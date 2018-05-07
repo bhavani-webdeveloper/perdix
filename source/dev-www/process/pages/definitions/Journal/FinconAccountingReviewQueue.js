@@ -1,20 +1,21 @@
 define({
-    pageUID: "Journal.JournalEntryQueue",
+    pageUID: "Journal.FinconAccountingReviewQueue",
     pageType: "Engine",
     dependencies: ["$log", "$state", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
-        "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"],
+        "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"
+    ],
     $pageFn: function($log, $state, Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
         PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
 
         return {
             "type": "search-list",
-            "title": "JOURNAL_ENTRY_QUEUE",
+            "title": "FINCON_ACCOUNTING_REVIEW_QUEUE",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
-                $log.info("Journal Queue got initialized");
+                $log.info("FinconAccountingQueue Queue got initialized");
             },
             definition: {
-                title: "SEARCH_JOURNAL_ENTRY",
+                title: "SEARCH_FINCON_ACCOUNT",
                 searchForm: [
                     "*"
                 ],
@@ -23,12 +24,8 @@ define({
                     "type": 'object',
                     "title": 'SearchOptions',
                     "properties": {
-                        "transactionName": {
+                        "remarks": {
                             "title": "TRANSACTION_NAME",
-                            "type": "string"
-                        },
-                        "transactionDescription": {
-                            "title": "TRANSACTION_DESCRIPTION",
                             "type": "string"
                         },
                         "transactionDate": {
@@ -42,17 +39,13 @@ define({
                     },
                     "required": []
                 },
-                
+
                 getSearchFormHelper: function() {
                     return formHelper;
                 },
-                getResultsPromise: function(searchOptions, pageOpts) { 
-                    var promise = Journal.journalEntrySearch({
-                        'transactionName': searchOptions.transactionName,
-                        'transactionDescription':searchOptions.transactionDescription,
-                        'transactionDate': searchOptions.transactionDate,
-                        'transactionType':"Entry",
-                        'currentStage': "journalEntry",
+                getResultsPromise: function(searchOptions, pageOpts) {
+                    var promise = Journal.journalMultiEntrySearch({
+                        'currentStage': "multiJournalPosting",
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage,
                     }).$promise;
@@ -78,8 +71,7 @@ define({
                         return [];
                     },
                     getListItem: function(item) {
-                        return [
-                        ]
+                        return []
                     },
                     getTableConfig: function() {
                         return {
@@ -89,38 +81,27 @@ define({
                         };
                     },
                     getColumns: function() {
-                        return [
-                        {
-                            title: 'JOURNAL_ENTRY_ID',
+                        return [{
+                            title: 'JOURNAL_ID',
                             data: 'id'
-                        },
-                        {
-                            title: 'TRANSACTION_NAME',
-                            data: 'transactionName'
-                        },
-                        {
-                            title: 'TRANSACTION_DESCRIPTION',
-                            data: 'transactionDescription'
-                        },
-                        {
+                        }, {
                             title: 'TRANSACTION_DATE',
                             data: 'transactionDate'
+                        }, {
+                            title: 'TRANSACTION_NAME',
+                            data: 'remarks'
                         }]
                     },
                     getActions: function() {
                         return [{
-                            name: "UPDATE_JOURNAL_ENTRY",
+                            name: "REVIEW_MULTI_JOURNAL_ENTRY",
                             desc: "",
                             icon: "fa fa-pencil-square-o",
                             fn: function(item, index) {
                                 irfNavigator.go({
-                                    state: "Page.Engine",
-                                    pageName: "Journal.FinconAccounting",
+                                    state: "Page.Adhoc",
+                                    pageName: "Journal.FinconAccountingReview",
                                     pageId: item.id,
-                                },
-                                {
-                                    state: "Page.Engine", 
-                                    pageName: "Journal.JournalPostingQueue",
                                 });
                             },
                             isApplicable: function(item, index) {
