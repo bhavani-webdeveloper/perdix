@@ -17,7 +17,7 @@ export class FinconPostingProcess implements CanApplyPolicy {
     
     journalHeader: JournalHeader;
     stage: string;
-    private journalEntryProcessAction: string;
+    private journalProcessAction: string;
 
     finconRepo: IFinconRepository;
     constructor() {
@@ -45,9 +45,9 @@ export class FinconPostingProcess implements CanApplyPolicy {
     }
 
     save(): any{
-        this.journalEntryProcessAction = 'SAVE';
-        let pmBeforeUpdate:PolicyManager<FinconPostingProcess>  = new PolicyManager(this, FinconPostingPolicyFactory.getInstance(), 'beforeSave', FinconPostingProcess.getProcessConfig());
-        let obs1 = pmBeforeUpdate.applyPolicies();
+        this.journalProcessAction = 'SAVE';
+         let pmBeforeUpdate:PolicyManager<FinconPostingProcess>  = new PolicyManager(this, FinconPostingPolicyFactory.getInstance(), 'beforeSave', FinconPostingProcess.getProcessConfig());
+         let obs1 = pmBeforeUpdate.applyPolicies();
         let obs2 = null;
         if (this.journalHeader.id){
             obs2 = this.finconRepo.updateJournal(this);
@@ -55,14 +55,14 @@ export class FinconPostingProcess implements CanApplyPolicy {
             obs2 = this.finconRepo.createJournal(this);
         }
 
-        let pmAfterUpdate:PolicyManager<FinconPostingProcess>  = new PolicyManager(this, FinconPostingPolicyFactory.getInstance(), 'afterSave', FinconPostingProcess.getProcessConfig());
-        let obs3 = pmAfterUpdate.applyPolicies();
-        return Observable.concat(obs1, obs2, obs3).last();
+         let pmAfterUpdate:PolicyManager<FinconPostingProcess>  = new PolicyManager(this, FinconPostingPolicyFactory.getInstance(), 'afterSave', FinconPostingProcess.getProcessConfig());
+         let obs3 = pmAfterUpdate.applyPolicies();
+        return Observable.concat(obs2).last();
     }
 
     proceed(toStage?: any): Observable<FinconPostingProcess>{
         this.stage = toStage;
-        this.journalEntryProcessAction = 'PROCEED';
+        this.journalProcessAction = 'PROCEED';
         let pmBeforeUpdate:PolicyManager<FinconPostingProcess>  = new PolicyManager(this, FinconPostingPolicyFactory.getInstance(), 'beforeProceed', FinconPostingProcess.getProcessConfig());
         let obs1 = pmBeforeUpdate.applyPolicies();
         let obs2 = this.finconRepo.updateJournal(this);
@@ -73,7 +73,7 @@ export class FinconPostingProcess implements CanApplyPolicy {
 
    reject(): Observable<FinconPostingProcess>{
         // this.stage = toStage;
-        this.journalEntryProcessAction = 'PROCEED';
+        this.journalProcessAction = 'PROCEED';
         this.stage = 'Rejected';
         let pmBeforeUpdate:PolicyManager<FinconPostingProcess>  = new PolicyManager(this, FinconPostingPolicyFactory.getInstance(), 'beforeReject', FinconPostingProcess.getProcessConfig());
         let obs1 = pmBeforeUpdate.applyPolicies();
@@ -83,9 +83,9 @@ export class FinconPostingProcess implements CanApplyPolicy {
         return Observable.concat(obs1, obs2, obs3).last();
     }
 
-    sendBack(): Observable<FinconPostingProcess>{
-        // this.stage = toStage;
-        this.journalEntryProcessAction = 'PROCEED';
+    sendBack(toStage?: any): Observable<FinconPostingProcess>{
+        this.journalProcessAction = 'PROCEED';
+        this.stage = toStage;
         let pmBeforeUpdate:PolicyManager<FinconPostingProcess>  = new PolicyManager(this, FinconPostingPolicyFactory.getInstance(), 'beforeSendBack', FinconPostingProcess.getProcessConfig());
         let obs1 = pmBeforeUpdate.applyPolicies();
         let obs2 = this.finconRepo.updateJournal(this);
