@@ -266,13 +266,15 @@
             "type": ["string", "null"],
             "maxLength": 10,
             "minLength": 10,
-            "title": "MOBILE_NUMBER1"
+            "title": "MOBILE_NUMBER1",
+            "pattern":"^[0-9]{10}$"
          },
          "alternateMobileNo": {
             "type": ["string", "null"],
             "title": "ALTERNATE_MOBILE_NUMBER",
             "maxLength": 10,
-            "minLength": 10
+            "minLength": 10,
+            "pattern":"^[0-9]{10}$"
          },
          "businessName": {
             "type": ["string", "null"],
