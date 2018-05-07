@@ -79,7 +79,7 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingDi
                         'scheduledDispatchDate':searchOptions.disbursement_date,
                         'rejectedAccount':searchOptions.rejectedAccount,
                         'page': pageOpts.pageNo,
-                        'itemsPerPage': pageOpts.itemsPerPage
+                        'per_page': pageOpts.itemsPerPage
                     }).$promise;
 
                     return promise;

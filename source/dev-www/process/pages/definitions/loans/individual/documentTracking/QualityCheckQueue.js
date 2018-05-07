@@ -8,7 +8,7 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.QualityCh
                     "subTitle": "",
                     initialize: function(model, form, formCtrl) {
                         model.branch = branch;
-                        model.branchId = branchId;
+                        // model.branchId = branchId;
                         $log.info("Perding for Filing page got initiated");
                     },
                     definition: {
@@ -77,7 +77,7 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.QualityCh
                                     'accountNumber': searchOptions.account_number,
                                     'scheduledDispatchDate': searchOptions.disbursement_date,
                                     'page': pageOpts.pageNo,
-                                    'itemsPerPage': pageOpts.itemsPerPage
+                                    'per_page': pageOpts.itemsPerPage
                                 }).$promise;
 
                                 return promise;

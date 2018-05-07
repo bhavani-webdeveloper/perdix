@@ -63,7 +63,7 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingVe
                         'courierNumber': searchOptions.courierNumber,
                         'receiveDate': searchOptions.receiveDate,
                         'page': pageOpts.pageNo,
-                        'itemsPerPage': pageOpts.itemsPerPage
+                        'per_page': pageOpts.itemsPerPage
                     }).$promise;
                     return promise;
                 },

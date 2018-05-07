@@ -65,7 +65,7 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.BatchInTr
                         'courierNumber': searchOptions.courierNumber,
                         'courierDate': searchOptions.courierDate,
                         'page': pageOpts.pageNo,
-                        'itemsPerPage': pageOpts.itemsPerPage
+                        'per_page': pageOpts.itemsPerPage
                     }).$promise;
                     return promise;
                 },
