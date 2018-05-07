@@ -47,35 +47,35 @@ irf.pages.controller("FinconAccountingDashboardCtrl", ['$log', '$scope', 'PagesD
                 });
             }
 
-             var jeMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/Journal.RejectedFinconAccountingQueue"];
+            //  var jeMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/Journal.RejectedFinconAccountingQueue"];
 
-            if (jeMenu) {
-                var promise = Journal.journalMultiEntrySearch({
+            // if (jeMenu) {
+            //     var promise = Journal.journalMultiEntrySearch({
 
-                    'page': 1,
-                    'per_page': 1,
-                    'currentStage': "multiJournalPosting"
-                }).$promise.then(function(response, headerGetter) {
-                    jeMenu.data = Number(response.headers['x-total-count']);
-                }, function() {
-                    jeMenu.data = '-';
-                });
-            }
+            //         'page': 1,
+            //         'per_page': 1,
+            //         'currentStage': "multiJournalPosting"
+            //     }).$promise.then(function(response, headerGetter) {
+            //         jeMenu.data = Number(response.headers['x-total-count']);
+            //     }, function() {
+            //         jeMenu.data = '-';
+            //     });
+            // }
 
-             var jeMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/Journal.CompletedFinconAccountingQueue"];
+            //  var jeMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/Journal.CompletedFinconAccountingQueue"];
 
-            if (jeMenu) {
-                var promise = Journal.journalMultiEntrySearch({
+            // if (jeMenu) {
+            //     var promise = Journal.journalMultiEntrySearch({
 
-                    'page': 1,
-                    'per_page': 1,
-                    'currentStage': "multiJournalPosting"
-                }).$promise.then(function(response, headerGetter) {
-                    jeMenu.data = Number(response.headers['x-total-count']);
-                }, function() {
-                    jeMenu.data = '-';
-                });
-            }
+            //         'page': 1,
+            //         'per_page': 1,
+            //         'currentStage': "multiJournalPosting"
+            //     }).$promise.then(function(response, headerGetter) {
+            //         jeMenu.data = Number(response.headers['x-total-count']);
+            //     }, function() {
+            //         jeMenu.data = '-';
+            //     });
+            // }
         });
     }
 ]);
