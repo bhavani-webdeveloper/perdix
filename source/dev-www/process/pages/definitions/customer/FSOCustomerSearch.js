@@ -326,7 +326,7 @@ function($log, formHelper, Enrollment,Queries,$state, SessionStore, Utils, Pages
 								});
 							},
 							isApplicable: function(item, model){
-								return (model.siteCode === "saija" && item.currentStage === 'Stage02');
+								return ((model.siteCode === "saija" || model.siteCode === "sambandh") && item.currentStage === 'Stage02');
 							}
 						}
 					];

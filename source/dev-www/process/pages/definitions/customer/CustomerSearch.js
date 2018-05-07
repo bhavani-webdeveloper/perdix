@@ -341,7 +341,7 @@ function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionSto
 								});
 							},
 							isApplicable: function(item, model){
-								return (model.siteCode === "saija" && item.currentStage === 'Stage02');
+								return ((model.siteCode === "saija" || model.siteCode === "sambandh") && item.currentStage === 'Stage02');
 							}
 						}
 					];
