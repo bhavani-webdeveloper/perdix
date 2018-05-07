@@ -1,6 +1,6 @@
-irf.pageCollection.factory("Pages__ProfileInformation", ["$log","Lead", "$q","Queries", "Enrollment", 'EnrollmentHelper', 'PageHelper', 'formHelper', "elementsUtils",
+irf.pageCollection.factory("Pages__ProfileInformation", ["$log","Lead","LeadHelper", "$q","Queries", "Enrollment", 'EnrollmentHelper', 'PageHelper', 'formHelper', "elementsUtils",
     'irfProgressMessage', 'SessionStore', "$state", "$stateParams", "irfNavigator",
-    function($log,Lead, $q,Queries, Enrollment, EnrollmentHelper, PageHelper, formHelper, elementsUtils,
+    function($log,Lead,LeadHelper, $q,Queries, Enrollment, EnrollmentHelper, PageHelper, formHelper, elementsUtils,
         irfProgressMessage, SessionStore, $state, $stateParams, irfNavigator) {
 
         var branch = SessionStore.getBranch();
@@ -14,6 +14,7 @@ irf.pageCollection.factory("Pages__ProfileInformation", ["$log","Lead", "$q","Qu
             initialize: function(model, form, formCtrl) {
                 $stateParams.confirmExit = true;
                 model.customer = model.customer || {};
+                model.lead = model.lead || {};
                 model.customer.customerType = "Individual";
                 var branch1 = formHelper.enum('branch_id').data;
                 var allowedBranch = [];
@@ -38,8 +39,10 @@ irf.pageCollection.factory("Pages__ProfileInformation", ["$log","Lead", "$q","Qu
                             })
                             .$promise
                             .then(function(res) {
+                                model.lead=res;
                                 PageHelper.showProgress('Enrollment-input', 'Done.', 5000);
                                 model.customer.mobilePhone = res.mobileNo;
+                                model.lead.id=res.id;
                                 model.customer.gender = res.gender;
                                 model.customer.firstName = res.leadName;
                                 model.customer.maritalStatus = res.maritalStatus;
@@ -56,6 +59,9 @@ irf.pageCollection.factory("Pages__ProfileInformation", ["$log","Lead", "$q","Qu
                                 model.customer.landLineNo = res.alternateMobileNo;
                                 model.customer.dateOfBirth = res.dob;
                                 model.customer.age = res.age;
+                                if (model.customer.dateOfBirth) {
+                                    model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                                }
                                 model.customer.gender = res.gender;
                                 model.customer.landLineNo = res.alternateMobileNo;
                                 for (var i = 0; i < model.customer.familyMembers.length; i++) {
@@ -121,6 +127,7 @@ irf.pageCollection.factory("Pages__ProfileInformation", ["$log","Lead", "$q","Qu
                         }
                     }
                 }
+
                 $log.info("ProfileInformation page got initialized:" + model.customer.customerBranchId);
             },
             modelPromise: function(pageId, _model) {
@@ -802,6 +809,16 @@ irf.pageCollection.factory("Pages__ProfileInformation", ["$log","Lead", "$q","Qu
                         model.customer = _.clone(res.customer);
                         model.customer.addressProofSameAsIdProof = (model.customer.title=="true")?true:false;
                         model = EnrollmentHelper.fixData(model);
+                   
+                        if (model.customer.id && _.hasIn(model, "lead.id")) {
+                            var reqData = {
+                                lead: _.cloneDeep(model.lead),
+                                stage: "Completed"
+                            }
+
+                            reqData.lead.leadStatus = "Complete";
+                            LeadHelper.proceedData(reqData)
+                        }
                         /*reqData = _.cloneDeep(model);
                         EnrollmentHelper.proceedData(reqData).then(function(res){
                             irfNavigator.goBack();
