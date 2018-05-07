@@ -13,15 +13,6 @@
     },
     {
       "order": 2,
-      "code": "Stage02",
-      "name": "Stage 2",
-      "stageType": "CAPTURE",
-      "allowedRoles": [
-        "WM"
-      ]
-    },
-    {
-      "order": 3,
       "code": "Completed",
       "name": "Completed",
       "stageType": "CAPTURE",
