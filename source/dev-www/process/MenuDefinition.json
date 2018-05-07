@@ -48,15 +48,17 @@
         "Page/CreditMonitoringDashboard",
         "Page/InventoryDashboard",
         "Page/Adhoc/loans.group.GroupDashboard",
-        "Page/Engine/CentrePaymentCollectionDownload", {
+        "Page/Engine/CentrePaymentCollectionDownload", 
+        {
             "title": "JOURNAL_ENTRY",
             "iconClass": "fa fa-exchange",
             "items": [
                 "Page/JournalMaintenanceDashboard",
                 "Page/JournalPostingDashboard",
-                "Page/JournalMultiPostingDashboard"
+                "Page/FinconAccountingDashboard"
             ]
-        }, {
+        }, 
+        {
             "title": "MANAGEMENT",
             "iconClass": "fa fa-cubes",
             "items": [
