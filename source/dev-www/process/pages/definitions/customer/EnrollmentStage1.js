@@ -1,6 +1,6 @@
-irf.pageCollection.factory("Pages__ProfileInformation", ["$log", "$q","Queries", "Enrollment", 'EnrollmentHelper', 'PageHelper', 'formHelper', "elementsUtils",
+irf.pageCollection.factory("Pages__ProfileInformation", ["$log","Lead", "$q","Queries", "Enrollment", 'EnrollmentHelper', 'PageHelper', 'formHelper', "elementsUtils",
     'irfProgressMessage', 'SessionStore', "$state", "$stateParams", "irfNavigator",
-    function($log, $q,Queries, Enrollment, EnrollmentHelper, PageHelper, formHelper, elementsUtils,
+    function($log,Lead, $q,Queries, Enrollment, EnrollmentHelper, PageHelper, formHelper, elementsUtils,
         irfProgressMessage, SessionStore, $state, $stateParams, irfNavigator) {
 
         var branch = SessionStore.getBranch();
@@ -29,55 +29,96 @@ irf.pageCollection.factory("Pages__ProfileInformation", ["$log", "$q","Queries",
                 $log.info(formHelper.enum('bank'));
 
                 if ($stateParams.pageData) {
-                    $log.info($stateParams.pagedata);
-                    var family = $stateParams.pageData;
-                    model.customer.familyEnrollmentId = family.familydata.enrollmentId;
-                    model.customer.parentCustomerId = family.familydata.customerId;
-                    model.customer.dateOfBirth = family.familydata.dateOfBirth;
-                    model.customer.educationStatus = family.familydata.educationStatus;
-                    model.customer.firstName = family.familydata.familyMemberFirstName;
-                    model.customer.gender = family.familydata.gender;
-                    model.customer.maritalStatus = family.familydata.maritalStatus;
-                    model.customer.mobilePhone = family.familydata.mobilePhone;
-                    model.customer.doorNo = family.doorNo;
-                    model.customer.street = family.street;
-                    model.customer.locality = family.locality;
-                    model.customer.villageName = family.villageName;
-                    model.customer.postOffice = family.postOffice;
-                    model.customer.district = family.district;
-                    model.customer.pincode = family.pincode;
-                    model.customer.state = family.state;
-                    model.customer.stdCode = family.stdCode;
-                    model.customer.landLineNo = family.landLineNo;
-                    model.customer.mailSameAsResidence = family.mailSameAsResidence;
-                    model.customer.mailingDoorNo = family.mailingDoorNo;
-                    model.customer.mailingStreet = family.mailingStreet;
-                    model.customer.mailingLocality = family.mailingLocality;
-                    model.customer.mailingPostoffice = family.mailingPostoffice;
-                    model.customer.mailingDistrict = family.mailingDistrict;
-                    model.customer.mailingPincode = family.mailingPincode;
-                    model.customer.mailingState = family.mailingState;
-
-                    if (family.familydata.maritalStatus == 'MARRIED' && (family.familydata.relationShip == 'Wife' || family.familydata.relationShip == 'Husband')) {
-                        model.customer.spouseFirstName = family.firstName;
-                        model.customer.spouseDateOfBirth = family.spouseDateOfBirth;
-                        if(family.spouseDateOfBirth){
-                            model.customer.spouseAge = moment().diff(moment(family.spouseDateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-                        }
-                        if (!_.hasIn(model.customer, 'udf') || model.customer.udf == null) {
-                            model.customer.udf = {
-                                userDefinedFieldValues: {
-                                    udf33 : family.udf.userDefinedFieldValues.udf33,
-                                    udf34 :family.udf.userDefinedFieldValues.udf34,
-                                    udf35 :family.udf.userDefinedFieldValues.udf35,
-                                    udf36 :family.udf.userDefinedFieldValues.udf36
+                    if (_.hasIn($stateParams.pageData, 'lead_id') && _.isNumber($stateParams.pageData['lead_id'])) {
+                        PageHelper.showLoader();
+                        PageHelper.showProgress("Enrollment-input", 'Loading lead details');
+                        var _leadId = $stateParams.pageData['lead_id'];
+                        Lead.get({
+                                id: _leadId
+                            })
+                            .$promise
+                            .then(function(res) {
+                                PageHelper.showProgress('Enrollment-input', 'Done.', 5000);
+                                model.customer.mobilePhone = res.mobileNo;
+                                model.customer.gender = res.gender;
+                                model.customer.firstName = res.leadName;
+                                model.customer.maritalStatus = res.maritalStatus;
+                                model.customer.customerBranchId = res.branchId;
+                                model.customer.centreId = res.centreId;
+                                model.customer.centreName = res.centreName;
+                                model.customer.street = res.addressLine2;
+                                model.customer.doorNo = res.addressLine1;
+                                model.customer.pincode = res.pincode;
+                                model.customer.district = res.district;
+                                model.customer.state = res.state;
+                                model.customer.locality = res.area;
+                                model.customer.villageName = res.cityTownVillage;
+                                model.customer.landLineNo = res.alternateMobileNo;
+                                model.customer.dateOfBirth = res.dob;
+                                model.customer.age = res.age;
+                                model.customer.gender = res.gender;
+                                model.customer.landLineNo = res.alternateMobileNo;
+                                for (var i = 0; i < model.customer.familyMembers.length; i++) {
+                                    $log.info(model.customer.familyMembers[i].relationShip);
+                                    model.customer.familyMembers[i].educationStatus = obj.educationStatus;
                                 }
-                            };
+                            }, function(httpRes) {
+                                PageHelper.showErrors(httpRes);
+                            })
+                            .finally(function() {
+                                PageHelper.hideLoader();
+                            })
+                    } else {
+                        $log.info($stateParams.pagedata);
+                        var family = $stateParams.pageData;
+                        model.customer.familyEnrollmentId = family.familydata.enrollmentId;
+                        model.customer.parentCustomerId = family.familydata.customerId;
+                        model.customer.dateOfBirth = family.familydata.dateOfBirth;
+                        model.customer.educationStatus = family.familydata.educationStatus;
+                        model.customer.firstName = family.familydata.familyMemberFirstName;
+                        model.customer.gender = family.familydata.gender;
+                        model.customer.maritalStatus = family.familydata.maritalStatus;
+                        model.customer.mobilePhone = family.familydata.mobilePhone;
+                        model.customer.doorNo = family.doorNo;
+                        model.customer.street = family.street;
+                        model.customer.locality = family.locality;
+                        model.customer.villageName = family.villageName;
+                        model.customer.postOffice = family.postOffice;
+                        model.customer.district = family.district;
+                        model.customer.pincode = family.pincode;
+                        model.customer.state = family.state;
+                        model.customer.stdCode = family.stdCode;
+                        model.customer.landLineNo = family.landLineNo;
+                        model.customer.mailSameAsResidence = family.mailSameAsResidence;
+                        model.customer.mailingDoorNo = family.mailingDoorNo;
+                        model.customer.mailingStreet = family.mailingStreet;
+                        model.customer.mailingLocality = family.mailingLocality;
+                        model.customer.mailingPostoffice = family.mailingPostoffice;
+                        model.customer.mailingDistrict = family.mailingDistrict;
+                        model.customer.mailingPincode = family.mailingPincode;
+                        model.customer.mailingState = family.mailingState;
+
+                        if (family.familydata.maritalStatus == 'MARRIED' && (family.familydata.relationShip == 'Wife' || family.familydata.relationShip == 'Husband')) {
+                            model.customer.spouseFirstName = family.firstName;
+                            model.customer.spouseDateOfBirth = family.spouseDateOfBirth;
+                            if (family.spouseDateOfBirth) {
+                                model.customer.spouseAge = moment().diff(moment(family.spouseDateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                            }
+                            if (!_.hasIn(model.customer, 'udf') || model.customer.udf == null) {
+                                model.customer.udf = {
+                                    userDefinedFieldValues: {
+                                        udf33: family.udf.userDefinedFieldValues.udf33,
+                                        udf34: family.udf.userDefinedFieldValues.udf34,
+                                        udf35: family.udf.userDefinedFieldValues.udf35,
+                                        udf36: family.udf.userDefinedFieldValues.udf36
+                                    }
+                                };
+                            }
                         }
-                    }
-                    
-                    if (model.customer.dateOfBirth) {
-                        model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+
+                        if (model.customer.dateOfBirth) {
+                            model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                        }
                     }
                 }
                 $log.info("ProfileInformation page got initialized:" + model.customer.customerBranchId);
