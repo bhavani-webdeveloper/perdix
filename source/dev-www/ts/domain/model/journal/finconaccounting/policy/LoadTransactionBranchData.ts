@@ -20,8 +20,8 @@ export class LoadTransactionBranchData implements FinconPostingPolicy<PopulateLe
     }
 
     run(finconPostingProcess: FinconPostingProcess): Observable<FinconPostingProcess> {
-        let activeSession:ISession = ObjectFactory.getInstance("Session");
-       //finconPostingProcess.journalHeader.transactionBranchId = activeSession.getBranchId();
+       let activeSession:ISession = ObjectFactory.getInstance("Session");
+       finconPostingProcess.journalHeader.transactionBranchId = activeSession.getBranchId();
 
         return Observable.of(finconPostingProcess);
     }
