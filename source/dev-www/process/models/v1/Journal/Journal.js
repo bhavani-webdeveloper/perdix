@@ -13,6 +13,10 @@ irf.models.factory('Journal', ["$resource", "$httpParamSerializer", "BASE_URL", 
 				method: 'POST',
 				url: endpoint2 + '/create'
 			},
+			multiJournalSearch : {
+				method: 'GET',
+				url: endpoint2 + '/find'
+			},
 			updateJournal: {
 				method: 'PUT',
 				url: endpoint + '/journalMaintenance'
