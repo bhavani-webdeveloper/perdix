@@ -1,6 +1,6 @@
 import {FinconPostingPolicy} from "./FinconPostingPolicy";
 import {IPolicyFactory} from "../../../../shared/IPolicyFactory";
-
+import {LoadTransactionBranchData} from "./LoadTransactionBranchData";
 export class FinconPostingPolicyFactory implements IPolicyFactory {
 
     private static _instance:FinconPostingPolicyFactory = null;
@@ -15,8 +15,13 @@ export class FinconPostingPolicyFactory implements IPolicyFactory {
     }
 
     fromPolicyName(name: string):FinconPostingPolicy<Object> {
-        let obj = null;
-        
+         let obj = null;
+        switch(name) {
+            case 'LoadTransactionBranchData':    
+                return new LoadTransactionBranchData();
+            default:
+                return null;
+        }
         return obj;
     }
 }
