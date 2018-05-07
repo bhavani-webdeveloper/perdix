@@ -1,4 +1,4 @@
-irf.pageCollection.controller(irf.controller("Journal.FinconAccountingReview"), ["$log", "$scope", "Journal", "$state", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage", "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator", "UIRepository", "IrfFormRequestProcessor", "$injector", "entityManager", "SchemaResource", "irfSimpleModal", "Queries",
+irf.pageCollection.controller(irf.controller("Journal.RejectedFinconAccount"), ["$log", "$scope", "Journal", "$state", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage", "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator", "UIRepository", "IrfFormRequestProcessor", "$injector", "entityManager", "SchemaResource", "irfSimpleModal", "Queries",
     function($log, $scope, Journal, $state, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
         PageHelper, Utils, PagesDefinition, Queries, irfNavigator, UIRepository, IrfFormRequestProcessor, $injector, entityManager, SchemaResource, irfSimpleModal, Queries) {
         $log.info("Page.FinconAccounting.html loaded");
@@ -9,7 +9,7 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccountingReview"), 
 
         $scope.page = {
             "type": "schema-form",
-            "title": "BRANCH_POSTING_ENTRY",
+            "title": "REJECTED_FINCON_ACCOUNT",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 var self = this;
@@ -92,25 +92,18 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccountingReview"), 
                             ""
                         ],
                         "options": {
-                            "additions": [{
+                            "additions": [
+                            {
                                 "type": "actionbox",
                                 "orderNo": 1200,
                                 "items": [{
                                     "type": "button",
-                                    "title": "PROCEED",
+                                    "title": "Back",
 
                                     "onClick": "actions.save(model, formCtrl, form, $event)"
-                                }, {
-                                    "type": "button",
-                                    "title": "SENDBACK",
-                                    "onClick": "actions.sendBack(model, formCtrl, form, $event)"
-                                }, {
-                                    "type": "button",
-                                    "title": "REJECT",
-                                    "onClick": "actions.reject(model, formCtrl, form, $event)"
-
                                 }]
-                            }, {
+                            }, 
+                            {
                                 "targetID": "Entries",
                                 "items": [{
                                     "type": "section",
@@ -248,6 +241,7 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccountingReview"), 
                         console.log(res);
                         model.finconProcess = res
                         model.journal.journalHeader = res.journalHeader;
+
                         if (model.journal.journalHeader.entryType == ("Payment - Account") || model.journal.journalHeader.entryType == ("Payment") || model.journal.journalHeader.entryType == ("Journal - Account") || model.journal.journalHeader.entryType == ("Journal")) {
                             model.showFeilds = true;
                         }
@@ -270,56 +264,8 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccountingReview"), 
             },
             actions: {
                 save: function(model, formCtrl, form, $event) {
-                    PageHelper.showLoader();
-                    console.log(model.finconProcess);
-                    model.finconProcess.proceed("Completed")
-                        .finally(function() {
-                            PageHelper.hideLoader();
-                        })
-                        .subscribe(function(out) {
-                            console.log(out);
-                            irfNavigator.goBack();
-                        }, function(err) {
-                            console.log(err);
-                            PageHelper.hideLoader();
-                        })
-                },
-                reject: function (model, formCtrl, form, $event) {
-                        $log.info("Inside reject()");
-                        // if (PageHelper.isFormInvalid(formCtrl)) {
-                        //     return false;
-                        // }
-                        PageHelper.showLoader();
-                       //model.branchProcess.remarks = model.journal.remarks;
-                        model.finconProcess.reject()
-                        .finally(function() {
-                            PageHelper.hideLoader();
-                        })
-                        .subscribe(function(out) {
-                            PageHelper.showProgress("Review Rejected", "Posting Rejected", 3000);
-                           // PageHelper.showProgress('Posting', 'Done.', 5000);
-                            irfNavigator.goBack();
-                        }, function(err) {
-                            PageHelper.showProgress('Posting', 'Oops. Some error.', 5000);
-                            PageHelper.showErrors(err);
-                            PageHelper.hideLoader();
-                        });
-                    },
-                  sendBack: function (model, formCtrl, form, $event) {
-                        model.finconProcess.sendBack("multiJournalEntry")
-                        .finally(function() {
-                            PageHelper.hideLoader();
-                        })
-                        .subscribe(function(out) {
-                            PageHelper.showProgress("Posting Send Back", "Posting Send Back", 3000);
-                            PageHelper.showProgress('Posting', 'Done.', 5000);
-                            irfNavigator.goBack();
-                        }, function(err) {
-                            PageHelper.showProgress('Posting', 'Oops. Some error.', 5000);
-                            PageHelper.showErrors(err);
-                            PageHelper.hideLoader();
-                        });
-                    }
+                    irfNavigator.goBack();
+                }
             }
         }
 

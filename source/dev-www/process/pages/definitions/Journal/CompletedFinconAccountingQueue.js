@@ -1,5 +1,5 @@
 define({
-    pageUID: "Journal.FinconAccountingQueue",
+    pageUID: "Journal.CompletedFinconAccountingQueue",
     pageType: "Engine",
     dependencies: ["$log", "$state", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
         "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"
@@ -9,7 +9,7 @@ define({
 
         return {
             "type": "search-list",
-            "title": "FINCON_ACCOUNTING_QUEUE",
+            "title": "COMPLETED_FINCON_ACCOUNTING_QUEUE",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 $log.info("FinconAccountingQueue Queue got initialized");
@@ -45,9 +45,7 @@ define({
                 },
                 getResultsPromise: function(searchOptions, pageOpts) {
                     var promise = Journal.journalMultiEntrySearch({
-                        'remarks': searchOptions.remarks,
-                        'transactionDate': searchOptions.transactionDate,
-                        'currentStage': "multiJournalEntry",
+                        'currentStage': "Completed",
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage,
                     }).$promise;
@@ -96,13 +94,13 @@ define({
                     },
                     getActions: function() {
                         return [{
-                            name: "UPDATE_MULTI_JOURNAL_ENTRY",
+                            name: "COMPLETED_FINCON_ACCOUNT",
                             desc: "",
                             icon: "fa fa-pencil-square-o",
                             fn: function(item, index) {
                                 irfNavigator.go({
                                     state: "Page.Adhoc",
-                                    pageName: "Journal.FinconAccounting",
+                                    pageName: "Journal.CompletedFinconAccount",
                                     pageId: item.id,
                                 });
                             },

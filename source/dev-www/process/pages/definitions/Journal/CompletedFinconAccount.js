@@ -1,4 +1,4 @@
-irf.pageCollection.controller(irf.controller("Journal.FinconAccountingReview"), ["$log", "$scope", "Journal", "$state", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage", "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator", "UIRepository", "IrfFormRequestProcessor", "$injector", "entityManager", "SchemaResource", "irfSimpleModal", "Queries",
+irf.pageCollection.controller(irf.controller("Journal.CompletedFinconAccount"), ["$log", "$scope", "Journal", "$state", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage", "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator", "UIRepository", "IrfFormRequestProcessor", "$injector", "entityManager", "SchemaResource", "irfSimpleModal", "Queries",
     function($log, $scope, Journal, $state, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
         PageHelper, Utils, PagesDefinition, Queries, irfNavigator, UIRepository, IrfFormRequestProcessor, $injector, entityManager, SchemaResource, irfSimpleModal, Queries) {
         $log.info("Page.FinconAccounting.html loaded");
@@ -9,7 +9,7 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccountingReview"), 
 
         $scope.page = {
             "type": "schema-form",
-            "title": "BRANCH_POSTING_ENTRY",
+            "title": "COMPLETED_FINCON_ACCOUNT",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 var self = this;
@@ -53,7 +53,7 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccountingReview"), 
                             "FinconAccounting": {
                                 "readonly": true
                             },
-                            "FinconAccounting.transactionSection.billNumber": {
+                             "FinconAccounting.transactionSection.billNumber": {
                                 "condition": "model.showFeilds"
                             },
                             "FinconAccounting.transactionSection.billDate": {
@@ -92,25 +92,18 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccountingReview"), 
                             ""
                         ],
                         "options": {
-                            "additions": [{
+                            "additions": [
+                            {
                                 "type": "actionbox",
                                 "orderNo": 1200,
                                 "items": [{
                                     "type": "button",
-                                    "title": "PROCEED",
+                                    "title": "Back",
 
                                     "onClick": "actions.save(model, formCtrl, form, $event)"
-                                }, {
-                                    "type": "button",
-                                    "title": "SENDBACK",
-                                    "onClick": "actions.sendBack(model, formCtrl, form, $event)"
-                                }, {
-                                    "type": "button",
-                                    "title": "REJECT",
-                                    "onClick": "actions.reject(model, formCtrl, form, $event)"
-
                                 }]
-                            }, {
+                            }, 
+                            {
                                 "targetID": "Entries",
                                 "items": [{
                                     "type": "section",
@@ -270,19 +263,7 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccountingReview"), 
             },
             actions: {
                 save: function(model, formCtrl, form, $event) {
-                    PageHelper.showLoader();
-                    console.log(model.finconProcess);
-                    model.finconProcess.proceed("Completed")
-                        .finally(function() {
-                            PageHelper.hideLoader();
-                        })
-                        .subscribe(function(out) {
-                            console.log(out);
-                            irfNavigator.goBack();
-                        }, function(err) {
-                            console.log(err);
-                            PageHelper.hideLoader();
-                        })
+                    irfNavigator.goBack();
                 },
                 reject: function (model, formCtrl, form, $event) {
                         $log.info("Inside reject()");

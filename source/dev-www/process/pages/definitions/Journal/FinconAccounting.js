@@ -79,6 +79,23 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
 
                         var getOverrides = function(param) {
                             return {
+                                "FinconAccounting.transactionSection.entryType": {
+                                    onChange: function(modelValue, form, model) {
+                                        model.showFeilds = false;
+                                        if(modelValue == ("Payment - Account")  || modelValue == ("Payment") || modelValue == ("Journal - Account") ||modelValue == ("Journal")){
+                                            model.showFeilds = true;
+                                        }
+                                    }
+                                },
+                                "FinconAccounting.transactionSection.billNumber":{
+                                    "condition":"model.showFeilds"
+                                },
+                                "FinconAccounting.transactionSection.billDate":{
+                                    "condition":"model.showFeilds"
+                                },
+                                "FinconAccounting.instrumentSection":{
+                                    "condition":"model.showFeilds"
+                                }
 
                             }
                         }
@@ -89,6 +106,7 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
                                 "FinconAccounting.transactionSection.entryType",
                                 "FinconAccounting.transactionSection.transactionDate",
                                 "FinconAccounting.transactionSection.transactionBranchId",
+                                "FinconAccounting.transactionSection.remarks",
                                 "FinconAccounting.transactionSection.valueDate",
                                 "FinconAccounting.transactionSection.billNumber",
                                 "FinconAccounting.transactionSection.billDate",
@@ -99,7 +117,7 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
                                 "FinconAccounting.instrumentSection.instrumentNumber",
                                 "FinconAccounting.instrumentSection.instrumentBankName",
                                 "FinconAccounting.instrumentSection.instrumentBranchName",
-                                "FinconAccounting.instrumentSection.remarks",
+                                
                                 "Entries"
                             ]
 
@@ -266,6 +284,11 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
                                 console.log(res);
                                 model.finconProcess = res
                                 model.journal.journalHeader = res.journalHeader;
+                                if (model.journal.journalHeader.entryType == ("Payment - Account") || model.journal.journalHeader.entryType == ("Payment") || model.journal.journalHeader.entryType == ("Journal - Account") || model.journal.journalHeader.entryType == ("Journal")) {
+                                    model.showFeilds = true;
+                                }
+                                model.journal.journalHeader.billNumber = parseInt(res.journalHeader.billNumber);
+                                model.journal.journalHeader.instrumentNumber = parseInt(res.journalHeader.instrumentNumber);
                                 model.myFunc("p", res.journalHeader.journaldetails)
                             })
                         }

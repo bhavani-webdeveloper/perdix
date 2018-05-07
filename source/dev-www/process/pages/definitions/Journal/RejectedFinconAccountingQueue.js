@@ -1,5 +1,5 @@
 define({
-    pageUID: "Journal.FinconAccountingQueue",
+    pageUID: "Journal.RejectedFinconAccountingQueue",
     pageType: "Engine",
     dependencies: ["$log", "$state", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
         "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"
@@ -9,13 +9,13 @@ define({
 
         return {
             "type": "search-list",
-            "title": "FINCON_ACCOUNTING_QUEUE",
+            "title": "REJECTED_FINCON_ACCOUNT_QUEUE",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 $log.info("FinconAccountingQueue Queue got initialized");
             },
             definition: {
-                title: "SEARCH_FINCON_ACCOUNT",
+                title: "SEARCH_REJECTED_FINCON_ACCOUNT",
                 searchForm: [
                     "*"
                 ],
@@ -45,9 +45,7 @@ define({
                 },
                 getResultsPromise: function(searchOptions, pageOpts) {
                     var promise = Journal.journalMultiEntrySearch({
-                        'remarks': searchOptions.remarks,
-                        'transactionDate': searchOptions.transactionDate,
-                        'currentStage': "multiJournalEntry",
+                        'currentStage': "Rejected",
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage,
                     }).$promise;
@@ -96,13 +94,13 @@ define({
                     },
                     getActions: function() {
                         return [{
-                            name: "UPDATE_MULTI_JOURNAL_ENTRY",
+                            name: "REJECTED_FINCON_ACCOUNT",
                             desc: "",
                             icon: "fa fa-pencil-square-o",
                             fn: function(item, index) {
                                 irfNavigator.go({
                                     state: "Page.Adhoc",
-                                    pageName: "Journal.FinconAccounting",
+                                    pageName: "Journal.RejectedFinconAccount",
                                     pageId: item.id,
                                 });
                             },
