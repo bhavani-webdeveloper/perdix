@@ -874,23 +874,36 @@ irf.models.factory('Queries', [
         return deferred.promise;
     }
     
-            resource.getActiveLoansCountByProduct = function(customerUrn, applicantUrn, productCode, loanId){
-            var deferred = $q.defer();
-            var request = {};
-            request.urn_no = customerUrn;
-            request.applicant = applicantUrn;
-            request.product_code = productCode;
-            request.loan_id = loanId
-            resource.getResult("activeLoansCountByProduct", request)
-                .then(function(response){
-                    if (response && _.isArray(response.results) && response.results.length > 0) {
-                        deferred.resolve(response.results[0].count);
-                    } else {
-                        deferred.resolve(0);
-                    }
-                }, deferred.reject)
-            return deferred.promise;
+    resource.getActiveLoansCountByProduct = function(customerUrn, applicantUrn, productCode, loanId) {
+        var deferred = $q.defer();
+        var request = {};
+        request.urn_no = customerUrn;
+        request.applicant = applicantUrn;
+        request.product_code = productCode;
+        request.loan_id = loanId
+        resource.getResult("activeLoansCountByProduct", request)
+            .then(function(response) {
+                if (response && _.isArray(response.results) && response.results.length > 0) {
+                    deferred.resolve(response.results[0].count);
+                } else {
+                    deferred.resolve(0);
+                }
+            }, deferred.reject)
+        return deferred.promise;
+    };
+
+    resource.getloanAccountsByLikeAccountNumber = function(accountNo) {
+        var deferred = $q.defer();
+        var request = {
+            "account_number": accountNo
         };
+        resource.getResult("loanAccountsByLikeAccountNumber.list", request)
+        .then(function(response) {
+            deferred.resolve(response.results);
+            console.log(response.results)
+        }, deferred.reject);
+        return deferred.promise;
+    };
     
     return resource;
     }
