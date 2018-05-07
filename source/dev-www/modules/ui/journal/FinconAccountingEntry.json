@@ -10,8 +10,10 @@
                 "htmlClass": "col-xs-6 col-md-6",
                 "items": {
                     "entryType": {
-                         "key": "journal.journalHeader.entryType",
-                         "title": "ENTRY_TYPE",
+                        "key": "journal.journalHeader.entryType",
+                        "title": "ENTRY_TYPE",
+                        "type": "select",
+                        "enumCode": "journal_transaction_type",
                          "orderNo": 10
                     },
                     "transactionDate": {
@@ -21,12 +23,20 @@
                         "type": "date",
                         "orderNo": 20
                     },
-                    "transactionBranch": {
-                        "key": "journal.journalHeader.transactionBranch",
+                    "transactionBranchId": {
+                        "key": "journal.journalHeader.transactionBranchId",
                         "required":true,
                         "title": "TRANSACTION_BRANCH",
-                        "type": "string",
+                        "type": "select",
+                        "enumCode": "branch_id",
                         "orderNo": 30
+                    },
+                     "remarks":{
+                        "key": "journal.journalHeader.remarks",
+                        "type": "string",
+                        "title": "TRANSACTION_NAME",
+                        "orderNo": 35
+
                     },
                      "valueDate": {
                         "key": "journal.journalHeader.valueDate",
@@ -150,12 +160,6 @@
         "title": "ENTRIES",
         "colClass":"col-sm-12",
         "orderNo":"30",
-        "items": {
-            "section1": {
-                "type":"section",
-                "html": "<div class='row'> <div class='col-xs-12'> <table><th>GL_AC_NO</th><th>Type</th><th>Amount</th><th>Loan Account No</th><th>Narration</th><th>Delete</th> <tr ng-repeat='d in model.journal.journalHeader.journalDetails track by $index'> <td><div><input ng-model=\"d['glAcNo']\" class='form-control' sf-field-model><a href='' ng-click='model.openLov($index)'><i class='fa fa-bars color-theme'></i></a></div></td><td> <select class='form-control' ng-model=\"d['drCrIndicator']\" schema-validate='form' ng-options='item.value as item.name for item in model.entryType'> <option value=''>{{('CHOOSE'|translate)+' '+(form.title|translate)}}</option> </select></td><td><input ng-model=\"d['transactionAmount']\" type='number' class='form-control' /></td><td><input ng-model=\"d['relatedAccountNo']\" class='form-control' /><a href='' ng-click='model.openLov()'><i class='fa fa-bars color-theme'></i></a></td><td><textarea ng-model=\"d['remarks']\" class='form-control' /></td><td><a href='' ng-click='model.delete($index)'>Delete</a></td> </tr> </table><div></i><a href='' ng-click='model.addEntry()'><i class='fa fa-plus'>Add Entry</a></div>"
-
-            }
-        }
+        "items": []
     }
 }
