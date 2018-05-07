@@ -24,7 +24,7 @@ class FinconRepository implements IFinconRepository {
 	createJournal(reqData: FinconPostingProcess): Observable<any> {
 		return Ro.fromPromise(this.finconService.createMultiJournal(reqData).$promise)
 		.map((obj:any) => {
-			let journalHeader:JournalHeader = <JournalHeader>plainToClass<JournalHeader, Object>(JournalHeader, obj.journalEntryDto);
+			let journalHeader:JournalHeader = <JournalHeader>plainToClass<JournalHeader, Object>(JournalHeader, obj.journalHeader);
 			_.merge(reqData.journalHeader, journalHeader);
 			return reqData;
 		})
@@ -33,7 +33,7 @@ class FinconRepository implements IFinconRepository {
 	updateJournal(reqData: FinconPostingProcess): Observable<any> {
 		return Ro.fromPromise(this.finconService.updateJournaMultilEntry(reqData).$promise)
 		.map((obj:any) => {
-			let journalHeader:JournalHeader = <JournalHeader>plainToClass<JournalHeader, Object>(JournalHeader, obj.journalEntryDto);
+			let journalHeader:JournalHeader = <JournalHeader>plainToClass<JournalHeader, Object>(JournalHeader, obj.journalHeader);
 			_.merge(reqData.journalHeader, journalHeader);
 			return reqData;
 		})
