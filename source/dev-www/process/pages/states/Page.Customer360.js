@@ -1,8 +1,8 @@
 
 irf.pages.controller("Customer360Ctrl",
-["$log", "$scope", "$stateParams","Queries", "$q", "formHelper", "SessionStore", "PagesDefinition", "Enrollment", 
+["$log", "$scope", "$stateParams","Queries", "$q", "formHelper", "SessionStore", "PagesDefinition", "Enrollment",
 "entityManager", "Utils", "PageHelper", "$filter", "$httpParamSerializer", "AuthTokenHelper",
-function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, PagesDefinition, Enrollment, 
+function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, PagesDefinition, Enrollment,
 	entityManager, Utils, PageHelper, $filter, $httpParamSerializer, AuthTokenHelper){
 	$log.info("Customer360 loaded");
 
@@ -23,15 +23,15 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 			return "Page/Engine/witfin.customer360.CustomerProfile";
 		} else {
 			return "Page/Engine/customer360.CustomerProfile";
-		} 
+		}
 	}
 
 	var getBusinessProfilePageUrl = function() {
 		if(siteCode == 'witfin') {
 			return "Page/Engine/witfin.customer360.BusinessProfile";
 		} else {
-			return "Page/Engine/customer360.BuisnessProfile";
-		} 
+			return "Page/Engine/customer360.BusinessProfile";
+		}
 	}
 
 	var customerDefinition = {
@@ -51,7 +51,7 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 						]
 					},
 					"Page/Engine/customer360.loans.View",
-					"Page/Engine/customer360.loans.Service"	
+					"Page/Engine/customer360.loans.Service"
 				]
 			},
 			{
@@ -87,7 +87,7 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 						]
 					},
 					"Page/Engine/customer360.loans.View",
-					"Page/Engine/customer360.loans.Service"	
+					"Page/Engine/customer360.loans.Service"
 				]
 			},
 			{
@@ -327,7 +327,7 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 		$scope.model = {customer: data};
 		$scope.introFormName = "introForm";
 		$scope.pageTitle = 'CUSTOMER_360';
-		
+
 		if (data.customerType === 'Enterprise') {
 			$scope.introForm = enterprisePortfolioForm;
 			//$scope.pageTitle = 'BUSINESS_360';
@@ -373,7 +373,7 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 				return $q.resolve(menu);
 			};
 		}
-		
+
 		if ($scope.dashboardDefinition.$menuMap['Page/Engine/customer360.EnrollmentProfile'])
 		$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.EnrollmentProfile'].onClick = function(event, menu) {
 			menu.stateParams.pageId = $scope.customerId;
