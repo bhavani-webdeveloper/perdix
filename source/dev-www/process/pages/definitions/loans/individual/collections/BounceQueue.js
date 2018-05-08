@@ -42,7 +42,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager, 
                     IncludeUserFilter: false
                 };
                 _.defaults(data, defaultConfig);
-                model.pageConfig = data;
+                model.pageConfig = _.extend(model.pageConfig, data);
                 if (model.pageConfig.IncludeUserFilter)
                     model.assignedTo = SessionStore.getLoginname();                    
             });
