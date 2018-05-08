@@ -16,7 +16,7 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 
 	var getCustomerProfilePageUrl = function() {
 		if (siteCode == 'sambandh') {
-			return "Page/Engine/customer.IndividualEnrollment3";
+			return "Page/Engine/customer.IndividualEnrollmentStage2";
 		}  else if (siteCode == 'saija') {
 			return "Page/Engine/customer.IndividualEnrollmentStage2";
 		} else if(siteCode == 'witfin') {
