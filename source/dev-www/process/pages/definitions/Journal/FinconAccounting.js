@@ -333,7 +333,7 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
                 save: function(model, formCtrl, form, $event) {
                     PageHelper.showLoader();
                     console.log(model.finconProcess);
-                    model.finconProcess.journalHeader.remarks = "adsfad"
+                   // model.finconProcess.journalHeader.remarks = "adsfad"
                     _.forEach(model.finconProcess && model.finconProcess.journalHeader.journalDetails, function(value) {
 
                         value.transactionDescription = "Hardcoded transactionDescription";
