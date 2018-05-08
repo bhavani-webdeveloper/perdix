@@ -21,6 +21,9 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         remove: true,
                         startEmpty: true,
                     },
+                    "CustomerInformation.customerBranchId": {
+                        enumCode: "userbranches"
+                    }, 
                     "CustomerInformation.centreId": {
                         "title": "CENTRE",
                     },
@@ -750,6 +753,9 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                 };
             } else if (model.siteCode == "saija") {
                 return {
+                    "CustomerInformation.customerBranchId": {
+                        enumCode: "userbranches"
+                    }, 
                     "CustomerInformation.centreId": {
                         "title": "CENTRE",
                     },

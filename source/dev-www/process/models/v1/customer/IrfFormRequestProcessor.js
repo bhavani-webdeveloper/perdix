@@ -34,7 +34,6 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         "type": "select",
                         key: "customer.customerBranchId",
                         "title": "BRANCH_NAME",
-                        parentEnumCode: "userbranches",
                         "readonly": true
                     },
                     "centreCode": {
