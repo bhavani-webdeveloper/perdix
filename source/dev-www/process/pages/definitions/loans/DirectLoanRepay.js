@@ -762,7 +762,7 @@ irf.pageCollection.factory(irf.page('loans.DirectLoanRepay'),
                 submit: function(model, formCtrl, formName) {
                     $log.info("Inside submit");
 
-                    if (!model.additional.override_fp && !model.customer.isBiometricValidated) {
+                    if (!model.additional.override_fp && !model.customer.isBiometricValidated && model.siteCode == 'KGFS') {
                         elementsUtils.alert('Fingerprint not verified.');
                         return;  
                     }

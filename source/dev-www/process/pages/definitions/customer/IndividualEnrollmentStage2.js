@@ -351,9 +351,9 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                 };
             } else if (model.siteCode == "sambandh") {
                 var customReadonly = false;
-                if (_.hasIn($stateParams.pageData, 'currentStage') && $stateParams.pageData.currentStage == 'Stage02') {
+                /*if (_.hasIn($stateParams.pageData, 'currentStage') && $stateParams.pageData.currentStage == 'Stage02') {
                     customReadonly = true;
-                }
+                }*/
                 return {
                     "CustomerInformation": {
                         "readonly": customReadonly
