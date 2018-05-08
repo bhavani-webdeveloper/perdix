@@ -82,19 +82,41 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
                                 "FinconAccounting.transactionSection.entryType": {
                                     onChange: function(modelValue, form, model) {
                                         model.showFeilds = false;
-                                        if(modelValue == ("Payment - Account")  || modelValue == ("Payment") || modelValue == ("Journal - Account") ||modelValue == ("Journal")){
+                                        model.showFeild = false;
+                                        if (modelValue == ("Payment - Account") || modelValue == ("Payment") || modelValue == ("Journal - Account") || modelValue == ("Journal")) {
                                             model.showFeilds = true;
+                                        }
+                                        if (modelValue == ("Payment - Account") || modelValue == ("Payment") || modelValue == ("Receipt - Account") || modelValue == ("Receipt")) {
+                                            model.showFeild = true;
                                         }
                                     }
                                 },
-                                "FinconAccounting.transactionSection.billNumber":{
-                                    "condition":"model.showFeilds"
+                                "FinconAccounting.transactionSection.billNumber": {
+                                    "condition": "model.showFeilds"
                                 },
-                                "FinconAccounting.transactionSection.billDate":{
-                                    "condition":"model.showFeilds"
+                                "FinconAccounting.transactionSection.billDate": {
+                                    "condition": "model.showFeilds"
                                 },
-                                "FinconAccounting.instrumentSection":{
-                                    "condition":"model.showFeilds"
+                                "FinconAccounting.instrumentSection.billUpload": {
+                                    "condition": "model.showFeilds"
+                                },
+                                "FinconAccounting.instrumentSection": {
+
+                                },
+                                "FinconAccounting.instrumentSection.instrumentType": {
+                                    "condition": "model.showFeild"
+                                },
+                                "FinconAccounting.instrumentSection.instrumentDate": {
+                                    "condition": "model.showFeild"
+                                },
+                                "FinconAccounting.instrumentSection.instrumentNumber": {
+                                    "condition": "model.showFeild"
+                                },
+                                "FinconAccounting.instrumentSection.instrumentBankName": {
+                                    "condition": "model.showFeild"
+                                },
+                                "FinconAccounting.instrumentSection.instrumentBranchName": {
+                                    "condition": "model.showFeild"
                                 }
 
                             }
@@ -117,7 +139,7 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
                                 "FinconAccounting.instrumentSection.instrumentNumber",
                                 "FinconAccounting.instrumentSection.instrumentBankName",
                                 "FinconAccounting.instrumentSection.instrumentBranchName",
-                                
+
                                 "Entries"
                             ]
 
@@ -284,8 +306,13 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
                                 console.log(res);
                                 model.finconProcess = res
                                 model.journal.journalHeader = res.journalHeader;
-                                if (model.journal.journalHeader.entryType == ("Payment - Account") || model.journal.journalHeader.entryType == ("Payment") || model.journal.journalHeader.entryType == ("Journal - Account") || model.journal.journalHeader.entryType == ("Journal")) {
+                                model.showFeilds = false;
+                                model.showFeild = false;
+                                if (res.journalHeader.entryType == ("Payment - Account") || res.journalHeader.entryType == ("Payment") || res.journalHeader.entryType == ("Journal - Account") || res.journalHeader.entryType == ("Journal")) {
                                     model.showFeilds = true;
+                                }
+                                if (res.journalHeader.entryType == ("Payment - Account") || res.journalHeader.entryType == ("Payment") || res.journalHeader.entryType == ("Receipt - Account") || res.journalHeader.entryType == ("Receipt")) {
+                                    model.showFeild = true;
                                 }
                                 model.journal.journalHeader.billNumber = parseInt(res.journalHeader.billNumber);
                                 model.journal.journalHeader.instrumentNumber = parseInt(res.journalHeader.instrumentNumber);

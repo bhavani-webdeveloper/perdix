@@ -30,7 +30,7 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccountingReview"), 
                         'value': 'Credit'
                     }]
 
-                    model.myFunc = function( journaldetails) {
+                    model.myFunc = function(journaldetails) {
                         var debitSum = 0;
                         var creditSum = 0;
                         _.forEach(journaldetails, function(journaldetail) {
@@ -53,14 +53,47 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccountingReview"), 
                             "FinconAccounting": {
                                 "readonly": true
                             },
+                            "FinconAccounting.instrumentSection.billUpload":{
+                                "readonly": true
+                            },
+                            "FinconAccounting.transactionSection.entryType": {
+                                onChange: function(modelValue, form, model) {
+                                    model.showFeilds = false;
+                                    model.showFeild = false;
+                                    if (modelValue == ("Payment - Account") || modelValue == ("Payment") || modelValue == ("Journal - Account") || modelValue == ("Journal")) {
+                                        model.showFeilds = true;
+                                    }
+                                    if (modelValue == ("Payment - Account") || modelValue == ("Payment") || modelValue == ("Receipt - Account") || modelValue == ("Receipt")) {
+                                        model.showFeild = true;
+                                    }
+                                }
+                            },
                             "FinconAccounting.transactionSection.billNumber": {
                                 "condition": "model.showFeilds"
                             },
                             "FinconAccounting.transactionSection.billDate": {
                                 "condition": "model.showFeilds"
                             },
-                            "FinconAccounting.instrumentSection": {
+                            "FinconAccounting.instrumentSection.billUpload": {
                                 "condition": "model.showFeilds"
+                            },
+                            "FinconAccounting.instrumentSection": {
+
+                            },
+                            "FinconAccounting.instrumentSection.instrumentType": {
+                                "condition": "model.showFeild"
+                            },
+                            "FinconAccounting.instrumentSection.instrumentDate": {
+                                "condition": "model.showFeild"
+                            },
+                            "FinconAccounting.instrumentSection.instrumentNumber": {
+                                "condition": "model.showFeild"
+                            },
+                            "FinconAccounting.instrumentSection.instrumentBankName": {
+                                "condition": "model.showFeild"
+                            },
+                            "FinconAccounting.instrumentSection.instrumentBranchName": {
+                                "condition": "model.showFeild"
                             }
                         }
                     }
@@ -218,50 +251,55 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccountingReview"), 
                             }]
                         }
                     }
-                UIRepository.getFinconAccountingUIRepository().$promise
-                    .then(function(repo) {
-                        return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model)
-                    })
-                    .then(function(form) {
-                        console.log(form)
-                        self.form = form;
-                    });
-                if (!_.hasIn($stateParams, 'pageId') || _.isNull($stateParams.pageId)) {
-                    FinconPostingProcess.createNewProcess()
-                        .finally(function() {
-                            PageHelper.showProgress('Posting', 'Loading Finished.', 5000);
-                            PageHelper.hideLoader();
+                    UIRepository.getFinconAccountingUIRepository().$promise
+                        .then(function(repo) {
+                            return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model)
                         })
-                        .subscribe(function(journal) {
-                            model.finconProcess = journal;
-                            console.log(journal);
-                            model.journal.journalHeader = {};
-                            model.journal.journalHeader = journal.journalHeader;
-                            journalDetailsClass = JournalDetails;
-                            // model.journal.journalEntryDto.branchId = SessionStore.getCurrentBranch().branchId;
+                        .then(function(form) {
+                            console.log(form)
+                            self.form = form;
                         });
-                } else {
+                    if (!_.hasIn($stateParams, 'pageId') || _.isNull($stateParams.pageId)) {
+                        FinconPostingProcess.createNewProcess()
+                            .finally(function() {
+                                PageHelper.showProgress('Posting', 'Loading Finished.', 5000);
+                                PageHelper.hideLoader();
+                            })
+                            .subscribe(function(journal) {
+                                model.finconProcess = journal;
+                                console.log(journal);
+                                model.journal.journalHeader = {};
+                                model.journal.journalHeader = journal.journalHeader;
+                                journalDetailsClass = JournalDetails;
+                                // model.journal.journalEntryDto.branchId = SessionStore.getCurrentBranch().branchId;
+                            });
+                    } else {
+                        var obs = FinconPostingProcess.getJournal($stateParams.pageId);
+                        obs.subscribe(function(res) {
+                            PageHelper.hideLoader();
+                            console.log(res);
+                            model.finconProcess = res
+                                // model.finconProcess = res
+                            model.journal.journalHeader = res.journalHeader;
+                            model.showFeilds = false;
+                            model.showFeild = false;
+                            _.forEach(res.journalHeader.journalDetails ,function(journaldetail){
+                                journaldetail.glAcNo = "TESTGL101"
+                            })
+                            if (res.journalHeader.entryType == ("Payment - Account") || res.journalHeader.entryType == ("Payment") || res.journalHeader.entryType == ("Journal - Account") || res.journalHeader.entryType == ("Journal")) {
+                                model.showFeilds = true;
+                            }
+                            if (res.journalHeader.entryType == ("Payment - Account") || res.journalHeader.entryType == ("Payment") || res.journalHeader.entryType == ("Receipt - Account") || res.journalHeader.entryType == ("Receipt")) {
+                                model.showFeild = true;
+                            }
+                            model.journal.journalHeader.billNumber = parseInt(res.journalHeader.billNumber);
+                            model.journal.journalHeader.instrumentNumber = parseInt(res.journalHeader.instrumentNumber);
+                            model.myFunc(res.journalHeader.journaldetails)
+                        })
+                    }
 
-                    var obs = FinconPostingProcess.getJournal($stateParams.pageId);
-                    obs.subscribe(function(res) {
-                        PageHelper.hideLoader();
-                        console.log(res);
-                        model.finconProcess = res
-                        model.journal.journalHeader = res.journalHeader;
-                        if (model.journal.journalHeader.entryType == ("Payment - Account") || model.journal.journalHeader.entryType == ("Payment") || model.journal.journalHeader.entryType == ("Journal - Account") || model.journal.journalHeader.entryType == ("Journal")) {
-                            model.showFeilds = true;
-                        }
-                        _.forEach(res.journalHeader.journalDetails,function(journaldetail){
-                            journaldetail.glAcNo = 'TestGL101'
-                        });
-                        model.journal.journalHeader.billNumber = parseInt(res.journalHeader.billNumber);
-                        model.journal.journalHeader.instrumentNumber = parseInt(res.journalHeader.instrumentNumber);
-                         model.myFunc(res.journalHeader.journaldetails)
-                    })
-                }
 
-
-            })
+                })
 
             },
             form: [],
@@ -284,29 +322,29 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccountingReview"), 
                             PageHelper.hideLoader();
                         })
                 },
-                reject: function (model, formCtrl, form, $event) {
-                        $log.info("Inside reject()");
-                        // if (PageHelper.isFormInvalid(formCtrl)) {
-                        //     return false;
-                        // }
-                        PageHelper.showLoader();
-                       //model.branchProcess.remarks = model.journal.remarks;
-                        model.finconProcess.reject()
+                reject: function(model, formCtrl, form, $event) {
+                    $log.info("Inside reject()");
+                    // if (PageHelper.isFormInvalid(formCtrl)) {
+                    //     return false;
+                    // }
+                    PageHelper.showLoader();
+                    //model.branchProcess.remarks = model.journal.remarks;
+                    model.finconProcess.reject()
                         .finally(function() {
                             PageHelper.hideLoader();
                         })
                         .subscribe(function(out) {
                             PageHelper.showProgress("Review Rejected", "Posting Rejected", 3000);
-                           // PageHelper.showProgress('Posting', 'Done.', 5000);
+                            // PageHelper.showProgress('Posting', 'Done.', 5000);
                             irfNavigator.goBack();
                         }, function(err) {
                             PageHelper.showProgress('Posting', 'Oops. Some error.', 5000);
                             PageHelper.showErrors(err);
                             PageHelper.hideLoader();
                         });
-                    },
-                  sendBack: function (model, formCtrl, form, $event) {
-                        model.finconProcess.sendBack("multiJournalEntry")
+                },
+                sendBack: function(model, formCtrl, form, $event) {
+                    model.finconProcess.sendBack("multiJournalEntry")
                         .finally(function() {
                             PageHelper.hideLoader();
                         })
@@ -319,7 +357,7 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccountingReview"), 
                             PageHelper.showErrors(err);
                             PageHelper.hideLoader();
                         });
-                    }
+                }
             }
         }
 

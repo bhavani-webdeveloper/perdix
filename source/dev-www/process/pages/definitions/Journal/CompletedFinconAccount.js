@@ -1,113 +1,141 @@
 irf.pageCollection.controller(irf.controller("Journal.CompletedFinconAccount"), ["$log", "$scope", "Journal", "$state", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage", "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator", "UIRepository", "IrfFormRequestProcessor", "$injector", "entityManager", "SchemaResource", "irfSimpleModal", "Queries",
-    function($log, $scope, Journal, $state, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
-        PageHelper, Utils, PagesDefinition, Queries, irfNavigator, UIRepository, IrfFormRequestProcessor, $injector, entityManager, SchemaResource, irfSimpleModal, Queries) {
-        $log.info("Page.FinconAccounting.html loaded");
-        $scope.$templateUrl = "process/pages/templates/Page.FinconAccounting.html";
-        $scope.pageName = $stateParams.pageName;
+            function($log, $scope, Journal, $state, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
+                PageHelper, Utils, PagesDefinition, Queries, irfNavigator, UIRepository, IrfFormRequestProcessor, $injector, entityManager, SchemaResource, irfSimpleModal, Queries) {
+                $log.info("Page.FinconAccounting.html loaded");
+                $scope.$templateUrl = "process/pages/templates/Page.FinconAccounting.html";
+                $scope.pageName = $stateParams.pageName;
 
-        $scope.formHelper = formHelper;
+                $scope.formHelper = formHelper;
 
-        $scope.page = {
-            "type": "schema-form",
-            "title": "COMPLETED_FINCON_ACCOUNT",
-            "subTitle": "",
-            initialize: function(model, form, formCtrl) {
-                var self = this;
+                $scope.page = {
+                    "type": "schema-form",
+                    "title": "COMPLETED_FINCON_ACCOUNT",
+                    "subTitle": "",
+                    initialize: function(model, form, formCtrl) {
+                        var self = this;
 
-                var pageDefPath = "perdix/domain/model/journal/finconaccounting/FinconPostingProcess";
-                var journaldetail = "perdix/domain/model/journal/finconaccounting/JournalDetail";
-                // var pageDefPath = "pages/" + $scope.pageName.replace(/\./g, "/");
-                PageHelper.showLoader();
-                require([pageDefPath, journaldetail], function(FinconPostingProcess, JournalDetails) {
-                    FinconPostingProcess = FinconPostingProcess['FinconPostingProcess'];
+                        var pageDefPath = "perdix/domain/model/journal/finconaccounting/FinconPostingProcess";
+                        var journaldetail = "perdix/domain/model/journal/finconaccounting/JournalDetail";
+                        // var pageDefPath = "pages/" + $scope.pageName.replace(/\./g, "/");
+                        PageHelper.showLoader();
+                        require([pageDefPath, journaldetail], function(FinconPostingProcess, JournalDetails) {
+                                    FinconPostingProcess = FinconPostingProcess['FinconPostingProcess'];
 
-                    model.journal = model.journal || {};
-                    model.entryType = [{
-                        'name': 'Debit',
-                        'value': 'Debit'
-                    }, {
-                        'name': 'Credit',
-                        'value': 'Credit'
-                    }]
+                                    model.journal = model.journal || {};
+                                    model.entryType = [{
+                                        'name': 'Debit',
+                                        'value': 'Debit'
+                                    }, {
+                                        'name': 'Credit',
+                                        'value': 'Credit'
+                                    }]
 
-                    model.myFunc = function( journaldetails) {
-                        var debitSum = 0;
-                        var creditSum = 0;
-                        _.forEach(journaldetails, function(journaldetail) {
-                            if (journaldetail.drCrIndicator == "Credit" && journaldetail.transactionAmount) {
-                                creditSum = creditSum + journaldetail.transactionAmount;
-                            } else if (journaldetail.drCrIndicator == "Debit" && journaldetail.transactionAmount) {
-                                debitSum = debitSum + journaldetail.transactionAmount;
-                            }
+                                    model.myFunc = function(journaldetails) {
+                                        var debitSum = 0;
+                                        var creditSum = 0;
+                                        _.forEach(journaldetails, function(journaldetail) {
+                                            if (journaldetail.drCrIndicator == "Credit" && journaldetail.transactionAmount) {
+                                                creditSum = creditSum + journaldetail.transactionAmount;
+                                            } else if (journaldetail.drCrIndicator == "Debit" && journaldetail.transactionAmount) {
+                                                debitSum = debitSum + journaldetail.transactionAmount;
+                                            }
 
-                        })
-                        model.totalAmount = creditSum - debitSum;
-                    }
+                                        })
+                                        model.totalAmount = creditSum - debitSum;
+                                    }
 
-                    var configFile = function() {
-                        return {}
-                    }
+                                    var configFile = function() {
+                                        return {}
+                                    }
 
-                    var getOverrides = function(param) {
-                        return {
-                            "FinconAccounting": {
-                                "readonly": true
-                            },
-                             "FinconAccounting.transactionSection.billNumber": {
-                                "condition": "model.showFeilds"
-                            },
-                            "FinconAccounting.transactionSection.billDate": {
-                                "condition": "model.showFeilds"
-                            },
-                            "FinconAccounting.instrumentSection": {
-                                "condition": "model.showFeilds"
-                            }
-                        }
-                    }
-                    var getIncludes = function(model) {
-                        return [
-                            "FinconAccounting",
-                            "FinconAccounting.transactionSection",
-                            "FinconAccounting.transactionSection.entryType",
-                            "FinconAccounting.transactionSection.transactionDate",
-                            "FinconAccounting.transactionSection.transactionBranch",
-                            "FinconAccounting.transactionSection.valueDate",
-                            "FinconAccounting.transactionSection.billNumber",
-                            "FinconAccounting.transactionSection.billDate",
-                            "FinconAccounting.instrumentSection",
-                            "FinconAccounting.instrumentSection.billUpload",
-                            "FinconAccounting.instrumentSection.instrumentType",
-                            "FinconAccounting.instrumentSection.instrumentDate",
-                            "FinconAccounting.instrumentSection.instrumentNumber",
-                            "FinconAccounting.instrumentSection.instrumentBankName",
-                            "FinconAccounting.instrumentSection.instrumentBranchName",
-                            "Entries"
-                        ]
+                                    var getOverrides = function(param) {
+                                        return {
+                                            "FinconAccounting": {
+                                                "readonly": true
+                                            },
+                                            "FinconAccounting.transactionSection.entryType": {
+                                                onChange: function(modelValue, form, model) {
+                                                    model.showFeilds = false;
+                                                    model.showFeild = false;
+                                                    if (modelValue == ("Payment - Account") || modelValue == ("Payment") || modelValue == ("Journal - Account") || modelValue == ("Journal")) {
+                                                        model.showFeilds = true;
+                                                    }
+                                                    if (modelValue == ("Payment - Account") || modelValue == ("Payment") || modelValue == ("Receipt - Account") || modelValue == ("Receipt")) {
+                                                        model.showFeild = true;
+                                                    }
+                                                }
+                                            },
+                                            "FinconAccounting.transactionSection.billNumber": {
+                                                "condition": "model.showFeilds"
+                                            },
+                                            "FinconAccounting.transactionSection.billDate": {
+                                                "condition": "model.showFeilds"
+                                            },
+                                            "FinconAccounting.instrumentSection.billUpload": {
+                                                "condition": "model.showFeilds"
+                                            },
+                                            "FinconAccounting.instrumentSection": {
 
-                    }
-                    var formRequest = {
-                        "overrides": getOverrides(model),
-                        "includes": getIncludes(model),
-                        "excludes": [
-                            ""
-                        ],
-                        "options": {
-                            "additions": [
-                            {
-                                "type": "actionbox",
-                                "orderNo": 1200,
-                                "items": [{
-                                    "type": "button",
-                                    "title": "Back",
+                                            },
+                                            "FinconAccounting.instrumentSection.instrumentType": {
+                                                "condition": "model.showFeild"
+                                            },
+                                            "FinconAccounting.instrumentSection.instrumentDate": {
+                                                "condition": "model.showFeild"
+                                            },
+                                            "FinconAccounting.instrumentSection.instrumentNumber": {
+                                                "condition": "model.showFeild"
+                                            },
+                                            "FinconAccounting.instrumentSection.instrumentBankName": {
+                                                "condition": "model.showFeild"
+                                            },
+                                            "FinconAccounting.instrumentSection.instrumentBranchName": {
+                                                "condition": "model.showFeild"
+                                            }
+                                        }
+                                    }
+                                    var getIncludes = function(model) {
+                                        return [
+                                            "FinconAccounting",
+                                            "FinconAccounting.transactionSection",
+                                            "FinconAccounting.transactionSection.entryType",
+                                            "FinconAccounting.transactionSection.transactionDate",
+                                            "FinconAccounting.transactionSection.transactionBranch",
+                                            "FinconAccounting.transactionSection.valueDate",
+                                            "FinconAccounting.transactionSection.billNumber",
+                                            "FinconAccounting.transactionSection.billDate",
+                                            "FinconAccounting.instrumentSection",
+                                            "FinconAccounting.instrumentSection.billUpload",
+                                            "FinconAccounting.instrumentSection.instrumentType",
+                                            "FinconAccounting.instrumentSection.instrumentDate",
+                                            "FinconAccounting.instrumentSection.instrumentNumber",
+                                            "FinconAccounting.instrumentSection.instrumentBankName",
+                                            "FinconAccounting.instrumentSection.instrumentBranchName",
+                                            "Entries"
+                                        ]
 
-                                    "onClick": "actions.save(model, formCtrl, form, $event)"
-                                }]
-                            }, 
-                            {
-                                "targetID": "Entries",
-                                "items": [{
-                                    "type": "section",
-                                    "html": "\
+                                    }
+                                    var formRequest = {
+                                        "overrides": getOverrides(model),
+                                        "includes": getIncludes(model),
+                                        "excludes": [
+                                            ""
+                                        ],
+                                        "options": {
+                                            "additions": [{
+                                                "type": "actionbox",
+                                                "orderNo": 1200,
+                                                "items": [{
+                                                    "type": "button",
+                                                    "title": "Back",
+
+                                                    "onClick": "actions.save(model, formCtrl, form, $event)"
+                                                }]
+                                            }, {
+                                                "targetID": "Entries",
+                                                "items": [{
+                                                    "type": "section",
+                                                    "html": "\
                                         <style>\
                                         .margin-top-5px{\
                                                 margin-top:10px \
@@ -207,118 +235,119 @@ irf.pageCollection.controller(irf.controller("Journal.CompletedFinconAccount"), 
                                             <div class=\"margin-top-5px pull-right\"><a onclick=\"return false\" href='' ng-click=\"return false;\"><i class='fa fa-plus'>Add Entry</i></a></div>\
                                             <div class=\"margin-top-10px text-center\"><span disabled ng-model=\"d['totalAmount']\"><b>TotalAmount :</b> {{' ' + model.totalAmount}}</span></div>"
 
-                                }]
-                            }]
-                        }
+                                                }]
+                                            }]
+                                        }
+                                    }
+                                    UIRepository.getFinconAccountingUIRepository().$promise
+                                        .then(function(repo) {
+                                            return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model)
+                                        })
+                                        .then(function(form) {
+                                            console.log(form)
+                                            self.form = form;
+                                        });
+                                    if (!_.hasIn($stateParams, 'pageId') || _.isNull($stateParams.pageId)) {
+                                        FinconPostingProcess.createNewProcess()
+                                            .finally(function() {
+                                                PageHelper.showProgress('Posting', 'Loading Finished.', 5000);
+                                                PageHelper.hideLoader();
+                                            })
+                                            .subscribe(function(journal) {
+                                                model.finconProcess = journal;
+                                                console.log(journal);
+                                                model.journal.journalHeader = {};
+                                                model.journal.journalHeader = journal.journalHeader;
+                                                journalDetailsClass = JournalDetails;
+                                                // model.journal.journalEntryDto.branchId = SessionStore.getCurrentBranch().branchId;
+                                            });
+                                    } else {
+                                        var obs = FinconPostingProcess.getJournal($stateParams.pageId);
+                                        obs.subscribe(function(res) {
+                                                PageHelper.hideLoader();
+                                                model.finconProcess = res
+                                                model.journal.journalHeader = res.journalHeader;
+                                                model.showFeilds = false;
+                                                model.showFeild = false;
+                                                if (res.journalHeader.entryType == ("Payment - Account") || res.journalHeader.entryType == ("Payment") || res.journalHeader.entryType == ("Journal - Account") || res.journalHeader.entryType == ("Journal")) {
+                                                    model.showFeilds = true;
+                                                }
+                                                if (res.journalHeader.entryType == ("Payment - Account") || res.journalHeader.entryType == ("Payment") || res.journalHeader.entryType == ("Receipt - Account") || res.journalHeader.entryType == ("Receipt")) {
+                                                    model.showFeild = true;
+                                                }
+                                                model.journal.journalHeader.billNumber = parseInt(res.journalHeader.billNumber);
+                                                model.journal.journalHeader.instrumentNumber = parseInt(res.journalHeader.instrumentNumber);
+
+                                                    model.myFunc(res.journalHeader.journaldetails)
+                                                })
+                                        }
+
+
+                                    })
+
+                            },
+                            form: [],
+                            schema: function() {
+                                return SchemaResource.getJournalMultiSchema().$promise;
+                            },
+                            actions: {
+                                save: function(model, formCtrl, form, $event) {
+                                    irfNavigator.goBack();
+                                },
+                                reject: function(model, formCtrl, form, $event) {
+                                    $log.info("Inside reject()");
+                                    // if (PageHelper.isFormInvalid(formCtrl)) {
+                                    //     return false;
+                                    // }
+                                    PageHelper.showLoader();
+                                    //model.branchProcess.remarks = model.journal.remarks;
+                                    model.finconProcess.reject()
+                                        .finally(function() {
+                                            PageHelper.hideLoader();
+                                        })
+                                        .subscribe(function(out) {
+                                            PageHelper.showProgress("Review Rejected", "Posting Rejected", 3000);
+                                            // PageHelper.showProgress('Posting', 'Done.', 5000);
+                                            irfNavigator.goBack();
+                                        }, function(err) {
+                                            PageHelper.showProgress('Posting', 'Oops. Some error.', 5000);
+                                            PageHelper.showErrors(err);
+                                            PageHelper.hideLoader();
+                                        });
+                                },
+                                sendBack: function(model, formCtrl, form, $event) {
+                                    model.finconProcess.sendBack("multiJournalEntry")
+                                        .finally(function() {
+                                            PageHelper.hideLoader();
+                                        })
+                                        .subscribe(function(out) {
+                                            PageHelper.showProgress("Posting Send Back", "Posting Send Back", 3000);
+                                            PageHelper.showProgress('Posting', 'Done.', 5000);
+                                            irfNavigator.goBack();
+                                        }, function(err) {
+                                            PageHelper.showProgress('Posting', 'Oops. Some error.', 5000);
+                                            PageHelper.showErrors(err);
+                                            PageHelper.hideLoader();
+                                        });
+                                }
+                            }
                     }
-                UIRepository.getFinconAccountingUIRepository().$promise
-                    .then(function(repo) {
-                        return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model)
-                    })
-                    .then(function(form) {
-                        console.log(form)
-                        self.form = form;
+
+                        $scope.initialize = function(model, form, formCtrl) {
+                        if (model.$$STORAGE_KEY$$) {
+                            if (angular.isFunction($scope.page.offlineInitialize)) {
+                                $scope.page.offlineInitialize(model, form, formCtrl);
+                            }
+                        } else {
+                            $scope.page.initialize(model, form, formCtrl);
+                        }
+                    };
+
+                    var promise = $scope.page.schema();
+                    promise.then(function(data) {
+                        $scope.schema = data;
                     });
-                if (!_.hasIn($stateParams, 'pageId') || _.isNull($stateParams.pageId)) {
-                    FinconPostingProcess.createNewProcess()
-                        .finally(function() {
-                            PageHelper.showProgress('Posting', 'Loading Finished.', 5000);
-                            PageHelper.hideLoader();
-                        })
-                        .subscribe(function(journal) {
-                            model.finconProcess = journal;
-                            console.log(journal);
-                            model.journal.journalHeader = {};
-                            model.journal.journalHeader = journal.journalHeader;
-                            journalDetailsClass = JournalDetails;
-                            // model.journal.journalEntryDto.branchId = SessionStore.getCurrentBranch().branchId;
-                        });
-                } else {
+                    $scope.model = entityManager.getModel($scope.pageName);
 
-                    var obs = FinconPostingProcess.getJournal($stateParams.pageId);
-                    obs.subscribe(function(res) {
-                        PageHelper.hideLoader();
-                        console.log(res);
-                        model.finconProcess = res
-                        model.journal.journalHeader = res.journalHeader;
-                        if (model.journal.journalHeader.entryType == ("Payment - Account") || model.journal.journalHeader.entryType == ("Payment") || model.journal.journalHeader.entryType == ("Journal - Account") || model.journal.journalHeader.entryType == ("Journal")) {
-                            model.showFeilds = true;
-                        }
-                        _.forEach(res.journalHeader.journalDetails,function(journaldetail){
-                            journaldetail.glAcNo = 'TestGL101'
-                        });
-                        model.journal.journalHeader.billNumber = parseInt(res.journalHeader.billNumber);
-                        model.journal.journalHeader.instrumentNumber = parseInt(res.journalHeader.instrumentNumber);
-                         model.myFunc(res.journalHeader.journaldetails)
-                    })
                 }
-
-
-            })
-
-            },
-            form: [],
-            schema: function() {
-                return SchemaResource.getJournalMultiSchema().$promise;
-            },
-            actions: {
-                save: function(model, formCtrl, form, $event) {
-                    irfNavigator.goBack();
-                },
-                reject: function (model, formCtrl, form, $event) {
-                        $log.info("Inside reject()");
-                        // if (PageHelper.isFormInvalid(formCtrl)) {
-                        //     return false;
-                        // }
-                        PageHelper.showLoader();
-                       //model.branchProcess.remarks = model.journal.remarks;
-                        model.finconProcess.reject()
-                        .finally(function() {
-                            PageHelper.hideLoader();
-                        })
-                        .subscribe(function(out) {
-                            PageHelper.showProgress("Review Rejected", "Posting Rejected", 3000);
-                           // PageHelper.showProgress('Posting', 'Done.', 5000);
-                            irfNavigator.goBack();
-                        }, function(err) {
-                            PageHelper.showProgress('Posting', 'Oops. Some error.', 5000);
-                            PageHelper.showErrors(err);
-                            PageHelper.hideLoader();
-                        });
-                    },
-                  sendBack: function (model, formCtrl, form, $event) {
-                        model.finconProcess.sendBack("multiJournalEntry")
-                        .finally(function() {
-                            PageHelper.hideLoader();
-                        })
-                        .subscribe(function(out) {
-                            PageHelper.showProgress("Posting Send Back", "Posting Send Back", 3000);
-                            PageHelper.showProgress('Posting', 'Done.', 5000);
-                            irfNavigator.goBack();
-                        }, function(err) {
-                            PageHelper.showProgress('Posting', 'Oops. Some error.', 5000);
-                            PageHelper.showErrors(err);
-                            PageHelper.hideLoader();
-                        });
-                    }
-            }
-        }
-
-        $scope.initialize = function(model, form, formCtrl) {
-            if (model.$$STORAGE_KEY$$) {
-                if (angular.isFunction($scope.page.offlineInitialize)) {
-                    $scope.page.offlineInitialize(model, form, formCtrl);
-                }
-            } else {
-                $scope.page.initialize(model, form, formCtrl);
-            }
-        };
-
-        var promise = $scope.page.schema();
-        promise.then(function(data) {
-            $scope.schema = data;
-        });
-        $scope.model = entityManager.getModel($scope.pageName);
-
-    }
-]);
+            ]);
