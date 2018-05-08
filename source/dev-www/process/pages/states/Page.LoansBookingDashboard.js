@@ -15,7 +15,7 @@ function($log, $scope, PagesDefinition, SessionStore, IndividualLoan) {
             "Page/Engine/loans.individual.booking.PendingVerificationQueue"
         ]
     };
-    if(siteCode == 'sambandh') {
+    if(siteCode == 'sambandh' || siteCode == 'saija') {
         fullDefinition.items = [
             "Page/Engine/loans.individual.booking.SimpleLoanInput",
             "Page/Engine/loans.individual.booking.InitiationQueue",
