@@ -1,5 +1,5 @@
 {
-  "urnGenerateStage": "BasicEnrolment",
+  "urnGenerateStage": "Stage02",
   "cbValidationStage": "BasicEnrolment",
   "stages": [
     {
