@@ -153,7 +153,8 @@
          },
          "leadName": {
             "type": ["string", "null"],
-            "title": "LEAD_NAME"
+            "title": "LEAD_NAME",
+            "pattern":"[a-zA-Z ]*$"
          },
          "interestedInProduct": {
             "type": ["string", "null"],
@@ -278,7 +279,8 @@
          },
          "businessName": {
             "type": ["string", "null"],
-            "title": "BUSINESS_NAME"
+            "title": "BUSINESS_NAME",
+            "pattern":"[a-zA-Z ]*$"
          },
          "businessType": {
             "type": ["string", "null"],

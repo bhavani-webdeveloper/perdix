@@ -28,9 +28,9 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
 
 
                 model = Utils.removeNulls(model, true);
-                if(model.lead.siteCode == 'sambandh'){
+                if(model.lead.siteCode == 'sambandh' || model.lead.siteCode == 'KGFS'){
                     model.lead.customerType = "Individual";
-                   }
+                }
                 if (!(model && model.lead && model.lead.id && model.$$STORAGE_KEY$$)) {
 
                     PageHelper.showLoader();
