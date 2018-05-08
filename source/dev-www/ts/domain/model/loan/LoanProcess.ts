@@ -156,6 +156,34 @@ export class LoanProcess {
                 this.loanAccount.loanCustomerRelations.push(lcr);
             }
         }
+
+        /**
+         * Remove
+         */
+        _.remove(this.loanAccount.loanCustomerRelations, function(lcr:LoanCustomerRelation){
+            if (lcr.relation == LoanCustomerRelationTypes.APPLICANT){
+                if (_.hasIn(this.applicantEnrolmentProcess, 'customer.id') &&
+                    this.applicantEnrolmentProcess.customer.id != lcr.customerId) {
+                    return true;
+                }
+            } else if (lcr.relation == LoanCustomerRelationTypes.CO_APPLICANT){
+                return _.every(this.coApplicantsEnrolmentProcesses, function(coApplicant){
+                    return (_.hasIn(coApplicant, "customer.id") && coApplicant.customer.id != lcr.customerId)
+                })
+            } else if (lcr.relation == LoanCustomerRelationTypes.GUARANTOR){
+                return _.every(this.guarantorsEnrolmentProcesses, function(guarantor){
+                    return (_.hasIn(guarantor, "customer.id") && guarantor.customer.id != lcr.customerId)
+                });
+            } else if (lcr.relation == LoanCustomerRelationTypes.LOAN_CUSTOMER) {
+                if (_.hasIn(this.loanCustomerEnrolmentProcess, 'customer.id') &&
+                    this.loanCustomerEnrolmentProcess.customer.id != lcr.customerId) {
+                    return true;
+                }
+            }
+            return false;
+
+        });
+        
     }
 
     /**
