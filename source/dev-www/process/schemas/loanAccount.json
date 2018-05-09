@@ -1107,6 +1107,24 @@
                             "version"
                         ]
                     }
+                },                
+                "loanUtilisationDetail": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "utilisationType": {
+                                "type": ["string", "null"]
+                            },
+                            "fundAllocationPercentage": {
+                                "type": ["string", "null"]
+                            },
+                            "consumptionDetails": {
+                                "type": ["string", "null"]
+                            }
+                        }
+                    }
+
                 },
                 "numberOfDisbursed": {
                     "type": ["null", "integer"]

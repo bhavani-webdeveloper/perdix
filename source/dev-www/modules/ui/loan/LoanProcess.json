@@ -377,12 +377,12 @@
     "ProposedUtilizationPlan": {
         "type": "box",
         "title": "PROPOSED_LOAN_UTILIZATION",
-        "startEmpty": true,
         "orderNo": 59,
         "items": {
             "loanUtilisationDetail" : {
                 "key": "loanAccount.loanUtilisationDetail",
-                "type": "array",
+                "type": "array",                
+                "startEmpty": true,
                 "title": "PROPOSED_UTILIZATION_PLAN",
                 "items": {
                     "utilisationType": {
