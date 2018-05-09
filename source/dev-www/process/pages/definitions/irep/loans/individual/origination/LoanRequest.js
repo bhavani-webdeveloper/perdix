@@ -1056,10 +1056,7 @@ define([],function(){
                             });
 
                     },
-                    sendBack: function(model, formCtrl, form, $event){
-                        if(PageHelper.isFormInvalid(formCtrl)) {
-                            return false;
-                        }
+                    sendBack: function(model, formCtrl, form, $event){                        
                         PageHelper.showLoader();
                         model.loanProcess.sendBack()
                             .finally(function () {

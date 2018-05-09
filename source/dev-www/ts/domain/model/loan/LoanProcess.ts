@@ -62,6 +62,9 @@ export class LoanProcess {
                 break;
 
             case LoanCustomerRelationTypes.GUARANTOR:
+            if (!_.isArray(this.guarantorsEnrolmentProcesses)) {
+                    this.guarantorsEnrolmentProcesses = [];
+                }
                 this.guarantorsEnrolmentProcesses.push(enrolmentProcess);
                 break;
 
@@ -205,7 +208,7 @@ export class LoanProcess {
                 this.coApplicantsEnrolmentProcesses.splice(index, 1);
             }
         } else if (relation == LoanCustomerRelationTypes.GUARANTOR){
-            let index = _.findIndex(this.coApplicantsEnrolmentProcesses, function(ep){
+            let index = _.findIndex(this.guarantorsEnrolmentProcesses, function(ep){
                 return ep === enrolmentProcess
             })
             if (index > -1){
