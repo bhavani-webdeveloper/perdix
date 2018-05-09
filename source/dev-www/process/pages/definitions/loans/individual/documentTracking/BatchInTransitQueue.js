@@ -149,7 +149,7 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.BatchInTr
                                         	reqData.accountDocumentTrackingAction = "PROCEED";
                                         	$log.info(reqData);
                                         	PageHelper.showProgress("process-batch", "Working...");
-                                        	DocumentTracking.create(reqData)
+                                        	DocumentTracking.update(reqData)
                                         	.$promise
                                         	.then(function(res){
                                         		PageHelper.showProgress("process-batch", "Batch marked as Received", 3000);
