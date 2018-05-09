@@ -75,6 +75,7 @@ define({
                     "key": "product.partnerCode",
                     "type": "select",
                     "enumCode": "partner",
+                    "required": true
                 }, {
                     "key": "product.loanType",
                     "type": "select",
@@ -626,7 +627,7 @@ define({
                                 }
                             },
                             "insuranceRateCode": {
-                                "type": "string",
+                                "type": ["string", "null"],
                                 "title": "INSURANCE_RATE_CODE"
                             },
                             "amountFrom": {
@@ -863,7 +864,7 @@ define({
                                             "title": "INVESTOR_ID"
                                         },
                                         "smsProductName": {
-                                            "type": "string",
+                                            "type": ["string", "null"],
                                             "title": "SMS_PRODUCT_NAME"
                                         },
                                     }
