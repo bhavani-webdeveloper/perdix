@@ -18,6 +18,7 @@ define({
                 model.loanCustomerRel = []
                 Queries.getLoanCustomerDetails(model.bundleModel.loanId).then(function(res) {
                     model.loanCustomerRelation = res;
+                    model.loanCustomerRel.push(applicant);
                     _.each(model.loanCustomerRelation.coApplicants, function(coApp) {
                         model.loanCustomerRel.push(coApp);
                     })
@@ -36,7 +37,7 @@ define({
                     id: model.customerId
                 }).$promise.then(function(res) {
                     model.customer = res;
-                    BundleManager.pushEvent('business', model._bundlePageObj, model.customer);
+                    BundleManager.pushEvent('business', model.bundleModel, model.customer);
 
                     model.customer.presetAddress = [
                         model.customer.doorNo,

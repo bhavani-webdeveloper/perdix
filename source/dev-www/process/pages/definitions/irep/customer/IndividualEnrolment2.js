@@ -1573,7 +1573,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             'firstName': model.customer.firstName
                         }
                         // BundleManager.pushEvent('new-enrolment',  {customer: model.customer})
-                        BundleManager.pushEvent("enrolment-removed", model._bundlePageObj, enrolmentDetails)
+                        BundleManager.pushEvent("enrolment-removed", model._bundlePageObj, enrolmentDetails);
+                        model.loanProcess.removeRelatedEnrolmentProcess(model.enrolmentProcess, model.loanCustomerRelationType);
                     }
                     return $q.resolve();
                 },

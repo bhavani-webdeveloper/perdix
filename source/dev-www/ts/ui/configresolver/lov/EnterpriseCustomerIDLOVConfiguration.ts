@@ -60,7 +60,7 @@ export class EnterpriseCustomerIDLOVConfiguration extends LOVElementConfiguratio
             })
             .subscribe(function(enrolmentProcess){
                 /* Updating the loan process */
-                model.loanProcess.removeRelatedEnrolmentProcess(model.customer.id, model.loanCustomerRelationType);
+                model.loanProcess.removeRelatedEnrolmentProcess(model.enrolmentProcess, model.loanCustomerRelationType);
                 model.loanProcess.setRelatedCustomerWithRelation(enrolmentProcess, model.loanCustomerRelationType);
 
                 /* Setting on the current page */
