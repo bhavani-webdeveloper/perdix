@@ -3,11 +3,11 @@ import {NGHelper} from "../../../infra/helpers/NGHelper";
 import AngularResourceService = require("../../../infra/api/AngularResourceService");
 import {EnrolmentProcess} from '../../../domain/model/customer/EnrolmentProcess';
 import * as _ from 'lodash';
-export class BankIFSCLOVConfiguration extends LOVElementConfiguration {
+export class JournalIFSCLOVConfiguration extends LOVElementConfiguration {
     outputMap: Object = {
-        "bankName": "customer.customerBankAccounts[arrayIndex].customerBankName",
-        "branchName": "customer.customerBankAccounts[arrayIndex].customerBankBranchName",
-        "ifscCode": "customer.customerBankAccounts[arrayIndex].ifscCode"
+        "bankName": "journal.journalEntryDto.instrumentBankName",
+        "branchName": "journal.journalEntryDto.instrumentBranchName",
+        "ifscCode": "journal.journalEntryDto.ifscCode"
     };
 
     search: Function = function(inputModel, form) {
@@ -43,15 +43,14 @@ export class BankIFSCLOVConfiguration extends LOVElementConfiguration {
 
     inputMap: Object = {
         "ifscCode": {
-            "key": "customer.customerBankAccounts[].ifscCode"
+            "key": "journal.journalEntryDto.ifscCode"
         },
         "bankName": {
-            "key": "customer.customerBankAccounts[].customerBankName"
+            "key": "journal.journalEntryDto.instrumentBankName"
         },
         "branchName": {
-            "key": "customer.customerBankAccounts[].customerBankBranchName"
+            "key": "journal.journalEntryDto.instrumentBranchName"
         }
-
 
     };
 

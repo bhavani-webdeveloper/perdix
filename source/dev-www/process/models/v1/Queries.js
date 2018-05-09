@@ -854,14 +854,14 @@ irf.models.factory('Queries', [
         resource.getResult("physicalAssets.list",request).then(function(response) {
             deferred.resolve(response.results);
         }, deferred.reject);
-        return deferred.promise;        
+        return deferred.promise;
     };
     resource.getProfileSummary = function() {
         var deferred = $q.defer();
         var request = {};
         resource.getResult("profileSummary.list",request).then(function(response){
             if (response && _.isArray(response.results) && response.results.length > 0) {
-                
+
                 var result = {
                     headers: {
                         "x-total-count": response.results.length
@@ -873,7 +873,7 @@ irf.models.factory('Queries', [
         }, deferred.reject)
         return deferred.promise;
     }
-    
+
     resource.getActiveLoansCountByProduct = function(customerUrn, applicantUrn, productCode, loanId) {
         var deferred = $q.defer();
         var request = {};
@@ -899,12 +899,18 @@ irf.models.factory('Queries', [
         };
         resource.getResult("loanAccountsByLikeAccountNumber.list", request)
         .then(function(response) {
-            deferred.resolve(response.results);
+            var result = {
+                headers: {
+                    "x-total-count": response.results.length
+                },
+                body: response.results
+            };
+            deferred.resolve(result);
             console.log(response.results)
         }, deferred.reject);
         return deferred.promise;
     };
-    
+
     return resource;
     }
 ]);

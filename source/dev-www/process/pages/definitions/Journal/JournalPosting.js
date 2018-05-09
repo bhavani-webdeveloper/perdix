@@ -1,6 +1,6 @@
 define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], function(BranchPostingProcess) {
     BranchPostingProcess = BranchPostingProcess['BranchPostingProcess'];
-    
+
     return {
         pageUID: "Journal.JournalPosting",
         pageType: "Engine",
@@ -75,7 +75,44 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                     model.journal = model.journal || {};
                     var self = this;
                     var formRequest = {
-                        "overrides": {},
+                        "overrides": {
+                            "BranchPostingEntry.billNo": {
+                                "condition": "BranchPostingEntry.transactionType.toLowerCase() == 'journal' || BranchPostingEntry.transactionType.toLowerCase() == 'payment'",
+                                "type": "text"
+                            },
+                            "BranchPostingEntry.billDate": {
+                                "condition": "BranchPostingEntry.transactionType.toLowerCase() == 'journal' || BranchPostingEntry.transactionType.toLowerCase() == 'payment'"
+                            },
+                            "BranchPostingEntry.billUpload": {
+                                "condition": "BranchPostingEntry.transactionType.toLowerCase() == 'journal' || BranchPostingEntry.transactionType.toLowerCase() == 'payment'"
+                            },
+                            "BranchPostingEntry.instrumentType": {
+                                "condition": "BranchPostingEntry.transactionType.toLowerCase() == 'receipt' || BranchPostingEntry.transactionType.toLowerCase() == 'payment'"
+                            },
+                            "BranchPostingEntry.instrumentNumber": {
+                                "condition": "BranchPostingEntry.transactionType.toLowerCase() == 'receipt' || BranchPostingEntry.transactionType.toLowerCase() == 'payment'"
+                            },
+                            "BranchPostingEntry.instrumentDate": {
+                                "condition": "BranchPostingEntry.transactionType.toLowerCase() == 'receipt' || BranchPostingEntry.transactionType.toLowerCase() == 'payment'"
+                            },
+                            "BranchPostingEntry.instrumentBankName": {
+                                "condition": "BranchPostingEntry.transactionType.toLowerCase() == 'receipt' || BranchPostingEntry.transactionType.toLowerCase() == 'payment'"
+                            },
+                            "BranchPostingEntry.instrumentBranchName": {
+                                "condition": "BranchPostingEntry.transactionType.toLowerCase() == 'receipt' || BranchPostingEntry.transactionType.toLowerCase() == 'payment'"
+                            },
+                            "BranchPostingEntry.ifscCode": {
+                                "condition": "BranchPostingEntry.transactionType.toLowerCase() == 'receipt' || BranchPostingEntry.transactionType.toLowerCase() == 'payment'",
+                                "resolver": "JournalIFSCLOVConfiguration",
+                                "type": "lov",
+                                "lovonly": true
+                            },
+                            "BranchPostingEntry.relatedAccountNo": {
+                                "resolver": "JournalIFSCAccountNoConfiguration",
+                                "type": "lov",
+                                "lovonly": true
+                            }
+                        },
                         "includes": getIncludes (model),
                         "excludes": [
                         ""
@@ -177,13 +214,13 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                                             ];
                                         }
                                     }, {
-                                        
+
                                         type: "button",
                                         title: "SEND_BACK",
                                         onClick: "actions.sendBack(model, formCtrl, form, $event)"
                                     }
                                     ]
-                                    
+
 
                                 }]
                             }
@@ -201,7 +238,7 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                             } else {
                                 BranchPostingProcess.getJournal(journalId)
                                 .finally(function() {
-                                    PageHelper.showProgress('Posting', 'Loading Finished.', 5000);    
+                                    PageHelper.showProgress('Posting', 'Loading Finished.', 5000);
                                 })
                                 .subscribe(function(journal) {
 
@@ -223,7 +260,7 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                         } else {
                             BranchPostingProcess.createNewProcess()
                             .finally(function() {
-                                PageHelper.showProgress('Posting', 'Loading Finished.', 5000);    
+                                PageHelper.showProgress('Posting', 'Loading Finished.', 5000);
                             })
                             .subscribe(function(journal) {
                                 model.branchProcess = journal;
@@ -335,7 +372,7 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                 //                 'creditGLNo': inputModel.creditGLNo,
                 //                 'isApplicable': 0,
                 //             }).$promise.then(function(response){
-                //                 var count=0; 
+                //                 var count=0;
                 //                 angular.forEach(response.body, function(value, key) {
                 //                     $log.info(value);
                 //                     Journal.get({

@@ -31,11 +31,11 @@ define({
                             }
                     }
                 }
-                
+
                 if (!(model && model.journal && model.journal.id && model.$$STORAGE_KEY$$)) {
                     PageHelper.showLoader();
                     PageHelper.showProgress("page-init", "Loading...");
-                    
+
                     if (!journalId) {
                         PageHelper.hideLoader();
                     }
@@ -44,8 +44,8 @@ define({
                         },
                         function(res) {
                             _.assign(model.journal, res);
-                            
-                            
+
+
                             var journalBranches = [];
 
                             model.journal.journalBranches.map(function(j) {
@@ -60,15 +60,15 @@ define({
                                     return j.id == b.value;
                                 });
                                 if(index < 0) {
-                                    journalBranches.push({name: b.name});     
+                                    journalBranches.push({name: b.name});
                                 }
-                                
+
                             })
 
-                            
-                            
+
+
                             model.journal.journalBranches = journalBranches;
-                            
+
                             $log.info(model.journal);
                             PageHelper.hideLoader();
                         }
@@ -94,19 +94,19 @@ define({
                         readonly: true,
                         type: "number",
                         "title": "JOURNAL_ID"
-                    }, 
+                    },
                     {
                         key: "journal.transactionName",
                         type: "string",
                         "title": "TRANSACTION_NAME",
                         required: true
-                    }, 
+                    },
                     {
                         key: "journal.transactionDescription",
                         type: "textarea",
                         required: true,
                         "title": "TRANSACTION_DESCRIPTION"
-                    }, 
+                    },
                     {
                         key: "journal.transactionType",
                         type: "select",
@@ -123,7 +123,7 @@ define({
                         required: true,
                         "title": "PRODUCT_TYPE",
                         "enumCode": 'journal_transaction_type'
-                        
+
                     },
                     {
                         key: "journal.debitGLNo",
@@ -283,9 +283,9 @@ define({
                                     journalbranch.push({branchId: branches[index].value,id:j.id})
                                 }
                             });
-                           
+
                             model.journal.journalBranches = journalbranch;
-                            
+
                             if (model.journal.id) {
                                 Journal.updateJournal(model.journal)
                                     .$promise
@@ -405,7 +405,7 @@ define({
                         //         PageHelper.hideLoader();
                         //     })
                     } else {
-                    
+
                         Journal.createJournal(model.journal)
                             .$promise
                             .then(function(res) {
