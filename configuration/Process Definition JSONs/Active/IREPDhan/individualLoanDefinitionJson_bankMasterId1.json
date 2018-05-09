@@ -79,7 +79,7 @@
          "allowedRoles":[
             "WM"
          ]
-      },
+      },      
       {
          "order":7,
          "code":"CreditCommitteeReview",
@@ -1196,7 +1196,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "LoanInitiation", "KYC", "GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview"
+                        "LoanInitiation", "KYC", "GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview", "Televerification" ,"Evaluation", "Sanction", "CreditCommitteeReview", "Rejected", "KYCReview"
                      ]
                   },
                   "nomineeMiddleName":{
@@ -1205,7 +1205,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "LoanInitiation", "KYC", "GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview"
+                        "LoanInitiation", "KYC", "GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview", "Televerification" ,"Evaluation", "CreditCommitteeReview", "Sanction", "Rejected", "KYCReview"
                      ]
                   },
                   "nomineeLastName":{
@@ -1214,14 +1214,14 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "LoanInitiation", "KYC","GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview"
+                        "LoanInitiation", "Televerification" ,"Evaluation", "Sanction", "Rejected", "KYCReview", "KYC","GuarantorAddition", "PendingForPartner","CreditCommitteeReview", "Appraisal","AppraisalReview"
                      ]
                   },
                   "nomineeRelationship":{
                      "title":"Nominee Relationship",
                      "type":"string",
                      "captureStages":[
-                        "LoanInitiation", "KYC","GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview"
+                        "LoanInitiation", "Televerification" ,"Evaluation", "Sanction", "Rejected", "KYCReview", "KYC","GuarantorAddition", "PendingForPartner","CreditCommitteeReview", "Appraisal","AppraisalReview"
                      ],
                      "refCodeCategory":"relation"
                   },
@@ -1231,7 +1231,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "LoanInitiation", "KYC","GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview"
+                        "LoanInitiation", "Televerification" ,"Evaluation", "Sanction", "Rejected", "KYCReview", "KYC","GuarantorAddition", "PendingForPartner","CreditCommitteeReview", "Appraisal","AppraisalReview"
                      ]
                   },
                   "nomineeStreet":{
@@ -1240,7 +1240,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "LoanInitiation", "KYC","GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview"
+                        "LoanInitiation", "Televerification" ,"Evaluation", "Sanction", "Rejected", "KYCReview", "KYC","GuarantorAddition", "PendingForPartner","CreditCommitteeReview", "Appraisal","AppraisalReview"
                      ]
                   },
                   "nomineeLocality":{
@@ -1249,14 +1249,14 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "LoanInitiation", "KYC","GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview"
+                        "LoanInitiation", "Televerification" ,"Evaluation", "Sanction", "Rejected", "KYCReview","KYC","GuarantorAddition", "PendingForPartner","CreditCommitteeReview", "Appraisal","AppraisalReview"
                      ]
                   },
                   "nomineeDistrict":{
                      "title":"Nominee District",
                      "type":"string",
                      "captureStages":[
-                        "LoanInitiation", "KYC","GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview"
+                        "LoanInitiation", "Televerification" ,"Evaluation", "Sanction", "Rejected", "KYCReview", "KYC","GuarantorAddition", "PendingForPartner","CreditCommitteeReview", "Appraisal","AppraisalReview"
                      ],
                      "refCodeCategory":"district"
                   },
@@ -1266,7 +1266,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "LoanInitiation", "KYC","GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview"
+                        "LoanInitiation", "Televerification" ,"Evaluation", "Sanction", "Rejected", "KYCReview", "KYC","GuarantorAddition", "PendingForPartner","CreditCommitteeReview", "Appraisal","AppraisalReview"
                      ]
                   },
                   "nomineePincode":{
@@ -1275,21 +1275,21 @@
                      "minimum":6,
                      "maximum":6,
                      "captureStages":[
-                        "LoanInitiation", "KYC","GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview"
+                        "LoanInitiation", "Televerification" ,"Evaluation", "Sanction", "Rejected", "KYCReview", "KYC","GuarantorAddition", "PendingForPartner","CreditCommitteeReview", "Appraisal","AppraisalReview"
                      ]
                   },
                   "nomineeDOB":{
                      "title":"Nominee DOB",
                      "type":"string",
                      "captureStages":[
-                        "LoanInitiation", "KYC","GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview"
+                        "LoanInitiation", "Televerification" ,"Evaluation", "Sanction", "Rejected", "KYCReview", "KYC","GuarantorAddition", "PendingForPartner","CreditCommitteeReview", "Appraisal","AppraisalReview"
                      ]
                   },
                   "nomineeGender":{
                      "title":"Nominee Gender",
                      "type":"string",
                      "captureStages":[
-                        "LoanInitiation", "KYC","GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview"
+                        "LoanInitiation", "Televerification" ,"Evaluation", "Sanction", "Rejected", "KYCReview", "KYC","GuarantorAddition", "PendingForPartner","CreditCommitteeReview", "Appraisal","AppraisalReview"
                      ],
                      "refCodeCategory":"gender"
                   },
@@ -1297,7 +1297,7 @@
                      "title":"Nominee Minor",
                      "type":"boolean",
                      "captureStages":[
-                        "LoanInitiation", "KYC","GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview"
+                        "LoanInitiation", "CreditCommitteeReview","Televerification" ,"Evaluation", "Sanction", "Rejected", "KYCReview", "KYC","GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview"
                      ]
                   },
                   "guardianTitle":{
@@ -1306,7 +1306,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "LoanInitiation", "KYC","GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview"
+                        "LoanInitiation", "CreditCommitteeReview","Televerification" ,"Evaluation", "Sanction", "Rejected", "KYCReview", "KYC","GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview"
                      ]
                   },
                   "guardianFirstName":{
@@ -1315,7 +1315,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "LoanInitiation", "KYC","GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview"
+                        "LoanInitiation", "CreditCommitteeReview","Televerification" ,"Evaluation", "Sanction", "Rejected", "KYCReview", "KYC","GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview"
                      ]
                   },
                   "guardianMiddleName":{
@@ -1324,7 +1324,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "LoanInitiation", "KYC","GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview"
+                        "LoanInitiation", "CreditCommitteeReview","Televerification" ,"Evaluation", "Sanction", "Rejected", "KYCReview", "KYC","GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview"
                      ]
                   },
                   "guardianLastName":{
@@ -1333,14 +1333,14 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "LoanInitiation", "KYC","GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview"
+                        "LoanInitiation", "CreditCommitteeReview","Televerification" ,"Evaluation", "Sanction", "Rejected", "KYCReview", "KYC","GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview"
                      ]
                   },
                   "guardianRelationWithMinor":{
                      "title":"Guardian Relation With Minor",
                      "type":"string",
                      "captureStages":[
-                        "LoanInitiation", "KYC","GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview"
+                        "LoanInitiation", "CreditCommitteeReview","Televerification" ,"Evaluation", "Sanction", "Rejected", "KYCReview", "KYC","GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview"
                      ],
                      "refCodeCategory":"relationship"
                   },
@@ -1348,7 +1348,7 @@
                      "title":"Guardian DOB",
                      "type":"string",
                      "captureStages":[
-                        "LoanInitiation", "KYC","GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview"
+                        "LoanInitiation", "CreditCommitteeReview","Televerification" ,"Evaluation", "Sanction", "Rejected", "KYCReview", "KYC","GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview"
                      ]
                   },
                   "guardianDoorNo":{
@@ -1357,7 +1357,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "LoanInitiation", "KYC","GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview"
+                        "LoanInitiation", "CreditCommitteeReview","Televerification" ,"Evaluation", "Sanction", "Rejected", "KYCReview", "KYC","GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview"
                      ]
                   },
                   "guardianStreet":{
@@ -1366,7 +1366,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "LoanInitiation", "KYC","GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview"
+                        "LoanInitiation", "CreditCommitteeReview","Televerification" ,"Evaluation", "Sanction", "Rejected", "KYCReview", "KYC","GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview"
                      ]
                   },
                   "guardianLocality":{
@@ -1375,14 +1375,14 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "LoanInitiation", "KYC","GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview"
+                        "LoanInitiation", "CreditCommitteeReview","Televerification" ,"Evaluation", "Sanction", "Rejected", "KYCReview", "KYC","GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview"
                      ]
                   },
                   "guardianDistrict":{
                      "title":"Guardian District",
                      "type":"string",
                      "captureStages":[
-                        "LoanInitiation", "KYC","GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview"
+                        "LoanInitiation", "CreditCommitteeReview","Televerification" ,"Evaluation", "Sanction", "Rejected", "KYCReview", "KYC","GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview"
                      ],
                      "refCodeCategory":"district"
                   },
@@ -1392,7 +1392,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "LoanInitiation", "KYC","GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview"
+                        "LoanInitiation", "CreditCommitteeReview","Televerification" ,"Evaluation", "Sanction", "Rejected", "KYCReview", "KYC","GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview"
                      ]
                   },
                   "guardianPincode":{
@@ -1401,14 +1401,14 @@
                      "minimum":6,
                      "maximum":6,
                      "captureStages":[
-                        "LoanInitiation", "KYC","GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview"
+                        "LoanInitiation", "CreditCommitteeReview","Televerification" ,"Evaluation", "Sanction", "Rejected", "KYCReview", "KYC","GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview"
                      ]
                   },
                   "guardianGender":{
                      "title":"Guardian Gender",
                      "type":"string",
                      "captureStages":[
-                        "LoanInitiation", "KYC","GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview"
+                        "LoanInitiation", "CreditCommitteeReview","Televerification" ,"Evaluation", "Sanction", "Rejected", "KYCReview", "KYC","GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview"
                      ],
                      "refCodeCategory":"gender"
                   }
