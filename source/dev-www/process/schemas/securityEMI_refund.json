@@ -1,0 +1,84 @@
+{
+   "$schema": "http://json-schema.org/draft-04/schema#",
+   "type": "object",
+   "properties": {
+      "branches": [],
+      "accountIds": [],
+      "securityEMIRefund": {
+         "type": "object",
+         "required": 
+         [
+            "BankAccountNo",
+            "DisbursementAccountNo."
+         ],
+         "properties": 
+         { 
+            "applicantName":{
+               "type": ["string", "null"],
+               "title": "APPLICANT_NAME"
+            },
+            "businessName": {
+               "type": ["string", "null"],
+               "title": "BUSINESS_NAME"
+            },
+            "loanAccountNo": {
+              "type": ["number", "null"],
+              "title": "LOAN_ACCOUNT_NO"
+            },          
+            "refundAmount": {
+               "type": ["number", "null"],
+               "title": "REFUND_AMOUNT"
+            },
+            "hub": {
+               "type": ["string", "null"],
+               "title": "HUB"
+            },
+            "spoke": {
+                  "type": ["string", "null"],
+                  "title": "SPOKE"
+            },
+            "LoanClosingDate": {
+               "type": ["string", "null"],
+               "title": "LOAN_CLOSING_DATE"
+            },
+            "BankAccountNo": {
+               "type": ["number", "null"],
+               "title": "BANK_ACCOUNT_NO"
+            },
+            "AccountHolderName": {
+               "type": ["string", "null"],
+               "title": "ACCOUNT_HOLDER_NAME"
+            },
+            "AccountType": {
+               "type": ["string", "null"],
+               "title": "ACCOUNT_TYPE"
+            },
+            "IFSCode": {
+               "type": ["string", "null"],
+               "title": "IFS_CODE"
+            },
+            "BankName": {
+               "type": ["string", "null"],
+               "title": "BANK_NAME"
+            },
+            "BankCity": {
+               "type": ["string", "null"],
+               "title": "BANK_CITY"
+            },
+            "DisbursementAccountNo.": {
+               "type": ["string", "null"],
+               "title": "DISBURSEMENT_ACCOUNT_NUMBER"
+            },
+            "DisbursementBankName": {
+               "type": ["string", "null"],
+               "title": "DISBURSEMENT_BANK_NAME"
+            }
+         }
+   }
+}
+}
+
+
+
+
+
