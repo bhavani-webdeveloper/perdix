@@ -131,6 +131,7 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                                 type: "array",
                                 //view: "fixed",
                                 title: "MAPPED_BRANCHES",
+                                titleExpr: "model.user.userBranches[arrayIndex].branchId",
                                 startEmpty: true,
                                 onArrayAdd: function(modelValue, form, model, formCtrl, $event) {
                                     //modelValue.bankId=model.bankId;

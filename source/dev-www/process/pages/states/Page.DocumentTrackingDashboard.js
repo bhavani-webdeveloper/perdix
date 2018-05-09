@@ -56,7 +56,7 @@ irf.pages.controller("DocumentTrackingDashboardCtrl", ['$log', '$scope', "formHe
 
             var bitMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.documentTracking.BatchInTransitQueue"];
             if (bitMenu) {
-                DocumentTracking.search({
+                DocumentTracking.findBatches({
                     'stage': 'BatchInTransit',
                     'branchId': null,
                     'centerId': null,
@@ -71,7 +71,7 @@ irf.pages.controller("DocumentTrackingDashboardCtrl", ['$log', '$scope', "formHe
 
             var pvMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.documentTracking.PendingVerificationQueue"];
             if (pvMenu) {
-                DocumentTracking.search({
+                DocumentTracking.findBatches({
                     'stage': 'PendingVerification',
                     'branchId': null,
                     'centerId': null,
