@@ -303,6 +303,12 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
         }*/
         var action = reqData.customer.id ? 'update' : 'save';
         Enrollment[action](reqData, function (res, headers) {
+            if (res.customer.dateOfBirth) {
+                res.customer.age = moment().diff(moment(res.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+            }
+            if (res.customer.spouseDateOfBirth) {
+                res.customer.spouseAge = moment().diff(moment(res.customer.spouseDateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+            }
             $log.info(res);
             PageHelper.hideLoader();
             deferred.resolve(res);
@@ -312,7 +318,6 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
             deferred.reject(res);
         });
         return deferred.promise;
-
     };
     /*
     * fn proceedData:

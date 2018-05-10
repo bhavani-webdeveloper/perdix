@@ -549,19 +549,19 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                                 model.customer.familyMembers[0].age = model.customer.age;
                                 model.customer.familyMembers[0].maritalStatus = model.customer.maritalStatus;
                                 model.customer.familyMembers[0].mobilePhone = model.customer.mobilePhone;
-                            }
-                            if (model.customer.maritalStatus == "MARRIED") {
-                                var spouse = null;
-                                spouse = {
-                                    familyMemberFirstName: model.customer.spouseFirstName,
-                                    relationShip: model.customer.gender === 'MALE' ? 'Wife' : 'Husband',
-                                    gender: model.customer.gender === 'MALE' ? 'FEMALE' : 'MALE',
-                                    dateOfBirth: model.customer.spouseDateOfBirth,
-                                    maritalStatus: model.customer.maritalStatus,
-                                    age: moment().diff(moment(model.customer.spouseDateOfBirth, SessionStore.getSystemDateFormat()), 'years')
-                                };
-                                model.customer.familyMembers.push(spouse);
-                            }
+                                if (model.customer.maritalStatus == "MARRIED") {
+                                    var spouse = null;
+                                    spouse = {
+                                        familyMemberFirstName: model.customer.spouseFirstName,
+                                        relationShip: model.customer.gender === 'MALE' ? 'Wife' : 'Husband',
+                                        gender: model.customer.gender === 'MALE' ? 'FEMALE' : 'MALE',
+                                        dateOfBirth: model.customer.spouseDateOfBirth,
+                                        maritalStatus: model.customer.maritalStatus,
+                                        age: moment().diff(moment(model.customer.spouseDateOfBirth, SessionStore.getSystemDateFormat()), 'years')
+                                    };
+                                    model.customer.familyMembers.push(spouse);
+                                }
+                            }   
                         }
                     },
                     "familyDetails.familyMembers.relationShip": {
@@ -1006,7 +1006,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                     "CustomerInformation.religion",
                     "CustomerInformation.caste",
                     "CustomerInformation.dateOfBirth",
-                    "CustomerInformation.udf1",
+                    //"CustomerInformation.udf1",
                     "KYC",
                     "KYC.IdentityProof1",
                     "KYC.IdentityProof1.identityProof",
@@ -1080,12 +1080,12 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                     "familyDetails.familyMembers.maritalStatus",
                     "familyDetails.familyMembers.mobilePhone",
                     "familyDetails.familyMembers.healthStatus",
-                    "familyDetails.familyMembers.contributionToExpenditure",
+                    //"familyDetails.familyMembers.contributionToExpenditure",
                     "familyDetails.familyMembers.incomes",
                     "familyDetails.familyMembers.incomes.incomeSource",
                     "familyDetails.familyMembers.incomes.incomeEarned",
                     "familyDetails.familyMembers.incomes.frequency",
-                    "familyDetails.familyMembers.incomes.monthsPerYear",
+                    //"familyDetails.familyMembers.incomes.monthsPerYear",
                     "familyDetails.familyMembers.gender_readonly",
                     "familyDetails.familyMembers.age_readonly",
                     "familyDetails.familyMembers.dateOfBirth_readonly",
@@ -1097,10 +1097,10 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                     // "familyDetails.additionalDetails.privateHospitalTreatment",
                     // "familyDetails.additionalDetails.householdFinanceRelatedDecision",
                     "HouseVerification",
-                    "HouseVerification.nameOfRo",
+                    //"HouseVerification.nameOfRo",
                     "HouseVerification.HouseDetails",
                     "HouseVerification.HouseDetails.HouseOwnership",
-                    "HouseVerification.HouseDetails.landLordName", //drinkingwater
+                    //"HouseVerification.HouseDetails.landLordName", //drinkingwater
                     "HouseVerification.HouseDetails.HouseVerification", //waterfilter
                     //"HouseVerification.HouseDetails.Toilet",//is toilet available
                     "HouseVerification.HouseDetails.durationOfStay", //toilet facility
@@ -1392,6 +1392,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                         }
                     }
                     model.siteCode = SessionStore.getGlobalSetting('siteCode');
+
                     var reqData = _.cloneDeep(model);
                     EnrollmentHelper.fixData(reqData);
 
@@ -1411,6 +1412,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 $state.go('Page.Landing', null);
                             }, function(err) {
+                                PageHelper.showProgress('enrolment', 'Error in Enrollment', 5000);
                                 Utils.removeNulls(res.customer, true);
                                 model.customer = res.customer;
                             });

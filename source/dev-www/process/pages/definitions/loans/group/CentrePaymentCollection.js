@@ -434,6 +434,8 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 												demand.error = "No advance payment allowed";
 												demand.overdue= Number(demand.amountPaid-demand.totalToBeCollected)||0;
 												return;
+											}else{
+												demand.overdue=0;
 											}
 											demand.notcollected = Number(demand.totalToBeCollected-demand.amountPaid);
 											var collected = 0;
@@ -443,6 +445,8 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 												var col;
 												var noncol;
 												var l2=model.groupCollectionDemand[i].collectiondemand.length;
+												model.groupCollectionDemand[i].collected=0;
+												model.groupCollectionDemand[i].notcollected=0;
 												for(j=0;j<l2;j++){
 													model.groupCollectionDemand[i].collected += Number(model.groupCollectionDemand[i].collectiondemand[j].amountPaid);
 													model.groupCollectionDemand[i].notcollected += Number(model.groupCollectionDemand[i].collectiondemand[j].notcollected)||0;
