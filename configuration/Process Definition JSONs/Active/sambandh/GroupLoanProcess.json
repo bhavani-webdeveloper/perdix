@@ -2,7 +2,7 @@
    "customerMinAgeGenericProduct": 18,
    "customerMaxGenericAge": 60,
    "customerMaxAgeBcProduct": 58,
-   "customerAgeLimitForSingleFemale": 35,
+   "customerAgeLimitForSingleFemale": 18,
    "stages": [{
       "order": 1,
       "code": "GroupCreation",
