@@ -36,6 +36,7 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
                 model.delete = function(index) {
                     model.entries.splice(index, 1)
                     model.journal.journalHeader.journalDetails.splice(index, 1)
+                    model.myFunc("p", model.journal.journalHeader.journalDetails);
                 }
                 model.myFunc = function(p, journaldetails) {
                     var debitSum = 0;
@@ -319,6 +320,7 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
                                 }
                                 // model.journal.journalHeader.billNumber = parseInt(res.journalHeader.billNumber);
                                 // model.journal.journalHeader.instrumentNumber = parseInt(res.journalHeader.instrumentNumber);
+                                journalDetailsClass = JournalDetails;
                                 model.myFunc("p", res.journalHeader.journaldetails)
                             })
                         }
