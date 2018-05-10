@@ -89,7 +89,8 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
                                         if (modelValue == ("Payment - Account") || modelValue == ("Payment") || modelValue == ("Receipt - Account") || modelValue == ("Receipt")) {
                                             model.showFeild = true;
                                         }
-                                    }
+                                    },
+                                    "required": true
                                 },
                                 "FinconAccounting.transactionSection.billNumber": {
                                     "condition": "model.showFeilds",
