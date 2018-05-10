@@ -162,6 +162,13 @@
                 "null"
               ]
             },
+            "remarks": {
+                "title": "TRANSACTION_NAME",
+                "type": [
+                    "string",
+                    "null"
+                ]
+            },
             "valueDate": {
               "title": "VALUE_DATE",
               "type": [
@@ -172,6 +179,13 @@
             "version": {
               "title": "VERSION",
               "type": "number"
+            },
+            "billNumber": {
+              "title": "BILL_NO",
+              "type": [
+                 "string",
+                 "null"
+               ]
             }
           },
           "required": [],

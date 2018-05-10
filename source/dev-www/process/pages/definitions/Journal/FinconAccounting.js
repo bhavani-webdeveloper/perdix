@@ -92,7 +92,8 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
                                     }
                                 },
                                 "FinconAccounting.transactionSection.billNumber": {
-                                    "condition": "model.showFeilds"
+                                    "condition": "model.showFeilds",
+                                    "type": "text"
                                 },
                                 "FinconAccounting.transactionSection.billDate": {
                                     "condition": "model.showFeilds"
@@ -110,7 +111,8 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
                                     "condition": "model.showFeild"
                                 },
                                 "FinconAccounting.instrumentSection.instrumentNumber": {
-                                    "condition": "model.showFeild"
+                                    "condition": "model.showFeild",
+                                    "type": "string"
                                 },
                                 "FinconAccounting.instrumentSection.instrumentBankName": {
                                     "condition": "model.showFeild"
@@ -314,8 +316,8 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
                                 if (res.journalHeader.entryType == ("Payment - Account") || res.journalHeader.entryType == ("Payment") || res.journalHeader.entryType == ("Receipt - Account") || res.journalHeader.entryType == ("Receipt")) {
                                     model.showFeild = true;
                                 }
-                                model.journal.journalHeader.billNumber = parseInt(res.journalHeader.billNumber);
-                                model.journal.journalHeader.instrumentNumber = parseInt(res.journalHeader.instrumentNumber);
+                                // model.journal.journalHeader.billNumber = parseInt(res.journalHeader.billNumber);
+                                // model.journal.journalHeader.instrumentNumber = parseInt(res.journalHeader.instrumentNumber);
                                 model.myFunc("p", res.journalHeader.journaldetails)
                             })
                         }

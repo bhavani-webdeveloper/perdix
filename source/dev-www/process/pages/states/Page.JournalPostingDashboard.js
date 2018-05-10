@@ -1,10 +1,10 @@
-irf.pages.controller("JournalPostingDashboardCtrl", 
+irf.pages.controller("JournalPostingDashboardCtrl",
     ['$log', '$scope', 'PagesDefinition', 'SessionStore', 'Lead','Journal',
     function($log, $scope, PagesDefinition, SessionStore, Lead,Journal) {
         $log.info("Page.JournalPostingDashboard.html loaded");
 
         var fullDefinition = {
-            "title": "JOURNAL_ENTRY_POSTING_DASHBOARD",
+            "title": "BRANCH_POSTING_ENTRY_DASHBOARD",
             "iconClass": "fa fa-exchange",
             "items": [
                 "Page/Engine/Journal.JournalPosting",

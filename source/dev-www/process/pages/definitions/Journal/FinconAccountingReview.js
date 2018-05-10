@@ -94,6 +94,12 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccountingReview"), 
                             },
                             "FinconAccounting.instrumentSection.instrumentBranchName": {
                                 "condition": "model.showFeild"
+                            },
+                            "FinconAccounting.transactionSection.transactionBranchId": {
+                                "type": "string"
+                            },
+                            "FinconAccounting.transactionSection.entryType": {
+                                "type": "string"
                             }
                         }
                     }
@@ -103,7 +109,8 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccountingReview"), 
                             "FinconAccounting.transactionSection",
                             "FinconAccounting.transactionSection.entryType",
                             "FinconAccounting.transactionSection.transactionDate",
-                            "FinconAccounting.transactionSection.transactionBranch",
+                            "FinconAccounting.transactionSection.transactionBranchId",
+                            "FinconAccounting.transactionSection.remarks",
                             "FinconAccounting.transactionSection.valueDate",
                             "FinconAccounting.transactionSection.billNumber",
                             "FinconAccounting.transactionSection.billDate",
