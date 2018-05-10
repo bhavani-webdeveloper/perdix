@@ -1454,14 +1454,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             },
                             {
                                 key: "customer.customerBankAccounts[].isDisbersementAccount",
-                                type: "radios",
-                                titleMap: [{
-                                    value: true,
-                                    name: "Yes"
-                                },{
-                                    value: false,
-                                    name: "No"
-                                }]
+                                type: "checkbox"
                             }
                         ]
                     }

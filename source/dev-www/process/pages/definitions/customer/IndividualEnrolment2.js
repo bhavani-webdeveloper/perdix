@@ -2280,14 +2280,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),["$log", "$
                             },
                             {
                                 key: "customer.customerBankAccounts[].isDisbersementAccount",
-                                type: "radios",
-                                titleMap: [{
-                                    value: true,
-                                    name: "Yes"
-                                },{
-                                    value: false,
-                                    name: "No"
-                                }]
+                                type: "checkbox"
                             }
                         ]
                     }
