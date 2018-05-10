@@ -9,6 +9,7 @@ export class JournalTransactionLOVConfiguration extends LOVElementConfiguration 
         "id": "journal.journalEntryDto.journalMasterId",
         "transactionName": "journal.journalEntryDto.transactionName",
         "transactionType": "journal.journalEntryDto.transactionType",
+        "productType": "journal.journalEntryDto.productType",
         "transactionDescription": "journal.journalEntryDto.transactionDescription",
         "debitGLNo": "journal.journalEntryDto.debitGLNo",
         "creditGLNo": "journal.journalEntryDto.creditGLNo",
@@ -22,11 +23,11 @@ export class JournalTransactionLOVConfiguration extends LOVElementConfiguration 
         Journal.journalSearch().$promise.then(function(response){
             let count=0;
             angular.forEach(response.body, function(value, key) {
-                
+
                 Journal.get({
                     id: value.id
                 }, function(res) {
-                   
+
                     if (res.journalBranches && res.journalBranches) {
                         for (let k = 0; k < res.journalBranches.length; k++) {
                             if (_.hasIn(res.journalBranches[k], 'branchId') && res.journalBranches[k].branchId == model.journal.journalEntryDto.branchId) {
@@ -58,12 +59,12 @@ export class JournalTransactionLOVConfiguration extends LOVElementConfiguration 
     };
 
     onSelect: Function = function(valueObj, model, context){
-  
+
 
     };
 
     initialize: Function = function(model, form, parentModel, context) {
-       
+
 
     };
 
@@ -88,8 +89,8 @@ export class JournalTransactionLOVConfiguration extends LOVElementConfiguration 
             "title": "CREDIT_GL_NO",
             "type": "string",
         }
-        
-        
+
+
     };
 
     lovonly: boolean = true;

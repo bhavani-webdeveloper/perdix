@@ -46,7 +46,6 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                 "BranchPostingEntry",
                 "BranchPostingEntry.transactionName",
                 "BranchPostingEntry.transactionDescription",
-                "BranchPostingEntry.transactionType",
                 "BranchPostingEntry.productType",
                 "BranchPostingEntry.creditGLNo",
                 "BranchPostingEntry.debitGLNo",
@@ -77,32 +76,32 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                     var formRequest = {
                         "overrides": {
                             "BranchPostingEntry.billNo": {
-                                "condition": "BranchPostingEntry.transactionType.toLowerCase() == 'journal' || BranchPostingEntry.transactionType.toLowerCase() == 'payment'",
+                                "condition": 'model.journal.journalEntryDto.productType == ("Payment - Account") || model.journal.journalEntryDto.productType == ("Payment") || model.journal.journalEntryDto.productType == ("Journal - Account") || model.journal.journalEntryDto.productType == ("Journal")',
                                 "type": "text"
                             },
                             "BranchPostingEntry.billDate": {
-                                "condition": "BranchPostingEntry.transactionType.toLowerCase() == 'journal' || BranchPostingEntry.transactionType.toLowerCase() == 'payment'"
+                                "condition": 'model.journal.journalEntryDto.productType == ("Payment - Account") || model.journal.journalEntryDto.productType == ("Payment") || model.journal.journalEntryDto.productType == ("Journal - Account") || model.journal.journalEntryDto.productType == ("Journal")'
                             },
                             "BranchPostingEntry.billUpload": {
-                                "condition": "BranchPostingEntry.transactionType.toLowerCase() == 'journal' || BranchPostingEntry.transactionType.toLowerCase() == 'payment'"
+                                "condition": 'model.journal.journalEntryDto.productType == ("Payment - Account") || model.journal.journalEntryDto.productType == ("Payment") || model.journal.journalEntryDto.productType == ("Journal - Account") || model.journal.journalEntryDto.productType == ("Journal")'
                             },
                             "BranchPostingEntry.instrumentType": {
-                                "condition": "BranchPostingEntry.transactionType.toLowerCase() == 'receipt' || BranchPostingEntry.transactionType.toLowerCase() == 'payment'"
+                                "condition": 'model.journal.journalEntryDto.productType == ("Payment - Account") || model.journal.journalEntryDto.productType == ("Payment") || model.journal.journalEntryDto.productType == ("Receipt - Account") || model.journal.journalEntryDto.productType == ("Receipt")'
                             },
                             "BranchPostingEntry.instrumentNumber": {
-                                "condition": "BranchPostingEntry.transactionType.toLowerCase() == 'receipt' || BranchPostingEntry.transactionType.toLowerCase() == 'payment'"
+                                "condition": 'model.journal.journalEntryDto.productType == ("Payment - Account") || model.journal.journalEntryDto.productType == ("Payment") || model.journal.journalEntryDto.productType == ("Receipt - Account") || model.journal.journalEntryDto.productType == ("Receipt")'
                             },
                             "BranchPostingEntry.instrumentDate": {
-                                "condition": "BranchPostingEntry.transactionType.toLowerCase() == 'receipt' || BranchPostingEntry.transactionType.toLowerCase() == 'payment'"
+                                "condition": 'model.journal.journalEntryDto.productType == ("Payment - Account") || model.journal.journalEntryDto.productType == ("Payment") || model.journal.journalEntryDto.productType == ("Receipt - Account") || model.journal.journalEntryDto.productType == ("Receipt")'
                             },
                             "BranchPostingEntry.instrumentBankName": {
-                                "condition": "BranchPostingEntry.transactionType.toLowerCase() == 'receipt' || BranchPostingEntry.transactionType.toLowerCase() == 'payment'"
+                                "condition": 'model.journal.journalEntryDto.productType == ("Payment - Account") || model.journal.journalEntryDto.productType == ("Payment") || model.journal.journalEntryDto.productType == ("Receipt - Account") || model.journal.journalEntryDto.productType == ("Receipt")'
                             },
                             "BranchPostingEntry.instrumentBranchName": {
-                                "condition": "BranchPostingEntry.transactionType.toLowerCase() == 'receipt' || BranchPostingEntry.transactionType.toLowerCase() == 'payment'"
+                                "condition": 'model.journal.journalEntryDto.productType == ("Payment - Account") || model.journal.journalEntryDto.productType == ("Payment") || model.journal.journalEntryDto.productType == ("Receipt - Account") || model.journal.journalEntryDto.productType == ("Receipt")'
                             },
                             "BranchPostingEntry.ifscCode": {
-                                "condition": "BranchPostingEntry.transactionType.toLowerCase() == 'receipt' || BranchPostingEntry.transactionType.toLowerCase() == 'payment'",
+                                "condition": 'model.journal.journalEntryDto.productType == ("Payment - Account") || model.journal.journalEntryDto.productType == ("Payment") || model.journal.journalEntryDto.productType == ("Receipt - Account") || model.journal.journalEntryDto.productType == ("Receipt")',
                                 "resolver": "JournalIFSCLOVConfiguration",
                                 "type": "lov",
                                 "lovonly": true
@@ -556,8 +555,8 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                                             "title": "TRANSACTION_STATUS",
                                             "type": "string"
                                         },
-                                        "transactionType": {
-                                            "title": "TRANSACTION_TYPE",
+                                        "productType": {
+                                            "title": "PRODUCT_TYPE",
                                             "type": "string"
                                         },
                                         "valueDate": {
