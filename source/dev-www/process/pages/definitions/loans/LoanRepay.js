@@ -38,6 +38,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                     _pageGlobals.transactionName = "Scheduled Demand";
                     _pageGlobals.hideTransactionName = true;
                 }
+                //_pageGlobals.transactionName = "Scheduled Demand";
             }
 
             return {
@@ -107,6 +108,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                         model.repayment.totalNormalInterestDue  = Utils.roundToDecimal(data.totalNormalInterestDue);
                         model.repayment.preclosureFee = Utils.roundToDecimal(data.preclosureFee);
                         model.repayment.payOffAmount = Utils.roundToDecimal(data.payOffAmount);
+                        model.repayment.totalPrincipalDue = Utils.roundToDecimal(data.totalPrincipalDue);
                         model.repayment.totalDemandDue = Utils.roundToDecimal(data.totalDemandDue);
                         model.repayment.totalDue = Utils.roundToDecimal(data.totalDemandDue + data.totalFeeDue + data.totalSecurityDepositDue);
                         model.repayment.bookedNotDueNormalInterest = Utils.roundToDecimal(data.bookedNotDueNormalInterest);
@@ -292,7 +294,8 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                     "Scheduled Demand":"Scheduled Demand",
                                     "Fee Payment":"Fee Payment",
                                     "Pre-closure":"Pre-closure",
-                                    "Prepayment":"Prepayment"
+                                    "Prepayment":"Prepayment",
+                                    "SecurityDepositRefund":"SecurityDepositRefund"
                                 },
                                 onChange: function(value ,form, model){
                                     if ( value == 'Pre-closure'){
@@ -308,7 +311,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             {
                                 type: "fieldset",
                                 title: "PRECLOSURE_BREAKUP",
-                                condition: "model.repayment.transactionName=='Pre-closure'",
+                                condition: "model.repayment.transactionName=='Pre-closure'||'SecurityDepositRefund'",
                                 items: [
                                     {
                                         key: "repayment.principalNotDue",
@@ -371,13 +374,6 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 title: "TOTAL_DEMAND_DUE",
                                 type: "amount"
                             },
-                            // {
-                            //     key: "repayment.totalSecurityDepositDue",
-                            //     readonly: true,
-                            //     title: "TOTAL_SECURITY_DEPOSIT_DUE",
-                            //     condition: "model.repayment.transactionName=='Scheduled Demand' && model.repayment.totalSecurityDepositDue > 0",
-                            //     type: "amount"
-                            // },
                             {
                                 key: "repayment.totalFeeDue",
                                 readonly: true,
@@ -460,10 +456,10 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                     "name": "Internal",
                                     "value": "INTERNAL"
                                 },
-                                {
-                                    "name": "Security EMI Adjustment",
-                                    "value": "Security EMI Adjustment"
-                                }
+                                /*{
+                                    "name": "Security Deposit",
+                                    "value": "security_deposit"
+                                }*/
                                 ],
                                 onChange: function(value, form, model) {
                                     if (value == 'PDC') {
@@ -483,7 +479,8 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                                 PageHelper.hideLoader();
                                             }
                                         )
-                                    } else {
+                                    }
+                                    else {
                                         model.repayment.chequeNumber = "";
                                         model.repayment.amount = "";
                                         if (model.repayment.transactionName) {
@@ -502,6 +499,59 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                         }
                                     }   
                                 }
+                            },
+                            {
+                                key: "repayment.securityDeposit",
+                                readonly: true,
+                                title: "TOTAL_SECURITY_DEPOSIT_DUE",
+                                condition:"model.repayment.instrument=='security_deposit'",
+                                type: "amount"
+                            },
+                            {
+                                key: "repayment.totalPrincipalDue",
+                                readonly: true,
+                                title: "TOTAL_PRINCIPAL_DUE",
+                                condition:"model.repayment.instrument=='security_deposit'",
+                                type: "amount"
+                            },
+                            {
+                                key: "repayment.totalNormalInterestDue",
+                                readonly: true,
+                                title: "TOTAL_INTEREST_DUE",
+                                condition:"model.repayment.instrument=='security_deposit'",
+                                type: "amount"
+                            },
+                            {
+                                key: "repayment.totalPenalInterestDue",
+                                readonly: true,
+                                title: "TOTAL_PENAL_INTEREST_DUE",
+                                condition:"model.repayment.instrument=='security_deposit'",
+                                type: "amount"
+                            },
+                            {
+                                key: "repayment.totalFeeDue",
+                                readonly: true,
+                                title: "TOTAL_FEE_DUE",
+                                condition:"model.repayment.instrument=='security_deposit'",
+                                type: "amount"
+                            },
+                            {
+                                key: "repayment.payOffAndDueAmount",
+                                readonly: true,
+                                title: "TOTAL_OUTSTANDING",
+                                condition:"model.repayment.instrument=='security_deposit'",
+                                type: "amount"
+                            },
+                            {
+                                key:"repayment.reference",
+                                title:"CHEQUE_NUMBER",
+                                "schema": {
+                                    type:"string",
+                                    maxLength:6,
+                                    minLength:6
+                                },
+                                required:true,
+                                condition:"model.repayment.instrument=='CHQ'"
                             },
                             {
                                 key:"repayment.reference",
@@ -567,7 +617,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 key: "repayment.bankAccountNumber",
                                 type: "lov",
                                 autolov: true,
-                                condition:"model.repayment.instrument=='NEFT' || model.repayment.instrument=='RTGS'||model.repayment.instrument=='ACH' || model.repayment.instrument == 'INTERNAL'",
+                                condition:"model.repayment.instrument=='NEFT' || model.repayment.instrument=='RTGS'||model.repayment.instrument=='ACH' || model.repayment.instrument == 'INTERNAL' || model.repayment.instrument == 'security_deposit'",
                                 title:"REPAYMENT_TO_ACCOUNT",
                                 required: true,
                                 bindMap: {
