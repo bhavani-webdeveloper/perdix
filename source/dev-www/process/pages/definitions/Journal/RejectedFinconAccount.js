@@ -225,7 +225,7 @@ irf.pageCollection.controller(irf.controller("Journal.RejectedFinconAccount"), [
                                                         </td>\
                                                         <td class='col-xs-3'>\
                                                             <div> \
-                                                                <input disabled typeahead-append-to-body=\"true\" class=\"form-control\" ng-model=\"d['relatedAccountNo']\" uib-typeahead=\"loanNumb as loanNumb.account_number for loanNumb in model.getLoanAccountNumber($viewValue) | limitTo:10\" placeholder=\"Enter code\"  typeahead-popup-template-url=\"customPopupTemplate.html\" typeahead-template-url=\"customTemplat.html\" >\
+                                                                <input disabled typeahead-append-to-body=\"true\" class=\"form-control\" ng-model=\"d['relatedAccountNo']\" uib-typeahead=\"loanNumb as loanNumb.account_number for loanNumb in model.getLoanAccountNumber($viewValue) | limitTo:10\"  typeahead-popup-template-url=\"customPopupTemplate.html\" typeahead-template-url=\"customTemplat.html\" >\
                                                             </div>\
                                                         </td>\
                                                         <td class='col-xs-2'><textarea disabled rows=\"1\" ng-model=\"d['remarks']\" class='form-control' />\

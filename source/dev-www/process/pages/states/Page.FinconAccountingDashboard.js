@@ -54,7 +54,7 @@ irf.pages.controller("FinconAccountingDashboardCtrl", ['$log', '$scope', 'PagesD
 
                     'page': 1,
                     'per_page': 1,
-                    'currentStage': "multiJournalPosting"
+                    'currentStage': "Rejected"
                 }).$promise.then(function(response, headerGetter) {
                     jrMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
@@ -69,7 +69,7 @@ irf.pages.controller("FinconAccountingDashboardCtrl", ['$log', '$scope', 'PagesD
 
                     'page': 1,
                     'per_page': 1,
-                    'currentStage': "multiJournalPosting"
+                    'currentStage': "Completed"
                 }).$promise.then(function(response, headerGetter) {
                     jeMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
