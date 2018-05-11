@@ -1810,7 +1810,6 @@
             "nameOfOwnedAsset": {
               "title": "Name Of Owned Asset",
               "type": "string",
-              "refCodeCategory": "asset_type",
               "captureStages": [
                 "BasicEnrolment",
                 "Stage02",
@@ -1860,7 +1859,6 @@
             "ownedAssetDetails": {
               "title": "Owned Asset Details",
               "type": "string",
-              "refCodeCategory": "asset_Details",
               "captureStages": [
                 "BasicEnrolment",
                 "Stage02",
