@@ -273,14 +273,18 @@ define({
                             _.map(model.journal.journalBranches, function(j) {
                                 if(j.$selected == true && !j.id) {
                                     var index = _.findIndex(branches, function(b) {
-                                        return b.name === j.name;
+                                        return b.name == j.name;
                                     })
-                                    journalbranch.push({branchId: branches[index].value});
+                                if (index > -1) {
+                                        journalbranch.push({branchId: branches[index].value});
+                                    }
                                 } else if (j.$selected && j.id) {
                                     var index = _.findIndex(branches, function(b) {
-                                        return b.name === j.name;
+                                        return b.name == j.name;
                                     })
-                                    journalbranch.push({branchId: branches[index].value,id:j.id})
+                                if (index > -1) {
+                                        journalbranch.push({branchId: branches[index].value});
+                                    }
                                 }
                             });
 

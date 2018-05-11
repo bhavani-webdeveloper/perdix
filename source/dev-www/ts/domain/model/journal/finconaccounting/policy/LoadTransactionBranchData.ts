@@ -9,7 +9,7 @@ import {Utils} from "../../../../shared/Utils";
 
 
 export interface PopulateLeadBranchArgs {
-    
+
 }
 export class LoadTransactionBranchData implements FinconPostingPolicy<PopulateLeadBranchArgs> {
 
@@ -22,8 +22,7 @@ export class LoadTransactionBranchData implements FinconPostingPolicy<PopulateLe
     run(finconPostingProcess: FinconPostingProcess): Observable<FinconPostingProcess> {
        let activeSession:ISession = ObjectFactory.getInstance("Session");
        finconPostingProcess.journalHeader.transactionBranchId = activeSession.getBranchId();
-
+       finconPostingProcess.journalHeader.valueDate = activeSession.getCBSDate();
         return Observable.of(finconPostingProcess);
     }
-
 }

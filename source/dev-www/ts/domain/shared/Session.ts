@@ -11,6 +11,7 @@ export interface ISession {
     getCenters(): Array<any>;
     getLoginname(): string;
     getSystemDateFormat(): string;
+    getCBSDate(): string;
 }
 
 export abstract class NeedsAngularInjector {
@@ -57,5 +58,9 @@ export class UserSession extends NeedsAngularInjector implements ISession {
 
     getSystemDateFormat(): string {
         return 'YYYY-MM-DD';
+    }
+
+    getCBSDate(): string {
+        return this.getInjector().getCBSDate();
     }
 }
