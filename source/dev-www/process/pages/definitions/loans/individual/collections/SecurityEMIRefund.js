@@ -20,10 +20,12 @@ define({
                         'accountNumber': $stateParams.pageId
                     }).$promise.then(function(res) {
                         $log.info(res);
-                        model.securityRefund.applicantName = res.body[0].applicantName||"";
-                        model.securityRefund.businessName = res.body[0].customerName||"";
-                        model.securityRefund.hub = res.body[0].branchName;
-                        model.securityRefund.spoke = res.body[0].centreName;
+                        if (res && res.body && res.body.length) {
+                            model.securityRefund.applicantName = res.body[0].applicantName || "";
+                            model.securityRefund.businessName = res.body[0].customerName || "";
+                            model.securityRefund.hub = res.body[0].branchName;
+                            model.securityRefund.spoke = res.body[0].centreName;
+                        }
                         var promise = LoanAccount.get({
                             accountId: $stateParams.pageId
                         }).$promise;
@@ -37,6 +39,7 @@ define({
                             model.securityRefund.accountNumber = data.accountId;
                             model.securityRefund.loanAccountNumber = data.accountId;
                             model.securityRefund.customerName = data.customer1FirstName;
+                            model.securityRefund.businessName=data.customer1FirstName;
                             model.securityRefund.productCode = data.productCode;
                             model.securityRefund.visitedDate = SessionStore.getCBSDate();
                             model.securityRefund.repaymentDate=SessionStore.getCBSDate();
@@ -78,25 +81,17 @@ define({
                 "items": [ {
                         key: "securityRefund.hub",
                         readonly: true,
+                        "condition":"securityRefund.hub",
                         title: "BRANCH"
                     }, {
                         key: "securityRefund.spoke",
                         readonly: true,
+                        "condition":"securityRefund.spoke",
                         title: "CENTRE"
                     },{
                         key: "securityRefund.urnNo",
                         readonly: true,
                         title: "URN_NO"
-                    },{
-                        key: "securityRefund.applicantName",
-                        type: "string",
-                        "readonly": true,
-                        title: "APPLICANT_NAME"
-                    }, {
-                        key: "securityRefund.businessName",
-                        type: "string",
-                        title: "BUSINESS_NAME",
-                        readonly: true
                     }, {
                         key: "securityRefund.accountNumber",
                         readonly: true,

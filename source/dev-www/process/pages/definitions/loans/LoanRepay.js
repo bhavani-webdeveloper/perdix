@@ -294,8 +294,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                     "Scheduled Demand":"Scheduled Demand",
                                     "Fee Payment":"Fee Payment",
                                     "Pre-closure":"Pre-closure",
-                                    "Prepayment":"Prepayment",
-                                    "SecurityDepositRefund":"SecurityDepositRefund"
+                                    "Prepayment":"Prepayment"
                                 },
                                 onChange: function(value ,form, model){
                                     if ( value == 'Pre-closure'){
