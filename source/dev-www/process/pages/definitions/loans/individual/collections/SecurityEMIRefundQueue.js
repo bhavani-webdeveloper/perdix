@@ -86,7 +86,20 @@ define({
                         'accountIds': accountIdarray,
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage,
-                    }).$promise;
+                    }).$promise.then(function(res){
+                        var ret = [];
+                        angular.forEach(res.body, function(value, key) {
+                            if(value.status==2){
+                                ret.push(value);
+                            }
+                        });
+                        return $q.resolve({
+                            headers: {
+                                "x-total-count": ret.length
+                            },
+                            body: ret
+                        });
+                    });
 
 
                     /*.then(function(res) {

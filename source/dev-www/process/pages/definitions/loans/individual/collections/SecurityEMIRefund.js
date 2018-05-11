@@ -93,6 +93,10 @@ define({
                         key: "securityRefund.spoke",
                         readonly: true,
                         title: "CENTRE"
+                    },{
+                        key: "securityRefund.urnNo",
+                        readonly: true,
+                        title: "URN_NO"
                     }, {
                         key: "securityRefund.accountNumber",
                         readonly: true,
@@ -101,6 +105,7 @@ define({
                         key: "cbsLoanData.closedOnValueDate",
                         "condition":"model.cbsLoanData.closedOnValueDate",
                         type: "date",
+                        readonly:true,
                         title: "LOAN_CLOSING_DATE"
                     }, {
                         key: "securityRefund.amount",
