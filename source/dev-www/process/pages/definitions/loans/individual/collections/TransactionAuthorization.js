@@ -59,6 +59,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                                     model.transAuth.customer_name = data.customer1FirstName;
                                     model.transAuth.productCode = data.productCode;
                                     model.transAuth.urnNo = data.customerId1;
+                                    model._transAuth.urnNo = data.customerId1;
                                     //model.transAuth.instrument = 'CASH_IN';
                                     //model.transAuth.authorizationUsing = 'Testing-Swapnil';
                                     //model.transAuth.remarks = 'collections';

@@ -311,7 +311,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             {
                                 type: "fieldset",
                                 title: "PRECLOSURE_BREAKUP",
-                                condition: "model.repayment.transactionName=='Pre-closure'||'SecurityDepositRefund'",
+                                condition: "model.repayment.transactionName=='Pre-closure'",
                                 items: [
                                     {
                                         key: "repayment.principalNotDue",
@@ -456,10 +456,10 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                     "name": "Internal",
                                     "value": "INTERNAL"
                                 },
-                                /*{
+                                {
                                     "name": "Security Deposit",
-                                    "value": "security_deposit"
-                                }*/
+                                    "value": "SECURITY_DEPOSIT"
+                                }
                                 ],
                                 onChange: function(value, form, model) {
                                     if (value == 'PDC') {
@@ -504,42 +504,42 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 key: "repayment.securityDeposit",
                                 readonly: true,
                                 title: "TOTAL_SECURITY_DEPOSIT_DUE",
-                                condition:"model.repayment.instrument=='security_deposit'",
+                                condition:"model.repayment.instrument=='SECURITY_DEPOSIT'",
                                 type: "amount"
                             },
                             {
                                 key: "repayment.totalPrincipalDue",
                                 readonly: true,
                                 title: "TOTAL_PRINCIPAL_DUE",
-                                condition:"model.repayment.instrument=='security_deposit'",
+                                condition:"model.repayment.instrument=='SECURITY_DEPOSIT'",
                                 type: "amount"
                             },
                             {
                                 key: "repayment.totalNormalInterestDue",
                                 readonly: true,
                                 title: "TOTAL_INTEREST_DUE",
-                                condition:"model.repayment.instrument=='security_deposit'",
+                                condition:"model.repayment.instrument=='SECURITY_DEPOSIT'",
                                 type: "amount"
                             },
                             {
                                 key: "repayment.totalPenalInterestDue",
                                 readonly: true,
                                 title: "TOTAL_PENAL_INTEREST_DUE",
-                                condition:"model.repayment.instrument=='security_deposit'",
+                                condition:"model.repayment.instrument=='SECURITY_DEPOSIT'",
                                 type: "amount"
                             },
                             {
                                 key: "repayment.totalFeeDue",
                                 readonly: true,
                                 title: "TOTAL_FEE_DUE",
-                                condition:"model.repayment.instrument=='security_deposit'",
+                                condition:"model.repayment.instrument=='SECURITY_DEPOSIT'",
                                 type: "amount"
                             },
                             {
                                 key: "repayment.payOffAndDueAmount",
                                 readonly: true,
                                 title: "TOTAL_OUTSTANDING",
-                                condition:"model.repayment.instrument=='security_deposit'",
+                                condition:"model.repayment.instrument=='SECURITY_DEPOSIT'",
                                 type: "amount"
                             },
                             {
@@ -617,7 +617,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 key: "repayment.bankAccountNumber",
                                 type: "lov",
                                 autolov: true,
-                                condition:"model.repayment.instrument=='NEFT' || model.repayment.instrument=='RTGS'||model.repayment.instrument=='ACH' || model.repayment.instrument == 'INTERNAL' || model.repayment.instrument == 'security_deposit'",
+                                condition:"model.repayment.instrument=='NEFT' || model.repayment.instrument=='RTGS'||model.repayment.instrument=='ACH' || model.repayment.instrument == 'INTERNAL' || model.repayment.instrument == 'SECURITY_DEPOSIT'",
                                 title:"REPAYMENT_TO_ACCOUNT",
                                 required: true,
                                 bindMap: {

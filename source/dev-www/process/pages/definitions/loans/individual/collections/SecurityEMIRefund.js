@@ -20,8 +20,8 @@ define({
                         'accountNumber': $stateParams.pageId
                     }).$promise.then(function(res) {
                         $log.info(res);
-                        model.securityRefund.applicantName = res.body[0].applicantName;
-                        model.securityRefund.businessName = res.body[0].customerName;
+                        model.securityRefund.applicantName = res.body[0].applicantName||"";
+                        model.securityRefund.businessName = res.body[0].customerName||"";
                         model.securityRefund.hub = res.body[0].branchName;
                         model.securityRefund.spoke = res.body[0].centreName;
                         var promise = LoanAccount.get({
@@ -75,17 +75,7 @@ define({
             form: [{
                 "type": "box",
                 "title": "DETAILS",
-                "items": [{
-                        key: "securityRefund.applicantName",
-                        type: "string",
-                        "readonly": true,
-                        title: "APPLICANT_NAME"
-                    }, {
-                        key: "securityRefund.businessName",
-                        type: "string",
-                        title: "BUSINESS_NAME",
-                        readonly: true
-                    }, {
+                "items": [ {
                         key: "securityRefund.hub",
                         readonly: true,
                         title: "BRANCH"
@@ -97,6 +87,16 @@ define({
                         key: "securityRefund.urnNo",
                         readonly: true,
                         title: "URN_NO"
+                    },{
+                        key: "securityRefund.applicantName",
+                        type: "string",
+                        "readonly": true,
+                        title: "APPLICANT_NAME"
+                    }, {
+                        key: "securityRefund.businessName",
+                        type: "string",
+                        title: "BUSINESS_NAME",
+                        readonly: true
                     }, {
                         key: "securityRefund.accountNumber",
                         readonly: true,
@@ -161,45 +161,11 @@ define({
                     required: true,
                 }]
             }, 
-            /*{
-                "type": "box",
-                "title": "DISBURSEMENT_FROM_ACCOUNT",
-                "items": [{
-                    key: "securityRefund.disbursementFromBankAccountNumber",
-                    type: "lov",
-                    "schema": {
-                        "type": ["string", "null"]
-                    },
-                    autolov: true,
-                    title: "DISBURSEMENT_FROM_ACCOUNT",
-                    bindMap: {
-
-                    },
-                    outputMap: {
-                        "account_number": "securityRefund.disbursementFromBankAccountNumber"
-                    },
-                    searchHelper: formHelper,
-                    search: function(inputModel, form, model) {
-                        //return Queries.getBankAccountsByProduct(model.additional.productCode,true,false);
-                        return Queries.getBankAccountsByProduct(model.securityRefund.productCode, true, false);
-                    },
-                    getListDisplayItem: function(item, index) {
-                        return [
-                            item.account_number,
-                            item.ifsc_code + ', ' + item.bank_name,
-                            item.branch_name
-                        ];
-                    }
-                }]
-            },*/ 
             {
                 "type": "actionbox",
                 "items": [{
                     "type": "submit",
                     "title": "Submit"
-                }, {
-                    "type": "submit",
-                    "title": "hold"
                 }]
             }],
             schema: function() {
@@ -221,7 +187,10 @@ define({
                         PageHelper.hideLoader();
                         PageHelper.showProgress('centreCreationSubmitRequest', 'Done', 5000);
                         form.$setPristine();
-                        $state.go('Page.SecurityEMIRefundSearch', null);
+                        $state.go('Page.Engine', {
+                            pageName: 'loans.individual.collections.SecurityEMIRefundQueue',
+                            pageId: null
+                        });
                     }, function(data) {
                         PageHelper.hideLoader();
                         PageHelper.showProgress('SecurityEMIRefund', 'Oops some error happend', 5000);
