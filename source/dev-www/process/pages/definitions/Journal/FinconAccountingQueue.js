@@ -45,7 +45,7 @@ define({
                 },
                 getResultsPromise: function(searchOptions, pageOpts) {
                     var promise = Journal.journalMultiEntrySearch({
-                        'remarks': searchOptions.remarks,
+                        'transactionName': searchOptions.remarks,
                         'transactionDate': searchOptions.transactionDate,
                         'currentStage': "multiJournalEntry",
                         'page': pageOpts.pageNo,

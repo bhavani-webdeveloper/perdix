@@ -32,33 +32,33 @@ irf.pages.controller("FinconAccountingDashboardCtrl", ['$log', '$scope', 'PagesD
                 });
             }
 
-            var jeMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/Journal.FinconAccountingReviewQueue"];
+            var jpMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/Journal.FinconAccountingReviewQueue"];
 
-            if (jeMenu) {
+            if (jpMenu) {
                 var promise = Journal.journalMultiEntrySearch({
 
                     'page': 1,
                     'per_page': 1,
                     'currentStage': "multiJournalPosting"
                 }).$promise.then(function(response, headerGetter) {
-                    jeMenu.data = Number(response.headers['x-total-count']);
+                    jpMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
-                    jeMenu.data = '-';
+                    jpMenu.data = '-';
                 });
             }
 
-             var jeMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/Journal.RejectedFinconAccountingQueue"];
+             var jrMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/Journal.RejectedFinconAccountingQueue"];
 
-            if (jeMenu) {
+            if (jrMenu) {
                 var promise = Journal.journalMultiEntrySearch({
 
                     'page': 1,
                     'per_page': 1,
                     'currentStage': "multiJournalPosting"
                 }).$promise.then(function(response, headerGetter) {
-                    jeMenu.data = Number(response.headers['x-total-count']);
+                    jrMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
-                    jeMenu.data = '-';
+                    jrMenu.data = '-';
                 });
             }
 
