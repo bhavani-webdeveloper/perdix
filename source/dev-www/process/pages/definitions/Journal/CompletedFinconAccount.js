@@ -66,7 +66,8 @@ irf.pageCollection.controller(irf.controller("Journal.CompletedFinconAccount"), 
                                                 }
                                             },
                                             "FinconAccounting.transactionSection.billNumber": {
-                                                "condition": "model.showFeilds"
+                                                "condition": "model.showFeilds",
+                                                "type": "string"
                                             },
                                             "FinconAccounting.transactionSection.billDate": {
                                                 "condition": "model.showFeilds"
@@ -84,7 +85,8 @@ irf.pageCollection.controller(irf.controller("Journal.CompletedFinconAccount"), 
                                                 "condition": "model.showFeild"
                                             },
                                             "FinconAccounting.instrumentSection.instrumentNumber": {
-                                                "condition": "model.showFeild"
+                                                "condition": "model.showFeild",
+                                                "type": "string"
                                             },
                                             "FinconAccounting.instrumentSection.instrumentBankName": {
                                                 "condition": "model.showFeild"
@@ -100,7 +102,8 @@ irf.pageCollection.controller(irf.controller("Journal.CompletedFinconAccount"), 
                                             "FinconAccounting.transactionSection",
                                             "FinconAccounting.transactionSection.entryType",
                                             "FinconAccounting.transactionSection.transactionDate",
-                                            "FinconAccounting.transactionSection.transactionBranch",
+                                            "FinconAccounting.transactionSection.transactionBranchId",
+                                            "FinconAccounting.transactionSection.remarks",
                                             "FinconAccounting.transactionSection.valueDate",
                                             "FinconAccounting.transactionSection.billNumber",
                                             "FinconAccounting.transactionSection.billDate",
@@ -275,10 +278,9 @@ irf.pageCollection.controller(irf.controller("Journal.CompletedFinconAccount"), 
                                                 if (res.journalHeader.entryType == ("Payment - Account") || res.journalHeader.entryType == ("Payment") || res.journalHeader.entryType == ("Receipt - Account") || res.journalHeader.entryType == ("Receipt")) {
                                                     model.showFeild = true;
                                                 }
-                                                model.journal.journalHeader.billNumber = parseInt(res.journalHeader.billNumber);
-                                                model.journal.journalHeader.instrumentNumber = parseInt(res.journalHeader.instrumentNumber);
-
-                                                    model.myFunc(res.journalHeader.journaldetails)
+                                                // model.journal.journalHeader.billNumber = parseInt(res.journalHeader.billNumber);
+                                                // model.journal.journalHeader.instrumentNumber = parseInt(res.journalHeader.instrumentNumber);
+                                                model.myFunc(res.journalHeader.journaldetails)
                                                 })
                                         }
 

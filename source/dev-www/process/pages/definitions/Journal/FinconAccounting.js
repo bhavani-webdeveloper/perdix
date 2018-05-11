@@ -107,20 +107,24 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
 
                                 },
                                 "FinconAccounting.instrumentSection.instrumentType": {
-                                    "condition": "model.showFeild"
+                                    "condition": 'model.showFeild'
                                 },
                                 "FinconAccounting.instrumentSection.instrumentDate": {
-                                    "condition": "model.showFeild"
+                                    "condition": 'model.showFeild',
+                                    "orderNo": 120
                                 },
                                 "FinconAccounting.instrumentSection.instrumentNumber": {
-                                    "condition": "model.showFeild",
-                                    "type": "string"
+                                    "condition": 'model.showFeild && model.journal.journalHeader.instrumentType.toLowerCase() == "cheque" || model.journal.journalHeader.instrumentType.toLowerCase() == "neft" || model.journal.journalHeader.instrumentType.toLowerCase() == "rtgs"',
+                                    "type": "string",
+                                    "orderNo": 110
                                 },
                                 "FinconAccounting.instrumentSection.instrumentBankName": {
-                                    "condition": "model.showFeild"
+                                    "condition": 'model.showFeild && model.journal.journalHeader.instrumentType.toLowerCase() == "cheque" || model.journal.journalHeader.instrumentType.toLowerCase() == "neft" || model.journal.journalHeader.instrumentType.toLowerCase() == "rtgs"',
+                                    "orderNo" : 90
                                 },
                                 "FinconAccounting.instrumentSection.instrumentBranchName": {
-                                    "condition": "model.showFeild"
+                                    "condition": 'model.showFeild && model.journal.journalHeader.instrumentType.toLowerCase() == "cheque" || model.journal.journalHeader.instrumentType.toLowerCase() == "neft" || model.journal.journalHeader.instrumentType.toLowerCase() == "rtgs"',
+                                    "orderNo" : 100
                                 }
 
                             }
@@ -264,7 +268,7 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
                                                         </td>\
                                                         <td class='col-xs-3'>\
                                                             <div> \
-                                                                <input  typeahead-append-to-body=\"true\" class=\"form-control\" ng-model=\"d['relatedAccountNo']\" placeholder=\"Loan Account number\" uib-typeahead=\"loanNumb.account_number  as loanNumb.account_number for loanNumb in model.getLoanAccountNumber($viewValue) | limitTo:10\" placeholder=\"Enter code\"  typeahead-popup-template-url=\"customPopupTemplate.html\" typeahead-template-url=\"customTemplat.html\" >\
+                                                                <input  typeahead-append-to-body=\"true\" class=\"form-control\" ng-required=\"model.journal.journalHeader.entryType.toLowerCase() == 'payment - account' || model.journal.journalHeader.entryType.toLowerCase() == 'journal - account' || model.journal.journalHeader.entryType.toLowerCase() == 'receipt - account' || model.journal.journalHeader.entryType.toLowerCase() == 'contra - journal' \" ng-model=\"d['relatedAccountNo']\" uib-typeahead=\"loanNumb.account_number  as loanNumb.account_number for loanNumb in model.getLoanAccountNumber($viewValue) | limitTo:10\"  typeahead-popup-template-url=\"customPopupTemplate.html\" typeahead-template-url=\"customTemplat.html\" >\
                                                             </div>\
                                                         </td>\
                                                         <td class='col-xs-2'><textarea rows=\"1\" ng-model=\"d['remarks']\" class='form-control' />\
@@ -379,15 +383,15 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
                                     })
                                     .subscribe(function(out) {
                                         PageHelper.showProgress("Posting Save", "Posting Updated with id", 3000);
-                                        PageHelper.showProgress('Posting', 'Done.', 5000);
+                                        PageHelper.showProgress('Posting', 'Done.', 3000);
                                         irfNavigator.goBack();
                                     }, function(err) {
-                                        PageHelper.showProgress('Posting', 'Oops. Some error.', 5000);
+                                        PageHelper.showProgress('Posting', 'Oops. Some error.', 3000);
                                         PageHelper.showErrors(err);
                                         PageHelper.hideLoader();
                                     })
                             }, function(err) {
-                                PageHelper.showProgress('Posting', 'Oops. Some error.', 5000);
+                                PageHelper.showProgress('Posting', 'Oops. Some error.', 3000);
                                 PageHelper.showErrors(err);
                                 PageHelper.hideLoader();
                             });
