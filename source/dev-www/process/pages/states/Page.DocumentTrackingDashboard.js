@@ -41,7 +41,7 @@ irf.pages.controller("DocumentTrackingDashboardCtrl", ['$log', '$scope', "formHe
 
             var pdcMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.documentTracking.PendingDispatchConfirmationQueue"];
             if (pdcMenu) {
-                DocumentTracking.search({
+                DocumentTracking.findBatches({
                     'stage': 'BatchConfirmation',
                     'branchId': branchId,
                     'centerId': null,
