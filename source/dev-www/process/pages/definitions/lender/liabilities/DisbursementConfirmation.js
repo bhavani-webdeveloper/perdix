@@ -25,7 +25,10 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                         "required": true 
                     },
                     "DisbursementConfirmation.referenceNumber": {
-                        "required": true 
+                        "required": true,
+                        "schema":{
+                            "pattern":"^[0-9a-zA-Z]{10}$"
+                        }
                     }
 
                 }
