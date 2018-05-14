@@ -925,6 +925,8 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                                 } else if (postData.loanCollection.instrumentType == 'Suspense'){
                                                     resp.stage = "CreditValidation";
                                                     resp.loanCollection.bankAccountNumber = model.additional.suspenseCode;
+                                                } else if (postData.loanCollection.instrumentType == 'SECURITY_DEPOSIT') {                                    
+                                                    resp.stage = "CreditValidation";
                                                 } else {
                                                     resp.stage = "BRSValidation";
                                                 }
