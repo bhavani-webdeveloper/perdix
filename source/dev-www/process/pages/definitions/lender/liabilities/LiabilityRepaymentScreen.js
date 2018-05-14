@@ -17,19 +17,61 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
             var totalAmountPaidSum = function(modelValue,model){
                 var total = 0;
                 if (_.isNumber(model.liabilityRepay.principalPaid)) {
-                    total = total + model.liabilityRepay.principalPaid;
+                    if (model.liabilityRepay.principalPaid < 0) {
+                        PageHelper.showErrors({
+                            'data': {
+                                'error': "PrincipalPaid can't be less than 0"
+                            }
+                        })
+                        PageHelper.hideLoader();
+                    } else {
+                        PageHelper.clearErrors();
+                        total = total + model.liabilityRepay.principalPaid;
+                    }
+
                 }
 
                 if (_.isNumber(model.liabilityRepay.interestPaid)) {
-                    total = total + model.liabilityRepay.interestPaid;
+                    if (model.liabilityRepay.interestPaid < 0) {
+                        PageHelper.showErrors({
+                            'data': {
+                                'error': "InterestPaid can't be less than 0"
+                            }
+                        })
+                        PageHelper.hideLoader();
+                    } else {
+                        PageHelper.clearErrors();
+                        total = total + model.liabilityRepay.interestPaid;
+                    }
                 }
 
                 if (_.isNumber(model.liabilityRepay.penalityPaid)) {
-                    total = total + model.liabilityRepay.penalityPaid;
+                    if (model.liabilityRepay.penalityPaid < 0) {
+                        PageHelper.showErrors({
+                            'data': {
+                                'error': "PenalityPaid can't be less than 0"
+                            }
+                        })
+                        PageHelper.hideLoader();
+                    } else {
+                        PageHelper.clearErrors();
+                        total = total + model.liabilityRepay.penalityPaid;
+                    }
                 }
 
                 if (_.isNumber(model.liabilityRepay.otherFeeChargesPaid)) {
-                    total = total + model.liabilityRepay.otherFeeChargesPaid;
+                    if (model.liabilityRepay.otherFeeChargesPaid < 0) {
+                        PageHelper.showErrors({
+                            'data': {
+                                'error': "OtherFeeChargesPaid can't be less than 0"
+                            }
+                        })
+                        PageHelper.hideLoader();
+                    } else {
+                        PageHelper.clearErrors();
+                        total = total + model.liabilityRepay.otherFeeChargesPaid;
+                    }
+
                 }
 
                 model.liabilityRepay.totalAmountPaid = total;   
