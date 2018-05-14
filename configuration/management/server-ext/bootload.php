@@ -72,6 +72,11 @@ $settings = [
     ]
 ];
 
+$bi_etl = getenv('BI_ETL_DB_NAME', 'bietl');
+$bi = getnv('BI_DB_NAME', 'bi');
+$encore = getenv('ENCORE_DB_NAME', 'encore');
+$perdix = getenv('DB_NAME', 'financialForms');
+
 Settings::getInstance()->setSettings($settings);
 
 header("Access-Control-Request-Method: GET");

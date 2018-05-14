@@ -35,8 +35,8 @@ export class VerifyIndividualReferencePolicy extends IPolicy<EnrolmentProcess> {
         if(_.hasIn(enrolmentProcess.customer, "verifications") && _.isArray(enrolmentProcess.customer.verifications) && enrolmentProcess.customer.verifications.length > 0) {
             this.flag = 0;
             for (let i=0;i<enrolmentProcess.customer.verifications.length;i++) {
-                 var verification = enrolmentProcess.customer.verifications[i];
-                 if (verification.referenceFirstName && verification.relationship && verification.mobileNo) {
+                var verification = enrolmentProcess.customer.verifications[i];
+                if (verification.referenceFirstName && verification.relationship && verification.mobileNo) {
                     this.flag++;
                 } else {
                     console.log("Please Fill Reference Details");
@@ -48,6 +48,6 @@ export class VerifyIndividualReferencePolicy extends IPolicy<EnrolmentProcess> {
                 return Observable.of(enrolmentProcess);
             }
         }
-
+        return Observable.of(enrolmentProcess);
     }
 }
