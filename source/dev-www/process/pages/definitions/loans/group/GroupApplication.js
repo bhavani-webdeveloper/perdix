@@ -114,7 +114,7 @@ define({
             var promiseArr = [];
             promiseArr.push(deferred);
             angular.forEach(model.group.jlgGroupMembers, function(member, key) {
-                if (model.siteCode == 'sambandh' || model.siteCode == 'saija') {
+                if (model.siteCode == 'sambandh') {
                     promiseArr.push(activateLoans(member));
                 }
                 Enrollment.get({
