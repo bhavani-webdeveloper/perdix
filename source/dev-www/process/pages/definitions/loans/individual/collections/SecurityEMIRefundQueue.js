@@ -12,6 +12,7 @@ define({
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 $log.info("search-list sample got initialized");
+                model.status=2;
             },
             definition: {
                 title: "SECURITY_EMI_REFUND_SEARCH",
@@ -21,7 +22,23 @@ define({
                         key: "branch",
                     },{
                         key: "accountId",
-                    }]
+                    },
+                    {
+                        key: "status",
+                        title: "STATUS",
+                        "type":"select",
+                        "titleMap": [{
+                            name: "open",
+                            value: 0
+                        }, {
+                            "name": "Inactive",
+                            "value": 1
+                        }, {
+                            "name": "closed",
+                            "value": 2
+                        }]
+                    }
+                    ]
                 }],
                 //autoSearch: true,
                 searchSchema: {
@@ -89,7 +106,7 @@ define({
                     }).$promise.then(function(res){
                         var ret = [];
                         angular.forEach(res.body, function(value, key) {
-                            if(value.status==2){
+                            if(value.status== searchOptions.status){
                                 ret.push(value);
                             }
                         });
@@ -100,30 +117,6 @@ define({
                             body: ret
                         });
                     });
-
-
-                    /*.then(function(res) {
-                        for (i in res.body) {
-                            if (res.body[i].accountId) {
-                                IndividualLoan.search({
-                                    'accountNumber': res.body[i].accountId
-                                }).$promise.then(function(response) {
-                                    res.body[i].applicantName = response.body[0].applicantName;
-                                    res.body[i].businessName = response.body[0].customerName;
-                                    return $q.resolve({
-                                        headers: {
-                                            "x-total-count": ret.length
-                                        },
-                                        body: ret
-                                    });
-                                }, function(err) {
-
-                                });
-                            }
-                        }
-                    });*/
-
-                    //var promise = SecurityEMIRefundResource.findSecurityDepositRefundAccounts().$promise;
                     return promise;
                 },
                 paginationOptions: {
