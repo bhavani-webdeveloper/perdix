@@ -13,6 +13,7 @@ define({
             initialize: function(model, form, formCtrl) {
                 $log.info("search-list sample got initialized");
                 model.status=2;
+                model.branch=SessionStore.getCurrentBranch().branchId;
             },
             definition: {
                 title: "SECURITY_EMI_REFUND_SEARCH",
@@ -27,6 +28,7 @@ define({
                         key: "status",
                         title: "STATUS",
                         "type":"select",
+                        "readonly":true,
                         "titleMap": [{
                             name: "open",
                             value: 0
@@ -55,7 +57,7 @@ define({
                         },
                         "accountId": {
                             "title": "ACCOUNT_ID",
-                            "type": "number"
+                            "type": "string"
                         },
                         "branch": {
                             "title": "BRANCH_NAME",

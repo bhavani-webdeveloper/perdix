@@ -63,11 +63,12 @@ define({
                             //_pageGlobals.totalDemandDue = data.totalDemandDue;
 
                             irfProgressMessage.pop('loading-loan-details', 'Loaded.', 2000);
+                            PageHelper.hideLoader();
                         }, function(resData) {
                             irfProgressMessage.pop('loading-loan-details', 'Error loading Loan details.', 4000);
                             PageHelper.showErrors(resData);
                         });
-                        PageHelper.hideLoader();
+                        
                     }, function(err) {
                         PageHelper.hideLoader();
                     })
