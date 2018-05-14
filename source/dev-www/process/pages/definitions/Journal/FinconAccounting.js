@@ -54,7 +54,7 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
                 model.getLoanAccountNumber = function(loanNumb) {
                     console.log(loanNumb)
                     return Queries.getloanAccountsByLikeAccountNumber(loanNumb).then(function(res) {
-                        return res
+                        return res.body
                     }, function(err) {
                         console.log(err)
                     })
