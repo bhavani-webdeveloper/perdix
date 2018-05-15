@@ -264,7 +264,7 @@ define({
                         model.UIUDF.cibil.cibil_score = res.cibil.cibilScore[0].score;
                         model.UIUDF.cibil.active_accounts = res.cibil.cibilLoanSummaryInfo[0].totalAccounts;
                         model.UIUDF.cibil.overdue_accounts = res.cibil.cibilLoanSummaryInfo[0].overDueAccounts;
-                        model.UIUDF.cibil.sanctioned_amount = res.cibil.cibilLoanDetails[0].highCreditOrSanctionedAmount;
+                        model.UIUDF.cibil.sanctioned_amount = (res.cibil.cibilLoanDetails.length!=0)?res.cibil.cibilLoanDetails[0].highCreditOrSanctionedAmount:"";
                         model.UIUDF.cibil.current_balance = res.cibil.cibilLoanSummaryInfo[0].currentBalance;
                         model.UIUDF.cibil.amount_overdue = res.cibil.cibilLoanSummaryInfo[0].amountOverDue;
                         // model.UIUDF.cibil.report = '<a href="" class="color-theme">Download</a>';
@@ -272,11 +272,14 @@ define({
                     if (res.highMark != null) {
                         model.UIUDF.highmark.score = res.highMark.highmarkScore;
                         var highmarkFields = $(res.highMark.reportHtml).find('.subHeader1').parent().parent().children(':last').find('.AccValue');
-                        model.UIUDF.highmark.active_accounts = highmarkFields[1].innerText.trim();
-                        model.UIUDF.highmark.overdue_accounts = highmarkFields[2].innerText.trim();
-                        model.UIUDF.highmark.current_balance = highmarkFields[3].innerText.trim() + ' ' + irfElementsConfig.currency.iconHtml;
-                        model.UIUDF.highmark.disbursed_amount = highmarkFields[4].innerText.trim() + ' ' + irfElementsConfig.currency.iconHtml;
-                        // model.UIUDF.highmark.report = '<a href="" class="color-theme">Download</a>';
+                        if (highmarkFields.length != 0) {
+                            model.UIUDF.highmark.active_accounts = highmarkFields[1].innerText.trim();
+                            model.UIUDF.highmark.overdue_accounts = highmarkFields[2].innerText.trim();
+                            model.UIUDF.highmark.current_balance = highmarkFields[3].innerText.trim() + ' ' + irfElementsConfig.currency.iconHtml;
+                            model.UIUDF.highmark.disbursed_amount = highmarkFields[4].innerText.trim() + ' ' + irfElementsConfig.currency.iconHtml;
+                            // model.UIUDF.highmark.report = '<a href="" class="color-theme">Download</a>';
+                        }
+
                     }
                 }, function(e) {
                     model.cibil_highmark = null;
