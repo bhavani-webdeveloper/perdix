@@ -192,6 +192,7 @@ irf.pageCollection.factory(irf.page("bi.BIReports"), ["$log", "RolesPages", "BIR
             },
             actions: {
                 submit: function(model, form, formName) {
+                    PageHelper.clearErrors();
                     if (model.selectedReport.parameterized) {
                         var reqData = {}
                         reqData.auth_data = {
