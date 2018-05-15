@@ -99,6 +99,7 @@ irf.pageCollection.factory(irf.page("bi.BIReports"), ["$log", "RolesPages", "BIR
                     onChange: function(modelValue, form, model, formCtrl, event){
                         var res = $filter('filter')( model.report.masterData, {'value': model.bi.report_name}, true);
                         model.selectedReport = (res && res.length > 0) ? res[0] : undefined; 
+                        delete model.bi._filterCollection;
                         model.bi._filterCollection = [];
                         if (model.selectedReport.parameters) {
                             for (var i = 0; i < model.selectedReport.parameters.length; i++) {
@@ -215,6 +216,13 @@ irf.pageCollection.factory(irf.page("bi.BIReports"), ["$log", "RolesPages", "BIR
                           {responseType: 'arraybuffer'}
                         ).then(function (response) {
                           var headers = response.headers();
+                          if (headers['content-type'].indexOf('json') != -1 ) {
+                            var decodedString = String.fromCharCode.apply(null, new Uint8Array(response.data));
+                            console.log(decodedString);
+                            PageHelper.showErrors({data: {error: decodedString}});
+                            irfProgressMessage.pop("Reports","Report download failed.", 5000);
+                            return;
+                          }
                           var blob = new Blob([response.data],{type:headers['content-type']});
                           var link = document.createElement('a');
                           link.href = window.URL.createObjectURL(blob);
