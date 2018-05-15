@@ -5,11 +5,11 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
     return {
         pageUID: "lender.liabilities.LiabilityLoanDocumentUpload",
         pageType: "Engine",
-        dependencies: ["$log", "$state", "$stateParams", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q",
-            "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository", "irfNavigator"],
+        dependencies: ["LiabilityAccountProcess","$log", "$state", "$stateParams", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q",
+            "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository", "irfNavigator", "Upload", "BASE_URL"],
 
-        $pageFn: function ($log, $state, $stateParams, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q,
-                           PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository, irfNavigator) {
+        $pageFn: function (LiabilityAccountProcess,$log, $state, $stateParams, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q,
+                           PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository, irfNavigator,Upload, BASE_URL) {
             var configFile = function () {
                 return {
                 }
@@ -61,6 +61,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     },
                     "LenderDocumentation.liabilityLenderDocuments.upload": {
                         "required": true,
+                        
                     },
                     "LenderDocumentation.liabilityLenderDocuments": {
                         "view":"fixed",
@@ -441,38 +442,39 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                 },
                 actions: {
                     save: function (model, formCtrl, form, $event) {
-                        PageHelper.clearErrors();
-                        if(PageHelper.isFormInvalid(formCtrl)) {
-                            return false;
-                        }
-                        formCtrl.scope.$broadcast('schemaFormValidate');
+                        console.log(model)
+                        // PageHelper.clearErrors();
+                        // if(PageHelper.isFormInvalid(formCtrl)) {
+                        //     return false;
+                        // }
+                        // formCtrl.scope.$broadcast('schemaFormValidate');
 
-                        if (formCtrl && formCtrl.$invalid) {
-                            PageHelper.showProgress("loan", "Your form have errors. Please fix them.", 5000);
-                            return false;
-                        }
+                        // if (formCtrl && formCtrl.$invalid) {
+                        //     PageHelper.showProgress("loan", "Your form have errors. Please fix them.", 5000);
+                        //     return false;
+                        // }
 
-                        _.map(model.LiabilityLoanAccountBookingProcess.liabilityAccount.liabilityLenderDocuments, function(n) {
-                            return n.documentType = "LenderDocuments";
-                        });
-                        _.map(model.LiabilityLoanAccountBookingProcess.liabilityAccount.liabilityComplianceDocuments, function(n) {
-                            return n.documentType = "ComplianceDocuments";
-                        });
+                        // _.map(model.LiabilityLoanAccountBookingProcess.liabilityAccount.liabilityLenderDocuments, function(n) {
+                        //     return n.documentType = "LenderDocuments";
+                        // });
+                        // _.map(model.LiabilityLoanAccountBookingProcess.liabilityAccount.liabilityComplianceDocuments, function(n) {
+                        //     return n.documentType = "ComplianceDocuments";
+                        // });
 
-                        PageHelper.showLoader();
-                        model.LiabilityLoanAccountBookingProcess.save()
-                            .finally(function () {
-                                PageHelper.hideLoader();
-                            })
-                            .subscribe(function (value) {
-                                PageHelper.showProgress('loan', 'Documents Saved.', 5000);
-                                PageHelper.clearErrors();
-                                //irfNavigator.goBack();
-                            }, function (err) {
-                                PageHelper.showProgress('loan', 'Oops. Some error.', 5000);
-                                PageHelper.showErrors(err);
-                                PageHelper.hideLoader();
-                            });
+                        // PageHelper.showLoader();
+                        // model.LiabilityLoanAccountBookingProcess.save()
+                        //     .finally(function () {
+                        //         PageHelper.hideLoader();
+                        //     })
+                        //     .subscribe(function (value) {
+                        //         PageHelper.showProgress('loan', 'Documents Saved.', 5000);
+                        //         PageHelper.clearErrors();
+                        //         //irfNavigator.goBack();
+                        //     }, function (err) {
+                        //         PageHelper.showProgress('loan', 'Oops. Some error.', 5000);
+                        //         PageHelper.showErrors(err);
+                        //         PageHelper.hideLoader();
+                        //     });
                     },
                     proceed: function (model, formCtrl, form, $event) {
                         PageHelper.clearErrors();
