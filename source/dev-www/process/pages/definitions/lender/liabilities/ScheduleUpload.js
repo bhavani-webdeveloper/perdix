@@ -109,13 +109,12 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                                         .subscribe(function(value) {
                                                             PageHelper.clearErrors();
                                                         }, function(err) {
-                                                            PageHelper.showErrors({
-                                                                    'message': "Please upload excel file only"
-                                                                })
+                                                            PageHelper.showErrors(err)
                                                             PageHelper.hideLoader();
                                                         });
                                                 }, function(err) {
-                                                    console.log("error");
+                                                    err.data.error = err.data.errorMessage;
+                                                   PageHelper.showErrors(err)
                                                 });
                                             }
                                         }
