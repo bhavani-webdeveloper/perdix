@@ -262,7 +262,8 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                                                             lovonly: true,
                                                                             searchHelper: formHelper,
                                                                             search: function(inputModel, form, model, context) {
-                                                                                var f = $filter('filter')(complianceDocument, {"document_code": model.liabilityAccount.liabilityComplianceDocuments[context.arrayIndex].documentName},true);
+                                                                                var fun = $filter('filter')(complianceDocument, {"document_code": model.liabilityAccount.liabilityComplianceDocuments[context.arrayIndex].documentName},true);
+                                                                                var f  = _.uniqBy(fun,'reject_reason');
                                                                                 return $q.resolve({
                                                                                     "header": {
                                                                                         "x-total-count": f && f.length
@@ -393,12 +394,13 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                                                             lovonly: true,
                                                                             searchHelper: formHelper,
                                                                             search: function(inputModel, form, model, context) {
-                                                                                var f = $filter('filter')(lenderDocuments, {"document_code": model.liabilityAccount.liabilityLenderDocuments[context.arrayIndex].documentName},true);
+                                                                                var fun = $filter('filter')(lenderDocuments, {"document_code": model.liabilityAccount.liabilityLenderDocuments[context.arrayIndex].documentName},true);
+                                                                                var f  = _.uniqBy(fun,'reject_reason');
                                                                                 return $q.resolve({
                                                                                     "header": {
                                                                                         "x-total-count": f && f.length
                                                                                     },
-                                                                                    "body": f = _.uniq(f, f.reject_reason)
+                                                                                    "body": f 
                                                                                 });
                                                                             },
                                                                             getListDisplayItem: function(item, index) {
