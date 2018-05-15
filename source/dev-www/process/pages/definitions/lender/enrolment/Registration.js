@@ -18,43 +18,61 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "LenderInformation": {
                         "orderNo": 10
                     },
+                    "LenderInformation.firstName":{
+                        "type":"text"
+                    },
                     "LenderContactDetails": {
                         "orderNo": 20
                     },
                     "LenderContactInformation": {
                         "title": "ADDRESS_DETAILS",
-                        "orderNo": 30
+                        "orderNo": 40
                     },
                     "BankAccounts": {
                         "orderNo": 30
                     },
                     "LenderInformation.leadName": {
-                        "required": true
+                        "required": true,
                     },
                     "LenderInformation.companyOperatingSince": {
                         "required": true
                     },
-                    "LenderContactDetails.LenderContactDetails.contactPersonName": {
+                    "LenderContactDetails.contactPersonName": {
                         "required": true
                     },
                     "LenderContactDetails.LenderContactDetails.mobilePhone1": {
-                        "required": true
+                        "required": true,
+                        "type":"number",
+                        "schema":{
+                            "pattern":"^[0-9]{10}$"
+                        }
+                    },
+                    "LenderContactDetails.LenderContactDetails.mobilePhone2": {
+                        "required": true,
+                        "type":"number",
+                        "schema":{
+                            "pattern":"^[0-9]{10}$"
+                        }
                     },
                     "LenderContactInformation.Address1.doorNo": {
                         "required": true
                     },
                     "LenderContactInformation.Address1.pincode": {
                         "resolver":"PincodeLOVConfiguration",
-                        "required": true
+                        "required": true,
+                        "orderNo":100
                     },
                     "LenderContactInformation.Address1.villageName": {
-                        "readonly": true
+                        "readonly": true,
+                        "orderNo":110
                     },
                     "LenderContactInformation.Address1.district": {
-                        "readonly": true
+                        "readonly": true,
+                        "orderNo":120
                     },
                     "LenderContactInformation.Address1.state": {
-                        "readonly": true
+                        "readonly": true,
+                        "orderNo":130
                     },
                     "LenderContactInformation.Address2.mailingLocality": {
                         "readonly": true
@@ -71,6 +89,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     "BankAccounts.customerBankAccounts.accountType": {
                         "required": true
+                    },
+                    "BankAccounts.customerBankAccounts.customerBankName":{
+                        "type" : "string"
+                    },
+                    "BankAccounts.customerBankAccounts.customerBankBranchName":{
+                        "type" : "string"
+                    },
+                    "BankAccounts.customerBankAccounts.customerNameAsInBank":{
+                        "type" : "string"
+                    },
+                    "BankAccounts.customerBankAccounts.accountNumber":{
+                        "type" : "number"
                     }
                 }
             }
@@ -127,6 +157,24 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "BankAccounts.customerBankAccounts.accountType"
                 ];
 
+            }
+
+            var operatingsinceDate = function(model){
+                var operatingSinceDate = model.enrolmentProcess.customer.enterprise.companyOperatingSince;
+                var dateA = new Date(operatingSinceDate);
+                var dateB = new Date();
+                if (dateA > dateB) {
+                    PageHelper.showErrors({
+                        'data': {
+                            'error': "OperatingSinceDate can't be more than current Date"
+                        }
+                    })
+                   // PageHelper.hideLoader();
+                    return true
+                }
+                else{
+                    return false
+                }
             }
 
             return {
@@ -365,25 +413,33 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
                         // $q.all start
                         PageHelper.showLoader();
-                        model.enrolmentProcess.save()
-                            .finally(function () {
-                                PageHelper.hideLoader();
-                            })
-                            .subscribe(function (value) {
-                                formHelper.resetFormValidityState(formCtrl);
-                                Utils.removeNulls(value, true);
-                                PageHelper.showProgress('enrolment', 'Lender Saved.', 5000);
-                                if(!model.customer.id) {
-                                    model.customer = value.customer;
-                                    model.enrolmentProcess.customer = value.customer;
-                                }
-                                PageHelper.clearErrors();
-                               
-                            }, function (err) {
-                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
-                                PageHelper.showErrors(err);
-                                PageHelper.hideLoader();
-                            });
+                        
+                        // var dateA = new Date(operatingSinceDate);
+                        // var dateB = new Date();
+                        var res = operatingsinceDate(model)
+                        if (res) {
+                           PageHelper.hideLoader();
+                        } else {
+                            model.enrolmentProcess.save()
+                                .finally(function() {
+                                    PageHelper.hideLoader();
+                                })
+                                .subscribe(function(value) {
+                                    formHelper.resetFormValidityState(formCtrl);
+                                    Utils.removeNulls(value, true);
+                                    PageHelper.showProgress('enrolment', 'Lender Saved.', 5000);
+                                    if (!model.customer.id) {
+                                        model.customer = value.customer;
+                                        model.enrolmentProcess.customer = value.customer;
+                                    }
+                                    PageHelper.clearErrors();
+
+                                }, function(err) {
+                                    PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                    PageHelper.showErrors(err);
+                                    PageHelper.hideLoader();
+                                });
+                        }
                     },
                     proceed: function (model, formCtrl, form, $event) {
                         PageHelper.clearErrors();
@@ -397,6 +453,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             return false;
                         }
                         PageHelper.showLoader();
+                        var res = operatingsinceDate(model)
+                        if (res) {
+                           PageHelper.hideLoader();
+                        } else
                         model.enrolmentProcess.proceed()
                             .finally(function () {
                                 PageHelper.hideLoader();
@@ -430,6 +490,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
                         // $q.all start
                         PageHelper.showLoader();
+                        var res = operatingsinceDate(model)
+                        if (res) {
+                           PageHelper.hideLoader();
+                        } else
                         model.enrolmentProcess.proceed()
                             .finally(function () {
                                 PageHelper.hideLoader();
