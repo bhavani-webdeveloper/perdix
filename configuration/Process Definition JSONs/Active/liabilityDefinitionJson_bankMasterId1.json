@@ -430,7 +430,17 @@
                   "captureStages":[
                      "LiabilityAccount", "DisbursementConfirmation"
                   ]
+               }, "sourcingAgent":{
+                  "title":"sourcingAgent",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                                 
+                  "captureStages":[
+                     "LiabilityAccount", "DisbursementConfirmation"
+                  ]
                },
+
 			   "agentContactPerson":{
                   "title":"agentContactPerson",
                   "type":"string",
