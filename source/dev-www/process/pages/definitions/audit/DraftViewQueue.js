@@ -200,7 +200,7 @@ irf.pageCollection.factory(irf.page("audit.DraftViewQueue"), ["$log", "Queries",
                     getColumns: function() {
                         var masterJson = Audit.offline.getAuditMaster();
                         return [{
-                            title: 'AUDIT_IT',
+                            title: 'AUDIT_ID',
                             data: 'audit_id'
                         }, {
                             title: 'AUDITOR_ID',
