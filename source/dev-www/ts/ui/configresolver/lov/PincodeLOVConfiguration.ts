@@ -3,11 +3,7 @@ import {NGHelper} from "../../../infra/helpers/NGHelper";
 import AngularResourceService = require("../../../infra/api/AngularResourceService");
 export class PincodeLOVConfiguration extends LOVElementConfiguration {
     inputMap: Object = {
-        "pincode": {
-            "key": "customer.pincode",
-            "title": "pinCode",
-            "type": "number"
-        },
+        "pincode": "customer.pincode",
         "district": {
             key: "customer.district"
         },
@@ -48,8 +44,13 @@ export class PincodeLOVConfiguration extends LOVElementConfiguration {
         ];
     };
     onSelect: Function = function(result, model, context) {
+        model.customer.pincode = result.pincode;
+        model.customer.locality = result.division;
+        model.customer.state = result.state;
+        model.customer.district = result.district;
         NGHelper.refreshUI();
     };
+    fieldType: string = "number";
     autolov: boolean = true;
     lovonly: boolean = false;
 }
