@@ -160,13 +160,10 @@ define({
                         };
                     },
                     getColumns: function(item) {
-                        return [/*{
-                            title: 'APPLICANT_NAME',
-                            data: 'applicantName'
-                        }, {
-                            title: 'BUSINESS_NAME',
-                            data: 'customerName'
-                        },*/ 
+                        return [{
+                            title: 'BRANCH_NAME',
+                            data: 'description'
+                        }, 
                         {
                             title: 'LOAN_ACCOUNT_NO',
                             data: 'accountId'
