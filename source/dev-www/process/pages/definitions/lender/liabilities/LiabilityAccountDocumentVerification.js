@@ -106,11 +106,13 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
             var lenderDocuments = [];
             Queries.getLoanProductDocumentsRejectReasons("lender_document").then(function(resp){
                 lenderDocuments = resp;
+                console.log(resp)
             });
 
             var complianceDocument = [];
             Queries.getLoanProductDocumentsRejectReasons("compliance_document").then(function(resp){
                 complianceDocument = resp;
+                console.log(resp)
             });
 
             return {
@@ -396,10 +398,11 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                                                                     "header": {
                                                                                         "x-total-count": f && f.length
                                                                                     },
-                                                                                    "body": f
+                                                                                    "body": f = _.uniq(f, f.reject_reason)
                                                                                 });
                                                                             },
                                                                             getListDisplayItem: function(item, index) {
+                                                                               // var mySubArray = _.uniq(item, item.reject_reason);
                                                                                 return [item.reject_reason];
                                                                             },
                                                                             onSelect: function(result, model, context) {
