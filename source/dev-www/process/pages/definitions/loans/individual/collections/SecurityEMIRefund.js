@@ -33,7 +33,7 @@ define({
                             model.cbsLoanData = data;
                             model.securityRefund.productCode = data.productCode;
                             model.securityRefund.urnNo = data.customerId1;
-                            model.securityRefund.instrument = 'CASH';
+                            //model.securityRefund.instrument = 'CASH';
                             model.securityRefund.authorizationUsing = '';
                             model.securityRefund.remarks = '';
                             model.securityRefund.accountNumber = data.accountId;
@@ -119,18 +119,21 @@ define({
                     "title":"INSTRUMENT_TYPE",
                     "required": true,
                     "titleMap": [{
-                        name: "Cash",
-                        value: "CASH"
+                        "name": "Cheque",
+                        "value": "CHQ"
                     }, {
                         "name": "NEFT",
                         "value": "NEFT"
+                    }, {
+                        "name": "RTGS",
+                        "value": "RTGS"
                     }]
                 }, {
                     key: "securityRefund.bankAccountNumber",
                     type: "lov",
                     autolov: true,
                     //condition: "model.repayment.instrument=='NEFT' || model.repayment.instrument=='RTGS'||model.repayment.instrument=='ACH' || model.repayment.instrument == 'INTERNAL'",
-                    title: "REPAYMENT_TO_ACCOUNT",
+                    title: "REPAYMENT_FROM_ACCOUNT",
                     required: true,
                     bindMap: {
 
@@ -152,7 +155,7 @@ define({
                 }, {
                     key: "securityRefund.instrumentDate",
                     title: "DATE",
-                    condition: "model.securityRefund.instrument=='NEFT'",
+                    //condition: "model.securityRefund.instrument=='NEFT'",
                     type: "date",
                     required: true,
                 }]
