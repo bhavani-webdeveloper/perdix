@@ -1840,8 +1840,6 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         key:"customer.supplierDetails",
                         title:"SUPPLIERS_DEATILS",
                         type: "array",
-                        splitField: "supplierType",
-                        splitFieldEnumCode: "supplier_type",
                         items:[
                             {
                                 key:"customer.supplierDetails[].supplierName",
@@ -1849,12 +1847,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 required:true,
                                 type:"string"
                             },
-                            // {
-                            //     key:"customer.supplierDetails[].supplierType",
-                            //     title:"TYPE",
-                            //     type:"select",
-                            //     enumCode: "supplier_type"
-                            // },
+                            {
+                                key:"customer.supplierDetails[].supplierType",
+                                title:"TYPE",
+                                type:"select",
+                                enumCode: "supplier_type"
+                            },
                             {
                                 key:"customer.supplierDetails[].paymentTerms",
                                 title:"PAYMENT_TERMS_IN_DAYS",
