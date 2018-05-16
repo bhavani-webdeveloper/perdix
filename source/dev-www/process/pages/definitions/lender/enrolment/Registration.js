@@ -100,7 +100,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "type" : "string"
                     },
                     "BankAccounts.customerBankAccounts.accountNumber":{
-                        "type" : "number"
+                        "schema":{
+                            "pattern":"^[0-9]{8,16}$"
+                        }
                     }
                 }
             }
@@ -244,8 +246,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                  "pincode": {
                                                     "key": "customer.pincode",
                                                     "type": "lov",
-                                                   // "inputmode": "number",
+                                                    "inputmode": "number",
+                                                    "feildType":"number",
                                                     "title":"PINCODE",
+                                                    "autolov":true,
                                                     "orderNo": 190
                                                 },
                                                 "locality": {
