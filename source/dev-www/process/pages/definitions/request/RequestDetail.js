@@ -243,9 +243,8 @@ define([], function(){
                   PageHelper.clearErrors();
                   PageHelper.showLoader();
                   PageHelper.showProgress('request', 'Updating Request');
-                  var reqData = _.cloneDeep(model);
-                  $log.info(reqData);
-                  var promise = Worklist.update(reqData.tranche).$promise;
+                  
+                  var promise = Worklist.update(model.reqDetail).$promise;
                   promise.then((data)=>{
                       PageHelper.showProgress('request', 'Update Done.', 5000);
                       irfNavigator.goBack();
