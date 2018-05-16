@@ -1554,6 +1554,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         "items":[
                             {
                                 "key":"loanAccount.collateral[].collateralType",
+                                "enumCode": "collateral_type_titledeed",
                                 "type":"select"
                             },
                             {
