@@ -99,6 +99,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "HouseVerification": {
                                     "readonly": true
                                 }
+                                "IndividualInformation.customerCategory": {
+                                    "readonly": true
+                                }
                             },
                             "excludes": [
                                 "ResidenceVerification",
@@ -166,6 +169,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "PhysicalAssets": {
                                     "readonly": true
+                                },
+                                "IndividualInformation.customerCategory": {
+                                    "readonly": true
                                 }
                             }
 
@@ -198,6 +204,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "PhysicalAssets": {
+                                    "readonly": true
+                                },
+                                "IndividualInformation.customerCategory": {
                                     "readonly": true
                                 }
                             },
@@ -235,6 +244,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "PhysicalAssets": {
                                     "readonly": true
+                                },
+                                "IndividualInformation.customerCategory": {
+                                    "readonly": true
                                 }
                             },
                             "excludes": [
@@ -270,6 +282,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "PhysicalAssets": {
+                                    "readonly": true
+                                },
+                                "IndividualInformation.customerCategory": {
                                     "readonly": true
                                 }
                             },
@@ -664,6 +679,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "KYC.additionalKYCs.kyc1ValidUptoDate",
                     "IndividualInformation",
                     "IndividualInformation.existingLoan",
+                    "IndividualInformation.customerCategory",
                     "IndividualInformation.customerBranchId",
                     "IndividualInformation.centreId",
                     "IndividualInformation.photoImageId",
@@ -986,6 +1002,17 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             }
                                         }
                                     }
+                                },
+                                "IndividualInformation": {
+                                    "items": {
+                                        "customerCategory": {
+                                            "key": "customer.customerCategory",
+                                            "title": "CUSTOMER_CATEGORY",
+                                            "type": "select",
+                                            "enumCode": "lead_category",
+                                            "orderNo": 85
+                                        }
+                                    }
                                 }
                             },
                             "additions": [
@@ -1102,6 +1129,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 model.customer.landLineNo = obj.alternateMobileNo;
                                 model.customer.landmark = obj.landmark;
                                 model.customer.postOffice = obj.postOffice;
+                                model.customer.customerCategory = obj.leadCategory;
 
                                 for (var i = 0; i < model.customer.familyMembers.length; i++) {
                                     // $log.info(model.customer.familyMembers[i].relationShip);

@@ -153,7 +153,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "TrackDetails",
                     "TrackDetails.vehiclesOwned",
                     "TrackDetails.vehiclesFinanced",
-                    "TrackDetails.vehiclesFree"
+                    "TrackDetails.vehiclesFree",
+                    "TangibleNetWorth",
+                    "TangibleNetWorth.enterpriseNetworth",
+                    "TangibleNetWorth.enterpriseNetworth.tangibleNetworth",
+                    "TangibleNetWorth.enterpriseNetworth.financialYear"
                 ];
             }
 
@@ -198,6 +202,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "TrackDetails": {
                                         "readonly": true
+                                    },
+                                    "tangibleNetworth": {
+                                      "readonly": true
                                     }
                                 },
                                 "excludes": [
@@ -229,8 +236,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "TrackDetails": {
                                         "readonly": true
+                                    },
+                                    "tangibleNetworth": {
+                                      "readonly": true
                                     }
-
                                 }
                             },
                             "BranchCreditAppraisal": {
@@ -258,6 +267,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "TrackDetails": {
                                         "readonly": true
+                                    },
+                                    "tangibleNetworth": {
+                                      "readonly": true
                                     }
                                 }
                             },
@@ -286,6 +298,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "TrackDetails": {
                                         "readonly": true
+                                    },
+                                    "tangibleNetworth": {
+                                      "readonly": true
                                     }
                                 }
                             },
@@ -314,6 +329,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "TrackDetails": {
                                         "readonly": true
+                                    },
+                                    "tangibleNetworth": {
+                                      "readonly": true
                                     }
                                 }
                             },
@@ -572,6 +590,32 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                                     getLocation().catch((err)=>{
                                                         console.log(err);
                                                     });
+                                                }
+                                            }
+                                        }
+
+                                    },
+                                    "TangibleNetWorth": {
+                                        "type": "box",
+                                        "title": "TANGIBLE_NET_WORTH",
+                                        "orderNo" : 85,
+                                        "items": {
+                                            "enterpriseNetworth": {
+                                                "key": "customer.enterpriseNetworth",
+                                                "type": "array",
+                                                "title": "TANGIBLE_NET_WORTH",
+                                                "startEmpty" : true,
+                                                "items": {
+                                                    "financialYear": {
+                                                        "key": "customer.enterpriseNetworth[].financialYear",
+                                                        "type": "date",
+                                                        "title": "FINANCIAL_YEAR",
+                                                    },
+                                                    "tangibleNetworth": {
+                                                      "key": "customer.enterpriseNetworth[].tangibleNetworth",
+                                                      "type": "number",
+                                                      "title": "TANGIBLE_NET_WORTH"
+                                                    }
                                                 }
                                             }
                                         }

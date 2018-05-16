@@ -1761,6 +1761,27 @@
 
                         }
                     }
+                },
+                "enterpriseNetworth": {
+                    "type": "array",
+                    "title": "ENTERPRISE_NET_WORTH",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "tangibleNetworth": {
+                               "type": ["number","null"],
+                               "title": "TANGIBLE_NET_WORTH"
+                            },
+                            "financialYear": {
+                               "type": ["string","null"],
+                               "title": "FINANCIAL_YEAR"
+                            }
+                        }
+                    }
+                },
+                "customerCategory": {
+                    "type": ["string","null"],
+                    "title": "CUSTOMER_CATEGORY"
                 }
             },
             "required": [

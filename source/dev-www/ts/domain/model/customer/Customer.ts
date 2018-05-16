@@ -26,6 +26,7 @@ import RawMaterialExpens = require("./RawMaterialExpens");
 import SupplierDetail = require("./SupplierDetail");
 import Udf = require("./Udf");
 import Verification = require("./Verification");
+import EnterpriseNetworth = require("./EnterpriseNetworth");
 
 export enum CustomerTypes {
     INDIVIDUAL = "Individual",
@@ -228,6 +229,7 @@ export class Customer {
     villageName: string;
     weddingDate: string;
     whatsAppMobileNo: string;
+    customerCategory: string;
 
 
     @Type(() => AdditionalKYC)
@@ -308,5 +310,7 @@ export class Customer {
     @Type(() => Verification)
     verifications: Verification[];
 
+    @Type(() => EnterpriseNetworth)
+    enterpriseNetworth: EnterpriseNetworth[];
 
 }

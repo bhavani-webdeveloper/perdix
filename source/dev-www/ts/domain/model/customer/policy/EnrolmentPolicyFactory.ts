@@ -11,6 +11,7 @@ import {GSTApplicablePolicy} from "./GSTApplicablePolicy";
 import {VerifyBankAccountNumberPolicy} from "./VerifyBankAccountNumberPolicy";
 import {DefaultIndividualReferencePolicy} from "./DefaultIndividualReferencePolicy";
 import {VerifyIndividualReferencePolicy} from "./VerifyIndividualReferencePolicy";
+import {MandatoryTangibleWorthPolicy} from "./MandatoryTangibleWorthPolicy";
 
 export class EnrolmentPolicyFactory implements IPolicyFactory{
 
@@ -51,6 +52,8 @@ export class EnrolmentPolicyFactory implements IPolicyFactory{
                 return new DefaultIndividualReferencePolicy();
             case 'VerifyIndividualReferencePolicy':
                 return new VerifyIndividualReferencePolicy();
+            case 'MandatoryTangibleWorthPolicy':
+                return new MandatoryTangibleWorthPolicy();
             default:
                 return null;
 
