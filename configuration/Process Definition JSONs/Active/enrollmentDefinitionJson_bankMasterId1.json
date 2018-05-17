@@ -754,7 +754,6 @@
           "firstName",
           "gender",
           "dateOfBirth",
-          "religion",
           "mobilePhone",
           "maritalStatus"
         ],
@@ -1059,8 +1058,7 @@
               "BasicEnrolment",
               "Completed"
             ]
-          }
-          ,
+          },
           "weddingDate": {
             "title": "weddingDate",
             "type": "date",
@@ -3038,8 +3036,7 @@
         "required": [
           "corporateName",
           "businessName",
-          "businessConstitution",
-          "businessType"
+          "businessConstitution"
         ],
         "properties": {
           "customerNumber": {
@@ -4705,7 +4702,7 @@
             },
             "tangibleNetworth": {
               "title": "tangibleNetworth ",
-              "type": "string",
+              "type": "number",
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"
