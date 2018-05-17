@@ -4487,6 +4487,26 @@
                 "Completed"
               ]
             }, 
+"isHypothecated": {
+              "title": "isHypothecated",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+"assetImageId": {
+              "title": "assetImageId",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
       "details": {
               "title": "details",
               "type": "string",
@@ -5100,6 +5120,39 @@
             },
             "hypothecatedToUs": {
               "title": "hypothecatedToUs",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            }
+            ,
+"assetCategory": {
+              "title": "assetCategory",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            }
+            ,
+"isHypothecated": {
+              "title": "isHypothecated",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            }
+            ,
+"assetImageId": {
+              "title": "assetImageId",
               "type": "string",
               "minLength": 1,
               "maxLength": 100,

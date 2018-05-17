@@ -1944,7 +1944,7 @@
                   "title":"engineStarted",
                   "type":"boolean",
                   "captureStages":[
-                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation" "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
                   ]
                },
                "make":{
@@ -2292,7 +2292,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                    "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation" "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                    "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation" 
                   ]
                },
                "accident":{
@@ -3041,6 +3041,15 @@
                      "type":"number",
                      "minimum":1,
                      "maximum":999999999,
+                     "captureStages":[
+                        "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                     ]
+                  },
+"collateralCategory":{
+                     "title":"collateralCategory",
+                     "type":"string",
+                     "minLength":1,
+                     "maxLength":100,
                      "captureStages":[
                         "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
                      ]
