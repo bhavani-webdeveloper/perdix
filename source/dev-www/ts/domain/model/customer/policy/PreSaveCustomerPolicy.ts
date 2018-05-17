@@ -57,6 +57,7 @@ export class PreSaveCustomerPolicy extends IPolicy<EnrolmentProcess> {
             return Observable.of(enrolmentProcess);
         } catch(err) {
             console.error(err);
+            console.log("Error in PreSaveCustomerPolicy");
             return Observable.of(enrolmentProcess);
         }
     }

@@ -81,6 +81,7 @@ export class LoadEnrolmentCustomerDataPolicy extends IPolicy<EnrolmentProcess> {
             return Observable.of(enrolmentProcess);
         } catch(err) {
             console.error(err);
+            console.log("Error in LoadEnrolmentCustomerDataPolicy")
             return Observable.of(enrolmentProcess);
         }
     }

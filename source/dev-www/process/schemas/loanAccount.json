@@ -26,6 +26,9 @@
                 },
                 "customerType":{
                     "type":["string", "null"]
+                },
+                "customerCategory":{
+                  "type":["string", "null"]
                 }
             }
         },
@@ -966,6 +969,10 @@
                     "type": ["string", "null"],
                     "enumCode":"loan_purpose_2"
                 },
+                "parentLoanAccount": {
+                    "title": "PARENT_LOAN_ACCOUNT",
+                    "type": ["string", "null"]
+                },
                 "loanPurpose3": {
                     "title": "LOAN_PURPOSE_LEVEL_3",
                     "type": ["string", "null"],
@@ -1107,7 +1114,7 @@
                             "version"
                         ]
                     }
-                },                
+                },
                 "loanUtilisationDetail": {
                     "type": "array",
                     "items": {

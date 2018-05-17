@@ -447,7 +447,7 @@ define([],function(){
                                 "condition": "model.loanAccount.securityEmiRequired == 'YES'"
                             },
                             "NewVehicleDetails": {
-                                "condition": "model.loanAccount.loanPurpose1 == 'Purchase – New Vehicle' || model.loanAccount.loanPurpose1 == 'Purchase – Used Vehicle' || model.loanAccount.loanPurpose1 == 'Refinance'"
+                                "condition": "(model.loanAccount.loanPurpose1 == 'Purchase – New Vehicle') || (model.loanAccount.loanPurpose1 == 'Purchase – Used Vehicle') || (model.loanAccount.loanPurpose1 == 'Refinance')"
                             },
                             "NewVehicleDetails.permitType": {
                                 "type": "select",
@@ -493,7 +493,7 @@ define([],function(){
                             },
                             "NewVehicleDetails.vehicleType": {
                                 "orderNo": 10,
-                                "enumCode": "enterprise_asset_type",
+                                "enumCode": "new_vehicle_type",
                                 "required": true
                             },
                             "NewVehicleDetails.endUse": {

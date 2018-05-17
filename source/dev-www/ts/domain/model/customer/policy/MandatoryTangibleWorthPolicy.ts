@@ -32,7 +32,7 @@ export class MandatoryTangibleWorthPolicy extends IPolicy<EnrolmentProcess> {
 
     run(enrolmentProcess: EnrolmentProcess): Observable<EnrolmentProcess> {
 
-        if(_.hasIn(enrolmentProcess.customer, "enterpriseNetworth") && _.isArray(enrolmentProcess.customer.enterpriseNetworth) && enrolmentProcess.customer.enterpriseNetworth.length > 0 && enrolmentProcess.customer.enterpriseType.toLowerCase() =='enterprise' && enrolmentProcess.customer.customerCategory.toLowerCase() == 'captive - retail') {
+        if(_.hasIn(enrolmentProcess.customer, "enterpriseNetworth") && _.isArray(enrolmentProcess.customer.enterpriseNetworth) && enrolmentProcess.customer.enterpriseNetworth.length > 0 && enrolmentProcess.customer.customerType && enrolmentProcess.customer.customerType.toLowerCase() =='enterprise' && enrolmentProcess.customer.customerCategory && enrolmentProcess.customer.customerCategory.toLowerCase() == 'captive - retail') {
             this.flag = 0;
             for (let i=0;i<enrolmentProcess.customer.enterpriseNetworth.length;i++) {
                 var enterpriseNetworth = enrolmentProcess.customer.enterpriseNetworth[i];

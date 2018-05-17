@@ -35,6 +35,7 @@ export class VerifyBankAccountNumberPolicy extends IPolicy<EnrolmentProcess> {
             for (let i=0;i<enrolmentProcess.customer.customerBankAccounts.length;i++) {
                  var banckAccount = enrolmentProcess.customer.customerBankAccounts[i];
                  if (banckAccount.accountNumber != banckAccount.confirmedAccountNumber) {
+                     console.log("Account Number and Confirmed Account Number must be same");
                     return Observable.throw(new ValidationError("Account Number and Confirmed Account Number must be same"));
                 }
             }

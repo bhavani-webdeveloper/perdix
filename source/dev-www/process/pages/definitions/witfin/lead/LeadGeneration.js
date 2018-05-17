@@ -48,6 +48,24 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                     "sourceDetails.dealerName": {
                         "condition": "model.lead.leadSource.toUpperCase() == 'DEALER(NEW VEHICLE)'",
                         "enumCode": "dealer"
+                    },
+                    "productDetails.interestedInProduct": {
+                        "orderNo" : 10
+                    },
+                    "productDetails.loanAmountRequested": {
+                        "orderNo": 60
+                    },
+                    "productDetails.loanPurpose1": {
+                        "orderNo": 20
+                    },
+                    "productDetails.loanPurpose2": {
+                        "orderNo": 30
+                    },
+                    "productDetails.productRequiredBy": {
+                        "orderNo": 50
+                    },
+                    "productDetails.screeningDate": {
+                        "orderNo": 60
                     }
 
                 }
@@ -91,6 +109,7 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                     "productDetails.loanAmountRequested",
                     "productDetails.loanPurpose1",
                     "productDetails.loanPurpose2",
+                    "productDetails.parentLoanAccount",
                     "productDetails.productRequiredBy",
                     "productDetails.followUpDate",
                     "productDetails.screeningDate",
@@ -138,7 +157,21 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                         "includes": getIncludes (model),
                         "excludes": [
                             "",
-                        ]
+                        ],
+                        "options": {
+                            "repositoryAdditions": {
+                                "productDetails": {
+                                    "items": {
+                                        "parentLoanAccount": {
+                                            "key": "lead.parentLoanAccount",
+                                            "title": "PARENT_LOAN_ACCOUNT",
+                                            "condition": "model.lead.interestedInProduct==='YES'",
+                                            "orderNo": 40
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     };
                     if (!(model && model.lead && model.lead.id && model.$$STORAGE_KEY$$) && $stateParams.pageId) {
                         var leadId = $stateParams.pageId;

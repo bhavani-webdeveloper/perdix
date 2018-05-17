@@ -680,6 +680,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "IndividualInformation",
                     "IndividualInformation.existingLoan",
                     "IndividualInformation.customerCategory",
+                    "IndividualInformation.parentLoanAccount",
                     "IndividualInformation.customerBranchId",
                     "IndividualInformation.centreId",
                     "IndividualInformation.photoImageId",
@@ -1011,6 +1012,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "type": "select",
                                             "enumCode": "lead_category",
                                             "orderNo": 85
+                                        },
+                                        "parentLoanAccount": {
+                                            "key": "customer.parentLoanAccount",
+                                            "title": "PARENT_LOAN_ACCOUNT"
                                         }
                                     }
                                 }
@@ -1130,6 +1135,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 model.customer.landmark = obj.landmark;
                                 model.customer.postOffice = obj.postOffice;
                                 model.customer.customerCategory = obj.leadCategory;
+                                model.customer.parentLoanAccount = obj.parentLoanAccount;
 
                                 for (var i = 0; i < model.customer.familyMembers.length; i++) {
                                     // $log.info(model.customer.familyMembers[i].relationShip);
