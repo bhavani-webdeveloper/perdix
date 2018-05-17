@@ -4329,6 +4329,7 @@
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"
+
               ]
             },
             "machineType": {
@@ -4472,6 +4473,16 @@
               "type": "number",
               "minimum": 0,
               "maximum": 10000000000,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+"hypothecatedToUs": {
+              "title": "hypothecatedToUs",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 20,
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"
