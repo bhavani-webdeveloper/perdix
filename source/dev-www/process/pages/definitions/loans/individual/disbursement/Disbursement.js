@@ -16,11 +16,21 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
             initialize: function (model, form, formCtrl) {
                 $log.info("Disbursement Page got initialized");
                 model.customer=model.customer||{};
+                model.loanAccountDisbursementSchedule = model.loanAccountDisbursementSchedule || {};
                 model.fee=model.fee||{};
-
                 model.additional = {"branchName":branch};
-
                 model.siteCode = SessionStore.getGlobalSetting("siteCode");
+                if (!model._disbursement) {
+                    $log.info("Page visited directly");
+                    $state.go('Page.Engine', {
+                        pageName: 'loans.individual.disbursement.ReadyForDisbursementQueue',
+                        pageId: null
+                    });
+                } else {
+                    model.loanAccountDisbursementSchedule = model._disbursement;
+                    $log.info("Printing the loanAccountDisbursementSchedule");
+                    $log.info(model.loanAccountDisbursementSchedule);
+                }
                 try {
                     var loanId = ($stateParams['pageId'].split('.'))[0];
                     var disbursementId = ($stateParams['pageId'].split('.'))[1];
@@ -39,6 +49,13 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         model.additional.loanamount=resp[0].amount;
                         model.additional.feeamount=resp[0].fees;
                         model.additional.transactionType = resp[0].transactionType;
+                        model.loanAccountDisbursementSchedule.feeAmountPayment= resp[0].feeAmountPayment;
+                        model.loanAccountDisbursementSchedule.penalInterestDuePayment= resp[0].penalInterestDuePayment;
+                        model.loanAccountDisbursementSchedule.normalInterestDuePayment= resp[0].normalInterestDuePayment;
+                        model.loanAccountDisbursementSchedule.principalDuePayment= resp[0].principalDuePayment;
+                        model.loanAccountDisbursementSchedule.linkedAccountNumber= resp[0].linkedAccountNumber;
+
+
                         /*if(model.siteCode == 'KGFS' && resp[0].fees) {
                             model.additional.feeamount = [];
                             for (var i = 0; i < resp[0].fees.length; i++){
@@ -59,15 +76,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                     model.additional.fees.push(model.additional.tempfees[i]);
                             }
                         }
-                        model.loanAccountDisbursementSchedule = model.loanAccountDisbursementSchedule || {};
-                        if (!model._disbursement) {
-                            $log.info("Page visited directly");
-                            $state.go('Page.Engine', {pageName: 'loans.individual.disbursement.ReadyForDisbursementQueue', pageId: null});
-                        } else {
-                            model.loanAccountDisbursementSchedule=model._disbursement;
-                            $log.info("Printing the loanAccountDisbursementSchedule");
-                            $log.info(model.loanAccountDisbursementSchedule);
-                        }
+
                         if(model.additional.netDisbursementAmount >= 200000){
                               model.loanAccountDisbursementSchedule.modeOfDisbursement = "RTGS";
                         }else{
@@ -400,7 +409,43 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         ]
                     }
                 ]
-            }],
+            },
+            {
+                "type": "box",
+                "title": "INTERNAL_FORE_CLOSURE_WAIVER_DETAILS", 
+                "condition": "model.siteCode == 'Kinara' && model.loanAccountDisbursementSchedule.linkedAccountNumber",
+                "items": [
+                    {
+                        "key": "loanAccountDisbursementSchedule.linkedAccountNumber",
+                        "title": "LINKED_ACCOUNT_NUMBER",
+                        "readonly": true
+                    }, {
+                        "key": "loanAccountDisbursementSchedule.principalDuePayment",
+                        "type": "amount",
+                        "title": "TOTAL_PRINCIPAL_DUE",
+                        "readonly": true
+                    },{
+                        "key": "loanAccountDisbursementSchedule.normalInterestDuePayment",
+                        "type": "amount",
+                        "title": "TOTAL_INTEREST_DUE",
+                        "readonly": true
+                    },{
+                        "key": "loanAccountDisbursementSchedule.penalInterestDuePayment",
+                        "type": "amount",
+                        "title": "TOTAL_PENAL_INTEREST_DUE",
+                        "readonly": true
+                    },{
+                        "key": "loanAccountDisbursementSchedule.feeAmountPayment",
+                        "type": "amount",
+                        "title": "TOTAL_FEE_DUE",
+                        "readonly": true
+                    },
+                ]
+            }
+            
+
+
+            ],
             schema: function() {
                 return SchemaResource.getDisbursementSchema().$promise;
             },

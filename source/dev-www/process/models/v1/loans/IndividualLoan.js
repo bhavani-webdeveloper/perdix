@@ -55,6 +55,10 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource,Upload,$q,PageHe
             url:endpoint+'/findDisbursement',
             isArray:true
         },
+        getPreClosureDetails:{
+            method:'GET',
+            url:endpoint+'/findPreclosureAmount',
+        },
         getDisbursementList:{
             method:'GET',
             url:endpoint+'/getDisbursementList',

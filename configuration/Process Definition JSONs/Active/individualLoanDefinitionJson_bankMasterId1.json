@@ -3811,6 +3811,34 @@
                      "captureStages":[
                         "Screening", "DocumentUpload", "LoanInitiation"
                      ]
+                  },
+                  "feeAmountPayment":{
+                     "title":"feeAmountPayment",
+                     "type":"string",
+                     "captureStages":[
+                        "LoanBooking"
+                     ]
+                  },
+                  "penalInterestDuePayment":{
+                     "title":"penalInterestDuePayment",
+                     "type":"string",
+                     "captureStages":[
+                        "LoanBooking"
+                     ]
+                  },
+                  "normalInterestDuePayment":{
+                     "title":"normalInterestDuePayment",
+                     "type":"string",
+                     "captureStages":[
+                        "LoanBooking"
+                     ]
+                  },
+                  "principalDuePayment":{
+                     "title":"principalDuePayment",
+                     "type":"string",
+                     "captureStages":[
+                        "LoanBooking"
+                     ]
                   }
                }
             }

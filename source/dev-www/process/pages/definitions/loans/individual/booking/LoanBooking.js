@@ -655,6 +655,90 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     }
                 ]
             },
+            ]
+            },
+
+            {
+                "type": "box",
+                "title": "INTERNAL_FORE_CLOSURE_DETAILS", 
+                "condition": "model.siteCode == 'Kinara' && model.loanAccount.linkedAccountNumber",
+                "items": [{
+                    "key": "loanAccount.linkedAccountNumber",
+                    "title":"LINKED_ACCOUNT_NUMBER",
+                    "readonly":true
+                }, {
+                    "key": "loanAccount.transactionType",
+                    "title":"TRANSACTION_TYPE",
+                    "readonly":true,
+                },{
+                    "key": "loanAccount.button",
+                    "title":"SUBMIT",
+                    "type":"button",
+                    "onClick": "actions.getPreClosureDetails(model, formCtrl, form, $event)"
+                },{
+                    "type":"fieldset",
+                    "condition":"model.loanAccount.precloseuredetails",
+                    "items":[
+                    {
+                        "key": "loanAccount.precloseurePayOffAmount",
+                        "title": "PAYOFF_AMOUNT",
+                        "readonly": true
+                    }, {
+                        "key": "loanAccount.precloseurePayOffAmountWithDue",
+                        "title": "PAYOFF_AMOUNT_WITH_DUE",
+                        "readonly": true,
+                    },{
+                        "key": "loanAccount.precloseurePrincipal",
+                        "title": "TOTAL_PRINCIPAL_DUE",
+                        "readonly": true
+                    }, {
+                        "key": "loanAccount.precloseureNormalInterest",
+                        "title": "TOTAL_INTEREST_DUE",
+                        "readonly": true,
+                    },{
+                        "key": "loanAccount.precloseurePenalInterest",
+                        "title": "TOTAL_PENAL_INTEREST_DUE",
+                        "readonly": true
+                    }, {
+                        "key": "loanAccount.precloseureTotalFee",
+                        "title": "TOTAL_FEE_DUE",
+                        "readonly": true,
+                    }
+                    ]
+                },
+                {
+                    "type": "fieldset",
+                    "title":"WAIVER_DETAILS",
+                    "condition": "model.loanAccount.precloseuredetails",
+                    "items": [
+                        {
+                            key: "loanAccount.disbursementSchedules",
+                            add: null,
+                            remove: null,
+                            items: [{
+                                "key": "loanAccount.disbursementSchedules[].principalDuePayment",
+                                "title": "TOTAL_PRINCIPAL_DUE",
+                                "type": "amount",
+                                "onChange": "actions.validateWaiverAmount(model.loanAccount.disbursementSchedules.principalDuePayment,model.loanAccount.precloseurePrincipal)"
+                            }, {
+                                "key": "loanAccount.disbursementSchedules[].normalInterestDuePayment",
+                                "title": "TOTAL_INTEREST_DUE",
+                                "type": "amount",
+                                "onChange": "actions.validateWaiverAmount(model.loanAccount.disbursementSchedules.normalInterestDuePayment,model.loanAccount.precloseureNormalInterest)"
+                            }, {
+                                "key": "loanAccount.disbursementSchedules[].penalInterestDuePayment",
+                                "title": "TOTAL_PENAL_INTEREST_DUE",
+                                "type": "amount",
+                                "onChange": "actions.validateWaiverAmount(model.loanAccount.disbursementSchedules.penalInterestDuePayment,model.loanAccount.precloseurePenalInterest)"
+                            }, {
+                                "key": "loanAccount.disbursementSchedules[].feeAmountPayment",
+                                "title": "TOTAL_FEE_DUE",
+                                "type": "amount",
+                                "onChange": "actions.validateWaiverAmount(model.loanAccount.disbursementSchedules.feeAmountPayment,model.loanAccount.precloseureTotalFee)"
+                            }]
+                        }   
+                    ]
+                }
                 ]
             },
             {
@@ -800,6 +884,40 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         PageHelper.showProgress('update-loan', 'Some error occured while updating the details. Please try again', 2000);
                         PageHelper.showErrors(httpRes);
                     });
+                },
+                getPreClosureDetails:function(model,form,formname){
+                    PageHelper.showLoader();
+                    PageHelper.showProgress('preclosure', 'Getting PreClosure Details', 2000);
+                    var reqData={
+                        linkedAccountId:'0001LTL1001911',
+                        valueDate:  moment(model._currentDisbursement.scheduledDisbursementDate).format("YYYY-MM-DD")
+                    };
+                    IndividualLoan.getPreClosureDetails(reqData).$promise.then(function(response){
+                        PageHelper.hideLoader();
+                        PageHelper.showProgress('preclosure', 'Preclosure loan details are generated', 2000);
+                        model.loanAccount.precloseuredetails=true;
+                        model.loanAccount.precloseurePayOffAmount=response.part1;
+                        model.loanAccount.precloseurePayOffAmountWithDue=response.part2;
+                        model.loanAccount.precloseurePrincipal=response.part3;
+                        model.loanAccount.precloseureNormalInterest=response.part4;
+                        model.loanAccount.precloseurePenalInterest=response.part5;
+                        model.loanAccount.precloseureTotalFee=response.part6;
+                    },function(error){
+                        model.loanAccount.precloseuredetails=false;
+                        PageHelper.showProgress('preclosure', 'Error Getting Preclosure loan details', 2000);
+                        $log.info(error);
+                        PageHelper.hideLoader();
+                    });
+                },
+                validateWaiverAmount: function(amount1,amount2) {
+                    PageHelper.clearErrors();
+                    amount2= (amount2.slice(3)).replace(/\,/g,"");
+                    if (amount1> parseInt(amount2)) {
+                        PageHelper.clearErrors();
+                        PageHelper.setError({
+                            message: "Amount should not be greater then" + amount2
+                        });
+                    }
                 },
                 reject: function (model, form, formName) {
 
