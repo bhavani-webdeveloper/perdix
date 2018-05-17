@@ -37,7 +37,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "LenderInformation.companyOperatingSince": {
                         "required": true
                     },
-                    "LenderContactDetails.contactPersonName": {
+                    "LenderContactDetails.LenderContactDetails.contactPersonName": {
                         "required": true
                     },
                     "LenderContactDetails.LenderContactDetails.mobilePhone1": {
@@ -48,7 +48,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         }
                     },
                     "LenderContactDetails.LenderContactDetails.mobilePhone2": {
-                        "required": true,
+                      
                         "type":"number",
                         "schema":{
                             "pattern":"^[0-9]{10}$"
