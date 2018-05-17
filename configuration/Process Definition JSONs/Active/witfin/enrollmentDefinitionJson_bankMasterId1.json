@@ -965,7 +965,18 @@
               "BasicEnrolment",
               "Completed"
             ]
-          },"weddingDate": {
+          },
+          "customerCategory": {
+            "title": "Customer category",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "weddingDate": {
             "title": "weddingDate",
             "type": "date",
             "captureStages": [
@@ -4475,7 +4486,7 @@
             },
             "tangibleNetworth": {
               "title": "tangibleNetworth ",
-              "type": "string",
+              "type": "number",
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"
