@@ -4311,6 +4311,16 @@
                 "Completed"
               ]
             },
+"machineName": {
+              "title": "machineName",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
             "hypothecatedToUs": {
               "title": "Hypothecated To Us",
               "type": "string",
@@ -4489,6 +4499,16 @@
             }, 
 "isHypothecated": {
               "title": "isHypothecated",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+"assetName": {
+              "title": "assetName",
               "type": "string",
               "minLength": 1,
               "maxLength": 100,
@@ -5120,6 +5140,16 @@
             },
             "hypothecatedToUs": {
               "title": "hypothecatedToUs",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "assetName": {
+              "title": "assetName",
               "type": "string",
               "minLength": 1,
               "maxLength": 100,
