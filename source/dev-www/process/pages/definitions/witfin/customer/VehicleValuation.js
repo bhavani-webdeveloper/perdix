@@ -594,6 +594,7 @@ define(
                                 "VehicleAsset": {
                                     "items": {
                                         "vehicleAssetConditions": {
+                                            "startEmpty": true,
                                             "items": {
                                                 "componentCondition1": {
                                                     "key": "loanAccount.vehicleLoanDetails.vehicleAssetConditions[].componentCondition",
