@@ -610,7 +610,11 @@ define({
                     PageHelper.showLoader();
                     irfProgressMessage.pop('Disbursement-proceed', 'Working...');
                     PageHelper.clearErrors();
-                    model.groupAction = "SAVE";
+                    if(model.siteCode == 'saija') {
+                        model.groupAction = "PROCEED";
+                    } else {
+                        model.groupAction = "SAVE";
+                    }
                     for(i=0;i<model.group.jlgGroupMembers.length;i++)
                     {
                        model.group.jlgGroupMembers[i].modeOfDisbursement='CASH';
@@ -619,6 +623,12 @@ define({
 
                     GroupProcess.updateGroup(reqData, function(res) {
                         res.groupAction = "PROCEED";
+                        if(model.siteCode == 'saija') {
+                            PageHelper.hideLoader();
+                            irfProgressMessage.pop('Disbursement-proceed', 'Operation Succeeded.  Disbursement Complete.', 5000);
+                            irfNavigator.goBack();
+                            return;
+                        }
                         GroupProcess.groupDisbursement(res, function(resp) {
                             PageHelper.hideLoader();
                             irfProgressMessage.pop('Disbursement-proceed', 'Operation Succeeded.  Disbursement Complete.', 5000);

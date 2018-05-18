@@ -103,7 +103,7 @@
       "code": "LoanDisbursement",
       "name": "Loan Disbursement",
       "isAccountOpening": false,
-      "stageType": "GROUPDISBURSE",
+      "stageType": "DISBURSE",
       "allowedRoles": [
          "A",
          "ARM",
