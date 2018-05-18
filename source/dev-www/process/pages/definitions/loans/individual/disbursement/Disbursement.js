@@ -134,6 +134,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                 "items": [
                     {
                         "key": "additional.transactionType",
+                        "condition": "model.additional.transactionType",
                         "type":"string",
                         "title":"TRANSACTION_TYPE",
                         "readonly":true

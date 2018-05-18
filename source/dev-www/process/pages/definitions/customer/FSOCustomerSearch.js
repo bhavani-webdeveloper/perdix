@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("FSOCustomerSearch"),
-["$log", "formHelper", "Enrollment","Queries","$state", "SessionStore", "Utils", "PagesDefinition", "irfNavigator",
-function($log, formHelper, Enrollment,Queries,$state, SessionStore, Utils, PagesDefinition, irfNavigator){
+["$log", "formHelper", "filterFilter", "Enrollment","Queries","$state", "SessionStore", "Utils", "PagesDefinition", "irfNavigator",
+function($log, formHelper, filterFilter , Enrollment,Queries,$state, SessionStore, Utils, PagesDefinition, irfNavigator){
 	var branch = SessionStore.getBranch();
 	return {
 		"type": "search-list",
@@ -193,6 +193,7 @@ function($log, formHelper, Enrollment,Queries,$state, SessionStore, Utils, Pages
 					};
 				},
 				getColumns: function(){
+					var centres = formHelper.enum('centre').data;
 					return [
 						{
 							title:'NAME',
@@ -216,7 +217,16 @@ function($log, formHelper, Enrollment,Queries,$state, SessionStore, Utils, Pages
 						},
 						{
 							title:'CENTRE',
-							data: 'centreId'
+							data: 'centreId',
+							render: function(data, type, full, meta) {
+	                            if (data) {
+	                                var centrevalue = filterFilter(centres, {
+	                                    "value": Number(full.centreId)
+	                                }, true);
+	                                data = centrevalue[0].name;
+	                            }
+	                            return data;
+							}	
 						},
 						{
 							title:'FATHER_NAME',

@@ -53,10 +53,10 @@ define({
 						},
 						"centre": {
 							"title": "CENTRE_NAME",
-							"type": ["integer", "null"],
+							"type": ["string", "null"],
 							"x-schema-form": {
 								"type": "select",
-								"enumCode": "centre",
+								"enumCode": "centre_code",
 								"parentEnumCode": "branch_id",
                                 "parentValueExpr": "model.branchId",
                                 "screenFilter": true
@@ -145,7 +145,7 @@ define({
 						};
 					},
 					getColumns: function() {
-						//var centres = formHelper.enum('centre').data;
+						var centres = formHelper.enum('centre_code').data;
 						//var siteCode=SessionStore.getGlobalSetting("siteCode");
 						return [{
 							title: 'ID',
@@ -156,6 +156,15 @@ define({
 						}, {
 							title: 'CENTRE_ID',
 							data: 'centreCode',
+							render: function(data, type, full, meta) {
+	                            if (data) {
+	                                var centrevalue = filterFilter(centres, {
+	                                    "value": full.centreCode
+	                                }, true);
+	                                data = centrevalue[0].name;
+	                            }
+	                            return data;
+							}
 						}, {
 							title: 'GROUP_CODE',
 							data: 'groupCode'
