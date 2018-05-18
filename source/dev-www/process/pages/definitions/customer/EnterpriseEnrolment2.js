@@ -45,13 +45,6 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     .then(function(res){
                         model.customer = res;
 
-                        // _.forEach(model.customer.enterpriseAssets,function(enterpriseAsset){
-                        //     model.show = false;model.customer.enterpriseAssets.assetType 
-                        //     if( model.customer.enterpriseAssets.assetType  == 'Furniture' || model.customer.enterpriseAssets.assetType  == 'Fixture'){
-                        //         model.show = true;
-                        //     };
-                        // })
-
                         if (model.customer.stockMaterialManagement) {
                         model.proxyIndicatorsHasValue = true;
                         $log.debug('PROXY_INDICATORS already has value');
@@ -2262,11 +2255,11 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             },
                             ]
                         },
-                            {
-                                type:"fieldset",
-                                title:"ASSETS",
-                                items:[]
-                            },
+                            // {
+                            //     type:"fieldset",
+                            //     title:"ASSETS",
+                            //     items:[]
+                            // },
                             // {
                             //     key: "customer.enterprise.cashAtBank",
                             //     title: "CASH_AT_BANK",
@@ -2356,6 +2349,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         }
                     },{
                         key: "customer.currentAssets[].hypothecatedToUs",
+                        condition : "model.customer.currentAssets[arrayIndex].isHypothecated == 'No' ",
                         title:"HYPOTHECATED_TO_KINARA",
                         type: "radios",
                         titleMap: {
@@ -2388,50 +2382,45 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         type: "select",
                         enumCode: "stock_enterprise_assets",
                         required: true,
-                        "onChange": function(modelValue, form, model) {
-                            model.show = false;
-                            if( modelValue == 'Furniture' || modelValue == 'Fixture'){
-                                model.show = true;
-                            };
-                        }
+                    }, {
+                        key: "customer.enterpriseAssets[].valueOfAsset",
+                        // condition : "model.customer.enterpriseAssets[form.arrayIndex].assetType  == 'Furniture'",
+                        title: "PRESENT_VALUE",
+                        type: "amount",
                     }, {
                         key: "customer.enterpriseAssets[].description",
                         title: "DESCRIPTION",
-                        condition : "model.customer.enterpriseAssets[].assetType"  == 'Furniture' || "model.customer.enterpriseAssets[].assetType"  == 'Fixture',
+                        condition : "model.customer.enterpriseAssets[arrayIndex].assetType  == 'Furniture' || model.customer.enterpriseAssets[arrayIndex].assetType  == 'Fixture'",
                         type: "string",
-                    }, {
-                        key: "customer.enterpriseAssets[].valueOfAsset",
-                        title: "PRESENT_VALUE",
-                        type: "amount",
                     },{
                         key: "customer.enterpriseAssets[].assetName",
+                        condition : "model.customer.enterpriseAssets[arrayIndex].assetType  == 'Furniture' || model.customer.enterpriseAssets[arrayIndex].assetType  == 'Fixture'",
                         title: "TYPE",
                         type: "select",
-                        enumCode: "enterprise_asset_name",
-                        condition : "model.customer.enterpriseAssets[].assetType"  == 'Furniture' || "model.customer.enterpriseAssets[].assetType"  == 'Fixture',
+                        enumCode: "enterprise_asset_name"        
                     }, {
                         key: "customer.enterpriseAssets[].isHypothecated",
-                        title: "IS_THE_MACHINE_HYPOTHECATED",
-                        condition : "model.customer.enterpriseAssets.assetType"  == 'Furniture' || "model.customer.enterpriseAssets.assetType"  == 'Fixture',
+                        condition : "model.customer.enterpriseAssets[arrayIndex].assetType  == 'Furniture' || model.customer.enterpriseAssets[arrayIndex].assetType  == 'Fixture'",
+                        title: "IS_THE_MACHINE_HYPOTHECATED" ,       
                         type: "radios",
                         titleMap: {
                             "No": "No",
                             "Yes": "Yes"
                         }
                     },
-                    //  {
-                    //     key: "customer.enterpriseAssets[].hypothecatedToUs",
-                    //     title: "HYPOTHECATED_TO_KINARA",
-                    //     condition : "model.show",
-                    //     type: "radios",
-                    //     titleMap: {
-                    //         "No": "No",
-                    //         "Yes": "Yes"
-                    //     }
-                    // },
+                     {
+                        key: "customer.enterpriseAssets[].hypothecatedToUs",
+                        title: "HYPOTHECATED_TO_KINARA",
+                        condition : "model.customer.enterpriseAssets[arrayIndex].isHypothecated == 'No'",
+                        type: "radios",
+                        titleMap: {
+                            "No": "No",
+                            "Yes": "Yes"
+                        }
+                    },
                      {
                         key: "customer.enterpriseAssets[].assetImageId",
-                        condition : "model.customer.enterpriseAssets.assetType"  == 'Furniture' || "model.customer.enterpriseAssets.assetType"  == 'Fixture',
+                        condition : "model.customer.enterpriseAssets[arrayIndex].assetType  == 'Furniture' || model.customer.enterpriseAssets[arrayIndex].assetType  == 'Fixture'",
                         title: "IMAGE",
                         "type": "file",
                         "fileType": "image/*",
