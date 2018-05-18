@@ -445,7 +445,7 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
 
     BundleManager.deleteOffline = function() {
         if ($scope.bundleModel.$$STORAGE_KEY$$) {
-            OfflineManager.removeItem_v2($scope.pageName, $scope.bundleModel.$$STORAGE_KEY$$, $scope.bundlePage.offlineStrategy).then(function(success) {
+            return OfflineManager.removeItem_v2($scope.pageName, $scope.bundleModel.$$STORAGE_KEY$$, $scope.bundlePage.offlineStrategy).then(function(success) {
                 delete $scope.bundleModel.$$STORAGE_KEY$$;
                 return $q.resolve();
             }, function(error) {
