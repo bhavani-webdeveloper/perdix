@@ -240,11 +240,12 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                                                 },
                                                                 "upload": {                                        
                                                                     "type": "section",
-                                                                    "condition":"showLender",
                                                                     "htmlClass": "col-sm-3",
                                                                     "items": {
                                                                         "upload":{
                                                                             "key": "liabilityAccount.liabilityLenderDocuments[].fileId",
+                                                                            "condition":"showLender",
+                                                                            "condition":"liabilityAccount.liabilityLenderDocuments.length != 0",
                                                                             "title": "DOWNLOAD_FORM",
                                                                             "notitle": true,
                                                                             "fieldHtmlClass": "btn-block",
