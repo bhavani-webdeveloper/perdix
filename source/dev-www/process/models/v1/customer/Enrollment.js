@@ -38,7 +38,10 @@ irf.models.factory('Enrollment',function($resource,$httpParamSerializer,BASE_URL
             url:endpoint+'/:service/:id',
             isArray:true
         },
-
+        getCustomerSummary:{
+            method:'GET',
+            url:'http://devkinara.perdix.in:8081/management/server-ext_kgfs/wm_summary.php?cid=1'
+        },
         getSchema:{
             method:'GET',
             url:'process/schemas/profileInformation.json'

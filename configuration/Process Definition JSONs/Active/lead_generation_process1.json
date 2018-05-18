@@ -606,8 +606,8 @@
                         "ReadyForScreening"
                      ]
                   },
-                  "vehicleRegistartionNumber": {
-                     "title": "Vehicle Registartion Number",
+                  "vehicleRegistrationNumber": {
+                     "title": "Vehicle Registration Number",
                      "type": "String",
                      "minLength": 1,
                      "maxLength": 100,

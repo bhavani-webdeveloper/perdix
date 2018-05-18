@@ -1,0 +1,103 @@
+{
+"customer_summary":{
+
+"segment_name":"Business low income",
+"Last_interaction":"mel loan",
+"primary_income_earner":"Karthikeyan",
+"last_edited_date": "2018-04-05",
+"target_product" : "ILF Term Life",
+"Age":42,
+
+"Loans":[{"status":"Active","JLG":1,"MEL":0,"PERSONAL":0,"OTHERS":0},
+			{"status":"Closed","JLG":4,"MEL":0,"PERSONAL":1,"OTHERS":3}
+			
+			
+],
+
+"outsranding_amt":[{"Product":"JLG",
+					"Outstanding_amt":12500,
+					"ovedue_days":10,
+					"Maturity_date":"25-05-2018"},
+					{"Product":"JEWEL",
+					"Outstanding_amt":3000,
+					"ovedue_days":10,
+					"Maturity_date":"25-05-2018"}
+],
+"credit_score":175, 
+"owns_a_shop":"yes",
+
+"upgrade_eligibility":[
+                    {"Product":"MEL",
+					"Eligibility":"no",
+					"Eligible_for_upgrade":"no",
+					"Percentage_upgrade":0},
+					{"Product":"PERSONAL",
+					"Eligibility":"yes",
+					"Eligible_for_upgrade":"yes",
+					"Percentage_upgrade":5}
+
+
+],
+	
+"household_composition":[
+                    {"dependents":"male",
+					"below_18":1,
+					"between_18_27":0,
+					"above_27":0},
+					{"dependents":"female",
+					"below_18":1,
+					"between_18_27":0,
+					"above_27":1}
+
+],
+
+"insurance":[
+			{"customer":"Janaki",
+			 "product":"Term life",
+			 "expires_in":26,
+			 "coverage":250000,
+			 "product_close_date":"25-05-2018"},
+			 
+			 {"customer":"janaki",
+			 "product":"Accident",
+			 "expires_in":26,
+			 "coverage":300000,
+			 "product_close_date":"25-05-2018"}
+
+],
+
+"savings":[
+
+			{
+			"deposit_amount":150,
+			"deposit_date":"23-04-2017"
+			},
+			{
+			"deposit_amount":1300,
+			"deposit_date":"23-04-2017"
+			}
+
+
+
+
+],
+
+"Remittance":[
+
+				{
+				 "amount":25000,
+				 "withdrawal_date":"23-04-2017",
+				 "agent":"western union"
+				 
+				},
+				{
+				 "amount":15000,
+				 "withdrawal_date":"23-06-2017",
+				 "agent":"western union"
+				 
+				}
+
+
+]}
+
+}

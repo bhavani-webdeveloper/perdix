@@ -1870,6 +1870,13 @@
                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
                   ]
                },
+                "insuredDeclaredValue":{
+                  "title":"Insured Declared Value",
+                   "type":"number",
+                   "captureStages":[
+                   "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                  ]
+               },
                "inspectedBy":{
                   "title":"inspectedBy",
                   "type":"string",
