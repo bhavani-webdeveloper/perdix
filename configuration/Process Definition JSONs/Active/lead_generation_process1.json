@@ -594,30 +594,30 @@
                         "ReadyForScreening"
                      ]
                   },
-                  "parentLoanAccount": {
-                     "title": "parent Account Number",
-                     "type": "String",
-                     "minLength": 1,
-                     "maxLength": 100,
-                     "captureStages": [
-                        "Assignment Pending",
-                        "Incomplete",
-                        "Inprocess",
-                        "ReadyForScreening"
-                     ]
-                  },
-                  "vehicleRegistrationNumber": {
-                     "title": "Vehicle Registration Number",
-                     "type": "String",
-                     "minLength": 1,
-                     "maxLength": 100,
-                     "captureStages": [
-                        "Assignment Pending",
-                        "Incomplete",
-                        "Inprocess",
-                        "ReadyForScreening"
-                     ]
-                  },
+               "parentLoanAccount": {
+                  "title": "parent Account Number",
+                  "type": "String",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "captureStages": [
+                     "Assignment Pending",
+                     "Incomplete",
+                     "Inprocess",
+                     "ReadyForScreening"
+                  ]
+               },
+               "vehicleRegistrationNumber": {
+                  "title": "Vehicle Registration Number",
+                  "type": "String",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "captureStages": [
+                     "Assignment Pending",
+                     "Incomplete",
+                     "Inprocess",
+                     "ReadyForScreening"
+                  ]
+               },
                "applicantCustomerId": {
                   "title": "applicantCustomerId",
                   "type": "number",
