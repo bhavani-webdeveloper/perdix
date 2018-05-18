@@ -113,6 +113,7 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                     "productDetails.productRequiredBy",
                     "productDetails.followUpDate",
                     "productDetails.screeningDate",
+                    "productDetails.vehicleRegistrationNumber",
                     "productDetails.productEligibility",
                     "productDetails.productEligibility.eligibleForProduct",
                     "productDetails.productRejectionReason",
@@ -167,6 +168,12 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                                             "title": "PARENT_LOAN_ACCOUNT",
                                             "condition": "model.lead.interestedInProduct==='YES'",
                                             "orderNo": 40
+                                        },
+                                        "vehicleRegistrationNumber": {
+                                            "key": "lead.vehicleRegistrationNumber",
+                                            "title": "REGN_NO",
+                                            "condition": "model.lead.interestedInProduct==='YES' && (model.lead.loanPurpose1 == 'Purchase - Used Vehicle' || model.lead.loanPurpose1 == 'Refinance')",
+                                            "orderNo": 45
                                         }
                                     }
                                 }

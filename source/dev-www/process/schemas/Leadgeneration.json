@@ -399,6 +399,14 @@
             "type": ["string", "null"],
             "title": "PARTNER_CODE"
          },
+         "parentLoanAccount": {
+           "type": ["string", "null"],
+           "title": "PARENT_LOAN_ACCOUNT"
+         },
+         "vehicleRegistrationNumber": {
+           "type": ["string", "null"],
+           "title": "REGN_NO"
+         },
          "udf": {
             "type": "object",
             "title": "UDF",

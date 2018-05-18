@@ -383,6 +383,7 @@ define([],function(){
                     "NewVehicleDetails.registrationNumber",
                     "NewVehicleDetails.originalInvoiceValue",
                     "NewVehicleDetails.permitType",
+                    "NewVehicleDetails.price",
                     "TeleVerification",
                     "TeleVerification.verifications",
                     "TeleVerification.verifications.personContacted",
@@ -447,7 +448,7 @@ define([],function(){
                                 "condition": "model.loanAccount.securityEmiRequired == 'YES'"
                             },
                             "NewVehicleDetails": {
-                                "condition": "(model.loanAccount.loanPurpose1 == 'Purchase – New Vehicle') || (model.loanAccount.loanPurpose1 == 'Purchase – Used Vehicle') || (model.loanAccount.loanPurpose1 == 'Refinance')"
+                                "condition": "model.loanAccount.loanPurpose1 == 'Purchase - New Vehicle' || model.loanAccount.loanPurpose1 == 'Purchase - Used Vehicle' || model.loanAccount.loanPurpose1 == 'Refinance'"
                             },
                             "NewVehicleDetails.permitType": {
                                 "type": "select",
@@ -493,7 +494,7 @@ define([],function(){
                             },
                             "NewVehicleDetails.vehicleType": {
                                 "orderNo": 10,
-                                "enumCode": "new_vehicle_type",
+                                "enumCode": "new_vehicle_category",
                                 "required": true
                             },
                             "NewVehicleDetails.endUse": {
@@ -532,7 +533,6 @@ define([],function(){
                                 "key": "loanAccount.vehicleLoanDetails.make",
                                 "type": "lov",
                                 "autolov": true,
-                                "lovonly":true,
                                 "title": "MAKE",
                                 bindMap: {},
                                 searchHelper: formHelper,
@@ -566,7 +566,6 @@ define([],function(){
                                 "key": "loanAccount.vehicleLoanDetails.vehicleModel",
                                 "type": "lov",
                                 "autolov": true,
-                                "lovonly":true,
                                 bindMap: {},
                                 searchHelper: formHelper,
                                 search: function(inputModel, form, model, context) {
@@ -599,7 +598,6 @@ define([],function(){
                                 "title": "MANUFACTURER_YEAR",
                                 "type": "lov",
                                 "autolov": true,
-                                "lovonly":true,
                                 bindMap: {},
                                 searchHelper: formHelper,
                                 search: function(inputModel, form, model, context) {
@@ -1076,9 +1074,11 @@ define([],function(){
                 eventListeners: {
                     "lead-loaded": function(bundleModel, model, obj) {
                         model.lead = obj;
+                        model.loanAccount.vehicleLoanDetails = {};
                         model.loanAccount.loanAmountRequested = obj.loanAmountRequested;
                         model.loanAccount.loanPurpose1 = obj.loanPurpose1;
                         model.loanAccount.loanPurpose2 = obj.loanPurpose2;
+                        model.loanAccount.vehicleLoanDetails.registrationNumber = obj.vehicleRegistrationNumber;
                         model.loanAccount.screeningDate = obj.screeningDate || moment().format("YYYY-MM-DD");
                     },
                     "get-vehicle-price": function(bundleModel, model, obj) {

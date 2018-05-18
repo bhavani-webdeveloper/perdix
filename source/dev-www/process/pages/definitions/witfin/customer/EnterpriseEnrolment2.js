@@ -58,6 +58,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseInformation.partnershipDissolvedDate",
                     "EnterpriseInformation.companyRegistered",
                     "EnterpriseInformation.isGSTAvailable",
+                    "EnterpriseInformation.netBusinessIncome",
                     "EnterpriseInformation.enterpriseRegistrations",
                     "EnterpriseInformation.enterpriseRegistrations.registrationType",
                     "EnterpriseInformation.enterpriseRegistrations.registrationNumber",
@@ -100,21 +101,21 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseReferences.verifications.opinion",
                     "Liabilities",
                     "Liabilities.liabilities",
-                    "Liabilities.liabilities.loanType",
-                    "Liabilities.liabilities.loanSourceCategory",
-                    "Liabilities.liabilities.loanSource",
-                    "Liabilities.liabilities.loanSource1",
+                    // "Liabilities.liabilities.loanType",
+                    // "Liabilities.liabilities.loanSourceCategory",
+                    // "Liabilities.liabilities.loanSource",
+                    // "Liabilities.liabilities.loanSource1",
                     "Liabilities.liabilities.loanAmountInPaisa",
                     "Liabilities.liabilities.installmentAmountInPaisa",
-                    "Liabilities.liabilities.outstandingAmountInPaisa",
+                    // "Liabilities.liabilities.outstandingAmountInPaisa",
                     "Liabilities.liabilities.startDate",
-                    "Liabilities.liabilities.maturityDate",
+                    // "Liabilities.liabilities.maturityDate",
                     "Liabilities.liabilities.noOfInstalmentPaid",
                     "Liabilities.liabilities.frequencyOfInstallment",
-                    "Liabilities.liabilities.liabilityLoanPurpose",
-                    "Liabilities.liabilities.interestOnly",
-                    "Liabilities.liabilities.interestRate",
-                    "Liabilities.liabilities.proofDocuments",
+                    // "Liabilities.liabilities.liabilityLoanPurpose",
+                    // "Liabilities.liabilities.interestOnly",
+                    // "Liabilities.liabilities.interestRate",
+                    // "Liabilities.liabilities.proofDocuments",
                     "EnterpriseAssets",
                     "EnterpriseAssets.enterpriseAssets",
                     "EnterpriseAssets.enterpriseAssets.assetType",
@@ -453,25 +454,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                      fieldType: "number",
                                      resolver: "PincodeLOVConfiguration"
                                 },
-                                "Liabilities.liabilities.liabilityLoanPurpose": {
-                                    "type": "select",
-                                    "enumCode": "loan_purpose_1"
-                                },
-                                "Liabilities.liabilities.loanSource1": {
-                                    orderNo: 12
-                                },
-                                "Liabilities.liabilities.loanSourceCategory": {
-                                    onChange: function(modelValue, form, model) {
-                                        if (modelValue == 'Friends') {
-                                            model.customer.liabilities[form.arrayIndex].loanSource = 'Friends';
-                                        } else if (modelValue == 'Relatives') {
-                                            model.customer.liabilities[form.arrayIndex].loanSource = 'Relatives';
-                                        }
-                                    }
-                                },
-                                "Liabilities.liabilities.loanSource": {
-                                    "condition": "model.customer.liabilities[arrayIndex].loanSourceCategory == 'Bank/NBFC'"
-                                },
                                 "EnterpriseInformation.enterpriseCustomerRelations.otherBusinessClosed": {
                                     "condition": "model.customer.enterpriseCustomerRelations[arrayIndex].partnerOfAnyOtherCompany == 'YES'"
                                 },
@@ -560,12 +542,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "items": {
                                             "liabilities": {
                                                 "items": {
-                                                    "loanSource1": {
-                                                        "condition": "model.customer.liabilities[arrayIndex].loanSourceCategory == 'Friends' ||  model.customer.liabilities[arrayIndex].loanSourceCategory == 'Relatives'",
-                                                        "key": "customer.liabilities[].loanSource",
-                                                        "title": "LOAN_SOURCE",
-                                                        "readonly": true
-                                                    }
+
                                                 }
                                             }
                                         }
@@ -591,6 +568,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                                         console.log(err);
                                                     });
                                                 }
+                                            },
+                                            "netBusinessIncome": {
+                                                "type": "number",
+                                                "title": "CASH_PROFIT",
+                                                "key": "customer.enterprise.netBusinessIncome"
+                                                // "condition": "model.customer.customerCategory.toLowerCase() == 'captive - retail'"
                                             }
                                         }
 
@@ -617,7 +600,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                                       "title": "TANGIBLE_NET_WORTH"
                                                     }
                                                 }
-                                            }
+                                            },
                                         }
 
                                     }
