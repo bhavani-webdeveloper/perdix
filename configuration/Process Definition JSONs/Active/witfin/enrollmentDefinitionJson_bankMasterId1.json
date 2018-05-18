@@ -2968,6 +2968,16 @@
               "Completed"
             ]
           },
+          "netBusinessIncome": {
+              "title": "Net Business Income",
+              "type": "number",
+              "minimum": 0,
+              "maximum": 10000000,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
           "businessDescription": {
             "title": "businessDescription",
             "type": "string",
