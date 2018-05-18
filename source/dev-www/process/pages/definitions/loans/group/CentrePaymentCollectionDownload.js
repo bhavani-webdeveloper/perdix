@@ -1,10 +1,10 @@
 irf.pageCollection.factory("Pages__CentrePaymentCollectionDownload",
 ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper",
 "$stateParams", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService",
-"$filter", "elementsUtils", "Utils","authService", "$rootScope",
+"$filter", "elementsUtils", "Utils","authService", "$rootScope", "Queries",
 function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 	$stateParams, LoanProcess, PM, PageHelper, StorageService,
-	$filter, elementsUtils, Utils,authService, $rootScope){
+	$filter, elementsUtils, Utils,authService, $rootScope, Queries){
 
 	return {
 		"id": "CentrePaymentCollection",
@@ -72,43 +72,68 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 								for(var i = 0; i < userCentres.length; i++) {
 									userCentreCollectionDemands = userCentreCollectionDemands.concat($filter('filter')(response.body, {centreId: userCentres[i].id, userId: SessionStore.getLoginname()}, true));
 								}
-							 	var storedData = {
-									collectionDemands: userCentreCollectionDemands,
-									collectionBranch: collectionBranch,
-									collectionDate: collectionDate
-								};
-								var tempDataArray = StorageService.retrieveJSON(model._offlineKey);
-								if(tempDataArray != null){
 
-									var indexForDate = _.findIndex(tempDataArray, function(b) {
-										return b.collectionDate == collectionDate;
-									});
-									if (indexForDate == -1) {
+								var temp = {};
+								var groupCodes = userCentreCollectionDemands.reduce(function (a, b) {
+								  if (b.groupCode && !temp[b.groupCode]) {
+								    a.push(b.groupCode)
+								    temp[b.groupCode] = true;
+								  }
+								  return a;
+								}, []);
+
+								Queries.getGroupDetailsByGroupcode(groupCodes).then(function(groups) {
+
+									if (groups && angular.isArray(groups) && groups.length > 0) {
+										var groupNames = groups.reduce(function(a, b) {
+											a[b.group_code] = b.group_name;
+											return a;
+										}, {});
+										for(var i = 0; i < userCentreCollectionDemands.length; i++) {
+											if (userCentreCollectionDemands[i]['groupCode']) {
+												userCentreCollectionDemands[i]['groupName'] = groupNames[userCentreCollectionDemands[i]['groupCode']];
+											}
+										}
+									}
+								}).finally(function(){
+									var storedData = {
+										collectionDemands: userCentreCollectionDemands,
+										collectionBranch: collectionBranch,
+										collectionDate: collectionDate
+									};
+									var tempDataArray = StorageService.retrieveJSON(model._offlineKey);
+									if(tempDataArray != null){
+
+										var indexForDate = _.findIndex(tempDataArray, function(b) {
+											return b.collectionDate == collectionDate;
+										});
+										if (indexForDate == -1) {
+											if (storedData.collectionDemands.length >0) {
+												tempDataArray.push(storedData);
+												StorageService.storeJSON(model._offlineKey, tempDataArray);
+												PM.pop('collection-demand', "Collection Demands Saved Successfully", 3000);
+											} else {
+												PM.pop('collection-demand', "No Collection Demands found", 3000);
+											}	
+										} else {
+											PM.pop('collection-demand', "Collection Demands already Downloaded for this date", 2000);
+										}
+									} else {
+										tempDataArray = [];
 										if (storedData.collectionDemands.length >0) {
 											tempDataArray.push(storedData);
 											StorageService.storeJSON(model._offlineKey, tempDataArray);
-											PM.pop('collection-demand', "Collection Demands Saved Successfully", 3000);
+											PM.pop('collection-demand', "Collection Demands Saved Successfully", 2000);
 										} else {
-											PM.pop('collection-demand', "No Collection Demands found", 3000);
-										}	
-									} else {
-										PM.pop('collection-demand', "Collection Demands already Downloaded for this date", 2000);
-									}
-								} else {
-									tempDataArray = [];
-									if (storedData.collectionDemands.length >0) {
-										tempDataArray.push(storedData);
-										StorageService.storeJSON(model._offlineKey, tempDataArray);
-										PM.pop('collection-demand', "Collection Demands Saved Successfully", 2000);
-									} else {
-										PM.pop('collection-demand', "No Collection Demands found", 2000);
-									}		
-								}															
-								PageHelper.hideLoader();
-								$state.go("Page.Engine", {
-									pageName: 'CentrePaymentCollectionDownload'
-								},{
-									reload: true
+											PM.pop('collection-demand', "No Collection Demands found", 2000);
+										}		
+									}															
+									PageHelper.hideLoader();
+									$state.go("Page.Engine", {
+										pageName: 'CentrePaymentCollectionDownload'
+									},{
+										reload: true
+									});
 								});
 							}, function(errorResponse){
 								PageHelper.hideLoader();

@@ -911,6 +911,20 @@ irf.models.factory('Queries', [
         return deferred.promise;
     };
 
+    resource.getGroupDetailsByGroupcode = function(groupCode) {
+        var deferred = $q.defer();
+        var groupCodeList = (groupCode && !angular.isArray(groupCode) ) ? [groupCode] : groupCode ;
+        resource.getResult("groupDetailsByGroupCode.list", {
+                "group_code": groupCodeList
+            })
+            .then(function(records) {
+                if (records && records.results) {
+                    deferred.resolve(records.results);
+                }
+            }, deferred.reject)
+        return deferred.promise;
+    }
+
     return resource;
     }
 ]);

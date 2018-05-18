@@ -108,7 +108,9 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 		offline: true,
 		getOfflineDisplayItem: function(item, index){
 			return [
-				'Centre: ' + item["collectionDemandSummary"]["centreName"] + ' (' +item["collectionDemandSummary"]["centreId"] + ') - ' + item["collectionDemandSummary"]["demandDate"],
+				'Centre: ' + item["collectionDemandSummary"]["centreName"] + ' (' +item["collectionDemandSummary"]["centreId"] + ') - '
+				 + (item["collectionDemandSummary"]["groupCode"] ? (' Group: ' +  item["collectionDemandSummary"]["groupNames"] + " (group code - " + item["collectionDemandSummary"]["groupCode"] + ") - " ) : '')
+				 + item["collectionDemandSummary"]["demandDate"],
 				'Total: '+item["totalToBeCollected"],
 				'Collected: '+item["collected"]
 			]
@@ -195,6 +197,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 		                        model.collectionDemandSummary.centreName = valueObj.name;
 		                        model.collectionDemandSummary.centreId = valueObj.id;
 		                        delete model.collectionDemandSummary.photoOfCentre;
+		                        delete model.collectionDemandSummary.allAttendance;
 		                        if(model.$$OFFLINE_FILES$$ && model.$$OFFLINE_FILES$$.collectionDemandSummary$photoOfCentre)
 		                        {
 			                        model.$$OFFLINE_FILES$$.collectionDemandSummary$photoOfCentre['data'] = null;
@@ -239,6 +242,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 											v.amountPaid = v.totalToBeCollected;
 											v.overdue = true;
 										}
+										groupName = v.groupName;
 										grouptobecollected += v.amountPaid;
 									});
 
@@ -248,24 +252,18 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 										totalToBeCollected:grouptobecollected,
 										collected:grouptobecollected,
 									};
-									GroupProcess.search({
-										'groupCode': k
-									}).$promise.then(function(res) {
-										d.groupName = res.body[0].groupName;
-										g.push(d);
-										PageHelper.hideLoader();
-										if (model.groupCollectionOn) {
-											model.groupCollectionDemand=g;
-											model.totalToBeCollected = model.collected = totalToBeCollected;
-											model.notcollected=0;
-										}else{
-											model.individualCollectionDemand=g;
-										}	
-									},function(err){
-										PageHelper.hideLoader();
-										$log.info(err);
-									});
+
+									d.groupName = groupName;
+									g.push(d);
+									if (!model.groupCollectionOn) {
+										model.groupCollectionDemand=g;
+										model.totalToBeCollected = model.collected = totalToBeCollected;
+										model.notcollected=0;
+									}else{
+										model.individualCollectionDemand=g;
+									}
 								});
+								PageHelper.hideLoader();
 		                    },
 		                    getListDisplayItem: function (item, index) {
 		                        return [
@@ -277,7 +275,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 						{
 							"key":"collectionDemandSummary.groupNames",
 							"title":"GROUP_NAME",
-							"condition":"!model.groupCollectionOn",
+							"condition":"model.groupCollectionOn && model._mode!=='VIEW'",
 							"type":"lov",
 		                    lovonly: true,
 		                    bindMap: {},
@@ -293,11 +291,24 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 		                    },
 		                    getListDisplayItem: function (item, index) {
 		                        return [
-		                            item.groupName,
+		                            item.groupName ? item.groupName : item.groupCode ,
 		                        ];
 		                    },
 		                    onSelect: function (valueObj, model, context) {
-		                    	model.collectionDemandSummary.groupNames= valueObj.groupName;
+		                    	if(valueObj.groupCode == 'Individual Loans') {
+		                    		model.collectionDemandSummary.indLoan = true;
+		                    	} else {
+		                    		model.collectionDemandSummary.indLoan = false;
+		                    	}
+		                    	delete model.collectionDemandSummary.allAttendance;
+		                    	delete model.collectionDemandSummary.photoOfCentre;
+		                        if(model.$$OFFLINE_FILES$$ && model.$$OFFLINE_FILES$$.collectionDemandSummary$photoOfCentre)
+		                        {
+			                        model.$$OFFLINE_FILES$$.collectionDemandSummary$photoOfCentre['data'] = null;
+			                        model.$$OFFLINE_FILES$$.collectionDemandSummary$photoOfCentre['filename'] = null;
+		                        }
+		                    	model.collectionDemandSummary.groupCode = valueObj.groupCode;
+		                    	model.collectionDemandSummary.groupNames= valueObj.groupName ? valueObj.groupName : valueObj.groupCode;
 		                    	model.groupCollectionDemand=[];
 		                    	model.totalToBeCollected= 0;
 		                    	var totalToBeCollected = 0;
@@ -327,9 +338,16 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 							"condition": "model._mode == 'VIEW'",
 						},
 						{
+							"key":"collectionDemandSummary.groupNames",
+							"title":"GROUP_NAME",
+							"readonly": true,
+							"condition":"model.groupCollectionOn && model._mode=='VIEW'",
+						},
+						{
 							"key": "collectionDemandSummary.photoOfCentre",
 							"type": "file",
-							"condition":"model.groupCollectionOn",
+							"required": true,
+							"condition":"!model.groupCollectionOn",
 							"fileType": "image/*",
 							"offline": true
 						},
@@ -341,7 +359,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 							"longitudeExpr":"model.collectionDemandSummary.longitude",
 							"latitude": "collectionDemandSummary.latitude",
 							"longitude": "collectionDemandSummary.longitude",
-							"condition": "model._mode!=='VIEW' && model.groupCollectionOn"
+							"condition": "model._mode!=='VIEW' && !model.groupCollectionOn"
 						},
 						{
 							"key": "collectionDemandSummary.latitude",
@@ -349,7 +367,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 							"type": "geotag",
 							"latitude": "collectionDemandSummary.latitude",
 							"longitude": "collectionDemandSummary.longitude",
-							"condition": "model._mode==='VIEW' && model.groupCollectionOn",
+							"condition": "model._mode==='VIEW' && !model.groupCollectionOn",
 							"readonly": true
 						}
 					]
@@ -358,7 +376,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 		},
 		{
 			"type": "box",
-			"title": "GROUPS",
+			"titleExpr": " !model.groupCollectionOn ? ('GROUPS' | translate) : ('COLLECTION_INFO' | translate)",
 			"condition": "model._storedData && model.collectionDemandSummary.centreId && model.collectionDemandSummary.collectionExist && (model.groupCollectionDemand && model.groupCollectionDemand.length && model.groupCollectionDemand.length>0)",
 			"items": [{
 				"key":"collectionDemandSummary.allAttendance",
@@ -375,13 +393,13 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 				"key": "groupCollectionDemand",
 				"add": null,
 				"remove": null,
-				"titleExpr": "model.groupCollectionDemand[arrayIndex].groupName + '(' + 'Group Code' + ' - ' + model.groupCollectionDemand[arrayIndex].groupCode + ')'",
+				"titleExpr": "model.collectionDemandSummary.indLoan ? model.groupCollectionDemand[arrayIndex].groupCode :(model.groupCollectionDemand[arrayIndex].groupName + '(' + 'Group Code' + ' - ' + model.groupCollectionDemand[arrayIndex].groupCode + ')')",
 				"items": [
 					{
 						"key": "collectionDemandSummary.photoOfCentre",
 						"type": "file",
-						"title":"Group Photo",
-						"condition": "!model.groupCollectionOn",
+						"title":"PHOTO_CAPTURE",
+						"condition": "model.groupCollectionOn",
 						"fileType": "image/*",
 						"offline": true
 					}, {
@@ -392,14 +410,14 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 						"longitudeExpr": "model.collectionDemandSummary.longitude",
 						"latitude": "collectionDemandSummary.latitude",
 						"longitude": "collectionDemandSummary.longitude",
-						"condition": "model._mode!=='VIEW' && !model.groupCollectionOn"
+						"condition": "model._mode!=='VIEW' && model.groupCollectionOn"
 					}, {
 						"key": "collectionDemandSummary.latitude",
 						"title": "Group Location",
 						"type": "geotag",
 						"latitude": "collectionDemandSummary.latitude",
 						"longitude": "collectionDemandSummary.longitude",
-						"condition": "model._mode==='VIEW' && !model.groupCollectionOn",
+						"condition": "model._mode==='VIEW' && model.groupCollectionOn",
 						"readonly": true
 					},
 					{
@@ -846,7 +864,8 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 				// 	PM.pop('collection-demand', 'Centre location is mandatory', 5000);
 				// 	return false;
 				// }
-				if (!(model.collectionDemandSummary.photoOfCentre || model.$$OFFLINE_FILES$$.collectionDemandSummary$photoOfCentre.data)) {
+				if (!model.collectionDemandSummary.indLoan && 
+					!(model.collectionDemandSummary.photoOfCentre || model.$$OFFLINE_FILES$$.collectionDemandSummary$photoOfCentre.data)) {
 					PM.pop('collection-demand', 'Centre Photo is mandatory', 5000);
 					return false;
 				}
@@ -875,7 +894,9 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 
 				var deferred = $q.defer();
 				var fdate = moment(model.collectionDemandSummary.demandDate).format('YYYY-MM-DD');
-				var skey = model.collectionDemandSummary.centreId + fdate;
+				var skey = model.groupCollectionOn ? 
+					(model.collectionDemandSummary.centreId + model.collectionDemandSummary.groupCode +  fdate ) 
+					: model.collectionDemandSummary.centreId + fdate;
 				var off = StorageService.getJSON('CentrePaymentCollection', skey);
 				if ((model.$$STORAGE_KEY$$ && !model.$$STORAGE_KEY$$.includes(skey))  && _.isObject(off) && !_.isEmpty(off)) {
 					PM.pop('collection-demand', 'Collection already saved in offline for CENTRE: ' + model.collectionDemandSummary.centreName + ' and DATE: ' + model.collectionDemandSummary.demandDate + '. Cannot process again. Please submit existing offline data.', 7000);
@@ -1009,7 +1030,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 			"properties": {
 				"collectionDemandSummary": {
 					"type": "object",
-					"required": ["centreId", "photoOfCentre"],
+					"required": ["centreId"],
 					"properties": {
 						"centreId": {
 							"title": "CENTRE",
