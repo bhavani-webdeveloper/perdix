@@ -765,6 +765,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "HouseVerification.distanceFromBranch",
                     "HouseVerification.monthlyRent",
                     "HouseVerification.previousRentDetails",
+                    "HouseVerification.customerDocuments",
+                    "HouseVerification.customerDocuments.fileType",
+                    "HouseVerification.customerDocuments.fileId",
+                    "HouseVerification.customerDocuments.documentDate",
+                    "HouseVerification.customerDocuments.udfDate1",
                     "ResidenceVerification",
                     "ResidenceVerification.location",
                     "ResidenceVerification.locatingHouse",
@@ -1016,6 +1021,41 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         "parentLoanAccount": {
                                             "key": "customer.parentLoanAccount",
                                             "title": "PARENT_LOAN_ACCOUNT"
+                                        }
+                                    }
+                                },
+                                "HouseVerification": {
+                                    "items": {
+                                        "customerDocuments": {
+                                            "type": "array",
+                                            "title": "PROOF_OF_RESIDENCE",
+                                            "key": "customer.customerDocuments",
+                                            "items": {
+                                                "fileType": {
+                                                    "type": "string",
+                                                    "key": "customer.customerDocuments[].fileType",
+                                                    "title": "DOCUMENT_NAME"
+                                                },
+                                                "fileId": {
+                                                    "key": "customer.customerDocuments[].fileId",
+                                                    "type": "file",
+                                                    "fileType": "application/pdf",
+                                                    "using": "scanner",
+                                                    "title": "DOCUMENT_UPLOAD",
+                                                    "category": "CustomerEnrollment",
+                                                    "subCategory": "KYC1"
+                                                },
+                                                "documentDate": {
+                                                    "key": "customer.customerDocuments[].documentDate",
+                                                    "title": "ISSUE_DATE",
+                                                    "type": "date"
+                                                },
+                                                "udfDate1": {
+                                                    "key": "customer.customerDocuments[].udfDate1",
+                                                    "title": "EXPIRY_DATE",
+                                                    "type": "date"
+                                                }
+                                            }
                                         }
                                     }
                                 }
