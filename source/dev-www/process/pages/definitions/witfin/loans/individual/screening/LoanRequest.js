@@ -1,34 +1,35 @@
-define([],function(){
+define([], function() {
 
     return {
         pageUID: "witfin.loans.individual.screening.LoanRequest",
         pageType: "Engine",
-        dependencies: ["$log", "$q","LoanAccount","LoanProcess", 'Scoring', 'Enrollment','EnrollmentHelper', 'AuthTokenHelper', 'SchemaResource', 'PageHelper','formHelper',"elementsUtils",
-            'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch", "IndividualLoan",
-            "BundleManager", "PsychometricTestService", "LeadHelper", "Message", "$filter", "Psychometric", "IrfFormRequestProcessor","UIRepository", "$injector", "irfNavigator"],
+        dependencies: ["$log", "$q", "LoanAccount", "LoanProcess", 'Scoring', 'Enrollment', 'EnrollmentHelper', 'AuthTokenHelper', 'SchemaResource', 'PageHelper', 'formHelper', "elementsUtils",
+            'irfProgressMessage', 'SessionStore', "$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch", "IndividualLoan",
+            "BundleManager", "PsychometricTestService", "LeadHelper", "Message", "$filter", "Psychometric", "IrfFormRequestProcessor", "UIRepository", "$injector", "irfNavigator"
+        ],
 
-        $pageFn: function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper, AuthTokenHelper, SchemaResource, PageHelper,formHelper,elementsUtils,
-                          irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch, IndividualLoan,
-                          BundleManager, PsychometricTestService, LeadHelper, Message, $filter, Psychometric, IrfFormRequestProcessor, UIRepository, $injector, irfNavigator) {
+        $pageFn: function($log, $q, LoanAccount, LoanProcess, Scoring, Enrollment, EnrollmentHelper, AuthTokenHelper, SchemaResource, PageHelper, formHelper, elementsUtils,
+            irfProgressMessage, SessionStore, $state, $stateParams, Queries, Utils, CustomerBankBranch, IndividualLoan,
+            BundleManager, PsychometricTestService, LeadHelper, Message, $filter, Psychometric, IrfFormRequestProcessor, UIRepository, $injector, irfNavigator) {
             var branch = SessionStore.getBranch();
 
 
             var self;
-            var validateForm = function(formCtrl){
+            var validateForm = function(formCtrl) {
                 formCtrl.scope.$broadcast('schemaFormValidate');
                 if (formCtrl && formCtrl.$invalid) {
-                    PageHelper.showProgress("enrolment","Your form have errors. Please fix them.", 5000);
+                    PageHelper.showProgress("enrolment", "Your form have errors. Please fix them.", 5000);
                     return false;
                 }
                 return true;
             };
 
-            var getRelationFromClass = function(relation){
-                if (relation == 'guarantor'){
+            var getRelationFromClass = function(relation) {
+                if (relation == 'guarantor') {
                     return 'Guarantor';
-                } else if (relation == 'applicant'){
+                } else if (relation == 'applicant') {
                     return 'Applicant';
-                } else if (relation == 'co-applicant'){
+                } else if (relation == 'co-applicant') {
                     return 'Co-Applicant';
                 }
             };
@@ -299,7 +300,7 @@ define([],function(){
                 }
             }
 
-            var getIncludes = function (model) {
+            var getIncludes = function(model) {
 
                 return [
                     "PreliminaryInformation",
@@ -376,14 +377,19 @@ define([],function(){
                     "NewVehicleDetails.segment",
                     "NewVehicleDetails.category",
                     "NewVehicleDetails.yearOfManufacture",
+                    "NewVehicleDetails.yearOfManufacture1",
                     "NewVehicleDetails.make",
+                    "NewVehicleDetails.make1",
                     "NewVehicleDetails.vehicleModel",
+                    "NewVehicleDetails.vehicleModel1",
                     "NewVehicleDetails.assetDetails",
                     "NewVehicleDetails.assetSubDetails",
                     "NewVehicleDetails.registrationNumber",
                     "NewVehicleDetails.originalInvoiceValue",
                     "NewVehicleDetails.permitType",
                     "NewVehicleDetails.price",
+                    "NewVehicleDetails.udf1",
+                    "NewVehicleDetails.insuredDeclaredValue",
                     "TeleVerification",
                     "TeleVerification.verifications",
                     "TeleVerification.verifications.personContacted",
@@ -412,11 +418,12 @@ define([],function(){
                 "type": "schema-form",
                 "title": "LOAN_REQUEST",
                 "subTitle": "BUSINESS",
-                initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
+                initialize: function(model, form, formCtrl, bundlePageObj, bundleModel) {
                     // AngularResourceService.getInstance().setInjector($injector);
 
                     /* Setting data recieved from Bundle */
                     model.loanAccount = model.loanProcess.loanAccount;
+                    model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 = 'NO';
 
                     self = this;
                     var formRequest = {
@@ -427,7 +434,7 @@ define([],function(){
                                 "required": true
                             },
                             "LoanRecommendation.tenure": {
-                                onChange : function (modelValue, form, model) {
+                                onChange: function(modelValue, form, model) {
                                     model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = null;
                                 }
                             },
@@ -462,21 +469,21 @@ define([],function(){
                             },
                             "PreliminaryInformation.estimatedEmi": {
                                 "required": true,
-                                "readonly" : true
+                                "readonly": true
                             },
                             "PreliminaryInformation.frequencyRequested": {
                                 "required": true,
-                                 onChange: function(modelValue, form, model) {
+                                onChange: function(modelValue, form, model) {
                                     model.loanAccount.estimatedEmi = null;
-                                    model.loanAccount.expectedInterestRate =  null;
+                                    model.loanAccount.expectedInterestRate = null;
                                     model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = null;
                                 }
                             },
                             "PreliminaryInformation.tenureRequested": {
                                 "required": true,
-                                 onChange: function(modelValue, form, model) {
+                                onChange: function(modelValue, form, model) {
                                     model.loanAccount.estimatedEmi = null;
-                                    model.loanAccount.expectedInterestRate =  null;
+                                    model.loanAccount.expectedInterestRate = null;
                                 }
                             },
                             "PreliminaryInformation.udf5": {
@@ -484,7 +491,7 @@ define([],function(){
                                 onChange: function(modelValue, form, model) {
                                     model.loanAccount.estimatedEmi = null;
                                     model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = null;
-                                    model.loanAccount.expectedInterestRate =  null;
+                                    model.loanAccount.expectedInterestRate = null;
                                 }
                             },
                             "PreliminaryInformation.expectedInterestRate": {
@@ -505,14 +512,17 @@ define([],function(){
                                 "orderNo": 30,
                                 "required": true
                             },
-                            "NewVehicleDetails.segment":{
+                            "NewVehicleDetails.segment": {
                                 "orderNo": 40,
                                 "enumCode": "vehicle_segment",
-                                onChange: function (modelValue, form, model) {
+                                onChange: function(modelValue, form, model) {
                                     model.loanAccount.vehicleLoanDetails.category = null;
-                                    model.loanAccount.vehicleLoanDetails.make = null
+                                    model.loanAccount.vehicleLoanDetails.make = null;
+                                    model.loanAccount.vehicleLoanDetails.make1 = null;
                                     model.loanAccount.vehicleLoanDetails.vehicleModel = null;
+                                    model.loanAccount.vehicleLoanDetails.vehicleModel1 = null;
                                     model.vehiclePriceDetails.yearOfManufacture = null;
+                                    model.vehiclePriceDetails.yearOfManufacture1 = null;
                                     model.loanAccount.vehicleLoanDetails.price = null;
                                 },
                                 "required": true
@@ -520,10 +530,13 @@ define([],function(){
                             "NewVehicleDetails.category": {
                                 "orderNo": 50,
                                 "enumCode": "vehicle_type",
-                                onChange: function (modelValue, form, model) {
-                                    model.loanAccount.vehicleLoanDetails.make = null
+                                onChange: function(modelValue, form, model) {
+                                    model.loanAccount.vehicleLoanDetails.make = null;
+                                    model.loanAccount.vehicleLoanDetails.make1 = null
                                     model.loanAccount.vehicleLoanDetails.vehicleModel = null;
+                                    model.loanAccount.vehicleLoanDetails.vehicleModel1 = null;
                                     model.vehiclePriceDetails.yearOfManufacture = null;
+                                    model.vehiclePriceDetails.yearOfManufacture1 = null;
                                     model.loanAccount.vehicleLoanDetails.price = null;
                                 },
                                 "required": true
@@ -533,14 +546,19 @@ define([],function(){
                                 "key": "loanAccount.vehicleLoanDetails.make",
                                 "type": "lov",
                                 "autolov": true,
+                                "lovonly": true,
                                 "title": "MAKE",
+                                "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'NO'",
                                 bindMap: {},
                                 searchHelper: formHelper,
                                 search: function(inputModel, form, model, context) {
                                     var vehiclePriceDetails = model.vehiclePriceDetails;
                                     var out = [];
-                                    var res = $filter('filter')(vehiclePriceDetails, {'segment': model.vehiclePriceDetails.segment , 'asset_type': model.vehiclePriceDetails.category}, true);
-                                    out = _.uniqBy(res,'manufacturer');
+                                    var res = $filter('filter')(vehiclePriceDetails, {
+                                        'segment': model.vehiclePriceDetails.segment,
+                                        'asset_type': model.vehiclePriceDetails.category
+                                    }, true);
+                                    out = _.uniqBy(res, 'manufacturer');
                                     return $q.resolve({
                                         headers: {
                                             "x-total-count": out.length
@@ -561,18 +579,24 @@ define([],function(){
                                 },
                                 "required": true
                             },
-                            "NewVehicleDetails.vehicleModel":{
+                            "NewVehicleDetails.vehicleModel": {
                                 "orderNo": 70,
                                 "key": "loanAccount.vehicleLoanDetails.vehicleModel",
                                 "type": "lov",
                                 "autolov": true,
+                                "lovonly": true,
+                                "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'NO'",
                                 bindMap: {},
                                 searchHelper: formHelper,
                                 search: function(inputModel, form, model, context) {
                                     var vehiclePriceDetails = model.vehiclePriceDetails;
                                     var out = [];
-                                    var res = $filter('filter')(vehiclePriceDetails, {'segment': model.loanAccount.vehicleLoanDetails.segment , 'asset_type': model.loanAccount.vehicleLoanDetails.category, 'manufacturer': model.loanAccount.vehicleLoanDetails.make}, true);
-                                    out = _.uniqBy(res,'model');
+                                    var res = $filter('filter')(vehiclePriceDetails, {
+                                        'segment': model.loanAccount.vehicleLoanDetails.segment,
+                                        'asset_type': model.loanAccount.vehicleLoanDetails.category,
+                                        'manufacturer': model.loanAccount.vehicleLoanDetails.make
+                                    }, true);
+                                    out = _.uniqBy(res, 'model');
                                     return $q.resolve({
                                         headers: {
                                             "x-total-count": out.length
@@ -598,13 +622,20 @@ define([],function(){
                                 "title": "MANUFACTURER_YEAR",
                                 "type": "lov",
                                 "autolov": true,
+                                "lovonly": true,
+                                "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'NO'",
                                 bindMap: {},
                                 searchHelper: formHelper,
                                 search: function(inputModel, form, model, context) {
                                     var vehiclePriceDetails = model.vehiclePriceDetails;
                                     var out = [];
-                                    var res = $filter('filter')(vehiclePriceDetails, {'segment': model.loanAccount.vehicleLoanDetails.segment , 'asset_type': model.loanAccount.vehicleLoanDetails.category, 'manufacturer': model.loanAccount.vehicleLoanDetails.make, 'model': model.loanAccount.vehicleLoanDetails.vehicleModel}, true);
-                                    out = _.uniqBy(res,'year_of_manufacture');
+                                    var res = $filter('filter')(vehiclePriceDetails, {
+                                        'segment': model.loanAccount.vehicleLoanDetails.segment,
+                                        'asset_type': model.loanAccount.vehicleLoanDetails.category,
+                                        'manufacturer': model.loanAccount.vehicleLoanDetails.make,
+                                        'model': model.loanAccount.vehicleLoanDetails.vehicleModel
+                                    }, true);
+                                    out = _.uniqBy(res, 'year_of_manufacture');
                                     return $q.resolve({
                                         headers: {
                                             "x-total-count": out.length
@@ -614,7 +645,13 @@ define([],function(){
                                 },
                                 onSelect: function(valueObj, model, context) {
                                     model.loanAccount.vehicleLoanDetails.yearOfManufacture = valueObj.year_of_manufacture;
-                                    var res = $filter('filter')(model.vehiclePriceDetails, {'segment': model.loanAccount.vehicleLoanDetails.segment , 'asset_type': model.loanAccount.vehicleLoanDetails.category, 'manufacturer': model.loanAccount.vehicleLoanDetails.make, 'model': model.loanAccount.vehicleLoanDetails.vehicleModel, 'year_of_manufacture': model.loanAccount.vehicleLoanDetails.yearOfManufacture}, true);
+                                    var res = $filter('filter')(model.vehiclePriceDetails, {
+                                        'segment': model.loanAccount.vehicleLoanDetails.segment,
+                                        'asset_type': model.loanAccount.vehicleLoanDetails.category,
+                                        'manufacturer': model.loanAccount.vehicleLoanDetails.make,
+                                        'model': model.loanAccount.vehicleLoanDetails.vehicleModel,
+                                        'year_of_manufacture': model.loanAccount.vehicleLoanDetails.yearOfManufacture
+                                    }, true);
                                     model.loanAccount.vehicleLoanDetails.price = Number(res[0].price);
                                 },
                                 getListDisplayItem: function(item, index) {
@@ -624,18 +661,18 @@ define([],function(){
                                 },
                                 "required": true
                             },
-                            "NewVehicleDetails.assetDetails":{
+                            "NewVehicleDetails.assetDetails": {
                                 "orderNo": 90
                             },
-                            "NewVehicleDetails.assetSubDetails":{
+                            "NewVehicleDetails.assetSubDetails": {
                                 "orderNo": 100,
                                 "title": "SUB_DESCRIPTION"
                             },
-                            "NewVehicleDetails.registrationNumber":{
+                            "NewVehicleDetails.registrationNumber": {
                                 "orderNo": 110,
                                 "required": true
                             },
-                            "NewVehicleDetails.originalInvoiceValue":{
+                            "NewVehicleDetails.originalInvoiceValue": {
                                 "orderNo": 120,
                                 "readonly": true,
                                 "required": true
@@ -644,7 +681,7 @@ define([],function(){
                                 "condition": "model.loanAccount.loanPurpose1 == 'Purchase – New Vehicle' || model.loanAccount.loanPurpose1 == 'Purchase – Used Vehicle' || model.loanAccount.loanPurpose1 == 'Refinance'"
                             }
                         },
-                        "includes": getIncludes (model),
+                        "includes": getIncludes(model),
                         "excludes": [
                             ""
                         ],
@@ -653,17 +690,17 @@ define([],function(){
                                 "PreliminaryInformation": {
                                     "items": {
                                         "calculateEmi": {
-                                            "title" : "CALCULATE_EMI",
+                                            "title": "CALCULATE_EMI",
                                             "type": "button",
                                             "onClick": function(model, formCtrl) {
                                                 var frequencyRequested1, frequencyRequested2;
                                                 if (model.loanAccount.frequencyRequested && model.loanAccount.tenureRequested && model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5) {
-                                                   switch(model.loanAccount.frequencyRequested) {
+                                                    switch (model.loanAccount.frequencyRequested) {
                                                         case 'Daily':
                                                             frequencyRequested1 = 365;
                                                             break;
                                                         case 'Fortnightly':
-                                                            frequencyRequested1 = parseInt(365/15);
+                                                            frequencyRequested1 = parseInt(365 / 15);
                                                             break;
                                                         case 'Monthly':
                                                             frequencyRequested1 = 12;
@@ -672,23 +709,27 @@ define([],function(){
                                                             frequencyRequested1 = 4;
                                                             break;
                                                         case 'Weekly':
-                                                            frequencyRequested1 = parseInt(365/7);
+                                                            frequencyRequested1 = parseInt(365 / 7);
                                                             break;
                                                         case 'Yearly':
                                                             frequencyRequested1 = 1;
                                                     }
-                                                    model.loanAccount.expectedInterestRate = (Math.pow((2*parseFloat(model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5)*parseFloat(model.loanAccount.tenureRequested)/parseFloat(model.loanAccount.tenureRequested) + 1)+ 1, 1/frequencyRequested1) - 1)* frequencyRequested1;
+                                                    model.loanAccount.expectedInterestRate = (Math.pow((2 * parseFloat(model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5) * parseFloat(model.loanAccount.tenureRequested) / parseFloat(model.loanAccount.tenureRequested) + 1) + 1, 1 / frequencyRequested1) - 1) * frequencyRequested1;
                                                 } else {
-                                                    PageHelper.showErrors({data: {error: "Please Enter Required Values for calculating Nominal Rate"}});
+                                                    PageHelper.showErrors({
+                                                        data: {
+                                                            error: "Please Enter Required Values for calculating Nominal Rate"
+                                                        }
+                                                    });
                                                     return false;
                                                 }
                                                 if (model.loanAccount.expectedInterestRate && model.loanAccount.tenureRequested && model.loanAccount.frequencyRequested && model.loanAccount.loanAmountRequested) {
-                                                    switch(model.loanAccount.frequencyRequested) {
+                                                    switch (model.loanAccount.frequencyRequested) {
                                                         case 'Daily':
                                                             frequencyRequested2 = 365;
                                                             break;
                                                         case 'Fortnightly':
-                                                            frequencyRequested2 = parseInt(365/15);
+                                                            frequencyRequested2 = parseInt(365 / 15);
                                                             break;
                                                         case 'Monthly':
                                                             frequencyRequested2 = 12;
@@ -697,18 +738,22 @@ define([],function(){
                                                             frequencyRequested2 = 4;
                                                             break;
                                                         case 'Weekly':
-                                                            frequencyRequested2 = parseInt(365/7);
+                                                            frequencyRequested2 = parseInt(365 / 7);
                                                             break;
                                                         case 'Yearly':
                                                             frequencyRequested2 = 1;
                                                     }
-                                                    var rate = parseFloat((model.loanAccount.expectedInterestRate)/(100*frequencyRequested2));
+                                                    var rate = parseFloat((model.loanAccount.expectedInterestRate) / (100 * frequencyRequested2));
                                                     var n = parseFloat(model.loanAccount.tenureRequested);
                                                     var calculateEmi = (parseFloat(model.loanAccount.loanAmountRequested) * rate / parseFloat((1 - Math.pow(1 + rate, -n))));
                                                     model.loanAccount.estimatedEmi = parseInt(calculateEmi.toFixed());
                                                 } else {
-                                                     PageHelper.showErrors({data: {error: "Nominal Rate is not proper"}});
-                                                     return false;
+                                                    PageHelper.showErrors({
+                                                        data: {
+                                                            error: "Nominal Rate is not proper"
+                                                        }
+                                                    });
+                                                    return false;
                                                 }
                                             }
                                         }
@@ -817,7 +862,7 @@ define([],function(){
                                                         .$promise
                                                         .then(function(resp) {
                                                             $log.info(resp);
-                                                            model.loanAccount.dealIrr = Number(resp.xirr.substr(0,resp.xirr.length-1));
+                                                            model.loanAccount.dealIrr = Number(resp.xirr.substr(0, resp.xirr.length - 1));
                                                         });
                                                 }
                                             }
@@ -882,7 +927,7 @@ define([],function(){
                                 },
                                 "FieldInvestigationDetails": {
                                     "type": "box",
-                                    "orderNo" : 300,
+                                    "orderNo": 300,
                                     "title": "FIELD_INVESTIGATION_DETAILS",
                                     "items": {
                                         "fieldInvestigationDecision": {
@@ -901,49 +946,85 @@ define([],function(){
                                             "parentValueExpr": "model.loanAccount.udf10"
                                         }
                                     }
+                                },
+                                "NewVehicleDetails": {
+                                    "items": {
+                                        "udf1": {
+                                            "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1",
+                                            "title": "MODEL_NOT_LISTED",
+                                            "enumCode": "decisionmaker",
+                                            "type": "radios",
+                                            "orderNo": 75
+                                        },
+                                        "make1": {
+                                            "orderNo": 60,
+                                            "key": "loanAccount.vehicleLoanDetails.make",
+                                            "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'YES'",
+                                            "title": "MAKE",
+                                            "required": true
+                                        },
+                                        "vehicleModel1": {
+                                            "orderNo": 70,
+                                            "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'YES'",
+                                            "key": "loanAccount.vehicleLoanDetails.vehicleModel",
+                                            "required": true,
+                                            "title": "MODEL"
+                                        },
+                                        "yearOfManufacture1": {
+                                            "orderNo": 80,
+                                            "key": "loanAccount.vehicleLoanDetails.yearOfManufacture",
+                                            "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'YES'",
+                                            "title": "MANUFACTURER_YEAR",
+                                            "required": true
+                                        },
+                                        "insuredDeclaredValue": {
+                                            "orderNo": 90,
+                                            "key": "loanAccount.vehicleLoanDetails.insuredDeclaredValue",
+                                            "title": "INSURED_DECLARED_VALUE"
+                                        }
+                                    }
                                 }
                             },
-                            "additions": [
-                                {
-                                    "type": "box",
-                                    "orderNo": 999,
-                                    "title": "POST_REVIEW",
-                                    "condition": "model.loanAccount.id && model.loanAccount.isReadOnly!='Yes'",
-                                    "items": [{
-                                        key: "review.action",
-                                        type: "radios",
-                                        titleMap: {
-                                            "REJECT": "REJECT",
-                                            "SEND_BACK": "SEND_BACK",
-                                            "PROCEED": "PROCEED"
+                            "additions": [{
+                                "type": "box",
+                                "orderNo": 999,
+                                "title": "POST_REVIEW",
+                                "condition": "model.loanAccount.id && model.loanAccount.isReadOnly!='Yes'",
+                                "items": [{
+                                    key: "review.action",
+                                    type: "radios",
+                                    titleMap: {
+                                        "REJECT": "REJECT",
+                                        "SEND_BACK": "SEND_BACK",
+                                        "PROCEED": "PROCEED"
+                                    }
+                                }, {
+                                    type: "section",
+                                    condition: "model.review.action=='PROCEED'",
+                                    items: [{
+                                        title: "REMARKS",
+                                        key: "loanProcess.remarks",
+                                        type: "textarea",
+                                        required: true
+                                    }, {
+                                        "title": "VALUATOR",
+                                        "key": "loanAccount.valuator",
+                                        "type": "select",
+                                        "condition": "model.loanProcess.loanAccount.currentStage == 'ScreeningReview' && (model.loanAccount.loanPurpose1 == 'Purchase – Used Vehicle' || model.loanAccount.loanPurpose1 == 'Refinance')",
+                                        "titleMap": {
+                                            "test": "test"
                                         }
                                     }, {
-                                        type: "section",
-                                        condition: "model.review.action=='PROCEED'",
-                                        items: [{
-                                            title: "REMARKS",
-                                            key: "loanProcess.remarks",
-                                            type: "textarea",
-                                            required: true
-                                        }, {
-                                            "title": "VALUATOR",
-                                            "key":"loanAccount.valuator",
-                                            "type":"select",
-                                            "condition": "model.loanProcess.loanAccount.currentStage == 'ScreeningReview' && (model.loanAccount.loanPurpose1 == 'Purchase – Used Vehicle' || model.loanAccount.loanPurpose1 == 'Refinance')",
-                                            "titleMap": {
-                                                "test":"test"
-                                            }
-                                        }, {
-                                            key: "review.proceedButton",
-                                            type: "button",
-                                            title: "PROCEED",
-                                            onClick: "actions.proceed(model, formCtrl, form, $event)"
-                                        }]
+                                        key: "review.proceedButton",
+                                        type: "button",
+                                        title: "PROCEED",
+                                        onClick: "actions.proceed(model, formCtrl, form, $event)"
+                                    }]
 
-                                    }, {
-                                        type: "section",
-                                        condition: "model.review.action=='SEND_BACK'",
-                                        items: [{
+                                }, {
+                                    type: "section",
+                                    condition: "model.review.action=='SEND_BACK'",
+                                    items: [{
                                         title: "REMARKS",
                                         key: "loanProcess.remarks",
                                         type: "textarea",
@@ -953,7 +1034,7 @@ define([],function(){
                                         "required": true,
                                         type: "lov",
                                         autolov: true,
-                                        lovonly:true,
+                                        lovonly: true,
                                         title: "SEND_BACK_TO_STAGE",
                                         bindMap: {},
                                         searchHelper: formHelper,
@@ -966,7 +1047,7 @@ define([],function(){
                                                 if (t.field1 == stage1) {
                                                     out.push({
                                                         name: t.name,
-                                                        value:t.code
+                                                        value: t.code
                                                     })
                                                 }
                                             }
@@ -994,77 +1075,75 @@ define([],function(){
                                         onClick: "actions.sendBack(model, formCtrl, form, $event)"
                                     }]
 
-                                    } , {
-                                        type: "section",
-                                        condition: "model.review.action=='REJECT'",
-                                        items: [{
-                                                title: "REMARKS",
-                                                key: "loanProcess.remarks",
-                                                type: "textarea",
-                                                required: true
-                                            }, {
-                                                key: "loanAccount.rejectReason",
-                                                type: "lov",
-                                                autolov: true,
-                                                required:true,
-                                                title: "REJECT_REASON",
-                                                bindMap: {},
-                                                searchHelper: formHelper,
-                                                search: function(inputModel, form, model, context) {
-                                                    var stage1 = model.loanProcess.loanAccount.currentStage;
+                                }, {
+                                    type: "section",
+                                    condition: "model.review.action=='REJECT'",
+                                    items: [{
+                                            title: "REMARKS",
+                                            key: "loanProcess.remarks",
+                                            type: "textarea",
+                                            required: true
+                                        }, {
+                                            key: "loanAccount.rejectReason",
+                                            type: "lov",
+                                            autolov: true,
+                                            required: true,
+                                            title: "REJECT_REASON",
+                                            bindMap: {},
+                                            searchHelper: formHelper,
+                                            search: function(inputModel, form, model, context) {
+                                                var stage1 = model.loanProcess.loanAccount.currentStage;
 
-                                                    var rejectReason = formHelper.enum('application_reject_reason').data;
-                                                    var out = [];
-                                                    for (var i = 0; i < rejectReason.length; i++) {
-                                                        var t = rejectReason[i];
-                                                        if (t.field1 == stage1) {
-                                                            out.push({
-                                                                name: t.name,
-                                                            })
-                                                        }
+                                                var rejectReason = formHelper.enum('application_reject_reason').data;
+                                                var out = [];
+                                                for (var i = 0; i < rejectReason.length; i++) {
+                                                    var t = rejectReason[i];
+                                                    if (t.field1 == stage1) {
+                                                        out.push({
+                                                            name: t.name,
+                                                        })
                                                     }
-                                                    return $q.resolve({
-                                                        headers: {
-                                                            "x-total-count": out.length
-                                                        },
-                                                        body: out
-                                                    });
-                                                },
-                                                onSelect: function(valueObj, model, context) {
-                                                    model.loanAccount.rejectReason = valueObj.name;
-                                                },
-                                                getListDisplayItem: function(item, index) {
-                                                    return [
-                                                        item.name
-                                                    ];
                                                 }
+                                                return $q.resolve({
+                                                    headers: {
+                                                        "x-total-count": out.length
+                                                    },
+                                                    body: out
+                                                });
                                             },
-
-                                            {
-                                                key: "review.rejectButton",
-                                                type: "button",
-                                                title: "REJECT",
-                                                required: true,
-                                                onClick: "actions.reject(model, formCtrl, form, $event)"
+                                            onSelect: function(valueObj, model, context) {
+                                                model.loanAccount.rejectReason = valueObj.name;
+                                            },
+                                            getListDisplayItem: function(item, index) {
+                                                return [
+                                                    item.name
+                                                ];
                                             }
-                                        ]
-                                    }]
-                                }
-                            ]
+                                        },
+                                        {
+                                            key: "review.rejectButton",
+                                            type: "button",
+                                            title: "REJECT",
+                                            required: true,
+                                            onClick: "actions.reject(model, formCtrl, form, $event)"
+                                        }
+                                    ]
+                                }]
+                            }]
                         }
                     };
                     var p1 = UIRepository.getLoanProcessUIRepository().$promise;
 
                     p1.then(function(repo) {
                         self.form = IrfFormRequestProcessor.getFormDefinition(repo, formRequest, configFile(), model);
-                    }, function(err){
+                    }, function(err) {
                         console.log(err);
 
                     })
 
                 },
                 offline: false,
-                getOfflineDisplayItem: function(item, index){
+                getOfflineDisplayItem: function(item, index) {
                     return [
                         item.customer.firstName,
                         item.customer.centreCode,
@@ -1101,13 +1180,13 @@ define([],function(){
                         }
                         return deferred.promise;
                     },
-                    save: function(model, formCtrl, form, $event){
+                    save: function(model, formCtrl, form, $event) {
                         /* Loan SAVE */
                         PageHelper.clearErrors();
-                        if(PageHelper.isFormInvalid(formCtrl)) {
+                        if (PageHelper.isFormInvalid(formCtrl)) {
                             return false;
                         }
-                        if (!model.loanAccount.id){
+                        if (!model.loanAccount.id) {
                             model.loanAccount.isRestructure = false;
                             model.loanAccount.documentTracking = "PENDING";
                             model.loanAccount.psychometricCompleted = "NO";
@@ -1116,69 +1195,69 @@ define([],function(){
                         PageHelper.showLoader();
                         PageHelper.showProgress('loan-process', 'Updating Loan');
                         model.loanProcess.save()
-                            .finally(function () {
+                            .finally(function() {
                                 PageHelper.hideLoader();
                             })
-                            .subscribe(function (value) {
+                            .subscribe(function(value) {
 
                                 PageHelper.showProgress('loan-process', 'Loan Saved.', 5000);
-                            }, function (err) {
+                            }, function(err) {
                                 PageHelper.showProgress('loan-process', 'Oops. Some error.', 5000);
                                 PageHelper.showErrors(err);
                                 PageHelper.hideLoader();
                             });
 
                     },
-                    sendBack: function(model, formCtrl, form, $event){
+                    sendBack: function(model, formCtrl, form, $event) {
                         PageHelper.showLoader();
                         model.loanProcess.sendBack()
-                            .finally(function () {
+                            .finally(function() {
                                 PageHelper.hideLoader();
                             })
-                            .subscribe(function (value) {
+                            .subscribe(function(value) {
 
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 irfNavigator.goBack();
-                            }, function (err) {
+                            }, function(err) {
                                 PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                 PageHelper.showErrors(err);
                                 PageHelper.hideLoader();
                             });
 
                     },
-                    proceed: function(model, formCtrl, form, $event){
-                        if(PageHelper.isFormInvalid(formCtrl)) {
+                    proceed: function(model, formCtrl, form, $event) {
+                        if (PageHelper.isFormInvalid(formCtrl)) {
                             return false;
                         }
                         PageHelper.clearErrors();
                         PageHelper.showLoader();
                         PageHelper.showProgress('enrolment', 'Updating Loan');
                         model.loanProcess.proceed()
-                            .finally(function () {
+                            .finally(function() {
                                 PageHelper.hideLoader();
                             })
-                            .subscribe(function (value) {
+                            .subscribe(function(value) {
 
                                 Utils.removeNulls(value, true);
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 irfNavigator.goBack();
-                            }, function (err) {
+                            }, function(err) {
                                 PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                 PageHelper.showErrors(err);
                                 PageHelper.hideLoader();
                             });
                     },
-                    reject: function(model, formCtrl, form, $event){
+                    reject: function(model, formCtrl, form, $event) {
                         PageHelper.showLoader();
-                         model.loanProcess.reject()
-                            .finally(function () {
+                        model.loanProcess.reject()
+                            .finally(function() {
                                 PageHelper.hideLoader();
                             })
-                            .subscribe(function (value) {
+                            .subscribe(function(value) {
                                 Utils.removeNulls(value, true);
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 irfNavigator.goBack();
-                            }, function (err) {
+                            }, function(err) {
                                 PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                 PageHelper.showErrors(err);
                                 PageHelper.hideLoader();
