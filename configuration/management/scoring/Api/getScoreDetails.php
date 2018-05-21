@@ -355,7 +355,7 @@ if (isset($_GET)) {
 	AND (sc_parameters.business_type='All' OR sc_parameters.business_type LIKE '%$business_type%')
 	AND (sc_parameters.existing_customer='All' OR sc_parameters.existing_customer LIKE '%$existing_customer%')
 	AND (sc_parameters.loan_type='All' OR sc_parameters.existing_customer LIKE '%$loan_type%')
-	GROUP BY sc_perdixparameters.ParameterName 
+	GROUP BY sc_perdixparameters.ParameterName ORDER BY sc_parameters.param_id ASC
 	";
             // echo $GetCustomerInputs; die();
             try {
