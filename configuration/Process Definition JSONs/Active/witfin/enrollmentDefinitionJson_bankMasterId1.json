@@ -2944,8 +2944,7 @@
         "type": "object",
         "required": [
           "corporateName",
-          "businessName",
-          "businessConstitution"
+          "businessName"
         ],
         "properties": {
           "customerNumber": {
@@ -3504,7 +3503,6 @@
         "type": "object",
         "required": [
           "Completed",
-          "relationshipType",
           "linkedToCompleted"
         ],
         "properties": {
