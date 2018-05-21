@@ -113,7 +113,10 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                                             PageHelper.hideLoader();
                                                         });
                                                 }, function(err) {
-                                                    err.data.error = err.data.errorMessage;
+                                                    if(err.data.errorMessage){
+                                                        err.data.error = err.data.errorMessage;
+                                                    }
+                                                    
                                                    PageHelper.showErrors(err)
                                                 });
                                             }
