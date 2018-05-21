@@ -979,7 +979,6 @@
                             "instituteName",
                             "loanSource",
                             "liabilityLoanPurpose",
-                            "loanAmountInPaisa",
                             "loanType",
                             "frequencyOfInstallment"
                         ]

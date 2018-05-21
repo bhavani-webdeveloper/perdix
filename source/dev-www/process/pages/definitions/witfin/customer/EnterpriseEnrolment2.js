@@ -112,10 +112,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     // "Liabilities.liabilities.maturityDate",
                     "Liabilities.liabilities.noOfInstalmentPaid",
                     "Liabilities.liabilities.frequencyOfInstallment",
+                    "Liabilities.liabilities.udf1",
                     // "Liabilities.liabilities.liabilityLoanPurpose",
                     // "Liabilities.liabilities.interestOnly",
                     // "Liabilities.liabilities.interestRate",
                     // "Liabilities.liabilities.proofDocuments",
+                    "Liabilities.liabilities.customerLiabilityRepayments",
+                    "Liabilities.liabilities.customerLiabilityRepayments.emiNo",
+                    "Liabilities.liabilities.customerLiabilityRepayments.emiAmount",
+                    "Liabilities.liabilities.customerLiabilityRepayments.emiDueDate",
+                    "Liabilities.liabilities.customerLiabilityRepayments.actualRepaymentDate",
                     "EnterpriseAssets",
                     "EnterpriseAssets.enterpriseAssets",
                     "EnterpriseAssets.enterpriseAssets.assetType",
@@ -503,6 +509,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 "Liabilities.liabilities": {
                                     startEmpty: true
                                 },
+                                "Liabilities.liabilities.frequencyOfInstallment": {
+                                    "title": "REPAYMENT_FREQUENCY",
+                                    "required": true
+                                },
+                                "Liabilities.liabilities.noOfInstalmentPaid": {
+                                    "title": "TENURE",
+                                    "required": true
+                                },
+                                "Liabilities.liabilities.startDate": {
+                                    "title": "LOAN_START_DATE",
+                                    "required": true
+                                },
                                 "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerName" :{
                                     "readonly": true
                                 },
@@ -542,7 +560,39 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "items": {
                                             "liabilities": {
                                                 "items": {
-
+                                                    "udf1": {
+                                                        "title": "VEHICLE_MODEL",
+                                                        "type": "string",
+                                                        "key": "customer.liabilities[].udf1"
+                                                    },
+                                                    "customerLiabilityRepayments" : {
+                                                        "key": "customer.liabilities[].customerLiabilityRepayments",
+                                                        "type": "array",
+                                                        "startEmpty": true,
+                                                        "title": "REPAYMENT_DETAILS",
+                                                        "items": {
+                                                            "emiNo": {
+                                                                "key": "customer.liabilities[].customerLiabilityRepayments[].emiNo",
+                                                                "title": "EMI_NO",
+                                                                "type": "number"
+                                                            },
+                                                            "emiAmount": {
+                                                              "key": "customer.liabilities[].customerLiabilityRepayments[].emiAmount",
+                                                              "title": "EMI_AMOUNT",
+                                                              "type": "number"
+                                                            },
+                                                            "emiDueDate": {
+                                                              "key": "customer.liabilities[].customerLiabilityRepayments[].emiDueDate",
+                                                              "title": "EMI_DUE_DATE",
+                                                              "type": "date"
+                                                            },
+                                                            "actualRepaymentDate": {
+                                                                "key": "customer.liabilities[].customerLiabilityRepayments[].actualRepaymentDate",
+                                                                "title": "ACTUAL_REPAYMENT_DATE",
+                                                                "type": "date"
+                                                            }
+                                                        }
+                                                    }
                                                 }
                                             }
                                         }
