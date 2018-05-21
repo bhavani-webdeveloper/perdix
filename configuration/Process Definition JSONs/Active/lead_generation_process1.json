@@ -1,4 +1,5 @@
 {
+   "customerAppRequestStage": "Assignment Pending",
    "stages": [{
       "order": 1,
       "code": "Assignment Pending",
