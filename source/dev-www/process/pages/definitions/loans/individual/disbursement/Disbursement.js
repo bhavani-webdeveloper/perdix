@@ -414,7 +414,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
             {
                 "type": "box",
                 "title": "INTERNAL_FORE_CLOSURE_WAIVER_DETAILS", 
-                "condition": "model.siteCode == 'Kinara' && model.loanAccountDisbursementSchedule.linkedAccountNumber",
+                "condition": "model.siteCode == 'kinara' && model.loanAccountDisbursementSchedule.linkedAccountNumber",
                 "items": [
                     {
                         "key": "loanAccountDisbursementSchedule.linkedAccountNumber",
