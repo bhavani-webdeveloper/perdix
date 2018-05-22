@@ -713,6 +713,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     "items": [
                         {
                             key: "loanAccount.disbursementSchedules",
+                            "title":"WAIVER_DETAILS",
                             add: null,
                             remove: null,
                             items: [{
