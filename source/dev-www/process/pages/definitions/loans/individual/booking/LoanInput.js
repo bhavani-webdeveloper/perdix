@@ -1391,20 +1391,31 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
             },
             {
                 "type":"box",
-                "title":"COLLATERAL",
+                "title":"HYPOTHECATION",
                 "condition": "model.siteCode != 'IFMRCapital' && model.siteCode != 'IREPDhan'",
                 "items":[
                     {
                         "key":"loanAccount.collateral",
-                        "title":"COLLATERAL",
+                        "title":"HYPOTHECATION",
                         "type":"array",
                         "items":[
                             {
-                                "key":"loanAccount.collateral[].collateralType",
-                                "type":"select"
+                                "key":"loanAccount.collateral[].collateralCategory",
+                                "type":"select",
+                                "enumCode":"hypothecation_type",
+                                "title":"HYPOTHECATION_TYPE"
                             },
                             {
-                                "key":"loanAccount.collateral[].collateralDescription"
+                                "key":"loanAccount.collateral[].collateralType",
+                                "type":"select",
+                                "enumCode":"hypothication_sub_type",
+                                "title":"HYPOTHECATION_SUB_TYPE",
+                                "parentEnumCode":"hypothecation_type",
+                                "parentValueExpr":"model.loanAccount.collateral[arrayIndex].collateralCategory",
+                            },
+                            {
+                                "key":"loanAccount.collateral[].collateralDescription",
+                                "title":"HYPOTHECATION_DESCRIPTION"
                             },
                             {
                                 "key":"loanAccount.collateral[].manufacturer"
