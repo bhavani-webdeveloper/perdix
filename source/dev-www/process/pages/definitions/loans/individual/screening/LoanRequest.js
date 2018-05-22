@@ -3081,6 +3081,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                         var machine = enterpriseCustomer.fixedAssetsMachinaries[i];
                                         if (machine.hypothecatedToUs == "YES" || machine.hypothecatedToUs == "Yes"){
                                             var c = {
+                                                collateralCategory:"Machinery",
                                                 collateralDescription: machine.machineDescription,
                                                 collateralType: machine.machineType,
                                                 manufacturer: machine.manufacturerName,
@@ -3092,6 +3093,59 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                                 quantity: machine.quantity || 1
                                             };
                                             c.totalValue = c.quantity * c.loanToValue;
+                                            reqData.loanAccount.collateral.push(c)
+                                        }
+                                    }
+                                }
+                                if (_.isArray(enterpriseCustomer.currentAssets)){
+                                    reqData.loanAccount.collateral = reqData.loanAccount.collateral || [];
+                                    for (var i=0;i<enterpriseCustomer.currentAssets.length; i++){
+                                        var currentAsset = enterpriseCustomer.currentAssets[i];
+                                        // if(currentAsset.assetCategory){
+                                        //     currentAsset.assetCategory = currentAsset.assetCategory;
+                                        // }
+                                        // if(currentAsset.assetName){
+                                        //     currentAsset.assetCategory = currentAsset.assetName
+                                        // }
+                                        if (currentAsset.hypothecatedToUs == "YES" || currentAsset.hypothecatedToUs == "Yes"){
+                                            var c = {
+                                                collateralDescription: currentAsset.description,
+                                                collateralType: currentAsset.assetType,
+                                                collateralCategory:currentAsset.assetCategory,
+                                                collateralValue: currentAsset.assetValue,
+                                               // isHypothecated: currentAsset.isHypothecated,
+                                                photoFilePath: currentAsset.assetImageId,
+                                                // collateralValue: currentAsset.purchasePrice,
+                                                // loanToValue: currentAsset.presentValue,
+                                                // machineOld: !_.isNull(machine.isTheMachineNew)?(machine.isTheMachineNew.toUpperCase() == "YES"?false:true):null,
+                                                // quantity: machine.quantity || 1
+                                            };
+                                           // c.totalValue = c.quantity * c.loanToValue;
+                                            reqData.loanAccount.collateral.push(c)
+                                        }
+                                    }
+                                }
+                                if (_.isArray(enterpriseCustomer.enterpriseAssets)){
+                                    reqData.loanAccount.collateral = reqData.loanAccount.collateral || [];
+                                    for (var i=0;i<enterpriseCustomer.enterpriseAssets.length; i++){
+                                        var enterpriseAsset = enterpriseCustomer.enterpriseAssets[i];
+                                        // if(currentAsset.assetName){
+                                        //     currentAsset.assetCategory = currentAsset.assetName
+                                        // }
+                                        if (enterpriseAsset.hypothecatedToUs == "YES" || enterpriseAsset.hypothecatedToUs == "Yes"){
+                                            var c = {
+                                                collateralDescription: enterpriseAsset.description,
+                                                collateralType: enterpriseAsset.assetType,
+                                                collateralCategory:"Furniture & Fixture",
+                                                collateralValue: enterpriseAsset.valueOfAsset,
+                                               // isHypothecated: currentAsset.isHypothecated,
+                                                photoFilePath: enterpriseAsset.assetImageId,
+                                                // collateralValue: currentAsset.purchasePrice,
+                                                // loanToValue: currentAsset.presentValue,
+                                                // machineOld: !_.isNull(machine.isTheMachineNew)?(machine.isTheMachineNew.toUpperCase() == "YES"?false:true):null,
+                                                // quantity: machine.quantity || 1
+                                            };
+                                            //c.totalValue = c.quantity * c.loanToValue;
                                             reqData.loanAccount.collateral.push(c)
                                         }
                                     }
