@@ -164,7 +164,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "TangibleNetWorth",
                     "TangibleNetWorth.enterpriseNetworth",
                     "TangibleNetWorth.enterpriseNetworth.tangibleNetworth",
-                    "TangibleNetWorth.enterpriseNetworth.financialYear"
+                    "TangibleNetWorth.enterpriseNetworth.financialYear",
+                    "enterpriseDocuments",
+                    "enterpriseDocuments.enterpriseDocuments",
+                    "enterpriseDocuments.enterpriseDocuments.docType",
+                    "enterpriseDocuments.enterpriseDocuments.fileId"
                 ];
             }
 
@@ -653,6 +657,34 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                             },
                                         }
 
+                                    },
+                                    "enterpriseDocuments": {
+                                        "type": "box",
+                                        "title": "INCOME_DOCUMENT",
+                                        "orderNo": 86,
+                                        "items": {
+                                            "enterpriseDocuments":{
+                                                "type":"array",
+                                                "title": "INCOME_DOCUMENT",
+                                                "key": "customer.enterpriseDocuments",
+                                                "startEmpty": true,
+                                                "items": {
+                                                    "docType": {
+                                                        "type": "select",
+                                                        "enumCode": "income_doc_type",
+                                                        "title": "DOCUMENT_TYPE",
+                                                        "key": "customer.enterpriseDocuments[].docType"
+                                                    },
+                                                    "fileId": {
+                                                        "key": "customer.enterpriseDocuments[].fileId",
+                                                        "type": "file",
+                                                        "title": "DOCUMENT_UPLOAD",
+                                                        "category": "CustomerEnrollment",
+                                                        "subCategory": "PHOTO",
+                                                    }
+                                                }
+                                            }
+                                        }
                                     }
                                 },
                                 "additions": [

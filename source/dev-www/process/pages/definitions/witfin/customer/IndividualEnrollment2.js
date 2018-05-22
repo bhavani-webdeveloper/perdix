@@ -1067,28 +1067,27 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "customerLicenceDetails": {
                                     "title": "MUTLI_TYPE_LICENCE_CAPTURE",
                                     "type": "box",
-                                    "key": "customer.customerLicenceDetails",
                                     "orderNo": 85,
                                     "items": {
                                         "customerLicenceDetails": {
                                             "type": "array",
                                             "title": "MUTLI_TYPE_LICENCE_CAPTURE",
                                             "startEmpty": true,
-                                            "key": "customer.customerLicenceDetails.customerLicenceDetails",
+                                            "key": "customer.customerLicenceDetails",
                                             "items": {
                                                 "licence1Type": {
-                                                    "key": "customer.customerLicenceDetails.customerLicenceDetails[].licence1Type",
+                                                    "key": "customer.customerLicenceDetails[].licence1Type",
                                                     "title": "LICENCE_TYPE",
                                                     "type": "select",
                                                     "enumCode": "licence_type"
                                                 },
                                                 "licence1ValidFrom": {
-                                                      "key": "customer.customerLicenceDetails.customerLicenceDetails[].licence1ValidFrom",
+                                                      "key": "customer.customerLicenceDetails[].licence1ValidFrom",
                                                       "title": "LICENCE_VALID_FROM",
                                                       "type": "date"
                                                 },
                                                 "licence1ValidTo": {
-                                                      "key": "customer.customerLicenceDetails.customerLicenceDetails[].licence1ValidTo",
+                                                      "key": "customer.customerLicenceDetails[].licence1ValidTo",
                                                       "title": "LICENCE_VALID_TO",
                                                       "type": "date"
                                                 }
