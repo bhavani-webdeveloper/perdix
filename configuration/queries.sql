@@ -56,6 +56,6 @@ loanAccountsByUrnAndStage.list = Select l.account_Number as accountNumber, l.id 
 LookUpCodeByFrequency.list = select lookup_code from `equated_installment_lookup_master` where frequency=:frequency
 physicalAssets.list= select * from asset_master
 profileSummary.list = select * from `customer_profile_summary` where current_stage='PendingVerification'
-activeLoansCountByProduct = select count(*) as count from loan_accounts l where l.product_code = :product_code and l.urn_no = :urn_no and l.applicant = :applicant and l.id != :loan_id and l.account_number is NOT NULL and l.is_closed = 0 
+activeLoansCountByProduct = select count(*) as count from loan_accounts l where l.product_code = :product_code and l.urn_no = :urn_no or l.applicant = :applicant and l.id != :loan_id and l.account_number is NOT NULL and l.is_closed = 0 
 loanAccountsByLikeAccountNumber.list=select distinct l.account_number, c.first_name as `customer`, applicant.first_name as `applicant` from loan_accounts l left join customer c on (c.id = l.customer_id) left join customer applicant on (l.applicant = applicant.urn_no) where l.account_number like concat('%', :account_number, '%') and l.account_number is not null
 groupDetailsByGroupCode.list = select * from jlg_groups where group_code IN (:group_code)
