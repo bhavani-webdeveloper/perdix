@@ -3303,6 +3303,111 @@
                     }
                 }
             },
+             "vehicleLoanDocuments":{
+                 "title":"vehicleLoanDocuments",
+                "type":"array",
+                "maxItems":null,
+                "items":{
+                   "type":"object",
+                   "required":[
+
+                   ],
+                   "properties":{
+                      "docType":{
+                         "title":"financier",
+                         "type":"string",
+                         "minLength":1,
+                         "maxLength":100,
+                         "captureStages":[
+                        "Screening", "LoanInitiation"
+                         ]
+                      },
+                       "fileId":{
+                         "title":"fileId",
+                         "type":"string",
+                         "minLength":1,
+                         "maxLength":100,
+                         "captureStages":[
+                        "Screening", "LoanInitiation"
+                         ]
+                      },
+                      "issueDate":{
+                         "title":"issueDate",
+                         "type":"date",
+                         "captureStages":[
+                    "Screening", "LoanInitiation"
+                         ]
+                      },
+                      "expiryDate":{
+                         "title":"expiryDate",
+                         "type":"date",
+                         "captureStages":[
+                     "Screening", "LoanInitiation"
+                         ]
+                      },
+                       "udf1":{
+                         "title":"udf1",
+                         "type":"string",
+                         "captureStages":[
+                           "Screening", "LoanInitiation"
+                         ]
+                      },
+
+                      "udf4":{
+                         "title":"udf4",
+                         "type":"string",
+                         "captureStages":[
+                         "Screening", "LoanInitiation"
+                         ]
+                      },
+
+                      "udf2":{
+                         "title":"udf2",
+                         "type":"string",
+                         "captureStages":[
+                         "Screening", "LoanInitiation"
+                         ]
+                      },
+
+                      "udf3":{
+                         "title":"udf3",
+                         "type":"string",
+                         "captureStages":[
+                        "Screening", "LoanInitiation"
+                         ]
+                      },
+
+                      "udf5":{
+                         "title":"udf5",
+                         "type":"string",
+                         "captureStages":[
+                        "Screening", "LoanInitiation"
+                         ]
+                      },
+                       "udfDate1":{
+                      "title":"date1",
+                      "type":"string",
+                      "captureStages":[
+                         "Screening", "LoanInitiation"
+                      ]
+                   },
+                   "udfDate2":{
+                      "title":"date2",
+                      "type":"string",
+                      "captureStages":[
+                     "Screening", "LoanInitiation"
+                      ]
+                   },
+                   "udfDate2":{
+                      "title":"date2",
+                      "type":"string",
+                      "captureStages":[
+                      "Screening", "LoanInitiation"
+                      ]
+                   }
+                }
+             }
+           },            
             "vehicleAssetConditions": {
                 "title": "vehicleAssetConditions",
                 "type": "array",
