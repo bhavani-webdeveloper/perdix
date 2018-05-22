@@ -800,7 +800,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "customerLicenceDetails.customerLicenceDetails",
                     "customerLicenceDetails.customerLicenceDetails.licence1Type",
                     "customerLicenceDetails.customerLicenceDetails.licence1ValidFrom",
-                    "customerLicenceDetails.customerLicenceDetails.licence1ValidTo"
+                    "customerLicenceDetails.customerLicenceDetails.licence1ValidTo",
+                    "vehicleLoanDocuments",
+                    "vehicleLoanDocuments.vehicleLoanDocuments",
+                    "vehicleLoanDocuments.vehicleLoanDocuments.docType",
+                    "vehicleLoanDocuments.vehicleLoanDocuments.fileId",
+                    "vehicleLoanDocuments.vehicleLoanDocuments.issueDate",
+                    "vehicleLoanDocuments.vehicleLoanDocuments.expiryDate"
                 ];
 
             }
@@ -1094,6 +1100,46 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             }
                                         }
 
+                                    }
+                                },
+                                "vehicleLoanDocuments": {
+                                    "type": "box",
+                                    "title": "VEHICLE_DOCUMENTS",
+                                    "orderNo": 86,
+                                    "items": {
+                                        "vehicleLoanDocuments": {
+                                            "type": "array",
+                                            "title": "VEHICLE_DOCUMENTS",
+                                            "startEmpty": true,
+                                            "key": "customer.vehicleLoanDetails.vehicleLoanDocuments",
+                                            "items": {
+                                                "docType": {
+                                                    "type":"select",
+                                                    "enumCode":"vehicle_doc_type",
+                                                    "title": "DOCUMENT_TYPE",
+                                                    "key": "customer.vehicleLoanDetails.vehicleLoanDocuments[].docType"
+                                                },
+                                                "fileId": {
+                                                    "key": "customer.vehicleLoanDetails.vehicleLoanDocuments[].fileId",
+                                                    "type": "file",
+                                                    "fileType": "application/pdf",
+                                                    "using": "scanner",
+                                                    "title": "DOCUMENT_UPLOAD",
+                                                    "category": "CustomerEnrollment",
+                                                    "subCategory": "KYC1"
+                                                },
+                                                "issueDate": {
+                                                    "type": "date",
+                                                    "key": "customer.vehicleLoanDetails.vehicleLoanDocuments[].issueDate",
+                                                    "title": "ISSUE_DATE"
+                                                },
+                                                "expiryDate": {
+                                                    "type": "date",
+                                                    "key": "customer.vehicleLoanDetails.vehicleLoanDocuments[].expiryDate",
+                                                    "title": "EXPIRY_DATE"
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                             },

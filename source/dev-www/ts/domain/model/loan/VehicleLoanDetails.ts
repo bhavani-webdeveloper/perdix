@@ -6,7 +6,7 @@ import VehicleLoanIncome = require("./VehicleLoanIncome");
 import VehiclePastValuation = require("./VehiclePastValuation");
 import VehiclePhotoCapture = require("./VehiclePhotoCapture");
 import VehicleRouteDetail = require("./VehicleRouteDetail");
-
+import vehicleLoanDocument = require("./vehicleLoanDocuments");
 
 
 class VehicleLoanDetails {
@@ -173,6 +173,8 @@ class VehicleLoanDetails {
     @Type(() => VehicleRouteDetail)
     vehicleRouteDetails: VehicleRouteDetail[];
 
+    @Type(() => vehicleLoanDocument)
+    vehicleLoanDocuments: vehicleLoanDocument[];
 }
 
 export = VehicleLoanDetails;

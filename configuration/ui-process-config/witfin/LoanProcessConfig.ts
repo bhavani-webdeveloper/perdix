@@ -24,6 +24,10 @@ let config = {
                     {
                         "name": "CustomerReferencePolicy",
                         "arguments": {}
+                    },
+                    {
+                        "name": "DefaultVehicleDocumnentsPolicy",
+                        "arguments": {}
                     }
                 ],
                 "overrides": [

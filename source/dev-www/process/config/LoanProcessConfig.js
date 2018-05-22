@@ -26,6 +26,10 @@ define(["require", "exports"], function (require, exports) {
                         {
                             "name": "CustomerReferencePolicy",
                             "arguments": {}
+                        },
+                        {
+                            "name": "DefaultVehicleDocumnentsPolicy",
+                            "arguments": {}
                         }
                     ],
                     "overrides": [
