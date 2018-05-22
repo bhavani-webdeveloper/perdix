@@ -51,7 +51,7 @@ export class DefaultVehicleDocumentsPolicy extends IPolicy<LoanProcess> {
                 }
                 for(let component of data) {
                     let vehicleLoanDoc = new vehicleLoanDocument();
-                    vehicleLoanDoc.docType = component.docType;
+                    vehicleLoanDoc.docType = component.name;
                     loanProcess.loanAccount.vehicleLoanDetails.vehicleLoanDocuments.push(vehicleLoanDoc);
                 }
                 return Observable.of(loanProcess);
