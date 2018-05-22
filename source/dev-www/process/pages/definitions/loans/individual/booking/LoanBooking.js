@@ -889,7 +889,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     PageHelper.showLoader();
                     PageHelper.showProgress('preclosure', 'Getting PreClosure Details', 2000);
                     var reqData={
-                        linkedAccountId:'0001LTL1001911',
+                        linkedAccountId:model.loanAccount.linkedAccountNumber,
                         valueDate:  moment(model._currentDisbursement.scheduledDisbursementDate).format("YYYY-MM-DD")
                     };
                     IndividualLoan.getPreClosureDetails(reqData).$promise.then(function(response){
