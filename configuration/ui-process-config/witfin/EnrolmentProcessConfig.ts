@@ -14,10 +14,18 @@ let config = {
                     {
                         "name":"EnrolmentDerivedPolicy",
                         "arguments": {}
-                    },
+                    }
+                ],
+                "overrides": [
                     {
-                        "name": "DefaultIndividualReferencePolicy",
-                        "arguments": {}
+                         "type": "expr",
+                         "expr": "this.currentStage == 'Applciation'",
+                         "add": [
+                             {
+                                 "name": "VerifyIndividualReferencePolicy",
+                                 "arguments": {}
+                             }
+                        ]   
                     }
                 ]
             },
@@ -30,10 +38,18 @@ let config = {
                     {
                         "name": "VerifyBankAccountNumberPolicy",
                         "arguments": null
-                    },
+                    }
+                ],
+                "overrides": [
                     {
-                        "name": "VerifyIndividualReferencePolicy",
-                        "arguments": null                        
+                         "type": "expr",
+                         "expr": "this.currentStage == 'Applciation'",
+                         "add": [
+                             {
+                                 "name": "VerifyIndividualReferencePolicy",
+                                 "arguments": {}
+                             }
+                        ]   
                     }
                 ]
             },
@@ -44,12 +60,20 @@ let config = {
                         "arguments": null
                     },
                     {
-                        "name": "VerifyIndividualReferencePolicy",
-                        "arguments": null                        
-                    },
-                    {
                         "name": "VerifyBankAccountNumberPolicy",
                         "arguments": null
+                    }
+                ],
+                "overrides": [
+                    {
+                         "type": "expr",
+                         "expr": "this.currentStage == 'Applciation'",
+                         "add": [
+                             {
+                                 "name": "VerifyIndividualReferencePolicy",
+                                 "arguments": {}
+                             }
+                        ]   
                     }
                 ]
             },
