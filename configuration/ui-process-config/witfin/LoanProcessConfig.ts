@@ -29,7 +29,7 @@ let config = {
                         "name": "DefaultVehicleDocumnentsPolicy",
                         "arguments": {}
                     }
-                ],
+                    ],
                 "overrides": [
                     {
                         "type": "expr",
