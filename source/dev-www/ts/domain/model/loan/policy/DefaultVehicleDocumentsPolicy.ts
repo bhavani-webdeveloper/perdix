@@ -17,7 +17,7 @@ import {FormHelper, IFormHelper} from "../../../shared/FormHelper";
  * Created by shahalpk on 28/11/17.
  */
 
-export class DefaultVehicleComponentsPolicy extends IPolicy<LoanProcess> {
+export class DefaultVehicleDocumentsPolicy extends IPolicy<LoanProcess> {
 
     enrolmentRepo: IEnrolmentRepository;
 
