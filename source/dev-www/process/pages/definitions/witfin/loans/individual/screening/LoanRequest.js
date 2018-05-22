@@ -423,8 +423,11 @@ define([], function() {
 
                     /* Setting data recieved from Bundle */
                     model.loanAccount = model.loanProcess.loanAccount;
-                    model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 = 'NO';
-
+                    model.loanAccount.accountUserDefinedFields = {
+                        userDefinedFieldValues: {
+                            udf1: 'NO'
+                        }
+                    };
                     self = this;
                     var formRequest = {
                         "overrides": {
