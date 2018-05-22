@@ -1534,11 +1534,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "title":"DOCUMENT_1"
                             },
                             {
-                                "key":"loanAccount.collateral[].collateral2FilePath",
-                                "type":"file",
-                                "title":"DOCUMENT_2"
-                            },
-                            {
                                 "key":"loanAccount.collateral[].collateral3FilePath",
                                 "type":"file",
                                 "title":"DOCUMENT_3"
