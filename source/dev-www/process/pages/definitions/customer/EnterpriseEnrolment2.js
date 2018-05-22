@@ -2318,10 +2318,11 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 items: [{
                     key: "customer.currentAssets",
                     type: "pivotarray",
+                    startEmpty: false,
+                    view: "fixed",
                     addButtonExpr: " ('ADD'| translate ) + ' ' + (pivotValue | translate)",
                     pivotFieldEnumCode: 'stock_current_assets',
                     pivotField: "assetCategory",
-                  
                     title: "RAW_Material",
                     items: [{
                         key: "customer.currentAssets[].description",
@@ -2375,6 +2376,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     key: 'customer.enterpriseAssets',
                     type: 'array',
                     startEmpty: true,
+                    view: "fixed",
                     title: "ENTERPRICE_ASSETS",
                     items: [{
                         key: "customer.enterpriseAssets[].assetType",
@@ -2390,17 +2392,17 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     }, {
                         key: "customer.enterpriseAssets[].description",
                         title: "DESCRIPTION",
-                        condition : "model.customer.enterpriseAssets[arrayIndex].assetType  == 'Furniture' || model.customer.enterpriseAssets[arrayIndex].assetType  == 'Fixture'",
+                        condition : "model.customer.enterpriseAssets[arrayIndex].assetType  == 'Furniture' || model.customer.enterpriseAssets[arrayIndex].assetType  == 'Fixtures'",
                         type: "string",
                     },{
                         key: "customer.enterpriseAssets[].assetName",
-                        condition : "model.customer.enterpriseAssets[arrayIndex].assetType  == 'Furniture' || model.customer.enterpriseAssets[arrayIndex].assetType  == 'Fixture'",
+                        condition : "model.customer.enterpriseAssets[arrayIndex].assetType  == 'Furniture' || model.customer.enterpriseAssets[arrayIndex].assetType  == 'Fixtures'",
                         title: "TYPE",
                         type: "select",
                         enumCode: "enterprise_asset_name"        
                     }, {
                         key: "customer.enterpriseAssets[].isHypothecated",
-                        condition : "model.customer.enterpriseAssets[arrayIndex].assetType  == 'Furniture' || model.customer.enterpriseAssets[arrayIndex].assetType  == 'Fixture'",
+                        condition : "model.customer.enterpriseAssets[arrayIndex].assetType  == 'Furniture' || model.customer.enterpriseAssets[arrayIndex].assetType  == 'Fixtures'",
                         title: "IS_THE_MACHINE_HYPOTHECATED" ,       
                         type: "radios",
                         titleMap: {
@@ -2420,7 +2422,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     },
                      {
                         key: "customer.enterpriseAssets[].assetImageId",
-                        condition : "model.customer.enterpriseAssets[arrayIndex].assetType  == 'Furniture' || model.customer.enterpriseAssets[arrayIndex].assetType  == 'Fixture'",
+                        condition : "model.customer.enterpriseAssets[arrayIndex].assetType  == 'Furniture' || model.customer.enterpriseAssets[arrayIndex].assetType  == 'Fixtures'",
                         title: "IMAGE",
                         "type": "file",
                         "fileType": "image/*",
