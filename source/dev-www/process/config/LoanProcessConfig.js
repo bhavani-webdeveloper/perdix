@@ -28,7 +28,7 @@ define(["require", "exports"], function (require, exports) {
                             "arguments": {}
                         },
                         {
-                            "name": "DefaultVehicleDocumenntsPolicy",
+                            "name": "DefaultVehicleDocumentsPolicy",
                             "arguments": {}
                         }
                     ],

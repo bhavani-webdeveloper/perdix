@@ -26,7 +26,7 @@ let config = {
                         "arguments": {}
                     },
                     {
-                        "name": "DefaultVehicleDocumenntsPolicy",
+                        "name": "DefaultVehicleDocumentsPolicy",
                         "arguments": {}
                     }
                     ],
