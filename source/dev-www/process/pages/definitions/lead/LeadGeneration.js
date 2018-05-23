@@ -145,7 +145,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                             title: "LEAD_DETAILS",
                             items: [{
                                     key: "lead.leadName",
-                                ]    title: "APPLICANT_NAME",  
+                                    title: "APPLICANT_NAME", 
                                 }, {
                                     key: "lead.customerType",
                                     type: "select",
