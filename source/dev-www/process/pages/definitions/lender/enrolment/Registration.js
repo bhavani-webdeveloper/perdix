@@ -10,7 +10,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                            PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository, irfNavigator) {
 
             var configFile = function () {
-                return {                    
+                return {
                 }
             }
             var overridesFields = function (bundlePageObj) {
@@ -48,7 +48,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         }
                     },
                     "LenderContactDetails.LenderContactDetails.mobilePhone2": {
-                      
+
                         "type":"number",
                         "schema":{
                             "pattern":"^[0-9]{10}$"
@@ -187,14 +187,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     if(_.hasIn($stateParams, "pageId") && !_.isNull($stateParams.pageId)) {
                         PageHelper.showLoader();
                         EnrolmentProcess.fromCustomerID($stateParams.pageId)
-                            .subscribe(function(enrolmentProcess) { 
+                            .subscribe(function(enrolmentProcess) {
                                 model.enrolmentProcess = enrolmentProcess;
                                 model.customer = model.enrolmentProcess.customer;
                                 PageHelper.hideLoader();
                             });
                     } else {
                          EnrolmentProcess.createNewProcess('Lender')
-                            .subscribe(function(enrolmentProcess) { 
+                            .subscribe(function(enrolmentProcess) {
                                 console.log("else enrolmentProcess");
                                 console.log(enrolmentProcess);
                                 model.enrolmentProcess = enrolmentProcess;
@@ -216,12 +216,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "type": "box",
                                     "title": "CONTACT_INFORMATION",
                                     "items": {
-                                        "Address1": {                                            
+                                        "Address1": {
                                             "type": "fieldset",
                                             "title": "ADDRESS1",
                                             "items": {
                                                 "addressType": {
-                                                    "key": "customer.udf.userDefinedFieldValues.udf1",                                                    
+                                                    "key": "customer.udf.userDefinedFieldValues.udf1",
                                                     "title": "ADDRESS_TYPE",
                                                     "type": "select",
                                                     "enumCode": "address_type",
@@ -246,8 +246,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                  "pincode": {
                                                     "key": "customer.pincode",
                                                     "type": "lov",
-                                                    "inputmode": "number",
-                                                    "feildType":"number",
+                                                    "fieldType": "number",
                                                     "title":"PINCODE",
                                                     "autolov":true,
                                                     "orderNo": 190
@@ -273,7 +272,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         "Address2": {
                                             "type": "fieldset",
                                             "title": "ADDRESS2",
-                                            "items": {                                                
+                                            "items": {
                                                 "addressType": {
                                                     "key": "customer.udf.userDefinedFieldValues.udf2",
                                                     "title": "ADDRESS_TYPE",
@@ -417,7 +416,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
                         // $q.all start
                         PageHelper.showLoader();
-                        
+
                         // var dateA = new Date(operatingSinceDate);
                         // var dateB = new Date();
                         var res = operatingsinceDate(model)
