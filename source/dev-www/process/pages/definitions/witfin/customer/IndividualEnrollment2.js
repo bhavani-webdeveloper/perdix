@@ -465,6 +465,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "resolver": "MailingPincodeLOVConfiguration",
                         "condition": "!model.customer.mailSameAsResidence"
                     },
+                    "KYC.addressProofNo": {
+                        onCapture: EnrollmentHelper.customerAadhaarOnCapture
+                    },
                     "KYC.addressProof" :{
                         "readonly": true
                     },

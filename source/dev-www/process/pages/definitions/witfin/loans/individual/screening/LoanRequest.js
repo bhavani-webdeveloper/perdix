@@ -437,6 +437,18 @@ define([], function() {
                     self = this;
                     var formRequest = {
                         "overrides": {
+                            "vehicleLoanDocuments.vehicleLoanDocuments": {
+                                "view": "fixed",
+                                "titleExpr": "model.loanAccount.vehicleLoanDetails.vehicleLoanDocuments[arrayIndexes[0]].docType",
+                                "add": null,
+                                "remove": null
+                            },
+                            "vehicleLoanDocuments.vehicleLoanDocuments.docType": {
+                                "required": true
+                            },
+                            "vehicleLoanDocuments.vehicleLoanDocuments.fileId": {
+                                "required": true
+                            },
                             "VehicleRouteDetails.vehicleRouteDetails.routeFrom": {
                                 "required": true
                             },
