@@ -400,6 +400,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
             model.siteCode = SessionStore.getGlobalSetting("siteCode");
             model.customer=model.customer || {};
             model.applicant=model.applicant||{};
+            model.temp=model.temp||{};
             model.review = model.review|| {};
             if (_.hasIn(model, 'loanAccount')){
                 $log.info('Printing Loan Account');
@@ -475,6 +476,29 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     });
             }
 
+            if (_.hasIn(model, 'loanAccount.loanCustomerRelations') &&
+                model.loanAccount.loanCustomerRelations != null &&
+                model.loanAccount.loanCustomerRelations.length > 0) {
+                var lcr = model.loanAccount.loanCustomerRelations;
+                var idArr = [];
+                for (var i = 0; i < lcr.length; i++) {
+                    idArr.push(lcr[i].customerId);
+                }
+                Queries.getCustomerBasicDetails({
+                        'ids': idArr
+                    })
+                    .then(function(result) {
+                        if (result && result.ids) {
+                            for (var i = 0; i < lcr.length; i++) {
+                                var cust = result.ids[lcr[i].customerId];
+                                if (cust) {
+                                    lcr[i].name = cust.first_name;
+                                }
+                            }
+                        }
+                    });
+            }
+
             BundleManager.broadcastEvent('loan-account-loaded', {loanAccount: model.loanAccount});
         },
         offline: false,
@@ -494,6 +518,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         addToRelation = false;
                         if (params.customer.urnNo)
                             model.loanAccount.loanCustomerRelations[i].urn =params.customer.urnNo;
+                            model.loanAccount.loanCustomerRelations[i].name =params.customer.firstName;
                         break;
                     }
                 }
@@ -502,7 +527,8 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     model.loanAccount.loanCustomerRelations.push({
                         'customerId': params.customer.id,
                         'relation': "Applicant",
-                        'urn':params.customer.urnNo
+                        'urn':params.customer.urnNo,
+                        'name':params.customer.firstName
                     });
                     model.loanAccount.applicant = params.customer.urnNo;              
                 }
@@ -523,6 +549,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         addToRelation = false;
                         if (params.customer.urnNo)
                             model.loanAccount.loanCustomerRelations[i].urn =params.customer.urnNo;
+                            model.loanAccount.loanCustomerRelations[i].name =params.customer.firstName;
                         break;
                     }
                 }
@@ -531,7 +558,8 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     model.loanAccount.loanCustomerRelations.push({
                         'customerId': params.customer.id,
                         'relation': "Co-Applicant",
-                        'urn':params.customer.urnNo
+                        'urn':params.customer.urnNo,
+                        'name':params.customer.firstName
                     })
                 }
             },
@@ -565,6 +593,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         addToRelation = false;
                         if (params.customer.urnNo)
                             model.loanAccount.loanCustomerRelations[i].urn =params.customer.urnNo;
+                            model.loanAccount.loanCustomerRelations[i].name =params.customer.firstName;
                         break;
                     }
                 }
@@ -573,7 +602,8 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     model.loanAccount.loanCustomerRelations.push({
                         'customerId': params.customer.id,
                         'relation': "Guarantor",
-                        'urn': params.customer.urnNo
+                        'urn': params.customer.urnNo,
+                        'name':params.customer.firstName
                     })
                 };
 
@@ -1073,6 +1103,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     type: "array",
                     add: null,
                     remove: null,
+                    startEmpty: true,
                     title: "LOAN_CUSTOMER_RELATIONS",
                     items: [{
                         key: "loanAccount.loanCustomerRelations[].customerId",
@@ -2083,7 +2114,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 },
                 {
                     "key": "loanAccount.securityEmiRequired",
-                    'enumCode': "decisionmaker",
+                    'enumCode': "DECISIONMAKER",
                     'type': "select",
                     "title": "SECURITY_EMI_REQUIRED",
                     // readonly:true,
@@ -2559,7 +2590,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 Utils.confirm("Are You Sure?")
                     .then(
                         function(){
-
+                            model.temp.loanCustomerRelations = model.loanAccount.loanCustomerRelations;
                             var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                             reqData.loanAccount.status = '';
                             reqData.loanProcessAction = "SAVE";
@@ -2587,6 +2618,15 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
 
                                         reqData.lead.leadStatus = "Complete";
                                         LeadHelper.proceedData(reqData)
+                                    }
+                                    if(model.temp.loanCustomerRelations && model.temp.loanCustomerRelations.length){
+                                        for(i in model.temp.loanCustomerRelations){
+                                            for(j in model.loanAccount.loanCustomerRelations){
+                                                if(model.temp.loanCustomerRelations[i].customerId == model.loanAccount.loanCustomerRelations[i].customerId ){
+                                                    model.loanAccount.loanCustomerRelations[i].name = model.temp.loanCustomerRelations[i].name;
+                                                }
+                                            }
+                                        }
                                     }
                                 }, function(httpRes){
                                     PageHelper.showErrors(httpRes);

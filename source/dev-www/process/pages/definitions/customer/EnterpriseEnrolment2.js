@@ -2598,7 +2598,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 key: "customer.fixedAssetsMachinaries[].isTheMachineHypothecated",
                                 title:"IS_THE_MACHINE_HYPOTHECATED",
                                 type: "radios",
-                                enumCode: "decisionmaker",
+                                enumCode: "DECISIONMAKER",
                                 onChange: function(modelValue, form, model, formCtrl, event) {
                                     if (modelValue && modelValue.toLowerCase() === 'no')
                                         model.customer.fixedAssetsMachinaries[form.arrayIndex].hypothecatedTo = null;
@@ -2705,7 +2705,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 key: "customer.fixedAssetsMachinaries[].isTheMachineHypothecated",
                                 title:"IS_THE_MACHINE_HYPOTHECATED",
                                 type: "radios",
-                                enumCode: "decisionmaker"
+                                enumCode: "DECISIONMAKER"
                             },
                             {
                                 key: "customer.fixedAssetsMachinaries[].hypothecatedTo",
@@ -2910,7 +2910,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     enumCode: "decisionmaker",
                 }, {
                     key: "customer.customerAttitudeToKinara",
-                    title: "CUSTOMER_ATTITUDE_TO_KINARA",
+                    title: "CUSTOMER_ATTITUDE_TO_BANK",
                     type: "string",
                     required: false,
                     enumCode: "status_scale_2"
@@ -3522,7 +3522,9 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         }
                     }
                     else
+                    {
                         commercialCheckFailed = true;
+                    }
                     if(commercialCheckFailed && model.customer.customerBankAccounts && model.customer.customerBankAccounts.length>0){
                         for (var i = model.customer.customerBankAccounts.length - 1; i >= 0; i--) {
                             if(model.customer.customerBankAccounts[i].accountType == 'OD' || model.customer.customerBankAccounts[i].accountType == 'CC'){

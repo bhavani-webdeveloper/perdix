@@ -59,8 +59,14 @@ irf.models.factory('Enrollment',function($resource,$httpParamSerializer,BASE_URL
         },
         update:{
             method:'PUT',
-            url:endpoint+'/:service'
+            url:endpoint+'/:service'   
         },
+
+        houseHoldLink:{
+            method:'POST',
+            url:endpoint+'/linkhousehold'
+        },
+
         post:{
             method:'POST',
             url:endpoint+'/:service/:format',
@@ -310,11 +316,22 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
                     model.customer.familyMembers[i].age = moment().diff(moment(model.customer.familyMembers[i].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                 }
                 var family= model.customer.familyMembers[i];
-                family.familyMemberFirstName=Utils.getFullName(family.familyMemberFirstName,family.familyMemberMiddleName,family.familyMemberLastName);
+                family.familyMemberFullName=Utils.getFullName(family.familyMemberFirstName,family.familyMemberMiddleName,family.familyMemberLastName);
             }
         }
 
-
+       
+        model.customer.idAndBcCustId = model.customer.id + ' / ' + model.customer.bcCustId;
+        model.customer.firstName = Utils.getFullName(model.customer.firstName, model.customer.middleName, model.customer.lastName);
+        model.customer.middleName = "";
+        model.customer.lastName = "";
+        model.customer.fatherFirstName = Utils.getFullName(model.customer.fatherFirstName, model.customer.fatherMiddleName, model.customer.fatherLastName);
+        model.customer.fatherMiddleName = "";
+        model.customer.fatherLastName = "";
+        model.customer.spouseFirstName = Utils.getFullName(model.customer.spouseFirstName, model.customer.spouseMiddleName, model.customer.spouseLastName);
+        model.customer.spouseMiddleName = "";
+        model.customer.spouseLastName = "";
+        
 
         Utils.removeNulls(model,true);
         return model;
@@ -486,8 +503,8 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
         model.customer.street = aadhaarData.street;
         model.customer.locality = aadhaarData.loc;
         model.customer.villageName = aadhaarData.vtc;
-        model.customer.district = aadhaarData.dist;
-        model.customer.state = aadhaarData.state;
+        //model.customer.district = aadhaarData.dist;
+        //model.customer.state = aadhaarData.state;
         model.customer.pincode = aadhaarData.pc;
         model.customer.postOffice = aadhaarData.po;
         if (aadhaarData.dob) {

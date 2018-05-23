@@ -132,16 +132,12 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
 
                     var defaultAccountPromise = Queries.getBankAccountsByPartnerForLoanRepay("Kinara").then(function(res){
                         var records = res.body;
-
                         if(records && _.isArray(records) && records.length > 0){
-
                             var defaultBank = $filter('filter')( records, {default_collection_account : true}, true);
                             if(defaultBank && _.isArray(defaultBank) && defaultBank.length > 0)
                             model.repayment.bankAccountNumber = defaultBank[0].account_number;
                         }
                     });
-
-
 
                     $q.all([promise, p3, p4, defaultAccountPromise])
                         .finally(
@@ -692,6 +688,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             postData.loanCollection.transactionName = model.repayment.transactionName;
                             postData.loanCollection.agentTrxn = false;
                             postData.loanCollection.unapprovedAmount = model.additional.unapprovedAmount;
+                            postData.loanCollection.feeAmount = 0;
 
                             if(model.repayment.id){
                                 if(postData.loanCollection.instrument == 'CASH')

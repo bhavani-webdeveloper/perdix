@@ -1,8 +1,8 @@
 irf.pageCollection.controller(irf.controller("loans.group.GroupDashboard"),
 ['$log', '$scope', 'PageHelper', '$stateParams', 'GroupProcess', 'Groups',
-    'irfStorageService', 'SessionStore', 'PagesDefinition',
+    'irfStorageService', 'SessionStore', 'PagesDefinition', 'formHelper',
 function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
-    irfStorageService, SessionStore, PagesDefinition) {
+    irfStorageService, SessionStore, PagesDefinition, formHelper) {
     $scope.$templateUrl = "process/pages/templates/Page.Dashboard.html";
 
     PageHelper.clearErrors();
@@ -84,6 +84,14 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
         if (centres && centres.length) {
             for (var i = 0; i < centres.length; i++) {
                 centreId.push(centres[i].centreId);
+            }
+        }
+        var banks = formHelper.enum('bank').data;
+        var bankId;
+        for (var i = 0; i < banks.length; i++){
+            if(banks[i].name == SessionStore.getBankName()){
+                bankId = banks[i].value;
+                break;
             }
         }
 
@@ -223,8 +231,8 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
         if (checker1) {
             checker1.data = '-';
             GroupProcess.search({
-                'branchId': branchId,
-                'partner': userPartner,
+                'bankId': bankId,
+                'partner': "KGFS",
                 'groupStatus': true,
                 'currentStage': "Checker1"
             }, function(response) {
@@ -235,8 +243,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
         if (checker2) {
             checker2.data = '-';
             GroupProcess.search({
-                'branchId': branchId,
-                'partner': userPartner,
+                'partner': "AXIS",
                 'groupStatus': true,
                 'currentStage': "Checker2"
             }, function(response) {
@@ -247,8 +254,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
         if (checkerGamma1) {
             checkerGamma1.data = '-';
             GroupProcess.search({
-                'branchId': branchId,
-                'partner': userPartner,
+                'partner': "AXIS",
                 'groupStatus': true,
                 'currentStage': "Checker1"
             }, function(response) {
@@ -259,8 +265,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
         if (checkerGamma2) {
             checkerGamma2.data = '-';
             GroupProcess.search({
-                'branchId': branchId,
-                'partner': userPartner,
+                'partner': "KGFS",
                 'groupStatus': true,
                 'currentStage': "Checker2"
             }, function(response) {
@@ -283,8 +288,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
         if (checker3) {
             checker3.data = '-';
             GroupProcess.search({
-                'branchId': branchId,
-                'partner': userPartner,
+                'partner': "AXIS",
                 'groupStatus': true,
                 'currentStage': "Checker3"
             }, function(response) {
@@ -295,8 +299,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
         if (checker4) {
             checker4.data = '-';
             GroupProcess.search({
-                'branchId': branchId,
-                'partner': userPartner,
+                'partner': "AXIS",
                 'groupStatus': true,
                 'currentStage': "Checker4"
             }, function(response) {

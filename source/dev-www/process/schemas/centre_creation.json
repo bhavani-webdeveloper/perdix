@@ -9,7 +9,6 @@
             "branchId",
             "centreAddress",
             "centreAltitude",
-            "centreCode",
             "centreName"
          ],
          "properties": 
@@ -28,7 +27,7 @@
             },          
             "centreCode": {
                "type": ["string", "null"],
-               "title": "CENTRE_CODE1"
+               "title": "CENTRE_CODE_"
             },
             "centreId": {
                "type": ["object", "null"],
@@ -36,7 +35,7 @@
             },
             "centreGpsCaptureDate": {
                   "type": ["string", "null"],
-                  "title": "GPS_CAPTURE_DATE"
+                  "title": "CENTRE_CREATION_DATE"
             },
             "centreLeaderUrn": {
                "type": ["string", "null"],
@@ -94,8 +93,17 @@
                "type": ["object", "null"],
                "title": "WEEEKLY_MEETING_TIME"
             },
+             "fortnightlyMeetingDay": {
+               "type": ["string", "null"],
+               "title": "FORTNIGHTLY_MEETING_DAY_"
+            },
+            "fortnightlyMeetingTime": {
+               "type": ["object", "null"],
+               "title": "FORTNIGHTLY_MEETING_TIME"
+            },
             "pincode": {
-                "type": ["integer","null"]
+                "type": ["integer","null"],
+                "title": "PINCODE"
             },
             "state": {
               "type": ["string","null"],
@@ -115,6 +123,10 @@
             "locality": {
               "type": ["string","null"],
               "title": "LOCALITY"
+            },
+            "taluk": {
+              "type": ["string","null"],
+              "title": "TALUK"
             }
          }
    }

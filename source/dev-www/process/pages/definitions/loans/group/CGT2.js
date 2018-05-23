@@ -129,6 +129,11 @@ define({
                     "title": "START_CGT2",
                     "type":"button",
                     "onClick":"actions.startCGT2(model,form)"   
+                },{
+                    "key": "group.cgtDate2",
+                    "title": "CGT2 Started",
+                    "condition":"model.group.cgtDate2",
+                    "readonly":true
                 }]
 
             },{
@@ -172,7 +177,12 @@ define({
                     key: "group.cgt2Remarks",
                     type: "textarea",
                     required: true
-                },]
+                },{
+                    "key": "group.cgtEndDate2",
+                    "title": "CGT2 Ended",
+                    "condition":"model.group.cgtEndDate2",
+                    "readonly":true
+                }]
             }, { 
                 "type": "box",
                 "title": "GROUP_MEMBERS",

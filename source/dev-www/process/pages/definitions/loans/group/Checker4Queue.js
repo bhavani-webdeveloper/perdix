@@ -28,8 +28,8 @@ define({
 				if(userRole && userRole.accessLevel && userRole.accessLevel === 5){
 					model.fullAccess = true;
 				}
-				model.partner = SessionStore.session.partnerCode;
-				model.isPartnerChangeAllowed = GroupProcess.hasPartnerCodeAccess(model.partner);
+				model.partner = "AXIS";
+				model.isPartnerChangeAllowed = false;
 				$log.info("Checker4 Queue got initialized");
 			},
 			definition: {

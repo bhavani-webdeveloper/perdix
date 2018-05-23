@@ -38,7 +38,7 @@ irf.pageCollection.factory("InventoryHelper", ["$log", "$q", "Inventory", 'PageH
                 res.action = "PROCEED";
                 Inventory.updateInventory(res, function(res, headers) {
                     PageHelper.hideLoader();
-                    PageHelper.showProgress('inventory', 'Done. inventory updated with ID: ' + res.inventoryTrackerDto.id + ' and Batch Number:' + res.inventoryTrackerDto.batchNumber, 5000);
+                    PageHelper.showProgress('inventory', 'Done. Data updated with ID: ' + res.inventoryTrackerDto.id + ' and Batch Number:' + res.inventoryTrackerDto.batchNumber, 5000);
                     deferred.resolve(res);
                 }, function(res, headers) {
                     PageHelper.hideLoader();
@@ -70,7 +70,7 @@ irf.pageCollection.factory("InventoryHelper", ["$log", "$q", "Inventory", 'PageH
 */
                 Inventory.updateInventory(res, function(res, headers) {
                     PageHelper.hideLoader();
-                    PageHelper.showProgress('inventory', 'Done. inventory updated with ID: ' + res.inventoryTrackerDto.id + ' and Batch Number:' + res.inventoryTrackerDto.batchNumber, 5000);
+                    PageHelper.showProgress('inventory', 'Done. Data updated with ID: ' + res.inventoryTrackerDto.id + ' and Batch Number:' + res.inventoryTrackerDto.batchNumber, 5000);
                     deferred.resolve(res);
                 }, function(res, headers) {
                     PageHelper.hideLoader();

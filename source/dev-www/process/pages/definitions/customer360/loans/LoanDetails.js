@@ -187,11 +187,11 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                                             }
                                                         } else if (data.transactionName == 'Fee Charge'){
                                                             var m = $filter('filter')(model.feesFormMappingList, {fee_category:data.param1, fee_description: data.description, invoice_type: "Fee Charge"});
-                                                            if (m.length==0){
+                                                            if (m && m.length==0){
                                                                 m = $filter('filter')(model.feesFormMappingList, {fee_category:data.param1, fee_description: "ALL", invoice_type: "Fee Charge"});
                                                             }
 
-                                                            if (m.length>0){
+                                                            if (m && m.length>0){
                                                                  recordStr = deriveRecordStr(m[0].record_id_format, data);
                                                                 return Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=" + m[0].form_name + "&record_id=" + recordStr);    
                                                             }
@@ -268,10 +268,10 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                                         fee_description: value.description,
                                                         invoice_type: "Fee Charge"
                                                     });
-                                                    if (m.length==0){
+                                                    if (m && m.length==0){
                                                         m = $filter('filter')(model.feesFormMappingList, {fee_category:value.param1, fee_description: "ALL", invoice_type: "Fee Charge"});
                                                     }
-                                                    if (m.length > 0) {
+                                                    if (m && m.length > 0) {
                                                         isapplicable = true;
                                                     }
                                                 }
@@ -1127,6 +1127,78 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                     ]
                 },
                 {
+                    type: "box",
+                    "condition": "model.siteCode=='KGFS'",
+                    "colClass": "col-sm-12",
+                    title: "Disbursement Repayment Scheduled",
+                    "items": [{
+                        "type": "section",
+                        "htmlClass": "col-sm-12",
+                        "items": [{
+                            type: "tableview",
+                            htmlClass: "table-striped",
+                            listStyle: "table",
+                            key: "loanAccount.newLoanDemandSchedules",
+                            title: "",
+                            selectable: false,
+                            expandable: true,
+                            paginate: false,
+                            searching: false,
+                            getColumns: function() {
+                                return [{
+                                    title: 'Scheduled Date',
+                                    data: 'scheduleDate',
+                                    render: function(data, type, full, meta) {
+                                        return (moment(data).format("DD-MMM-YYYY"));
+                                    }
+                                }, {
+                                    title: 'INSTALLMENT_AMOUNT',
+                                    data: 'installmentAmountInPaisa',
+                                    render: function(data, type, full, meta) {
+                                        if (data) {
+                                            data = data / 100;
+                                            return '<i class="fa fa-inr"></i> ' + data;
+                                        }else{
+                                            return data
+                                        }  
+                                    }
+                                }, {
+                                    title: 'Pending Amount',
+                                    data: 'pendingAmountInPaisa',
+                                    render: function(data, type, full, meta) {
+                                        if (data) {
+                                            data = data / 100
+                                            return '<i class="fa fa-inr"></i> ' + data; 
+                                        }else{
+                                            return data
+                                        }                                          
+                                    }
+                                }, {
+                                    title: 'Repaid Amount',
+                                    data: 'repaymentAmountInPaisa',
+                                    render: function(data, type, full, meta) {
+                                        if (data) {
+                                            data = data / 100;
+                                            return '<i class="fa fa-inr"></i> ' + data;
+                                        }else{
+                                            return data
+                                        }     
+                                    }
+                                }, {
+                                    title: 'REPAYMENT_TYPE',
+                                    data: 'repaymentType'
+                                }, {
+                                    title: 'LAST_REPAYMENT_DATE',
+                                    data: 'repaymentDate'
+                                }]
+                            },
+                            getActions: function(item) {
+                                return [];
+                            }
+                        }]
+                    }]
+                },
+                {
                     "type": "box",
                     "colClass": "col-sm-12",
                     "title": "REPAYMENT_SCHEDULE",
@@ -1143,6 +1215,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                         },
                         ] // END of box items
                 },
+                
                 {
                     "type": "box",
                     "colClass": "col-sm-12",
@@ -1574,13 +1647,15 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                             }]
                         }]
                     }]
-                }, {
+                },
+
+                {
                     "type": "box",
                     "title": "LOAN_DOCUMENTS",
                     "items": [{
                         "type": "fieldset",
                         "title": "EXISTING_LOAN_DOCUMENTS",
-                        "condition": "!model.loanAccount.loanType == 'JLG'",
+                        "condition": "model.loanAccount.loanType != 'JLG'",
                         "items": [{
                             "type": "array",
                             "required":false,
@@ -1608,7 +1683,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                     }, {
                         "type": "fieldset",
                         "title": "ADD_LOAN_DOCUMENTS",
-                        "condition": "!model.loanAccount.loanType == 'JLG'",
+                        "condition": "model.loanAccount.loanType != 'JLG'",
                         "items": [{
                             "type": "array",
                             "required":false,
@@ -1617,16 +1692,6 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                             "startEmpty": true,
                             "titleExpr": "model.loanDocuments.newLoanDocuments[arrayIndex].document",
                             "items": [
-                                // {
-                                //     "key": "loanDocuments.newLoanDocuments[].document",
-                                //     "title": "DOCUMENT",
-                                //     "type": "string"
-                                // },
-                                // {
-                                //     "key": "loanDocuments.newLoanDocuments[].disbursementId",
-                                //     "title": "DISBURSEMENT_ID",
-                                //     "type": "string"
-                                // },
                                 {
                                     "title": "Upload",
                                     "required":false,
@@ -1636,16 +1701,11 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                     category: "Loan",
                                     subCategory: "DOC1",
                                     notitle: true
-
                                 }
-                                // ,
-                                // {
-                                //     "key": "loanDocuments.newLoanDocuments[].documentStatus",
-                                //     "type": "string"
-                                // }
                             ]
                         }]
-                    },{
+                    },
+                    {
                         "title": "Loan Doument Download",
                         "key": "loanAccount.applicationFileId",
                         "condition": "model.loanAccount.loanType == 'JLG'",

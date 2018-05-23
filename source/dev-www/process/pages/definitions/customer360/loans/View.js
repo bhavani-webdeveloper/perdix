@@ -109,7 +109,7 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                                         })
                                     },
                                     isApplicable: function(item, index){
-                                        return true;
+                                        return false;
                                     }
                                 },
                                  {
@@ -122,7 +122,7 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                                         })
                                     },
                                     isApplicable: function(item, index){
-                                        return true;
+                                        return false;
                                     }
                                 }, {
                                     name: "FREEZE_ACCOUNT",
@@ -133,7 +133,7 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                                         })
                                     },
                                     isApplicable: function(item, index){
-                                        return true;
+                                        return false;
                                     }
                                 },
                             ];

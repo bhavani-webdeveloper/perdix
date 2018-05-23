@@ -153,6 +153,7 @@ define({
                         groupId: groupId
                     }, function(response, headersGetter) {
                         model.group = _.cloneDeep(response);
+                        model.group.branchId = model.group.branchId || SessionStore.getCurrentBranch().branchId;
                         fixData(model);
                         if (model.group.jlgGroupMembers.length > 0) {
                             fillNames(model).then(function(m) {
@@ -370,6 +371,8 @@ define({
                             $log.info("Hi Selected");
                             var familyMembers = [];
                             model.group.jlgGroupMembers[context.arrayIndex].relation = "Father";
+                            model.group.jlgGroupMembers[context.arrayIndex].witnessFirstName = "";
+                            model.group.jlgGroupMembers[context.arrayIndex].witnessRelationship= "";
                             Enrollment.getCustomerById({id:valueObj.customerId}).$promise
                                  .then(function(res){
                                  model.group.jlgGroupMembers[context.arrayIndex].maritalStatus = res.maritalStatus;
@@ -417,6 +420,7 @@ define({
                         "key": "group.jlgGroupMembers[].outStandingLoanAmount",
                         "condition":"model.group.partnerCode=='AXIS'",
                         "type": "amount",
+                        "required":true,
                         "title": "OUTSTANDING_LOAN_AMOUNT"
                     },{
                         "key": "group.jlgGroupMembers[].loanAmount",
@@ -481,7 +485,7 @@ define({
                             var familyMembers = [];
                             if(model.group.jlgGroupMembers[context.arrayIndex].familyMembers)
                             for (var idx = 0; idx < model.group.jlgGroupMembers[context.arrayIndex].familyMembers.length; idx++){
-                                if(model.group.jlgGroupMembers[context.arrayIndex].familyMembers[idx].relationShip != 'self') {
+                                if(model.group.jlgGroupMembers[context.arrayIndex].familyMembers[idx].name != model.group.jlgGroupMembers[context.arrayIndex].firstName) {
                                     familyMembers.push(model.group.jlgGroupMembers[context.arrayIndex].familyMembers[idx]);
                                 }
                             }
@@ -513,7 +517,7 @@ define({
                             var familyMembers = [];
                             if(model.group.jlgGroupMembers[context.arrayIndex].familyMembers)
                             for (var idx = 0; idx < model.group.jlgGroupMembers[context.arrayIndex].familyMembers.length; idx++){
-                                if(model.group.jlgGroupMembers[context.arrayIndex].familyMembers[idx].relationShip != 'self') {
+                                if(model.group.jlgGroupMembers[context.arrayIndex].familyMembers[idx].name != model.group.jlgGroupMembers[context.arrayIndex].firstName) {
                                     familyMembers.push(model.group.jlgGroupMembers[context.arrayIndex].familyMembers[idx]);
                                 }
                             }

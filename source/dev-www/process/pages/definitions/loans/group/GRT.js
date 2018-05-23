@@ -176,9 +176,13 @@ define({
                     "key": "group.Cgtbutton",
                     "title": "START_GRT",
                     "type":"button",
-                    "onClick":"actions.startGRT(model,form)"   
+                    "onClick":"actions.startGRT(model,form)" 
+                },{
+                    "key": "group.grtDate",
+                    "title": "GRT Started",
+                    "condition":"model.group.grtDate",
+                    "readonly":true
                 }]
-
             }, {
                 "type": "box",
                 "title": "END_GRT",
@@ -259,6 +263,11 @@ define({
                     "key": "group.grtRemarks",
                     "title": "GRT_REMARKS",
                     "type": "textarea"
+                },{
+                    "key": "group.grtEndDate",
+                    "title": "GRT Ended",
+                    "condition":"model.group.grtEndDate",
+                    "readonly":true
                 }]
             }, {
                 "type": "box",
@@ -746,7 +755,7 @@ define({
                         "onClick": function(model, form, schemaForm, event) {
                             Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=app_Loan&record_id=" + model.group.jlgGroupMembers[event.arrayIndex].loanAccount.id);
                         }
-                    }, {
+                    },{
                         "type": "button",
                         "key": "group.jlgGroupMembers[]",
                         condition: "model.group.partnerCode === 'AXIS'",

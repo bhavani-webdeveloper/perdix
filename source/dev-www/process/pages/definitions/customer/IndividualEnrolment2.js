@@ -1011,7 +1011,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 },
                                 {
                                     "key": "customer.existingLoan",
-                                    "title": "EXISTING_LOAN",
+                                    "title": "EXISTING_LOAN_FROM_BANK",
                                     "type": "radios",
                                     enumCode:"decisionmaker",
                                     condition:"model._bundlePageObj.pageClass=='applicant'"

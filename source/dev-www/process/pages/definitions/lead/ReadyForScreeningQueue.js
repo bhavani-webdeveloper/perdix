@@ -222,7 +222,7 @@ irf.pageCollection.factory(irf.page("lead.ReadyForScreeningQueue"), ["$log", "fo
 								});
 							},
 							isApplicable: function(item, index) {
-								return siteCode !== 'sambandh' ? true : false;
+								return ((siteCode !== 'sambandh')&&(siteCode !== 'KGFS')) ? true : false;
 							}
 						},
 						{
@@ -233,15 +233,24 @@ irf.pageCollection.factory(irf.page("lead.ReadyForScreeningQueue"), ["$log", "fo
 								entityManager.setModel('lead.LeadGeneration', {
 									_request: item
 								});
-								$state.go("Page.Engine", {
-									pageName: "customer.IndividualEnrollment3",
-									pageData: {
-										lead_id: item.id
-									}
-								});
+								if (siteCode == 'sambandh') {
+									$state.go("Page.Engine", {
+										pageName: "customer.IndividualEnrollment3",
+										pageData: {
+											lead_id: item.id
+										}
+									});
+								} else if (siteCode == 'KGFS') {
+									$state.go("Page.Engine", {
+										pageName: "ProfileInformation",
+										pageData: {
+											lead_id: item.id
+										}
+									});
+								}	
 							},
 							isApplicable: function(item, index) {
-								return siteCode == 'sambandh' ? true : false;
+								return ((siteCode == 'sambandh')||(siteCode =='KGFS'))? true : false;
 							}
 						},
 						{
@@ -258,7 +267,6 @@ irf.pageCollection.factory(irf.page("lead.ReadyForScreeningQueue"), ["$log", "fo
 								});
 							},
 							isApplicable: function(item, index) {
-
 								return true;
 							}
 						}];

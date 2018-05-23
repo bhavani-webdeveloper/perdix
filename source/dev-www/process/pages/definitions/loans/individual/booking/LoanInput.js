@@ -730,7 +730,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 key:"loanAccount.securityEmiRequired",
                                 type:"select",
                                 required: true,
-                                enumCode: "decisionmaker"
+                                'enumCode': "DECISIONMAKER",
                             },
                             {
                                 key:"loanAccount.processingFeePercentage",
@@ -1187,7 +1187,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 key:"loanAccount.securityEmiRequired",
                                 type:"select",
                                 required: true,
-                                enumCode: "decisionmaker"
+                                'enumCode': "DECISIONMAKER",
                             },
                             {
                                 key:"loanAccount.processingFeePercentage",
@@ -2519,6 +2519,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 },
                 save: function(model, formCtrl, form, $event){
                     $log.info("Inside save()");
+
+                    if (!validateForm(form)){
+                        return;
+                    }
+                    
                     PageHelper.clearErrors();
                     if (!_.hasIn(model.loanAccount, 'loanAmountRequested') || _.isNull(model.loanAccount.loanAmountRequested)){
                         model.loanAccount.loanAmountRequested = model.loanAccount.loanAmount;

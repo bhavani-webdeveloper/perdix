@@ -128,6 +128,11 @@ define({
                     "title": "START_CGT3",
                     "type":"button",
                     "onClick":"actions.startCGT3(model,form)"   
+                },{
+                    "key": "group.cgtDate3",
+                    "title": "CGT3 Started",
+                    "condition":"model.group.cgtDate3",
+                    "readonly":true
                 }]
             },{
                 "type": "box",
@@ -170,7 +175,12 @@ define({
                     key: "group.cgt3Remarks",
                     type: "textarea",
                     required: true
-                },]
+                },{
+                    "key": "group.cgtEndDate3",
+                    "title": "CGT3 Ended",
+                    "condition":"model.group.cgtEndDate3",
+                    "readonly":true
+                }]
             }, { 
                 "type": "box",
                 "title": "GROUP_MEMBERS",

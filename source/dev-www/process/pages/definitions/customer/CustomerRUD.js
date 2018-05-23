@@ -1,9 +1,8 @@
 irf.pageCollection.factory("Pages__CustomerRUD",
-    ["$log", "$q", "Enrollment", 'PageHelper', 'irfProgressMessage', '$stateParams', '$state',
+    ["$log", "$q", "Enrollment","Queries", 'PageHelper', 'irfProgressMessage', '$stateParams', '$state',
         'formHelper', "BASE_URL", "$window", "SessionStore", "Utils", "EnrollmentHelper",
-        function ($log, $q, Enrollment, PageHelper, irfProgressMessage, $stateParams, $state,
+        function ($log, $q, Enrollment,Queries,PageHelper, irfProgressMessage, $stateParams, $state,
                   formHelper, BASE_URL, $window, SessionStore, Utils, EnrollmentHelper) {
-
             return {
                 "id": "CustomerRUD",
                 "type": "schema-form",
@@ -41,7 +40,6 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                             pageId: null
                         });
                     });
-
                 },
                 form: [
                     {
@@ -84,27 +82,23 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                 key: "customer.centreId",
                                 type: "select",
                                 "enumCode": "centre",
-                                "x-schema-form": {
-                                    "type": "select",
-                                    "parentEnumCode": "branch_id",
-                                    "parentValueExpr": "model.branch",
-                                    "screenFilter": true
-                                }
+                                "parentEnumCode": "branch_id",
+                                "parentValueExpr": "model.customer.customerBranchId",
                             },
                             {
                                 key: "customer.enrolledAs",
-                                type: "radios"
+                                type: "radios",
+                                "readonly":true
                             },
                             {
                                 key: "customer.firstName",
                                 "readonly":true,
                                 title: "FULL_NAME"
                             },
-
-
                             {
                                 key: "customer.gender",
-                                type: "radios"
+                                type: "radios",
+                                "readonly":true,
                             },
                             {
                                 key: "customer.age",
@@ -137,11 +131,12 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                             },
                             {
                                 key: "customer.maritalStatus",
+                                "readonly":true,
                                 type: "select"
                             },
                             {
                                 key: "customer.spouseFirstName",
-                                title: "SPOUSE_FULL_NAME",
+                                title: "Spouse Full name",
                                 condition: "model.customer.maritalStatus==='MARRIED'",
                                 type: "qrcode",
                                 onCapture: function(result, model, form) {
@@ -155,14 +150,16 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                         model.customer.spouseDateOfBirth = aadhaarData.yob + '-01-01';
                                     }
                                 }
-                            }, {
+                            },
+                            {
                                 key: "customer.spouseDateOfBirth",
                                 type: "date",
                                 condition: "model.customer.maritalStatus==='MARRIED'",
                                 "onChange": function(modelValue, form, model) {
                                     if (model.customer.spouseDateOfBirth) {}
                                 }
-                            }, {
+                            }, 
+                            {
                                 key: "customer.udf.userDefinedFieldValues.udf1",
                                 condition: "model.customer.maritalStatus==='MARRIED'",
                                 title: "SPOUSE_LOAN_CONSENT",
@@ -170,9 +167,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                 "schema":{
                                     "default":false
                                 }
-
                             }
-
                         ]
                     }, {
                         "type": "box",
@@ -181,7 +176,6 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                             type: "fieldset",
                             title: "CUSTOMER_RESIDENTIAL_ADDRESS",
                             items: [
-
                                 "customer.doorNo",
                                 "customer.street",
                                 "customer.locality",
@@ -240,16 +234,59 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                 "key": "customer.aadhaarNo",
                                 type: "qrcode",
                                 onChange: "actions.setProofs(model)",
-                                onCapture: EnrollmentHelper.customerAadhaarOnCapture
+                                "condition":"model.customer.urnNo",
+                                "readonly":true,
+                                onCapture: function(result, model, form) {
+                                    PageHelper.showLoader();
+                                    var aadhaarData = EnrollmentHelper.customerAadhaarOnCapture(result, model, form);
+                                    Queries.searchPincodes(
+                                        aadhaarData.pc
+                                    ).then(function(response) {
+                                        $log.info(response);
+                                        if (response.body && response.body.length) {
+                                            model.customer.district = response.body[0].district;
+                                            model.customer.state = response.body[0].state;
+                                        }
+                                        PageHelper.hideLoader();
+                                    });
+                                }
+                                //onCapture: EnrollmentHelper.customerAadhaarOnCapture
+                            },{
+                                "key": "customer.aadhaarNo",
+                                type: "qrcode",
+                                "condition":"!model.customer.urnNo",
+                                onChange: "actions.setProofs(model)",
+                                onCapture: function(result, model, form) {
+                                    PageHelper.showLoader();
+                                    var aadhaarData = EnrollmentHelper.customerAadhaarOnCapture(result, model, form);
+                                    Queries.searchPincodes(
+                                        aadhaarData.pc
+                                    ).then(function(response) {
+                                        $log.info(response);
+                                        if (response.body && response.body.length) {
+                                            model.customer.district = response.body[0].district;
+                                            model.customer.state = response.body[0].state;
+                                        }
+                                        PageHelper.hideLoader();
+                                    });
+                                }
+                                //onCapture: EnrollmentHelper.customerAadhaarOnCapture
                             }, {
                                 type: "fieldset",
                                 title: "IDENTITY_PROOF",
                                 items: [{
                                     key: "customer.identityProof",
+                                    "condition":"model.customer.urnNo",
+                                    "readonly":true,
                                     type: "select"
                                 }, {
+                                    key: "customer.identityProof",
+                                    "condition":"!model.customer.urnNo",
+                                    type: "select"
+                                },{
                                     key: "customer.identityProofImageId",
                                     type: "file",
+                                    "readonly":true,
                                     fileType: "image/*",
                                     "viewParams": function(modelValue, form, model) {
                                         return {
@@ -260,6 +297,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                 }, {
                                     key: "customer.identityProofReverseImageId",
                                     type: "file",
+                                    "readonly":true,
                                     fileType: "image/*",
                                     "viewParams": function(modelValue, form, model) {
                                         return {
@@ -270,6 +308,16 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                 }, {
                                     key: "customer.identityProofNo",
                                     type: "barcode",
+                                    "condition":"model.customer.urnNo",
+                                    "readonly":true,
+                                    onCapture: function(result, model, form) {
+                                        $log.info(result);
+                                        model.customer.identityProofNo = result.text;
+                                    }
+                                },{
+                                    key: "customer.identityProofNo",
+                                    type: "barcode",
+                                    "condition":"!model.customer.urnNo",
                                     onCapture: function(result, model, form) {
                                         $log.info(result);
                                         model.customer.identityProofNo = result.text;
@@ -342,9 +390,16 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                 condition: "!model.customer.addressProofSameAsIdProof",
                                 items: [{
                                     key: "customer.addressProof",
-                                    type: "select"
+                                    type: "select",
+                                    "condition":"model.customer.urnNo",
+                                    "readonly":true,
+                                },{
+                                    key: "customer.addressProof",
+                                    type: "select",
+                                    "condition":"!model.customer.urnNo",
                                 }, {
                                     key: "customer.addressProofImageId",
+                                    "readonly":true,
                                     type: "file",
                                     fileType: "image/*",
                                     "viewParams": function(modelValue, form, model) {
@@ -355,6 +410,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                     //"offline": true
                                 }, {
                                     key: "customer.addressProofReverseImageId",
+                                    "readonly":true,
                                     type: "file",
                                     fileType: "image/*",
                                     "viewParams": function(modelValue, form, model) {
@@ -366,6 +422,19 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                 }, {
                                     key: "customer.addressProofNo",
                                     type: "barcode",
+                                    "condition":"model.customer.urnNo",
+                                    "readonly":true,
+                                    onCapture: function(result, model, form) {
+                                        $log.info(result);
+                                        model.customer.addressProofNo = result.text;
+                                    },
+                                    "schema":{
+                                        "pattern":"^[a-zA-Z0-9]*$"
+                                    }
+                                },{
+                                    key: "customer.addressProofNo",
+                                    type: "barcode",
+                                    "condition":"!model.customer.urnNo",
                                     onCapture: function(result, model, form) {
                                         $log.info(result);
                                         model.customer.addressProofNo = result.text;
@@ -558,6 +627,42 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                         },
                         {
                             key: "customer.familyMembers[].gender",
+                            condition:"(model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() === 'self'",
+                            type: "radios",
+                            readonly:true,
+                            title: "T_GENDER"
+                        },
+                        {
+                            key:"customer.familyMembers[].age",
+                            condition:"(model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() === 'self'",
+                            title: "AGE",
+                            type:"number",
+                            readonly:true,
+                            "onChange": function(modelValue, form, model, formCtrl, event) {
+                                if (model.customer.familyMembers[form.arrayIndex].age > 0) {
+                                    if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
+                                        model.customer.familyMembers[form.arrayIndex].dateOfBirth = moment(new Date()).subtract(model.customer.familyMembers[form.arrayIndex].age, 'years').format('YYYY-') + moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, 'YYYY-MM-DD').format('MM-DD');
+                                    } else {
+                                        model.customer.familyMembers[form.arrayIndex].dateOfBirth = moment(new Date()).subtract(model.customer.familyMembers[form.arrayIndex].age, 'years').format('YYYY-MM-DD');
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            key: "customer.familyMembers[].dateOfBirth",
+                            condition:"(model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() === 'self'",
+                            type:"date",
+                            readonly:true,
+                            title: "T_DATEOFBIRTH",
+                            "onChange": function(modelValue, form, model, formCtrl, event) {
+                                if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
+                                    model.customer.familyMembers[form.arrayIndex].age = moment().diff(moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                                }
+                            }
+                        },
+                        {
+                            key: "customer.familyMembers[].gender",
+                            condition:"(model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() != 'self'",
                             type: "radios",
                             title: "T_GENDER"
                         },
@@ -565,6 +670,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                             key:"customer.familyMembers[].age",
                             title: "AGE",
                             type:"number",
+                            condition:"(model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() != 'self'",
                             "onChange": function(modelValue, form, model, formCtrl, event) {
                                 if (model.customer.familyMembers[form.arrayIndex].age > 0) {
                                     if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
@@ -578,6 +684,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                         {
                             key: "customer.familyMembers[].dateOfBirth",
                             type:"date",
+                            condition:"(model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() != 'self'",
                             title: "T_DATEOFBIRTH",
                             "onChange": function(modelValue, form, model, formCtrl, event) {
                                 if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
@@ -593,6 +700,14 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                         {
                             key:"customer.familyMembers[].maritalStatus",
                             type:"select",
+                            readonly:true,
+                            condition:"(model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() === 'self'",
+                            title: "T_MARITAL_STATUS"
+                        },
+                        {
+                            key:"customer.familyMembers[].maritalStatus",
+                            type:"select",
+                            condition:"(model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() != 'self'",
                             title: "T_MARITAL_STATUS"
                         },
                         "customer.familyMembers[].mobilePhone",
@@ -604,7 +719,99 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                 "BAD":"BAD"
                             },
                         },
-                                {
+                        {
+                            "type":"fieldset",
+                            "title":"Enroll URN",
+                             condition: "model.customer.currentStage=='Completed'&& !model.customer.familyMembers[arrayIndex].enrolled && ((model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() != 'self' && (model.customer.familyMembers[arrayIndex].age >= 18) ) ",
+                            "items":[
+                            {
+                                key: "customer.familyMembers[].enrollURN",
+                                "title": "URN_NO",
+                                type: "lov",
+                                "inputMap": {
+                                    "firstName": {
+                                        "key": "customer.firstName",
+                                        "title": "CUSTOMER_NAME"
+                                    },
+                                    "branchName": {
+                                        "key": "customer.kgfsName",
+                                        "type": "select"
+                                    }
+                                },
+                                "outputMap": {
+                                    "urnNo": "customer.familyMembers[arrayIndex].enrollURN",
+                                    "firstName": "customer.familyMembers[arrayIndex].enrollfirstName"
+                                },
+                                "searchHelper": formHelper,
+                                "search": function(inputModel, form) {
+                                    $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                                    var promise = Enrollment.search({
+                                        'branchName': inputModel.branchName || SessionStore.getBranch(),
+                                        'firstName': inputModel.firstName,
+                                    }).$promise;
+                                    return promise;
+                                },
+                                onSelect: function(valueObj, model, context) {
+                                    
+                                },
+                                getListDisplayItem: function(data, index) {
+                                    return [
+                                        [data.firstName, data.fatherFirstName].join(' '),
+                                        data.id
+                                    ];
+                                }
+                            },
+                            {
+                                key: "customer.familyMembers[].enrollfirstName",
+                                "title": "FIRST_NAME",
+                            },
+                            {
+                                key: "customer.familyMembers[].enroll",
+                                //"condition":"model.customer.familyMembers[arrayIndex].enrollURN",
+                                type: "button",
+                                title: "Link To Household",
+                                onClick: function(model, formCtrl, context) {
+                                    PageHelper.showLoader();
+                                    var request={
+                                        "alert": false,
+                                        "familySequenceId": model.customer.familyMembers[context.arrayIndex].familySequenceId,
+                                        "primaryUrn": model.customer.urnNo,
+                                        "secondaryUrn": model.customer.familyMembers[context.arrayIndex].enrollURN
+                                    }
+                                   
+                                    Enrollment.houseHoldLink(request).$promise.then(function(response){
+                                       PageHelper.hideLoader();
+                                       $log.info("inside Response");
+                                       $log.info(response);
+                                       PageHelper.showProgress("houseHoldLink", "houseHoldLink success" + '  ' +response.message, 3000);
+                                    },function(err){
+                                        PageHelper.hideLoader();
+                                        $log.info("inside error");
+                                        $log.info(err);
+                                        PageHelper.showProgress("houseHoldLink", "houseHoldLink Failed" + '  ' +err.data.errors.secondaryUrn[0], 3000);
+                                    });
+                                }
+                            },
+                            ]
+                        },
+                        {
+                            key: "customer.familyMembers[].enroll",
+                            type: "button",
+                            condition: "model.customer.currentStage=='Completed'&& !model.customer.familyMembers[arrayIndex].enrolled && ((model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() != 'self' && (model.customer.familyMembers[arrayIndex].age >= 18) ) ",
+                            title: "Enroll as customer",
+                            onClick: function(model, formCtrl, context) {
+                                model.family = {};
+                                model.family = model.customer;
+                                model.family.familydata = model.customer.familyMembers[context.arrayIndex];
+                                $state.go("Page.Engine", {
+                                    pageName: "ProfileInformation",
+                                    pageId: undefined,
+                                    pageData: model.family
+                                    //pageData:model.customer.familyMembers[context.arrayIndex]
+                                });
+                            }
+                        },
+                        {
                             key:"customer.familyMembers[].incomes",
                             type:"array",
                             startEmpty: true,
@@ -621,13 +828,14 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                 {
                                     key: "customer.familyMembers[].incomes[].monthsPerYear",
                                     "schema":{
-                                        "minimum": 0,
-                                        "maximum": 366,
+                                        "minimum": 1,
+                                        "maximum": 12,
                                     }
                                 }
                             ]
-                        }
-                            ]
+                        },
+                        
+                        ]
                         },
                             {
                                 "type": "fieldset",

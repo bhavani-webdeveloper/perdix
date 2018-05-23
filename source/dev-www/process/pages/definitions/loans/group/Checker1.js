@@ -286,6 +286,11 @@ return {
                                 fileType: "image/*",
                                 "category": "CustomerEnrollment",
                                 "subCategory": "PHOTO",
+                                "viewParams": function(modelValue, form, model,context) {
+                                    return {
+                                        customerId: model.group.jlgGroupMembers[context.arrayIndexes[0]].customer.id
+                                    };
+                                },
                             }]
                         }]
                     }, {
@@ -323,21 +328,26 @@ return {
                                 "fileType": "image/*",
                                 "category": "CustomerEnrollment",
                                 "subCategory": "IDENTITYPROOF",
-                                "section": '<table class="table" id="lightbox-text" style="display: inline;">' +
-                                            '<tbody>' +
-                                            '<tr> <td></td> <td>'+"{{ 'aadhaarNo' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.aadhaarNo}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'IDENTITY_PROOFNO' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.identityProofNo}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'ADDRESS_PROOF_NO' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.addressProofNo}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'CUSTOMER_RESIDENTIAL_ADDRESS' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.addressHtml1}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'VILLAGE_NAME' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.villageName}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'POST_OFFICE' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.postOffice}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'DISTRICT' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.district}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'PIN_CODE' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.pincode}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'MOBILE_PHONE' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.mobilePhone}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'LANDLINE_NO' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.landLineNo}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'ADDRESS_PROOF' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.addressProof}}" + '</td> </tr>' +
-                                            '</tbody>' +
-                                            '</table>',
+                                "viewParams": function(modelValue, form, model,context) {
+                                    return {
+                                        customerId: model.group.jlgGroupMembers[context.arrayIndexes[0]].customer.id
+                                    };
+                                },
+                                "lightboxHtml": '<table class="table" style="margin-bottom:0">' +
+                                    '<tbody ng-init="c = model.group.jlgGroupMembers[arrayIndexes[0]].customer">' +
+                                    '<tr><td>{{ "aadhaarNo" |translate}}</td> <td>{{c.aadhaarNo}}</td> <td rowspan="11">__IMAGE__</td> </tr>' +
+                                    '<tr><td>{{ "IDENTITY_PROOFNO" |translate}}</td> <td>{{c.identityProofNo}}</td> </tr>' +
+                                    '<tr><td>{{ "ADDRESS_PROOF_NO" |translate}}</td> <td>{{c.addressProofNo}}</td> </tr>' +
+                                    '<tr><td>{{ "CUSTOMER_RESIDENTIAL_ADDRESS" |translate}}</td> <td>{{c.addressHtml1}}</td> </tr>' +
+                                    '<tr><td>{{ "VILLAGE_NAME" |translate}}</td> <td>{{c.villageName}}</td> </tr>' +
+                                    '<tr><td>{{ "POST_OFFICE" |translate}}</td> <td>{{c.postOffice}}</td> </tr>' +
+                                    '<tr><td>{{ "DISTRICT" |translate}}</td> <td>{{c.district}}</td> </tr>' +
+                                    '<tr><td>{{ "PIN_CODE" |translate}}</td> <td>{{c.pincode}}</td> </tr>' +
+                                    '<tr><td>{{ "MOBILE_PHONE" |translate}}</td> <td>{{c.mobilePhone}}</td> </tr>' +
+                                    '<tr><td>{{ "LANDLINE_NO" |translate}}</td> <td>{{c.landLineNo}}</td> </tr>' +
+                                    '<tr><td>{{ "ADDRESS_PROOF" |translate}}</td> <td>{{c.addressProof}}</td> </tr>' +
+                                    '</tbody>' +
+                                    '</table>',
                             }, ]
                         }, {
                             "type": "section",
@@ -351,23 +361,28 @@ return {
                                 "key": "group.jlgGroupMembers[].customer.identityProofReverseImageId",
                                 "type": "file",
                                 "fileType": "image/*",
+                                "viewParams": function(modelValue, form, model,context) {
+                                    return {
+                                        customerId: model.group.jlgGroupMembers[context.arrayIndexes[0]].customer.id
+                                    };
+                                },
                                 "category": "CustomerEnrollment",
                                 "subCategory": "IDENTITYPROOF",
-                                "section": '<table class="table" id="lightbox-text" style="display: inline;">' +
-                                            '<tbody>' +
-                                            '<tr> <td></td> <td>'+"{{ 'aadhaarNo' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.aadhaarNo}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'IDENTITY_PROOFNO' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.identityProofNo}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'ADDRESS_PROOF_NO' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.addressProofNo}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'CUSTOMER_RESIDENTIAL_ADDRESS' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.addressHtml1}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'VILLAGE_NAME' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.villageName}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'POST_OFFICE' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.postOffice}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'DISTRICT' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.district}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'PIN_CODE' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.pincode}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'MOBILE_PHONE' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.mobilePhone}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'LANDLINE_NO' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.landLineNo}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'ADDRESS_PROOF' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.addressProof}}" + '</td> </tr>' +
-                                            '</tbody>' +
-                                            '</table>',
+                                "lightboxHtml": '<table class="table" style="margin-bottom:0">' +
+                                    '<tbody ng-init="c = model.group.jlgGroupMembers[arrayIndexes[0]].customer">' +
+                                    '<tr><td>{{ "aadhaarNo" |translate}}</td> <td>{{c.aadhaarNo}}</td> <td rowspan="11">__IMAGE__</td> </tr>' +
+                                    '<tr><td>{{ "IDENTITY_PROOFNO" |translate}}</td> <td>{{c.identityProofNo}}</td> </tr>' +
+                                    '<tr><td>{{ "ADDRESS_PROOF_NO" |translate}}</td> <td>{{c.addressProofNo}}</td> </tr>' +
+                                    '<tr><td>{{ "CUSTOMER_RESIDENTIAL_ADDRESS" |translate}}</td> <td>{{c.addressHtml1}}</td> </tr>' +
+                                    '<tr><td>{{ "VILLAGE_NAME" |translate}}</td> <td>{{c.villageName}}</td> </tr>' +
+                                    '<tr><td>{{ "POST_OFFICE" |translate}}</td> <td>{{c.postOffice}}</td> </tr>' +
+                                    '<tr><td>{{ "DISTRICT" |translate}}</td> <td>{{c.district}}</td> </tr>' +
+                                    '<tr><td>{{ "PIN_CODE" |translate}}</td> <td>{{c.pincode}}</td> </tr>' +
+                                    '<tr><td>{{ "MOBILE_PHONE" |translate}}</td> <td>{{c.mobilePhone}}</td> </tr>' +
+                                    '<tr><td>{{ "LANDLINE_NO" |translate}}</td> <td>{{c.landLineNo}}</td> </tr>' +
+                                    '<tr><td>{{ "ADDRESS_PROOF" |translate}}</td> <td>{{c.addressProof}}</td> </tr>' +
+                                    '</tbody>' +
+                                    '</table>',
                             }]
                         }, ]
                     }, {
@@ -433,22 +448,27 @@ return {
                                 "type": "file",
                                 "fileType": "image/*",
                                 "category": "CustomerEnrollment",
+                                "viewParams": function(modelValue, form, model,context) {
+                                    return {
+                                        customerId: model.group.jlgGroupMembers[context.arrayIndexes[0]].customer.id
+                                    };
+                                },
                                 "subCategory": "ADDRESSPROOF",
-                                "section": '<table class="table" id="lightbox-text" style="display: inline;">' +
-                                            '<tbody>' +
-                                            '<tr> <td></td> <td>'+"{{ 'aadhaarNo' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.aadhaarNo}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'IDENTITY_PROOFNO' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.identityProofNo}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'ADDRESS_PROOF_NO' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.addressProofNo}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'CUSTOMER_RESIDENTIAL_ADDRESS' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.addressHtml1}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'VILLAGE_NAME' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.villageName}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'POST_OFFICE' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.postOffice}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'DISTRICT' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.district}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'PIN_CODE' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.pincode}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'MOBILE_PHONE' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.mobilePhone}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'LANDLINE_NO' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.landLineNo}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'ADDRESS_PROOF' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.addressProof}}" + '</td> </tr>' +
-                                            '</tbody>' +
-                                            '</table>',
+                                "lightboxHtml": '<table class="table" style="margin-bottom:0">' +
+                                    '<tbody ng-init="c = model.group.jlgGroupMembers[arrayIndexes[0]].customer">' +
+                                    '<tr><td>{{ "aadhaarNo" |translate}}</td> <td>{{c.aadhaarNo}}</td> <td rowspan="11">__IMAGE__</td> </tr>' +
+                                    '<tr><td>{{ "IDENTITY_PROOFNO" |translate}}</td> <td>{{c.identityProofNo}}</td> </tr>' +
+                                    '<tr><td>{{ "ADDRESS_PROOF_NO" |translate}}</td> <td>{{c.addressProofNo}}</td> </tr>' +
+                                    '<tr><td>{{ "CUSTOMER_RESIDENTIAL_ADDRESS" |translate}}</td> <td>{{c.addressHtml1}}</td> </tr>' +
+                                    '<tr><td>{{ "VILLAGE_NAME" |translate}}</td> <td>{{c.villageName}}</td> </tr>' +
+                                    '<tr><td>{{ "POST_OFFICE" |translate}}</td> <td>{{c.postOffice}}</td> </tr>' +
+                                    '<tr><td>{{ "DISTRICT" |translate}}</td> <td>{{c.district}}</td> </tr>' +
+                                    '<tr><td>{{ "PIN_CODE" |translate}}</td> <td>{{c.pincode}}</td> </tr>' +
+                                    '<tr><td>{{ "MOBILE_PHONE" |translate}}</td> <td>{{c.mobilePhone}}</td> </tr>' +
+                                    '<tr><td>{{ "LANDLINE_NO" |translate}}</td> <td>{{c.landLineNo}}</td> </tr>' +
+                                    '<tr><td>{{ "ADDRESS_PROOF" |translate}}</td> <td>{{c.addressProof}}</td> </tr>' +
+                                    '</tbody>' +
+                                    '</table>',
                             }, {
                                 "title": "ADDRESS_PROOF_REVERSE_IMAGE_ID",
                                 "key": "group.jlgGroupMembers[].customer.addressProofReverseImageId",
@@ -456,21 +476,26 @@ return {
                                 "fileType": "image/*",
                                 "category": "CustomerEnrollment",
                                 "subCategory": "ADDRESSPROOF",
-                                "section": '<table class="table" id="lightbox-text" style="display: inline;">' +
-                                            '<tbody>' +
-                                            '<tr> <td></td> <td>'+"{{ 'aadhaarNo' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.aadhaarNo}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'IDENTITY_PROOFNO' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.identityProofNo}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'ADDRESS_PROOF_NO' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.addressProofNo}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'CUSTOMER_RESIDENTIAL_ADDRESS' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.addressHtml1}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'VILLAGE_NAME' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.villageName}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'POST_OFFICE' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.postOffice}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'DISTRICT' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.district}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'PIN_CODE' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.pincode}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'MOBILE_PHONE' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.mobilePhone}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'LANDLINE_NO' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.landLineNo}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'ADDRESS_PROOF' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.addressProof}}" + '</td> </tr>' +
-                                            '</tbody>' +
-                                            '</table>',
+                                "viewParams": function(modelValue, form, model,context) {
+                                    return {
+                                        customerId: model.group.jlgGroupMembers[context.arrayIndexes[0]].customer.id
+                                    };
+                                },
+                                "lightboxHtml": '<table class="table" style="margin-bottom:0">' +
+                                    '<tbody ng-init="c = model.group.jlgGroupMembers[arrayIndexes[0]].customer">' +
+                                    '<tr><td>{{ "aadhaarNo" |translate}}</td> <td>{{c.aadhaarNo}}</td> <td rowspan="11">__IMAGE__</td> </tr>' +
+                                    '<tr><td>{{ "IDENTITY_PROOFNO" |translate}}</td> <td>{{c.identityProofNo}}</td> </tr>' +
+                                    '<tr><td>{{ "ADDRESS_PROOF_NO" |translate}}</td> <td>{{c.addressProofNo}}</td> </tr>' +
+                                    '<tr><td>{{ "CUSTOMER_RESIDENTIAL_ADDRESS" |translate}}</td> <td>{{c.addressHtml1}}</td> </tr>' +
+                                    '<tr><td>{{ "VILLAGE_NAME" |translate}}</td> <td>{{c.villageName}}</td> </tr>' +
+                                    '<tr><td>{{ "POST_OFFICE" |translate}}</td> <td>{{c.postOffice}}</td> </tr>' +
+                                    '<tr><td>{{ "DISTRICT" |translate}}</td> <td>{{c.district}}</td> </tr>' +
+                                    '<tr><td>{{ "PIN_CODE" |translate}}</td> <td>{{c.pincode}}</td> </tr>' +
+                                    '<tr><td>{{ "MOBILE_PHONE" |translate}}</td> <td>{{c.mobilePhone}}</td> </tr>' +
+                                    '<tr><td>{{ "LANDLINE_NO" |translate}}</td> <td>{{c.landLineNo}}</td> </tr>' +
+                                    '<tr><td>{{ "ADDRESS_PROOF" |translate}}</td> <td>{{c.addressProof}}</td> </tr>' +
+                                    '</tbody>' +
+                                    '</table>',
                             }]
                         }]
                     }, {
@@ -513,21 +538,26 @@ return {
                                 "fileType": "image/*",
                                 "category": "CustomerEnrollment",
                                 "subCategory": "KYC1",
-                                "section": '<table class="table" id="lightbox-text" style="display: inline;">' +
-                                            '<tbody>' +
-                                            '<tr> <td></td> <td>'+"{{ 'aadhaarNo' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.aadhaarNo}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'IDENTITY_PROOFNO' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.identityProofNo}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'ADDRESS_PROOF_NO' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.addressProofNo}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'CUSTOMER_RESIDENTIAL_ADDRESS' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.addressHtml1}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'VILLAGE_NAME' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.villageName}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'POST_OFFICE' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.postOffice}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'DISTRICT' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.district}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'PIN_CODE' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.pincode}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'MOBILE_PHONE' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.mobilePhone}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'LANDLINE_NO' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.landLineNo}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'ADDRESS_PROOF' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.addressProof}}" + '</td> </tr>' +
-                                            '</tbody>' +
-                                            '</table>',
+                                "viewParams": function(modelValue, form, model,context) {
+                                    return {
+                                        customerId: model.group.jlgGroupMembers[context.arrayIndexes[0]].customer.id
+                                    };
+                                },
+                                "lightboxHtml": '<table class="table" style="margin-bottom:0">' +
+                                    '<tbody ng-init="c = model.group.jlgGroupMembers[arrayIndexes[0]].customer">' +
+                                    '<tr><td>{{ "aadhaarNo" |translate}}</td> <td>{{c.aadhaarNo}}</td> <td rowspan="11">__IMAGE__</td> </tr>' +
+                                    '<tr><td>{{ "IDENTITY_PROOFNO" |translate}}</td> <td>{{c.identityProofNo}}</td> </tr>' +
+                                    '<tr><td>{{ "ADDRESS_PROOF_NO" |translate}}</td> <td>{{c.addressProofNo}}</td> </tr>' +
+                                    '<tr><td>{{ "CUSTOMER_RESIDENTIAL_ADDRESS" |translate}}</td> <td>{{c.addressHtml1}}</td> </tr>' +
+                                    '<tr><td>{{ "VILLAGE_NAME" |translate}}</td> <td>{{c.villageName}}</td> </tr>' +
+                                    '<tr><td>{{ "POST_OFFICE" |translate}}</td> <td>{{c.postOffice}}</td> </tr>' +
+                                    '<tr><td>{{ "DISTRICT" |translate}}</td> <td>{{c.district}}</td> </tr>' +
+                                    '<tr><td>{{ "PIN_CODE" |translate}}</td> <td>{{c.pincode}}</td> </tr>' +
+                                    '<tr><td>{{ "MOBILE_PHONE" |translate}}</td> <td>{{c.mobilePhone}}</td> </tr>' +
+                                    '<tr><td>{{ "LANDLINE_NO" |translate}}</td> <td>{{c.landLineNo}}</td> </tr>' +
+                                    '<tr><td>{{ "ADDRESS_PROOF" |translate}}</td> <td>{{c.addressProof}}</td> </tr>' +
+                                    '</tbody>' +
+                                    '</table>',
                             }, {
                                 key: "group.jlgGroupMembers[].customer.additionalKYCs[].kyc1ReverseImagePath",
                                 "title": "KYC1_PROOF_DOCUMENT_BACK_SIDE",
@@ -535,21 +565,26 @@ return {
                                 "fileType": "image/*",
                                 "category": "CustomerEnrollment",
                                 "subCategory": "KYC1",
-                                "section": '<table class="table" id="lightbox-text" style="display: inline;">' +
-                                            '<tbody>' +
-                                            '<tr> <td></td> <td>'+"{{ 'aadhaarNo' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.aadhaarNo}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'IDENTITY_PROOFNO' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.identityProofNo}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'ADDRESS_PROOF_NO' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.addressProofNo}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'CUSTOMER_RESIDENTIAL_ADDRESS' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.addressHtml1}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'VILLAGE_NAME' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.villageName}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'POST_OFFICE' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.postOffice}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'DISTRICT' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.district}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'PIN_CODE' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.pincode}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'MOBILE_PHONE' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.mobilePhone}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'LANDLINE_NO' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.landLineNo}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'ADDRESS_PROOF' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.addressProof}}" + '</td> </tr>' +
-                                            '</tbody>' +
-                                            '</table>',
+                                "viewParams": function(modelValue, form, model,context) {
+                                    return {
+                                        customerId: model.group.jlgGroupMembers[context.arrayIndexes[0]].customer.id
+                                    };
+                                },
+                                "lightboxHtml": '<table class="table" style="margin-bottom:0">' +
+                                    '<tbody ng-init="c = model.group.jlgGroupMembers[arrayIndexes[0]].customer">' +
+                                    '<tr><td>{{ "aadhaarNo" |translate}}</td> <td>{{c.aadhaarNo}}</td> <td rowspan="11">__IMAGE__</td> </tr>' +
+                                    '<tr><td>{{ "IDENTITY_PROOFNO" |translate}}</td> <td>{{c.identityProofNo}}</td> </tr>' +
+                                    '<tr><td>{{ "ADDRESS_PROOF_NO" |translate}}</td> <td>{{c.addressProofNo}}</td> </tr>' +
+                                    '<tr><td>{{ "CUSTOMER_RESIDENTIAL_ADDRESS" |translate}}</td> <td>{{c.addressHtml1}}</td> </tr>' +
+                                    '<tr><td>{{ "VILLAGE_NAME" |translate}}</td> <td>{{c.villageName}}</td> </tr>' +
+                                    '<tr><td>{{ "POST_OFFICE" |translate}}</td> <td>{{c.postOffice}}</td> </tr>' +
+                                    '<tr><td>{{ "DISTRICT" |translate}}</td> <td>{{c.district}}</td> </tr>' +
+                                    '<tr><td>{{ "PIN_CODE" |translate}}</td> <td>{{c.pincode}}</td> </tr>' +
+                                    '<tr><td>{{ "MOBILE_PHONE" |translate}}</td> <td>{{c.mobilePhone}}</td> </tr>' +
+                                    '<tr><td>{{ "LANDLINE_NO" |translate}}</td> <td>{{c.landLineNo}}</td> </tr>' +
+                                    '<tr><td>{{ "ADDRESS_PROOF" |translate}}</td> <td>{{c.addressProof}}</td> </tr>' +
+                                    '</tbody>' +
+                                    '</table>',
                             }, ]
                         }, {
                             "type": "section",
@@ -575,21 +610,26 @@ return {
                                 "fileType": "image/*",
                                 "category": "CustomerEnrollment",
                                 "subCategory": "KYC1",
-                                "section": '<table class="table" id="lightbox-text" style="display: inline;">' +
-                                            '<tbody>' +
-                                            '<tr> <td></td> <td>'+"{{ 'aadhaarNo' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.aadhaarNo}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'IDENTITY_PROOFNO' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.identityProofNo}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'ADDRESS_PROOF_NO' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.addressProofNo}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'CUSTOMER_RESIDENTIAL_ADDRESS' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.addressHtml1}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'VILLAGE_NAME' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.villageName}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'POST_OFFICE' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.postOffice}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'DISTRICT' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.district}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'PIN_CODE' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.pincode}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'MOBILE_PHONE' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.mobilePhone}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'LANDLINE_NO' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.landLineNo}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'ADDRESS_PROOF' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.addressProof}}" + '</td> </tr>' +
-                                            '</tbody>' +
-                                            '</table>',
+                                "viewParams": function(modelValue, form, model,context) {
+                                    return {
+                                        customerId: model.group.jlgGroupMembers[context.arrayIndexes[0]].customer.id
+                                    };
+                                },
+                                "lightboxHtml": '<table class="table" style="margin-bottom:0">' +
+                                    '<tbody ng-init="c = model.group.jlgGroupMembers[arrayIndexes[0]].customer">' +
+                                    '<tr><td>{{ "aadhaarNo" |translate}}</td> <td>{{c.aadhaarNo}}</td> <td rowspan="11">__IMAGE__</td> </tr>' +
+                                    '<tr><td>{{ "IDENTITY_PROOFNO" |translate}}</td> <td>{{c.identityProofNo}}</td> </tr>' +
+                                    '<tr><td>{{ "ADDRESS_PROOF_NO" |translate}}</td> <td>{{c.addressProofNo}}</td> </tr>' +
+                                    '<tr><td>{{ "CUSTOMER_RESIDENTIAL_ADDRESS" |translate}}</td> <td>{{c.addressHtml1}}</td> </tr>' +
+                                    '<tr><td>{{ "VILLAGE_NAME" |translate}}</td> <td>{{c.villageName}}</td> </tr>' +
+                                    '<tr><td>{{ "POST_OFFICE" |translate}}</td> <td>{{c.postOffice}}</td> </tr>' +
+                                    '<tr><td>{{ "DISTRICT" |translate}}</td> <td>{{c.district}}</td> </tr>' +
+                                    '<tr><td>{{ "PIN_CODE" |translate}}</td> <td>{{c.pincode}}</td> </tr>' +
+                                    '<tr><td>{{ "MOBILE_PHONE" |translate}}</td> <td>{{c.mobilePhone}}</td> </tr>' +
+                                    '<tr><td>{{ "LANDLINE_NO" |translate}}</td> <td>{{c.landLineNo}}</td> </tr>' +
+                                    '<tr><td>{{ "ADDRESS_PROOF" |translate}}</td> <td>{{c.addressProof}}</td> </tr>' +
+                                    '</tbody>' +
+                                    '</table>',
                             }, {
                                 key: "group.jlgGroupMembers[].customer.additionalKYCs[].kyc2ReverseImagePath",
                                 "title": "KYC2_PROOF_DOCUMENT_BACK_SIDE",
@@ -597,21 +637,26 @@ return {
                                 "fileType": "image/*",
                                 "category": "CustomerEnrollment",
                                 "subCategory": "KYC1",
-                                "section": '<table class="table" id="lightbox-text" style="display: inline;">' +
-                                            '<tbody>' +
-                                            '<tr> <td></td> <td>'+"{{ 'aadhaarNo' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.aadhaarNo}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'IDENTITY_PROOFNO' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.identityProofNo}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'ADDRESS_PROOF_NO' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.addressProofNo}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'CUSTOMER_RESIDENTIAL_ADDRESS' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.addressHtml1}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'VILLAGE_NAME' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.villageName}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'POST_OFFICE' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.postOffice}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'DISTRICT' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.district}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'PIN_CODE' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.pincode}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'MOBILE_PHONE' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.mobilePhone}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'LANDLINE_NO' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.landLineNo}}" + '</td> </tr>' +
-                                            '<tr> <td></td> <td>'+"{{ 'ADDRESS_PROOF' |translate}}"+'</td> <td>' + "{{model.group.jlgGroupMembers[arrayIndexes[0]].customer.addressProof}}" + '</td> </tr>' +
-                                            '</tbody>' +
-                                            '</table>',
+                                "viewParams": function(modelValue, form, model,context) {
+                                    return {
+                                        customerId: model.group.jlgGroupMembers[context.arrayIndexes[0]].customer.id
+                                    };
+                                },
+                                "lightboxHtml": '<table class="table" style="margin-bottom:0">' +
+                                    '<tbody ng-init="c = model.group.jlgGroupMembers[arrayIndexes[0]].customer">' +
+                                    '<tr><td>{{ "aadhaarNo" |translate}}</td> <td>{{c.aadhaarNo}}</td> <td rowspan="11">__IMAGE__</td> </tr>' +
+                                    '<tr><td>{{ "IDENTITY_PROOFNO" |translate}}</td> <td>{{c.identityProofNo}}</td> </tr>' +
+                                    '<tr><td>{{ "ADDRESS_PROOF_NO" |translate}}</td> <td>{{c.addressProofNo}}</td> </tr>' +
+                                    '<tr><td>{{ "CUSTOMER_RESIDENTIAL_ADDRESS" |translate}}</td> <td>{{c.addressHtml1}}</td> </tr>' +
+                                    '<tr><td>{{ "VILLAGE_NAME" |translate}}</td> <td>{{c.villageName}}</td> </tr>' +
+                                    '<tr><td>{{ "POST_OFFICE" |translate}}</td> <td>{{c.postOffice}}</td> </tr>' +
+                                    '<tr><td>{{ "DISTRICT" |translate}}</td> <td>{{c.district}}</td> </tr>' +
+                                    '<tr><td>{{ "PIN_CODE" |translate}}</td> <td>{{c.pincode}}</td> </tr>' +
+                                    '<tr><td>{{ "MOBILE_PHONE" |translate}}</td> <td>{{c.mobilePhone}}</td> </tr>' +
+                                    '<tr><td>{{ "LANDLINE_NO" |translate}}</td> <td>{{c.landLineNo}}</td> </tr>' +
+                                    '<tr><td>{{ "ADDRESS_PROOF" |translate}}</td> <td>{{c.addressProof}}</td> </tr>' +
+                                    '</tbody>' +
+                                    '</table>',
                             }]
                         }]
                     }, {
@@ -913,6 +958,11 @@ return {
                                 "key": "group.jlgGroupMembers[].customer.identityProofImageId",
                                 "type": "file",
                                 "fileType": "image/*",
+                                "viewParams": function(modelValue, form, model,context) {
+                                    return {
+                                        customerId: model.group.jlgGroupMembers[context.arrayIndexes[0]].customer.id
+                                    };
+                                },
                                 "category": "CustomerEnrollment",
                                 "subCategory": "IDENTITYPROOF"
                             }, {
@@ -920,6 +970,11 @@ return {
                                 "key": "group.jlgGroupMembers[].customer.identityProofReverseImageId",
                                 "type": "file",
                                 "fileType": "image/*",
+                                "viewParams": function(modelValue, form, model,context) {
+                                    return {
+                                        customerId: model.group.jlgGroupMembers[context.arrayIndexes[0]].customer.id
+                                    };
+                                },
                                 "category": "CustomerEnrollment",
                                 "subCategory": "IDENTITYPROOF"
                             }]
@@ -980,6 +1035,11 @@ return {
                                 "key": "group.jlgGroupMembers[].customer.addressProofImageId",
                                 "type": "file",
                                 "fileType": "image/*",
+                                "viewParams": function(modelValue, form, model,context) {
+                                    return {
+                                        customerId: model.group.jlgGroupMembers[context.arrayIndexes[0]].customer.id
+                                    };
+                                },
                                 "category": "CustomerEnrollment",
                                 "subCategory": "ADDRESSPROOF"
                             }, {
@@ -987,6 +1047,11 @@ return {
                                 "key": "group.jlgGroupMembers[].customer.addressProofReverseImageId",
                                 "type": "file",
                                 "fileType": "image/*",
+                                "viewParams": function(modelValue, form, model,context) {
+                                    return {
+                                        customerId: model.group.jlgGroupMembers[context.arrayIndexes[0]].customer.id
+                                    };
+                                },
                                 "category": "CustomerEnrollment",
                                 "subCategory": "ADDRESSPROOF"
                             }]
@@ -1032,6 +1097,11 @@ return {
                                     key:"group.jlgGroupMembers[].customer.additionalKYCs[].kyc1ImagePath",
                                     "type": "file",
                                     "fileType": "image/*",
+                                    "viewParams": function(modelValue, form, model,context) {
+                                    return {
+                                        customerId: model.group.jlgGroupMembers[context.arrayIndexes[0]].customer.id
+                                    };
+                                },
                                     "category": "CustomerEnrollment",
                                     "subCategory": "KYC1"
                                 },
@@ -1040,6 +1110,11 @@ return {
                                     "title": "KYC1_PROOF_DOCUMENT_BACK_SIDE",
                                     "type": "file",
                                     "fileType": "image/*",
+                                    "viewParams": function(modelValue, form, model,context) {
+                                    return {
+                                        customerId: model.group.jlgGroupMembers[context.arrayIndexes[0]].customer.id
+                                    };
+                                },
                                     "category": "CustomerEnrollment",
                                     "subCategory": "KYC1"
                                 },
@@ -1557,7 +1632,7 @@ return {
                 },
                 {
                     type: "section",
-                    condition: "model.action=='SEND_BACK' && model.siteCode == 'sambandh'",
+                    condition: "model.action=='SEND_BACK'",
                     items: [{
                             title: "REMARKS",
                             key: "group.groupRemarks",
@@ -1688,7 +1763,7 @@ return {
                 $log.info("Inside ViewCustomer()");
                 irfNavigator.go({
                     state: "Page.Customer360", 
-                    pageId: model.group.jlgGroupMembers[form.arrayIndex].customer.id,
+                    pageId: model.group.jlgGroupMembers[context.arrayIndexes[0]].customer.id,
                     pageData: {
                         "siteCode":model.siteCode,
                         "enabletrue":true

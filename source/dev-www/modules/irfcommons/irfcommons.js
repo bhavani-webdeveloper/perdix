@@ -274,7 +274,8 @@ irf.commons.factory("Utils", ["$log", "$q", "$http", function($log, $q, $http){
 	};
 }]);
 
-irf.commons.factory("BiometricService", ['$log', '$q', function($log, $q){
+irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','Files', 
+	function($log, $q,irfSimpleModal,$sce,Files){
 
 	return {
         getLabel: function(fingerId){
@@ -350,6 +351,56 @@ irf.commons.factory("BiometricService", ['$log', '$q', function($log, $q){
 
             return tableField;
         },
+        validate: function(fingerObj) {
+        	var fingerObj= fingerObj;
+        	var deferred = $q.defer();
+			var fingerData;
+			var response;
+			var result = [];
+			var fileId = null;
+			var BiometricHTML = '\
+			<select ng-model="selectedFinger" ng-change="model.changeFinger(selectedFinger)">\
+			<option value="LeftThumb">LeftThumb</option>\
+			<option value="LeftIndex">LeftIndex</option>\
+			<option value="LeftMiddle">LeftMiddle</option>\
+			<option value="LeftRing">LeftRing</option>\
+			<option value="LeftLittle">LeftLittle</option>\
+			<option value="RightThumb">RightThumb</option>\
+			<option value="RightIndex">RightIndex</option>\
+			<option value="RightMiddle">RightMiddle</option>\
+			<option value="RightRing">RightRing</option>\
+			<option value="RightLittle">RightLittle</option>\
+			</select>\
+			<applet code="in/gov/uidai/auth/biometric/VerifyApplet.class" archive="resources/fingerprintutil/FingerPrintUtil.jar" id="verificationApplet" height="20px"></applet>\
+			<button ng-click="model.takeData();">Validate Finger</button>\
+			<div id="responsediv" class="text-danger">\
+			</div>';
+
+                
+                var BiometricModal = irfSimpleModal("Choose a finger to Validate Biometric Data", BiometricHTML, {
+                	"result": result,
+                	changeFinger: function(fingerId) {
+                		// Get Finger Data Using API
+                		fileId = fingerObj[fingerId];
+                	},
+                	takeData: function() {
+                		Files.getBase64DataFromFileId(fileId, {}, true)
+                		.then(function(res) {
+                			fingerData = res;
+                			var applet = document.getElementById('verificationApplet');
+                			var responsediv = document.getElementById('responsediv');
+	                		result = applet.getMatch(fingerData);
+	                		responsediv.innerHTML=result;
+	                		deferred.resolve(result);
+                		}, function(err) {
+                			responsediv.innerHTML=err;
+                			deferred.reject(err);
+                		});
+                	}
+                });
+
+            return deferred.promise;
+        },
 		capture: function(model){
 			var deferred = $q.defer();
 			if (typeof(cordova)!=='undefined' && cordova && cordova.plugins && cordova.plugins.irfBluetooth && _.isFunction(cordova.plugins.irfBluetooth.enroll)) {
@@ -406,6 +457,90 @@ irf.commons.factory("BiometricService", ['$log', '$q', function($log, $q){
 				}, function(error){
 					deferred.reject('ERR_BIOMETRIC_CAPTURE_FAILED');
 				});
+			}else if (navigator.userAgent.indexOf("Trident") > 0 || navigator.userAgent.indexOf("MSIE") > 0 || (navigator.userAgent.indexOf("Firefox") > 0 && parseInt(navigator.userAgent.match(/Firefox\/([0-9]+)\./)[1]) < 60)) 
+				{
+			
+					var BiometricHTML = '\
+	                    <applet code="in/gov/uidai/auth/biometric/FingerPrintCaptureApplet.class" archive="resources/fingerprintutil/FingerPrintUtil.jar" id="webCaptureApplet" height="250px" width="525px"><param name="isEkycMode" value="false"> Choose a finger</applet>\
+	                    <button ng-click="$close(model.takeData())">Confirm</button>';
+					var result = [];
+					var out = null;
+
+					var BiometricModal = irfSimpleModal("Capture Data", BiometricHTML, {
+						"result": result,
+						"takeData": function() {
+							var applet = document.getElementById('webCaptureApplet');
+							result = applet.getFingerPrints();
+							var tableField = null;
+							var thumb = null;
+							var obj = {};
+							for (var i = 0; i < result.length; i++) {
+
+								switch (i) {
+									case 0:
+										tableField = 'leftHandThumpImageId';
+										thumb = 'LeftThumb';
+										break;
+									case 1:
+										tableField = 'leftHandIndexImageId';
+										thumb = 'LeftIndex';
+										break;
+									case 2:
+										tableField = 'leftHandMiddleImageId';
+										thumb = 'LeftMiddle';
+										break;
+									case 3:
+										tableField = 'leftHandRingImageId';
+										thumb = 'LeftRing';
+										break;
+									case 4:
+										tableField = 'leftHandSmallImageId';
+										thumb = 'LeftLittle';
+										break;
+									case 5:
+										tableField = 'rightHandThumpImageId';
+										thumb = 'RightThumb';
+										break;
+									case 6:
+										tableField = 'rightHandIndexImageId';
+										thumb = 'RightIndex';
+										break;
+									case 7:
+										tableField = 'rightHandMiddleImageId';
+										thumb = 'RightMiddle';
+										break;
+									case 8:
+										tableField = 'rightHandRingImageId';
+										thumb = 'RightRing';
+										break;
+									case 9:
+										tableField = 'rightHandSmallImageId';
+										thumb = 'RightLittle';
+										break;
+								}
+								if (tableField != null) {
+									obj[thumb] = {};
+									obj[thumb]['data'] = result[i];
+									obj[thumb]['table_field'] = tableField;
+								}
+
+
+							}
+
+							return obj;
+
+							// deferred.resolve(result);
+						}
+					});
+
+
+					BiometricModal.result.then(function(obj) {
+						console.log(obj)
+						deferred.resolve(obj);
+					}, function() {
+						console.log("Modal closed by user");
+						deferred.reject();
+					})
 			} else {
 				deferred.reject('ERR_BIOMETRIC_PLUGIN_MISSING');
 			}

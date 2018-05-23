@@ -155,15 +155,9 @@
                     "title": "GroupStatus"
                     
                 },
-                "grtDate": {
-                    "type": "string",
-                    "title": "GRT_DATE"
-                    
-                },
                 "grtDoneBy": {
                     "type": "string",
-                    "title": "GRT_DONE_BY"
-                    
+                    "title": "GRT_DONE_BY"   
                 },
                 "grtLatitude": {
                     "type": "string",

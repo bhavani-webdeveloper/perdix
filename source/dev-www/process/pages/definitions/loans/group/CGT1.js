@@ -153,6 +153,11 @@ define({
                     "title": "START_CGT1",
                     "type":"button",
                     "onClick":"actions.startCGT1(model,form)"   
+                },{
+                    "key": "group.cgtDate1",
+                    "title": "CGT1 Started",
+                    "condition":"model.group.cgtDate1",
+                    "readonly":true
                 }]
             },
                 {
@@ -196,7 +201,12 @@ define({
                     key: "group.cgt1Remarks",
                     type: "textarea",
                     required: true
-                },]
+                },{
+                    "key": "group.cgtEndDate1",
+                    "title": "CGT1 Ended",
+                    "condition":"model.group.cgtEndDate1",
+                    "readonly":true
+                }]
             }, { 
                 "type": "box",
                 "title": "GROUP_MEMBERS",
@@ -497,7 +507,10 @@ define({
             actions: {
                 // preSave: function(model, form, formName) {},
                 startCGT1: function(model, form) {
-                    
+                    if(model.group.cgtDate1){
+                         irfProgressMessage.pop('CGT-Start', 'CGT start date is already captured', 3000);
+                         return;
+                    }
                     PageHelper.showLoader();
                     $timeout(function() {
                         model.group.cgtDate1 = new Date();
@@ -548,7 +561,7 @@ define({
                     GroupProcess.updateGroup(reqData, function(res) {
                         formHelper.newOffline.deleteOffline($stateParams.pageName, model);
                         PageHelper.hideLoader();
-                        irfProgressMessage.pop('CGT1-proceed', 'Operation Succeeded. Proceeded to CGT 2.', 5000);
+                        irfProgressMessage.pop('CGT1-proceed', 'Operation Succeeded.', 5000);
                         irfNavigator.goBack();
                     }, function(res) {
                         PageHelper.hideLoader();

@@ -1,10 +1,10 @@
 irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
  ["$log", "$q", "SessionStore", "$state", "formHelper",
     "$stateParams", "LoanAccount", "LoanProcess", "PageHelper",
-    "Groups", "Utils", "elementsUtils", '$filter', 'LoanProducts', 'irfNavigator',
+    "Groups","GroupProcess", "Utils", "elementsUtils", '$filter', 'LoanProducts', 'irfNavigator',
     function($log, $q, SessionStore, $state, formHelper, $stateParams,
         LoanAccount, LoanProcess, PageHelper,
-        Groups, Utils, elementsUtils, $filter, LoanProducts, irfNavigator) {
+        Groups,GroupProcess, Utils, elementsUtils, $filter, LoanProducts, irfNavigator) {
 
         function backToQueue() {
             irfNavigator.goBack();
@@ -89,6 +89,20 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                         delete resp.$promise;
                         delete resp.$resolved;
                         console.warn(resp);
+                        GroupProcess.search({
+                            'groupCode': groupParams[1]
+                        }).$promise.then(function(res) {
+                            model.groupName= res.body[0].groupName;
+                            model.centreCode=res.body[0].centreCode;
+                            var centres = formHelper.enum('centre').data;
+                            for (var i = 0; i < centres.length; i++) {
+                                var centre = centres[i];
+                                if (centre.field3 == model.centreCode) {
+                                    model.centreName = centre.name;
+                                }
+                            }
+
+                        });
                         model._partnerCode = groupParams[0];
                         var axisRepayment = (groupParams[0] == "AXIS");
                         model.total = 0;
@@ -158,12 +172,9 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                             model.loanDemandScheduleDto = _.cloneDeep(resp.loanDemandScheduleDto);
                             model.total =0;
                             for (var i = 0; i < model.loanDemandScheduleDto.length; i++) {
-
                                 var accountNumber=model.loanDemandScheduleDto[i].accountNumber;
                                 $log.info(accountNumber);
-
                                 model.loanDemandScheduleDto[i].isAdvanceDemand = false;
-                                
                                 model.loanDemandScheduleDto[i].installmentAmountInPaisa =model.loanDemandScheduleDto[i].installmentAmountInPaisa/100;
                                 model.loanDemandScheduleDto[i].pendingAmountInPaisa =model.loanDemandScheduleDto[i].pendingAmountInPaisa/100;
                                 model.loanDemandScheduleDto[i].amount = model.loanDemandScheduleDto[i].pendingAmountInPaisa;
@@ -477,9 +488,11 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                             return this.lines;
                         }
 
-                        var getPrintReceipt = function(repaymentInfo, opts) {
+                        var pData = new PrinterData();
+
+                        var getPrintHeader = function(opts) {
                             opts['duplicate'] = opts['duplicate'] || false;
-                            var pData = new PrinterData();
+
                             if (opts['duplicate']) {
                                 pData.addLine('DUPLICATE', {
                                     'center': true,
@@ -502,11 +515,19 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                 .addLine(opts['branch'], {
                                     'center': true,
                                     font: PrinterConstants.FONT_SMALL_NORMAL
-                                }).addLine("Date : " + today, {
-                                    'center': false,
+                                })
+                                .addLine("Centre Code : " + opts['centre_code'], {
+                                    'center': true, 
                                     font: PrinterConstants.FONT_SMALL_NORMAL
                                 })
-                                //.addLine("Customer ID : " + repaymentInfo['customerId'], {'center': false, font: PrinterConstants.FONT_SMALL_NORMAL})
+                                .addLine("Centre Name : " + opts['centre_name'], {
+                                    'center': true, 
+                                    font: PrinterConstants.FONT_SMALL_NORMAL
+                                })
+                                .addLine("Date : " + today, {
+                                    'center': true,
+                                    font: PrinterConstants.FONT_SMALL_NORMAL
+                                })
                                 .addLine("LOAN REPAYMENT", {
                                     'center': true,
                                     font: PrinterConstants.FONT_LARGE_BOLD
@@ -515,14 +536,27 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                     'center': true,
                                     font: PrinterConstants.FONT_SMALL_NORMAL
                                 })
-                                .addLine(repaymentInfo['accountName'] + "-" + repaymentInfo["productCode"], {
+                                .addLine(opts['accountName'] + "-" + opts["productCode"], {
                                     'center': true,
                                     font: PrinterConstants.FONT_SMALL_BOLD
                                 })
                                 .addKeyValueLine("Branch Code", opts['branch_code'], {
                                     font: PrinterConstants.FONT_SMALL_NORMAL
                                 })
-                                .addKeyValueLine("Customer URN", repaymentInfo['customerURN'], {
+                                .addLine("", {})
+                                .addKeyValueLine("Group Code", opts['group_code'], {
+                                    font: PrinterConstants.FONT_SMALL_NORMAL
+                                })
+                                .addKeyValueLine("Group Name", opts['group_name'], {
+                                    font: PrinterConstants.FONT_SMALL_NORMAL
+                                })
+                                .addLine("", {})
+                            return pData;
+                        }
+
+                        var getPrintReceipt = function(repaymentInfo, opts) {
+                            //var pData = {};
+                            pData.addKeyValueLine("Customer URN", repaymentInfo['customerURN'], {
                                     font: PrinterConstants.FONT_SMALL_NORMAL
                                 })
                                 .addKeyValueLine("Customer Name", repaymentInfo['customerName'], {
@@ -543,14 +577,20 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                 .addKeyValueLine("Amount Paid", formatAmount(repaymentInfo['amountPaid']), {
                                     font: PrinterConstants.FONT_SMALL_BOLD
                                 })
-                                .addKeyValueLine("Total Payoff Amount", formatAmount(parseFloat(repaymentInfo['payOffAmount']) - parseFloat(repaymentInfo['amountPaid'])), {
+                                .addKeyValueLine("Total Payoff Amount", formatAmount(parseFloat(repaymentInfo['payOffAmount'])), {
                                     font: PrinterConstants.FONT_SMALL_BOLD
                                 })
                                 // .addKeyValueLine("Demand Amount", repaymentInfo['demandAmount'], {font:PrinterConstants.FONT_SMALL_BOLD})
                                 .addKeyValueLine("Demands Paid/Pending", repaymentInfo['demandsPaidAndPending'], {
                                     font: PrinterConstants.FONT_SMALL_BOLD
                                 })
-                                .addStrRepeatingLine("-", {
+                                return pData;
+
+                        }
+
+                        var getPrintFooter = function(opts) {
+                            //var pData = {};
+                            pData.addStrRepeatingLine("-", {
                                     font: PrinterConstants.FONT_LARGE_BOLD
                                 })
                                 .addLine(opts['company_name'], {
@@ -591,7 +631,6 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                     'center': true,
                                     font: PrinterConstants.FONT_SMALL_NORMAL
                                 });
-
                             return pData;
                         }
 
@@ -608,11 +647,16 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                             'website': "http://ruralchannels.kgfs.co.in",
                             'helpline': '18001029370',
                             'branch_id': model.branchId,
-                            'branch_code': model.branchCode
+                            'branch_code': model.branchCode,
+                            'group_name':model.groupName,
+                            'group_code':model.groupCode,
+                            'centre_code':model.centreCode,
+                            'centre_name':model.centreName
                         };
 
                         if (model._partnerCode != "AXIS") {
                             var promise = [];
+                            var pData;
                             for (var i = 0; i < model.repayments.length; i++) {
                                 if (model.repayments[i].amount != 0) {
                                     (function(i) {
@@ -636,10 +680,18 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                                     }
                                                 }
                                             }
+                                            /*if (resp.transactions && resp.transactions.length) {
+                                                for (i = 0; i < resp.transactions.length; i++) {
+                                                    if (resp.transactions[i].transactionId == r.transactionId) {
+                                                        r.transactionType = resp.transactions[i].transactionName
+                                                    }
+                                                }
+                                            }*/
                                             $log.info(totalSatisfiedDemands);
                                             $log.info(pendingInstallment);
                                             r.totalSatisfiedDemands = totalSatisfiedDemands;
                                             r.pendingInstallment = pendingInstallment;
+                                            r.payOffAmount=resp.payOffAmount;
                                         });
                                     })(i);
                                 }
@@ -647,6 +699,9 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
 
                             $q.all(promise).finally(function() {
 
+                                opts.accountName= model.repayments[0].accountName;
+                                opts.productCode=model.repayments[0].productCode;
+                                getPrintHeader(opts);
                                 for (var i = 0; i < model.repayments.length; i++) {
                                     if (model.repayments[i].amount != 0) {
                                         var r = model.repayments[i];
@@ -662,17 +717,16 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                         repaymentInfo.accountName=r.accountName;
                                         repaymentInfo.demandsPaidAndPending=r.totalSatisfiedDemands + " / " + r.pendingInstallment;
                                         repaymentInfo.productCode=r.productCode;
-                                        //repaymentInfo.transactionID=r.paymentResponse.transactionId;
+                                        repaymentInfo.transactionID=r.paymentResponse.transactionId;
                                         $log.info(repaymentInfo);
-                                        var pData = getPrintReceipt(repaymentInfo, opts);
-                                        $log.info(pData);
+                                        getPrintReceipt(repaymentInfo, opts);
                                         pData.addLine("", {});
                                         pData.addLine("", {});
-                                        fullPrintData.addLines(pData.getLines());
-                                        $log.info(fullPrintData);
                                     }
                                 }
 
+                                getPrintFooter(opts);
+                                $log.info(pData);
                                 $log.info("outside print");
                                 cordova.plugins.irfBluetooth.print(function() {
                                     console.log("succc callback");
@@ -680,7 +734,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                     console.error(err);
                                     $log.info("cordova not there");
                                     console.log("errr collback");
-                                }, fullPrintData.getLines());
+                                }, pData.getLines());
 
                             });
                         } else
@@ -691,6 +745,8 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                     var r = model.repaymentResponse.loanDemandScheduleDto[i];
                                     var totalSatisfiedDemands = 0;
                                     var pendingInstallment = 0;
+                                    var pData;
+
                                     promise[i] = LoanAccount.get({
                                         accountId: r.encoreAccountNo
                                     }).$promise.then(function(resp) {
@@ -730,6 +786,9 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
 
                             $log.info(promise);
                             $q.all(promise).finally(function() {
+                                opts.accountName= model.repaymentResponse.loanDemandScheduleDto[0].accountName;
+                                opts.productCode=model.repaymentResponse.loanDemandScheduleDto[0].product;
+                                getPrintHeader(opts);
                                 for (var i = 0; i < model.repaymentResponse.loanDemandScheduleDto.length; i++) {
                                     var r = model.repaymentResponse.loanDemandScheduleDto[i];
                                     $log.info(r);
@@ -745,28 +804,28 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                         'payOffAmount': r.payOffAmount,
                                         'accountName': r.accountName,
                                         'demandsPaidAndPending': r.totalSatisfiedDemands + " / " + r.pendingInstallment,
-                                        'productCode': r.product
+                                        'productCode': r.productCode
                                     };
                                     $log.info(repaymentInfo);
-                                    var pData = getPrintReceipt(repaymentInfo, opts);
-
-                                    $log.info(pData);
+                                    getPrintReceipt(repaymentInfo, opts);
                                     pData.addLine("", {});
                                     pData.addLine("", {});
-                                    fullPrintData.addLines(pData.getLines());
-                                    $log.info(fullPrintData);
                                 }
+                                getPrintFooter(opts);
+                                $log.info(pData);
+
                                 cordova.plugins.irfBluetooth.print(function() {
                                     console.log("succc callback");
                                 }, function(err) {
                                     console.error(err);
                                     console.log("errr collback");
-                                }, fullPrintData.getLines());
+                                }, pData.getLines());
                             });
                         }
                     }
                 }]
             }],
+
             schema: {
                 "$schema": "http://json-schema.org/draft-04/schema#",
                 "type": "object",
@@ -980,7 +1039,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                     if (reqData.repayments && reqData.repayments.length) {
                         for (var i = 0; i < reqData.repayments.length; i++) {
                             reqData.repayments[i].accountNumber=reqData.repayments[i].accountId;
-
+                            
                             if (reqData.repayments[i].amount != 0) {
                                 repaymentsData.push(reqData.repayments[i]);
                             }
@@ -1034,9 +1093,11 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                 model.repaymentResponse = resp;
                                 model.ui.submissionDone = true;
 
+
+
                                 _.forOwn(model.repayments, function(repayment) {
                                     repayment.paymentResponse = _.find(resp.repayments, {
-                                        'accountId': repayment.accountId
+                                        'accountNumber': repayment.accountId
                                     })
                                 })
 

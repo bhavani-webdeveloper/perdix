@@ -126,6 +126,7 @@ define({
                     }, {
                         "key": "group.branchId",
                         "title": "BRANCH_NAME",
+                        "enumCode": "branch_id",
                         "required": true,
                         readonly: true,
                         "parentEnumCode": "bank",
@@ -228,7 +229,7 @@ define({
                                 //"readonly": readonly
                         }, {
                             type: "fieldset",
-                            "condition": "model.group.jlgGroupMembers[arrayIndex].dscStatus && model.group.currentStage == 'DSC'",
+                            "condition": "model.group.jlgGroupMembers[arrayIndex].dscStatus",
                             title: "DSC_STATUS",
                             items: [{
                                 "key": "group.jlgGroupMembers[].dscStatus",
@@ -294,7 +295,7 @@ define({
                                 "title": "VIEW_DSC_RESPONSE",
                                 "icon": "fa fa-eye",
                                 "style": "btn-primary",
-                                "condition": "model.group.jlgGroupMembers[arrayIndex].dscStatus=='DSC_OVERRIDE_REQUIRED'",
+                                //"condition": "model.group.jlgGroupMembers[arrayIndex].dscStatus=='DSC_OVERRIDE_REQUIRED'",
                                 "onClick": function(model, formCtrl, form, event) {
                                     console.log(form);
                                     console.warn(event);
@@ -831,11 +832,16 @@ define({
                         "properties": {
                             "status": {
                                 "title": "STATUS",
-                                "type": "string"
+                                "type": ["string", "null"]
                             },
-                            "branchName": {
+                            "branchId": {
                                 "title": "BRANCH_NAME",
-                                "type": "integer"
+                                "type": ["integer", "null"],
+                                "enumCode": "branch_id",
+                                "x-schema-form": {
+                                    "type": "select",
+                                    "screenFilter": true,
+                                }
                             },
                             "centreId": {
                                 "title": "CENTRE_CODE",
@@ -874,7 +880,7 @@ define({
                                     PageHelper.hideLoader();
                                     irfProgressMessage.pop("group-dsc-check", "Oops. An error occurred", 2000);
                                 });
-                                var dscFailedStatuses = ['DSC_OVERRIDE_REQUIRED', 'DSC_OVERRIDE_REQUESTED'];
+                                var dscFailedStatuses = ['DSC_OVERRIDE_REQUIRED', 'DSC_OVERRIDE_REQUESTED','NORESPONSE'];
                                 var allOk = true;
                                 var failedMsg = Array();
                                 angular.forEach(model.group.jlgGroupMembers, function(member) {

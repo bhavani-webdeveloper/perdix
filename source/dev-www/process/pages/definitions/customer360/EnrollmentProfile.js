@@ -1,8 +1,8 @@
 irf.pageCollection.factory(irf.page("customer360.EnrollmentProfile"),
-["$log", "Enrollment", "EnrollmentHelper","PagesDefinition", "SessionStore","$state","$stateParams", "formHelper", "$q", "irfProgressMessage",
-"PageHelper", "Utils", "BiometricService",
-function($log, Enrollment, EnrollmentHelper,PagesDefinition, SessionStore,$state,$stateParams, formHelper, $q, irfProgressMessage,
-    PageHelper, Utils, BiometricService){
+["$log", "Enrollment","Queries","EnrollmentHelper","PagesDefinition", "SessionStore","$state","$stateParams", "formHelper", "$q", "irfProgressMessage",
+"PageHelper", "Utils", "BiometricService","CustomerBankBranch",
+function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStore,$state,$stateParams, formHelper, $q, irfProgressMessage,
+    PageHelper, Utils, BiometricService,CustomerBankBranch){
 
     var branch = SessionStore.getBranch();
 
@@ -19,18 +19,6 @@ function($log, Enrollment, EnrollmentHelper,PagesDefinition, SessionStore,$state
         if (_.isArray(centres) && centres.length > 0){
             model.customer.centreId = model.customer.centreId || centres[0].centreId;
         }
-
-        model.customer.idAndBcCustId = model.customer.id + ' / ' + model.customer.bcCustId;
-        model.customer.firstName = Utils.getFullName(model.customer.firstName, model.customer.middleName, model.customer.lastName);
-        model.customer.middleName= "";
-        model.customer.lastName="";
-        model.customer.fatherFirstName = Utils.getFullName(model.customer.fatherFirstName, model.customer.fatherMiddleName, model.customer.fatherLastName);
-        model.customer.fatherMiddleName="";
-        model.customer.fatherLastName="";
-        model.customer.spouseFirstName=Utils.getFullName(model.customer.spouseFirstName,model.customer.spouseMiddleName,model.customer.spouseLastName);
-        model.customer.spouseMiddleName="";
-        model.customer.spouseLastName="";
-        model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
     };
     return {
         "id": "ProfileBasic",
@@ -99,12 +87,12 @@ function($log, Enrollment, EnrollmentHelper,PagesDefinition, SessionStore,$state
                 {
                     key:"customer.enrolledAs",
                     type:"radios",
-                    readonly: true
+                    //readonly: true
                 },
                 {
                     key:"customer.gender",
                     type:"radios",
-                    readonly: true
+                    //readonly: true
                 },
                 {
                     key:"customer.age",
@@ -145,7 +133,7 @@ function($log, Enrollment, EnrollmentHelper,PagesDefinition, SessionStore,$state
                 },
                 {
                     key: "customer.spouseFirstName",
-                    title: "SPOUSE_FULL_NAME",
+                    title: "Spouse Full Name",
                     condition:"model.customer.maritalStatus==='MARRIED'",
                     type:"qrcode",
                     onCapture: function(result, model, form) {
@@ -282,7 +270,21 @@ function($log, Enrollment, EnrollmentHelper,PagesDefinition, SessionStore,$state
                     "key": "customer.aadhaarNo",
                     type:"qrcode",
                     onChange:"actions.setProofs(model)",
-                    onCapture: EnrollmentHelper.customerAadhaarOnCapture
+                    onCapture: function(result, model, form) {
+                        PageHelper.showLoader();
+                        var aadhaarData = EnrollmentHelper.customerAadhaarOnCapture(result, model, form);
+                        Queries.searchPincodes(
+                            aadhaarData.pc
+                        ).then(function(response) {
+                            $log.info(response);
+                            if (response.body && response.body.length) {
+                                model.customer.district = response.body[0].district;
+                                model.customer.state = response.body[0].state;
+                            }
+                            PageHelper.hideLoader();
+                        });
+                    }
+                    //onCapture: EnrollmentHelper.customerAadhaarOnCapture
                 },
                 {
                     type:"fieldset",
@@ -448,7 +450,6 @@ function($log, Enrollment, EnrollmentHelper,PagesDefinition, SessionStore,$state
                         },
                     ]
                 }
-
             ]
         },
         {
@@ -676,31 +677,196 @@ function($log, Enrollment, EnrollmentHelper,PagesDefinition, SessionStore,$state
                             {
                                 key: "customer.familyMembers[].incomes[].monthsPerYear",
                                 "schema": {
-                                    "minimum": 0,
-                                    "maximum": 366,
+                                    "minimum": 1,
+                                    "maximum": 12,
                                 }
                             }
                         ]
                     },
-                    {
-                        key:"customer.familyMembers[].enroll",
-                        type:"button",
-                        condition:"model.customer.currentStage=='Completed'&& !model.customer.familyMembers[arrayIndex].enrolled && ((model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() != 'self' && (model.customer.familyMembers[arrayIndex].age >= 18) ) ",
-                        title:"ENROLL_AS_CUSTOMER",
-                        onClick: function(model, formCtrl,context) {
-                            model.family={};
-                            model.family=model.customer;
-                            model.family.familydata=model.customer.familyMembers[context.arrayIndex];
-                                $state.go("Page.Engine", {
-                                    pageName: "ProfileInformation",
-                                    pageId:undefined,
-                                    pageData:model.family
-                                    //pageData:model.customer.familyMembers[context.arrayIndex]
-                                });
-                        }
-                    },
+                    // {
+                    //     key:"customer.familyMembers[].enroll",
+                    //     type:"button",
+                    //     condition:"model.customer.currentStage=='Completed'&& !model.customer.familyMembers[arrayIndex].enrolled && ((model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() != 'self' && (model.customer.familyMembers[arrayIndex].age >= 18) ) ",
+                    //     title:"ENROLL_AS_CUSTOMER",
+                    //     onClick: function(model, formCtrl,context) {
+                    //         model.family={};
+                    //         model.family=model.customer;
+                    //         model.family.familydata=model.customer.familyMembers[context.arrayIndex];
+                    //             $state.go("Page.Engine", {
+                    //                 pageName: "ProfileInformation",
+                    //                 pageId:undefined,
+                    //                 pageData:model.family
+                    //                 //pageData:model.customer.familyMembers[context.arrayIndex]
+                    //             });
+                    //     }
+                    // },
                 ]
             }]
+        },
+        {
+                    type: "box",
+                    title: "BANK_ACCOUNTS",
+                    // "condition":"model.currentStage=='Screening' || model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
+                    items: [{
+                        key: "customer.customerBankAccounts",
+                        type: "array",
+                        title: "BANK_ACCOUNTS",
+                        startEmpty: true,
+                        onArrayAdd: function(modelValue, form, model, formCtrl, $event) {
+                            modelValue.bankStatements = [];
+                            var CBSDateMoment = moment(SessionStore.getCBSDate(), SessionStore.getSystemDateFormat());
+                            var noOfMonthsToDisplay = 6;
+                            var statementStartMoment = CBSDateMoment.subtract(noOfMonthsToDisplay, 'months').startOf('month');
+                            for (var i = 0; i < noOfMonthsToDisplay; i++) {
+                                modelValue.bankStatements.push({
+                                    startMonth: statementStartMoment.format(SessionStore.getSystemDateFormat())
+                                });
+                                statementStartMoment = statementStartMoment.add(1, 'months').startOf('month');
+                            }
+                        },
+                        items: [{
+                            key: "customer.customerBankAccounts[].ifscCode",
+                            type: "lov",
+                            lovonly: true,
+                            required: true,
+                            inputMap: {
+                                "ifscCode": {
+                                    "key": "customer.customerBankAccounts[].ifscCode"
+                                },
+                                "bankName": {
+                                    "key": "customer.customerBankAccounts[].customerBankName"
+                                },
+                                "branchName": {
+                                    "key": "customer.customerBankAccounts[].customerBankBranchName"
+                                }
+                            },
+                            outputMap: {
+                                "bankName": "customer.customerBankAccounts[arrayIndex].customerBankName",
+                                "branchName": "customer.customerBankAccounts[arrayIndex].customerBankBranchName",
+                                "ifscCode": "customer.customerBankAccounts[arrayIndex].ifscCode"
+                            },
+                            searchHelper: formHelper,
+                            search: function(inputModel, form) {
+                                $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                                var promise = CustomerBankBranch.search({
+                                    'bankName': inputModel.bankName,
+                                    'ifscCode': inputModel.ifscCode,
+                                    'branchName': inputModel.branchName
+                                }).$promise;
+                                return promise;
+                            },
+                            getListDisplayItem: function(data, index) {
+                                return [
+                                    data.ifscCode,
+                                    data.branchName,
+                                    data.bankName
+                                ];
+                            }
+                        }, {
+                            key: "customer.customerBankAccounts[].customerBankName",
+                            required: true,
+                            readonly: true
+                        }, {
+                            key: "customer.customerBankAccounts[].customerBankBranchName",
+                            required: true,
+                            readonly: true
+                        }, {
+                            key: "customer.customerBankAccounts[].customerNameAsInBank"
+                        }, {
+                            key: "customer.customerBankAccounts[].accountNumber",
+                            type: "password",
+                            inputmode: "number",
+                            numberType: "tel"
+                        }, {
+                            key: "customer.customerBankAccounts[].confirmedAccountNumber",
+                            inputmode: "number",
+                            numberType: "tel"
+                        }, {
+                            key: "customer.customerBankAccounts[].accountType",
+                            type: "select"
+                        }, {
+                            key: "customer.customerBankAccounts[].bankingSince",
+                            type: "date",
+                            title: "BANKING_SINCE"
+                        }, {
+                            key: "customer.customerBankAccounts[].netBankingAvailable",
+                            type: "select",
+                            title: "NET_BANKING_AVAILABLE",
+                            enumCode: "decisionmaker"
+                        }, {
+                            key: "customer.customerBankAccounts[].sanctionedAmount",
+                            condition: "model.customer.customerBankAccounts[arrayIndex].accountType =='OD'||model.customer.customerBankAccounts[arrayIndex].accountType =='CC'",
+                            type: "amount",
+                            required: true,
+                            title: "OUTSTANDING_BALANCE"
+                        }, {
+                            key: "customer.customerBankAccounts[].limit",
+                            type: "amount"
+                        }, {
+                            key: "customer.customerBankAccounts[].bankStatements",
+                            type: "array",
+                            title: "STATEMENT_DETAILS",
+                            titleExpr: "moment(model.customer.customerBankAccounts[arrayIndexes[0]].bankStatements[arrayIndexes[1]].startMonth).format('MMMM YYYY') + ' ' + ('STATEMENT_DETAILS' | translate)",
+                            titleExprLocals: {
+                                moment: window.moment
+                            },
+                            startEmpty: true,
+                            items: [{
+                                key: "customer.customerBankAccounts[].bankStatements[].startMonth",
+                                type: "date",
+                                title: "START_MONTH"
+                            }, {
+                                key: "customer.customerBankAccounts[].bankStatements[].totalDeposits",
+                                type: "amount",
+                                calculator: true,
+                                creditDebitBook: true,
+                                onDone: function(result, model, context) {
+                                    model.customer.customerBankAccounts[context.arrayIndexes[0]].bankStatements[context.arrayIndexes[1]].totalDeposits = result.totalCredit;
+                                    model.customer.customerBankAccounts[context.arrayIndexes[0]].bankStatements[context.arrayIndexes[1]].totalWithdrawals = result.totalDebit;
+                                },
+                                title: "TOTAL_DEPOSITS"
+                            }, {
+                                key: "customer.customerBankAccounts[].bankStatements[].totalWithdrawals",
+                                type: "amount",
+                                title: "TOTAL_WITHDRAWALS"
+                            }, {
+                                key: "customer.customerBankAccounts[].bankStatements[].balanceAsOn15th",
+                                type: "amount",
+                                title: "BALENCE_AS_ON_REQUESTED_EMI_DATE"
+                            }, {
+                                key: "customer.customerBankAccounts[].bankStatements[].noOfChequeBounced",
+                                type: "amount",
+                                //maximum:99,
+                                required: true,
+                                title: "NO_OF_CHEQUE_BOUNCED"
+                            }, {
+                                key: "customer.customerBankAccounts[].bankStatements[].noOfEmiChequeBounced",
+                                type: "amount",
+                                required: true,
+                                //maximum:99,
+                                title: "NO_OF_EMI_CHEQUE_BOUNCED"
+                            }, {
+                                key: "customer.customerBankAccounts[].bankStatements[].bankStatementPhoto",
+                                type: "file",
+                                required: true,
+                                title: "BANK_STATEMENT_UPLOAD",
+                                fileType: "application/pdf",
+                                "category": "CustomerEnrollment",
+                                "subCategory": "IDENTITYPROOF",
+                                using: "scanner"
+                            }, ]
+                        }, {
+                            key: "customer.customerBankAccounts[].isDisbersementAccount",
+                            type: "radios",
+                            titleMap: [{
+                                value: true,
+                                name: "Yes"
+                            }, {
+                                value: false,
+                                name: "No"
+                            }]
+                        }]
+                    }]
         },
         {
             "type": "box",
@@ -1178,7 +1344,6 @@ function($log, Enrollment, EnrollmentHelper,PagesDefinition, SessionStore,$state
                             key:"customer.verifications[].relationship",
                             type:"select"
                         }
-
                     ]
                 },
                 {
@@ -1199,8 +1364,6 @@ function($log, Enrollment, EnrollmentHelper,PagesDefinition, SessionStore,$state
                 "title": "SUBMIT"
             }]
         }];
-
-
         },
         modelPromise: function(pageId, _model) {
             if (!_model || !_model.customer || _model.customer.id != pageId) {
@@ -1276,9 +1439,6 @@ function($log, Enrollment, EnrollmentHelper,PagesDefinition, SessionStore,$state
                     Enrollment.updateCustomer(reqData, function (res, headers) {
                         if (res.customer) {
                             model.customer = res.customer;
-                            model.customer.idAndBcCustId = model.customer.id + ' / ' + model.customer.bcCustId;
-                            model.customer.fullName = Utils.getFullName(model.customer.firstName, model.customer.middleName, model.customer.lastName);
-                            model.customer.fatherFullName = Utils.getFullName(model.customer.fatherFirstName, model.customer.fatherMiddleName, model.customer.fatherLastName);
                             model.customer.addressProofSameAsIdProof = (model.customer.title=="true")?true:false;
                             model = EnrollmentHelper.fixData(model);
                         }

@@ -13,31 +13,55 @@ define({
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				$log.info("View / close group got initialized");
+				model.branchId = SessionStore.getCurrentBranch().branchId;
 			},
 			definition: {
 				title: "VIEW_OR_CLOSE_GROUP",
 				searchForm: [
 					"*"
 				],
-				//autoSearch: true,
+				autoSearch: true,
 				searchSchema: {
 					"type": 'object',
 					"title": 'SearchOptions',
 					"properties": {
+						"branchId": {
+							"title": "BRANCH_NAME",
+							"type": ["integer", "null"],
+							"x-schema-form": {
+								"type": "select",
+								"readonly":true,
+								"enumCode": "branch_id",
+							}
+						},
 						"partner": {
-							"type": "string",
+							"type": ["string", "null"],
 							"title": "PARTNER",
 							"x-schema-form": {
 								"type": "select",
 								"enumCode": "partner"
 							}
 						},
+						"product": {
+							"title": "PRODUCT_CATEGORY",
+							"type":["string", "null"],
+							"enumCode": "jlg_loan_product",
+							"x-schema-form": {
+								"type": "select",
+								"parentEnumCode": "partner",
+								"parentValueExpr": "model.partner"
+							}
+						},
+						"groupCode": {
+							"type": ["string", "null"],
+							"title": "GROUP_CODE",
+						},
 						"stage": {
 							"title": "STAGE",
 							"type": ["string", "null"],
+							"enumCode": "group_Loan_Stages",
 							"x-schema-form": {
-								"type": "select",
-								"enumCode": "groupLoanStages"
+								"type": "select",	
 							}
 						}
 					},
@@ -51,6 +75,9 @@ define({
 
 					var params = {
 						//'branchId': branchId,
+						'branchId':searchOptions.branchId,
+						'product':searchOptions.product,
+						'groupCode':searchOptions.groupCode,
 						'partner': searchOptions.partner,
 						'groupStatus': true,
 						'currentStage': searchOptions.stage,

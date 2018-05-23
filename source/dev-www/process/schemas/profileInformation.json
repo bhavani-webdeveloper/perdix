@@ -574,9 +574,9 @@
                                         },
                                         "monthsPerYear": {
                                             "type": ["integer","null"],
-                                            "title": "PER_YEAR",
+                                            "title": "MONTHS_PER_YEAR",
                                             "minimum": 1,
-                                            "maximum": 366,
+                                            "maximum": 12,
                                             "captureStages":[
                                                 "Stage02"
                                             ]
@@ -586,6 +586,7 @@
                                     "required": [
                                         "incomeEarned",
                                         "incomeSource",
+                                        "monthsPerYear",
                                         "frequency"
                                     ]
                                 }
@@ -616,11 +617,11 @@
                                 "title":"MARITAL_STATUS",
                                 "enumCode":"marital_status"
                             }
-
                         },
                         "required": [
                             "dateOfBirth",
                             "educationStatus",
+                            "maritalStatus",
                             "familyMemberFirstName",
                             "gender",
                             "relationShip"

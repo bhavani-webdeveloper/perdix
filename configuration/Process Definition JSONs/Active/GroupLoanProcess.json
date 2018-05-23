@@ -39,7 +39,7 @@
       "order": 4,
       "code": "CGT2",
       "name": "CGT 2",
-      "requiredIfLoanCycleLessThan": 3,
+      "requiredIfLoanCycleLessThan": 2,
       "isAccountOpening": false,
       "stageType": "CGT",
       "allowedRoles": [
@@ -51,7 +51,7 @@
       "order": 5,
       "code": "CGT3",
       "name": "CGT 3",
-      "requiredIfLoanCycleLessThan": 3,
+      "requiredIfLoanCycleLessThan": 2,
       "isAccountOpening": false,
       "stageType": "CGT",
       "allowedRoles": [
@@ -133,6 +133,26 @@
       "name": "Loan Disbursement",
       "isAccountOpening": false,
       "stageType": "DISBURSE",
+      "allowedRoles": [
+         "A",
+         "ARM",
+         "RM"
+      ]
+   },{
+      "order": 15,
+      "code": "Completed",
+      "name": "Completed",
+      "isAccountOpening": false,
+      "allowedRoles": [
+         "A",
+         "ARM",
+         "RM"
+      ]
+   },{
+      "order": 16,
+      "code": "Rejected",
+      "name": "Loan Disbursement",
+      "isAccountOpening": false,
       "allowedRoles": [
          "A",
          "ARM",
@@ -517,7 +537,7 @@
                   "title": "groupRemarks",
                   "type": "string",
                   "minLength": 1,
-                  "maxLength": 250,
+                  "maxLength": 500,
                   "captureStages": [
                      "GroupCreation",
                      "GRT",
@@ -542,8 +562,7 @@
             "maxItems": null,
             "items": {
                "type": "object",
-               "required": [
-               ],
+               "required": [],
                "properties": {
                   "loanPurpose": {
                      "title": "Loan Purpose",
@@ -873,7 +892,7 @@
                }
             }
          },
-      "memberLoanAccount": {
+		"memberLoanAccount": {
         "type":"object",
             "maxItems":null,
             "items":null,
@@ -894,10 +913,11 @@
               "title": "applicationStatus",
               "type": "string",
               "captureStages": [
-               "GroupCreation",
+			      "GroupCreation",
                "ApplicationPending",
                "AgreementUploadPending",
-               "Checker1"
+               "Checker1",
+			   "Completed"
               ]
             },
             "applicationStatusUpdatedBy": {
@@ -910,7 +930,7 @@
                "Checker1"
               ]
             },
-          "applicationStatusUpdatedOn": {
+			 "applicationStatusUpdatedOn": {
               "title": "applicationStatusUpdatedOn",
               "type": "date",
               "captureStages": [
@@ -920,7 +940,7 @@
                "Checker1"
               ]
             },
-          "chk1FileUploadId": {
+			 "chk1FileUploadId": {
               "title": "chk1FileUploadId",
               "type": "string",
               "captureStages": [
@@ -930,18 +950,19 @@
                "Checker1"
               ]
             },
-           
-          "agreementStatus": {
+			  
+			 "agreementStatus": {
               "title": "agreementStatus",
               "type": "string",
               "captureStages": [
                "GroupCreation",
                "ApplicationPending",
                "AgreementUploadPending",
-               "Checker1"
+               "Checker1",
+			   "Completed"
               ]
             },
-          "agreementStatusUpdatedBy": {
+			 "agreementStatusUpdatedBy": {
               "title": "agreementStatusUpdatedBy",
               "type": "string",
               "captureStages": [
@@ -951,7 +972,7 @@
                "Checker1"
               ]
             },
-          "agreementStatusUpdatedOn": {
+			 "agreementStatusUpdatedOn": {
               "title": "agreementStatusUpdatedOn",
               "type": "date",
               "captureStages": [
@@ -961,7 +982,7 @@
                "Checker1"
               ]
             },
-         "agreementFileId": {
+			"agreementFileId": {
               "title": "agreementFileId",
               "type": "string",
               "captureStages": [
