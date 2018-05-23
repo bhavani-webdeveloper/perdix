@@ -24,6 +24,7 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 		} else {
 			return "Page/Engine/customer360.CustomerProfile";
 		}
+
 	}
 
 	var getBusinessProfilePageUrl = function() {
@@ -65,7 +66,8 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 				]
 			},
 			"Page/Engine/customer360.Recapture",
-			"Page/Engine/customer360.CustomerHistorySummary"
+			"Page/Engine/customer360.CustomerHistorySummary",
+			
 		]
 	};
 	//"Page/CustomerHistory",
@@ -101,7 +103,9 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 				]
 			},
 			"Page/CustomerHistory",
-			"Page/Engine/customer360.Recapture"
+			"Page/Engine/customer360.Recapture",
+			"Page/Engine/customer360.CustomerSummaryView"
+
 		]
 	};
 
@@ -420,6 +424,15 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 			menu.stateParams.pageId = $scope.customerId;
 			return $q.resolve(menu);
 		};
+
+
+		if ($scope.dashboardDefinition.$menuMap['Page/Engine/customer360.CustomerSummaryView'])
+		$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.CustomerSummaryView'].onClick = function(event, menu) {
+			menu.stateParams.pageId = $scope.customerId;
+			return $q.resolve(menu);
+		};
+
+
 
 		if ($scope.dashboardDefinition.$menuMap['Page/Engine/customer360.CustomerHistorySummary'])
 		$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.CustomerHistorySummary'].onClick = function(event, menu) {

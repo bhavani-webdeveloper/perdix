@@ -2,6 +2,7 @@ irf.models.factory('Enrollment',function($resource,$httpParamSerializer,BASE_URL
     var endpoint = BASE_URL + '/api/enrollments';
     var snapshotFrom = '/snapshotDiff?snapshotIdFrom=';
     var snapshotTo  = 'snapshotIdTo=';
+    var managementEndPoint= irf.MANAGEMENT_BASE_URL;
 
     var transformResponse = function(customer){
         if (_.hasIn(customer, "customerBankAccounts") && _.isArray(customer.customerBankAccounts)){
@@ -37,6 +38,11 @@ irf.models.factory('Enrollment',function($resource,$httpParamSerializer,BASE_URL
             method:'GET',
             url:endpoint+'/:service/:id',
             isArray:true
+        },
+
+        getCustomerSummary:{
+            method:'GET',
+            url: managementEndPoint + '/server-ext/wm_summary.php'
         },
 
         getSchema:{
