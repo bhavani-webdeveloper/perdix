@@ -405,6 +405,12 @@ define([], function() {
                     "FieldInvestigationDetails",
                     "FieldInvestigationDetails.fieldInvestigationDecision",
                     "FieldInvestigationDetails.fieldInvestigationReason",
+                    "vehicleLoanDocuments",
+                    "vehicleLoanDocuments.vehicleLoanDocuments",
+                    "vehicleLoanDocuments.vehicleLoanDocuments.docType",
+                    "vehicleLoanDocuments.vehicleLoanDocuments.fileId",
+                    "vehicleLoanDocuments.vehicleLoanDocuments.issueDate",
+                    "vehicleLoanDocuments.vehicleLoanDocuments.expiryDate",
                     "LoanChannel",
                     "LoanChannel.loanChannels",
                     "actionbox",
@@ -431,6 +437,12 @@ define([], function() {
                     self = this;
                     var formRequest = {
                         "overrides": {
+                            "VehicleRouteDetails.vehicleRouteDetails.routeFrom": {
+                                "required": true
+                            },
+                            "VehicleRouteDetails.vehicleRouteDetails.routeTo": {
+                                "required": true
+                            },
                             "LoanRecommendation.udf6": {
                                 "title": "NOMINAL_RATE",
                                 "readonly": true,

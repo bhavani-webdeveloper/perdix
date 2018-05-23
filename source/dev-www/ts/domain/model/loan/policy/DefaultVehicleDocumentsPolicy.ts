@@ -32,7 +32,7 @@ export class DefaultVehicleDocumentsPolicy extends IPolicy<LoanProcess> {
     run(loanProcess: LoanProcess): Observable<LoanProcess> {
         let activeSession:ISession = ObjectFactory.getInstance("Session");
         let formHelper:IFormHelper = ObjectFactory.getInstance("FormHelper");
-        let data = formHelper.getVehicleComponents();
+        let data = formHelper.getVehicleDocuments();
 
         if(_.isArray(data) && data.length > 0) {
             try {

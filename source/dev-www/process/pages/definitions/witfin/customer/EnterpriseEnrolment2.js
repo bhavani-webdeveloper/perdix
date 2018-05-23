@@ -470,6 +470,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 "EnterpriseInformation.enterpriseCustomerRelations.otherBusinessClosureDate": {
                                     "condition": "model.customer.enterpriseCustomerRelations[arrayIndex].partnerOfAnyOtherCompany == 'YES'"
                                 },
+                                "EnterpriseInformation.enterpriseCustomerRelations.relationshipType": {
+                                    "required": true
+                                },
                                 "EnterpriseAssets.enterpriseAssets.assetType": {
                                     "required": true
                                 },
@@ -532,11 +535,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "title": "NEIGHBOUR_CHECK"
                                 },
                                 "EnterpriseReferences.verifications.referenceFirstName": {
-                                    "title":"NAME_OF_NEIGHBOUR"
+                                    "title":"NAME_OF_NEIGHBOUR",
+                                    "required": true
                                 },
                                 "EnterpriseReferences.verifications.knownSince": {
                                     "title":"KNOWN_SINCE_(_IN_YEARS_)",
-                                    "type" : "number"
+                                    "type" : "number",
+                                    "required": true
                                 },
                                 "EnterpriseReferences.verifications.customerResponse": {
                                     "title":"NEIGHBOUR_REFERENCE"
@@ -631,60 +636,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                             }
                                         }
 
-                                    },
-                                    "TangibleNetWorth": {
-                                        "type": "box",
-                                        "title": "TANGIBLE_NET_WORTH",
-                                        "orderNo" : 85,
-                                        "items": {
-                                            "enterpriseNetworth": {
-                                                "key": "customer.enterpriseNetworth",
-                                                "type": "array",
-                                                "title": "TANGIBLE_NET_WORTH",
-                                                "startEmpty" : true,
-                                                "items": {
-                                                    "financialYear": {
-                                                        "key": "customer.enterpriseNetworth[].financialYear",
-                                                        "type": "date",
-                                                        "title": "FINANCIAL_YEAR",
-                                                    },
-                                                    "tangibleNetworth": {
-                                                      "key": "customer.enterpriseNetworth[].tangibleNetworth",
-                                                      "type": "number",
-                                                      "title": "TANGIBLE_NET_WORTH"
-                                                    }
-                                                }
-                                            },
-                                        }
-
-                                    },
-                                    "enterpriseDocuments": {
-                                        "type": "box",
-                                        "title": "INCOME_DOCUMENT",
-                                        "orderNo": 86,
-                                        "items": {
-                                            "enterpriseDocuments":{
-                                                "type":"array",
-                                                "title": "INCOME_DOCUMENT",
-                                                "key": "customer.enterpriseDocuments",
-                                                "startEmpty": true,
-                                                "items": {
-                                                    "docType": {
-                                                        "type": "select",
-                                                        "enumCode": "income_doc_type",
-                                                        "title": "DOCUMENT_TYPE",
-                                                        "key": "customer.enterpriseDocuments[].docType"
-                                                    },
-                                                    "fileId": {
-                                                        "key": "customer.enterpriseDocuments[].fileId",
-                                                        "type": "file",
-                                                        "title": "DOCUMENT_UPLOAD",
-                                                        "category": "CustomerEnrollment",
-                                                        "subCategory": "PHOTO",
-                                                    }
-                                                }
-                                            }
-                                        }
                                     }
                                 },
                                 "additions": [
