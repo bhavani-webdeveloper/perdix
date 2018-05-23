@@ -102,7 +102,7 @@ define({
                     var family = {
                         "type": "box",
                         "readonly": true,
-                        "colClass": "col-sm-6",
+                        "colClass": "col-sm-12",
                         "overrideType": "default-view",
                         "title": "Family",
                         "items": [{
