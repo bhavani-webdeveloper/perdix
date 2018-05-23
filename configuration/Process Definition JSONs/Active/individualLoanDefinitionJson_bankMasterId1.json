@@ -1870,6 +1870,13 @@
                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
                   ]
                },
+                "insuredDeclaredValue":{
+                  "title":"Insured Declared Value",
+                   "type":"number",
+                   "captureStages":[
+                   "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                  ]
+               },
                "inspectedBy":{
                   "title":"inspectedBy",
                   "type":"string",
@@ -2583,7 +2590,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                    "Screening", "LoanInitiation"
+                   "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
                      ]
                   },
                    "fileId":{
@@ -2592,28 +2599,28 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                    "Screening", "LoanInitiation"
+                   "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
                      ]
                   },
                   "issueDate":{
                      "title":"issueDate",
                      "type":"date",
                      "captureStages":[
-                "Screening", "LoanInitiation"
+                  "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
                      ]
                   },
                   "expiryDate":{
                      "title":"expiryDate",
                      "type":"date",
                      "captureStages":[
-                 "Screening", "LoanInitiation"
+                 "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
                      ]
                   },
                    "udf1":{
                      "title":"udf1",
                      "type":"string",
                      "captureStages":[
-                       "Screening", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
                      ]
                   },
 
@@ -2621,7 +2628,7 @@
                      "title":"udf4",
                      "type":"string",
                      "captureStages":[
-                     "Screening", "LoanInitiation"
+                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
                      ]
                   },
 
@@ -2629,7 +2636,7 @@
                      "title":"udf2",
                      "type":"string",
                      "captureStages":[
-                     "Screening", "LoanInitiation"
+                   "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
                      ]
                   },
 
@@ -2637,7 +2644,7 @@
                      "title":"udf3",
                      "type":"string",
                      "captureStages":[
-                    "Screening", "LoanInitiation"
+                  "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
                      ]
                   },
 
@@ -2645,28 +2652,28 @@
                      "title":"udf5",
                      "type":"string",
                      "captureStages":[
-                    "Screening", "LoanInitiation"
+                    "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"   
                      ]
                   },
                    "udfDate1":{
                   "title":"date1",
                   "type":"string",
                   "captureStages":[
-                     "Screening", "LoanInitiation"
+                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
                   ]
                },
                "udfDate2":{
                   "title":"date2",
                   "type":"string",
                   "captureStages":[
-                 "Screening", "LoanInitiation"
+                 "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
                   ]
                },
-               "udfDate2":{
+               "udfDate3":{
                   "title":"date2",
                   "type":"string",
                   "captureStages":[
-                  "Screening", "LoanInitiation"
+                  "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
                   ]
                }
             }
