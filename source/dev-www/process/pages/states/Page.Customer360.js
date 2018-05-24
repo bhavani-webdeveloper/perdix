@@ -82,7 +82,8 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 				]
 			},
 			"Page/CustomerHistory",
-			"Page/Engine/customer360.Recapture"
+			"Page/Engine/customer360.Recapture",
+			"Page/Engine/customer360.CustomerSummaryView"
 		]
 	};
 
@@ -378,6 +379,12 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 
 		if ($scope.dashboardDefinition.$menuMap['Page/CustomerHistory'])
 		$scope.dashboardDefinition.$menuMap['Page/CustomerHistory'].onClick = function(event, menu) {
+			menu.stateParams.pageId = $scope.customerId;
+			return $q.resolve(menu);
+		};
+
+		if ($scope.dashboardDefinition.$menuMap['Page/Engine/customer360.CustomerSummaryView'])
+		$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.CustomerSummaryView'].onClick = function(event, menu) {
 			menu.stateParams.pageId = $scope.customerId;
 			return $q.resolve(menu);
 		};
