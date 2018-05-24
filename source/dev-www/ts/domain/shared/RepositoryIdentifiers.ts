@@ -6,7 +6,8 @@ export enum RepositoryIdentifiers {
     LiabilityLoanAccountBookingProcess = 5,
     LiabilityRepayment = 6,
     BranchPostingProcess = 7,
-    FinconPostingProcess = 8
+    FinconPostingProcess = 8,
+    AgentProcess = 9,
    // TagMasterProcess = 8   
  }
 

@@ -12,6 +12,8 @@ import BranchPostingRepository = require('../model/journal/branchposting/BranchR
 
 import { FinconPostingProcess } from '../model/journal/finconaccounting/FinconPostingProcess';
 import FinconRepository = require('../model/journal/finconaccounting/FinconRepository');
+import AgentRepository = require('../model/agent/AgentRepository');
+
 //import {TagMasterRepository} from "../model/TMaster/TagMasterRepository"
 
 
@@ -35,7 +37,10 @@ class RepositoryFactory {
             case RepositoryIdentifiers.BranchPostingProcess:
                 return new BranchPostingRepository();
             case RepositoryIdentifiers.FinconPostingProcess:
-                return new FinconRepository();                
+                return new FinconRepository();      
+            case RepositoryIdentifiers.AgentProcess:
+                return new AgentRepository();      
+
             // case RepositoryIdentifiers.TagMasterProcess:
             //     return new TagMasterRepository();
     		default:

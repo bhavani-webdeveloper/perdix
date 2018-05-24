@@ -4,6 +4,7 @@ import {LoadNewCustomerData} from "./LoadNewCustomerData";
 import {PreSaveCustomerPolicy} from "./PreSaveCustomerPolicy";
 import {LoadEnrolmentCustomerDataPolicy} from "./LoadEnrolmentCustomerDataPolicy";
 import {EnrolmentDerivedPolicy} from "./EnrolmentDerivedPolicy";
+import {EnrolmentDerivedPolicyforAge} from "./EnrolmentDerivedPolicyforAge";
 import {SelfRelationshipRequiredPolicy} from "./SelfRelationshipRequiredPolicy";
 import {CommercialCBCheckPolicy} from "./CommercialCBCheckPolicy";
 import {MinimumReferencesPolicy} from "./MinimumReferencesPolicy";
@@ -54,6 +55,8 @@ export class EnrolmentPolicyFactory implements IPolicyFactory{
                 return new VerifyIndividualReferencePolicy();
             case 'MandatoryTangibleWorthPolicy':
                 return new MandatoryTangibleWorthPolicy();
+            case 'EnrolmentDerivedPolicyforAge':
+                return new EnrolmentDerivedPolicyforAge();
             default:
                 return null;
 

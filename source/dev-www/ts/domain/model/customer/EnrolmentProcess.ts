@@ -6,9 +6,10 @@ import {IEnrolmentRepository} from "./IEnrolmentRepository";
 import {Observable} from "@reactivex/rxjs";
 import {plainToClass} from "class-transformer";
 import {PolicyManager} from "../../shared/PolicyManager";
+import {AgentProcess} from "../agent/AgentProcess";
 import {Customer, CustomerTypes} from "./Customer";
 import {EnrolmentPolicyFactory} from "./policy/EnrolmentPolicyFactory";
-import {LoanProcess} from "../loan/LoanProcess";
+// import {LoanProcess} from "../loan/LoanProcess";
 import EnrolmentProcessFactory = require("./EnrolmentProcessFactory");
 import EnterpriseCustomerRelation = require("./EnterpriseCustomerRelation");
 
@@ -20,7 +21,12 @@ export class EnrolmentProcess {
     stage: string;
     customer: Customer;
     enrollmentAction: string;
+    processType: string;
     enrolmentRepo: IEnrolmentRepository;
+
+    agentEnrolmentProcess: AgentProcess;    
+    applicantEnrolmentProcess: EnrolmentProcess;
+  
 
     constructor() {
         this.enrolmentRepo = RepositoryFactory.createRepositoryObject(RepositoryIdentifiers.Enrolment);
@@ -38,7 +44,8 @@ export class EnrolmentProcess {
     }
 
     save(): any {
-        this.enrollmentAction = 'SAVE';
+        this.enrollmentAction = 'SAVE';              
+        this.processType = 'AGENT';
         let pmBeforeUpdate:PolicyManager<EnrolmentProcess>  = new PolicyManager(this, EnrolmentPolicyFactory.getInstance(), 'beforeSave', EnrolmentProcess.getProcessConfig());
         let obs1 = pmBeforeUpdate.applyPolicies();
         let obs2 = this.enrolmentRepo.updateEnrollment(this)
@@ -49,6 +56,7 @@ export class EnrolmentProcess {
 
     proceed(): any {
         this.enrollmentAction = 'PROCEED';
+        this.processType = 'AGENT';
         let pmBeforeUpdate:PolicyManager<EnrolmentProcess>  = new PolicyManager(this, EnrolmentPolicyFactory.getInstance(), 'beforeProceed', EnrolmentProcess.getProcessConfig());
         let obs1 = pmBeforeUpdate.applyPolicies();
         let obs2 = this.enrolmentRepo.updateEnrollment(this)
@@ -136,7 +144,7 @@ export class EnrolmentProcess {
     }
 
     static createNewProcess(customerType: CustomerTypes = CustomerTypes.INDIVIDUAL): Observable<EnrolmentProcess> {
-        let ep = new EnrolmentProcess();
+        let ep = new EnrolmentProcess();  
         ep.customer = new Customer();
         ep.customer.customerType = customerType;
         let pm: PolicyManager<EnrolmentProcess> = new PolicyManager<EnrolmentProcess>(ep, EnrolmentProcessFactory.enrolmentPolicyFactory, 'onNew', EnrolmentProcess.getProcessConfig());
@@ -150,7 +158,6 @@ export class EnrolmentProcess {
                 return pm.applyPolicies();
             })
     }
-
     static getProcessConfig() {
         return enrolmentProcessConfig;
     }

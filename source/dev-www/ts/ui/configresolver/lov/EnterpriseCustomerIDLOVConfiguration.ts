@@ -1,7 +1,8 @@
-import {LOVElementConfiguration} from "./LOVElementConfiguration";
+\import {LOVElementConfiguration} from "./LOVElementConfiguration";
 import {NGHelper} from "../../../infra/helpers/NGHelper";
 import AngularResourceService = require("../../../infra/api/AngularResourceService");
 import {EnrolmentProcess} from '../../../domain/model/customer/EnrolmentProcess';
+import {AgentProcess} from '../../../domain/model/agent/AgentProcess';
 import * as _ from 'lodash';
 export class EnterpriseCustomerIDLOVConfiguration extends LOVElementConfiguration {
     outputMap: Object = {
@@ -60,9 +61,13 @@ export class EnterpriseCustomerIDLOVConfiguration extends LOVElementConfiguratio
             })
             .subscribe(function(enrolmentProcess){
                 /* Updating the loan process */
-                model.loanProcess.removeRelatedEnrolmentProcess(model.enrolmentProcess, model.loanCustomerRelationType);
-                model.loanProcess.setRelatedCustomerWithRelation(enrolmentProcess, model.loanCustomerRelationType);
-
+            
+                if (_.hasIn(model, 'loanProcess.removeRelatedEnrolmentProcess')){
+                    model.loanProcess.removeRelatedEnrolmentProcess(model.enrolmentProcess, model.loanCustomerRelationType);
+                }
+                 if (_.hasIn(model, 'loanProcess.setRelatedCustomerWithRelation')){
+                    model.loanProcess.setRelatedCustomerWithRelation(model.enrolmentProcess, model.loanCustomerRelationType);
+                }
                 /* Setting on the current page */
                 model.enrolmentProcess = enrolmentProcess;
                 model.customer = enrolmentProcess.customer;
@@ -75,8 +80,8 @@ export class EnterpriseCustomerIDLOVConfiguration extends LOVElementConfiguratio
             })
 
 
-    };
-
+    };   
+     
     initialize: Function = function(model, form, parentModel, context) {
         // let formHelper = AngularResourceService.getInstance().getNGService("formHelper");
         // let $filter = AngularResourceService.getInstance().getNGService("$filter");

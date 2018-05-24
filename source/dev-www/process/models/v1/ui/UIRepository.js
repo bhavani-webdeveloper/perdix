@@ -13,13 +13,13 @@ irf.models.factory('UIRepository', function($resource, $httpParamSerializer, BAS
             method: "GET",
             url: 'modules/ui/customer/EnrolmentProcess.json'
         },
-        getLenderLiabilitiesLoanAccountBookingProcess :{
-            method : "GET",
-            url :'modules/ui/lender/LenderLiabilitiesLoanAccountBookingProcess.json'
+        getLenderLiabilitiesLoanAccountBookingProcess: {
+            method: "GET",
+            url: 'modules/ui/lender/LenderLiabilitiesLoanAccountBookingProcess.json'
         },
-        getLiabilityRepayment : {
-            method : "GET",
-            url : 'modules/ui/lender/LiabilityRepayment.json'
+        getLiabilityRepayment: {
+            method: "GET",
+            url: 'modules/ui/lender/LiabilityRepayment.json'
         },
         getPostingEntryUIRepository: {
             method: 'GET',
@@ -28,8 +28,15 @@ irf.models.factory('UIRepository', function($resource, $httpParamSerializer, BAS
         getFinconAccountingUIRepository: {
             method: 'GET',
             url: 'modules/ui/journal/FinconAccountingEntry.json'
+        },
+        getAgentProcessUIRepository: {
+            method: 'GET',
+            url: 'modules/ui/agent/AgentProcess.json'
+        },
+        getCustomerAgentProcessUIRepository: {
+            method: 'GET',
+            url: 'modules/ui/agent/CustomerAgentProcess.json'
         }
-
     });
 
     return ret;

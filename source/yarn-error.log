@@ -1,0 +1,101 @@
+Arguments: 
+  C:\Program Files\nodejs\node.exe C:\Users\Vasanthi.Shanmugam\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add chalk
+
+PATH: 
+  C:\ProgramData\Oracle\Java\javapath;C:\Program Files\Java\jdk1.8.0_121\bin;C:\Program Files (x86)\Intel\iCLS Client\;C:\Program Files\Intel\iCLS Client\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\Git\cmd;C:\Users\Vasanthi.Shanmugam\AppData\Roaming\npm;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;F:\ProgramFiles\apache-maven-3.3.9\bin;C:\Program Files\TortoiseSVN\bin;C:\Program Files (x86)\Skype\Phone\;C:\Program Files\nodejs\;C:\Users\Vasanthi.Shanmugam\AppData\Local\Microsoft\WindowsApps;C:\Users\Vasanthi.Shanmugam\AppData\Local\atom\bin;C:\Users\Vasanthi.Shanmugam\AppData\Roaming\npm;C:\Program Files\Microsoft VS Code\bin
+
+Yarn version: 
+  1.6.0
+
+Node version: 
+  8.9.3
+
+Platform: 
+  win32 x64
+
+Trace: 
+  Error: ENOENT: no such file or directory, lstat 'F:\Works\client-trunk\source\node_modules\wiredep\node_modules\lodash\after.js'
+
+npm manifest: 
+  {
+    "name": "irf-perdix-view",
+    "version": "1.0.0",
+    "description": "",
+    "main": "\"\"",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+      "@reactivex/rxjs": "5.4.3",
+      "@types/lodash": "^4.14.85",
+      "@types/rx": "^4.1.1",
+      "chalk": "^1.1.1",
+      "class-transformer": "^0.1.8",
+      "com.lampa.startapp": "https://github.com/stalingino/com.lampa.startapp.git",
+      "cordova-android": "^6.3.0",
+      "cordova-browser": "~4.0.0",
+      "cordova-plugin-camera": "~2.1.1",
+      "cordova-plugin-datepicker": "~0.9.3",
+      "cordova-plugin-dialogs": "~1.2.1",
+      "cordova-plugin-geolocation": "~2.2.0",
+      "cordova-plugin-inappbrowser": "~1.4.0",
+      "cordova-plugin-whitelist": "1",
+      "gulp": "^3.9.0",
+      "gulp-cheerio": "^0.6.2",
+      "gulp-inject": "^4.2.0",
+      "gulp-json-modify": "^1.0.2",
+      "irf-bluetooth-plugin": "^1.2.0",
+      "js-logger": "^1.4.1",
+      "npm-git-install": "^0.2.0",
+      "phonegap-plugin-barcodescanner": "~4.1.0",
+      "reflect-metadata": "^0.1.10",
+      "wiredep": "^3.0.0"
+    },
+    "devDependencies": {
+      "del": "^2.2.2",
+      "frisby": "^0.8.5",
+      "gulp": "^3.9.1",
+      "gulp-if": "^2.0.1",
+      "gulp-load-plugins": "^1.2.4",
+      "gulp-main-bower-files": "^1.5.1",
+      "gulp-print": "^2.0.1",
+      "gulp-rev": "^7.1.2",
+      "gulp-rev-replace": "^0.4.3",
+      "gulp-typescript": "^3.2.3",
+      "gulp-useref": "^3.0.8",
+      "gulp-zip": "^3.2.0",
+      "jasmine-core": "^2.4.1",
+      "karma": "^0.13.22",
+      "karma-chrome-launcher": "^0.2.3",
+      "karma-jasmine": "^0.3.8",
+      "main-bower-files": "^2.13.1",
+      "merge2": "^1.2.0",
+      "typescript": "^2.6.1",
+      "yargs": "^6.6.0"
+    },
+    "cordova": {
+      "platforms": [
+        "browser",
+        "android"
+      ],
+      "plugins": {
+        "com.lampa.startapp": {},
+        "cordova-plugin-camera": {},
+        "cordova-plugin-datepicker": {},
+        "cordova-plugin-dialogs": {},
+        "cordova-plugin-geolocation": {},
+        "cordova-plugin-inappbrowser": {},
+        "cordova-plugin-whitelist": {},
+        "phonegap-plugin-barcodescanner": {},
+        "irf-bluetooth-plugin": {}
+      }
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
