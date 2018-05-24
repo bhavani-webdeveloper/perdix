@@ -37,7 +37,7 @@ irf.pageCollection.factory(irf.page("CBCheck"),
 					},
 					"urnNo": {
 						"title": "URN_NO",
-						"type": "number"
+						"type": "string"
 					},
 					"branchName": {
 						"title": "BRANCH_NAME",
