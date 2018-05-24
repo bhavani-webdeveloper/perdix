@@ -1255,7 +1255,7 @@
                         "type": "number"
                     }
                 }
-            },          
+            },
             "enterpriseMonthlySales": {
                 "key": "customer.enterpriseMonthlySales",
                 "type": "array",
@@ -1298,7 +1298,7 @@
                         "title": "NET_MARGIN_PRCT"
                     }
                 }
-            },            
+            },
             "expenditures": {
                 "key": "customer.expenditures",
                 "type": "array",
@@ -2270,6 +2270,63 @@
                 "key": "customer.enterprise.companyOperatingSince",
                 "title": "OPERATING_SINCE",
                 "type": "date"
+            }
+        }
+    },
+    "TangibleNetWorth": {
+        "type": "box",
+        "title": "TANGIBLE_NET_WORTH",
+        "orderNo" : 85,
+        "items": {
+            "enterpriseNetworth": {
+                "key": "customer.enterpriseNetworth",
+                "type": "array",
+                "title": "TANGIBLE_NET_WORTH",
+                "startEmpty" : true,
+                "items": {
+                    "financialYear": {
+                        "key": "customer.enterpriseNetworth[].financialYear",
+                        "type": "date",
+                        "title": "FINANCIAL_YEAR",
+                        "required": true
+                    },
+                    "tangibleNetworth": {
+                          "key": "customer.enterpriseNetworth[].tangibleNetworth",
+                          "type": "number",
+                          "title": "TANGIBLE_NET_WORTH",
+                          "required": true
+                    }
+                }
+            }
+        }
+    },
+    "EnterpriseDocuments": {
+        "type": "box",
+        "title": "INCOME_DOCUMENT",
+        "orderNo": 86,
+        "items": {
+            "enterpriseDocuments":{
+                "type":"array",
+                "title": "INCOME_DOCUMENT",
+                "key": "customer.enterpriseDocuments",
+                "startEmpty": true,
+                "items": {
+                    "docType": {
+                        "type": "select",
+                        "enumCode": "income_doc_type",
+                        "title": "DOCUMENT_TYPE",
+                        "key": "customer.enterpriseDocuments[].docType",
+                        "required": true
+                    },
+                    "fileId": {
+                        "key": "customer.enterpriseDocuments[].fileId",
+                        "type": "file",
+                        "title": "DOCUMENT_UPLOAD",
+                        "category": "CustomerEnrollment",
+                        "subCategory": "PHOTO",
+                        "required": true
+                    }
+                }
             }
         }
     }

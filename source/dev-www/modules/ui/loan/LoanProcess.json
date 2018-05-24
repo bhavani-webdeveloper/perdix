@@ -370,7 +370,7 @@
                 "key": "loanAccount.commercialCibilCharge",
                 "type": "amount",
                 "title": "COMMERCIAL_CIBIL_CHARGE"
-                
+
             }
         }
     },
@@ -381,7 +381,7 @@
         "items": {
             "loanUtilisationDetail" : {
                 "key": "loanAccount.loanUtilisationDetail",
-                "type": "array",                
+                "type": "array",
                 "startEmpty": true,
                 "title": "PROPOSED_UTILIZATION_PLAN",
                 "items": {
@@ -1531,6 +1531,46 @@
                     "remarks": {
                         "key": "loanAccount.telecallingDetails[].telecallingRemarks",
                         "title": "CUSTOME_REMARKS"
+                    }
+                }
+            }
+        }
+    },
+    "vehicleLoanDocuments": {
+        "type": "box",
+        "title": "VEHICLE_DOCUMENTS",
+        "orderNo": 86,
+        "items": {
+            "vehicleLoanDocuments": {
+                "type": "array",
+                "title": "VEHICLE_DOCUMENTS",
+                "startEmpty": true,
+                "key": "loanAccount.vehicleLoanDetails.vehicleLoanDocuments",
+                "items": {
+                    "docType": {
+                        "type":"select",
+                        "enumCode":"vehicle_doc_type",
+                        "title": "DOCUMENT_TYPE",
+                        "key": "loanAccount.vehicleLoanDetails.vehicleLoanDocuments[].docType"
+                    },
+                    "fileId": {
+                        "key": "loanAccount.vehicleLoanDetails.vehicleLoanDocuments[].fileId",
+                        "type": "file",
+                        "fileType": "application/pdf",
+                        "using": "scanner",
+                        "title": "DOCUMENT_UPLOAD",
+                        "category": "CustomerEnrollment",
+                        "subCategory": "KYC1"
+                    },
+                    "issueDate": {
+                        "type": "date",
+                        "key": "loanAccount.vehicleLoanDetails.vehicleLoanDocuments[].issueDate",
+                        "title": "ISSUE_DATE"
+                    },
+                    "expiryDate": {
+                        "type": "date",
+                        "key": "loanAccount.vehicleLoanDetails.vehicleLoanDocuments[].expiryDate",
+                        "title": "EXPIRY_DATE"
                     }
                 }
             }
