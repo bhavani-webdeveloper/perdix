@@ -32,6 +32,30 @@
         },
         {
             "order": 3,
+            "code": "DeviationApprovalHeadRisk",
+            "name": "Deviation Approval HeadRisk",
+            "stageType": "CAPTURE",
+            "sendSms": "No",
+            "smsCategory": "LoanBooking",
+            "isAccountOpening": false,
+            "allowedRoles": [
+                "WM"
+            ]
+        },
+        {
+            "order": 4,
+            "code": "DeviationApprovalCEO",
+            "name": "Deviation Approval CEO",
+            "stageType": "CAPTURE",
+            "sendSms": "No",
+            "smsCategory": "LoanBooking",
+            "isAccountOpening": false,
+            "allowedRoles": [
+                "WM"
+            ]
+        },                
+        {
+            "order": 5,
             "code": "VehicleValuation",
             "name": "Vehicle Valuation",
             "stageType": "CAPTURE",
@@ -40,7 +64,7 @@
             "isAccountOpening": false
         },
         {
-            "order": 4,
+            "order": 6,
             "code": "Application",
             "name": "Application",
             "stageType": "CAPTURE",
@@ -53,7 +77,7 @@
             ]
         },
         {
-            "order": 5,
+            "order": 7,
             "code": "ApplicationReview",
             "name": "Application Review",
             "stageType": "CAPTURE",
@@ -66,7 +90,7 @@
             ]
         },
         {
-            "order": 6,
+            "order": 8,
             "code": "BranchCreditAppraisal",
             "name": "Branch Credit Appraisal",
             "stageType": "CAPTURE",
@@ -78,7 +102,7 @@
             ]
         },
         {
-            "order": 7,
+            "order": 9,
             "code": "HOCreditAppraisal",
             "name": "HO Credit Appraisal",
             "stageType": "CAPTURE",
@@ -90,7 +114,7 @@
             ]
         },
         {
-            "order": 8,
+            "order": 10,
             "code": "ManagementCommittee",
             "name": "Management Committee",
             "stageType": "CAPTURE",
@@ -102,7 +126,7 @@
             ]
         },
         {
-            "order": 9,
+            "order": 11,
             "code": "Rejected",
             "name": "Rejected",
             "stageType": "CAPTURE",
@@ -114,7 +138,7 @@
             ]
         },
         {
-            "order": 10,
+            "order": 12,
             "code": "LoanInitiation",
             "name": "Loan Input",
             "stageType": "CAPTURE",
@@ -126,7 +150,7 @@
             ]
         },
         {
-            "order": 11,
+            "order": 13,
             "code": "PendingForPartner",
             "name": "Pending for Partner",
             "stageType": "CAPTURE",
@@ -138,7 +162,7 @@
             ]
         },
         {
-            "order": 12,
+            "order": 14,
             "code": "LoanBooking",
             "name": "Loan Booking",
             "stageType": "CAPTURE",
@@ -150,7 +174,7 @@
             ]
         },
         {
-            "order": 13,
+            "order": 15,
             "code": "DocumentUpload",
             "name": "Document Download and Upload",
             "stageType": "CAPTURE",
@@ -162,7 +186,7 @@
             ]
         },
         {
-            "order": 14,
+            "order": 16,
             "code": "DocumentVerification",
             "name": "Document Verification",
             "stageType": "CAPTURE",
