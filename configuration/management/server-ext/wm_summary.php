@@ -22,7 +22,7 @@ parse_str($queryString, $query);
 try{
 	
 	// Dashboard queries for customer summary
-	$result_segment =DB::select("	select (case 
+	$result_segment =DB::connection("bietl_db")->select("	select (case 
 
 	when oc_cat.occupation_category='Agriculture' and ifnull(ifnull(ti.household_income,0)/nullif(sz.cnt,0),0)>=0 and ifnull(ifnull(ti.household_income,0)/nullif(sz.cnt,0),0)<62826  then 'agri low income'
 
@@ -205,14 +205,14 @@ try{
 	
 	
 	
-	$result_last_edited_at=DB::select("select date(last_edited_at) as last_edited_at from financialForms.customer where id=?",array($query['cid']));
+	$result_last_edited_at=DB::connection("bietl_db")->select("select date(last_edited_at) as last_edited_at from financialForms.customer where id=?",array($query['cid']));
 	
-	$result_hh_size=DB::select("select count(*) as hh_size from financialForms.family_details where customer_id=?",array($query['cid']));
+	$result_hh_size=DB::connection("bietl_db")->select("select count(*) as hh_size from financialForms.family_details where customer_id=?",array($query['cid']));
 	
-	$result_expense=DB::select("select cs.id as id,sum(eps.annual_expenses * freq.multiple) as total_expense from 
+	$result_expense=DB::connection("bietl_db")->select("select cs.id as id,sum(eps.annual_expenses * freq.multiple) as total_expense from 
 								financialForms.expenditure_per_annum eps, bietl.expense_frequency freq,financialForms.customer cs   
 								WHERE eps.customer_id=cs.id and freq.frequency=eps.frequency and cs.id=?",array($query['cid']));
-	$result_income=DB::select("SELECT
+	$result_income=DB::connection("bietl_db")->select("SELECT
 			cs.id,sum(CEIL(LEAST((ipas.income_earned * inf.adjusted_multiple),
 			(ipas.income_earned * inf.multiple * LEAST(GREATEST(inf.min_months_per_year,
 			ipas.months_per_year), inf.max_months_per_year)/12)))) AS `household_income`
@@ -226,7 +226,7 @@ try{
 			AND inf.KGFS=cs.kgfs_bank_name
 			AND cs.id=tfds.customer_id
 			and cs.id=?",array($query['cid']));
-	$result_prime_earner =DB::select("select ps.family_member_first_name,ps.age from (SELECT tfds.family_member_first_name, tfds.id,round(datediff(curdate(),date(tfds.date_of_birth))/365,0) as age,
+	$result_prime_earner =DB::connection("bietl_db")->select("select ps.family_member_first_name,ps.age from (SELECT tfds.family_member_first_name, tfds.id,round(datediff(curdate(),date(tfds.date_of_birth))/365,0) as age,
 	  max(CEIL(LEAST((ipas.income_earned * inf.adjusted_multiple),  (ipas.income_earned * inf.multiple * LEAST(GREATEST(inf.min_months_per_year, 
 	  ipas.months_per_year), inf.max_months_per_year)/12)))) AS `household_occupation_income` 
 	  FROM financialForms.family_details tfds,
@@ -240,7 +240,7 @@ try{
 			AND cs.id=tfds.customer_id
 			and cs.id=?) ps",array($query['cid']));
 	
-	$result_hh_comp =DB::select("SELECT 'Male' as Dependants,
+	$result_hh_comp =DB::connection("bietl_db")->select("SELECT 'Male' as Dependants,
 	sum(case when (YEAR(curdate())-YEAR(tfds.date_of_birth))<18 and tfds.gender='Male' then 1 else 0 end) as dep_less_than_18,
 	sum(case when (YEAR(curdate())-YEAR(tfds.date_of_birth))>27 and tfds.gender='Male' then 1 else 0 end) as dep_abv_27,
 	sum(case when (YEAR(curdate())-YEAR(tfds.date_of_birth))>=18 and (YEAR(curdate())-YEAR(tfds.date_of_birth))<=27 and tfds.gender='Male' then 1 else 0 end) as dep_bet_18_27 
@@ -263,7 +263,7 @@ SELECT 'Female' as Dependants,
 	
 	
 	
-	$result_loan_count =DB::select("select 'Active' As Status , 
+	$result_loan_count =DB::connection("bietl_db")->select("select 'Active' As Status , 
 	sum(case when apd.product like '%jlg%' and apd.product_close_date>curdate() and apd.customer_id=? then 1 else 0 end) as JLG,
 	sum(case when apd.product like 'MEL|Retail' and apd.product_close_date>curdate() and apd.customer_id=? then 1 else 0 end) as MEL,
 	sum(case when apd.product like '%personal%' and apd.product_close_date>curdate() and apd.customer_id=? then 1 else 0 end)as PERSONAL,
@@ -278,13 +278,13 @@ UNION ALL
 
 	from bietl.`all_products_dump` apd where  apd.customer_id=?",array($query['cid'],$query['cid'],$query['cid'],$query['cid'],$query['cid'],$query['cid'],$query['cid'],$query['cid'],$query['cid'],$query['cid']));
 	
-	$result_loan_outstanding =DB::select("select odm.product,sum(odm.principal_outstanding) as outstanding_amt,apd.product_close_date as maturity_date,odm.days_overdue
+	$result_loan_outstanding =DB::connection("bietl_db")->select("select odm.product,sum(odm.principal_outstanding) as outstanding_amt,apd.product_close_date as maturity_date,odm.days_overdue
 	from bietl.all_products_dump apd, bietl.overdue_master_daily odm
 	where apd.product_number=odm.account_number and odm.date=curdate()-1 and odm.customer_id=?
 	group by product",array($query['cid']));
 
 
-	$result_owns_shop =DB::select("select 
+	$result_owns_shop =DB::connection("bietl_db")->select("select 
 	CASE WHEN ads.customer_id IS NULL THEN 'NO'
 			ELSE 'YES'
 		END shop		
@@ -295,18 +295,18 @@ ON  ads.customer_id = cs.id
 and ads.name_of_owned_asset='Shop' 
 WHERE cs.id=?",array($query['cid']));
 	
-	$result_insurance =DB::select("select apd.product as product, cs.first_name as customer,
+	$result_insurance =DB::connection("bietl_db")->select("select apd.product as product, cs.first_name as customer,
 	ifnull(apd.product_close_date,0) product_close_date,ifnull(datediff(apd.product_close_date,curdate()),0) as expires_in,apd.insurance_cover_amount as coverage 
 	from bietl.all_products_dump apd, financialForms.customer cs where product_category='Insurance' 
 	and apd.customer_id=? and cs.urn_no=apd.urn order by apd.product_close_date desc limit 5;",array($query['cid']));
 	
-	$result_remittance = DB::select("select transaction_type, transaction_amount,transaction_date,service_provider from $bi_etl.remittance_dump where household_id=? order by transaction_date desc limit 10",array($query['cid']));
+	$result_remittance = DB::connection("bietl_db")->select("select transaction_type, transaction_amount,transaction_date,service_provider from $bi_etl.remittance_dump where household_id=? order by transaction_date desc limit 10",array($query['cid']));
 
-	$result_savings = DB::select("select transaction_date,transaction_amount from bietl.sb_account_transactions_dump where transaction_type='DEPOSIT' and household_id= ?  order by transaction_date desc limit 10",array($query['cid']));
+	$result_savings = DB::connection("bietl_db")->select("select transaction_date,transaction_amount from bietl.sb_account_transactions_dump where transaction_type='DEPOSIT' and household_id= ?  order by transaction_date desc limit 10",array($query['cid']));
 	
 	//risk model variables
 	$risk_score= 0;
-	$risk_occup_cat_score=DB::select("
+	$risk_occup_cat_score=DB::connection("bietl_db")->select("
 	select (case 
 	when cat.occupation_category='Working Abroad' then 34
 	when cat.occupation_category='Agriculture' then 4
@@ -342,7 +342,7 @@ WHERE cs.id=?",array($query['cid']));
 	
 	$risk_score += (count($risk_occup_cat_score) > 0 && isset($risk_occup_cat_score[0]->occupation_category_score)) ? $risk_occup_cat_score[0]->occupation_category_score : 0; 
 	
-	$risk_ed_stat_score=DB::select("select (case 
+	$risk_ed_stat_score=DB::connection("bietl_db")->select("select (case 
 	when ed.education_status='1st - 5th' or ed.education_status='6th - 8th'  then 0
 	else 6 end) as edu_of_primary_income_earner_score 
 	 from 
@@ -362,7 +362,7 @@ WHERE cs.id=?",array($query['cid']));
 		and cs.id=?) ed where ed.id=?",array($query['cid'],$query['cid']));
 	$risk_score += (count($risk_ed_stat_score) > 0 && isset($risk_ed_stat_score[0]->edu_of_primary_income_earner_score)) ? $risk_ed_stat_score[0]->edu_of_primary_income_earner_score : 0; 
 	
-	$risk_net_income_per_member_score=DB::select("select (case 
+	$risk_net_income_per_member_score=DB::connection("bietl_db")->select("select (case 
 	when  net.net_income_per_member>40000 then 14
 	when  net.net_income_per_member>20000 and net.net_income_per_member<=40000 then 8
 	when  net.net_income_per_member<20000 then 0 else 0 end) as net_income_per_member_score
@@ -393,7 +393,7 @@ WHERE eps.customer_id=cs.id and freq.frequency=eps.frequency and cs.id=?) tex
 	where ti.customer_id=sz.customer_id and sz.customer_id=tex.id and ti.customer_id=?) net;",array($query['cid'],$query['cid'],$query['cid'],$query['cid']));
 	$risk_score += (count($risk_net_income_per_member_score) > 0 && isset($risk_net_income_per_member_score[0]->net_income_per_member_score)) ? $risk_net_income_per_member_score[0]->net_income_per_member_score : 0; 
 	
-	$risk_all_loans_active_score=DB::select("select (case
+	$risk_all_loans_active_score=DB::connection("bietl_db")->select("select (case
 	when lc.count_loans_active>3 then 0
 	when lc.count_loans_active>2 and lc.count_loans_active<=3 then 20
 	when lc.count_loans_active=2 then 23
@@ -405,7 +405,7 @@ WHERE eps.customer_id=cs.id and freq.frequency=eps.frequency and cs.id=?) tex
 	
 	$risk_score += (count($risk_all_loans_active_score) > 0 && isset($risk_all_loans_active_score[0]->all_loans_active_score)) ? $risk_all_loans_active_score[0]->all_loans_active_score : 0;
 	
-	$risk_all_loans_closed_score=DB::select("select (case
+	$risk_all_loans_closed_score=DB::connection("bietl_db")->select("select (case
 	when lc.count_loans_closed>7 then 11
 	when lc.count_loans_closed>3 and lc.count_loans_closed<=7 then 7
 	when lc.count_loans_closed>1 and lc.count_loans_closed<=3 then 0
@@ -417,7 +417,7 @@ WHERE eps.customer_id=cs.id and freq.frequency=eps.frequency and cs.id=?) tex
 	
 	$risk_score += (count($risk_all_loans_closed_score) > 0 && isset($risk_all_loans_closed_score[0]->all_loans_closed_score)) ? $risk_all_loans_closed_score[0]->all_loans_closed_score : 0;
 	
-	$risk_other_mfi=DB::select("select (case 
+	$risk_other_mfi=DB::connection("bietl_db")->select("select (case 
 	when max(hm.NO_OF_OTHER_MFIS)>0 then 11
 	when max(hm.NO_OF_OTHER_MFIS)<=0  then 0 else 0	
 	end) as o_mfi_cnt
@@ -429,7 +429,7 @@ WHERE eps.customer_id=cs.id and freq.frequency=eps.frequency and cs.id=?) tex
 	
 	$risk_score += (count($risk_other_mfi) > 0 && isset($risk_other_mfi[0]->o_mfi_cnt)) ? $risk_other_mfi[0]->o_mfi_cnt : 0;
 	
-	$risk_delinquency_score=DB::select("select (case 
+	$risk_delinquency_score=DB::connection("bietl_db")->select("select (case 
 	when max(hm.MAX_WORST_DELEQUENCY)>3 then 1
 	when max(hm.MAX_WORST_DELEQUENCY)>=0 and max(hm.MAX_WORST_DELEQUENCY)<=3 then 2
 	when max(hm.MAX_WORST_DELEQUENCY)<0  then 0  else 0
@@ -442,7 +442,7 @@ WHERE eps.customer_id=cs.id and freq.frequency=eps.frequency and cs.id=?) tex
 	
 	$risk_score += (count($risk_delinquency_score) > 0 && isset($risk_delinquency_score[0]->o_max_worst_deliquent_score)) ? $risk_delinquency_score[0]->o_max_worst_deliquent_score : 0;
 	
-	$risk_occupation_count=DB::select("select (case 
+	$risk_occupation_count=DB::connection("bietl_db")->select("select (case 
 	when oc.occupation_count>3 then 8
 	when oc.occupation_count=3 then 8
 	when oc.occupation_count=2 then 5
@@ -464,7 +464,7 @@ WHERE eps.customer_id=cs.id and freq.frequency=eps.frequency and cs.id=?) tex
 	 
 	 $risk_score += (count($risk_occupation_count) > 0 && isset($risk_occupation_count[0]->occupation_count_score)) ? $risk_occupation_count[0]->occupation_count_score : 0;
 	
-	$risk_age_borrower=DB::select("select (case when (curdate()-date_of_birth)>52 then 24
+	$risk_age_borrower=DB::connection("bietl_db")->select("select (case when (curdate()-date_of_birth)>52 then 24
 	when (curdate()-date_of_birth)>44 and (curdate()-date_of_birth)<=52 then 22
 	when (curdate()-date_of_birth)>30 and (curdate()-date_of_birth)<=44 then 16
 	when (curdate()-date_of_birth)<30 then 0
@@ -505,7 +505,7 @@ WHERE eps.customer_id=cs.id and freq.frequency=eps.frequency and cs.id=?) tex
 	
 	
 	//overdue_days
-	$result_od_days=DB::select("select (days_overdue) from bietl.overdue_master_daily where customer_id=? and days_overdue is not null order by date desc limit 1",array($query['cid']));
+	$result_od_days=DB::connection("bietl_db")->select("select (days_overdue) from bietl.overdue_master_daily where customer_id=? and days_overdue is not null order by date desc limit 1",array($query['cid']));
 	
 	$days_overdue=0;
 	if(count($result_od_days)>0 && isset($result_od_days[0]->days_overdue)){
@@ -520,7 +520,7 @@ WHERE eps.customer_id=cs.id and freq.frequency=eps.frequency and cs.id=?) tex
 	
 	//current_loan_exposure
 	
-	$current_loan_exposure=DB::select("select sum(principal_outstanding) as total_exposure  from bietl.overdue_master_daily where customer_id=? and date=curdate()-1;",array($query['cid']));
+	$current_loan_exposure=DB::connection("bietl_db")->select("select sum(principal_outstanding) as total_exposure  from bietl.overdue_master_daily where customer_id=? and date=curdate()-1;",array($query['cid']));
 	$exposure=0;
 	if(count($current_loan_exposure)>0 && isset($current_loan_exposure[0]->total_exposure)){
 		
