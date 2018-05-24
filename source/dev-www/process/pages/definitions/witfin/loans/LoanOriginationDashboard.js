@@ -23,6 +23,8 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
                 "Page/Engine/witfin.lead.ReadyForScreeningQueue",
                 "Page/Engine/witfin.loans.individual.screening.ScreeningQueue",
                 "Page/Engine/witfin.loans.individual.screening.ScreeningReviewQueue",
+                "Page/Engine/witfin.loans.individual.screening.GoNoGoApproval1Queue",
+                "Page/Engine/witfin.loans.individual.screening.GoNoGoApproval2Queue",
                 "Page/Engine/witfin.loans.individual.screening.VehicleValuationQueue",
                 "Page/Engine/witfin.loans.individual.screening.ApplicationQueue",
                 "Page/Engine/witfin.loans.individual.screening.ApplicationReviewQueue",
@@ -32,7 +34,7 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
                 "Page/Engine/witfin.loans.individual.screening.RejectedQueue"
             ]
         };
-        
+
 
         PagesDefinition.getUserAllowedDefinition(leadDefinition).then(function(resp) {
             $scope.leadDashboardDefinition = resp;
@@ -43,18 +45,18 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
             var lapqMenu = $scope.leadDashboardDefinition.$menuMap["Page/Engine/witfin.lead.LeadAssignmentPendingQueue"];
             var lfuqMenu = $scope.leadDashboardDefinition.$menuMap["Page/Engine/witfin.lead.LeadFollowUpQueue"];
             var ilqMenu = $scope.leadDashboardDefinition.$menuMap["Page/Engine/witfin.lead.IncompleteLeadQueue"];
-            
+
             var rMenu = $scope.leadDashboardDefinition.$menuMap["Page/Engine/witfin.lead.LeadRejectedQueue"];
 
             if (rMenu) rMenu.data = 0;
             if (lapqMenu) lapqMenu.data = 0;
             if (lfuqMenu) lfuqMenu.data = 0;
             if (ilqMenu) ilqMenu.data = 0;
-            
+
 
                _.forEach(centres, function(centre) {
 
-                
+
                 if (lfuqMenu) {
                     Lead.search({
                         'branchName': branchName,
@@ -139,7 +141,7 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
                 });
             }
 
-            
+
         });
         PagesDefinition.getUserAllowedDefinition(loanDefinition).then(function(resp) {
 
@@ -213,6 +215,42 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
                     srqMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
                     srqMenu.data = '-';
+                });
+            }
+
+            var gng1Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.GoNoGoApproval1Queue"];
+            if (gng1Menu) {
+                IndividualLoan.search({
+                    'stage': 'GoNoGoApproval1',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                }).$promise.then(function(response, headerGetter) {
+                    gng1Menu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    gng1Menu.data = '-';
+                });
+            }
+
+            var gng2Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.GoNoGoApproval2Queue"];
+            if (gng2Menu) {
+                IndividualLoan.search({
+                    'stage': 'GoNoGoApproval2',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                }).$promise.then(function(response, headerGetter) {
+                    gng2Menu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    gng2Menu.data = '-';
                 });
             }
 
@@ -353,9 +391,6 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
                     drqMenu.data = '-';
                 });
             }
-
-
-
 
         });
     }
