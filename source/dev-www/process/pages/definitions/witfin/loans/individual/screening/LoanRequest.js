@@ -457,8 +457,7 @@ define([], function() {
                             },
                             "LoanRecommendation.udf6": {
                                 "title": "NOMINAL_RATE",
-                                "readonly": true,
-                                "required": true
+                                "readonly": true
                             },
                             "LoanRecommendation.tenure": {
                                 onChange: function(modelValue, form, model) {
