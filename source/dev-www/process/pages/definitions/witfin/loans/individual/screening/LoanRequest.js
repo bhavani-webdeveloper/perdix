@@ -429,11 +429,17 @@ define([], function() {
 
                     /* Setting data recieved from Bundle */
                     model.loanAccount = model.loanProcess.loanAccount;
-                    model.loanAccount.accountUserDefinedFields = {
-                        userDefinedFieldValues: {
-                            udf1: 'NO'
-                        }
-                    };
+
+                    if (!model.loanAccount.id){
+                        model.loanAccount.accountUserDefinedFields = {
+                            userDefinedFieldValues: {
+                                udf1: 'NO'
+                            }
+                        };
+                    }
+
+                    // model.loanAccount.accountUserDefinedFields = model.loanAccount.accountUserDefinedFields || {};
+
                     self = this;
                     var formRequest = {
                         "overrides": {
@@ -782,7 +788,13 @@ define([], function() {
                                                     return false;
                                                 }
                                             }
-                                        }
+                                        },
+                                        "udf5": {
+                                            "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5",
+                                            "title" : "FLAT_RATE",
+                                            "type": "string",
+                                            "orderNo" : 75
+                                        },
                                     }
                                 },
                                 "DeductionsFromLoan": {
