@@ -1,8 +1,8 @@
 define({
     pageUID: "loans.individual.screening.detail.PortfolioAnalysis",
     pageType: "Engine",
-    dependencies: ["$log", "$q", "SchemaResource","PageHelper","Scoring","AuthTokenHelper","Enrollment", "SessionStore","formHelper", "filterFilter", "irfCurrencyFilter", "irfElementsConfig", "Model_ELEM_FC", "BundleManager"],
-    $pageFn: function ($log, $q, SchemaResource,PageHelper,Scoring, AuthTokenHelper, Enrollment,SessionStore, formHelper, filterFilter, irfCurrencyFilter, irfElementsConfig, Model_ELEM_FC, BundleManager) {
+    dependencies: ["$log", "$q", "SchemaResource","PageHelper","Scoring","AuthTokenHelper","Enrollment", "SessionStore","formHelper", "filterFilter", "irfCurrencyFilter", "irfElementsConfig", "Model_ELEM_FC", "BundleManager","$filter"],
+    $pageFn: function ($log, $q, SchemaResource,PageHelper,Scoring, AuthTokenHelper, Enrollment,SessionStore, formHelper, filterFilter, irfCurrencyFilter, irfElementsConfig, Model_ELEM_FC, BundleManager,$filter) {
         var randomColor = function() {
 			return (function(m,s,c){return (c ? arguments.callee(m,s,c-1) : '#') + s[m.floor(m.random() * s.length)]})(Math,'0123456789ABCDEF',5);
         }
@@ -352,11 +352,12 @@ define({
                             prepareFinancialData['tableData'].push(params[3].tableData[0]);
                         });
                     };
-                    prepareFinancialData['tableData'].sort(function compare(a, b) {
+                    prepareFinancialData['tableData']=$filter("orderBy") (prepareFinancialData['tableData'], ['loanId']);
+                    /* prepareFinancialData['tableData'].sort(function compare(a, b) {
                         var dateA = new Date(a.disbursement_date);
                         var dateB = new Date(b.disbursement_date);
                         return dateA - dateB;
-                      });
+                      }); */
                     //older accounts should not be greater then 3
                     if(prepareFinancialData['tableData'].length>3) prepareFinancialData['tableData']=prepareFinancialData['tableData'].slice(-3);
                     _.forEach(prepareFinancialData['tableData'], function(histData){
