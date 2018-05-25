@@ -11,7 +11,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
             "subTitle": "Lead",
             initialize: function(model, form, formCtrl) {
                 model.lead = model.lead || {};
-                   model.lead.siteCode = SessionStore.getGlobalSetting('siteCode');
+                model.lead.siteCode = SessionStore.getGlobalSetting('siteCode');
 
                    
                 if (!(model.$$STORAGE_KEY$$)) {
@@ -44,6 +44,11 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                         },
                         function(res) {
                             _.assign(model.lead, res);
+                            
+                            if (model.lead.dob) {
+                                model.lead.age = moment().diff(moment(model.lead.dob, SessionStore.getSystemDateFormat()), 'years');
+                            }
+
                             if (model.lead.currentStage == 'Incomplete') {
                                 model.lead.customerType = "Enterprise";
                                 model.lead.leadStatus = "Incomplete";

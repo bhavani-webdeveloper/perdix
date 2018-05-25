@@ -39,6 +39,9 @@ irf.pageCollection.factory(irf.page("lead.LeadReject"), ["$log", "$state", "$fil
                         },
                         function(res) {
                             _.assign(model.lead, res);
+                            if (model.lead.dob) {
+                                model.lead.age = moment().diff(moment(model.lead.dob, SessionStore.getSystemDateFormat()), 'years');
+                            }
                             if (model.lead.currentStage == 'Incomplete') {
                                 model.lead.customerType = "Enterprise";
                                 model.lead.leadStatus = "Incomplete";
