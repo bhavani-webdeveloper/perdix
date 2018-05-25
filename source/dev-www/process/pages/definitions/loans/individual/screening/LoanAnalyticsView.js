@@ -43,6 +43,13 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.LoanAnalyticsVie
 				maximum: 1,
 				order: 50
 			}, {
+                pageName: 'loans.individual.screening.detail.PortfolioAnalysis',
+                title: 'PORTFOLIO_ANALYSIS',
+                pageClass: 'portfolio-analysis',
+                minimum: 1,
+                maximum: 1,
+                order: 52
+            },{
 				pageName: 'loans.individual.screening.detail.LoanApplicationView',
 				title: 'Loan Recommendation',
 				pageClass: 'loan-recommendation',
@@ -206,6 +213,18 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.LoanAnalyticsVie
 							pageClass: 'business-finance',
 							model: {
 								customerId: res.customerId
+							}
+						});
+						$this.bundlePages.push({
+							pageClass: 'portfolio-analysis',
+							model: {
+								cbModel: {
+									customerId: res.customerId,
+									loanId: bundleModel.loanId,
+									scoreName: 'RiskScore3',
+									customerDetail: bundleModel.customer_detail
+								}
+								
 							}
 						});
 

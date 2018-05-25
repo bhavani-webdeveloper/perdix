@@ -10,6 +10,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             var deferred = $q.defer();
             model.businessPLs = [];
             model.loanRepaymentHistory = [];
+            model.customerHistory=[];
             var keybasicLoanInfo = ['Loan Account Number', 'Operational Status', 'Product', 'Loan Amount', 'Frequency', 'Tenure', '# Tranche', 'EMI', 'Normal Interest Rate'];
             var p1 = Queries.getLoanAccountsByUrnAndStage(model.customerUrn, ["Completed",
             "Rejected"]);
@@ -67,6 +68,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                             
                             model.businessPLs.push(businessPL);
                             model.loanRepaymentHistory.push(loanRepaymentHistory);
+                            model.customerHistory.push(resp);
                         }, function(){
                             $log.info("Failed loading financial summary for loan_id::" + res[i].loanId);
                         });
@@ -140,6 +142,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
 
                 }).finally(function(){
                     deferred.resolve();
+                    BundleManager.pushEvent('customer-history-data', model._bundlePageObj, model.customerHistory);
                 })
 
             }, function(){});

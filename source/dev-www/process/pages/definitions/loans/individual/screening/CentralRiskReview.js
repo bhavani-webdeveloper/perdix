@@ -44,6 +44,13 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.CentralRiskRevie
                 maximum: 1,
                 order: 50
             }, {
+                pageName: 'loans.individual.screening.detail.PortfolioAnalysis',
+                title: 'PORTFOLIO_ANALYSIS',
+                pageClass: 'portfolio-analysis',
+                minimum: 1,
+                maximum: 1,
+                order: 52
+            },{
                 pageName: 'loans.individual.screening.detail.LoanApplicationView',
                 title: 'Loan Recommendation',
                 pageClass: 'loan-recommendation',
@@ -244,6 +251,19 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.CentralRiskRevie
                                 });
 
                                 $this.bundlePages.push({
+                                    pageClass: 'portfolio-analysis',
+                                    model: {
+                                        cbModel: {
+                                            customerId: res.customerId,
+                                            loanId: bundleModel.loanId,
+                                            scoreName: 'RiskScore3',
+                                            customerDetail: bundleModel.customer_detail
+                                        }
+                                        
+                                    }
+                                });
+
+                                $this.bundlePages.push({
                                     pageClass: 'loan-recommendation',
                                     model: {
                                         customerId: res.customerId
@@ -320,6 +340,9 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.CentralRiskRevie
                 },
                 "financialSummary": function(pageObj, bundleModel, params) {
                     BundleManager.broadcastEvent("financial-summary", params);
+                },
+                "customer-history-data": function(pageObj, bundleModel, params){
+                    BundleManager.broadcastEvent("customer-history-fin-snap", params);
                 },
                 "business": function(pageObj, bundleModel, params) {
                     BundleManager.broadcastEvent("business-customer", params);
