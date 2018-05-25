@@ -272,17 +272,17 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                     "condition":"model.rejectLenderDocumentFlag",
                                     "orderNo":10,
                                     "colClass": "col-sm-12",
-                                    "title": "COMPLIANCE_DOCUMENT",
+                                    "title": "COMPLIANCE_DOCUMENTS",
                                     "htmlClass": "text-danger",
                                     "items": {
                                         "liabilityComplianceDocument": {
                                             "type": "fieldset",
-                                            "title": "COMPLIANCE_DOCUMENT",
+                                            "title": "COMPLIANCE_DOCUMENTS",
                                             "items": {
                                                 "liabilityComplianceDocument": {
                                                     "key": "liabilityAccount.liabilityComplianceDocuments",
                                                     "type": "array",
-                                                    "title": "COMPLIANCE_DOCUMENT",
+                                                    "title": "COMPLIANCE_DOCUMENTS",
                                                     "view": "fixed",
                                                     "add": null,
                                                     "remove": null,
