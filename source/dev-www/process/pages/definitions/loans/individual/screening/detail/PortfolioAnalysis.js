@@ -111,8 +111,11 @@ define({
                     }
                 };
 
-                /* --Utility function for showing loader till the event loaded */
-                var renderRequiredEvents = ['financial-summary', 'customer-history-fin-snap'];
+                /* --Utility function for showing loader till the event loaded - 
+                rendering on financial summary atleast not snapshot because they may be empty 
+                so possibility that it never get fired*/
+
+                var renderRequiredEvents = ['financial-summary'];
                 model.renderReady = function(eventName) {
 	                renderRequiredEvents.splice(renderRequiredEvents.indexOf(eventName), 1);
 	                if (!renderRequiredEvents.length) {
@@ -336,8 +339,10 @@ define({
                         'financialsGraph':{}
                         };
                     if(params){
-                        model.customerHistoryFinancials['graphOptions']=params[0][3].graphOptions;
-                        model.customerHistoryFinancials['graphConfig']=params[0][3].graphConfig;
+                        if(_.isEmpty(model.customerHistoryFinancials['graphOptions']) || _.isEmpty(model.customerHistoryFinancials['graphConfig'])){
+                            model.customerHistoryFinancials['graphOptions']=params[0][3].graphOptions;
+                            model.customerHistoryFinancials['graphConfig']=params[0][3].graphConfig;
+                        }
                        _.forEach(params, function(params){
                             prepareFinancialData['tableData'].push(params[3].tableData[0]);
                         });
@@ -389,7 +394,7 @@ define({
                         })
 
                     });
-                    model.renderReady('customer-history-fin-snap');
+                    /* model.renderReady('customer-history-fin-snap'); */
                 },                
                 "financial-summary": function(bundleModel, model, params){
                     model.branchName=params[0].data[0]['Hub Name'];
@@ -401,6 +406,7 @@ define({
                     else{
                         model.existingCustomerStr = "New Customer"
                     };
+
                     let prepareFinancialData={};
                         if(params){
                             let balancesheet=params[9].data[0];
@@ -430,6 +436,21 @@ define({
                             }
                         }
                     model.customerHistoryFinancials['tableData'].push(prepareFinancialData);
+                    if(_.isEmpty(model.customerHistoryFinancials['graphOptions']) || _.isEmpty(model.customerHistoryFinancials['graphConfig'])){
+                        model.customerHistoryFinancials['graphOptions']={
+                                                            'multiBar' :{
+                                                                "chart": {
+                                                                    "type": "multiBarChart",
+                                                                    "height": 280,
+                                                                    "duration": 500,
+                                                                    "stacked": false
+                                                                }
+                                                            }};
+                        model.customerHistoryFinancials['graphConfig']={
+                                                                'refreshDataOnly':true,
+                                                                'deepWatchData':false
+                                                            }
+                    };
                     model.financialGraphValues['totalAssetGraphValues'].push({
                         'x' : prepareFinancialData['Category'],
                         'y' : prepareFinancialData['Total Assets'],
