@@ -2314,6 +2314,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             },
             {       
                 type: "box",
+                condition: "model.currentStage == 'Application' || model.currentStage=='FieldAppraisal'",
                 title: "STOCKS",
                 items: [{
                     key: "customer.currentAssets",
@@ -2323,7 +2324,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     addButtonExpr: " ('ADD'| translate ) + ' ' + (pivotValue | translate)",
                     pivotFieldEnumCode: 'stock_current_assets',
                     pivotField: "assetCategory",
-                    title: "RAW_Material",
+                    title: "RAW_MATERIAL",
                     items: [{
                         key: "customer.currentAssets[].description",
                         title:"DESCRIPTION",
@@ -2370,6 +2371,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             },
             {
                 type: "box",
+                condition: "model.currentStage == 'Application' || model.currentStage=='FieldAppraisal'",
                 startEmpty: true,
                 title: "ENTERPRICE_ASSETS",
                 items: [{
