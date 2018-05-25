@@ -1,5 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHClose"), ["$log", "ACH", "IndividualLoan", "LoanAccount", "PageHelper", "irfProgressMessage", "SessionStore", "$state", "Utils", "$stateParams", "formHelper", "CustomerBankBranch", 'Queries', "$q",
-    function($log, ACH, IndividualLoan, LoanAccount, PageHelper, irfProgressMessage, SessionStore, $state, Utils, $stateParams, formHelper, CustomerBankBranch, Queries, $q) {
+    "irfNavigator",
+    function($log, ACH, IndividualLoan, LoanAccount, PageHelper, irfProgressMessage, SessionStore, $state, Utils, $stateParams, formHelper, CustomerBankBranch, Queries, $q, irfNavigator) {
 
         var branch = SessionStore.getBranch();
         var achSearchPromise;
@@ -50,11 +51,11 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHClose"), ["$log"
                         },
                         onSelect: function(result, model, arg1) {
                             model.ach = result;
-                            $log.info(model.temp);
+                            model.ach.accountNumber = result.accountId;
                         },
                         getListDisplayItem: function(item, index) {
                             return [
-                                'Account Number : ' + item.accoundId,
+                                'Account Number : ' + item.accountId,
                                 'Branch : ' + item.bankName,
                                 'Bank : ' + item.branchName,
                                 'IFSC Code : ' + item.ifscCode
@@ -104,6 +105,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHClose"), ["$log"
                         function(response) {
                             PageHelper.hideLoader();
                             PageHelper.showProgress("page-init", "Done.", 2000);
+                            irfNavigator.goBack();
                             /*$state.go("Page.Engine", {
                             	pageName: 'loans.individual.achpdc.ACHPDCQueue',
                             	pageId: null
