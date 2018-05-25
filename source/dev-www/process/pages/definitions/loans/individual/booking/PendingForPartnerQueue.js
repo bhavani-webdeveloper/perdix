@@ -102,16 +102,24 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 						icon: "fa fa-book",
 						fn: function(item, index){
 							//EntityManager.setModel("loans.individual.booking.IFMRDO",{_loan:item});
-							$state.go("Page.Engine",{
+							/*$state.go("Page.Engine",{
 								pageName:"loans.individual.booking.PendingForPartner",
 								pageId:item.loanId
+							});*/
+							irfNavigator.go({
+								state: "Page.Bundle",
+								pageName: "loans.individual.screening.DoPartnerView",
+								pageId: item.loanId
+							}, {
+								state: 'Page.Engine',
+								pageName: "loans.individual.booking.PendingForPartnerQueue"
 							});
 						},
 						isApplicable: function(item, index){
 							return true;
 						}
 					},
-					{
+					/*{
 						name: "VIEW LOAN",
 						desc: "",
 						icon: "fa fa-pencil-square-o",
@@ -130,7 +138,7 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 
 							return true;
 						}
-					}];
+					}*/];
 				}
 			}
 		}
