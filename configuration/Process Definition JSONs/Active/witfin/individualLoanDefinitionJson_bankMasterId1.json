@@ -111,7 +111,7 @@
         {
             "order": 12,
             "code": "BusinessApproval1",
-            "name": "Business Approval",
+            "name": "Business Approval 1",
             "stageType": "CAPTURE",
             "sendSms": "Yes",
             "smsCategory": "LoanBooking",
@@ -123,7 +123,7 @@
         {
             "order": 12,
             "code": "BusinessApproval2",
-            "name": "Business Approval",
+            "name": "Business Approval 2",
             "stageType": "CAPTURE",
             "sendSms": "Yes",
             "smsCategory": "LoanBooking",
@@ -134,8 +134,32 @@
         },
         {
             "order": 12,
-            "code": "BusinessApprova3",
-            "name": "Business Approval",
+            "code": "BusinessApproval3",
+            "name": "Business Approval 3",
+            "stageType": "CAPTURE",
+            "sendSms": "Yes",
+            "smsCategory": "LoanBooking",
+            "isAccountOpening": false,
+            "allowedRoles": [
+                "WM"
+            ]
+        },
+        {
+            "order": 12,
+            "code": "BusinessApproval4",
+            "name": "Business Approval 4",
+            "stageType": "CAPTURE",
+            "sendSms": "Yes",
+            "smsCategory": "LoanBooking",
+            "isAccountOpening": false,
+            "allowedRoles": [
+                "WM"
+            ]
+        },
+        {
+            "order": 12,
+            "code": "BusinessApproval5",
+            "name": "Business Approval 5",
             "stageType": "CAPTURE",
             "sendSms": "Yes",
             "smsCategory": "LoanBooking",
@@ -172,6 +196,30 @@
             "order": 15,
             "code": "CreditApproval3",
             "name": "Credit Approval 3",
+            "stageType": "CAPTURE",
+            "sendSms": "Yes",
+            "smsCategory": "LoanBooking",
+            "isAccountOpening": false,
+            "allowedRoles": [
+                "WM"
+            ]
+        },
+                {
+            "order": 15,
+            "code": "CreditApproval4",
+            "name": "Credit Approval 4",
+            "stageType": "CAPTURE",
+            "sendSms": "Yes",
+            "smsCategory": "LoanBooking",
+            "isAccountOpening": false,
+            "allowedRoles": [
+                "WM"
+            ]
+        },
+                {
+            "order": 15,
+            "code": "CreditApproval5",
+            "name": "Credit Approval 5",
             "stageType": "CAPTURE",
             "sendSms": "Yes",
             "smsCategory": "LoanBooking",
