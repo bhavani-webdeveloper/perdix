@@ -5,11 +5,11 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
     return {
         pageUID: "lender.liabilities.LiabilityLoanAccountBooking",
         pageType: "Engine",
-        dependencies: ["$log", "$state", "$stateParams", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q",
+        dependencies: ["$http","AuthTokenHelper","$log", "irfElementsConfig","$state", "$stateParams", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q",
             "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository", "irfNavigator", "Files"
         ],
 
-        $pageFn: function($log, $state, $stateParams, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q,
+        $pageFn: function($http,AuthTokenHelper,$log, elementsConfig,$state, $stateParams, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q,
             PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository, irfNavigator, Files) {
 
             var configFile = function() {
@@ -126,6 +126,9 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     },
                     "DisbursementConfirmation": {
                         "orderNo": 60
+                    },
+                    "Liabilityschedules":{
+                        "orderNo":65
                     },
                     "LiabilitySchedules": {
                         "orderNo": 70
@@ -333,7 +336,9 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                         getActions: function(item) {
                             return [];
                         }
-                    }
+                    },
+                    
+
                 }
             }
             var getIncludes = function(model) {
@@ -423,6 +428,11 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     // "LegalCompliance.liabilityComplianceDocuments.isSignOff",
                     "LegalCompliance.liabilityComplianceDocuments.uploadedDate",
 
+                    "Liabilityschedules",
+                    "Liabilityschedules.scheduleDownload",
+                   // "LiabilitySchedules.liabilitySchedules.scheduleDownload",
+
+
 
 
                 ]
@@ -432,6 +442,8 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                 "title": "LIABILITY_REGISTRATION",
                 "subTitle": "",
                 initialize: function(model, form, formCtrl) {
+                    model.auth_token= elementsConfig.fileUpload.authToken ;
+                    console.log(model.auth_token)
                     var self = this;
                     console.log(model);
                     var formRequest = {
@@ -440,6 +452,74 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                         "excludes": [],
                         "options": {
                             "repositoryAdditions": {
+                                 "Liabilityschedules": {
+                                            "type": "box",
+                                            "title": "SCHEDULE_DOWNLOAD",
+                                            "condition": "model.liabilityAccount.currentStage == 'Completed'",
+                                            "items": {
+                                                "scheduleDownload": {
+                                                    "key": "scheduleDownload",
+                                                    "title": "DOWNLOAD_FORM",
+                                                    "notitle": true,
+                                                    "fieldHtmlClass": "btn-block",
+                                                    "style": "btn-default",
+                                                    "icon": "fa fa-download",
+                                                    "type": "button",
+                                                    // "condition": "model.liabilityAccounts.liabilityLenderDocuments[arrayIndex].fileId",
+                                                   "onClick": function(model, form, schemaForm, event) {
+                                                        var reqData = {}
+                                                        reqData.auth_data = {
+                                                            'auth_token': AuthTokenHelper.getAuthData().access_token,
+                                                        }
+                                                        reqData.report_name = "liability_schedule_detail";
+                                                        //reqData.query_mode = 1;
+                                                            var a = {"parameter":"lender_account_number","operator":"IN","value":[model.liabilityAccounts.lenderAccountNumber]}
+                                                        reqData.filters = [];
+                                                       reqData.filters.push(a)
+                                                        $http.post(
+                                                            irf.BI_BASE_URL + '/newdownload.php',
+                                                            reqData, {
+                                                                responseType: 'arraybuffer'
+                                                            }
+                                                        ).then(function(response) {
+                                                            var headers = response.headers();
+                                                            if (headers['content-type'].indexOf('json') != -1) {
+                                                                var decodedString = String.fromCharCode.apply(null, new Uint8Array(response.data));
+                                                                console.log(decodedString);
+                                                                PageHelper.showErrors({
+                                                                    data: {
+                                                                        error: decodedString
+                                                                    }
+                                                                });
+                                                                irfProgressMessage.pop("Reports", "Report download failed.", 5000);
+                                                                return;
+                                                            }
+                                                            var blob = new Blob([response.data], {
+                                                                type: headers['content-type']
+                                                            });
+                                                            var link = document.createElement('a');
+                                                            link.href = window.URL.createObjectURL(blob);
+                                                            if (headers["content-disposition"] && headers["content-disposition"].split('filename=').length == 2) {
+                                                                var filename = headers["content-disposition"].split('filename=')[1];
+                                                                link.download = filename.substr(1, filename.length - 2);
+                                                            } else {
+                                                                link.download = SessionStore.getLoginname() + '_' + "liability_schedule_detail" + '_' + moment().format('YYYYMMDDhhmmss');
+                                                            }
+                                                            link.click();
+                                                            irfProgressMessage.pop("Reports", "Report downloaded.", 5000);
+                                                        }, function(err) {
+                                                            PageHelper.showErrors(err);
+                                                        }).finally(function() {
+                                                            PageHelper.hideLoader();
+                                                        });
+                                                     
+                                                        // var fileId = model.liabilityAccounts.liabilityLenderDocuments[schemaForm.arrayIndex].fileId;
+                                                        // Utils.downloadFile(Files.getFileDownloadURL(fileId));
+                                                    }
+                                                },
+
+                                            }
+                                        },
                                 "Document": {
                                     "type": "box",
                                     "title": "LOAN_DOCUMENTS",
@@ -509,7 +589,8 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                                     }
                                                 }
                                             }
-                                        }
+                                        },
+                                        
                                     }
                                 },
 
