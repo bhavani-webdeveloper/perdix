@@ -3640,9 +3640,21 @@
                             "maxLength": 100,
                             "captureStages": [
                                 "Screening",
-                                "LoanInitiation",
+                                "ScreeningReview",
+                                "GoNoGoApproval1",
+                                "GoNoGoApproval2",
                                 "VehicleValuation",
-                                "Application"
+                                "TeleVerification",
+                                "FieldInvestigation",
+                                "CreditAppraisal",
+                                "DeviationApproval1",
+                                "DeviationApproval2",
+                                "DeviationApproval3",
+                                "BusinessApproval",
+                                "CreditApproval1",
+                                "CreditApproval2",
+                                "CreditApproval3",
+                                "LoanInitiation"                                
                             ]
                         },
                         "incomeAmount": {
