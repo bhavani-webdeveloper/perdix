@@ -109,17 +109,32 @@
             "isAccountOpening": false
         },
         {
-            "order": 11,
-            "code": "DeviationApproval3",
-            "name": "Deviation Approval 3",
+            "order": 12,
+            "code": "BusinessApproval1",
+            "name": "Business Approval",
             "stageType": "CAPTURE",
-            "sendSms": "No",
+            "sendSms": "Yes",
             "smsCategory": "LoanBooking",
-            "isAccountOpening": false
+            "isAccountOpening": false,
+            "allowedRoles": [
+                "WM"
+            ]
         },
         {
             "order": 12,
-            "code": "BusinessApproval",
+            "code": "BusinessApproval2",
+            "name": "Business Approval",
+            "stageType": "CAPTURE",
+            "sendSms": "Yes",
+            "smsCategory": "LoanBooking",
+            "isAccountOpening": false,
+            "allowedRoles": [
+                "WM"
+            ]
+        },
+        {
+            "order": 12,
+            "code": "BusinessApprova3",
             "name": "Business Approval",
             "stageType": "CAPTURE",
             "sendSms": "Yes",
