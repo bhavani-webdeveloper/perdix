@@ -294,18 +294,28 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                     "Scheduled Demand":"Scheduled Demand",
                                     "Fee Payment":"Fee Payment",
                                     "Pre-closure":"Pre-closure",
-                                    "Prepayment":"Prepayment"
+                                    "Prepayment":"Prepayment",
+                                    "PenalInterestPayment":"PenalInterestPayment"
                                 },
                                 onChange: function(value ,form, model){
                                     if ( value == 'Pre-closure'){
                                         model.repayment.amount = model.repayment.totalPayoffAmountToBePaid;
                                     } else if (value == 'Scheduled Demand'){
                                         model.repayment.amount = Utils.ceil(model.repayment.totalDue);
+                                    }else if(value == 'PenalInterestPayment'){
+                                        model.repayment.amount = model.repayment.bookedNotDuePenalInterest;
                                     } else {
                                         model.repayment.amount = null;
                                     }
                                     model.repayment.demandAmount = model.repayment.amount || 0;
                                 }
+                            },
+                            {
+                                key: "repayment.bookedNotDuePenalInterest",
+                                readonly: true,
+                                condition: "model.repayment.transactionName=='PenalInterestPayment'",
+                                title: "PRECLOSURE_FEE",
+                                type: "amount"
                             },
                             {
                                 type: "fieldset",
@@ -390,13 +400,13 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             {
                                 key: "repayment.amount",
                                 type: "number",
-                                condition:"!model.repayment.chequeNumber"
+                                condition:"!model.repayment.chequeNumber && (model.repayment.transactionName !='PenalInterestPayment')"
                             },
                             {
                                 key: "repayment.amount",
                                 type: "number",
                                 "readonly":true,
-                                condition:"model.repayment.chequeNumber"
+                                condition:"model.repayment.chequeNumber || (model.repayment.transactionName=='PenalInterestPayment')"
                             },
                             {
                                 key: "repayment.chequeNumber",

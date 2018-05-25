@@ -248,7 +248,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                             },
                             {
                                 type: "fieldset",
-                                condition: "model._transAuth.transactionName == 'Pre-closure'",
+                                condition: "model._transAuth.transactionName == 'Pre-closure' || model._transAuth.transactionName == 'PenalInterestPayment'",
                                 items: [
                                     {
                                         key: "_transAuth.demandAmount",
@@ -259,7 +259,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                                     {
                                         type: "fieldset",
                                         title: "PRECLOSURE_BREAKUP",
-                                        condition: "model._transAuth.transactionName=='Pre-closure'",
+                                        condition: "model._transAuth.transactionName=='Pre-closure' || model._transAuth.transactionName=='PenalInterestPayment' ",
                                         items: [
                                             {
                                                 key: "loanAccount.principalNotDue",
@@ -441,6 +441,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                 actions: {
                     sendBack: function(model, form, formName){
                         $log.info("Inside sendBack()");
+                        model._transAuth.bookedNotDuePenalInterest= model.loanAccount.bookedNotDuePenalInterest ||0;
                         var loanCollection = _.cloneDeep(model._transAuth);
                         var reqParams = {};
                         reqParams.loanCollection = loanCollection;
@@ -484,6 +485,8 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                                 return false;
                             }
                         }
+
+                        model._transAuth.bookedNotDuePenalInterest= model.loanAccount.bookedNotDuePenalInterest ||0;
                         
                         Utils.confirm("Are You Sure?")
                             .then(function () {
