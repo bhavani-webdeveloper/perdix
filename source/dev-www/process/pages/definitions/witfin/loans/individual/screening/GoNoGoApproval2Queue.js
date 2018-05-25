@@ -113,7 +113,7 @@ define({
                         searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centre, formHelper);
                     }
                     return IndividualLoan.search({
-                        'stage': 'DeviationApprovalCEO',
+                        'stage': 'GoNoGoApproval2',
                         'branchName': branch,
                         'enterprisePincode': searchOptions.pincode,
                         'enterprisePincode': searchOptions.pincode,
