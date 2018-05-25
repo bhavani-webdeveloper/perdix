@@ -26,13 +26,16 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
                 "Page/Engine/witfin.loans.individual.screening.GoNoGoApproval1Queue",
                 "Page/Engine/witfin.loans.individual.screening.GoNoGoApproval2Queue",
                 "Page/Engine/witfin.loans.individual.screening.VehicleValuationQueue",
-                "Page/Engine/witfin.loans.individual.screening.ApplicationQueue",
-                "Page/Engine/witfin.loans.individual.screening.ApplicationReviewQueue",
-                "Page/Engine/witfin.loans.individual.screening.BranchCrAppraisalQueue",
-                "Page/Engine/witfin.loans.individual.screening.HOCrAppraisalQueue",
-                "Page/Engine/witfin.loans.individual.screening.ManagementCommitteeQueue",
-                "Page/Engine/witfin.loans.individual.screening.RejectedQueue"
-            ]
+                "Page/Engine/witfin.loans.individual.screening.FieldInvestigationQueue",
+                "Page/Engine/witfin.loans.individual.screening.TeleVerificationQueue",
+                "Page/Engine/witfin.loans.individual.screening.CreditAppraisalQueue",
+                "Page/Engine/witfin.loans.individual.screening.DeviationApproval1Queue",
+                "Page/Engine/witfin.loans.individual.screening.DeviationApproval2Queue",
+                "Page/Engine/witfin.loans.individual.screening.DeviationApproval3Queue",
+                "Page/Engine/witfin.loans.individual.screening.BusinessApprovalQueue",
+                "Page/Engine/witfin.loans.individual.screening.CreditApproval1Queue",
+                "Page/Engine/witfin.loans.individual.screening.CreditApproval2Queue",
+                "Page/Engine/witfin.loans.individual.screening.CreditApproval3Queue"            ]
         };
 
 
@@ -272,34 +275,10 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
                 });
             }
 
-            var aqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.ApplicationQueue"];
-
-            if (aqMenu) {
-                aqMenu.data = 0;
-                _.forEach(centres, function(centre) {
-                    IndividualLoan.search({
-                        'stage': 'Application',
-                        'enterprisePincode': '',
-                        'applicantName': '',
-                        'area': '',
-                        'villageName': '',
-                        'customerName': '',
-                        'page': 1,
-                        'per_page': 1,
-                        'branchName': currentBranch.branchName,
-                        'centreCode': centre.centreCode
-                    }).$promise.then(function(response, headerGetter) {
-                        aqMenu.data = aqMenu.data + Number(response.headers['x-total-count']);
-                    }, function() {
-                        aqMenu.data = '-';
-                    });
-                });
-            }
-
-            var arqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.ApplicationReviewQueue"];
-            if (arqMenu) {
+            var fiq1Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.FieldInvestigationQueue"];
+            if (fiq1Menu) {
                 IndividualLoan.search({
-                    'stage': 'ApplicationReview',
+                    'stage': 'FieldInvestigation',
                     'enterprisePincode': '',
                     'applicantName': '',
                     'area': '',
@@ -307,19 +286,17 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
                     'customerName': '',
                     'page': 1,
                     'per_page': 1,
-                    'branchName': currentBranch.branchName
                 }).$promise.then(function(response, headerGetter) {
-                    arqMenu.data = Number(response.headers['x-total-count']);
+                    fiq1Menu.data = Number(response.headers['x-total-count']);
                 }, function() {
-                    arqMenu.data = '-';
+                    fiq1Menu.data = '-';
                 });
             }
 
-
-            var bcaqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.BranchCrAppraisalQueue"];
-            if (bcaqMenu) {
+            var tvq1Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.TeleVerificationQueue"];
+            if (tvq1Menu) {
                 IndividualLoan.search({
-                    'stage': 'BranchCreditAppraisal',
+                    'stage': 'TeleVerification',
                     'enterprisePincode': '',
                     'applicantName': '',
                     'area': '',
@@ -327,18 +304,18 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
                     'customerName': '',
                     'page': 1,
                     'per_page': 1,
-                    'branchName': currentBranch.branchName
                 }).$promise.then(function(response, headerGetter) {
-                    bcaqMenu.data = Number(response.headers['x-total-count']);
+                    tvq1Menu.data = Number(response.headers['x-total-count']);
                 }, function() {
-                    bcaqMenu.data = '-';
+                    tvq1Menu.data = '-';
                 });
             }
 
-            var hocaqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.HOCrAppraisalQueue"];
-            if (hocaqMenu) {
+
+            var caq1Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.CreditAppraisalQueue"];
+            if (caq1Menu) {
                 IndividualLoan.search({
-                    'stage': 'HOCreditAppraisal',
+                    'stage': 'CreditAppraisal',
                     'enterprisePincode': '',
                     'applicantName': '',
                     'area': '',
@@ -346,18 +323,18 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
                     'customerName': '',
                     'page': 1,
                     'per_page': 1,
-                    'branchName': currentBranch.branchName
                 }).$promise.then(function(response, headerGetter) {
-                    hocaqMenu.data = Number(response.headers['x-total-count']);
+                    caq1Menu.data = Number(response.headers['x-total-count']);
                 }, function() {
-                    hocaqMenu.data = '-';
+                    caq1Menu.data = '-';
                 });
             }
 
-            var mcqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.ManagementCommitteeQueue"];
-            if (mcqMenu) {
+
+            var daq1Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.DeviationApproval1Queue"];
+            if (daq1Menu) {
                 IndividualLoan.search({
-                    'stage': 'ManagementCommittee',
+                    'stage': 'DeviationApproval1',
                     'enterprisePincode': '',
                     'applicantName': '',
                     'area': '',
@@ -365,14 +342,125 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
                     'customerName': '',
                     'page': 1,
                     'per_page': 1,
-                    'branchName': currentBranch.branchName
                 }).$promise.then(function(response, headerGetter) {
-                    mcqMenu.data = Number(response.headers['x-total-count']);
+                    daq1Menu.data = Number(response.headers['x-total-count']);
                 }, function() {
-                    mcqMenu.data = '-';
+                    daq1Menu.data = '-';
                 });
             }
 
+            var daq2Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.DeviationApproval2Queue"];
+            if (daq2Menu) {
+                IndividualLoan.search({
+                    'stage': 'DeviationApproval2',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                }).$promise.then(function(response, headerGetter) {
+                    daq2Menu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    daq2Menu.data = '-';
+                });
+            }
+
+            var daq3Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.DeviationApproval3Queue"];
+
+            if (daq3Menu) {
+                IndividualLoan.search({
+                    'stage': 'DeviationApproval3',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                }).$promise.then(function(response, headerGetter) {
+                    daq3Menu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    daq3Menu.data = '-';
+                });
+            }
+
+            var baq3Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.BusinessApprovalQueue"];
+
+            if (baq3Menu) {
+                IndividualLoan.search({
+                    'stage': 'BusinessApproval',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                }).$promise.then(function(response, headerGetter) {
+                    baq3Menu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    baq3Menu.data = '-';
+                });
+            }
+
+            var caq1Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.CreditApproval1Queue"];
+
+            if (caq1Menu) {
+                IndividualLoan.search({
+                    'stage': 'CreditApproval1',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                }).$promise.then(function(response, headerGetter) {
+                    caq1Menu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    caq1Menu.data = '-';
+                });
+            }
+
+            var caq2Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.CreditApproval2Queue"];
+
+            if (caq2Menu) {
+                IndividualLoan.search({
+                    'stage': 'CreditApproval2',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                }).$promise.then(function(response, headerGetter) {
+                    caq2Menu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    caq2Menu.data = '-';
+                });
+            }
+
+            var caq3Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.CreditApproval3Queue"];
+
+            if (caq3Menu) {
+                IndividualLoan.search({
+                    'stage': 'CreditApproval3',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                }).$promise.then(function(response, headerGetter) {
+                    caq3Menu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    caq3Menu.data = '-';
+                });
+            }
 
             var drqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.RejectedQueue"];
             if (drqMenu) {
