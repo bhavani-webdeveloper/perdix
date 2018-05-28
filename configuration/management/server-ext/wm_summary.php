@@ -4,6 +4,7 @@
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+// error_reporting(0);
 
 include_once("bootload.php");
 use GuzzleHttp\Client as GuzzleClient;
@@ -85,7 +86,7 @@ try{
 		AND inf.gender=tfds.gender
 		AND inf.KGFS=cs.kgfs_bank_name
 		AND cs.id=tfds.customer_id
-		and cs.id=?) as ti,
+		and cs.id=?) as ti left join
 	 
 	 (SELECT
 		cs.id,sum(CEIL(LEAST((ipas.income_earned * inf.adjusted_multiple),
@@ -101,18 +102,21 @@ try{
 		AND inf.KGFS=cs.kgfs_bank_name
 		AND ipas.income_source IN ('Goat rearing', 'Agriculture', 'Dairy', 'Fishing')
 		AND cs.id=tfds.customer_id
-		and cs.id=?) as ai,
-	 
+		and cs.id=?) as ai
+		on ti.id=ai.id
+	 left join
 	 (select oc.id,
 	 (case 
 	 when oc.income_source='Working Abroad' then 'Working Abroad' 
 	 when oc.income_source in ('Goat rearing','Agriculture','Dairy','Fishing') then 'Agriculture'
 	 when oc.income_source in ('Salaried - Govt','	Salaried - Others','Retired / Pensioner') then 'Salary'
 	 when oc.income_source in ('Agri Trading','Rental Income','Shop Owner','Business - Others','Driver','Small Industry','Professional') then 'Business'
-	 when oc.income_source in ('Performing Arts','Labour','Migrant Labour','Unemployed','House-wife','Student') then 'Labour' end) as occupation_category from
-	 
+	 when oc.income_source in ('Performing Arts','Labour','Migrant Labour','Unemployed','House-wife','Student') then 'Labour'
+	 when oc.income_source is NULL then 'missing data'
+	   end) as occupation_category from
+	  
 	 (SELECT
-		cs.id,ipas.income_source,max(CEIL(LEAST((ipas.income_earned * inf.adjusted_multiple),
+		cs.id,ipas.income_source,(CEIL(LEAST((ipas.income_earned * inf.adjusted_multiple),
 		(ipas.income_earned * inf.multiple * LEAST(GREATEST(inf.min_months_per_year,
 		ipas.months_per_year), inf.max_months_per_year)/12)))) AS `household_income`
 		FROM financialForms.family_details tfds,
@@ -124,83 +128,18 @@ try{
 		AND inf.gender=tfds.gender
 		AND inf.KGFS=cs.kgfs_bank_name
 		AND cs.id=tfds.customer_id
-		and cs.id=?
+		and cs.id=? order by household_income desc limit 1
 		) oc 
-	where oc.id= ?) as oc_cat,
+	where oc.id= ?) as oc_cat 
+	on ai.id=oc_cat.id 
+	left join
 
 	(select customer_id,count(*) as cnt  from financialForms.family_details where customer_id=?) as sz
+	on oc_cat.id=sz.customer_id
 
 	
 	
-	where ti.id=ai.id and ai.id=oc_cat.id and oc_cat.id=sz.customer_id and ti.id= ?",array($query['cid'],$query['cid'],$query['cid'],$query['cid'],$query['cid'],$query['cid']));
-	
-	
-	
-	switch($result_segment[0]->Segment){
-	case ($result_segment[0]->Segment)=="agri low income":
-			$Target_products1="Health insurance and savings";
-			break;
-			
-	case ($result_segment[0]->Segment)=="agri mid income":
-			$Target_products1="IFL, health insurance";
-			break;
-
-	case ($result_segment[0]->Segment)=="agri high income":
-			$Target_products1="Insurance and mutual funds,NPS";
-			break;
-			
-	case ($result_segment[0]->Segment)=="business low income":
-			$Target_products1="MEL loan";
-			break;
-			
-	case ($result_segment[0]->Segment)=="business mid income":
-			$Target_products1="Term life insurance, accident insurance, NPS";
-			break;
-			
-	case ($result_segment[0]->Segment)=="business high income":
-			$Target_products1="Business loan, accident insurance";
-			break;
-			
-	case ($result_segment[0]->Segment)=="working abroad low income":
-			$Target_products1="Accident insurance, term life insurance,health insurance and remittance";
-			break;
-			
-			
-	case ($result_segment[0]->Segment)=="working abroad mid income":
-			$Target_products1="Health insurance and remittance";
-			break;
-			
-			
-	case ($result_segment[0]->Segment)=="working abroad high income":
-			$Target_products1="Accident insurance, term life insurance,mutual funds and remittance";
-			break;
-			
-	case ($result_segment[0]->Segment)=="working abroad agri income":
-			$Target_products1="insurance and remittance";
-			break;
-			
-	case ($result_segment[0]->Segment)=="labour low income":
-			$Target_products1="JLG loan";
-			break;
-			
-	case ($result_segment[0]->Segment)=="labour mid income":
-			$Target_products1="NPS, insurance";
-			break;
-			
-	case ($result_segment[0]->Segment)=="labour high income":
-			$Target_products1="NPS";
-			break;
-			
-	case ($result_segment[0]->Segment)=="labour agri income":
-			$Target_products1="insurance";
-			break;		
-		
-}
-	
-	
-	
-	
-	
+	where  ti.id=?",array($query['cid'],$query['cid'],$query['cid'],$query['cid'],$query['cid'],$query['cid']));
 	
 	
 	
@@ -212,6 +151,7 @@ try{
 	$result_expense=DB::connection("bietl_db")->select("select cs.id as id,sum(eps.annual_expenses * freq.multiple) as total_expense from 
 								financialForms.expenditure_per_annum eps, bietl.expense_frequency freq,financialForms.customer cs   
 								WHERE eps.customer_id=cs.id and freq.frequency=eps.frequency and cs.id=?",array($query['cid']));
+								
 	$result_income=DB::connection("bietl_db")->select("SELECT
 			cs.id,sum(CEIL(LEAST((ipas.income_earned * inf.adjusted_multiple),
 			(ipas.income_earned * inf.multiple * LEAST(GREATEST(inf.min_months_per_year,
@@ -226,6 +166,7 @@ try{
 			AND inf.KGFS=cs.kgfs_bank_name
 			AND cs.id=tfds.customer_id
 			and cs.id=?",array($query['cid']));
+			
 	$result_prime_earner =DB::connection("bietl_db")->select("select ps.family_member_first_name,ps.age,ps.household_occupation_income from (SELECT tfds.family_member_first_name, tfds.id,round(datediff(curdate(),date(tfds.date_of_birth))/365,0) as age,
 	  (CEIL(LEAST((ipas.income_earned * inf.adjusted_multiple),  (ipas.income_earned * inf.multiple * LEAST(GREATEST(inf.min_months_per_year, 
 	  ipas.months_per_year), inf.max_months_per_year)/12)))) AS `household_occupation_income` 
@@ -413,7 +354,7 @@ WHERE eps.customer_id=cs.id and freq.frequency=eps.frequency and cs.id=?) tex
 	) as all_loans_closed_score from
 	(SELECT apd.customer_id,count(*) as count_loans_closed 
 	FROM bietl.`all_products_dump` apd 
-	where apd.product_category='Loans' and apd.product_close_date<curdate() and apd.customer_id=1) lc where lc.customer_id=?",array($query['cid']));
+	where apd.product_category='Loans' and apd.product_close_date<curdate() and apd.customer_id=?) lc where lc.customer_id=?",array($query['cid'],$query['cid']));
 	
 	$risk_score += (count($risk_all_loans_closed_score) > 0 && isset($risk_all_loans_closed_score[0]->all_loans_closed_score)) ? $risk_all_loans_closed_score[0]->all_loans_closed_score : 0;
 	
@@ -473,6 +414,12 @@ WHERE eps.customer_id=cs.id and freq.frequency=eps.frequency and cs.id=?) tex
 	 
 	 $risk_score += (count($risk_age_borrower) > 0 && isset($risk_age_borrower[0]->age_borrower_score)) ? $risk_age_borrower[0]->age_borrower_score : 0;
 	 
+	
+	
+	//urn_no
+	$result_urn =DB::connection("bietl_db")->select("select urn_no from financialForms.customer where id=?",array($query['cid']));
+	
+
 	// risk score calculation
 	$denom=192;
 	$multiplier=1000;
@@ -483,26 +430,40 @@ WHERE eps.customer_id=cs.id and freq.frequency=eps.frequency and cs.id=?) tex
 	//google link
 	$glink="https://docs.google.com/forms/d/e/1FAIpQLSc-X_XvO1Z0XRjkkui5x-zYx9-6-MGzwn-zrb_l_0JjxZvpZQ/viewform?entry.326955045=";
 	//https://docs.google.com/forms/d/e/1FAIpQLSc-X_XvO1Z0XRjkkui5x-zYx9-6-MGzwn-zrb_l_0JjxZvpZQ/viewform?entry.326955045=cid&entry.1591633300=segment
+	//https://docs.google.com/forms/d/e/1FAIpQLSc-X_XvO1Z0XRjkkui5x-zYx9-6-MGzwn-zrb_l_0JjxZvpZQ/viewform?usp=pp_url&entry.326955045=cid&entry.962142054=urn&entry.1591633300=segment
 	
 	$cid=$query['cid'];
+	$urn_par="&entry.962142054=";
+	$urn=$result_urn[0]->urn_no;
 	$segment_par="&entry.1591633300=";
 	$segment_val=$result_segment[0]->Segment;
 	
-	$finurl=$glink.$cid.$segment_par.$segment_val;
-	
+	$finurl=$glink.$cid.$urn_par.$urn.$segment_par.$segment_val;
 
-	
 	
 	// Eligibility calculation
 	
 	$age=0;
 	if (count($result_prime_earner)>0){
-		if($result_prime_earner[0]->age>=18 && $result_prime_earner[0]->age<=58){
+		if($result_prime_earner[0]->age>=21 && $result_prime_earner[0]->age<=60){
 			$age=1;
 		}
 	}
 	
 	
+	//credit history
+	$result_credit_hist=DB::connection("bietl_db")->select("select (case
+	when lc.count_loans_closed>=1 then 1
+	else 0 end
+	) as cred_hist from
+	(SELECT apd.customer_id,count(*) as count_loans_closed 
+	FROM bietl.`all_products_dump` apd 
+	where apd.product_category='Loans' and apd.product_close_date<curdate() and apd.customer_id=?) lc where lc.customer_id=?",array($query['cid'],$query['cid']));
+	
+	
+	
+	$cred_hist=0;
+	$cred_hist=(count($result_credit_hist)>0 && $result_credit_hist[0]->cred_hist && $result_credit_hist[0]->cred_hist==1) ? 1 : 0;
 	
 	//overdue_days
 	$result_od_days=DB::connection("bietl_db")->select("select (days_overdue) from bietl.overdue_master_daily where customer_id=? and days_overdue is not null order by date desc limit 1",array($query['cid']));
@@ -518,6 +479,24 @@ WHERE eps.customer_id=cs.id and freq.frequency=eps.frequency and cs.id=?) tex
 	$shop=(count($result_owns_shop)>0 && $result_owns_shop[0]->shop && $result_owns_shop[0]->shop=="YES") ? 1 : 0;
 	
 	
+	
+	
+	//owns a house
+	$result_owns_house =DB::connection("bietl_db")->select("select 
+	CASE WHEN ads.customer_id IS NULL THEN 'NO'
+			ELSE 'YES'
+		END house		
+from 
+financialForms. customer  cs
+LEFT JOIN financialForms.asset_details  ads
+ON  ads.customer_id = cs.id 
+and ads.name_of_owned_asset='House' 
+WHERE cs.id=?",array($query['cid']));
+
+	$house=(count($result_owns_house)>0 && $result_owns_house[0]->house && $result_owns_house[0]->house=="YES") ? 1 : 0;
+	
+	
+	
 	//current_loan_exposure
 	
 	$current_loan_exposure=DB::connection("bietl_db")->select("select sum(principal_outstanding) as total_exposure  from bietl.overdue_master_daily where customer_id=? and date=curdate()-1;",array($query['cid']));
@@ -529,92 +508,49 @@ WHERE eps.customer_id=cs.id and freq.frequency=eps.frequency and cs.id=?) tex
 	}}
 	
 	$mel_eligibility=0;
-	if($age==1 && $days_overdue==1 && $shop==1  && $exposure==1 && $result_total_risk>580){
+	if($age==1  && ($shop==1||$house==1)   && $result_total_risk>580){
 		$mel_eligibility="yes";
 	}
 	else{$mel_eligibility="no";}
 	
-	
-	
-	$mel_eligibility=0;
-	$mel_upgrade=0;
-	if($age==1 && $days_overdue==1 && $shop==1  && $exposure==1 && $result_total_risk>580){
-		$mel_eligibility="yes";
-		
-		//switch ($result_total_risk) {
-		//case $result_total_risk >=583 && $result_total_risk <=646;
-		//	
-		//	break;
 
-		//case $number >=11 && $number <=20:
-		//	print "The number is between 11 and 20";
-		//	break;
-
-	//	default:
-		//	print "Your number is not between 0 and 20";
-		
+	//personal loan eligibility
+	$personal_eligibility=0;
+	if($age==1 && $cred_hist==1 && $house==1   && $result_total_risk>580){
+		$personal_eligibility="yes";
 	}
-	else{$mel_eligibility="no";
-		 $mel_upgrade="no";
-	}
-	
-	
-	
-	
-	
-	
-	//risk_score
-	
-	
-	
-	//switch ($number) {
-		//case $number >=0 && $number <=10:
-		//	print "The number is between 0 and 10";
-		//	break;
-
-		//case $number >=11 && $number <=20:
-		//	print "The number is between 11 and 20";
-		//	break;
-
-	//	default:
-		//	print "Your number is not between 0 and 20";
-//}
-
-
-
-
-	$last_interaction="MEL Loan";
-	
-	//$target_products="IFL insurance, term life insurance, remittance";
-	
-	
-	
-	//$mel_eligibility="no";
-	
-	$personal_eligibility="yes";
-	$personal_upgrade="no";
-	
-	
-	 
-	
-	
-	#everywhere output does not come, need to handle -segment 
-	
-	
-	
-	
+	else{$personal_eligibility="no";}
 	
 	
 	//result aggregation
 	$result = [
-		'Segment' => ['Segment'=>$result_segment[0]->Segment,'Last_edited_date'=>$result_last_edited_at[0]->last_edited_at],
-		'Household_Composition' => ['Primary_income_earner'=>$result_prime_earner[0]->family_member_first_name,'Size_of_household'=>$result_hh_size[0]->hh_size,'Primary_earner_age'=>$result_prime_earner[0]->age,'Total_expenses'=>(int)$result_expense[0]->total_expense,'Total_income'=>(int)$result_income[0]->household_income,'dependants'=>$result_hh_comp],
-		'Loans' => ['Loan_count'=>$result_loan_count,'Outstanding_amount'=>$result_loan_outstanding,'Credit_score'=>$result_total_risk,'Owns_a_shop'=>$result_owns_shop[0]->shop],
-		'Eligibility_Criteria'=>[['product'=>"MEL",'eligibility'=>$mel_eligibility],['product'=>"Personal",'eligibility'=>$personal_eligibility]],
-		'Insurance' => $result_insurance,
-		'savings' => $result_savings,
-		'remittance' => $result_remittance,
-		'google_link'=>$finurl
+		'Segment' => [
+			'Segment'=>(isset($result_segment) && count($result_segment)>0 && isset($result_segment[0]->Segment))? $result_segment[0]->Segment:"no data",
+			'Last_edited_date'=>(isset($result_last_edited_at) && count($result_last_edited_at)>0 && isset($result_last_edited_at[0]->last_edited_at))? $result_last_edited_at[0]->last_edited_at:"no data"
+			
+			],
+			'Household_Composition' => [
+				'Primary_income_earner'=>(isset($result_prime_earner) && count($result_prime_earner)>0 && isset($result_prime_earner[0]->family_member_first_name)) ? $result_prime_earner[0]->family_member_first_name: "no data",
+				'Size_of_household'=>(isset($result_hh_size) && count($result_hh_size)>0 && isset($result_hh_size[0]->hh_size)) ? (int)$result_hh_size[0]->hh_size: 0,
+				'Primary_earner_age'=>(isset($result_prime_earner) && count($result_prime_earner)>0 && isset($result_prime_earner[0]->age)) ? $result_prime_earner[0]->age: 0,
+				'Total_expenses'=>(isset($result_expense) && count($result_expense)>0 && isset($result_expense[0]->total_expense)) ? (int)$result_expense[0]->total_expense: 0,
+				'Total_income'=>(isset($result_income) && count($result_income)>0 && isset($result_income[0]->household_income)) ? (int)$result_income[0]->household_income : 0,
+				'dependants'=>$result_hh_comp
+			],
+			'Loans' => [
+				'Loan_count'=>$result_loan_count,
+				'Outstanding_amount'=>$result_loan_outstanding,
+				'Credit_score'=>$result_total_risk,
+				'Owns_a_shop'=>(isset($result_owns_shop) && count($result_owns_shop)>0 && isset($result_owns_shop[0]->shop)) ? $result_owns_shop[0]->shop:"no data"
+			],
+			'Eligibility_Criteria'=>[
+				['product'=>"MEL",'eligibility'=>$mel_eligibility],
+				['product'=>"Personal",'eligibility'=>$personal_eligibility]
+			],
+			'Insurance' => $result_insurance,
+			'savings' => $result_savings,
+			'remittance' => $result_remittance,
+			'google_link'=>$finurl
 	];
 
 	// create json
