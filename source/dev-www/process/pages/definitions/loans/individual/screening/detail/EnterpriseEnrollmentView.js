@@ -118,9 +118,11 @@ define({
                     /* Machin Details*/
 
                     model.machine_count = model.customer.fixedAssetsMachinaries.length;
+                    model.stock_count = model.customer.currentAssets.length;
+                    model.non_machinery_asset = model.customer.enterpriseAssets.length;
                     model.totalValue = 0;
                     /*
-                                        model.proxyScore = model.psi;*/
+                    model.proxyScore = model.psi;*/
                     model.hypothecatedToKinara = 0;
                     model.totalHypothecatedValue = 0;
                     _.each(model.customer.fixedAssetsMachinaries, function(machine) {
@@ -128,6 +130,30 @@ define({
                         if (machine.hypothecatedToUs == 'YES') {
                             model.hypothecatedToKinara++;
                             model.totalHypothecatedValue += machine.presentValue;
+
+                        }
+                    });
+
+                    model.totalstockValue = 0;
+                    model.hypothecatedStockToKinara = 0;
+                    model.totalHypothecatedStockValue = 0;
+                    _.each(model.customer.currentAssets, function(currentAsset) {
+                        model.totalstockValue += currentAsset.assetValue;
+                        if (currentAsset.hypothecatedToUs == 'YES' || currentAsset.hypothecatedToUs == 'Yes') {
+                            model.hypothecatedStockToKinara++;
+                            model.totalHypothecatedStockValue += currentAsset.assetValue;
+
+                        }
+                    });
+
+                    model.totalEnterpriseAssetValue = 0;
+                    model.hypothecatedEnterpriseAssetToKinara = 0;
+                    model.totalHypothecatedEnterpriseAssetValue = 0;
+                    _.each(model.customer.enterpriseAssets, function(enterpriseAsset) {
+                        model.totalEnterpriseAssetValue += enterpriseAsset.valueOfAsset;
+                        if (enterpriseAsset.hypothecatedToUs == 'YES' || enterpriseAsset.hypothecatedToUs == 'Yes') {
+                            model.hypothecatedEnterpriseAssetToKinara++;
+                            model.totalHypothecatedEnterpriseAssetValue += enterpriseAsset.valueOfAsset;
 
                         }
                     });
@@ -664,7 +690,172 @@ define({
                         }
                     }]
                 }]
-            }, {
+            },
+            {
+                "type": "box",
+                "colClass": "col-sm-12",
+                "overrideType": "default-view",
+                "readonly": true,
+                "title": "Stocks",
+                "items": [{
+                    "type": "grid",
+                    "orientation": "horizontal",
+                    "items": [{
+                        "type": "grid",
+                        "orientation": "vertical",
+                        "items": [{
+                            "key": "stock_count",
+                            "title": "Total no. of stocks",
+                            "type": "number"
+                        }, {
+                            "key": "totalstockValue",
+                            "title": "Total value of stocks",
+                            "type": "amount"
+                        }]
+                    }, {
+                        "type": "grid",
+                        "orientation": "vertical",
+                        "items": [{
+                            "key": "hypothecatedStockToKinara",
+                            "title": "NO_OF_STOCKS_HYPOTHECATED_TO",
+                            "type": "number"
+                        }, {
+                            "key": "totalHypothecatedStockValue",
+                            "title": "VALUE_OF_STOCKS_HYPOTHECATED_TO",
+                            "type": "amount"
+                        }]
+                    }]
+                }, {
+                    "type": "expandablesection",
+                    "items": [{
+                        "type": "tableview",
+                        "key": "currentAssets",
+                        "selectable": false,
+                        "editable": false,
+                        "tableConfig": {
+                            "searching": false,
+                            "paginate": false,
+                            "pageLength": 10
+                        },
+                        getColumns: function() {
+                            return [{
+                                "title": "Stock Type",
+                                "data": "Stock Type"
+                            }, {
+                                "title": "Stock Description",
+                                "data": "Stock Description"
+                            }, {
+                                "title": "Stock Value.",
+                                "data": "Stock Value",
+                            }, {
+                                "title": "% of Loan Amount",
+                                "data": "Percn Of Loan Amount"
+                            }];
+                        },
+                        getActions: function() {
+                            return [];
+                        }
+                    }]
+                }]
+            },{
+                "type": "box",
+                "colClass": "col-sm-12",
+                "overrideType": "default-view",
+                "readonly": true,
+                "title": "NON_MACHINERY_ASSET",
+                "items": [{
+                    "type": "grid",
+                    "orientation": "horizontal",
+                    "items": [{
+                        "type": "grid",
+                        "orientation": "vertical",
+                        "items": [{
+                            "key": "non_machinery_asset",
+                            "title": "TOTAL_NO_OF_NON_MACHINERY_ASSET",
+                            "type": "number"
+                        }, {
+                            "key": "totalEnterpriseAssetValue",
+                            "title": "TOTAL_VALUE_NON_MACHINERY_ASSET",
+                            "type": "amount"
+                        }]
+                    }, {
+                        "type": "grid",
+                        "orientation": "vertical",
+                        "items": [{
+                            "key": "hypothecatedEnterpriseAssetToKinara",
+                            "title": "NO_OF_NON_MACHINERY_ASSET_HYPOTHECATED_TO_KINARA",
+                            "type": "number"
+                        }, {
+                            "key": "totalHypothecatedEnterpriseAssetValue",
+                            "title": "VALUE_OF_NON_MACHINERY_ASSET_HYPOTHECATED_TO_KINARA",
+                            "type": "amount"
+                        }]
+                    }]
+                }, {
+                    "type": "expandablesection",
+                    "items": [{
+                        "type": "tableview",
+                        "key": "enterpriseAssets",
+                        "selectable": false,
+                        "editable": false,
+                        "tableConfig": {
+                            "searching": false,
+                            "paginate": false,
+                            "pageLength": 10
+                        },
+                        getColumns: function() {
+                            return [{
+                                "title": "Asset Type",
+                                "data": "Asset Type"
+                            }, {
+                                "title": "Asset Description",
+                                "data": "Asset Description"
+                            }, {
+                                "title": "Total Asset Value.",
+                                "data": "Total Asset Value",
+                            }, {
+                                "title": "% of Loan Amount",
+                                "data": "Asset Type"
+                            }];
+                        },
+                        getActions: function() {
+                            return [];
+                        }
+                    }]
+                }]
+            } ,
+            {
+                "type": "box",
+                "colClass": "col-sm-12",
+                "overrideType": "default-view",
+                "readonly": true,
+                "title": "OVER_ALL_HYPHOTHECATION_VALUE",
+                "items": [{
+                    "type": "grid",
+                    "orientation": "horizontal",
+                    "items": [{
+                        "type": "grid",
+                        "orientation": "vertical",
+                        "items": [{
+                            "key": "overAllHypoValue['Hypothecation Type']",
+                            "title": "HYPOTHECATION_TYPE",
+                            "type": "number"
+                        }, {
+                            "key": "overAllHypoValue['Stock And Declared Value']",
+                            "title": "STOCK_AND_DECLARED_VALUE",
+                            "type": "amount"
+                        }]
+                    }, {
+                        "type": "grid",
+                        "orientation": "vertical",
+                        "items": [{
+                            "key": "overAllHypoValue['% Of loan_amount']",
+                            "title": "%_TO_LOAN_AMOUNT",
+                            "type": "number"
+                        }]
+                    }]
+                }]
+            },{
                 "type": "box",
                 "colClass": "col-sm-12",
                 "overrideType": "default-view",
@@ -912,6 +1103,9 @@ define({
                     model.proxyScore = {};
                     model.proxyScore = params[2].data[5];
                     model.liability = params[19].subgroups;
+                    model.currentAssets = params[23].data;
+                    model.enterpriseAssets = params[24].data;
+                    model.overAllHypoValue = params[25].data[0];
                     model.liabilities = [];
                     var monthly_installment = 0;
                     var outstanding_bal = 0;
