@@ -143,74 +143,6 @@ try{
 	
 	
 	
-	//switch($result_segment[0]->Segment){
-	//case ($result_segment[0]->Segment)=="agri low income":
-	//		$Target_products1="Health insurance and savings";
-	//		break;
-			
-	//case ($result_segment[0]->Segment)=="agri mid income":
-	//		$Target_products1="IFL, health insurance";
-	//		break;
-
-	//case ($result_segment[0]->Segment)=="agri high income":
-	//		$Target_products1="Insurance and mutual funds,NPS";
-	//		break;
-			
-	//case ($result_segment[0]->Segment)=="business low income":
-	//		$Target_products1="MEL loan";
-	//		break;
-			
-	//case ($result_segment[0]->Segment)=="business mid income":
-	//		$Target_products1="Term life insurance, accident insurance, NPS";
-	//		break;
-			
-	//case ($result_segment[0]->Segment)=="business high income":
-	//		$Target_products1="Business loan, accident insurance";
-	//		break;
-			
-	//case ($result_segment[0]->Segment)=="working abroad low income":
-	//		$Target_products1="Accident insurance, term life insurance,health insurance and remittance";
-	//		break;
-			
-			
-	//case ($result_segment[0]->Segment)=="working abroad mid income":
-	//		$Target_products1="Health insurance and remittance";
-	//		break;
-			
-			
-	//case ($result_segment[0]->Segment)=="working abroad high income":
-	//		$Target_products1="Accident insurance, term life insurance,mutual funds and remittance";
-	//		break;
-			
-	//case ($result_segment[0]->Segment)=="working abroad agri income":
-	//		$Target_products1="insurance and remittance";
-	//		break;
-			
-	//case ($result_segment[0]->Segment)=="labour low income":
-	//		$Target_products1="JLG loan";
-	//		break;
-			
-	//case ($result_segment[0]->Segment)=="labour mid income":
-	//		$Target_products1="NPS, insurance";
-	//		break;
-			
-	//case ($result_segment[0]->Segment)=="labour high income":
-	//		$Target_products1="NPS";
-	//		break;
-			
-	//case ($result_segment[0]->Segment)=="labour agri income":
-	//		$Target_products1="insurance";
-	//		break;		
-		
-//}
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	$result_last_edited_at=DB::connection("bietl_db")->select("select date(last_edited_at) as last_edited_at from financialForms.customer where id=?",array($query['cid']));
 	
@@ -422,7 +354,7 @@ WHERE eps.customer_id=cs.id and freq.frequency=eps.frequency and cs.id=?) tex
 	) as all_loans_closed_score from
 	(SELECT apd.customer_id,count(*) as count_loans_closed 
 	FROM bietl.`all_products_dump` apd 
-	where apd.product_category='Loans' and apd.product_close_date<curdate() and apd.customer_id=1) lc where lc.customer_id=?",array($query['cid']));
+	where apd.product_category='Loans' and apd.product_close_date<curdate() and apd.customer_id=?) lc where lc.customer_id=?",array($query['cid'],$query['cid']));
 	
 	$risk_score += (count($risk_all_loans_closed_score) > 0 && isset($risk_all_loans_closed_score[0]->all_loans_closed_score)) ? $risk_all_loans_closed_score[0]->all_loans_closed_score : 0;
 	
@@ -487,9 +419,7 @@ WHERE eps.customer_id=cs.id and freq.frequency=eps.frequency and cs.id=?) tex
 	//urn_no
 	$result_urn =DB::connection("bietl_db")->select("select urn_no from financialForms.customer where id=?",array($query['cid']));
 	
-	
-	
-	 
+
 	// risk score calculation
 	$denom=192;
 	$multiplier=1000;
@@ -500,6 +430,7 @@ WHERE eps.customer_id=cs.id and freq.frequency=eps.frequency and cs.id=?) tex
 	//google link
 	$glink="https://docs.google.com/forms/d/e/1FAIpQLSc-X_XvO1Z0XRjkkui5x-zYx9-6-MGzwn-zrb_l_0JjxZvpZQ/viewform?entry.326955045=";
 	//https://docs.google.com/forms/d/e/1FAIpQLSc-X_XvO1Z0XRjkkui5x-zYx9-6-MGzwn-zrb_l_0JjxZvpZQ/viewform?entry.326955045=cid&entry.1591633300=segment
+	//https://docs.google.com/forms/d/e/1FAIpQLSc-X_XvO1Z0XRjkkui5x-zYx9-6-MGzwn-zrb_l_0JjxZvpZQ/viewform?usp=pp_url&entry.326955045=cid&entry.962142054=urn&entry.1591633300=segment
 	
 	$cid=$query['cid'];
 	$urn_par="&entry.962142054=";
@@ -508,20 +439,31 @@ WHERE eps.customer_id=cs.id and freq.frequency=eps.frequency and cs.id=?) tex
 	$segment_val=$result_segment[0]->Segment;
 	
 	$finurl=$glink.$cid.$urn_par.$urn.$segment_par.$segment_val;
-	
 
-	
 	
 	// Eligibility calculation
 	
 	$age=0;
 	if (count($result_prime_earner)>0){
-		if($result_prime_earner[0]->age>=18 && $result_prime_earner[0]->age<=58){
+		if($result_prime_earner[0]->age>=21 && $result_prime_earner[0]->age<=60){
 			$age=1;
 		}
 	}
 	
 	
+	//credit history
+	$result_credit_hist=DB::connection("bietl_db")->select("select (case
+	when lc.count_loans_closed>=1 then 1
+	else 0 end
+	) as cred_hist from
+	(SELECT apd.customer_id,count(*) as count_loans_closed 
+	FROM bietl.`all_products_dump` apd 
+	where apd.product_category='Loans' and apd.product_close_date<curdate() and apd.customer_id=?) lc where lc.customer_id=?",array($query['cid'],$query['cid']));
+	
+	
+	
+	$cred_hist=0;
+	$cred_hist=(count($result_credit_hist)>0 && $result_credit_hist[0]->cred_hist && $result_credit_hist[0]->cred_hist==1) ? 1 : 0;
 	
 	//overdue_days
 	$result_od_days=DB::connection("bietl_db")->select("select (days_overdue) from bietl.overdue_master_daily where customer_id=? and days_overdue is not null order by date desc limit 1",array($query['cid']));
@@ -537,6 +479,24 @@ WHERE eps.customer_id=cs.id and freq.frequency=eps.frequency and cs.id=?) tex
 	$shop=(count($result_owns_shop)>0 && $result_owns_shop[0]->shop && $result_owns_shop[0]->shop=="YES") ? 1 : 0;
 	
 	
+	
+	
+	//owns a house
+	$result_owns_house =DB::connection("bietl_db")->select("select 
+	CASE WHEN ads.customer_id IS NULL THEN 'NO'
+			ELSE 'YES'
+		END house		
+from 
+financialForms. customer  cs
+LEFT JOIN financialForms.asset_details  ads
+ON  ads.customer_id = cs.id 
+and ads.name_of_owned_asset='House' 
+WHERE cs.id=?",array($query['cid']));
+
+	$house=(count($result_owns_house)>0 && $result_owns_house[0]->house && $result_owns_house[0]->house=="YES") ? 1 : 0;
+	
+	
+	
 	//current_loan_exposure
 	
 	$current_loan_exposure=DB::connection("bietl_db")->select("select sum(principal_outstanding) as total_exposure  from bietl.overdue_master_daily where customer_id=? and date=curdate()-1;",array($query['cid']));
@@ -548,58 +508,18 @@ WHERE eps.customer_id=cs.id and freq.frequency=eps.frequency and cs.id=?) tex
 	}}
 	
 	$mel_eligibility=0;
-	if($age==1 && $days_overdue==1 && $shop==1  && $exposure==1 && $result_total_risk>580){
+	if($age==1  && ($shop==1||$house==1)   && $result_total_risk>580){
 		$mel_eligibility="yes";
 	}
 	else{$mel_eligibility="no";}
 	
-	
-	
-	$mel_eligibility=0;
-	$mel_upgrade=0;
-	if($age==1 && $days_overdue==1 && $shop==1  && $exposure==1 && $result_total_risk>580){
-		$mel_eligibility="yes";
-		
-		//switch ($result_total_risk) {
-		//case $result_total_risk >=583 && $result_total_risk <=646;
-		//	
-		//	break;
 
-		//case $number >=11 && $number <=20:
-		//	print "The number is between 11 and 20";
-		//	break;
-
-	//	default:
-		//	print "Your number is not between 0 and 20";
-		
+	//personal loan eligibility
+	$personal_eligibility=0;
+	if($age==1 && $cred_hist==1 && $house==1   && $result_total_risk>580){
+		$personal_eligibility="yes";
 	}
-	else{$mel_eligibility="no";
-		 $mel_upgrade="no";
-	}
-	
-	
-	
-	
-	
-
-
-
-
-	$last_interaction="MEL Loan";
-
-	
-	$personal_eligibility="yes";
-	$personal_upgrade="no";
-	
-	
-	 
-	
-	
-	#everywhere output does not come, need to handle -segment 
-	
-	
-	
-	
+	else{$personal_eligibility="no";}
 	
 	
 	//result aggregation
