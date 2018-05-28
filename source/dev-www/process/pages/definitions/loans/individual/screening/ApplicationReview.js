@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page('loans.individual.screening.ApplicationReview'), ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "Enrollment", "LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
-    "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch", "Queries", "Utils", "IndividualLoan", "BundleManager", "Message", "irfNavigator",
-    function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries, Utils, IndividualLoan, BundleManager, Message, irfNavigator) {
+    "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch", "Queries", "Utils", "IndividualLoan", "BundleManager", "Message", "irfNavigator","Scoring",
+    function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries, Utils, IndividualLoan, BundleManager, Message, irfNavigator,Scoring) {
         $log.info("Inside LoanBookingBundle");
         var getBundleDefinition = function() {
             var definition = [{
@@ -129,21 +129,50 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ApplicationRevie
 
             "pre_pages_initialize": function(bundleModel) {
                 $log.info("Inside pre_page_initialize");
+                var ExistingCustomer = false;
                 bundleModel.currentStage = "ApplicationReview";
                 var deferred = $q.defer();
+                
+                switch (bundleModel.currentStage) {
+                    case "ScreeningReview":
+                        bundleModel.scoreName = "RiskScore1";
+                        break;
+                    case "ApplicationReview":
+                        bundleModel.scoreName = "RiskScore2";
+                        break;
+                    case "FieldAppraisalReview":
+                        bundleModel.scoreName = "RiskScore3";
+                        break;
+                    default:
+                        bundleModel.scoreName = "ConsolidatedScore";
+                        break;
+                };
 
                 var $this = this;
                 if (_.hasIn($stateParams, 'pageId') && !_.isNull($stateParams.pageId)) {
                     PageHelper.showLoader();
                     bundleModel.loanId = $stateParams.pageId;
+
+                    Scoring.financialSummary({
+                        loan_id: bundleModel.loanId,
+                        score_name: bundleModel.scoreName
+                    }).$promise
+                    .then (function(res1) {
+                        if(res1[0].data[0]['Existing Customer'].toLowerCase()=='yes'){
+                            ExistingCustomer= true;
+                        }else {
+                            ExistingCustomer=false;
+                        }                                  
+                    },function(err){
+                       $log.info(err);
+                    });
+
                     IndividualLoan.get({
                             id: bundleModel.loanId
                         })
                         .$promise
                         .then(
                             function(res) {
-
-
                                 bundleModel.loanAccount = res;
 
                                 bundleModel.applicant = {};
@@ -256,8 +285,9 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ApplicationRevie
                                     model: {
                                         customerId: res.customerId
                                     }
-                                });
-
+                                });                                
+                
+                            if(ExistingCustomer) {
                                 $this.bundlePages.push({
                                     pageClass: 'portfolio-analysis',
                                     model: {
@@ -269,7 +299,9 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ApplicationRevie
                                         }
                                         
                                     }
-                                });
+                                }); 
+                            };
+
 
                                 $this.bundlePages.push({
                                     pageClass: 'loan-recommendation',

@@ -124,7 +124,7 @@ define({
                 /* --Utility function for showing loader till the event loaded - 
                 rendering on financial summary atleast not snapshot because they may be empty 
                 so possibility that it never get fired*/
-                var renderRequiredEvents = ['financial-summary'];
+                var renderRequiredEvents = ['financial-summary','customer-history-fin-snap'];
                 model.renderReady = function(eventName) {
                     renderRequiredEvents.splice(renderRequiredEvents.indexOf(eventName), 1);
 	                if (!renderRequiredEvents.length) {
@@ -353,11 +353,6 @@ define({
                         });
                     };
                     prepareFinancialData['tableData']=$filter("orderBy") (prepareFinancialData['tableData'], ['loanId']);
-                    /* prepareFinancialData['tableData'].sort(function compare(a, b) {
-                        var dateA = new Date(a.disbursement_date);
-                        var dateB = new Date(b.disbursement_date);
-                        return dateA - dateB;
-                      }); */
                     //older accounts should not be greater then 3
                     if(prepareFinancialData['tableData'].length>3) prepareFinancialData['tableData']=prepareFinancialData['tableData'].slice(-3);
                     _.forEach(prepareFinancialData['tableData'], function(histData){
@@ -400,7 +395,7 @@ define({
                         })
 
                     });
-                    /* model.renderReady('customer-history-fin-snap'); */ 
+                     model.renderReady('customer-history-fin-snap');
                 },                
                 "financial-summary": function(bundleModel, model, params){
                     model.branchName=params[0].data[0]['Hub Name'];
