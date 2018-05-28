@@ -43,19 +43,13 @@ irf.pageCollection.factory(irf.page("customer360.CustomerSummaryView"), ["$log",
                             "key": "customerSummary.Segment.Segment",
                             "title": "SEGMENT"
                         }, {
-                            "key": "customerSummary.Segment.Last_interaction",
-                            "title": "LAST_INTERACTION"
-                        }, {
                             "key": "customerSummary.Segment.Last_edited_date",
                             "title": "LAST_EDITED_DATE",
                             "type": "date"
                         }, {
-                            "key": "customerSummary.Segment.Target_products",
-                            "title": "TARGET_PRODUCTS"
-                        }, {
                             "type": "section",
                             "html": '<h4 style="padding:5px 10px;margin:0 -10px 5px;background-color:powderblue">{{form.title|translate}}</h4>',
-                            "title": "HOUSEHOLDING_COMPOSITION"
+                            "title": "HOUSEHOLD_COMPOSITION"
                         }, {
                             "type": "section",
                             "htmlClass": "row",
@@ -107,7 +101,7 @@ irf.pageCollection.factory(irf.page("customer360.CustomerSummaryView"), ["$log",
                                     "title": "DEP_BET_18_27",
                                     "data": "dep_bet_18_27"
 
-                                } ,{
+                                }, {
                                     "title": "DEP_ABV_27",
                                     "data": "dep_abv_27"
 
@@ -204,7 +198,7 @@ irf.pageCollection.factory(irf.page("customer360.CustomerSummaryView"), ["$log",
                                     "type": ""
                                 }]
                             }]
-                        },{
+                        }, {
                             "type": "section",
                             "html": '<br><a target="_blank" ng-href="{{model.customerSummary.google_link}}">{{form.title|translate}}</a>',
                             "title": "CUSTOMER_INPUT_FORM"
@@ -230,9 +224,6 @@ irf.pageCollection.factory(irf.page("customer360.CustomerSummaryView"), ["$log",
                                     "title": "ELIGIBILITY",
                                     "data": "eligibility"
 
-                                }, {
-                                    "title": "ELIGIBILITY_FOR_UPGRADE",
-                                    "data": "upgrade"
                                 }]
                             },
                             getActions: function(item) {
@@ -249,14 +240,14 @@ irf.pageCollection.factory(irf.page("customer360.CustomerSummaryView"), ["$log",
                             "searching": false,
                             "paginate": false,
                             getColumns: function() {
-                                return [ {
+                                return [{
                                     "title": "CUSTOMER",
                                     "data": "customer"
 
-                                },{
+                                }, {
                                     "title": "PRODUCT",
                                     "data": "product"
-                                      
+
                                 }, {
                                     "title": "EXPIRES_IN",
                                     "data": "expires_in"
@@ -299,7 +290,7 @@ irf.pageCollection.factory(irf.page("customer360.CustomerSummaryView"), ["$log",
                         }, {
                             "type": "section",
                             "html": '<h4 style="padding:5px 10px;margin:0 -10px 5px;background-color:powderblue">{{form.title|translate}}</h4>',
-                            "title": "Remmittance"
+                            "title": "REMITTANCE"
                         }, {
                             "type": "tableview",
                             "listStyle": "table",
