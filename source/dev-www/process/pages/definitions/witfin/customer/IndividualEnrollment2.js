@@ -40,41 +40,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             var configFile = function () {
                 return {
                     "loanProcess.loanAccount.currentStage": {
-                        "Screening": {
-                            "excludes": [
-                                "PhysicalAssets",
-                                "IndividualReferences",
-                                "ResidenceVerification",
-                                "assets",
-                                "FamilyDetails.familyMembers.dateOfBirth",
-                                "FamilyDetails.familyMembers.maritalStatus",
-                                "FamilyDetails.familyMembers.primaryOccupation",
-                                "FamilyDetails.familyMembers.familyMemberFirstName",
-                                "FamilyDetails.familyMembers.anualEducationFee",
-                                "FamilyDetails.familyMembers.salary",
-                                "FamilyDetails.familyMembers.incomes",
-                                "FamilyDetails.expenditures"
-                            ],
-                            "overrides": {
-                                "FamilyDetails.familyMembers": {
-                                    "add": null,
-                                    "remove": null,
-                                    "view": "fixed"
-                                },
-                                "FamilyDetails.familyMembers.relationShip": {
-                                    "readonly": true
-                                },
-                                // "IndividualReferenes.verifications.referenceFirstName": {
-                                //     "title":"NAME_OF_NEIGHBOUR"
-                                // },
-                                // "IndividualReferenes.verifications.customerResponse": {
-                                //     "title":"NEIGHBOUR_REFERENCE"
-                                // },
-                                // "IndividualReferenes.verifications.opinion": {
-                                //     "title":"COMMENTS_OF_NEIGHBOUR"
-                                // }
-                            }
-                        },
+
                         "ScreeningReview": {
                             "overrides": {
                                 "KYC": {

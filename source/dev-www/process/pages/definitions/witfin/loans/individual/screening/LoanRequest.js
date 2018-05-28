@@ -39,16 +39,6 @@ define([], function() {
             var configFile = function() {
                 return {
                     "loanProcess.loanAccount.currentStage": {
-                        "Screening": {
-                            "excludes": [
-                                "LoanRecommendation",
-                                "VehicleRouteDetails",
-                                "VehicleAssetUse",
-                                "VehicleAssetViability",
-                                "VehiclePhotoCaptures",
-                                "TeleVerification"
-                            ]
-                        },
                         "ScreeningReview": {
                             "excludes": [
                                 "calculateEmi",
@@ -77,14 +67,13 @@ define([], function() {
                                 }
                             }
                         },
-                        "Application": {
+                        "GoNoGoApproval1": {
                             "excludes": [
-                                "LoanRecommendation",
-                                "TeleVerification"
-                            ]
-                        },
-                        "ApplicationReview": {
-                            "excludes": [
+                                "calculateEmi",
+                                "VehicleRouteDetails",
+                                "VehicleAssetUse",
+                                "VehicleAssetViability",
+                                "VehiclePhotoCaptures",
                                 "PreliminaryInformation.calculateEmi",
                                 "TeleVerification"
                             ],
@@ -92,18 +81,6 @@ define([], function() {
                                 "PreliminaryInformation": {
                                     "readonly": true
                                 },
-                                "VehicleAssetUse": {
-                                    "readonly": true
-                                },
-                                "VehicleRouteDetails": {
-                                    "readonly": true
-                                },
-                                "VehicleAssetViability": {
-                                    "readonly": true
-                                },
-                                "VehiclePhotoCaptures": {
-                                    "readonly": true
-                                },
                                 "DeductionsFromLoan": {
                                     "readonly": true
                                 },
@@ -118,43 +95,15 @@ define([], function() {
                                 }
                             }
                         },
-                        "BranchCreditAppraisal": {
+                        "GoNoGoApproval2": {
                             "excludes": [
-                                "PreliminaryInformation.calculateEmi"
-                            ],
-                            "overrides": {
-                                "PreliminaryInformation": {
-                                    "readonly": true
-                                },
-                                "VehicleAssetUse": {
-                                    "readonly": true
-                                },
-                                "VehicleRouteDetails": {
-                                    "readonly": true
-                                },
-                                "VehicleAssetViability": {
-                                    "readonly": true
-                                },
-                                "VehiclePhotoCaptures": {
-                                    "readonly": true
-                                },
-                                "DeductionsFromLoan": {
-                                    "readonly": true
-                                },
-                                "LoanDocuments": {
-                                    "readonly": true
-                                },
-                                "PayerDetails": {
-                                    "readonly": true
-                                },
-                                "NewVehicleDetails": {
-                                    "readonly": true
-                                }
-                            }
-                        },
-                        "HOCreditAppraisal": {
-                            "excludes": [
-                                "PreliminaryInformation.calculateEmi"
+                                "calculateEmi",
+                                "VehicleRouteDetails",
+                                "VehicleAssetUse",
+                                "VehicleAssetViability",
+                                "VehiclePhotoCaptures",
+                                "PreliminaryInformation.calculateEmi",
+                                "TeleVerification"
                             ],
                             "overrides": {
                                 "PreliminaryInformation": {
@@ -163,19 +112,7 @@ define([], function() {
                                 "DeductionsFromLoan": {
                                     "readonly": true
                                 },
-                                "VehicleAssetUse": {
-                                    "readonly": true
-                                },
                                 "LoanDocuments": {
-                                    "readonly": true
-                                },
-                                "VehicleRouteDetails": {
-                                    "readonly": true
-                                },
-                                "VehicleAssetViability": {
-                                    "readonly": true
-                                },
-                                "VehiclePhotoCaptures": {
                                     "readonly": true
                                 },
                                 "PayerDetails": {
@@ -183,18 +120,48 @@ define([], function() {
                                 },
                                 "NewVehicleDetails": {
                                     "readonly": true
-                                },
-                                "TeleVerification": {
-                                    "readonly": true
-                                },
-                                "NewVehicleDetails": {
-                                    "readonly": true
                                 }
                             }
                         },
-                        "ManagementCommittee": {
+                        "FieldInvestigation": {
                             "excludes": [
-                                "PreliminaryInformation.calculateEmi"
+                                "LoanRecommendation",
+                                "VehicleRouteDetails",
+                                "VehicleAssetUse",
+                                "VehicleAssetViability",
+                                "VehiclePhotoCaptures",
+                                "TeleVerification"
+                            ]
+                        },
+                        "TeleVerification": {
+                            "excludes": [
+                                "LoanRecommendation",
+                                "VehicleRouteDetails",
+                                "VehicleAssetUse",
+                                "VehicleAssetViability",
+                                "VehiclePhotoCaptures",
+                                "TeleVerification"
+                            ]
+                        },
+                        "CreditAppraisal":  {
+                            "excludes": [
+                                "LoanRecommendation",
+                                "VehicleRouteDetails",
+                                "VehicleAssetUse",
+                                "VehicleAssetViability",
+                                "VehiclePhotoCaptures",
+                                "TeleVerification"
+                            ]
+                        },
+                        "DeviationApproval1": {
+                            "excludes": [
+                                "calculateEmi",
+                                "VehicleRouteDetails",
+                                "VehicleAssetUse",
+                                "VehicleAssetViability",
+                                "VehiclePhotoCaptures",
+                                "PreliminaryInformation.calculateEmi",
+                                "TeleVerification"
                             ],
                             "overrides": {
                                 "PreliminaryInformation": {
@@ -203,7 +170,32 @@ define([], function() {
                                 "DeductionsFromLoan": {
                                     "readonly": true
                                 },
-                                "VehicleAssetUse": {
+                                "LoanDocuments": {
+                                    "readonly": true
+                                },
+                                "PayerDetails": {
+                                    "readonly": true
+                                },
+                                "NewVehicleDetails": {
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "DeviationApproval2": {
+                            "excludes": [
+                                "calculateEmi",
+                                "VehicleRouteDetails",
+                                "VehicleAssetUse",
+                                "VehicleAssetViability",
+                                "VehiclePhotoCaptures",
+                                "PreliminaryInformation.calculateEmi",
+                                "TeleVerification"
+                            ],
+                            "overrides": {
+                                "PreliminaryInformation": {
+                                    "readonly": true
+                                },
+                                "DeductionsFromLoan": {
                                     "readonly": true
                                 },
                                 "LoanDocuments": {
@@ -212,19 +204,32 @@ define([], function() {
                                 "PayerDetails": {
                                     "readonly": true
                                 },
-                                "VehicleRouteDetails": {
-                                    "readonly": true
-                                },
-                                "VehicleAssetViability": {
-                                    "readonly": true
-                                },
-                                "VehiclePhotoCaptures": {
-                                    "readonly": true
-                                },
                                 "NewVehicleDetails": {
                                     "readonly": true
+                                }
+                            }
+                        },
+                        "BusinessApproval1": {
+                            "excludes": [
+                                "calculateEmi",
+                                "VehicleRouteDetails",
+                                "VehicleAssetUse",
+                                "VehicleAssetViability",
+                                "VehiclePhotoCaptures",
+                                "PreliminaryInformation.calculateEmi",
+                                "TeleVerification"
+                            ],
+                            "overrides": {
+                                "PreliminaryInformation": {
+                                    "readonly": true
                                 },
-                                "TeleVerification": {
+                                "DeductionsFromLoan": {
+                                    "readonly": true
+                                },
+                                "LoanDocuments": {
+                                    "readonly": true
+                                },
+                                "PayerDetails": {
                                     "readonly": true
                                 },
                                 "NewVehicleDetails": {
@@ -232,6 +237,413 @@ define([], function() {
                                 }
                             }
                         },
+                        "BusinessApproval2": {
+                            "excludes": [
+                                "calculateEmi",
+                                "VehicleRouteDetails",
+                                "VehicleAssetUse",
+                                "VehicleAssetViability",
+                                "VehiclePhotoCaptures",
+                                "PreliminaryInformation.calculateEmi",
+                                "TeleVerification"
+                            ],
+                            "overrides": {
+                                "PreliminaryInformation": {
+                                    "readonly": true
+                                },
+                                "DeductionsFromLoan": {
+                                    "readonly": true
+                                },
+                                "LoanDocuments": {
+                                    "readonly": true
+                                },
+                                "PayerDetails": {
+                                    "readonly": true
+                                },
+                                "NewVehicleDetails": {
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "BusinessApproval3": {
+                            "excludes": [
+                                "calculateEmi",
+                                "VehicleRouteDetails",
+                                "VehicleAssetUse",
+                                "VehicleAssetViability",
+                                "VehiclePhotoCaptures",
+                                "PreliminaryInformation.calculateEmi",
+                                "TeleVerification"
+                            ],
+                            "overrides": {
+                                "PreliminaryInformation": {
+                                    "readonly": true
+                                },
+                                "DeductionsFromLoan": {
+                                    "readonly": true
+                                },
+                                "LoanDocuments": {
+                                    "readonly": true
+                                },
+                                "PayerDetails": {
+                                    "readonly": true
+                                },
+                                "NewVehicleDetails": {
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "BusinessApproval4": {
+                            "excludes": [
+                                "calculateEmi",
+                                "VehicleRouteDetails",
+                                "VehicleAssetUse",
+                                "VehicleAssetViability",
+                                "VehiclePhotoCaptures",
+                                "PreliminaryInformation.calculateEmi",
+                                "TeleVerification"
+                            ],
+                            "overrides": {
+                                "PreliminaryInformation": {
+                                    "readonly": true
+                                },
+                                "DeductionsFromLoan": {
+                                    "readonly": true
+                                },
+                                "LoanDocuments": {
+                                    "readonly": true
+                                },
+                                "PayerDetails": {
+                                    "readonly": true
+                                },
+                                "NewVehicleDetails": {
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "BusinessApproval5": {
+                            "excludes": [
+                                "calculateEmi",
+                                "VehicleRouteDetails",
+                                "VehicleAssetUse",
+                                "VehicleAssetViability",
+                                "VehiclePhotoCaptures",
+                                "PreliminaryInformation.calculateEmi",
+                                "TeleVerification"
+                            ],
+                            "overrides": {
+                                "PreliminaryInformation": {
+                                    "readonly": true
+                                },
+                                "DeductionsFromLoan": {
+                                    "readonly": true
+                                },
+                                "LoanDocuments": {
+                                    "readonly": true
+                                },
+                                "PayerDetails": {
+                                    "readonly": true
+                                },
+                                "NewVehicleDetails": {
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "CreditApproval1": {
+                            "excludes": [
+                                "calculateEmi",
+                                "VehicleRouteDetails",
+                                "VehicleAssetUse",
+                                "VehicleAssetViability",
+                                "VehiclePhotoCaptures",
+                                "PreliminaryInformation.calculateEmi",
+                                "TeleVerification"
+                            ],
+                            "overrides": {
+                                "PreliminaryInformation": {
+                                    "readonly": true
+                                },
+                                "DeductionsFromLoan": {
+                                    "readonly": true
+                                },
+                                "LoanDocuments": {
+                                    "readonly": true
+                                },
+                                "PayerDetails": {
+                                    "readonly": true
+                                },
+                                "NewVehicleDetails": {
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "CreditApproval2": {
+                            "excludes": [
+                                "calculateEmi",
+                                "VehicleRouteDetails",
+                                "VehicleAssetUse",
+                                "VehicleAssetViability",
+                                "VehiclePhotoCaptures",
+                                "PreliminaryInformation.calculateEmi",
+                                "TeleVerification"
+                            ],
+                            "overrides": {
+                                "PreliminaryInformation": {
+                                    "readonly": true
+                                },
+                                "DeductionsFromLoan": {
+                                    "readonly": true
+                                },
+                                "LoanDocuments": {
+                                    "readonly": true
+                                },
+                                "PayerDetails": {
+                                    "readonly": true
+                                },
+                                "NewVehicleDetails": {
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "CreditApproval3": {
+                            "excludes": [
+                                "calculateEmi",
+                                "VehicleRouteDetails",
+                                "VehicleAssetUse",
+                                "VehicleAssetViability",
+                                "VehiclePhotoCaptures",
+                                "PreliminaryInformation.calculateEmi",
+                                "TeleVerification"
+                            ],
+                            "overrides": {
+                                "PreliminaryInformation": {
+                                    "readonly": true
+                                },
+                                "DeductionsFromLoan": {
+                                    "readonly": true
+                                },
+                                "LoanDocuments": {
+                                    "readonly": true
+                                },
+                                "PayerDetails": {
+                                    "readonly": true
+                                },
+                                "NewVehicleDetails": {
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "CreditApproval4": {
+                            "excludes": [
+                                "calculateEmi",
+                                "VehicleRouteDetails",
+                                "VehicleAssetUse",
+                                "VehicleAssetViability",
+                                "VehiclePhotoCaptures",
+                                "PreliminaryInformation.calculateEmi",
+                                "TeleVerification"
+                            ],
+                            "overrides": {
+                                "PreliminaryInformation": {
+                                    "readonly": true
+                                },
+                                "DeductionsFromLoan": {
+                                    "readonly": true
+                                },
+                                "LoanDocuments": {
+                                    "readonly": true
+                                },
+                                "PayerDetails": {
+                                    "readonly": true
+                                },
+                                "NewVehicleDetails": {
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "CreditApproval5": {
+                            "excludes": [
+                                "calculateEmi",
+                                "VehicleRouteDetails",
+                                "VehicleAssetUse",
+                                "VehicleAssetViability",
+                                "VehiclePhotoCaptures",
+                                "PreliminaryInformation.calculateEmi",
+                                "TeleVerification"
+                            ],
+                            "overrides": {
+                                "PreliminaryInformation": {
+                                    "readonly": true
+                                },
+                                "DeductionsFromLoan": {
+                                    "readonly": true
+                                },
+                                "LoanDocuments": {
+                                    "readonly": true
+                                },
+                                "PayerDetails": {
+                                    "readonly": true
+                                },
+                                "NewVehicleDetails": {
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        // "Application": {
+                        //     "excludes": [
+                        //         "LoanRecommendation",
+                        //         "TeleVerification"
+                        //     ]
+                        // },
+                        // "ApplicationReview": {
+                        //     "excludes": [
+                        //         "PreliminaryInformation.calculateEmi",
+                        //         "TeleVerification"
+                        //     ],
+                        //     "overrides": {
+                        //         "PreliminaryInformation": {
+                        //             "readonly": true
+                        //         },
+                        //         "VehicleAssetUse": {
+                        //             "readonly": true
+                        //         },
+                        //         "VehicleRouteDetails": {
+                        //             "readonly": true
+                        //         },
+                        //         "VehicleAssetViability": {
+                        //             "readonly": true
+                        //         },
+                        //         "VehiclePhotoCaptures": {
+                        //             "readonly": true
+                        //         },
+                        //         "DeductionsFromLoan": {
+                        //             "readonly": true
+                        //         },
+                        //         "LoanDocuments": {
+                        //             "readonly": true
+                        //         },
+                        //         "PayerDetails": {
+                        //             "readonly": true
+                        //         },
+                        //         "NewVehicleDetails": {
+                        //             "readonly": true
+                        //         }
+                        //     }
+                        // },
+                        // "BranchCreditAppraisal": {
+                        //     "excludes": [
+                        //         "PreliminaryInformation.calculateEmi"
+                        //     ],
+                        //     "overrides": {
+                        //         "PreliminaryInformation": {
+                        //             "readonly": true
+                        //         },
+                        //         "VehicleAssetUse": {
+                        //             "readonly": true
+                        //         },
+                        //         "VehicleRouteDetails": {
+                        //             "readonly": true
+                        //         },
+                        //         "VehicleAssetViability": {
+                        //             "readonly": true
+                        //         },
+                        //         "VehiclePhotoCaptures": {
+                        //             "readonly": true
+                        //         },
+                        //         "DeductionsFromLoan": {
+                        //             "readonly": true
+                        //         },
+                        //         "LoanDocuments": {
+                        //             "readonly": true
+                        //         },
+                        //         "PayerDetails": {
+                        //             "readonly": true
+                        //         },
+                        //         "NewVehicleDetails": {
+                        //             "readonly": true
+                        //         }
+                        //     }
+                        // },
+                        // "HOCreditAppraisal": {
+                        //     "excludes": [
+                        //         "PreliminaryInformation.calculateEmi"
+                        //     ],
+                        //     "overrides": {
+                        //         "PreliminaryInformation": {
+                        //             "readonly": true
+                        //         },
+                        //         "DeductionsFromLoan": {
+                        //             "readonly": true
+                        //         },
+                        //         "VehicleAssetUse": {
+                        //             "readonly": true
+                        //         },
+                        //         "LoanDocuments": {
+                        //             "readonly": true
+                        //         },
+                        //         "VehicleRouteDetails": {
+                        //             "readonly": true
+                        //         },
+                        //         "VehicleAssetViability": {
+                        //             "readonly": true
+                        //         },
+                        //         "VehiclePhotoCaptures": {
+                        //             "readonly": true
+                        //         },
+                        //         "PayerDetails": {
+                        //             "readonly": true
+                        //         },
+                        //         "NewVehicleDetails": {
+                        //             "readonly": true
+                        //         },
+                        //         "TeleVerification": {
+                        //             "readonly": true
+                        //         },
+                        //         "NewVehicleDetails": {
+                        //             "readonly": true
+                        //         }
+                        //     }
+                        // },
+                        // "ManagementCommittee": {
+                        //     "excludes": [
+                        //         "PreliminaryInformation.calculateEmi"
+                        //     ],
+                        //     "overrides": {
+                        //         "PreliminaryInformation": {
+                        //             "readonly": true
+                        //         },
+                        //         "DeductionsFromLoan": {
+                        //             "readonly": true
+                        //         },
+                        //         "VehicleAssetUse": {
+                        //             "readonly": true
+                        //         },
+                        //         "LoanDocuments": {
+                        //             "readonly": true
+                        //         },
+                        //         "PayerDetails": {
+                        //             "readonly": true
+                        //         },
+                        //         "VehicleRouteDetails": {
+                        //             "readonly": true
+                        //         },
+                        //         "VehicleAssetViability": {
+                        //             "readonly": true
+                        //         },
+                        //         "VehiclePhotoCaptures": {
+                        //             "readonly": true
+                        //         },
+                        //         "NewVehicleDetails": {
+                        //             "readonly": true
+                        //         },
+                        //         "TeleVerification": {
+                        //             "readonly": true
+                        //         },
+                        //         "NewVehicleDetails": {
+                        //             "readonly": true
+                        //         }
+                        //     }
+                        // },
                         "REJECTED": {
                             "excludes": [
                                 "PreliminaryInformation.calculateEmi"

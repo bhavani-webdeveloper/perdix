@@ -175,22 +175,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
             var configFile = function() {
                 return {
                         "loanProcess.loanAccount.currentStage": {
-                            "Screening": {
-                                "overrides": {
-                                    "EnterpriseInformation": {
-                                        "readonly": "true"
-                                    },
-                                    "Liabilities": {
-                                        "readonly": "true"
-                                    },
-                                    "EnterpriseAssets": {
-                                        "readonly": "true"
-                                    }
-                                },
-                                "excludes": [
-                                    "EnterpriseReferences"
-                                ]
-                            },
                             "ScreeningReview": {
                                 "overrides": {
                                     "EnterpriseInformation": {
@@ -222,7 +206,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseReferences"
                                 ]
                             },
-                            "ApplicationReview": {
+                            "GoNoGoApproval1": {
                                 "overrides": {
                                     "EnterpriseInformation": {
                                         "readonly": true
@@ -242,18 +226,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "ContactInformation": {
                                         "readonly": true
                                     },
-                                    "EnterpriseReferences": {
-                                        "readonly": true
-                                    },
                                     "TrackDetails": {
                                         "readonly": true
                                     },
                                     "tangibleNetworth": {
                                       "readonly": true
                                     }
-                                }
+                                },
+                                "excludes": [
+                                    "EnterpriseReferences"
+                                ]
                             },
-                            "BranchCreditAppraisal": {
+                            "GoNoGoApproval2": {
                                 "overrides": {
                                     "EnterpriseInformation": {
                                         "readonly": true
@@ -273,18 +257,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "ContactInformation": {
                                         "readonly": true
                                     },
-                                    "EnterpriseReferences": {
-                                        "readonly": true
-                                    },
                                     "TrackDetails": {
                                         "readonly": true
                                     },
                                     "tangibleNetworth": {
                                       "readonly": true
                                     }
-                                }
+                                },
+                                "excludes": [
+                                    "EnterpriseReferences"
+                                ]
                             },
-                            "HOCreditAppraisal": {
+                            "DeviationApproval1": {
                                 "overrides": {
                                     "EnterpriseInformation": {
                                         "readonly": true
@@ -304,18 +288,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "ContactInformation": {
                                         "readonly": true
                                     },
-                                    "EnterpriseReferences": {
-                                        "readonly": true
-                                    },
                                     "TrackDetails": {
                                         "readonly": true
                                     },
                                     "tangibleNetworth": {
                                       "readonly": true
                                     }
-                                }
+                                },
+                                "excludes": [
+                                    "EnterpriseReferences"
+                                ]
                             },
-                            "ManagementCommittee": {
+                            "DeviationApproval2": {
                                 "overrides": {
                                     "EnterpriseInformation": {
                                         "readonly": true
@@ -335,7 +319,35 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "ContactInformation": {
                                         "readonly": true
                                     },
-                                    "EnterpriseReferences": {
+                                    "TrackDetails": {
+                                        "readonly": true
+                                    },
+                                    "tangibleNetworth": {
+                                      "readonly": true
+                                    }
+                                },
+                                "excludes": [
+                                    "EnterpriseReferences"
+                                ]
+                            },
+                            "BusinessApproval1": {
+                                "overrides": {
+                                    "EnterpriseInformation": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseInformation.enterpriseType" : {
+                                        "readonly": true
+                                    },
+                                    "Liabilities": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseAssets": {
+                                        "readonly": true
+                                    },
+                                    "BankAccounts": {
+                                        "readonly": true
+                                    },
+                                    "ContactInformation": {
                                         "readonly": true
                                     },
                                     "TrackDetails": {
@@ -344,8 +356,414 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "tangibleNetworth": {
                                       "readonly": true
                                     }
-                                }
+                                },
+                                "excludes": [
+                                    "EnterpriseReferences"
+                                ]
                             },
+                            "BusinessApproval2": {
+                                "overrides": {
+                                    "EnterpriseInformation": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseInformation.enterpriseType" : {
+                                        "readonly": true
+                                    },
+                                    "Liabilities": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseAssets": {
+                                        "readonly": true
+                                    },
+                                    "BankAccounts": {
+                                        "readonly": true
+                                    },
+                                    "ContactInformation": {
+                                        "readonly": true
+                                    },
+                                    "TrackDetails": {
+                                        "readonly": true
+                                    },
+                                    "tangibleNetworth": {
+                                      "readonly": true
+                                    }
+                                },
+                                "excludes": [
+                                    "EnterpriseReferences"
+                                ]
+                            },
+                            "BusinessApproval3": {
+                                "overrides": {
+                                    "EnterpriseInformation": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseInformation.enterpriseType" : {
+                                        "readonly": true
+                                    },
+                                    "Liabilities": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseAssets": {
+                                        "readonly": true
+                                    },
+                                    "BankAccounts": {
+                                        "readonly": true
+                                    },
+                                    "ContactInformation": {
+                                        "readonly": true
+                                    },
+                                    "TrackDetails": {
+                                        "readonly": true
+                                    },
+                                    "tangibleNetworth": {
+                                      "readonly": true
+                                    }
+                                },
+                                "excludes": [
+                                    "EnterpriseReferences"
+                                ]
+                            },
+                            "BusinessApproval4": {
+                                "overrides": {
+                                    "EnterpriseInformation": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseInformation.enterpriseType" : {
+                                        "readonly": true
+                                    },
+                                    "Liabilities": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseAssets": {
+                                        "readonly": true
+                                    },
+                                    "BankAccounts": {
+                                        "readonly": true
+                                    },
+                                    "ContactInformation": {
+                                        "readonly": true
+                                    },
+                                    "TrackDetails": {
+                                        "readonly": true
+                                    },
+                                    "tangibleNetworth": {
+                                      "readonly": true
+                                    }
+                                },
+                                "excludes": [
+                                    "EnterpriseReferences"
+                                ]
+                            },
+                            "BusinessApproval5": {
+                                "overrides": {
+                                    "EnterpriseInformation": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseInformation.enterpriseType" : {
+                                        "readonly": true
+                                    },
+                                    "Liabilities": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseAssets": {
+                                        "readonly": true
+                                    },
+                                    "BankAccounts": {
+                                        "readonly": true
+                                    },
+                                    "ContactInformation": {
+                                        "readonly": true
+                                    },
+                                    "TrackDetails": {
+                                        "readonly": true
+                                    },
+                                    "tangibleNetworth": {
+                                      "readonly": true
+                                    }
+                                },
+                                "excludes": [
+                                    "EnterpriseReferences"
+                                ]
+                            },
+                            "CreditApproval1": {
+                                "overrides": {
+                                    "EnterpriseInformation": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseInformation.enterpriseType" : {
+                                        "readonly": true
+                                    },
+                                    "Liabilities": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseAssets": {
+                                        "readonly": true
+                                    },
+                                    "BankAccounts": {
+                                        "readonly": true
+                                    },
+                                    "ContactInformation": {
+                                        "readonly": true
+                                    },
+                                    "TrackDetails": {
+                                        "readonly": true
+                                    },
+                                    "tangibleNetworth": {
+                                      "readonly": true
+                                    }
+                                },
+                                "excludes": [
+                                    "EnterpriseReferences"
+                                ]
+                            },
+                            "CreditApproval2": {
+                                "overrides": {
+                                    "EnterpriseInformation": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseInformation.enterpriseType" : {
+                                        "readonly": true
+                                    },
+                                    "Liabilities": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseAssets": {
+                                        "readonly": true
+                                    },
+                                    "BankAccounts": {
+                                        "readonly": true
+                                    },
+                                    "ContactInformation": {
+                                        "readonly": true
+                                    },
+                                    "TrackDetails": {
+                                        "readonly": true
+                                    },
+                                    "tangibleNetworth": {
+                                      "readonly": true
+                                    }
+                                },
+                                "excludes": [
+                                    "EnterpriseReferences"
+                                ]
+                            },
+                            "CreditApproval3": {
+                                "overrides": {
+                                    "EnterpriseInformation": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseInformation.enterpriseType" : {
+                                        "readonly": true
+                                    },
+                                    "Liabilities": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseAssets": {
+                                        "readonly": true
+                                    },
+                                    "BankAccounts": {
+                                        "readonly": true
+                                    },
+                                    "ContactInformation": {
+                                        "readonly": true
+                                    },
+                                    "TrackDetails": {
+                                        "readonly": true
+                                    },
+                                    "tangibleNetworth": {
+                                      "readonly": true
+                                    }
+                                },
+                                "excludes": [
+                                    "EnterpriseReferences"
+                                ]
+                            },
+                            "CreditApproval4": {
+                                "overrides": {
+                                    "EnterpriseInformation": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseInformation.enterpriseType" : {
+                                        "readonly": true
+                                    },
+                                    "Liabilities": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseAssets": {
+                                        "readonly": true
+                                    },
+                                    "BankAccounts": {
+                                        "readonly": true
+                                    },
+                                    "ContactInformation": {
+                                        "readonly": true
+                                    },
+                                    "TrackDetails": {
+                                        "readonly": true
+                                    },
+                                    "tangibleNetworth": {
+                                      "readonly": true
+                                    }
+                                },
+                                "excludes": [
+                                    "EnterpriseReferences"
+                                ]
+                            },
+                            "CreditApproval5": {
+                                "overrides": {
+                                    "EnterpriseInformation": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseInformation.enterpriseType" : {
+                                        "readonly": true
+                                    },
+                                    "Liabilities": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseAssets": {
+                                        "readonly": true
+                                    },
+                                    "BankAccounts": {
+                                        "readonly": true
+                                    },
+                                    "ContactInformation": {
+                                        "readonly": true
+                                    },
+                                    "TrackDetails": {
+                                        "readonly": true
+                                    },
+                                    "tangibleNetworth": {
+                                      "readonly": true
+                                    }
+                                },
+                                "excludes": [
+                                    "EnterpriseReferences"
+                                ]
+                            },
+                            // "ApplicationReview": {
+                            //     "overrides": {
+                            //         "EnterpriseInformation": {
+                            //             "readonly": true
+                            //         },
+                            //         "EnterpriseInformation.enterpriseType" : {
+                            //             "readonly": true
+                            //         },
+                            //         "Liabilities": {
+                            //             "readonly": true
+                            //         },
+                            //         "EnterpriseAssets": {
+                            //             "readonly": true
+                            //         },
+                            //         "BankAccounts": {
+                            //             "readonly": true
+                            //         },
+                            //         "ContactInformation": {
+                            //             "readonly": true
+                            //         },
+                            //         "EnterpriseReferences": {
+                            //             "readonly": true
+                            //         },
+                            //         "TrackDetails": {
+                            //             "readonly": true
+                            //         },
+                            //         "tangibleNetworth": {
+                            //           "readonly": true
+                            //         }
+                            //     }
+                            // },
+                            // "BranchCreditAppraisal": {
+                            //     "overrides": {
+                            //         "EnterpriseInformation": {
+                            //             "readonly": true
+                            //         },
+                            //         "EnterpriseInformation.enterpriseType" : {
+                            //             "readonly": true
+                            //         },
+                            //         "Liabilities": {
+                            //             "readonly": true
+                            //         },
+                            //         "EnterpriseAssets": {
+                            //             "readonly": true
+                            //         },
+                            //         "BankAccounts": {
+                            //             "readonly": true
+                            //         },
+                            //         "ContactInformation": {
+                            //             "readonly": true
+                            //         },
+                            //         "EnterpriseReferences": {
+                            //             "readonly": true
+                            //         },
+                            //         "TrackDetails": {
+                            //             "readonly": true
+                            //         },
+                            //         "tangibleNetworth": {
+                            //           "readonly": true
+                            //         }
+                            //     }
+                            // },
+                            // "HOCreditAppraisal": {
+                            //     "overrides": {
+                            //         "EnterpriseInformation": {
+                            //             "readonly": true
+                            //         },
+                            //         "EnterpriseInformation.enterpriseType" : {
+                            //             "readonly": true
+                            //         },
+                            //         "Liabilities": {
+                            //             "readonly": true
+                            //         },
+                            //         "EnterpriseAssets": {
+                            //             "readonly": true
+                            //         },
+                            //         "BankAccounts": {
+                            //             "readonly": true
+                            //         },
+                            //         "ContactInformation": {
+                            //             "readonly": true
+                            //         },
+                            //         "EnterpriseReferences": {
+                            //             "readonly": true
+                            //         },
+                            //         "TrackDetails": {
+                            //             "readonly": true
+                            //         },
+                            //         "tangibleNetworth": {
+                            //           "readonly": true
+                            //         }
+                            //     }
+                            // },
+                            // "ManagementCommittee": {
+                            //     "overrides": {
+                            //         "EnterpriseInformation": {
+                            //             "readonly": true
+                            //         },
+                            //         "EnterpriseInformation.enterpriseType" : {
+                            //             "readonly": true
+                            //         },
+                            //         "Liabilities": {
+                            //             "readonly": true
+                            //         },
+                            //         "EnterpriseAssets": {
+                            //             "readonly": true
+                            //         },
+                            //         "BankAccounts": {
+                            //             "readonly": true
+                            //         },
+                            //         "ContactInformation": {
+                            //             "readonly": true
+                            //         },
+                            //         "EnterpriseReferences": {
+                            //             "readonly": true
+                            //         },
+                            //         "TrackDetails": {
+                            //             "readonly": true
+                            //         },
+                            //         "tangibleNetworth": {
+                            //           "readonly": true
+                            //         }
+                            //     }
+                            // },
                             "REJECTED": {
                                 "overrides": {
                                     "EnterpriseInformation": {
