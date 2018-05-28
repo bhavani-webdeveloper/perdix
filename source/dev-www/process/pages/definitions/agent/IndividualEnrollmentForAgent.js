@@ -1,5 +1,6 @@
-define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProcess) {
+define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/agent/AgentProcess'], function(EnrolmentProcess, AgentProcess) {
     EnrolmentProcess = EnrolmentProcess['EnrolmentProcess'];
+    AgentProcess = AgentProcess['AgentProcess'];
     return {
         pageUID: "agent.IndividualEnrollmentForAgent",
         pageType: "Engine",
@@ -213,7 +214,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     /* End of setting data recieved from Bundle */
 
                     /* Setting data for the form */
-                    model.customer = model.enrolmentProcess.customer;
+                    model.customer = model.agentProcess.customer;
                     /* End of setting data for the form */
 
 

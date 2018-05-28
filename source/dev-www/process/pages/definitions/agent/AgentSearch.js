@@ -58,7 +58,7 @@ define({
                         'currentStage': '',
                         'agentName': searchOptions.agentName,
                         'agentType': searchOptions.agentType,
-                        'customerType': 'Individual',
+                        'customerType': '',
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage
                     }).$promise;
@@ -107,28 +107,51 @@ define({
                         }, {
                             title: 'AGENT_TYPE',
                             data: 'agentType'
-                        },{
+                        }, {
                             title: 'CUSTOMER_TYPE',
                             data: 'customer.customerType'
                         }]
                     },
                     getActions: function() {
                         return [{
-                            name: "VIEW/UPDATE",
+                            name: "APPLICATION_REVIEW",
+                            desc: "",
                             icon: "fa fa-pencil-square-o",
                             fn: function(item, index) {
-                                irfNavigator.go({
-                                    'state': 'Page.Engine',
-                                    'pageName': 'agent.ViewUpdateEnterpriseAgent',
-                                    'pageId': item.customer.id,
-                                    // 'pageData': {
-                                    //     "readonly": false
-                                    // }
-                                }, {
-                                    'state': 'Page.Engine',
-                                    'pageName': 'agent.AgentSearch',
-                                    'pageId': null
-                                });
+                                if (item.customer.customerType == 'Individual') {
+                                    entityManager.setModel('agent.IndividualAgentEnrollmentScreening', {
+                                        _request: item
+                                    });
+                                    irfNavigator.go({
+                                        'state': 'Page.Bundle',
+                                        'pageName': 'agent.IndividualAgentEnrollmentScreening',
+                                        'pageId': item.customer.id,
+                                        // 'pageData': {
+                                        //     "readonly": false
+                                        // }
+                                    }, {
+                                        'state': 'Page.Engine',
+                                        'pageName': 'agent.AgentSearch',
+                                        'pageId': null
+                                    });
+                                } else if (item.customer.customerType == 'Enterprise') {
+                                    entityManager.setModel('agent.EnterpriseAgentEnrollmentScreening', {
+                                        _request: item
+                                    });
+                                    irfNavigator.go({
+                                        'state': 'Page.Bundle',
+                                        'pageName': 'agent.EnterpriseAgentEnrollmentScreening',
+                                        'pageId': item.customer.id,
+                                        // 'pageData': {
+                                        //     "readonly": false
+                                        // }
+                                    }, {
+                                        'state': 'Page.Engine',
+                                        'pageName': 'agent.AgentSearch',
+                                        'pageId': null
+                                    });
+                                }
+
                             },
                             isApplicable: function(item, index) {
                                 return true;

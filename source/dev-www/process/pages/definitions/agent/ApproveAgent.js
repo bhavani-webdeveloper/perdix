@@ -108,10 +108,10 @@ define({
                             desc: "",
                             icon: "fa fa-pencil-square-o",
                             fn: function(item, index) {
-                                entityManager.setModel('witfin.loans.individual.screening.ApplicationReview', {
-                                    _request: item
-                                });
                                 if (item.customer.customerType == 'Individual') {
+                                    entityManager.setModel('agent.IndividualAgentEnrollmentScreening', {
+                                        _request: item
+                                    });
                                     irfNavigator.go({
                                         'state': 'Page.Bundle',
                                         'pageName': 'agent.IndividualAgentEnrollmentScreening',
@@ -121,10 +121,13 @@ define({
                                         // }
                                     }, {
                                         'state': 'Page.Engine',
-                                        'pageName': 'agent.EnrollAgent',
+                                        'pageName': 'agent.ApproveAgent',
                                         'pageId': null
                                     });
                                 } else if (item.customer.customerType == 'Enterprise') {
+                                    entityManager.setModel('agent.EnterpriseAgentEnrollmentScreening', {
+                                        _request: item
+                                    });
                                     irfNavigator.go({
                                         'state': 'Page.Bundle',
                                         'pageName': 'agent.EnterpriseAgentEnrollmentScreening',
@@ -134,7 +137,7 @@ define({
                                         // }
                                     }, {
                                         'state': 'Page.Engine',
-                                        'pageName': 'agent.EnrollAgent',
+                                        'pageName': 'agent.ApproveAgent',
                                         'pageId': null
                                     });
                                 }

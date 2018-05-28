@@ -1,16 +1,10 @@
 import {IPolicyFactory} from "../../../shared/IPolicyFactory";
 import {IPolicy} from "../../../shared/IPolicy";
-//import {LoadNewCustomerData} from "./LoadNewCustomerData";
-import {PreSaveCustomerPolicy} from "./PreSaveCustomerPolicy";
-import {LoadEnrolmentCustomerDataPolicy} from "./LoadEnrolmentCustomerDataPolicy";
-import {EnrolmentDerivedPolicy} from "./EnrolmentDerivedPolicy";
-import {SelfRelationshipRequiredPolicy} from "./SelfRelationshipRequiredPolicy";
-import {CommercialCBCheckPolicy} from "./CommercialCBCheckPolicy";
-import {MinimumReferencesPolicy} from "./MinimumReferencesPolicy";
-import {GSTApplicablePolicy} from "./GSTApplicablePolicy";
-import {VerifyBankAccountNumberPolicy} from "./VerifyBankAccountNumberPolicy";
-import {DefaultIndividualReferencePolicy} from "./DefaultIndividualReferencePolicy";
-import {VerifyIndividualReferencePolicy} from "./VerifyIndividualReferencePolicy";
+import {LoadNewCustomerData} from "../../customer/policy/LoadNewCustomerData";
+import {PreSaveCustomerPolicy} from "../../customer/policy/PreSaveCustomerPolicy";
+import {LoadEnrolmentCustomerDataPolicy} from "../../customer/policy/LoadEnrolmentCustomerDataPolicy";
+import {EnrolmentDerivedPolicy} from "../../customer/policy/EnrolmentDerivedPolicy";
+import {VerifyBankAccountNumberPolicy} from "../../customer/policy/VerifyBankAccountNumberPolicy";
 
 export class AgentPolicyFactory implements IPolicyFactory{
 
@@ -29,28 +23,16 @@ export class AgentPolicyFactory implements IPolicyFactory{
         let obj = null;
         switch (name) {
             case 'LoadNewCustomerData':
-               // obj =  new LoadNewCustomerData();
-                //return obj;
-           // case 'PreSaveCustomerPolicy':
-            //    return new PreSaveCustomerPolicy();
-            //case 'LoadEnrolmentCustomerDataPolicy':
-                //return new LoadEnrolmentCustomerDataPolicy();
-            //case 'EnrolmentDerivedPolicy':
-               // return new EnrolmentDerivedPolicy();
-            //case 'SelfRelationshipRequiredPolicy':
-                //return new SelfRelationshipRequiredPolicy();
-           // case 'CommercialCBCheckPolicy':
-               // return new CommercialCBCheckPolicy();
-            //case 'MinimumReferencesPolicy':
-                //return new MinimumReferencesPolicy();
-            //case 'GSTApplicablePolicy':
-                //return new GSTApplicablePolicy();
-           // case 'VerifyBankAccountNumberPolicy':
-               // return new VerifyBankAccountNumberPolicy();
-            //case 'DefaultIndividualReferencePolicy':
-                //return new DefaultIndividualReferencePolicy();
-            //case 'VerifyIndividualReferencePolicy':
-                //return new VerifyIndividualReferencePolicy();
+               obj =  new LoadNewCustomerData();
+                return obj;
+           case 'PreSaveCustomerPolicy':
+               return new PreSaveCustomerPolicy();
+            case 'LoadEnrolmentCustomerDataPolicy':
+                return new LoadEnrolmentCustomerDataPolicy();
+            case 'EnrolmentDerivedPolicy':
+               return new EnrolmentDerivedPolicy();
+            case 'VerifyBankAccountNumberPolicy':
+               return new VerifyBankAccountNumberPolicy();          
             default:
                 return null;
 

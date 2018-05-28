@@ -114,10 +114,14 @@ define({
                     },
                     getActions: function() {
                         return [{
-                            name: "ENROLL_AGENT",
+                            name: "APPLICATION_REVIEW",
+                            desc: "",
                             icon: "fa fa-pencil-square-o",
                             fn: function(item, index) {
                                 if (item.customer.customerType == 'Individual') {
+                                    entityManager.setModel('agent.IndividualAgentEnrollmentScreening', {
+                                        _request: item
+                                    });
                                     irfNavigator.go({
                                         'state': 'Page.Bundle',
                                         'pageName': 'agent.IndividualAgentEnrollmentScreening',
@@ -131,6 +135,9 @@ define({
                                         'pageId': null
                                     });
                                 } else if (item.customer.customerType == 'Enterprise') {
+                                    entityManager.setModel('agent.EnterpriseAgentEnrollmentScreening', {
+                                        _request: item
+                                    });
                                     irfNavigator.go({
                                         'state': 'Page.Bundle',
                                         'pageName': 'agent.EnterpriseAgentEnrollmentScreening',

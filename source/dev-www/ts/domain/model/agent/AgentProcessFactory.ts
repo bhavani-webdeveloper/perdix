@@ -1,57 +1,47 @@
-///<amd-dependency path="perdixConfig/AgentProcessConfig" name="agentProcessConfig"/>
-import {Observable} from "@reactivex/rxjs";
-import {IAgentRepository} from "./IAgentRepository";
-import RepositoryFactory = require('../../shared/RepositoryFactory');
-import {RepositoryIdentifiers} from '../../shared/RepositoryIdentifiers';
-import {plainToClass} from "class-transformer";
+import Agent = require("./Agent");
 import {PolicyManager} from "../../shared/PolicyManager";
 import {AgentPolicyFactory} from "./policy/AgentPolicyFactory";
-import {Customer} from "../customer/Customer";
+import {Observable} from "@reactivex/rxjs";
+import {IAgentRepository} from "./IAgentRepository";
+import {Customer} from "../Customer/Customer";
+import RepositoryFactory = require("../../shared/RepositoryFactory");
+import {RepositoryIdentifiers} from "../../shared/RepositoryIdentifiers";
 import {AgentProcess} from "./AgentProcess";
+import {plainToClass} from "class-transformer";
 import {Utils} from "../../shared/Utils";
-
-declare var enrolmentProcessConfig: Object;
-/**
- * Created by shahalpk on 21/11/17.
- */
-
-
 class AgentProcessFactory {
 
-    static AgentPolicyFactory:AgentPolicyFactory = AgentPolicyFactory.getInstance();
-    // static enrolmentProcessConfig:any = EnrolmentProcess.getProcessConfig();
+    static agentRepo:IAgentRepository = RepositoryFactory.createRepositoryObject(RepositoryIdentifiers.AgentProcess);
 
-    static fromCustomer(obj: Customer): Observable<AgentProcess> {
-        let ep = new AgentProcess();
-        ep.customer = obj;
-        let pm: PolicyManager<AgentProcess> = new PolicyManager<AgentProcess>(ep, AgentProcessFactory.AgentPolicyFactory, 'onLoad', AgentProcess.getProcessConfig());
-        return pm.applyPolicies();
+    static createFromLoanId(id: number): Observable<AgentProcess> {
+        let lp: AgentProcess = new AgentProcess();
+        return AgentProcessFactory.agentRepo.get(id)
+            .map(
+                (loanAccount:Object) => {
+                    lp.agent = <Agent>plainToClass<Agent, Object>(Agent, Utils.toJSObj(Agent));
+                    // lp.loanAccount = plainToClass(LoanAccount, Utils.toJSObj(loanAccount));
+                    return lp;
+                }
+            )
+
     }
 
-    static beforeProceedCustomer(obj: Customer): Observable<AgentProcess> {
-        let ep = new AgentProcess();
-        ep.customer = obj;
-        let pm: PolicyManager<AgentProcess> = new PolicyManager<AgentProcess>(ep, AgentProcessFactory.AgentPolicyFactory, 'beforeProceed', AgentProcess.getProcessConfig());
-        return pm.applyPolicies();
+    static fromLoanAccountObject(loanAccount: any): AgentProcess{
+        return null;
     }
 
-    static beforeSaveEnrolment(obj: Customer): Observable<AgentProcess> {
-        let ep = new AgentProcess();
-        ep.customer = obj;
-        let pm: PolicyManager<AgentProcess> = new PolicyManager<AgentProcess>(ep, AgentProcessFactory.AgentPolicyFactory, 'beforeSave', AgentProcess.getProcessConfig());
-        return pm.applyPolicies();
+    static createNew(): Observable<AgentProcess>{
+        return Observable.defer(() => {
+            let lp: AgentProcess = new AgentProcess();
+            lp.agent = new Agent();
+            return Observable.of(lp);
+        });
     }
 
-    static createNew(){
-        let ep = new AgentProcess();
-        ep.customer = new Customer();
-        let pm: PolicyManager<AgentProcess> = new PolicyManager<AgentProcess>(ep, AgentProcessFactory.AgentPolicyFactory, 'onNew', AgentProcess.getProcessConfig());
-        return pm.applyPolicies();
-    }
 
     static createFromCustomerID(id){
-        let agentRepo: IAgentRepository = RepositoryFactory.createRepositoryObject(RepositoryIdentifiers.AgentProcess);
-        return agentRepo.get(id)
+        let enrolmentRepo: IAgentRepository = RepositoryFactory.createRepositoryObject(RepositoryIdentifiers.AgentProcess);
+        return enrolmentRepo.getCustomerById(id)
             .map(
                 (value: Object) => {
                     let obj: Object = Utils.toJSObj(value);
@@ -62,9 +52,26 @@ class AgentProcessFactory {
                 }
             )
     }
-
-
 }
 
-
 export = AgentProcessFactory;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

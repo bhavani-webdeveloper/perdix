@@ -1,10 +1,15 @@
 
 import {Observable} from "@reactivex/rxjs";
+import {AgentProcess} from "./AgentProcess";
+
 
 export interface IAgentRepository {
 
-	getAgent(id: number): Observable<any>;
-	saveAgent(reqData: Object): Observable<any>;
-	updateAgent(reqData: Object): Observable<any>;
+	get(id: number): Observable<any>;
+	save(reqData: Object): Observable<any>;
+	update(reqData: Object): Observable<any>;
+	create(reqData: any): Observable<any
+	getCustomerById(id: number): Observable<AgentProcess>;
+    updateEnrollment(reqData: Object): Observable<AgentProcess>;
 
 }
