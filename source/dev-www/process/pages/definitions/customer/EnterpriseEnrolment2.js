@@ -2806,7 +2806,10 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             {
                                 key: "customer.fixedAssetsMachinaries[].machinePurchasedYear",
                                 title:"MACHINE_PURCHASED_YEAR",
-                                type: "number"
+                                type: "number",
+                                "schema":{
+                                    "maximum":9999
+                                }
                             },
                             {
                                 key: "customer.fixedAssetsMachinaries[].presentValue",
