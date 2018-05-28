@@ -124,7 +124,7 @@ define({
                 /* --Utility function for showing loader till the event loaded - 
                 rendering on financial summary atleast not snapshot because they may be empty 
                 so possibility that it never get fired*/
-                var renderRequiredEvents = ['financial-summary','customer-history-fin-snap'];
+                var renderRequiredEvents = ['financial-summary'];
                 model.renderReady = function(eventName) {
                     renderRequiredEvents.splice(renderRequiredEvents.indexOf(eventName), 1);
 	                if (!renderRequiredEvents.length) {
@@ -395,7 +395,7 @@ define({
                         })
 
                     });
-                     model.renderReady('customer-history-fin-snap');
+                     /* model.renderReady('customer-history-fin-snap'); */
                 },                
                 "financial-summary": function(bundleModel, model, params){
                     model.branchName=params[0].data[0]['Hub Name'];
