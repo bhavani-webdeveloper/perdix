@@ -1,5 +1,8 @@
-irf.pageCollection.factory(irf.page("customer360.CustomerSummaryView"), ["$log", "$stateParams", "SessionStore", "PageHelper", "formHelper", "RolesPages", "Utils", "translateFilter", "Enrollment", "$q",
-    function($log, $stateParams, SessionStore, PageHelper, formHelper, RolesPages, Utils, translateFilter, Enrollment, $q) {
+define({
+    pageUID: "customer360.CustomerSummaryView",
+    pageType: "Engine",
+    dependencies: ["$log", "$stateParams", "SessionStore", "PageHelper", "formHelper", "RolesPages", "Utils", "translateFilter", "Enrollment", "$q"],
+    $pageFn: function($log, $stateParams, SessionStore, PageHelper, formHelper, RolesPages, Utils, translateFilter, Enrollment, $q) {
         var strongRender = function(data, type, full, meta) {
             return '<strong>' + data + '</strong>';
         }
@@ -353,4 +356,4 @@ irf.pageCollection.factory(irf.page("customer360.CustomerSummaryView"), ["$log",
             }
         };
     }
-]);
+});
