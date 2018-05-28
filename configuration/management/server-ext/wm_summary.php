@@ -226,19 +226,19 @@ try{
 			AND inf.KGFS=cs.kgfs_bank_name
 			AND cs.id=tfds.customer_id
 			and cs.id=?",array($query['cid']));
-	$result_prime_earner =DB::connection("bietl_db")->select("select ps.family_member_first_name,ps.age from (SELECT tfds.family_member_first_name, tfds.id,round(datediff(curdate(),date(tfds.date_of_birth))/365,0) as age,
-	  max(CEIL(LEAST((ipas.income_earned * inf.adjusted_multiple),  (ipas.income_earned * inf.multiple * LEAST(GREATEST(inf.min_months_per_year, 
+	$result_prime_earner =DB::connection("bietl_db")->select("select ps.family_member_first_name,ps.age,ps.household_occupation_income from (SELECT tfds.family_member_first_name, tfds.id,round(datediff(curdate(),date(tfds.date_of_birth))/365,0) as age,
+	  (CEIL(LEAST((ipas.income_earned * inf.adjusted_multiple),  (ipas.income_earned * inf.multiple * LEAST(GREATEST(inf.min_months_per_year, 
 	  ipas.months_per_year), inf.max_months_per_year)/12)))) AS `household_occupation_income` 
 	  FROM financialForms.family_details tfds,
 			financialForms.income_per_annum ipas,
 			bietl.income_frequency inf, financialForms.customer cs
 			WHERE tfds.id=ipas.family_id
-			AND inf.frequency = ipas.frequency
+			AND inf.frequency = ipas.frequency 
 			AND inf.occupation=IF(YEAR(cs.last_edited_at)-YEAR(tfds.date_of_birth)<=5, 'Child', ipas.income_source)
 			AND inf.gender=tfds.gender
 			AND inf.KGFS=cs.kgfs_bank_name
 			AND cs.id=tfds.customer_id
-			and cs.id=?) ps",array($query['cid']));
+			and cs.id=? ) ps order by household_occupation_income desc limit 1",array($query['cid']));
 	
 	$result_hh_comp =DB::connection("bietl_db")->select("SELECT 'Male' as Dependants,
 	sum(case when (YEAR(curdate())-YEAR(tfds.date_of_birth))<18 and tfds.gender='Male' then 1 else 0 end) as dep_less_than_18,
@@ -324,7 +324,7 @@ WHERE cs.id=?",array($query['cid']));
 	 when oc.income_source in ('Performing Arts','Labour','Migrant Labour','Unemployed','House-wife','Student') then 'Labour' else 'Labour' end) as occupation_category from
 	 
 	 (SELECT
-		cs.id,ipas.income_source,max(CEIL(LEAST((ipas.income_earned * inf.adjusted_multiple),
+		cs.id,ipas.income_source,(CEIL(LEAST((ipas.income_earned * inf.adjusted_multiple),
 		(ipas.income_earned * inf.multiple * LEAST(GREATEST(inf.min_months_per_year,
 		ipas.months_per_year), inf.max_months_per_year)/12)))) AS `household_income`
 		FROM financialForms.family_details tfds,
@@ -336,7 +336,7 @@ WHERE cs.id=?",array($query['cid']));
 		AND inf.gender=tfds.gender
 		AND inf.KGFS=cs.kgfs_bank_name
 		AND cs.id=tfds.customer_id
-		and cs.id=?) oc where oc.id=?) cat where cat.id=?;",array($query['cid'],$query['cid'],$query['cid']));
+		and cs.id=? order by household_income desc limit 1) oc where oc.id=?) cat where cat.id=?",array($query['cid'],$query['cid'],$query['cid']));
 	
 	
 	
@@ -607,10 +607,10 @@ WHERE eps.customer_id=cs.id and freq.frequency=eps.frequency and cs.id=?) tex
 	
 	//result aggregation
 	$result = [
-		'Segment' => ['Segment'=>$result_segment[0]->Segment,'Last_interaction'=>$last_interaction,'Last_edited_date'=>$result_last_edited_at[0]->last_edited_at,'Target_products'=>$Target_products1],
+		'Segment' => ['Segment'=>$result_segment[0]->Segment,'Last_edited_date'=>$result_last_edited_at[0]->last_edited_at],
 		'Household_Composition' => ['Primary_income_earner'=>$result_prime_earner[0]->family_member_first_name,'Size_of_household'=>$result_hh_size[0]->hh_size,'Primary_earner_age'=>$result_prime_earner[0]->age,'Total_expenses'=>(int)$result_expense[0]->total_expense,'Total_income'=>(int)$result_income[0]->household_income,'dependants'=>$result_hh_comp],
 		'Loans' => ['Loan_count'=>$result_loan_count,'Outstanding_amount'=>$result_loan_outstanding,'Credit_score'=>$result_total_risk,'Owns_a_shop'=>$result_owns_shop[0]->shop],
-		'Eligibility_Criteria'=>[['product'=>"MEL",'eligibility'=>$mel_eligibility,'upgrade'=>$mel_upgrade],['product'=>"Personal",'eligibility'=>$personal_eligibility,'upgrade'=>$personal_upgrade]],
+		'Eligibility_Criteria'=>[['product'=>"MEL",'eligibility'=>$mel_eligibility],['product'=>"Personal",'eligibility'=>$personal_eligibility]],
 		'Insurance' => $result_insurance,
 		'savings' => $result_savings,
 		'remittance' => $result_remittance,
