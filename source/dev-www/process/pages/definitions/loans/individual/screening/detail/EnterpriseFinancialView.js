@@ -1114,7 +1114,7 @@ self.renderReady = function(eventName) {
 				},
 				"business-customer": function(bundleModel, model, params) {
 					model.business = params;
-					model.business.centreName = filterFilter(formHelper.enum('centre').data, {value: model.business.centreId})[0].name;
+					//model.business.centreName = filterFilter(formHelper.enum('centre').data, {value: model.business.centreId})[0].name;
 
 					var bankStatementSummary = (function() {
 						var averageGraphData = [{
