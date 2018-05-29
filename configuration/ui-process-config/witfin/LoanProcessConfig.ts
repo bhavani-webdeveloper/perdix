@@ -113,7 +113,7 @@ let config = {
                 "overrides": [
                     {
                         "type": "expr",
-                        "expr": "this.loanAccount.currentStage=='ManagementCommittee'",
+                        "expr": "this.loanAccount.currentStage=='CreditApproval5'",
                         "add": [
                             {
                                 "name": "OriginationToBookingPolicy",

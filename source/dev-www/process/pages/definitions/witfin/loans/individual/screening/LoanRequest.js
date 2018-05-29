@@ -1660,28 +1660,40 @@ define([], function() {
                     },
                     sendBack: function(model, formCtrl, form, $event) {
                         PageHelper.showLoader();
-                        model.loanProcess.sendBack()
-                            .finally(function() {
-                                PageHelper.hideLoader();
-                            })
-                            .subscribe(function(value) {
 
-                                PageHelper.showProgress('enrolment', 'Done.', 5000);
-                                irfNavigator.goBack();
-                            }, function(err) {
-                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
-                                PageHelper.showErrors(err);
-                                PageHelper.hideLoader();
-                            });
+                        if (_.isArray(model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses) && !model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[0])
+                            delete model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses
+                        if (_.isArray(model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes) && !model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes[0])
+                            delete model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes
 
+                        if (model.review.action==null || model.review.action =="" || model.review.targetStage1 ==null || model.review.targetStage1 ==""){
+                               PageHelper.showProgress("update-loan", "Send to Stage / Remarks is mandatory", 3000);
+                               PageHelper.hideLoader();
+                               return false;
+                        }
+
+                        Utils.confirm("Are You Sure?")
+                            .then(
+                                function(){
+                                    model.loanProcess.sendBack()
+                                        .finally(function() {
+                                            PageHelper.hideLoader();
+                                        })
+                                        .subscribe(function(value) {
+                                            PageHelper.showProgress('enrolment', 'Done.', 5000);
+                                            irfNavigator.goBack();
+                                        }, function(err) {
+                                            PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                            PageHelper.showErrors(err);
+                                            PageHelper.hideLoader();
+                                        });
+                                })
                     },
                     proceed: function(model, formCtrl, form, $event) {
                         if (PageHelper.isFormInvalid(formCtrl)) {
                             return false;
                         }
-                        PageHelper.clearErrors();
-                        PageHelper.showLoader();
-                        PageHelper.showProgress('enrolment', 'Updating Loan');
+
                         model.loanProcess.proceed()
                             .finally(function() {
                                 PageHelper.hideLoader();
@@ -1696,6 +1708,11 @@ define([], function() {
                                 PageHelper.showErrors(err);
                                 PageHelper.hideLoader();
                             });
+
+                        PageHelper.clearErrors();
+                        PageHelper.showLoader();
+                        PageHelper.showProgress('enrolment', 'Updating Loan');
+
                     },
                     reject: function(model, formCtrl, form, $event) {
                         PageHelper.showLoader();

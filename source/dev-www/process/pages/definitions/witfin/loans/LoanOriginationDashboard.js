@@ -40,7 +40,8 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
                 "Page/Engine/witfin.loans.individual.screening.CreditApproval2Queue",
                 "Page/Engine/witfin.loans.individual.screening.CreditApproval3Queue",
                 "Page/Engine/witfin.loans.individual.screening.CreditApproval4Queue",
-                "Page/Engine/witfin.loans.individual.screening.CreditApproval5Queue",            ]
+                "Page/Engine/witfin.loans.individual.screening.CreditApproval5Queue",
+                "Page/Engine/witfin.loans.individual.screening.RejectedQueue"            ]
         };
 
 
@@ -563,8 +564,8 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
                 });
             }
 
-            var drqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.RejectedQueue"];
-            if (drqMenu) {
+            var rjqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.RejectedQueue"];
+            if (rjqMenu) {
                 IndividualLoan.search({
                     'stage': 'Rejected',
                     'enterprisePincode': '',
@@ -575,9 +576,9 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
                     'page': 1,
                     'per_page': 1,
                 }).$promise.then(function(response, headerGetter) {
-                    drqMenu.data = Number(response.headers['x-total-count']);
+                    rjqMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
-                    drqMenu.data = '-';
+                    rjqMenu.data = '-';
                 });
             }
 
