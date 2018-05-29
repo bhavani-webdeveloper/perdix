@@ -129,6 +129,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.CreditCommitteeR
             "pre_pages_initialize": function(bundleModel) {
                 $log.info("Inside pre_page_initialize");
                 bundleModel.currentStage = "CreditCommitteeReview";
+                var ExistingCustomer = false;
                 var deferred = $q.defer();
 
                 switch (bundleModel.currentStage) {
@@ -286,18 +287,20 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.CreditCommitteeR
                                     }
                                 });
 
-                                $this.bundlePages.push({
-                                    pageClass: 'portfolio-analysis',
-                                    model: {
-                                        cbModel: {
-                                            customerId: res.customerId,
-                                            loanId: bundleModel.loanId,
-                                            scoreName: 'RiskScore3',
-                                            customerDetail: bundleModel.customer_detail
+                                if(ExistingCustomer) {
+                                    $this.bundlePages.push({
+                                        pageClass: 'portfolio-analysis',
+                                        model: {
+                                            cbModel: {
+                                                customerId: res.customerId,
+                                                loanId: bundleModel.loanId,
+                                                scoreName: 'RiskScore3',
+                                                customerDetail: bundleModel.customer_detail
+                                            }
+                                            
                                         }
-                                        
-                                    }
-                                });
+                                    }); 
+                                };
 
                                 $this.bundlePages.push({
                                     pageClass: 'loan-recommendation',
