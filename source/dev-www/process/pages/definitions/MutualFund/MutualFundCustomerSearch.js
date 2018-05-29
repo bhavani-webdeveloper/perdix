@@ -1,14 +1,14 @@
 define({
 	pageUID: "MutualFund.MutualFundCustomerSearch",
 	pageType: "Engine",
-	dependencies: ["$log", "formHelper", "Enrollment", "Queries", "$state", "SessionStore", "Utils", "PagesDefinition", "irfNavigator"],
+	dependencies: ["$log", "formHelper", "Enrollment", "Queries", "$state", "SessionStore", "Utils", "PagesDefinition", "irfNavigator","PageHelper"],
 
-	$pageFn: function($log, formHelper, Enrollment, Queries, $state, SessionStore, Utils, PagesDefinition, irfNavigator) {
+	$pageFn: function($log, formHelper, Enrollment, Queries, $state, SessionStore, Utils, PagesDefinition, irfNavigator,PageHelper) {
 
 		var branch = SessionStore.getBranch();
 		return {
 			"type": "search-list",
-			"title": "CUSTOMER_SEARCH",
+			"title": "MUTUAL_FUND_CUSTOMER_SEARCH",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				model.branch = SessionStore.getCurrentBranch().branchId;
@@ -142,7 +142,8 @@ define({
 						'per_page': pageOpts.itemsPerPage,
 						'kycNumber': searchOptions.kyc_no,
 						'lastName': searchOptions.lastName,
-						'urnNo': searchOptions.urnNo
+						'urnNo': searchOptions.urnNo,
+						'stage': "Completed"
 					}).$promise;
 
 					return promise;
@@ -189,16 +190,16 @@ define({
 							title: 'NAME',
 							data: 'firstName',
 							render: function(data, type, full, meta) {
-								return (full.customerType === 'Individual' ? '<i class="fa fa-user">&nbsp;</i> ' : '<i class="fa fa-industry"></i> ') + data;
+								return (full.customerType === 'Individual'  ? '<i class="fa fa-user">&nbsp;</i> ' : '<i class="fa fa-industry"></i> ') + data;
 							}
 						}, {
 							title: 'URN_NO',
 							data: 'urnNo'
 							// type: 'html',
-						}, {
+						}, /*{
 							title: 'CURRENT_STAGE',
 							data: 'currentStage'
-						}, {
+						},*/ {
 							title: 'BRANCH',
 							data: 'kgfsName'
 						}, {
@@ -210,106 +211,154 @@ define({
 						}]
 					},
 					getActions: function() {
-						return [{
-							name: "Enroll Customer",
-							desc: "",
-							icon: "fa fa-user-plus",
-							fn: function(item, model) {
-								if (model.siteCode == 'sambandh') {
-									$state.go("Page.Engine", {
-										pageName: "customer.IndividualEnrollment3",
-										pageId: item.id
-									});
-								} else if (model.siteCode == 'saija') {
-									$state.go("Page.Engine", {
-										pageName: "customer.IndividualEnrollment3",
-										pageId: item.id,
-										pageData: {
-											currentStage: item.currentStage
-										}
-									});
-								} else {
-									$state.go("Page.Engine", {
-										pageName: "customer.IndividualEnrollment",
-										pageId: item.id
-									});
-								}
-							},
-							isApplicable: function(item, model) {
-								if (item.currentStage === 'BasicEnrolment')
-									return true;
-								return false;
-							}
-						}, {
-							name: "CUSTOMER_360",
+						return [
+						{
+							name: "EKYC",
 							desc: "",
 							icon: "fa fa-user",
 							fn: function(item, model) {
-								$state.go("Page.Customer360", {
-									pageId: item.id,
-									pageData: model.siteCode
-								});
+								 irfNavigator.go({
+                                    state: "Page.Adhoc",
+
+                                    pageName: "MutualFund.MutualFundEKYC",
+                                    pageId: item.id,
+                                }
+                                );
 							},
+
 							isApplicable: function(item, model) {
 								if (item.currentStage === 'Completed')
 									return true;
 								return false;
 							}
-						}, {
-							name: "Edit Customer",
+						},
+						{
+							name: "FIRST_PURCHASE",
 							desc: "",
-							icon: "fa fa-pencil",
+							icon: "fa fa-user",
 							fn: function(item, model) {
-								if (item.currentStage === 'Stage01') {
-									irfNavigator.go({
-										state: "Page.Engine",
-										pageName: "ProfileInformation",
-										pageId: item.id
-									});
-								} else if (item.currentStage === 'Stage02') {
-									irfNavigator.go({
-										state: "Page.Engine",
-										pageName: "AssetsLiabilitiesAndHealth",
-										pageId: item.id
-									});
-								} else if (item.currentStage === 'EDF') {
-									irfNavigator.go({
-										state: "Page.Engine",
-										pageName: "EDF",
-										pageId: item.id
-									});
-								} else if (item.currentStage === 'Completed') {
-									irfNavigator.go({
-										state: "Page.Engine",
-										pageName: "CustomerRUD",
-										pageId: item.id,
-										pageData: {
-											intent: 'EDIT'
-										}
-									});
-								}
+								 irfNavigator.go({								 	
+                                    state: "Page.Engine", 
+                                    pageName: "MutualFund.MutualFundApplication",
+                                    pageId: item.id,
+                                });
 							},
+
 							isApplicable: function(item, model) {
-								return model.siteCode === "KGFS";
+								if (item.currentStage === 'Completed')
+									return true;
+								return false;
+								
 							}
-						}, {
-							name: "Edit Customer",
+						},
+						{	name: "ADDITIONAL_PURCHASE",
 							desc: "",
-							icon: "fa fa-pencil",
+							icon: "fa fa-user",
 							fn: function(item, model) {
-								irfNavigator.go({
-									state: "Page.Engine",
-									pageName: "customer.IndividualEnrollmentStage2",
-									pageId: item.id,
-									pageData: {
-										currentStage: item.currentStage
-									}
-								});
+								 irfNavigator.go({
+                                    state: "Page.Engine", 
+                                    pageName: "MutualFund.MutualFundTransaction",
+                                    pageData: {type: "additional"},
+                                    pageId: item.id,
+                                });
 							},
+
 							isApplicable: function(item, model) {
-								return (model.siteCode === "saija" && item.currentStage === 'Stage02');
+								if (item.currentStage === 'Completed')
+									return true;
+								return false;
 							}
-						}];
+						},
+						
+						
+						{	name: "REDEMPTION",
+							desc: "",
+							icon: "fa fa-user",
+							fn: function(item, model) {
+								 irfNavigator.go({
+                                    state: "Page.Engine", 
+                                    pageName: "MutualFund.MutualFundTransaction",
+                                    pageData: {type: "redemption"},
+                                    pageId: item.id,
+                                });
+							},
+
+
+
+							isApplicable: function(item, model) {
+								if (item.currentStage === 'Completed')
+									return true;
+								return false;
+							}
+						},
+
+						/*{	name: "MUTUALFUND_UPLOAD_FEED",
+							desc: "",
+							icon: "fa fa-user",
+							fn: function(item, model) {
+								 irfNavigator.go({
+                                    state: "Page.Engine", 
+                                    pageName: "MutualFund.MutualFundUploadFeed",
+                                    pageData: {type: "Page.Engine"},
+                                    pageId: item.id,
+                                });
+							},
+
+							
+
+							isApplicable: function(item, model) {
+								if (item.currentStage === 'Completed')
+									return true;
+								return false;
+							}
+						},
+*/
+						{	name: "SUMMARY",
+							desc: "",
+							icon: "fa fa-user",
+							fn: function(item, model) {
+								 irfNavigator.go({
+                                    state: "Page.Engine", 
+                                    pageName: "MutualFund.MutualFundSummary",
+                                    pageData: {type: "summary"},
+                                    pageId: item.id,
+                                });
+							},
+
+							
+
+							isApplicable: function(item, model) {
+								if (item.currentStage === 'Completed')
+									return true;
+								return false;
+							}
+						}
+
+						/*{	name: "DOWNLOAD_FEED",
+							desc: "",
+							icon: "fa fa-user",
+							fn: function(item, model) {
+								 irfNavigator.go({
+                                    state: "Page.Engine", 
+                                    pageName: "MutualFund.MutualFundDownloadFeed",
+                                   // pageData: {type: "Page.Engine"},
+                                    pageId: item.id,
+                                });
+							},
+
+							
+
+							isApplicable: function(item, model) {
+								if (item.currentStage === 'Completed')
+									return true;
+								return false;
+							}
+						}
+*/
+
+
+
+						];
 					}
 				}
 			}
