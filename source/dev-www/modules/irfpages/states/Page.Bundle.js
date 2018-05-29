@@ -13,6 +13,8 @@ irf.pages.factory('BundleManager', ['BundleLog', '$injector', '$q', 'formHelper'
     var pages = [];
     var pageCounter = 0;
 
+    var autoSaveOfflineTimer = [];
+
     return {
         register: function(bundlePage, bundleModel, _pages){
             var newInstance = {
@@ -256,6 +258,14 @@ irf.pages.factory('BundleManager', ['BundleLog', '$injector', '$q', 'formHelper'
                     formHelper.resetFormValidityState(pages[idx].formCtrl);
                 }
             }
+        },
+
+        startAutoSaveOffline: function(callback, duration) {
+            autoSaveOfflineTimer.push(setInterval(callback, duration));
+        },
+        stopAutoSaveOffline: function() {
+            var a = autoSaveOfflineTimer.pop();
+            a && clearInterval(a);
         }
     }
 }]);
@@ -626,19 +636,11 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
         return deferredInitBundle.promise;
     };
 
-    var autoSaveOfflineTimer = null;
-    var stopAutoSaveOffline = function() {
-        if (autoSaveOfflineTimer) {
-            clearInterval(autoSaveOfflineTimer);
-            autoSaveOfflineTimer = null;
-        }
-    };
-
     $scope.initBundle().then(function(){
 
-        stopAutoSaveOffline();
+        BundleManager.stopAutoSaveOffline();
         if ($scope.bundlePage.offline && (n = (n = SessionStore.getGlobalSetting('bundle.offline.autosave.timeout'))? Number(n): 0)) {
-            autoSaveOfflineTimer = setInterval(BundleManager.saveOffline, n);
+            BundleManager.startAutoSaveOffline(BundleManager.saveOffline, n);
         }
         $timeout(function() {
             $(".bundle-page .irf-tabset ul.nav-tabs").affix({
@@ -652,7 +654,7 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
             });
 
             $('.bundle-page').bind('destroyed', function() {
-                stopAutoSaveOffline();
+                BundleManager.stopAutoSaveOffline();
             });
 
             if ($scope.pages && $scope.pages.length) {
@@ -664,7 +666,7 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
     });
 
     $scope.$on('$destroy', function() {
-        stopAutoSaveOffline();
+        BundleManager.stopAutoSaveOffline();
     });
 
 }]);
