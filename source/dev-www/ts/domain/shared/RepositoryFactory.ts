@@ -5,14 +5,19 @@ import {EnrolmentProcess} from "../model/customer/EnrolmentProcess";
 import {EnrolmentRepository} from "../model/customer/EnrolmentRepository";
 import {LiabilityLoanAccountBookingRepository} from "../model/lender/LoanBooking/LiabilityLoanAccountBookingRepository";
 import {LiabilityRepaymentRepository} from "../model/lender/LoanBooking/LiabilityRepaymentRepository";
+
 import {QueryRepository} from "./query/QueryRepository";
 import { BranchPostingPolicyFactory } from '../model/journal/branchposting/policy/BranchPostingPolicyFactory';
+
 import { BranchPostingProcess } from '../model/journal/branchposting/BranchPostingProcess';
 import BranchPostingRepository = require('../model/journal/branchposting/BranchRepository');
 
 import { FinconPostingProcess } from '../model/journal/finconaccounting/FinconPostingProcess';
 import FinconRepository = require('../model/journal/finconaccounting/FinconRepository');
+
+import {AgentProcess} from '../model/agent/AgentProcess';
 import AgentRepository = require('../model/agent/AgentRepository');
+
 
 //import {TagMasterRepository} from "../model/TMaster/TagMasterRepository"
 

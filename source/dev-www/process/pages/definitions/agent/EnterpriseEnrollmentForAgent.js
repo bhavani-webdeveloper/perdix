@@ -1,5 +1,6 @@
-define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProcess) {
+define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/agent/AgentProcess'], function(EnrolmentProcess, AgentProcess) {
     EnrolmentProcess = EnrolmentProcess['EnrolmentProcess'];
+    AgentProcess = AgentProcess['AgentProcess'];
     return {
         pageUID: "agent.EnterpriseEnrollmentForAgent",
         pageType: "Engine",
@@ -77,15 +78,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                         "BankAccounts.customerBankAccounts.customerNameAsInBank",
                         "BankAccounts.customerBankAccounts.accountNumber",
                         "BankAccounts.customerBankAccounts.confirmedAccountNumber",
-                        "BankAccounts.customerBankAccounts.accountType",
-
-                        "AgentFeeDetails",
-                        "AgentFeeDetails.agentFeeDetails",
-                        "AgentFeeDetails.agentFeeDetails.feeAmount",
-                        "AgentFeeDetails.agentFeeDetails.feeName",
-                        "AgentFeeDetails.agentFeeDetails.feeType",
-                        "AgentFeeDetails.agentFeeDetails.frequency",
-                        "AgentFeeDetails.agentFeeDetails.dateOfIncorporation"
+                        "BankAccounts.customerBankAccounts.accountType"                      
                     ];
 
                 }

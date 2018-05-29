@@ -77,7 +77,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                     if (_.hasIn($stateParams, 'pageId') && !_.isNull($stateParams.pageId)) {
                         PageHelper.showLoader();
                         bundleModel.customerId = $stateParams.pageId;
-
                         AgentProcess.fromCustomerID(bundleModel.customerId)
                             .subscribe(function(agentProcess) {
                                 PageHelper.hideLoader();
@@ -93,7 +92,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                 $this.bundlePages.push({
                                     pageClass: 'agent',
                                     model: {
-                                        agentProcess: agentProcess.agentProcess,
+                                        agentProcess: agentProcess,
                                     }
                                 });
                                 deferred.resolve();

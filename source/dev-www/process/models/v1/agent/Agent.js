@@ -6,11 +6,11 @@ irf.models.factory('Agent', function($resource, $httpParamSerializer, BASE_URL, 
     var resource = $resource(endpoint, null, {
         submit: {
             method: 'PUT',
-            url: BASE_URL + '/api/agent'
+            url: endpoint
         },
         update: {
             method: 'POST',
-            url: BASE_URL + '/api/agent'
+            url: endpoint
         },
         search: searchResource({
             method: 'GET',

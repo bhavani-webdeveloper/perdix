@@ -48,16 +48,13 @@ export class AgentProcess {
 
      save(): any {
         /* Calls all business policies associated with save */
-        this.agentProcessAction = "SAVE";                    
-        this.processType = 'AGENT';
+      
         let pmBeforeUpdate: PolicyManager<AgentProcess> = new PolicyManager(this, AgentPolicyFactory.getInstance(), 'beforeSave', AgentProcess.getProcessConfig());
         let obs1 = pmBeforeUpdate.applyPolicies();
         let obs2 = null;
         if (this.agent.id){
             obs2 = this.agentRepo.update(this);
-        } else {
-            obs2 = this.agentRepo.create(this);
-        }
+        } 
 
         let pmAfterUpdate: PolicyManager<AgentProcess> = new PolicyManager(this, AgentPolicyFactory.getInstance(), 'afterSave', AgentProcess.getProcessConfig());
         let obs3 = pmAfterUpdate.applyPolicies();
@@ -66,33 +63,28 @@ export class AgentProcess {
 
    
     hold(): any {
-        this.agentProcessAction = "SAVE";                         
-        this.processType = 'AGENT';
+        this.agentProcessAction = "SAVE";  
         let pmBeforeUpdate: PolicyManager<AgentProcess> = new PolicyManager(this, AgentPolicyFactory.getInstance(), 'beforeSave', AgentProcess.getProcessConfig());
         let obs1 = pmBeforeUpdate.applyPolicies();
         let obs2 = null;
         if (this.agent.id){
             obs2 = this.agentRepo.update(this);
-        } else {
-            obs2 = this.agentRepo.create(this);
-        }
+        } 
 
         let pmAfterUpdate: PolicyManager<AgentProcess> = new PolicyManager(this, AgentPolicyFactory.getInstance(), 'afterSave', AgentProcess.getProcessConfig());
         let obs3 = pmAfterUpdate.applyPolicies();
         return Observable.concat(obs1, obs2, obs3).last();
     }
 
-    proceed(toStage: string): any {
+    proceed(): any {
         /* Calls all business policies assocaited with proceed */
-        this.stage = toStage;
-        this.agentProcessAction = "PROCEED";                             
-        this.processType = 'AGENT';
-        let pmBeforeUpdate: PolicyManager<AgentProcess> = new PolicyManager(this, AgentPolicyFactory.getInstance(), 'beforeProceed', AgentProcess.getProcessConfig());
-        let obs1 = pmBeforeUpdate.applyPolicies();
+        this.agentProcessAction = "SAVE";
+        // let pmBeforeUpdate: PolicyManager<AgentProcess> = new PolicyManager(this, AgentPolicyFactory.getInstance(), 'beforeProceed', AgentProcess.getProcessConfig());
+        // let obs1 = pmBeforeUpdate.applyPolicies();
         let obs2 = this.agentRepo.update(this);
-        let pmAfterUpdate: PolicyManager<AgentProcess> = new PolicyManager(this, AgentPolicyFactory.getInstance(), 'afterProceed', AgentProcess.getProcessConfig());
-        let obs3 = pmAfterUpdate.applyPolicies();
-        return Observable.concat(obs1, obs2, obs3).last();
+        // let pmAfterUpdate: PolicyManager<AgentProcess> = new PolicyManager(this, AgentPolicyFactory.getInstance(), 'afterProceed', AgentProcess.getProcessConfig());
+        // let obs3 = pmAfterUpdate.applyPolicies();
+        return Observable.concat(obs2).last();
     }
 
     sendBack(): any {
@@ -139,27 +131,15 @@ export class AgentProcess {
 
 
     static createNewProcess(): Observable<AgentProcess> {
-        let ep = new AgentProcess();
-        ep.agent = new Agent();
-       //  ep.customer.customerType = customerType;
-        let pm: PolicyManager<AgentProcess> = new PolicyManager<AgentProcess>(ep, AgentPolicyFactory.getInstance(), 'onNew', AgentProcess.getProcessConfig());
-        return pm.applyPolicies();
+        return AgentProcessFactory
+            .createNew()
+            .flatMap((agentProcess) => {
+                let pm: PolicyManager<AgentProcess> = new PolicyManager<AgentProcess>(agentProcess, AgentPolicyFactory.getInstance(), 'onNew', AgentProcess.getProcessConfig());
+                return pm.applyPolicies();
+            });
     }
 
-    //  static fromCustomerID(id: number): Observable<EnrolmentProcess> {
-    //     return AgentProcessFactory.createFromCustomerID(id)
-
-    //     let ep = new AgentProcess();
-    //     ep.agent = new Agent();
-    //    //  ep.customer.customerType = customerType;
-    //     let pm: PolicyManager<AgentProcess> = new PolicyManager<AgentProcess>(ep, AgentPolicyFactory.getInstance(), 'onNew', AgentProcess.getProcessConfig());
-    //     return pm.applyPolicies();
-    //         .flatMap((agentProcess) => {
-    //             let pm: PolicyManager<AgentProcess> = new PolicyManager<AgentProcess>(AgentProcess, AgentPolicyFactory.getInstance(), 'onLoad', AgentProcess.getProcessConfig());
-    //             return pm.applyPolicies();
-    //         })
-    // }
-
+   
     static getProcessConfig() {
         return agentProcessConfig;
     }
