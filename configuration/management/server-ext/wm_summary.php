@@ -20,7 +20,11 @@ $query = [];
 parse_str($queryString, $query);
 
 
+
+
 try{
+	
+	$id=DB::connection("bietl_db")->select("select (case when parent_customer_id=0 then id else parent_customer_id end) as id from customer where id=?",array($query['cid']));
 	
 	// Dashboard queries for customer summary
 	$result_segment =DB::connection("bietl_db")->select("	select (case 
@@ -139,18 +143,18 @@ try{
 
 	
 	
-	where  ti.id=?",array($query['cid'],$query['cid'],$query['cid'],$query['cid'],$query['cid'],$query['cid']));
+	where  ti.id=?",array($id[0]->id,$id[0]->id,$id[0]->id,$id[0]->id,$id[0]->id,$id[0]->id));
 	
 	
 	
 	
-	$result_last_edited_at=DB::connection("bietl_db")->select("select date(last_edited_at) as last_edited_at from financialForms.customer where id=?",array($query['cid']));
+	$result_last_edited_at=DB::connection("bietl_db")->select("select date(last_edited_at) as last_edited_at from financialForms.customer where id=?	",array($id[0]->id));
 	
-	$result_hh_size=DB::connection("bietl_db")->select("select count(*) as hh_size from financialForms.family_details where customer_id=?",array($query['cid']));
+	$result_hh_size=DB::connection("bietl_db")->select("select count(*) as hh_size from financialForms.family_details where customer_id=?",array($id[0]->id));
 	
 	$result_expense=DB::connection("bietl_db")->select("select cs.id as id,sum(eps.annual_expenses * freq.multiple) as total_expense from 
 								financialForms.expenditure_per_annum eps, bietl.expense_frequency freq,financialForms.customer cs   
-								WHERE eps.customer_id=cs.id and freq.frequency=eps.frequency and cs.id=?",array($query['cid']));
+								WHERE eps.customer_id=cs.id and freq.frequency=eps.frequency and cs.id=?",array($id[0]->id));
 								
 	$result_income=DB::connection("bietl_db")->select("SELECT
 			cs.id,sum(CEIL(LEAST((ipas.income_earned * inf.adjusted_multiple),
@@ -165,7 +169,7 @@ try{
 			AND inf.gender=tfds.gender
 			AND inf.KGFS=cs.kgfs_bank_name
 			AND cs.id=tfds.customer_id
-			and cs.id=?",array($query['cid']));
+			and cs.id=?",array($id[0]->id));
 			
 	$result_prime_earner =DB::connection("bietl_db")->select("select ps.family_member_first_name,ps.age,ps.household_occupation_income from (SELECT tfds.family_member_first_name, tfds.id,round(datediff(curdate(),date(tfds.date_of_birth))/365,0) as age,
 	  (CEIL(LEAST((ipas.income_earned * inf.adjusted_multiple),  (ipas.income_earned * inf.multiple * LEAST(GREATEST(inf.min_months_per_year, 
@@ -179,7 +183,7 @@ try{
 			AND inf.gender=tfds.gender
 			AND inf.KGFS=cs.kgfs_bank_name
 			AND cs.id=tfds.customer_id
-			and cs.id=? ) ps order by household_occupation_income desc limit 1",array($query['cid']));
+			and cs.id=? ) ps order by household_occupation_income desc limit 1",array($id[0]->id));
 	
 	$result_hh_comp =DB::connection("bietl_db")->select("SELECT 'Male' as Dependants,
 	sum(case when (YEAR(curdate())-YEAR(tfds.date_of_birth))<18 and tfds.gender='Male' then 1 else 0 end) as dep_less_than_18,
@@ -200,29 +204,29 @@ SELECT 'Female' as Dependants,
 	FROM financialForms.family_details tfds, financialForms.customer cs,
 	financialForms.income_per_annum ipas 
 	WHERE cs.id=tfds.customer_id AND tfds.id=ipas.family_id  
-	and (ipas.income_earned<=1 OR ipas.income_earned IS NULL) and cs.id=?",array($query['cid'],$query['cid']));
+	and (ipas.income_earned<=1 OR ipas.income_earned IS NULL) and cs.id=?",array($id[0]->id,$id[0]->id));
 	
 	
 	
 	$result_loan_count =DB::connection("bietl_db")->select("select 'Active' As Status , 
-	sum(case when apd.product like '%jlg%' and apd.product_close_date>curdate() and apd.customer_id=? then 1 else 0 end) as JLG,
-	sum(case when apd.product like 'MEL|Retail' and apd.product_close_date>curdate() and apd.customer_id=? then 1 else 0 end) as MEL,
-	sum(case when apd.product like '%personal%' and apd.product_close_date>curdate() and apd.customer_id=? then 1 else 0 end)as PERSONAL,
-	sum(case when apd.product  not rlike 'JLG|MEL|Retail|Personal' and apd.product_close_date>curdate() and apd.customer_id=? then 1 else 0 end) as OTHERS
-from bietl.`all_products_dump` apd where  apd.customer_id=?
+	sum(case when apd.product like '%jlg%' and apd.product_close_date>curdate() and apd.household_id=? then 1 else 0 end) as JLG,
+	sum(case when apd.product like 'MEL|Retail' and apd.product_close_date>curdate() and apd.household_id=? then 1 else 0 end) as MEL,
+	sum(case when apd.product like '%personal%' and apd.product_close_date>curdate() and apd.household_id=? then 1 else 0 end)as PERSONAL,
+	sum(case when apd.product  not rlike 'JLG|MEL|Retail|Personal' and apd.product_close_date>curdate() and apd.household_id=? then 1 else 0 end) as OTHERS
+from bietl.`all_products_dump` apd where  apd.household_id=?
 UNION ALL
 	SELECT 'Closed' As Status,
-	sum(case when apd.product like '%jlg%' and apd.product_close_date<curdate() and apd.customer_id=? then 1 else 0 end) as JLG,
-	sum(case when apd.product like 'MEL|Retail' and apd.product_close_date<curdate() and apd.customer_id=? then 1 else 0 end) as MEL,
-	sum(case when apd.product like '%personal%' and apd.product_close_date<curdate() and apd.customer_id=? then 1 else 0 end) as PERSONAL,
-	sum(case when apd.product not rlike 'JLG|MEL|Retail|Personal' and apd.product_close_date<curdate() and apd.customer_id=? then 1 else 0 end) as OTHERS
+	sum(case when apd.product like '%jlg%' and apd.product_close_date<curdate() and apd.household_id=? then 1 else 0 end) as JLG,
+	sum(case when apd.product like 'MEL|Retail' and apd.product_close_date<curdate() and apd.household_id=? then 1 else 0 end) as MEL,
+	sum(case when apd.product like '%personal%' and apd.product_close_date<curdate() and apd.household_id=? then 1 else 0 end) as PERSONAL,
+	sum(case when apd.product not rlike 'JLG|MEL|Retail|Personal' and apd.product_close_date<curdate() and apd.household_id=? then 1 else 0 end) as OTHERS
 
-	from bietl.`all_products_dump` apd where  apd.customer_id=?",array($query['cid'],$query['cid'],$query['cid'],$query['cid'],$query['cid'],$query['cid'],$query['cid'],$query['cid'],$query['cid'],$query['cid']));
+	from bietl.`all_products_dump` apd where  apd.household_id=?",array($id[0]->id,$id[0]->id,$id[0]->id,$id[0]->id,$id[0]->id,$id[0]->id,$id[0]->id,$id[0]->id,$id[0]->id,$id[0]->id));
 	
-	$result_loan_outstanding =DB::connection("bietl_db")->select("select odm.product,sum(odm.principal_outstanding) as outstanding_amt,apd.product_close_date as maturity_date,odm.days_overdue
-	from bietl.all_products_dump apd, bietl.overdue_master_daily odm
-	where apd.product_number=odm.account_number and odm.date=curdate()-1 and odm.customer_id=?
-	group by product",array($query['cid']));
+	$result_loan_outstanding =DB::connection("bietl_db")->select("select odm.product,sum(apd.principal_outstanding) as outstanding_amt,apd.product_close_date as maturity_date,odm.days_overdue
+	from bietl.all_products_dump apd left join  bietl.overdue_master_daily_latest_unique odm on apd.product_number=odm.account_number
+	where  odm.date=curdate()-1 and apd.household_id=?
+	group by product",array($id[0]->id));
 
 
 	$result_owns_shop =DB::connection("bietl_db")->select("select 
@@ -234,16 +238,16 @@ financialForms. customer  cs
 LEFT JOIN financialForms.asset_details  ads
 ON  ads.customer_id = cs.id 
 and ads.name_of_owned_asset='Shop' 
-WHERE cs.id=?",array($query['cid']));
+WHERE cs.id=?",array($id[0]->id));
 	
 	$result_insurance =DB::connection("bietl_db")->select("select apd.product as product, cs.first_name as customer,
 	ifnull(apd.product_close_date,0) product_close_date,ifnull(datediff(apd.product_close_date,curdate()),0) as expires_in,apd.insurance_cover_amount as coverage 
 	from bietl.all_products_dump apd, financialForms.customer cs where product_category='Insurance' 
-	and apd.customer_id=? and cs.urn_no=apd.urn order by apd.product_close_date desc limit 5;",array($query['cid']));
+	and apd.household_id=? and cs.urn_no=apd.urn order by apd.product_close_date desc limit 5;",array($id[0]->id));
 	
-	$result_remittance = DB::connection("bietl_db")->select("select transaction_type, transaction_amount,transaction_date,service_provider from $bi_etl.remittance_dump where household_id=? order by transaction_date desc limit 10",array($query['cid']));
+	$result_remittance = DB::connection("bietl_db")->select("select transaction_type, transaction_amount,transaction_date,service_provider from $bi_etl.remittance_dump where household_id=? order by transaction_date desc limit 10",array($id[0]->id));
 
-	$result_savings = DB::connection("bietl_db")->select("select transaction_date,transaction_amount from bietl.sb_account_transactions_dump where transaction_type='DEPOSIT' and household_id= ?  order by transaction_date desc limit 10",array($query['cid']));
+	$result_savings = DB::connection("bietl_db")->select("select transaction_date,transaction_amount from bietl.sb_account_transactions_dump where transaction_type='DEPOSIT' and household_id= ?  order by transaction_date desc limit 10",array($id[0]->id));
 	
 	//risk model variables
 	$risk_score= 0;
@@ -277,7 +281,7 @@ WHERE cs.id=?",array($query['cid']));
 		AND inf.gender=tfds.gender
 		AND inf.KGFS=cs.kgfs_bank_name
 		AND cs.id=tfds.customer_id
-		and cs.id=? order by household_income desc limit 1) oc where oc.id=?) cat where cat.id=?",array($query['cid'],$query['cid'],$query['cid']));
+		and cs.id=? order by household_income desc limit 1) oc where oc.id=?) cat where cat.id=?",array($id[0]->id,$id[0]->id,$id[0]->id));
 	
 	
 	
@@ -300,7 +304,7 @@ WHERE cs.id=?",array($query['cid']));
 		AND inf.gender=tfds.gender
 		AND inf.KGFS=cs.kgfs_bank_name
 		AND cs.id=tfds.customer_id
-		and cs.id=?) ed where ed.id=?",array($query['cid'],$query['cid']));
+		and cs.id=?) ed where ed.id=?",array($id[0]->id,$id[0]->id));
 	$risk_score += (count($risk_ed_stat_score) > 0 && isset($risk_ed_stat_score[0]->edu_of_primary_income_earner_score)) ? $risk_ed_stat_score[0]->edu_of_primary_income_earner_score : 0; 
 	
 	$risk_net_income_per_member_score=DB::connection("bietl_db")->select("select (case 
@@ -331,7 +335,7 @@ WHERE cs.id=?",array($query['cid']));
 financialForms.expenditure_per_annum eps, bietl.expense_frequency freq,financialForms.customer cs   
 WHERE eps.customer_id=cs.id and freq.frequency=eps.frequency and cs.id=?) tex
 
-	where ti.customer_id=sz.customer_id and sz.customer_id=tex.id and ti.customer_id=?) net;",array($query['cid'],$query['cid'],$query['cid'],$query['cid']));
+	where ti.customer_id=sz.customer_id and sz.customer_id=tex.id and ti.customer_id=?) net;",array($id[0]->id,$id[0]->id,$id[0]->id,$id[0]->id));
 	$risk_score += (count($risk_net_income_per_member_score) > 0 && isset($risk_net_income_per_member_score[0]->net_income_per_member_score)) ? $risk_net_income_per_member_score[0]->net_income_per_member_score : 0; 
 	
 	$risk_all_loans_active_score=DB::connection("bietl_db")->select("select (case
@@ -340,9 +344,9 @@ WHERE eps.customer_id=cs.id and freq.frequency=eps.frequency and cs.id=?) tex
 	when lc.count_loans_active=2 then 23
 	else 23 end
 	) as all_loans_active_score from
-	(SELECT apd.customer_id,count(*) as count_loans_active 
+	(SELECT apd.household_id,count(*) as count_loans_active 
 	FROM bietl.`all_products_dump` apd 
-	where apd.product_category='Loans' and apd.product_close_date>curdate() and apd.customer_id=?) lc where lc.customer_id=1",array($query['cid']));
+	where apd.product_category='Loans' and apd.product_close_date>curdate() and apd.household_id=?) lc where lc.household_id=?",array($id[0]->id,$id[0]->id));
 	
 	$risk_score += (count($risk_all_loans_active_score) > 0 && isset($risk_all_loans_active_score[0]->all_loans_active_score)) ? $risk_all_loans_active_score[0]->all_loans_active_score : 0;
 	
@@ -354,7 +358,7 @@ WHERE eps.customer_id=cs.id and freq.frequency=eps.frequency and cs.id=?) tex
 	) as all_loans_closed_score from
 	(SELECT apd.customer_id,count(*) as count_loans_closed 
 	FROM bietl.`all_products_dump` apd 
-	where apd.product_category='Loans' and apd.product_close_date<curdate() and apd.customer_id=?) lc where lc.customer_id=?",array($query['cid'],$query['cid']));
+	where apd.product_category='Loans' and apd.product_close_date<curdate() and apd.customer_id=?) lc where lc.customer_id=?",array($id[0]->id,$id[0]->id));
 	
 	$risk_score += (count($risk_all_loans_closed_score) > 0 && isset($risk_all_loans_closed_score[0]->all_loans_closed_score)) ? $risk_all_loans_closed_score[0]->all_loans_closed_score : 0;
 	
@@ -363,10 +367,10 @@ WHERE eps.customer_id=cs.id and freq.frequency=eps.frequency and cs.id=?) tex
 	when max(hm.NO_OF_OTHER_MFIS)<=0  then 0 else 0	
 	end) as o_mfi_cnt
 
-	from bietl.highmark_latest hm,financialForms.customer_snapshot cs 
+	from bietl.highmark_latest hm,financialForms.customer cs 
 
 
-	where hm.REQUEST_MBR_ID=cs.urn_no and cs.customer_id=? group by cs.customer_id,cs.urn_no;",array($query['cid']));
+	where hm.REQUEST_MBR_ID=cs.urn_no and cs.id=?",array($id[0]->id));
 	
 	$risk_score += (count($risk_other_mfi) > 0 && isset($risk_other_mfi[0]->o_mfi_cnt)) ? $risk_other_mfi[0]->o_mfi_cnt : 0;
 	
@@ -379,7 +383,7 @@ WHERE eps.customer_id=cs.id and freq.frequency=eps.frequency and cs.id=?) tex
 	from bietl.highmark_latest hm,financialForms.customer cs 
 
 
-	where hm.REQUEST_MBR_ID=cs.urn_no and cs.id=?",array($query['cid']));
+	where hm.REQUEST_MBR_ID=cs.urn_no and cs.id=?",array($id[0]->id));
 	
 	$risk_score += (count($risk_delinquency_score) > 0 && isset($risk_delinquency_score[0]->o_max_worst_deliquent_score)) ? $risk_delinquency_score[0]->o_max_worst_deliquent_score : 0;
 	
@@ -401,7 +405,7 @@ WHERE eps.customer_id=cs.id and freq.frequency=eps.frequency and cs.id=?) tex
 		AND inf.gender=tfds.gender
 		AND inf.KGFS=cs.kgfs_bank_name
 		AND cs.id=tfds.customer_id
-		and cs.id=?) oc where oc.id=?",array($query['cid'],$query['cid']));
+		and cs.id=?) oc where oc.id=?",array($id[0]->id,$id[0]->id));
 	 
 	 $risk_score += (count($risk_occupation_count) > 0 && isset($risk_occupation_count[0]->occupation_count_score)) ? $risk_occupation_count[0]->occupation_count_score : 0;
 	
@@ -432,7 +436,7 @@ WHERE eps.customer_id=cs.id and freq.frequency=eps.frequency and cs.id=?) tex
 	//https://docs.google.com/forms/d/e/1FAIpQLSc-X_XvO1Z0XRjkkui5x-zYx9-6-MGzwn-zrb_l_0JjxZvpZQ/viewform?entry.326955045=cid&entry.1591633300=segment
 	//https://docs.google.com/forms/d/e/1FAIpQLSc-X_XvO1Z0XRjkkui5x-zYx9-6-MGzwn-zrb_l_0JjxZvpZQ/viewform?usp=pp_url&entry.326955045=cid&entry.962142054=urn&entry.1591633300=segment
 	
-	$cid=$query['cid'];
+	$cid=$id[0]->id;
 	$urn_par="&entry.962142054=";
 	$urn=$result_urn[0]->urn_no;
 	$segment_par="&entry.1591633300=";
@@ -456,9 +460,9 @@ WHERE eps.customer_id=cs.id and freq.frequency=eps.frequency and cs.id=?) tex
 	when lc.count_loans_closed>=1 then 1
 	else 0 end
 	) as cred_hist from
-	(SELECT apd.customer_id,count(*) as count_loans_closed 
+	(SELECT apd.household_id,count(*) as count_loans_closed 
 	FROM bietl.`all_products_dump` apd 
-	where apd.product_category='Loans' and apd.product_close_date<curdate() and apd.customer_id=?) lc where lc.customer_id=?",array($query['cid'],$query['cid']));
+	where apd.product_category='Loans' and apd.product_close_date<curdate() and apd.household_id=?) lc where lc.household_id=?",array($id[0]->id,$id[0]->id));
 	
 	
 	
@@ -466,14 +470,14 @@ WHERE eps.customer_id=cs.id and freq.frequency=eps.frequency and cs.id=?) tex
 	$cred_hist=(count($result_credit_hist)>0 && $result_credit_hist[0]->cred_hist && $result_credit_hist[0]->cred_hist==1) ? 1 : 0;
 	
 	//overdue_days
-	$result_od_days=DB::connection("bietl_db")->select("select (days_overdue) from bietl.overdue_master_daily where customer_id=? and days_overdue is not null order by date desc limit 1",array($query['cid']));
+	//$result_od_days=DB::connection("bietl_db")->select("select (days_overdue) from bietl.overdue_master_daily where customer_id=? and days_overdue is not null order by date desc limit 1",array($id[0]->id));
 	
-	$days_overdue=0;
-	if(count($result_od_days)>0 && isset($result_od_days[0]->days_overdue)){
+	//$days_overdue=0;
+	//if(count($result_od_days)>0 && isset($result_od_days[0]->days_overdue)){
 		
-		if($result_od_days[0]->days_overdue<30){$days_overdue=1;
+	//	if($result_od_days[0]->days_overdue<30){$days_overdue=1;
 			
-	}}
+	//}}
 	
 	//owns_shop
 	$shop=(count($result_owns_shop)>0 && $result_owns_shop[0]->shop && $result_owns_shop[0]->shop=="YES") ? 1 : 0;
@@ -491,7 +495,7 @@ financialForms. customer  cs
 LEFT JOIN financialForms.asset_details  ads
 ON  ads.customer_id = cs.id 
 and ads.name_of_owned_asset='House' 
-WHERE cs.id=?",array($query['cid']));
+WHERE cs.id=?",array($id[0]->id));
 
 	$house=(count($result_owns_house)>0 && $result_owns_house[0]->house && $result_owns_house[0]->house=="YES") ? 1 : 0;
 	
@@ -499,13 +503,13 @@ WHERE cs.id=?",array($query['cid']));
 	
 	//current_loan_exposure
 	
-	$current_loan_exposure=DB::connection("bietl_db")->select("select sum(principal_outstanding) as total_exposure  from bietl.overdue_master_daily where customer_id=? and date=curdate()-1;",array($query['cid']));
-	$exposure=0;
-	if(count($current_loan_exposure)>0 && isset($current_loan_exposure[0]->total_exposure)){
+	//$current_loan_exposure=DB::connection("bietl_db")->select("select sum(principal_outstanding) as total_exposure  from bietl.overdue_master_daily where customer_id=? and date=curdate()-1;",array($id[0]->//id));
+	//$exposure=0;
+	//if(count($current_loan_exposure)>0 && isset($current_loan_exposure[0]->total_exposure)){
 		
-		if($current_loan_exposure[0]->total_exposure<75000){$exposure=1;
+	//	if($current_loan_exposure[0]->total_exposure<75000){$exposure=1;
 			
-	}}
+	//}}
 	
 	$mel_eligibility=0;
 	if($age==1  && ($shop==1||$house==1)   && $result_total_risk>580){
@@ -521,6 +525,148 @@ WHERE cs.id=?",array($query['cid']));
 	}
 	else{$personal_eligibility="no";}
 	
+	
+	//IP address
+	
+	if (!empty($_SERVER['HTTP_CLIENT_IP']))   
+	{
+		$ip_address = $_SERVER['HTTP_CLIENT_IP'];
+	}
+	//whether ip is from proxy
+	elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR']))  
+	{
+		$ip_address = $_SERVER['HTTP_X_FORWARDED_FOR'];
+	}
+	//whether ip is from remote address
+	else
+	{
+		$ip_address = $_SERVER['REMOTE_ADDR'];
+	}
+	
+	
+	function getOSBrowswer() { 
+
+		$user_agent     =   $_SERVER['HTTP_USER_AGENT'];
+	
+		$os_platform    =   "Unknown OS Platform";
+	
+		$os_array       =   array(
+								'/windows nt 6.2/i'     =>  'Windows 8',
+								'/windows nt 6.1/i'     =>  'Windows 7',
+								'/windows nt 6.0/i'     =>  'Windows Vista',
+								'/windows nt 5.2/i'     =>  'Windows Server 2003/XP x64',
+								'/windows nt 5.1/i'     =>  'Windows XP',
+								'/windows xp/i'         =>  'Windows XP',
+								'/windows nt 5.0/i'     =>  'Windows 2000',
+								'/windows me/i'         =>  'Windows ME',
+								'/win98/i'              =>  'Windows 98',
+								'/win95/i'              =>  'Windows 95',
+								'/win16/i'              =>  'Windows 3.11',
+								'/macintosh|mac os x/i' =>  'Mac OS X',
+								'/mac_powerpc/i'        =>  'Mac OS 9',
+								'/linux/i'              =>  'Linux',
+								'/ubuntu/i'             =>  'Ubuntu',
+								'/iphone/i'             =>  'iPhone',
+								'/ipod/i'               =>  'iPod',
+								'/ipad/i'               =>  'iPad',
+								'/android/i'            =>  'Android',
+								'/blackberry/i'         =>  'BlackBerry',
+								'/webos/i'              =>  'Mobile'
+							);
+	
+		foreach ($os_array as $regex => $value) { 
+	
+			if (preg_match($regex, $user_agent)) {
+				$os_platform    =   $value;
+			}
+	
+		}   
+	
+	
+	
+	
+		$browser        =   "Unknown Browser";
+	
+		$browser_array  =   array(
+								'/msie/i'       =>  'MSIE',
+								'/firefox/i'    =>  'Firefox',
+								'/safari/i'     =>  'Safari',
+								'/chrome/i'     =>  'Chrome',
+								'/opera/i'      =>  'Opera',
+								'/netscape/i'   =>  'Netscape',
+								'/maxthon/i'    =>  'Maxthon',
+								'/konqueror/i'  =>  'Konqueror',
+								'/mobile/i'     =>  'Mobile'
+							);
+	
+		foreach ($browser_array as $regex => $value) { 
+	
+			if (preg_match($regex, $user_agent)) {
+				$browser    =   $value;
+			}
+	
+		}
+	
+		// finally get the correct version number
+		$known = array('Version', $browser, 'other');
+		$pattern = '#(?<browser>' . join('|', $known) .
+		')[/ ]+(?<version>[0-9.|a-zA-Z.]*)#';
+		if (!preg_match_all($pattern, $user_agent, $matches)) {
+			// we have no matching number just continue
+		}
+		
+		// see how many we have
+		$i = count($matches['browser']);
+		if ($i != 1) {
+			//we will have two since we are not using 'other' argument yet
+			//see if version is before or after the name
+			if (strripos($user_agent,"Version") < strripos($user_agent,$browser)){
+				$version= $matches['version'][0];
+			}
+			else {
+				$version= $matches['version'][1];
+			}
+		}
+		else {
+			$version= $matches['version'][0];
+		}
+		
+		// check if we have a number
+		if ($version==null || $version=="") {$version="?";}
+	
+		return $os_platform.' '.$browser.' '.$version;
+	}
+
+
+	$browser = getOSBrowswer();
+	
+
+    if(isset($_SERVER['HTTP_REFERER'])) {$previous_page = $_SERVER['HTTP_REFERER'];} else {$previous_page='';}
+
+	
+ //Log creation
+DB::connection("bietl_db")->insert("INSERT INTO bietl.`fwr_page_log` (`server`, `unique_click_id`, `session_id`, `customer_id`, `household_id`, `user_id`, 
+`same_branch_user`, `ip_address`, `browser`, `referred_from`, `page`, `page_id`, `start_time`, 
+`end_time`, `view_time`, `time_stamp`) 
+
+SELECT 
+		'live' as server ,
+		'' as unique_click_id,
+		'' as session_id,
+		 ? as customer_id,
+		 ? as household_id,
+		 '' as user_id,
+		 '' as same_branch_user,
+		 ? as ip_address,
+		 ? as browser,
+		 ? as referred_from,
+		 'segmentation pilot' as page,
+		 '' as page_id,
+		 now() as start_time,
+		 now() as end_time,
+		 0 as view_time,
+		 now()  as time_stamp",array($query['cid'],$id[0]->id,$ip_address,$browser,$previous_page));
+ 
 	
 	//result aggregation
 	$result = [
