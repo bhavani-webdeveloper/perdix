@@ -92,6 +92,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         model.liabilitiesSummary = res[19];
         model.machineryDetails = res[20];
         model.opexDetails = res[21];
+        model.hypothecationType = res[25];
 
         model.enterpriseDetails.columns = model.enterpriseDetails.columns.concat(model.ratioDetails.columns);
         _.merge(model.enterpriseDetails.data[0], model.ratioDetails.data[0]);
@@ -257,6 +258,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         $log.info(model.additional);
 
         model.enterpriseDetailsData = model.enterpriseDetails.data[0];
+        model.enterpriseDetailsData["Hypothecation Type"] = model.hypothecationType.data[0]["Hypothecation Type"];
 
     }; // END OF prepareData()
 
