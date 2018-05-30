@@ -1870,6 +1870,104 @@
                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
                   ]
                },
+"viabilityCategory":{
+                  "title":"viabilityCategory",
+                   "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                  ]
+               },
+"grossVehicleWeight":{
+                  "title":"grossVehicleWeight",
+                   "type":"number",
+                  
+                  "captureStages":[
+                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                  ]
+               },
+"payLoad":{
+                  "title":"payLoad",
+                   "type":"string",
+                  "minLength":1,
+                  "maxLength":45,
+                  "captureStages":[
+                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                  ]
+               },
+"typeofLoad":{
+                  "title":"typeofLoad",
+                   "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                  ]
+               },
+"ratePerTrip":{
+                  "title":"ratePerTrip",
+                   "type":"number",
+                  "captureStages":[
+                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                  ]
+               },
+"mileage":{
+                  "title":"mileage",
+                   "type":"number",
+                  "captureStages":[
+                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                  ]
+               },
+"fuelConsumptionPerHour":{
+                  "title":"fuelConsumptionPerHour",
+                   "type":"number",
+                  "captureStages":[
+                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                  ]
+               },
+"noOfTyres":{
+                  "title":"noOfTyres",
+                   "type":"number",
+                  "captureStages":[
+                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                  ]
+               },
+"costOfTyre":{
+                  "title":"costOfTyre",
+                   "type":"number",
+                  "captureStages":[
+                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                  ]
+               },
+"lifeOfTyre":{
+                  "title":"lifeOfTyre",
+                   "type":"number",
+                  "captureStages":[
+                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                  ]
+               },
+"dailyWorkingHours":{
+                  "title":"dailyWorkingHours",
+                   "type":"number",
+                  "captureStages":[
+                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                  ]
+               },
+"monthlyWorkingDays":{
+                  "title":"monthlyWorkingDays",
+                   "type":"number",
+                  "captureStages":[
+                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                  ]
+               },
+"hourlyRate":{
+                  "title":"hourlyRate",
+                   "type":"number",
+                  "captureStages":[
+                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                  ]
+               },
                 "insuredDeclaredValue":{
                   "title":"Insured Declared Value",
                    "type":"number",
@@ -2891,6 +2989,20 @@
                     "type":"string",
                      "minLength":1,
                      "maxLength":100,
+                     "captureStages":[
+                        "Screening", "LoanInitiation"
+                     ]
+                  },
+ "routesKms":{
+                     "title":"routesKms",
+                    "type":"number",
+                     "captureStages":[
+                        "Screening", "LoanInitiation"
+                     ]
+                  },
+ "trips":{
+                     "title":"trips",
+                    "type":"number",
                      "captureStages":[
                         "Screening", "LoanInitiation"
                      ]
