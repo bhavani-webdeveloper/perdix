@@ -802,6 +802,25 @@ define([], function() {
                     "NewVehicleDetails.price",
                     "NewVehicleDetails.udf1",
                     "NewVehicleDetails.insuredDeclaredValue",
+                    "VehicleViability",
+                    "VehicleViability.viabilityCategory",
+                    "VehicleViability.grossVehicleWeight",
+                    "VehicleViability.payLoad",
+                    "VehicleViability.typeofLoad",
+                    "VehicleViability.ratePerTrip",
+                    "VehicleViability.mileage",
+                    "VehicleViability.noOfTyres",
+                    "VehicleViability.costOfTyre",
+                    "VehicleViability.lifeOfTyre",
+                    "VehicleViability1",
+                    "VehicleViability1.grossVehicleWeight1",
+                    "VehicleViability1.payLoad1",
+                    "VehicleViability1.typeofLoad1",
+                    "VehicleViability1.ratePerTrip1",
+                    "VehicleViability1.mileage1",
+                    "VehicleViability1.noOfTyres1",
+                    "VehicleViability1.costOfTyre1",
+                    "VehicleViability1.lifeOfTyre1",
                     "TeleVerification",
                     "TeleVerification.verifications",
                     "TeleVerification.verifications.personContacted",
@@ -1404,7 +1423,12 @@ define([], function() {
                                             "title": "MODEL_NOT_LISTED",
                                             "enumCode": "decisionmaker",
                                             "type": "radios",
-                                            "orderNo": 75
+                                            "orderNo": 75,
+                                            onChange: function(modelValue, form, model) {
+                                                if(model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'YES') {
+                                                    model.loanAccount.vehicleLoanDetails.viabilityCategory = "Non-Standard Asset";
+                                                }
+                                            }
                                         },
                                         "make1": {
                                             "orderNo": 60,
@@ -1431,6 +1455,121 @@ define([], function() {
                                             "orderNo": 90,
                                             "key": "loanAccount.vehicleLoanDetails.insuredDeclaredValue",
                                             "title": "INSURED_DECLARED_VALUE"
+                                        }
+                                    }
+                                },
+                                "VehicleViability": {
+                                    "type": "box",
+                                    "title": "VEHICLE_VIABILITY",
+                                    "orderNo": 45,
+                                    "condition": "model.loanAccount.loanPurpose1 == 'Purchase - New Vehicle' || model.loanAccount.loanPurpose1 == 'Purchase - Used Vehicle' || model.loanAccount.loanPurpose1 == 'Refinance'",
+                                    "items": {
+                                        "viabilityCategory": {
+                                           "key": "loanAccount.vehicleLoanDetails.viabilityCategory",
+                                           "title": "VIABILITY_CATEGORY",
+                                           "readonly": "true"
+                                        },
+                                        "grossVehicleWeight": {
+                                           "key": "loanAccount.vehicleLoanDetails.grossVehicleWeight",
+                                           "title": "GROSS_VEHICLE_WEIGHT",
+                                           "type": "number",
+                                           "readonly": "true"
+                                        },
+                                        "payLoad": {
+                                           "key": "loanAccount.vehicleLoanDetails.payLoad",
+                                           "title": "PAYLOAD",
+                                           "type": "number",
+                                           "readonly": "true"
+                                        },
+                                        "typeofLoad": {
+                                           "key": "loanAccount.vehicleLoanDetails.typeofLoad",
+                                           "title": "TYPE_OF_LOAD",
+                                           "readonly": "true"
+                                        },
+                                        "ratePerTrip": {
+                                           "key": "loanAccount.vehicleLoanDetails.ratePerTrip",
+                                           "title": "RATE_PER_TRIP",
+                                           "type": "number",
+                                           "readonly": "true"
+                                        },
+                                        "mileage": {
+                                           "key": "loanAccount.vehicleLoanDetails.mileage",
+                                           "title": "MILEAGE",
+                                           "type": "number",
+                                           "readonly": "true"
+                                        },
+                                        "noOfTyres": {
+                                           "key": "loanAccount.vehicleLoanDetails.noOfTyres",
+                                           "title": "NO_OF_TYRES",
+                                           "type": "number",
+                                           "readonly": "true"
+                                        },
+                                        "costOfTyre": {
+                                           "key": "loanAccount.vehicleLoanDetails.costOfTyre",
+                                           "title": "COST_OF_TYRE",
+                                           "type": "number",
+                                           "readonly": "true"
+                                        },
+                                        "lifeOfTyre": {
+                                           "key": "loanAccount.vehicleLoanDetails.lifeOfTyre",
+                                           "title": "LIFE_OF_TYRE",
+                                           "type": "number",
+                                           "readonly": "true"
+                                        }
+                                    }
+                                },
+                                "VehicleViability1": {
+                                    "type": "box",
+                                    "title": "VEHICLE_VIABILITY",
+                                    "orderNo": 45,
+                                    "condition": "model.loanAccount.loanPurpose1 == 'Purchase - New Vehicle' || model.loanAccount.loanPurpose1 == 'Purchase - Used Vehicle' || model.loanAccount.loanPurpose1 == 'Refinance'",
+                                    "items": {
+                                        "grossVehicleWeight1": {
+                                           "key": "loanAccount.vehicleLoanDetails.grossVehicleWeight",
+                                           "title": "GROSS_VEHICLE_WEIGHT",
+                                           "type": "number",
+                                           "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'YES'"
+                                        },
+                                        "payLoad1": {
+                                           "key": "loanAccount.vehicleLoanDetails.payLoad",
+                                           "title": "PAYLOAD",
+                                           "type": "number",
+                                           "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'YES'"
+                                        },
+                                        "typeofLoad1": {
+                                           "key": "loanAccount.vehicleLoanDetails.typeofLoad",
+                                           "title": "TYPE_OF_LOAD",
+                                           "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'YES'",
+                                        },
+                                        "ratePerTrip1": {
+                                           "key": "loanAccount.vehicleLoanDetails.ratePerTrip",
+                                           "title": "RATE_PER_TRIP",
+                                           "type": "number",
+                                           "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'YES'"
+                                        },
+                                        "mileage1": {
+                                           "key": "loanAccount.vehicleLoanDetails.mileage",
+                                           "title": "MILEAGE",
+                                           "type": "number",
+                                           "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'YES'"
+                                        },
+                                        "noOfTyres1": {
+                                           "key": "loanAccount.vehicleLoanDetails.noOfTyres",
+                                           "title": "NO_OF_TYRES",
+                                           "type": "number",
+                                           "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'YES'"
+                                        },
+                                        "costOfTyre1": {
+                                           "key": "loanAccount.vehicleLoanDetails.costOfTyre",
+                                           "title": "COST_OF_TYRE",
+                                           "type": "number",
+                                           "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'YES'"
+                                        },
+                                        "lifeOfTyre1": {
+                                           "key": "loanAccount.vehicleLoanDetails.lifeOfTyre",
+                                           "title": "LIFE_OF_TYRE",
+                                           "type": "number",
+                                           "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'YES'"
                                         }
                                     }
                                 }

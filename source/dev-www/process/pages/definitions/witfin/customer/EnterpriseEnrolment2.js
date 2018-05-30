@@ -1001,22 +1001,26 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                                             "emiNo": {
                                                                 "key": "customer.liabilities[].customerLiabilityRepayments[].emiNo",
                                                                 "title": "EMI_NO",
-                                                                "type": "number"
+                                                                "type": "number",
+                                                                "required": true
                                                             },
                                                             "emiAmount": {
                                                               "key": "customer.liabilities[].customerLiabilityRepayments[].emiAmount",
                                                               "title": "EMI_AMOUNT",
-                                                              "type": "number"
+                                                              "type": "number",
+                                                              "required": true
                                                             },
                                                             "emiDueDate": {
                                                               "key": "customer.liabilities[].customerLiabilityRepayments[].emiDueDate",
                                                               "title": "EMI_DUE_DATE",
-                                                              "type": "date"
+                                                              "type": "date",
+                                                              "required": true
                                                             },
                                                             "actualRepaymentDate": {
                                                                 "key": "customer.liabilities[].customerLiabilityRepayments[].actualRepaymentDate",
                                                                 "title": "ACTUAL_REPAYMENT_DATE",
-                                                                "type": "date"
+                                                                "type": "date",
+                                                                "required": true
                                                             }
                                                         }
                                                     }

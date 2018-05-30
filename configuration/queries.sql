@@ -49,7 +49,7 @@ enterpriseCustomer=select e.customer_id from  enterprise_customer_relations e wh
 loanCustomerDetails.list=select c.urn_no, IFNULL(lcr.relation, IF(c.id=l.customer_id, 'Loan Customer', 'NA')) `relation`, lcr.relationship_with_applicant, c.first_name, c.mobile_phone, c.landline_no, c.mobile_number_2 `alternate_mobile_number` from customer c left join loan_accounts l on (l.customer_id = c.id) left join loan_customer_relation lcr on (lcr.customer_id = c.id) where l.id = :loanId or lcr.loan_id = :loanId
 nextInstallmentDate= SELECT MIN(installment_date) as min_date from repayment_reminder WHERE DATE(installment_date) > CURDATE()
 allusers.list=select u.user_id i, u.user_name n, ur.role_id r, bm.id b from users u, user_roles ur, branch_master bm where u.user_id = ur.user_id and u.branch_name = bm.branch_name
-vehiclePriceEvaluation.list = SELECT * from vehicle_price_evaluation_master 
+vehicleViability.list = SELECT * from vehicle_viability_master 
 AllLoanPurposeMapping.list = select loan_purpose_first_level as purpose1,loan_purpose_second_level as purpose2,loan_purpose as purpose3 from loan_purpose_mapping_master
 PDCDemands.list= select repayment_amount, cheque_number from repayment_batch_details  where account_number=:accountNumber and repayment_type='PDC' and processing_status='FAILURE' order by id desc limit 1
 loanAccountsByUrnAndStage.list = Select l.account_Number as accountNumber, l.id as loanId, l.current_stage as currentStage from loan_accounts l where l.urn_no = :urn and l.current_stage IN (:currentStage)

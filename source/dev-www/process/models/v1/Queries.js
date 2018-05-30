@@ -812,7 +812,7 @@ irf.models.factory('Queries', [
         resource.getVehiclePrice = function (){
             var deferred = $q.defer();
             var request = {};
-            resource.getResult("vehiclePriceEvaluation.list", request)
+            resource.getResult("vehicleViability.list", request)
                 .then(function(response){
                     if (response && _.isArray(response.results) && response.results.length > 0) {
                         deferred.resolve(response.results);
