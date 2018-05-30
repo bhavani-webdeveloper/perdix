@@ -129,6 +129,13 @@ export class AgentProcess {
     }
 
 
+    static fromCustomerID(id: number): Observable<AgentProcess> {
+        return AgentProcessFactory.createFromCustomerID(id)
+            .flatMap((agentProcess) => {
+                let pm: PolicyManager<AgentProcess> = new PolicyManager<AgentProcess>(agentProcess, AgentPolicyFactory.getInstance(), 'onLoad', AgentProcess.getProcessConfig());
+                return pm.applyPolicies();
+            })
+    }
 
     static createNewProcess(): Observable<AgentProcess> {
         return AgentProcessFactory

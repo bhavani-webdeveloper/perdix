@@ -11,17 +11,10 @@ define({
             "title": "AGENT_SEARCH",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
-                model.branch = branch;
-                $log.info("search-list sample got initialized");
-                var branchId = SessionStore.getBranchId();
-                var branchName = SessionStore.getBranch();
-                var centres = SessionStore.getCentres();
-                if (_.isArray(centres) && centres.length > 0) {
-                    model.centre = centres[0].centreName;
-                }
+
             },
             definition: {
-                title: "SEARCH_LEAD",
+                title: "SEARCH_AGENT",
                 searchForm: [
                     "*"
                 ],
@@ -39,8 +32,12 @@ define({
                             "type": "string"
                         },
                         "agentType": {
-                            "title": "AGENT_TYPE",
-                            "type": "string"
+                            "type": ["string", "null"],
+                            'title': "AGENT_TYPE",
+                            "enumCode": "agent_type",
+                            "x-schema-form": {
+                                "type": "select"
+                            }
                         },
                         "agentId": {
                             "title": "AGENT_ID",
@@ -100,16 +97,16 @@ define({
                     getColumns: function() {
                         return [{
                             title: 'ID',
-                            data: 'customer.id'
+                            data: 'id'
                         }, {
-                            title: 'AGENT_NAME',
-                            data: 'customer.firstName'
+                            title: 'COMPANY_ID',
+                            data: 'customerId'
                         }, {
                             title: 'AGENT_TYPE',
                             data: 'agentType'
                         }, {
-                            title: 'CUSTOMER_TYPE',
-                            data: 'customer.customerType'
+                            title: 'COMPANY_NAME',
+                            data: 'companyName'
                         }]
                     },
                     getActions: function() {
@@ -118,14 +115,14 @@ define({
                             desc: "",
                             icon: "fa fa-pencil-square-o",
                             fn: function(item, index) {
-                                if (item.customer.customerType == 'Individual') {
+                                if (item.customerType == 'Individual') {
                                     entityManager.setModel('agent.IndividualAgentEnrollmentScreening', {
                                         _request: item
                                     });
                                     irfNavigator.go({
                                         'state': 'Page.Bundle',
                                         'pageName': 'agent.IndividualAgentEnrollmentScreening',
-                                        'pageId': item.customer.id,
+                                        'pageId': item.id,
                                         // 'pageData': {
                                         //     "readonly": false
                                         // }
@@ -134,14 +131,14 @@ define({
                                         'pageName': 'agent.AgentSearch',
                                         'pageId': null
                                     });
-                                } else if (item.customer.customerType == 'Enterprise') {
+                                } else if (item.customerType == 'Enterprise') {
                                     entityManager.setModel('agent.EnterpriseAgentEnrollmentScreening', {
                                         _request: item
                                     });
                                     irfNavigator.go({
                                         'state': 'Page.Bundle',
                                         'pageName': 'agent.EnterpriseAgentEnrollmentScreening',
-                                        'pageId': item.customer.id,
+                                        'pageId': item.id,
                                         // 'pageData': {
                                         //     "readonly": false
                                         // }

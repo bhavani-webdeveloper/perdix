@@ -29,8 +29,12 @@ define({
                             "type": "string"
                         },
                         "agentType": {
-                            "title": "AGENT_TYPE",
-                            "type": "string"
+                            "type": ["string", "null"],
+                            'title': "AGENT_TYPE",
+                            "enumCode": "agent_type",
+                            "x-schema-form": {
+                                "type": "select"
+                            }
                         },
                         "agentId": {
                             "title": "AGENT_ID",
@@ -90,16 +94,16 @@ define({
                     getColumns: function() {
                         return [{
                             title: 'ID',
-                            data: 'customer.id'
+                            data: 'id'
                         }, {
-                            title: 'AGENT_NAME',
-                            data: 'customer.firstName'
+                            title: 'COMPANY_ID',
+                            data: 'customerId'
                         }, {
                             title: 'AGENT_TYPE',
                             data: 'agentType'
                         }, {
-                            title: 'CUSTOMER_TYPE',
-                            data: 'customer.customerType'
+                            title: 'COMPANY_NAME',
+                            data: 'companyName'
                         }]
                     },
                     getActions: function() {
@@ -108,7 +112,7 @@ define({
                             desc: "",
                             icon: "fa fa-pencil-square-o",
                             fn: function(item, index) {
-                                if (item.customer.customerType == 'Individual') {
+                                if (item.customerType == 'Individual') {
                                     entityManager.setModel('agent.IndividualAgentEnrollmentScreening', {
                                         _request: item
                                     });
@@ -124,7 +128,7 @@ define({
                                         'pageName': 'agent.ApproveAgent',
                                         'pageId': null
                                     });
-                                } else if (item.customer.customerType == 'Enterprise') {
+                                } else if (item.customerType == 'Enterprise') {
                                     entityManager.setModel('agent.EnterpriseAgentEnrollmentScreening', {
                                         _request: item
                                     });

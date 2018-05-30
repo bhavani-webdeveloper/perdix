@@ -40,8 +40,8 @@ class AgentProcessFactory {
 
 
     static createFromCustomerID(id){
-        let enrolmentRepo: IAgentRepository = RepositoryFactory.createRepositoryObject(RepositoryIdentifiers.AgentProcess);
-        return enrolmentRepo.getCustomerById(id)
+        let agentRepo: IAgentRepository = RepositoryFactory.createRepositoryObject(RepositoryIdentifiers.AgentProcess);
+        return agentRepo.getCustomerById(id)
             .map(
                 (value: Object) => {
                     let obj: Object = Utils.toJSObj(value);

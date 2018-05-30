@@ -19,11 +19,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
 
             var overridesFields = function(bundlePageObj) {
                 return {
-                    "AgentInformation.customerId": {
+                    "agentEmployees.agentEmployees.customerId": {
                         type: "lov",
                         lovonly: true,
                         bindMap: {},
-                        key: "customer.id",
+                        key: "agent.customerId",
                         "inputMap": {
                             "firstName": {
                                 "key": "customer.firstName",
@@ -131,7 +131,17 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
 
                                     BundleManager.pushEvent(model.pageClass + "-updated", model._bundlePageObj, enrolmentProcess);
                                 })
+
+                            model.agent.customerId = valueObj.id;
                         }
+                    },
+                    "AgentInformation.agentId": {
+                        "key": "agent.id",
+                        "title": "AGENT_ENTERPRISE_ID",
+                    },
+                    "AgentEmployees.agentEmployees.customerId": {
+                        "key": "agent.customerId",
+                        "title": "AGENT_ID",
                     }
                 }
             }
@@ -139,15 +149,17 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
             var getIncludes = function(model) {
 
                 return [
-                    "AgentInformationForEnterprise",
-                    "AgentInformationForEnterprise.agentInformationForEnterprise",
-                    "AgentInformationForEnterprise.agentInformationForEnterprise.agentId",
-                    "AgentInformationForEnterprise.agentInformationForEnterprise.customerId",
-                    "AgentInformationForEnterprise.agentInformationForEnterprise.agentCompanyId",
-                    "AgentInformationForEnterprise.agentInformationForEnterprise.agentRegistrationNumber",
-                    "AgentInformationForEnterprise.agentInformationForEnterprise.agentType",
-                    "AgentInformationForEnterprise.agentInformationForEnterprise.companyName",
-                    "AgentInformationForEnterprise.agentInformationForEnterprise.designation",
+                    "AgentInformation",
+                    "AgentInformation.agentId",
+
+                    "AgentEmployees",
+                    "AgentEmployees.agentEmployees",
+                    "AgentEmployees.agentEmployees.customerId",
+                    "AgentEmployees.agentEmployees.agentCompanyId",
+                    "AgentEmployees.agentEmployees.agentRegistrationNumber",
+                    "AgentEmployees.agentEmployees.agentType",
+                    "AgentEmployees.agentEmployees.companyName",
+                    "AgentEmployees.agentEmployees.designation",
 
                     "AgentFeeDetails",
                     "AgentFeeDetails.agentFeeDetails",
@@ -181,30 +193,47 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                     // /* End of setting data recieved from Bundle */
 
                     // /* Setting data for the form */
-                    // model.customer = model.enrolmentProcess.customer;
+                    model.agent = model.agentProcess.agent;
                     /* End of setting data for the form */
 
 
                     /* Form rendering starts */
                     self = this;
                     var formRequest = {
-                        "overrides": {},
+                        "overrides": overridesFields(model),
                         "includes": getIncludes(model),
                         "excludes": [],
                         "options": {
+                            "repositoryAdditions": {
+                                "agentInformation": {
+                                    "type": "box",
+                                    "title": "PERSIONAL_INFORMATION",
+                                    "orderNo": 10,
+                                    "items": {
+                                        "customerId": {
+                                            "key": "agent.id",
+                                            "title": "CUSTOMER_ID",
+                                            "type": "lov",
+                                            "lovonly": false
+                                        }
+                                    }
+                                }
+                            },
                             "additions": [{
                                 "type": "actionbox",
+                                // "condition": "model.customer.currentStage && model.customer.id",
                                 "orderNo": 1200,
                                 "items": [{
-                                    "type": "submit",
-                                    "title": "SUBMIT"
+                                    "type": "button",
+                                    "title": "PROCEED",
+                                    "onClick": "actions.proceed(model, formCtrl, form, $event)"
                                 }]
                             }]
                         }
                     }
 
 
-                    UIRepository.getEnrolmentProcessUIRepository().$promise
+                    UIRepository.getAgentProcessUIRepository().$promise
                         .then(function(repo) {
                             return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, null, model)
                         })
@@ -233,61 +262,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                     "test-listener": function(bundleModel, model, obj) {
 
                     },
-                    // "lead-loaded": function(bundleModel, model, obj) {
 
-                    //     return $q.when()
-                    //         .then(function() {
-                    //             if (obj.applicantCustomerId) {
-                    //                 return EnrolmentProcess.fromCustomerID(obj.applicantCustomerId).toPromise();
-                    //             } else {
-                    //                 return null;
-                    //             }
-                    //         })
-                    //         .then(function(enrolmentProcess) {
-                    //             if (enrolmentProcess != null) {
-                    //                 model.enrolmentProcess = enrolmentProcess;
-                    //                 model.customer = enrolmentProcess.customer;
-                    //                 model.loanProcess.setRelatedCustomerWithRelation(enrolmentProcess, model.loanCustomerRelationType);
-                    //                 BundleManager.pushEvent(model.pageClass + "-updated", model._bundlePageObj, enrolmentProcess);
-                    //             }
-                    //             if (obj.leadCategory == 'Existing' || obj.leadCategory == 'Return') {
-                    //                 model.customer.existingLoan = 'YES';
-                    //             } else {
-                    //                 model.customer.existingLoan = 'NO';
-                    //             }
-                    //             model.customer.mobilePhone = obj.mobileNo;
-                    //             model.customer.gender = obj.gender;
-                    //             model.customer.firstName = obj.leadName;
-                    //             model.customer.maritalStatus = obj.maritalStatus;
-                    //             model.customer.customerBranchId = obj.branchId;
-                    //             model.customer.centreId = obj.centreId;
-                    //             model.customer.centreName = obj.centreName;
-                    //             model.customer.street = obj.addressLine2;
-                    //             model.customer.doorNo = obj.addressLine1;
-                    //             model.customer.pincode = obj.pincode;
-                    //             model.customer.district = obj.district;
-                    //             model.customer.state = obj.state;
-                    //             model.customer.locality = obj.area;
-                    //             model.customer.villageName = obj.cityTownVillage;
-                    //             model.customer.landLineNo = obj.alternateMobileNo;
-                    //             model.customer.dateOfBirth = obj.dob;
-                    //             model.customer.age = moment().diff(moment(obj.dob, SessionStore.getSystemDateFormat()), 'years');
-                    //             model.customer.gender = obj.gender;
-                    //             model.customer.referredBy = obj.referredBy;
-                    //             model.customer.landLineNo = obj.alternateMobileNo;
-                    //             model.customer.landmark = obj.landmark;
-                    //             model.customer.postOffice = obj.postOffice;
-
-                    //             for (var i = 0; i < model.customer.familyMembers.length; i++) {
-                    //                 // $log.info(model.customer.familyMembers[i].relationShip);
-                    //                 // model.customer.familyMembers[i].educationStatus = obj.educationStatus;
-                    //                 if (model.customer.familyMembers[i].relationShip.toUpperCase() == "SELF") {
-                    //                     model.customer.familyMembers[i].educationStatus = obj.educationStatus;
-                    //                 }
-                    //             }
-                    //         })
-
-                    // },
                     "origination-stage": function(bundleModel, model, obj) {
                         model.currentStage = obj
                     }
@@ -306,36 +281,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                     return Enrollment.getSchema().$promise;
                 },
                 actions: {
-                    setProofs: function(model) {
-                        model.customer.addressProofNo = model.customer.aadhaarNo;
-                        model.customer.identityProofNo = model.customer.aadhaarNo;
-                        model.customer.identityProof = 'Aadhar card';
-                        model.customer.addressProof = 'Aadhar card';
-                        model.customer.addressProofSameAsIdProof = true;
-                        if (model.customer.yearOfBirth) {
-                            model.customer.dateOfBirth = model.customer.yearOfBirth + '-01-01';
-                        }
-                    },
-                    preSave: function(model, form, formName) {
-                        var deferred = $q.defer();
-                        if (model.customer.firstName) {
-                            deferred.resolve();
-                        } else {
-                            PageHelper.showProgress('enrollment', 'Customer Name is required', 3000);
-                            deferred.reject();
-                        }
-                        return deferred.promise;
-                    },
-                    reload: function(model, formCtrl, form, $event) {
-                        $state.go("Page.Engine", {
-                            pageName: 'customer.IndividualEnrollment',
-                            pageId: model.customer.id
-                        }, {
-                            reload: true,
-                            inherit: false,
-                            notify: true
-                        });
-                    },
                     proceed: function(model, form, formName) {
                         PageHelper.clearErrors();
                         if (PageHelper.isFormInvalid(form)) {
@@ -358,35 +303,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                 PageHelper.hideLoader();
                             });
                     },
-                    submit: function(model, form, formName) {
-                        PageHelper.clearErrors();
-                        if (PageHelper.isFormInvalid(form)) {
-                            return false;
-                        }
-                        PageHelper.showProgress('enrolment', 'Updating Customer');
-                        PageHelper.showLoader();
-                        model.agentProcess.save()
-                            .finally(function() {
-                                PageHelper.hideLoader();
-                            })
-                            .subscribe(function(agentProcess) {
-                                formHelper.resetFormValidityState(form);
-                                PageHelper.showProgress('enrolment', 'Done.', 5000);
-                                PageHelper.clearErrors();
-                                BundleManager.pushEvent(model.pageClass + "-updated", model._bundlePageObj, agentProcess);
-                                model.agentProcess.proceed()
-                                    .subscribe(function(agentProcess) {
-                                        PageHelper.showProgress('enrolment', 'Done.', 5000);
-                                    }, function(err) {
-                                        PageHelper.showErrors(err);
-                                        PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
-                                    })
-                            }, function(err) {
-                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
-                                PageHelper.showErrors(err);
-                                PageHelper.hideLoader();
-                            });
-                    }
                 }
             };
         }

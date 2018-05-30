@@ -1,5 +1,6 @@
-define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProcess) {
+define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/agent/AgentProcess'], function(EnrolmentProcess, AgentProcess) {
     EnrolmentProcess = EnrolmentProcess['EnrolmentProcess'];
+    AgentProcess = AgentProcess['AgentProcess'];
 
     return {
         pageUID: "agent.EnterpriseAgentEnrollmentScreening",
@@ -23,7 +24,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                         title: 'Agent',
                         pageClass: 'agent',
                         minimum: 1,
-                        maximum: 1,
+                        maximum: 0,
                         order: 20
                     }]);
                 },
@@ -52,43 +53,51 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     if (_.hasIn($stateParams, 'pageId') && !_.isNull($stateParams.pageId)) {
                         PageHelper.showLoader();
                         bundleModel.customerId = $stateParams.pageId;
-                        EnrolmentProcess.fromCustomerID(bundleModel.customerId)
+                        AgentProcess.fromCustomerID(bundleModel.customerId)
                             .subscribe(function(enrolmentProcess) {
                                 PageHelper.hideLoader();
-                                bundleModel.Enrollment = enrolmentProcess;
-                                var enrolmentProcess = enrolmentProcess;
+                                bundleModel.agentProcess = agentProcess;
+                                var agentProcess = agentProcess;
 
 
                                 $this.bundlePages.push({
                                     pageClass: 'business',
                                     model: {
-                                        enrolmentProcess: enrolmentProcess,
+                                        agentProcess: agentProcess,
                                     }
                                 });
 
-                                // $this.bundlePages.push({
-                                //     pageClass: 'agent',
-                                //     model: {
-                                //         agentProcess: agentProcess.agentProcess,
-                                //     }
-                                // });
+                                $this.bundlePages.push({
+                                    pageClass: 'agent',
+                                    model: {
+                                        agentProcess: agentProcess
+                                    }
+                                });
 
                                 deferred.resolve();
 
                             });
 
                     } else {
-                        EnrolmentProcess.createNewProcess("Enterprise")
-                            .subscribe(function(enrolmentProcess) {
-                                bundleModel.enrolmentProcess = enrolmentProcess;
+                        AgentProcess.createNewProcess("Enterprise")
+                            .subscribe(function(agentProcess) {
+                                bundleModel.agentProcess = agentProcess;
                                 // loanProcess.loanAccount.currentStage = 'Screening';
 
                                 $this.bundlePages.push({
                                     pageClass: "business",
                                     model: {
-                                        enrolmentProcess: enrolmentProcess,
+                                        agentProcess: agentProcess,
                                     }
                                 });
+
+                                $this.bundlePages.push({
+                                    pageClass: 'agent',
+                                    model: {
+                                        agentProcess: agentProcess
+                                    }
+                                });
+
 
                                 deferred.resolve();
                             });

@@ -333,7 +333,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
 
 
                     /* Setting data for the form */
-                    model.customer = model.enrolmentProcess.customer;
+                     model.customer = model.agentProcess.customer;
                     /* End of setting data for the form */
                     var calculateVehiclesFree = function(modelValue, form, model) {}
                     var p1 = UIRepository.getEnrolmentProcessUIRepository().$promise;

@@ -20,7 +20,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
 
             var overridesFields = function(bundlePageObj) {
                 return {
-                    "AgentInformation.customerId": {
+                    "agentInformation.customerId": {
                         type: "lov",
                         lovonly: true,
                         bindMap: {},
@@ -133,7 +133,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                     BundleManager.pushEvent(model.pageClass + "-updated", model._bundlePageObj, enrolmentProcess);
                                 })
 
-                                model.agent.customerId = valueObj.id;
+                            model.agent.customerId = valueObj.id;
                         }
                     }
                 }
@@ -192,7 +192,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                         "excludes": [],
                         "options": {
                             "repositoryAdditions": {
-                                "AgentInformation": {
+                                "agentInformation": {
                                     "type": "box",
                                     "title": "PERSIONAL_INFORMATION",
                                     "orderNo": 10,
@@ -219,7 +219,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                         }
                     }
 
-                    UIRepository.getEnrolmentProcessUIRepository().$promise
+                    UIRepository.getAgentProcessUIRepository().$promise
                         .then(function(repo) {
                             return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, null, model)
                         })
@@ -285,38 +285,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                     return Enrollment.getSchema().$promise;
                 },
                 actions: {
-                    // setProofs: function(model) {
-                    //     model.customer.addressProofNo = model.customer.aadhaarNo;
-                    //     model.customer.identityProofNo = model.customer.aadhaarNo;
-                    //     model.customer.identityProof = 'Aadhar card';
-                    //     model.customer.addressProof = 'Aadhar card';
-                    //     model.customer.addressProofSameAsIdProof = true;
-                    //     if (model.customer.yearOfBirth) {
-                    //         model.customer.dateOfBirth = model.customer.yearOfBirth + '-01-01';
-                    //     }
-                    // },
-                    // preSave: function(model, form, formName) {
-                    //     var deferred = $q.defer();
-                    //     if (model.customer.firstName) {
-                    //         deferred.resolve();
-                    //     } else {
-                    //         PageHelper.showProgress('enrollment', 'Customer Name is required', 3000);
-                    //         deferred.reject();
-                    //     }
-                    //     return deferred.promise;
-                    // },
-                    // reload: function(model, formCtrl, form, $event) {
-                    //     $state.go("Page.Engine", {
-                    //         pageName: 'agent.IndividualEnrollment',
-                    //         pageId: model.agent.id
-                    //     }, {
-                    //         reload: true,
-                    //         inherit: false,
-                    //         notify: true
-                    //     });
-                    // },
                     proceed: function(model, form, formName) {
-
                         PageHelper.clearErrors();
                         if (PageHelper.isFormInvalid(form)) {
                             return false;
@@ -338,35 +307,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                 PageHelper.hideLoader();
                             });
                     },
-                    // submit: function(model, form, formName) {
-                    //     PageHelper.clearErrors();
-                    //     if (PageHelper.isFormInvalid(form)) {
-                    //         return false;
-                    //     }
-                    //     PageHelper.showProgress('enrolment', 'Updating Customer');
-                    //     PageHelper.showLoader();
-                    //     model.agentProcess.save()
-                    //         .finally(function() {
-                    //             PageHelper.hideLoader();
-                    //         })
-                    //         .subscribe(function(agentProcess) {
-                    //             formHelper.resetFormValidityState(form);
-                    //             PageHelper.showProgress('enrolment', 'Done.', 5000);
-                    //             PageHelper.clearErrors();
-                    //             BundleManager.pushEvent(model.pageClass + "-updated", model._bundlePageObj, agentProcess);
-                    //             model.agentProcess.proceed()
-                    //                 .subscribe(function(agentProcess) {
-                    //                     PageHelper.showProgress('enrolment', 'Done.', 5000);
-                    //                 }, function(err) {
-                    //                     PageHelper.showErrors(err);
-                    //                     PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
-                    //                 })
-                    //         }, function(err) {
-                    //             PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
-                    //             PageHelper.showErrors(err);
-                    //             PageHelper.hideLoader();
-                    //         });
-                    // }
+
                 }
             }
         }

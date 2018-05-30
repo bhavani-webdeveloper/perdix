@@ -76,8 +76,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
 
                     if (_.hasIn($stateParams, 'pageId') && !_.isNull($stateParams.pageId)) {
                         PageHelper.showLoader();
-                        bundleModel.customerId = $stateParams.pageId;
-                        AgentProcess.fromCustomerID(bundleModel.customerId)
+                        bundleModel.agentId = $stateParams.pageId;
+                        AgentProcess.fromCustomerID(bundleModel.agentId)
                             .subscribe(function(agentProcess) {
                                 PageHelper.hideLoader();
                                 bundleModel.Agent = agentProcess;
