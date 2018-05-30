@@ -852,7 +852,27 @@ define({
                             "key": "overAllHypoValue['% Of loan_amount']",
                             "title": "%_TO_LOAN_AMOUNT",
                             "type": "number"
+                        },
+                        {
+                            type: "section",
+                            htmlClass: "col-sm-6 ",
+                            "key": "overAllHypoValue['color_hexadecimal']",
+                            //condition: "model.currentStage!='ScreeningReview'",
+                            "title": "Status",
+                            html: '<span class="col-sm-6">Status</span> <span class="col-sm-6"><span class="square-color-box" style="background: {{model.overAllHypoValue.color_hexadecimal}}"> </span></span>' 
                         }]
+                        // {
+                        //     type: "section",
+                        //     htmlClass: "col-sm-6 pull-right",
+                        //     //condition: "model.currentStage!='ScreeningReview'",
+                        //     "title": "Status",
+                        //     html: '<span class="square-color-box" style="background: {{model.overAllHypoValue.color_hexadecimal}}"> </span>' 
+                        // }]
+                        // {
+                        //     "key": "overAllHypoValue['color_hexadecimal']",
+                        //     "title": "Status",
+                        //      html: '<span class="square-color-box" style="background: {{overAllHypoValue.color_hexadecimal}}"> </span>' 
+                        // }]
                     }]
                 }]
             },{
