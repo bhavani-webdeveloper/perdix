@@ -2324,7 +2324,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     addButtonExpr: " ('ADD'| translate ) + ' ' + (pivotValue | translate)",
                     pivotFieldEnumCode: 'stock_current_assets',
                     pivotField: "assetCategory",
-                    title: "RAW_MATERIAL",
+                   // title: "RAW_MATERIAL",
                     items: [{
                         key: "customer.currentAssets[].description",
                         title:"DESCRIPTION",
@@ -2808,7 +2808,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 title:"MACHINE_PURCHASED_YEAR",
                                 type: "number",
                                 "schema":{
-                                    "maximum":9999
+                                    "maximum":9999 
                                 }
                             },
                             {
