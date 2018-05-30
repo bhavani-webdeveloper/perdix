@@ -198,7 +198,7 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
             {
                 key: "bankDepositSummary.bankAccountNumber",
                 type: "lov",
-                autolov: true,
+                lovonly: true,
                 title:"DEPOSITED_TO_ACCOUNT",
                 required: true,
                 bindMap: {
