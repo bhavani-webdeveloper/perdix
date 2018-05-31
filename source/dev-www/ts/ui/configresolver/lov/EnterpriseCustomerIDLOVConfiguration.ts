@@ -2,7 +2,6 @@
 import {NGHelper} from "../../../infra/helpers/NGHelper";
 import AngularResourceService = require("../../../infra/api/AngularResourceService");
 import {EnrolmentProcess} from '../../../domain/model/customer/EnrolmentProcess';
-import {AgentProcess} from '../../../domain/model/agent/AgentProcess';
 import * as _ from 'lodash';
 export class EnterpriseCustomerIDLOVConfiguration extends LOVElementConfiguration {
     outputMap: Object = {

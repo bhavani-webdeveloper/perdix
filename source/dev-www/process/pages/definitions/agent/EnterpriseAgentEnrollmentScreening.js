@@ -53,8 +53,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                     if (_.hasIn($stateParams, 'pageId') && !_.isNull($stateParams.pageId)) {
                         PageHelper.showLoader();
                         bundleModel.customerId = $stateParams.pageId;
-                        AgentProcess.fromCustomerID(bundleModel.customerId)
-                            .subscribe(function(enrolmentProcess) {
+                        AgentProcess.get(bundleModel.customerId)
+                            .subscribe(function(agentProcess) {
                                 PageHelper.hideLoader();
                                 bundleModel.agentProcess = agentProcess;
                                 var agentProcess = agentProcess;
@@ -79,11 +79,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                             });
 
                     } else {
-                        AgentProcess.createNewProcess("Enterprise")
+                        AgentProcess.createNewProcess()
                             .subscribe(function(agentProcess) {
                                 bundleModel.agentProcess = agentProcess;
                                 // loanProcess.loanAccount.currentStage = 'Screening';
-
+                                PageHelper.hideLoader();
                                 $this.bundlePages.push({
                                     pageClass: "business",
                                     model: {

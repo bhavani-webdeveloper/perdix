@@ -3,6 +3,7 @@
 import {RepositoryIdentifiers} from '../../shared/RepositoryIdentifiers';
 import RepositoryFactory = require('../../shared/RepositoryFactory');
 import Agent = require("./Agent");
+import EnrollmentProcessFactory = require("../customer/EnrolmentProcessFactory");
 import {EnrolmentProcess} from "../customer/EnrolmentProcess";
 import {IAgentRepository} from "./IAgentRepository";
 import {Observable} from "@reactivex/rxjs";
@@ -55,7 +56,6 @@ export class AgentProcess {
         if (this.agent.id){
             obs2 = this.agentRepo.update(this);
         } 
-
         let pmAfterUpdate: PolicyManager<AgentProcess> = new PolicyManager(this, AgentPolicyFactory.getInstance(), 'afterSave', AgentProcess.getProcessConfig());
         let obs3 = pmAfterUpdate.applyPolicies();
         return Observable.concat(obs1, obs2, obs3).last();
@@ -108,14 +108,16 @@ export class AgentProcess {
         return Observable.concat(obs1, obs2, obs3).last();
     }
 
-    // static get(id: number): Observable<AgentProcess> {
-    //     return AgentProcessFactory.createFromLoanId(id).flatMap(
-    //         (AgentProcess) => {
-    //             let pm: PolicyManager<AgentProcess> = new PolicyManager<AgentProcess>(AgentProcess, AgentPolicyFactory.getInstance(), 'onLoad', AgentProcess.getProcessConfig());
-    //             return pm.applyPolicies();
-    //         }
-    //     );
-    // }
+    
+
+    static get(id: number): Observable<AgentProcess> {
+        return AgentProcessFactory.createFromAgentId(id).flatMap(
+            (agentProcess) => {
+                let pm: PolicyManager<AgentProcess> = new PolicyManager<AgentProcess>(agentProcess, AgentPolicyFactory.getInstance(), 'onLoad', AgentProcess.getProcessConfig());
+                return pm.applyPolicies();
+            }
+        );
+    }
 
     get(id: number): Observable<AgentProcess> {
         return this.agentRepo.get(id)
@@ -129,14 +131,7 @@ export class AgentProcess {
     }
 
 
-    static fromCustomerID(id: number): Observable<AgentProcess> {
-        return AgentProcessFactory.createFromCustomerID(id)
-            .flatMap((agentProcess) => {
-                let pm: PolicyManager<AgentProcess> = new PolicyManager<AgentProcess>(agentProcess, AgentPolicyFactory.getInstance(), 'onLoad', AgentProcess.getProcessConfig());
-                return pm.applyPolicies();
-            })
-    }
-
+   
     static createNewProcess(): Observable<AgentProcess> {
         return AgentProcessFactory
             .createNew()

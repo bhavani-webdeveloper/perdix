@@ -42,30 +42,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                     return out;
                 },
                 "onAddNewTab": function(definition, bundleModel) { /* returns model on promise resolution. */
-                    var deferred = $q.defer();
-                    var model = null;
-                    var enrolmentProcess = bundleModel.enrolmentProcess;
-
-                    switch (definition.pageClass) {
-                        case 'customer':
-                            AgentProcess.createNewProcess()
-                                .subscribe(function(enrolmentProcess) {
-                                    deferred.resolve({
-                                        enrolmentProcess: enrolmentProcess
-                                    })
-                                });
-                            break;
-                        case 'agent':
-                            AgentProcess.createNewProcess()
-                                .subscribe(function(enrolmentProcess) {
-                                    deferred.resolve({
-                                        enrolmentProcess: enrolmentProcess
-                                    })
-                                });
-                            break;
-                    }
-                    deferred.resolve(model);
-                    return deferred.promise;
+                
                 },
 
                 "pre_pages_initialize": function(bundleModel) {
@@ -77,7 +54,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                     if (_.hasIn($stateParams, 'pageId') && !_.isNull($stateParams.pageId)) {
                         PageHelper.showLoader();
                         bundleModel.agentId = $stateParams.pageId;
-                        AgentProcess.fromCustomerID(bundleModel.agentId)
+                        AgentProcess.get(bundleModel.agentId)
                             .subscribe(function(agentProcess) {
                                 PageHelper.hideLoader();
                                 bundleModel.Agent = agentProcess;
@@ -87,6 +64,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                     pageClass: 'applicant',
                                     model: {
                                         agentProcess: agentProcess,
+                                        enrolmentProcess: agentProcess,
                                     }
                                 });
                                 $this.bundlePages.push({

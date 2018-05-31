@@ -93,17 +93,17 @@ define({
                     },
                     getColumns: function() {
                         return [{
-                            title: 'ID',
+                            title: 'AGENT_ID',
                             data: 'id'
                         }, {
-                            title: 'COMPANY_ID',
-                            data: 'customerId'
+                            title: 'AGENT_NAME',
+                            data: 'agentName'
                         }, {
                             title: 'AGENT_TYPE',
                             data: 'agentType'
                         }, {
-                            title: 'COMPANY_NAME',
-                            data: 'companyName'
+                            title: 'CUSTOMER_TYPE',
+                            data: 'customerType'
                         }]
                     },
                     getActions: function() {
@@ -119,7 +119,7 @@ define({
                                     irfNavigator.go({
                                         'state': 'Page.Bundle',
                                         'pageName': 'agent.IndividualAgentEnrollmentScreening',
-                                        'pageId': item.customer.id,
+                                        'pageId': item.id,
                                         // 'pageData': {
                                         //     "readonly": false
                                         // }
@@ -135,7 +135,7 @@ define({
                                     irfNavigator.go({
                                         'state': 'Page.Bundle',
                                         'pageName': 'agent.EnterpriseAgentEnrollmentScreening',
-                                        'pageId': item.customer.id,
+                                        'pageId': item.id,
                                         // 'pageData': {
                                         //     "readonly": false
                                         // }

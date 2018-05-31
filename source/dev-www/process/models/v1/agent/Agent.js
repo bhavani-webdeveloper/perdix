@@ -4,6 +4,10 @@ irf.models.factory('Agent', function($resource, $httpParamSerializer, BASE_URL, 
     var endpintManagementACHPDC = irf.MANAGEMENT_BASE_URL + '/server-ext/achpdcdemandlist.php?';*/
 
     var resource = $resource(endpoint, null, {
+        getSchema: {
+            method: 'GET',
+            url: 'process/schemas/agentProcess.json'
+        },
         submit: {
             method: 'PUT',
             url: endpoint
@@ -20,6 +24,7 @@ irf.models.factory('Agent', function($resource, $httpParamSerializer, BASE_URL, 
             method: 'GET',
             url: BASE_URL + '/api/agent/:id'
         }
+
     });
     return resource;
 });

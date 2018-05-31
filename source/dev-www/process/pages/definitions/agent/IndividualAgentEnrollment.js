@@ -5,11 +5,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
     return {
         pageUID: "agent.IndividualAgentEnrollment",
         pageType: "Engine",
-        dependencies: ["$log", "$state", "$stateParams", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q",
+        dependencies: ["$log", "$state", "$stateParams", "Enrollment", "Agent", "EnrollmentHelper", "SessionStore", "formHelper", "$q",
             "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository"
         ],
 
-        $pageFn: function($log, $state, $stateParams, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q,
+        $pageFn: function($log, $state, $stateParams, Enrollment, Agent, EnrollmentHelper, SessionStore, formHelper, $q,
             PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository) {
 
             var self;
@@ -135,6 +135,66 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
 
                             model.agent.customerId = valueObj.id;
                         }
+                    },
+                    "AgentInformation.agentId": {
+                        type: "lov",
+                        lovonly: true,
+                        bindMap: {},
+                        key: "agent.agentId",
+                        "inputMap": {
+                            "agentId": {
+                                "key": "agent.agentId",
+                                "type": "number"
+                            },
+                            // "agentName": {
+                            //     "key": "agent.agentName", 
+                            //     "type": "string"
+                            // },            
+                            "agentType": {
+                                "key": "agent.agentType",
+                                "type": "select",
+                                "enumCode": "agent_type",
+                                "title": "AGENT_TYPE"
+                            },
+                        },
+                        "outputMap": {
+                            "agentId": "agent.agentId",
+                            'agentName': "agent.agentName",
+                            'agentType': "agent.agentType"
+                        },
+                        "searchHelper": formHelper,
+                        "search": function(inputModel, form) {
+                            var promise = Agent.search({
+                                'agentId': inputModel.agentId,
+                                'agentName': inputModel.agentName,
+                                'agentType': inputModel.agentType,
+                                'currentStage': "",
+                                'customerType': ""
+                            }).$promise;
+                            return promise;
+                        },
+                        getListDisplayItem: function(data, index) {
+                            return [
+                                data.agentId,
+                                data.agentType,
+                                data.agentName
+                            ];
+                        },
+                        onSelect: function(valueObj, model, context) {
+                            PageHelper.showProgress('customer-load', 'Loading customer...');
+                            model.agent.agentId = valueObj.id;
+                            model.agent.agentCompanyId = valueObj.agentCompanyId;
+                            model.agent.agentName = valueObj.agentName;
+                            model.agent.agentRegistrationNumber = valueObj.agentRegistrationNumber;
+                            model.agent.companyName = valueObj.companyName;
+                        }
+
+                    },
+                    "AgentFeeDetails.agentFeeDetails.agentId": {
+                        "key": "agent.agentType",
+                        "title": "AGENT_TYPE",
+                        "type": "select",
+                        "enumCode": "agent_type"
                     }
                 }
             }
@@ -152,6 +212,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
 
                     "AgentFeeDetails",
                     "AgentFeeDetails.agentFeeDetails",
+                    "AgentFeeDetails.agentFeeDetails.agentId",
                     "AgentFeeDetails.agentFeeDetails.feeAmount",
                     "AgentFeeDetails.agentFeeDetails.feeName",
                     "AgentFeeDetails.agentFeeDetails.feeType",
@@ -282,7 +343,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                 },
                 form: [],
                 schema: function() {
-                    return Enrollment.getSchema().$promise;
+                    return Agent.getSchema().$promise;
                 },
                 actions: {
                     proceed: function(model, form, formName) {

@@ -10,7 +10,7 @@ export interface IAgentRepository {
 	save(reqData: Object): Observable<any>;
 	update(reqData: Object): Observable<any>;
 	// create(reqData: any): Observable<any>;
-	getCustomerById(id: number): Observable<any>;
+	// getCustomerById(id: number): Observable<any>;
     // updateEnrollment(reqData: Object): Observable<any>;
 
 }

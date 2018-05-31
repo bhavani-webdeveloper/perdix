@@ -441,55 +441,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                     PageHelper.showErrors(err);
                                     PageHelper.hideLoader();
                                 });
-                        }
-                        // submit: function(model, form, formName) {
-                        //     PageHelper.clearErrors();
-                        //     if (PageHelper.isFormInvalid(form)) {
-                        //         return false;
-                        //     }
-                        //     PageHelper.showProgress('enrolment', 'Updating Customer');
-                        //     PageHelper.showLoader();
-
-                    //     if (model.customer.id) {
-                    //         model.enrolmentProcess.proceed()
-                    //             .finally(function() {
-                    //                 PageHelper.hideLoader();
-                    //             })
-                    //             .subscribe(function(enrolmentProcess) {
-                    //                 formHelper.resetFormValidityState(form);
-                    //                 PageHelper.showProgress('enrolment', 'Done.', 5000);
-                    //                 PageHelper.clearErrors();
-                    //                 BundleManager.pushEvent(model.pageClass + "-updated", model._bundlePageObj, enrolmentProcess);
-                    //             }, function(err) {
-                    //                 PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
-                    //                 PageHelper.showErrors(err);
-                    //                 PageHelper.hideLoader();
-                    //             });
-
-                    //     } else {
-                    //         model.enrolmentProcess.save()
-                    //             .finally(function() {
-                    //                 PageHelper.hideLoader();
-                    //             })
-                    //             .subscribe(function(enrolmentProcess) {
-                    //                 formHelper.resetFormValidityState(form);
-                    //                 PageHelper.showProgress('enrolment', 'Done.', 5000);
-                    //                 PageHelper.clearErrors();
-                    //                 BundleManager.pushEvent(model.pageClass + "-updated", model._bundlePageObj, enrolmentProcess);
-                    //                 model.enrolmentProcess.proceed()
-                    //                     .subscribe(function(enrolmentProcess) {
-                    //                         PageHelper.showProgress('enrolment', 'Done.', 5000);
-                    //                     }, function(err) {
-                    //                         PageHelper.showErrors(err);
-                    //                         PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
-                    //                     })
-                    //             }, function(err) {
-                    //                 PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
-                    //                 PageHelper.showErrors(err);
-                    //                 PageHelper.hideLoader();
-                    //             });
-                    //     }
-                    // }
+                        }                       
 
                 }
             };

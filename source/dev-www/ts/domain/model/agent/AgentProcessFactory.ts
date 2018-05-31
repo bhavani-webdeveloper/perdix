@@ -13,13 +13,12 @@ class AgentProcessFactory {
 
     static agentRepo:IAgentRepository = RepositoryFactory.createRepositoryObject(RepositoryIdentifiers.AgentProcess);
 
-    static createFromLoanId(id: number): Observable<AgentProcess> {
+    static createFromAgentId(id: number): Observable<AgentProcess> {
         let lp: AgentProcess = new AgentProcess();
         return AgentProcessFactory.agentRepo.get(id)
             .map(
-                (loanAccount:Object) => {
-                    lp.agent = <Agent>plainToClass<Agent, Object>(Agent, Utils.toJSObj(Agent));
-                    // lp.loanAccount = plainToClass(LoanAccount, Utils.toJSObj(loanAccount));
+                (agent:Object) => {
+                    lp.agent = <Agent>plainToClass<Agent, Object>(Agent, Utils.toJSObj(agent));
                     return lp;
                 }
             )
@@ -39,19 +38,19 @@ class AgentProcessFactory {
     }
 
 
-    static createFromCustomerID(id){
-        let agentRepo: IAgentRepository = RepositoryFactory.createRepositoryObject(RepositoryIdentifiers.AgentProcess);
-        return agentRepo.getCustomerById(id)
-            .map(
-                (value: Object) => {
-                    let obj: Object = Utils.toJSObj(value);
-                    let ep: AgentProcess = new AgentProcess();
-                    let cs: Customer = <Customer>plainToClass<Customer, Object>(Customer, obj);
-                    ep.customer = cs;
-                    return ep;
-                }
-            )
-    }
+    // static createFromCustomerID(id){
+    //     let agentRepo: IAgentRepository = RepositoryFactory.createRepositoryObject(RepositoryIdentifiers.AgentProcess);
+    //     return agentRepo.getCustomerById(id)
+    //         .map(
+    //             (value: Object) => {
+    //                 let obj: Object = Utils.toJSObj(value);
+    //                 let ep: AgentProcess = new AgentProcess();
+    //                 let cs: Customer = <Customer>plainToClass<Customer, Object>(Customer, obj);
+    //                 ep.customer = cs;
+    //                 return ep;
+    //             }
+    //         )
+    // }
 }
 
 export = AgentProcessFactory;
