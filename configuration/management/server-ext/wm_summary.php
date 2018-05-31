@@ -24,7 +24,7 @@ parse_str($queryString, $query);
 
 try{
 	
-	$id=DB::connection("bietl_db")->select("select (case when parent_customer_id=0 then id else parent_customer_id end) as id from customer where id=?",array($query['cid']));
+	$id=DB::connection("bietl_db")->select("select (case when parent_customer_id=0 then id else parent_customer_id end) as id from financialForms.customer where id=?",array($query['cid']));
 	
 	// Dashboard queries for customer summary
 	$result_segment =DB::connection("bietl_db")->select("	select (case 
