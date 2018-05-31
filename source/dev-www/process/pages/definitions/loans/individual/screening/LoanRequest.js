@@ -3090,7 +3090,8 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                                 collateralValue: machine.purchasePrice,
                                                 loanToValue: machine.presentValue,
                                                 machineOld: !_.isNull(machine.isTheMachineNew)?(machine.isTheMachineNew.toUpperCase() == "YES"?false:true):null,
-                                                quantity: machine.quantity || 1
+                                                quantity: machine.quantity || 1,
+                                                udf1 : "Adhoc"
                                             };
                                             c.totalValue = c.quantity * c.loanToValue;
                                             reqData.loanAccount.collateral.push(c)
@@ -3101,12 +3102,6 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                     reqData.loanAccount.collateral = reqData.loanAccount.collateral || [];
                                     for (var i=0;i<enterpriseCustomer.currentAssets.length; i++){
                                         var currentAsset = enterpriseCustomer.currentAssets[i];
-                                        // if(currentAsset.assetCategory){
-                                        //     currentAsset.assetCategory = currentAsset.assetCategory;
-                                        // }
-                                        // if(currentAsset.assetName){
-                                        //     currentAsset.assetCategory = currentAsset.assetName
-                                        // }
                                         if (currentAsset.hypothecatedToUs == "YES" || currentAsset.hypothecatedToUs == "Yes"){
                                             var c = {
                                                 collateralDescription: currentAsset.description,
@@ -3115,6 +3110,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                                 loanToValue: currentAsset.assetValue,
                                                // isHypothecated: currentAsset.isHypothecated,
                                                 photoFilePath: currentAsset.assetImageId,
+                                                 udf1 : "Adhoc"
                                                 // collateralValue: currentAsset.purchasePrice,
                                                 // loanToValue: currentAsset.presentValue,
                                                 // machineOld: !_.isNull(machine.isTheMachineNew)?(machine.isTheMachineNew.toUpperCase() == "YES"?false:true):null,
@@ -3134,16 +3130,12 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                         // }
                                         if (enterpriseAsset.hypothecatedToUs == "YES" || enterpriseAsset.hypothecatedToUs == "Yes"){
                                             var c = {
-                                                collateralDescription: enterpriseAsset.description,
+                                                collateralDescription: enterpriseAssetsenterpriseAsset.description,
                                                 collateralType: enterpriseAsset.assetType,
-                                                collateralCategory:"Furniture & Fixture",
+                                                collateralCategory:"non machinery",
                                                 loanToValue: enterpriseAsset.valueOfAsset,
-                                               // isHypothecated: currentAsset.isHypothecated,
                                                 photoFilePath: enterpriseAsset.assetImageId,
-                                                // collateralValue: currentAsset.purchasePrice,
-                                                // loanToValue: currentAsset.presentValue,
-                                                // machineOld: !_.isNull(machine.isTheMachineNew)?(machine.isTheMachineNew.toUpperCase() == "YES"?false:true):null,
-                                                // quantity: machine.quantity || 1
+                                                 udf1 : "Adhoc"
                                             };
                                             //c.totalValue = c.quantity * c.loanToValue;
                                             reqData.loanAccount.collateral.push(c)
