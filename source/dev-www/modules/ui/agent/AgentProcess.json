@@ -1,0 +1,183 @@
+{
+    "AgentInformation": {
+        "type": "box",
+        "title": "AGENT_INFORMATION",
+        "orderNo": 1,
+        "items": {
+            "agentId": {
+                "key": "agent.id",
+                "title": "AGENT_ID",
+                "orderNo": 10
+            },
+            "customerId": {
+                "key": "agent.customerId",
+                "resolver": "EnterpriseCustomerIDLOVConfiguration",
+                "type": "lov",
+                "title": "CUSTOMER_ID",
+                "orderNo": 20
+            },
+            "agentCompanyId": {
+                "key": "agent.agentCompanyId",
+                "title": "AGENT_COMPANT_ID",
+                "orderNo": 10
+            },
+            "agentRegistrationNumber": {
+                "key": "agent.agentRegistrationNumber",
+                "title": "AGENT_REGISTRATION_NUMBER",
+                "orderNo": 20
+            },
+            "agentType": {
+                "key": "agent.agentType",
+                "title": "AGENT_TYPE",
+                "type": "select",
+                "orderNo": 30,
+                "titleMap": {
+                    "DSA": "DSA",
+                    "Liability Agent": "Liability Agent"
+                }
+            },
+            "companyName": {
+                "key": "agent.companyName",
+                "title": "COMPANY_NAME",
+                "orderNo": 40
+            },
+            "designation": {
+                "key": "agent.designation",
+                "title": "DESIGNATION",
+                "orderNo": 50
+            },
+            "currentStage": {
+                "key": "agent.currentStage",
+                "title": "CURRENT_STAGE",
+                "orderNo": 60
+            },
+            "subType": {
+                "key": "agent.subType",
+                "title": "SUB_TYPE",
+                "orderNo": 70
+            }
+        }
+    },
+    "AgentEmployees": {
+        "type": "box",
+        "title": "AGENT_EMPLOYEES",
+        "orderNo": 2,
+        "items": {
+            "agentEmployees": {
+                "type": "array",
+                "startEmpty": true,
+                "title": "AGENT_EMPLOYEES",
+                "key": "agent.agentEmployees",
+                "items": {
+                    "customerId": {
+                        "key": "agent.agentEmployees[].customerId",
+                        "resolver": "EnterpriseCustomerIDLOVConfiguration",
+                        "type": "lov",
+                        "title": "CUSTOMER_ID",
+                        "orderNo": 20
+                    },
+                    "agentCompanyId": {
+                        "key": "agent.agentEmployees[].agentCompanyId",
+                        "title": "AGENT_COMPANT_ID",
+                        "orderNo": 10
+                    },
+                    "agentRegistrationNumber": {
+                        "key": "agent.agentEmployees[].agentRegistrationNumber",
+                        "title": "AGENT_REGISTRATION_NUMBER",
+                        "orderNo": 20
+                    },
+                    "agentType": {
+                        "key": "agent.agentEmployees[].agentType",
+                        "title": "AGENT_TYPE",
+                        "type": "select",
+                        "orderNo": 30,
+                        "titleMap": {
+                            "DSA": "DSA",
+                            "Liability Agent": "Liability Agent"
+                        }
+                    },
+                    "companyName": {
+                        "key": "agent.agentEmployees[].companyName",
+                        "title": "COMPANY_NAME",
+                        "orderNo": 40
+                    },
+                    "designation": {
+                        "key": "agent.agentEmployees[].designation",
+                        "title": "DESIGNATION",
+                        "orderNo": 50
+                    },
+                    "currentStage": {
+                        "key": "agent.agentEmployees[].currentStage",
+                        "title": "CURRENT_STAGE",
+                        "orderNo": 60
+                    },
+                    "subType": {
+                        "key": "agent.agentEmployees[].subType",
+                        "title": "SUB_TYPE",
+                        "orderNo": 70
+                    }
+                }
+            }
+        }
+    },
+    "AgentFeeDetails": {
+        "type": "box",
+        "title": "AGENT_FEE_DETAILS",
+        "orderNo": 3,
+        "items": {
+            "agentFeeDetails": {
+                "type": "array",
+                "startEmpty": true,
+                "title": "AGENT_FEE_DETAILS",
+                "key": "agent.agentFeeDetails",
+                "items": {
+                    "agentId": {
+                        "key": "agent.agentFeeDetails[].agentId",
+                        "title": "AGENT_ID",
+                        "type": "integer",
+                        "orderNo": 10
+                    },
+                    "customerId": {
+                        "key": "agent.agentFeeDetails[].customerId",
+                        "title": "CUSTOMER_ID",
+                        "type": "integer",
+                        "orderNo": 20
+                    },
+                    "dateOfIncorporation": {
+                        "key": "agent.agentFeeDetails[].dateOfIncorporation",
+                        "title": "DATE_OF_INCORPORATION",
+                        "type": "date",
+                        "orderNo": 30
+                    },
+                    "feeAmount": {
+                        "key": "agent.agentFeeDetails[].feeAmount",
+                        "title": "FEE_AMOUT",
+                        "type": "amount",
+                        "orderNo": 40
+                    },
+                    "feeName": {
+                        "key": "agent.agentFeeDetails[].feeName",
+                        "title": "FEE_NAME",
+                        "orderNo": 50
+                    },
+                    "feeType": {
+                        "key": "agent.agentFeeDetails[].feeType",
+                        "title": "FEE_TYPE",
+                        "type": "select",
+                        "titleMap": {
+                            "DSA": "DSA",
+                            "Liability Agent": "Liability Agent"
+                        },
+                        "orderNo": 60
+                    },
+                    "frequency": {
+                        "key": "agent.agentFeeDetails[].frequency",
+                        "title": "FREQUENCY",
+                        "orderNo": 70
+                    }
+                }
+            }
+        }
+    }
+
+}
