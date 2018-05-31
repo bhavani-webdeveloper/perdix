@@ -33,27 +33,13 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.DoPartnerView'),
                 maximum: 1,
                 order: 40
             },{
-                pageName: 'loans.individual.screening.detail.DOPartnerApplicationView',
-                title: 'DO Partner Review',
-                pageClass: 'loan-recommendation',
-                minimum: 1,
-                maximum: 1,
-                order: 5
-            },{
-                pageName: 'loans.individual.screening.Summary',
+                pageName: 'loans.individual.screening.DOPartnerSummary',
                 title: 'SUMMARY',
                 pageClass: 'summary',
                 minimum: 1,
                 maximum: 1,
                 order: 6
-            },{
-                pageName: 'loans.individual.screening.Review',
-                title: 'REVIEW',
-                pageClass: 'loan-review',
-                minimum: 1,
-                maximum: 1,
-                order: 80
-            },];
+            }];
             return definition;
         };
         return {
@@ -161,6 +147,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.DoPartnerView'),
                                 $this.bundlePages.push({
                                     pageClass: 'summary',
                                     model: {
+                                        customerId: res.customerId,
                                         cbModel: {
                                             customerId: res.customerId,
                                             loanId: bundleModel.loanId,
@@ -216,20 +203,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.DoPartnerView'),
                                     }
                                 });
 
-                                $this.bundlePages.push({
-                                    pageClass: 'loan-recommendation',
-                                    model: {
-                                        customerId: res.customerId
-                                    }
-                                });
-
-                                $this.bundlePages.push({
-                                    pageClass: 'loan-review',
-                                    model: {
-                                        loanAccount: res
-                                    }
-                                });
-
+                               
                                 deferred.resolve();
                             },
                             function(httpRes) {
