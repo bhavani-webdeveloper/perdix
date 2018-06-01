@@ -489,7 +489,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                             }
                                         )
                                     }
-                                    else {
+                                    /*else {
                                         model.repayment.chequeNumber = "";
                                         model.repayment.amount = "";
                                         if (model.repayment.transactionName) {
@@ -506,7 +506,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                             }
                                             model.repayment.demandAmount = model.repayment.amount || 0;
                                         }
-                                    }   
+                                    }*/   
                                 }
                             },
                             {
