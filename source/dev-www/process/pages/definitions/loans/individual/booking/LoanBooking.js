@@ -716,12 +716,15 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                             "title":"WAIVER_DETAILS",
                             add: null,
                             remove: null,
-                            items: [{
+                            "schema": {
+                                "maxItems": 1
+                            },
+                            items: [/*{
                                 "key": "loanAccount.disbursementSchedules[].principalDuePayment",
                                 "title": "TOTAL_PRINCIPAL_DUE",
                                 "type": "amount",
                                 "onChange": "actions.validateWaiverAmount(model.loanAccount.disbursementSchedules.principalDuePayment,model.loanAccount.precloseurePrincipal)"
-                            }, {
+                            },*/ {
                                 "key": "loanAccount.disbursementSchedules[].normalInterestDuePayment",
                                 "title": "TOTAL_INTEREST_DUE",
                                 "type": "amount",

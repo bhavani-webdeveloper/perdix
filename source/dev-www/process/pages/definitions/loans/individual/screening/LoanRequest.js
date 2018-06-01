@@ -802,14 +802,30 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     {
                         key:"loanAccount.linkedAccountNumber",
                         title:"LINKED_ACCOUNT_NUMBER",
-                        type:"lov",
+                        type: "lov",
+                        lovonly: true,
                         autolov: true,
                         searchHelper: formHelper,
                         search: function(inputModel, form, model, context) {
+                            var out=[];
                             var promise = LoanProcess.viewLoanaccount(
                             {
                                 urn: model.enterprise.urnNo
-                            }).$promise;
+                            }).$promise.then(function(res){
+                                if(res.body && res.body.length){
+                                    for(i in res.body){
+                                        if(res.body[i].operationalStatus=='Active'){
+                                            out.push(res.body[i]);
+                                        }
+                                    }
+                                    return $q.resolve({
+                                        headers: {
+                                            "x-total-count": out.length
+                                        },
+                                        body: out
+                                    });
+                                }
+                            });
                             return promise;
                         },
                         getListDisplayItem: function(item, index) {
@@ -984,7 +1000,9 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     {
                         key:"loanAccount.linkedAccountNumber",
                         title:"LINKED_ACCOUNT_NUMBER",
-                        type:"lov",
+                        type: "lov",
+                        lovonly: true,
+                        "readonly":true,
                         autolov: true,
                         searchHelper: formHelper,
                         search: function(inputModel, form, model, context) {
@@ -1007,7 +1025,6 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                             model.loanAccount.npa = valueObj.npa;
                             model.loanAccount.linkedAccountNumber = valueObj.accountId;
                         }
-
                     },
                     {
                         key: "loanAccount.npa",
