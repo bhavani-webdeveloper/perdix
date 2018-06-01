@@ -148,8 +148,8 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ZonalRiskReview'
                         }                                  
                     },function(err){
                        $log.info(err);
-                    });
-                    IndividualLoan.get({
+                    }).finally(function(){
+                        IndividualLoan.get({
                             id: bundleModel.loanId
                         })
                         .$promise
@@ -327,6 +327,8 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ZonalRiskReview'
                         .finally(function() {
                             PageHelper.hideLoader();
                         })
+                    })
+                    
                 }
                 return deferred.promise;
             },

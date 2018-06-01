@@ -156,8 +156,8 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.CentralRiskRevie
                         }                                  
                     },function(err){
                        $log.info(err);
-                    });
-                    IndividualLoan.get({
+                    }).finally(function(){
+                        IndividualLoan.get({
                             id: bundleModel.loanId
                         })
                         .$promise
@@ -335,6 +335,8 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.CentralRiskRevie
                         .finally(function() {
                             PageHelper.hideLoader();
                         })
+                    })
+                  
                 }
                 return deferred.promise;
             },

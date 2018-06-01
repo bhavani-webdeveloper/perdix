@@ -163,8 +163,8 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.CreditCommitteeR
                         }                                  
                     },function(err){
                        $log.info(err);
-                    });
-                    IndividualLoan.get({
+                    }).finally(function(){
+                        IndividualLoan.get({
                             id: bundleModel.loanId
                         })
                         .$promise
@@ -344,6 +344,8 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.CreditCommitteeR
                         .finally(function() {
                             PageHelper.hideLoader();
                         })
+                    })
+                    
                 }
                 return deferred.promise;
             },
