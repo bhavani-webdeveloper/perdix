@@ -9,7 +9,7 @@ export class AgentCompanyIdLOVConfiguration extends LOVElementConfiguration {
         'agentName': "agent.agentName",
         'agentType': "agent.agentType"
     };
-
+    
     search: Function = function(inputModel, form) {
         let SessionStore = AngularResourceService.getInstance().getNGService("SessionStore");
         let formHelper = AngularResourceService.getInstance().getNGService("formHelper");
