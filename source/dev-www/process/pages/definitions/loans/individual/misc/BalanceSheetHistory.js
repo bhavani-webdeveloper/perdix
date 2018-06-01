@@ -20,6 +20,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             p1.then(function(_res){
                 var loanIds = [];
                 var res = $filter("orderBy") (_res, ['loanId', 'currentStage']);
+                if(res){
                 res=(res.length>3)?(_res.slice(-3)):(res);
                 for (var i=0;i<res.length;i++){
                     (function(i){
@@ -75,6 +76,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                         });
                     })(i);
                 }
+            }
 
                 var bsLeft = [], bsRight = [];
                 repaymentHistoryForm = {
