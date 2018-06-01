@@ -1,5 +1,4 @@
 <?php
-
 //function SpecificData($AuthToken, $LoanId, $ScoreName) {
 if (isset($_GET)) {
     header("Access-Control-Allow-Headers: Content-Type, accept, Authorization, X-Requested-With");
@@ -32,6 +31,7 @@ if (isset($_GET)) {
 	l.account_number AS 'loan_accountNumber', 
 	MAX(app.urn_no) AS `urn_no`, 
 	MAX(coapp.id) AS `coapp_customer_id`, 
+	MAX(guarantor.id) AS `guarantor_customer_id`, 
 	l.customer_id AS `enterprise_cust_id`,
 	MAX(app.id) AS `customer_id`,
 	l.id AS 'loan_id',
@@ -47,8 +47,9 @@ if (isset($_GET)) {
 	'' AS 'Parameters'
 	FROM $perdix_db.loan_accounts l
 	LEFT JOIN $perdix_db.loan_customer_relation lcr ON l.id=lcr.loan_id
-	LEFT JOIN $perdix_db.customer app ON (lcr.customer_id=app.id AND lcr.relation IN ('Sole Proprieter', 'APPLICANT'))
-	LEFT JOIN $perdix_db.customer coapp ON (lcr.customer_id=coapp.id AND lcr.relation IN ('Co-Applicant', 'COAPPLICANT'))
+	LEFT JOIN $perdix_db.customer app ON (lcr.customer_id=app.id AND LOWER(lcr.relation) IN ('Sole Proprieter', 'APPLICANT'))
+	LEFT JOIN $perdix_db.customer coapp ON (lcr.customer_id=coapp.id AND LOWER(lcr.relation) IN ('Co-Applicant', 'COAPPLICANT'))
+	LEFT JOIN $perdix_db.customer guarantor ON (lcr.customer_id=guarantor.id AND LOWER(lcr.relation) = 'guarantor')
 	LEFT JOIN $perdix_db.customer c ON l.customer_id=c.id
 	LEFT JOIN $perdix_db.enterprise e ON c.enterprise_id=e.id
 	LEFT JOIN $perdix_db.loan_accounts old_loan ON (l.customer_id=old_loan.customer_id AND old_loan.loan_disbursement_date<CURRENT_DATE())
@@ -65,6 +66,7 @@ if (isset($_GET)) {
 
         $CustomerId = isset($AvailCustomerParams['customer_id']) ? $AvailCustomerParams['customer_id'] : '0';
         $CoappCustomerId = isset($AvailCustomerParams['coapp_customer_id']) ? $AvailCustomerParams['coapp_customer_id'] : '0';
+        $GuarantorCustomerId = isset($AvailCustomerParams['guarantor_customer_id']) ? $AvailCustomerParams['guarantor_customer_id'] : '0';
         $CustomerURN = $AvailCustomerParams['urn_no'];
         $EnterpriseCustId = $AvailCustomerParams['enterprise_cust_id'];
         $loan_type = $AvailCustomerParams['loan_type'];
@@ -142,21 +144,39 @@ if (isset($_GET)) {
 
 
     //get all applicant and co-applicant details
-    $ApplicantDetails = "
-	SELECT 
-	CONCAT_WS(' ', c.first_name, c.middle_name, c.last_name) AS 'relation_name',
-	lcr.relation,
-	c.id AS `relation_customer_id`,
-	max(ecr.business_involvement) AS `business_involvement`
-	FROM $perdix_db.loan_accounts l
-	LEFT JOIN $perdix_db.loan_customer_relation lcr ON l.id=lcr.loan_id 
-	LEFT JOIN $perdix_db.customer c ON lcr.customer_id=c.id
-	LEFT JOIN $perdix_db.enterprise_customer_relations ecr ON (lcr.customer_id=ecr.linked_to_customer_id and ecr.customer_id = l.customer_id)
-	WHERE
-	lcr.relation in ('Co-Applicant', 'COAPPLICANT', 'Sole Proprieter', 'APPLICANT') 
-	AND l.id = :CustomerLoanId
-	GROUP BY c.id
-	";
+	if($guarantor_is_required) {	
+		$ApplicantDetails = "
+		SELECT 
+		CONCAT_WS(' ', c.first_name, c.middle_name, c.last_name) AS 'relation_name',
+		lcr.relation,
+		c.id AS `relation_customer_id`,
+		max(ecr.business_involvement) AS `business_involvement`
+		FROM $perdix_db.loan_accounts l
+		LEFT JOIN $perdix_db.loan_customer_relation lcr ON l.id=lcr.loan_id 
+		LEFT JOIN $perdix_db.customer c ON lcr.customer_id=c.id
+		LEFT JOIN $perdix_db.enterprise_customer_relations ecr ON (lcr.customer_id=ecr.linked_to_customer_id and ecr.customer_id = l.customer_id)
+		WHERE
+		LOWER(lcr.relation) in ('co-applicant', 'coapplicant', 'sole proprieter', 'applicant', 'guarantor') 
+		AND l.id = :CustomerLoanId
+		GROUP BY c.id
+		";
+	} else {		
+		$ApplicantDetails = "
+		SELECT 
+		CONCAT_WS(' ', c.first_name, c.middle_name, c.last_name) AS 'relation_name',
+		lcr.relation,
+		c.id AS `relation_customer_id`,
+		max(ecr.business_involvement) AS `business_involvement`
+		FROM $perdix_db.loan_accounts l
+		LEFT JOIN $perdix_db.loan_customer_relation lcr ON l.id=lcr.loan_id 
+		LEFT JOIN $perdix_db.customer c ON lcr.customer_id=c.id
+		LEFT JOIN $perdix_db.enterprise_customer_relations ecr ON (lcr.customer_id=ecr.linked_to_customer_id and ecr.customer_id = l.customer_id)
+		WHERE
+		LOWER(lcr.relation) in ('co-applicant', 'coapplicant', 'sole proprieter', 'applicant') 
+		AND l.id = :CustomerLoanId
+		GROUP BY c.id
+		";
+	}
 
     $full_time = 0;
     $part_time = 0;
@@ -307,7 +327,8 @@ if (isset($_GET)) {
 	VALUES ";
 
 
-    $scoring_array = array('Others', 'ManagementScore');
+    $scoring_array = array('ManagementScore','Others');	
+	$CurrentParameters = [];
 
     for ($s = 0; $s < count($scoring_array); $s++) {
 
@@ -388,8 +409,8 @@ if (isset($_GET)) {
 		WHERE " . $PrepareQueries[$KeyValues]['condition_if_any'] . " )";
 
                 eval("\$CustomerQuery = \"$CustomerQuery\";");
-
-                try {
+				
+				try {
                     $db = ConnectUAT();
                     $parameters = $db->prepare($CustomerQuery);
                     $parameters->execute();
@@ -402,9 +423,8 @@ if (isset($_GET)) {
                     echo $CustomerQuery;
                     goto EndExecution;
                 }
-
+				
                 if (is_array($ListParameters)) {
-                    $CurrentParameters = [];
 
                     foreach ($ListParameters AS $Column => $InputValue) {
 
@@ -493,8 +513,7 @@ if (isset($_GET)) {
                         $TempArray['color_hexadecimal'] = $DefinedScoreValues['color_hexadecimal'];
                         $TempArray['created_by'] = $SessionUserName;
 
-                        $CurrentParameters[$TempArray['ParameterName']] = $TempArray;
-
+                        $CurrentParameters[$CustomerId][$TempArray['ParameterName']] = $TempArray;
                         $InsertValues .= "('" . implode("','", $TempArray) . "'),";
                         $TempArray['mitigant'] = explode("|", $DefinedScoreValues['mitigant']);
 
@@ -516,6 +535,7 @@ if (isset($_GET)) {
         } //closing applicant_loop
     } //closing scoring_array
     //print_r($ParameterDataAvail);
+	
 
     /*
     $getMappedParameters = "SELECT p.ScoreName, p.subscore_name, p.ParameterName, p.ParameterWeightage, p.ParameterPassScore, GROUP_CONCAT(m.mitigant SEPARATOR '|') AS `mitigant`
