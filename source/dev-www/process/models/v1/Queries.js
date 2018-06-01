@@ -809,7 +809,7 @@ irf.models.factory('Queries', [
         };
 
 
-        resource.getVehiclePrice = function (){
+        resource.getVehicleDetails = function (){
             var deferred = $q.defer();
             var request = {};
             resource.getResult("vehicleViability.list", request)

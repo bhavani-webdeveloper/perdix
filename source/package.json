@@ -23,7 +23,7 @@
     "cordova-plugin-geolocation": "~2.2.0",
     "cordova-plugin-inappbrowser": "~1.4.0",
     "cordova-plugin-whitelist": "1",
-    "gulp": "^3.9.0",
+    "gulp": "^3.9.1",
     "gulp-cheerio": "^0.6.2",
     "gulp-inject": "^4.2.0",
     "gulp-json-modify": "^1.0.2",
@@ -37,7 +37,6 @@
   "devDependencies": {
     "del": "^2.2.2",
     "frisby": "^0.8.5",
-    "gulp": "^3.9.1",
     "gulp-if": "^2.0.1",
     "gulp-load-plugins": "^1.2.4",
     "gulp-main-bower-files": "^1.5.1",

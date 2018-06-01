@@ -1077,7 +1077,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "items": [
                                         {
                                             "type": "submit",
-                                            "title": "SUBMIT"
+                                            "title": "SUBMIT",
+                                            "buttonType": "submit"
                                         }
                                     ]
                                 },
@@ -1102,7 +1103,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         {
                                             "type": "button",
                                             "title": "UPDATE_ENROLMENT",
-                                            "onClick": "actions.proceed(model, formCtrl, form, $event)"
+                                            "onClick": "actions.proceed(model, formCtrl, form, $event)",
+                                            "buttonType": "submit"
                                         }
                                     ]
                                 }

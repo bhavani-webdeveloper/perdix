@@ -983,9 +983,7 @@ define([], function() {
                                     model.loanAccount.vehicleLoanDetails.make = null;
                                     model.loanAccount.vehicleLoanDetails.make1 = null;
                                     model.loanAccount.vehicleLoanDetails.vehicleModel = null;
-                                    model.loanAccount.vehicleLoanDetails.vehicleModel1 = null;
-                                    model.vehiclePriceDetails.yearOfManufacture = null;
-                                    model.vehiclePriceDetails.yearOfManufacture1 = null;
+                                    model.loanAccount.vehicleLoanDetails.yearOfManufacture = null;
                                     model.loanAccount.vehicleLoanDetails.price = null;
                                 },
                                 "required": true
@@ -997,9 +995,7 @@ define([], function() {
                                     model.loanAccount.vehicleLoanDetails.make = null;
                                     model.loanAccount.vehicleLoanDetails.make1 = null
                                     model.loanAccount.vehicleLoanDetails.vehicleModel = null;
-                                    model.loanAccount.vehicleLoanDetails.vehicleModel1 = null;
-                                    model.vehiclePriceDetails.yearOfManufacture = null;
-                                    model.vehiclePriceDetails.yearOfManufacture1 = null;
+                                    model.loanAccount.vehicleLoanDetails.yearOfManufacture = null;
                                     model.loanAccount.vehicleLoanDetails.price = null;
                                 },
                                 "required": true
@@ -1015,11 +1011,11 @@ define([], function() {
                                 bindMap: {},
                                 searchHelper: formHelper,
                                 search: function(inputModel, form, model, context) {
-                                    var vehiclePriceDetails = model.vehiclePriceDetails;
+                                    var vehicleDetails = model.vehicleDetails;
                                     var out = [];
-                                    var res = $filter('filter')(vehiclePriceDetails, {
-                                        'segment': model.vehiclePriceDetails.segment,
-                                        'asset_type': model.vehiclePriceDetails.category
+                                    var res = $filter('filter')(vehicleDetails, {
+                                        'segment': model.vehicleDetails.segment,
+                                        'asset_type': model.vehicleDetails.category
                                     }, true);
                                     out = _.uniqBy(res, 'manufacturer');
                                     return $q.resolve({
@@ -1052,9 +1048,9 @@ define([], function() {
                                 bindMap: {},
                                 searchHelper: formHelper,
                                 search: function(inputModel, form, model, context) {
-                                    var vehiclePriceDetails = model.vehiclePriceDetails;
+                                    var vehicleDetails = model.vehicleDetails;
                                     var out = [];
-                                    var res = $filter('filter')(vehiclePriceDetails, {
+                                    var res = $filter('filter')(vehicleDetails, {
                                         'segment': model.loanAccount.vehicleLoanDetails.segment,
                                         'asset_type': model.loanAccount.vehicleLoanDetails.category,
                                         'manufacturer': model.loanAccount.vehicleLoanDetails.make
@@ -1083,45 +1079,42 @@ define([], function() {
                                 "orderNo": 80,
                                 "key": "loanAccount.vehicleLoanDetails.yearOfManufacture",
                                 "title": "MANUFACTURER_YEAR",
-                                "type": "lov",
-                                "autolov": true,
-                                "lovonly": true,
                                 "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'NO'",
-                                bindMap: {},
-                                searchHelper: formHelper,
-                                search: function(inputModel, form, model, context) {
-                                    var vehiclePriceDetails = model.vehiclePriceDetails;
-                                    var out = [];
-                                    var res = $filter('filter')(vehiclePriceDetails, {
-                                        'segment': model.loanAccount.vehicleLoanDetails.segment,
-                                        'asset_type': model.loanAccount.vehicleLoanDetails.category,
-                                        'manufacturer': model.loanAccount.vehicleLoanDetails.make,
-                                        'model': model.loanAccount.vehicleLoanDetails.vehicleModel
-                                    }, true);
-                                    out = _.uniqBy(res, 'year_of_manufacture');
-                                    return $q.resolve({
-                                        headers: {
-                                            "x-total-count": out.length
-                                        },
-                                        body: out
-                                    });
-                                },
-                                onSelect: function(valueObj, model, context) {
-                                    model.loanAccount.vehicleLoanDetails.yearOfManufacture = valueObj.year_of_manufacture;
-                                    var res = $filter('filter')(model.vehiclePriceDetails, {
-                                        'segment': model.loanAccount.vehicleLoanDetails.segment,
-                                        'asset_type': model.loanAccount.vehicleLoanDetails.category,
-                                        'manufacturer': model.loanAccount.vehicleLoanDetails.make,
-                                        'model': model.loanAccount.vehicleLoanDetails.vehicleModel,
-                                        'year_of_manufacture': model.loanAccount.vehicleLoanDetails.yearOfManufacture
-                                    }, true);
-                                    model.loanAccount.vehicleLoanDetails.price = Number(res[0].price);
-                                },
-                                getListDisplayItem: function(item, index) {
-                                    return [
-                                        item.year_of_manufacture
-                                    ];
-                                },
+                                // bindMap: {},
+                                // searchHelper: formHelper,
+                                // search: function(inputModel, form, model, context) {
+                                //     var vehicleDetails = model.vehicleDetails;
+                                //     var out = [];
+                                //     var res = $filter('filter')(vehicleDetails, {
+                                //         'segment': model.loanAccount.vehicleLoanDetails.segment,
+                                //         'asset_type': model.loanAccount.vehicleLoanDetails.category,
+                                //         'manufacturer': model.loanAccount.vehicleLoanDetails.make,
+                                //         'model': model.loanAccount.vehicleLoanDetails.vehicleModel
+                                //     }, true);
+                                //     out = _.uniqBy(res, 'year_of_manufacture');
+                                //     return $q.resolve({
+                                //         headers: {
+                                //             "x-total-count": out.length
+                                //         },
+                                //         body: out
+                                //     });
+                                // },
+                                // onSelect: function(valueObj, model, context) {
+                                //     model.loanAccount.vehicleLoanDetails.yearOfManufacture = valueObj.year_of_manufacture;
+                                //     var res = $filter('filter')(model.vehicleDetails, {
+                                //         'segment': model.loanAccount.vehicleLoanDetails.segment,
+                                //         'asset_type': model.loanAccount.vehicleLoanDetails.category,
+                                //         'manufacturer': model.loanAccount.vehicleLoanDetails.make,
+                                //         'model': model.loanAccount.vehicleLoanDetails.vehicleModel,
+                                //         'year_of_manufacture': model.loanAccount.vehicleLoanDetails.yearOfManufacture
+                                //     }, true);
+                                //     model.loanAccount.vehicleLoanDetails.price = Number(res[0].price);
+                                // },
+                                // getListDisplayItem: function(item, index) {
+                                //     return [
+                                //         item.year_of_manufacture
+                                //     ];
+                                // },
                                 "required": true
                             },
                             "NewVehicleDetails.assetDetails": {
@@ -1749,9 +1742,9 @@ define([], function() {
                         model.loanAccount.vehicleLoanDetails.registrationNumber = obj.vehicleRegistrationNumber;
                         model.loanAccount.screeningDate = obj.screeningDate || moment().format("YYYY-MM-DD");
                     },
-                    "get-vehicle-price": function(bundleModel, model, obj) {
+                    "get-vehicle-details": function(bundleModel, model, obj) {
                         $log.info(obj);
-                        model.vehiclePriceDetails = obj;
+                        model.vehicleDetails = obj;
                     }
                 },
                 form: [],
