@@ -3,6 +3,7 @@ import { Type } from "class-transformer";
 import AgentFeeDetails = require("./AgentFeeDetails");
 import Customer = require("../customer/Customer");
 
+
 class Agent {
     agentCompanyId: number;
     agentEmployees: Agent[];
@@ -31,6 +32,7 @@ class Agent {
     @Type(() => AgentFeeDetails)
     agentFeeDetails: AgentFeeDetails[];
 
+   
     public static createFromJSON(data:any) {
 
     }

@@ -210,17 +210,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                     }
                     /* Setting data recieved from Bundle */
                     model.pageClass = bundlePageObj.pageClass;
-                    // model.currentStage = bundleModel.currentStage;
-                    /* End of setting data recieved from Bundle */
-
-                    /* Setting data for the form */
-                    model.customer = model.agentProcess.customer;
+                        /* Setting data for the form */
+                    model.customer = model.enrolmentProcess.customer;
                     /* End of setting data for the form */
-
-
-                    $log.info(model.customer);
-                    $log.info("model.customer");
-
+                    // model.currentStage = bundleModel.currentStage;
+                    /* End of setting data recieved from Bundle */                
 
                     /* Form rendering starts */
                     self = this;
@@ -294,24 +288,23 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                     "test-listener": function(bundleModel, model, obj) {
 
                     },
-                    "lead-loaded": function(bundleModel, model, obj) {
-
+                    "lead-loaded": function (bundleModel, model, obj) {
                         return $q.when()
-                            .then(function() {
-                                if (obj.applicantCustomerId) {
+                            .then(function(){
+                                if (obj.applicantCustomerId){
                                     return EnrolmentProcess.fromCustomerID(obj.applicantCustomerId).toPromise();
                                 } else {
                                     return null;
                                 }
                             })
-                            .then(function(enrolmentProcess) {
-                                if (enrolmentProcess != null) {
+                            .then(function(enrolmentProcess){
+                                if (enrolmentProcess!=null){
                                     model.enrolmentProcess = enrolmentProcess;
                                     model.customer = enrolmentProcess.customer;
                                     model.loanProcess.setRelatedCustomerWithRelation(enrolmentProcess, model.loanCustomerRelationType);
-                                    BundleManager.pushEvent(model.pageClass + "-updated", model._bundlePageObj, enrolmentProcess);
+                                    BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
                                 }
-                                if (obj.leadCategory == 'Existing' || obj.leadCategory == 'Return') {
+                                if(obj.leadCategory == 'Existing' || obj.leadCategory == 'Return') {
                                     model.customer.existingLoan = 'YES';
                                 } else {
                                     model.customer.existingLoan = 'NO';
@@ -338,9 +331,17 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                 model.customer.landLineNo = obj.alternateMobileNo;
                                 model.customer.landmark = obj.landmark;
                                 model.customer.postOffice = obj.postOffice;
+                                model.customer.customerCategory = obj.leadCategory;
+                                model.customer.parentLoanAccount = obj.parentLoanAccount;
+
+                               })
 
 
-                            })
+
+
+
+
+
 
                     },
                     "origination-stage": function(bundleModel, model, obj) {
@@ -397,7 +398,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                             return false;
                         }
                         PageHelper.showProgress('enrolment', 'Updating Customer');
-                        PageHelper.showLoader();
+                        // PageHelper.showLoader();
                         model.enrolmentProcess.proceed()
                             .finally(function() {
                                 PageHelper.hideLoader();
@@ -414,34 +415,34 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                             });
                     },
                     submit: function(model, form, formName) {
-                            PageHelper.clearErrors();
-                            if (PageHelper.isFormInvalid(form)) {
-                                return false;
-                            }
-                            PageHelper.showProgress('enrolment', 'Updating Customer');
-                            PageHelper.showLoader();
-                            model.enrolmentProcess.save()
-                                .finally(function() {
-                                    PageHelper.hideLoader();
-                                })
-                                .subscribe(function(enrolmentProcess) {
-                                    formHelper.resetFormValidityState(form);
-                                    PageHelper.showProgress('enrolment', 'Done.', 5000);
-                                    PageHelper.clearErrors();
-                                    BundleManager.pushEvent(model.pageClass + "-updated", model._bundlePageObj, enrolmentProcess);
-                                    model.enrolmentProcess.proceed()
-                                        .subscribe(function(enrolmentProcess) {
-                                            PageHelper.showProgress('enrolment', 'Done.', 5000);
-                                        }, function(err) {
-                                            PageHelper.showErrors(err);
-                                            PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
-                                        })
-                                }, function(err) {
-                                    PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
-                                    PageHelper.showErrors(err);
-                                    PageHelper.hideLoader();
-                                });
-                        }                       
+                        PageHelper.clearErrors();
+                        if (PageHelper.isFormInvalid(form)) {
+                            return false;
+                        }
+                        PageHelper.showProgress('enrolment', 'Updating Customer');
+                        PageHelper.showLoader();
+                        model.enrolmentProcess.save()
+                            .finally(function() {
+                                PageHelper.hideLoader();
+                            })
+                            .subscribe(function(enrolmentProcess) {
+                                formHelper.resetFormValidityState(form);
+                                PageHelper.showProgress('enrolment', 'Done.', 5000);
+                                PageHelper.clearErrors();
+                                BundleManager.pushEvent(model.pageClass + "-updated", model._bundlePageObj, enrolmentProcess);
+                                model.enrolmentProcess.proceed()
+                                    .subscribe(function(enrolmentProcess) {
+                                        PageHelper.showProgress('enrolment', 'Done.', 5000);
+                                    }, function(err) {
+                                        PageHelper.showErrors(err);
+                                        PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                    })
+                            }, function(err) {
+                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                PageHelper.showErrors(err);
+                                PageHelper.hideLoader();
+                            });
+                    }
 
                 }
             };

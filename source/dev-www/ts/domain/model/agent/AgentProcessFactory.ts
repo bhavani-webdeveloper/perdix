@@ -29,7 +29,7 @@ class AgentProcessFactory {
         return null;
     }
 
-    static createNew(): Observable<AgentProcess>{
+     static createNew(): Observable<AgentProcess>{
         return Observable.defer(() => {
             let lp: AgentProcess = new AgentProcess();
             lp.agent = new Agent();
@@ -37,20 +37,6 @@ class AgentProcessFactory {
         });
     }
 
-
-    // static createFromCustomerID(id){
-    //     let agentRepo: IAgentRepository = RepositoryFactory.createRepositoryObject(RepositoryIdentifiers.AgentProcess);
-    //     return agentRepo.getCustomerById(id)
-    //         .map(
-    //             (value: Object) => {
-    //                 let obj: Object = Utils.toJSObj(value);
-    //                 let ep: AgentProcess = new AgentProcess();
-    //                 let cs: Customer = <Customer>plainToClass<Customer, Object>(Customer, obj);
-    //                 ep.customer = cs;
-    //                 return ep;
-    //             }
-    //         )
-    // }
 }
 
 export = AgentProcessFactory;

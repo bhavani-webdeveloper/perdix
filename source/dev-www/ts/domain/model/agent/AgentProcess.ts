@@ -15,6 +15,7 @@ import AgentProcessFactory = require("./AgentProcessFactory");
 import * as _ from 'lodash';
 
 
+
 declare var agentProcessConfig: Object;
 
 export class AgentProcess {
@@ -35,19 +36,12 @@ export class AgentProcess {
         this.agentRepo = RepositoryFactory.createRepositoryObject(RepositoryIdentifiers.AgentProcess);
     }
 
+    public setRelatedCustomerWithRelation(enrolmentProcess: EnrolmentProcess): AgentProcess {            
+            this.applicantEnrolmentProcess = enrolmentProcess;
+        return this;
+    }
 
-    /**
-     * Removes any related customers from the process. Internally calls refreshRelatedCustomers to update
-     * the values in LoanAccount.
-     *
-     * @param customerId
-     * @param re`lation
-     */
-  
-
-
-
-     save(): any {
+    save(): any {
         /* Calls all business policies associated with save */
       
         let pmBeforeUpdate: PolicyManager<AgentProcess> = new PolicyManager(this, AgentPolicyFactory.getInstance(), 'beforeSave', AgentProcess.getProcessConfig());

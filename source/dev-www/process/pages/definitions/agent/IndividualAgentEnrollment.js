@@ -190,6 +190,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                         }
 
                     },
+                    "AgentFeeDetails.agentFeeDetails.feeAmount": {
+                        "key": "agent.feeAmount",
+                        "title": "FEE_AMOUT",
+                        "type": "amount"
+                    },
                     "AgentFeeDetails.agentFeeDetails.agentId": {
                         "key": "agent.agentType",
                         "title": "AGENT_TYPE",

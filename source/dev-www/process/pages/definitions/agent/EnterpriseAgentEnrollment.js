@@ -135,6 +135,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                             model.agent.customerId = valueObj.id;
                         }
                     },
+                    "AgentFeeDetails.agentFeeDetails.feeAmount": {
+                        "key": "agent.feeAmount",
+                        "title": "FEE_AMOUT",
+                        "type": "amount"
+                    },
                     "AgentInformation.agentId": {
                         type: "lov",
                         lovonly: true,

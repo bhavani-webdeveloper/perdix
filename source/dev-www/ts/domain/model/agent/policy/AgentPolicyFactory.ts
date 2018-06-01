@@ -1,6 +1,8 @@
 import {IPolicyFactory} from "../../../shared/IPolicyFactory";
 import {IPolicy} from "../../../shared/IPolicy";
 import {LoadNewCustomerData} from "../../customer/policy/LoadNewCustomerData";
+import {DefaultRelatedCustomersPolicy} from "../policy/DefaultRelatedCustomersPolicy";
+import {LoadRelatedCustomersPolicy} from "../policy/LoadRelatedCustomersPolicy";
 import {PreSaveCustomerPolicy} from "../../customer/policy/PreSaveCustomerPolicy";
 import {LoadEnrolmentCustomerDataPolicy} from "../../customer/policy/LoadEnrolmentCustomerDataPolicy";
 import {EnrolmentDerivedPolicy} from "../../customer/policy/EnrolmentDerivedPolicy";
@@ -25,10 +27,16 @@ export class AgentPolicyFactory implements IPolicyFactory{
             case 'LoadNewCustomerData':
                obj =  new LoadNewCustomerData();
                 return obj;
-           case 'PreSaveCustomerPolicy':
+            case 'LoadRelatedCustomersPolicy':
+                obj = new LoadRelatedCustomersPolicy();
+                return obj;
+            case 'DefaultRelatedCustomersPolicy':
+                obj = new DefaultRelatedCustomersPolicy();
+                return obj;
+            case 'PreSaveCustomerPolicy':
                return new PreSaveCustomerPolicy();
             case 'LoadEnrolmentCustomerDataPolicy':
-                return new LoadEnrolmentCustomerDataPolicy();
+                return new LoadEnrolmentCustomerDataPolicy();  
             case 'EnrolmentDerivedPolicy':
                return new EnrolmentDerivedPolicy();
             case 'VerifyBankAccountNumberPolicy':

@@ -4,10 +4,20 @@ define(["require", "exports"], function (require, exports) {
         'policies': {
             'default': {
                 onNew: {
-                    "defaults": []
+                    "defaults": [{
+                            "name": "DefaultRelatedCustomersPolicy",
+                            "arguments": {
+                                "applicant": true
+                            }
+                        }]
                 },
                 onLoad: {
-                    "defaults": []
+                    "defaults": [
+                        {
+                            "name": "LoadRelatedCustomersPolicy",
+                            "arguments": {}
+                        }
+                    ]
                 },
                 beforeProceed: {
                     "defaults": []

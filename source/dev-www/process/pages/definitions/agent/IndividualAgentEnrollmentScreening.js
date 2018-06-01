@@ -16,7 +16,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                         title: 'CUSTOMER',
                         pageClass: 'applicant',
                         minimum: 1,
-                        maximum: 1,
+                        maximum: 0,
                         order: 10
                     }, {
                         pageName: 'agent.IndividualAgentEnrollment',
@@ -87,6 +87,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                 $this.bundlePages.push({
                                     pageClass: "applicant",
                                     model: {
+                                        enrolmentProcess :agentProcess.applicantEnrolmentProcess,
                                         agentProcess: agentProcess, 
                                     }
                                 });
