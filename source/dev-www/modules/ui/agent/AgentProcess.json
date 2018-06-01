@@ -6,6 +6,8 @@
         "items": {
             "agentId": {
                 "key": "agent.id",
+                "resolver": "AgentCompanyIdLOVConfiguration",
+                "type": "lov",
                 "title": "AGENT_ID",
                 "orderNo": 10
             },
@@ -31,10 +33,12 @@
                 "title": "AGENT_TYPE",
                 "type": "select",
                 "orderNo": 30,
-                "titleMap": {
-                    "DSA": "DSA",
-                    "Liability Agent": "Liability Agent"
-                }
+                "enumCode": "agent_type"
+            },
+            "agentName": {
+                "key": "agent.agentName",
+                "title": "AGENT_NAME",
+                "orderNo": 80
             },
             "companyName": {
                 "key": "agent.companyName",
@@ -137,43 +141,45 @@
                         "type": "integer",
                         "orderNo": 10
                     },
+                    "agentName": {
+                        "key": "agent.agentName",
+                        "title": "AGENT_NAME",
+                        "orderNo": 20
+                    },
                     "customerId": {
                         "key": "agent.agentFeeDetails[].customerId",
                         "title": "CUSTOMER_ID",
                         "type": "integer",
-                        "orderNo": 20
+                        "orderNo": 30
                     },
                     "dateOfIncorporation": {
                         "key": "agent.agentFeeDetails[].dateOfIncorporation",
                         "title": "DATE_OF_INCORPORATION",
                         "type": "date",
-                        "orderNo": 30
+                        "orderNo": 40
                     },
                     "feeAmount": {
                         "key": "agent.agentFeeDetails[].feeAmount",
                         "title": "FEE_AMOUT",
                         "type": "amount",
-                        "orderNo": 40
+                        "orderNo": 50
                     },
                     "feeName": {
                         "key": "agent.agentFeeDetails[].feeName",
                         "title": "FEE_NAME",
-                        "orderNo": 50
+                        "orderNo": 60
                     },
                     "feeType": {
                         "key": "agent.agentFeeDetails[].feeType",
                         "title": "FEE_TYPE",
                         "type": "select",
-                        "titleMap": {
-                            "DSA": "DSA",
-                            "Liability Agent": "Liability Agent"
-                        },
-                        "orderNo": 60
+                        "enumCode": "fee_type",
+                        "orderNo": 70
                     },
                     "frequency": {
                         "key": "agent.agentFeeDetails[].frequency",
                         "title": "FREQUENCY",
-                        "orderNo": 70
+                        "orderNo": 80
                     }
                 }
             }
