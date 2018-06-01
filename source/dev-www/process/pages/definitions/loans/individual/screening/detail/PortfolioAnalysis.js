@@ -354,7 +354,7 @@ define({
                     };
                     prepareFinancialData['tableData']=$filter("orderBy") (prepareFinancialData['tableData'], ['loanId']);
                     //older accounts should not be greater then 3
-                    if(prepareFinancialData['tableData'].length>3) prepareFinancialData['tableData']=prepareFinancialData['tableData'].slice(-3);
+                    /* if(prepareFinancialData['tableData'].length>3) prepareFinancialData['tableData']=prepareFinancialData['tableData'].slice(-3); */
                     _.forEach(prepareFinancialData['tableData'], function(histData){
                         model.customerHistoryFinancials['tableData'].push(histData);
                         model.financialGraphValues['totalAssetGraphValues'].push({

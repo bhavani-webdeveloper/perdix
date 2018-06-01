@@ -20,6 +20,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             p1.then(function(_res){
                 var loanIds = [];
                 var res = $filter("orderBy") (_res, ['loanId', 'currentStage']);
+                res=(res.length>3)?(_res.slice(-3)):(res);
                 for (var i=0;i<res.length;i++){
                     (function(i){
                         loanIds.push(res[i].loanId);
