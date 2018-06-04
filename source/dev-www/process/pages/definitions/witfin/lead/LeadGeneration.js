@@ -78,6 +78,7 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                     "sourceDetails",
                     "sourceDetails.leadSource",
                     "sourceDetails.referredBy",
+                    "sourceDetails.referredBy1",
                     "sourceDetails.agentName",
                     "sourceDetails.dealerName",
                     "leadProfile.individualDetails",
