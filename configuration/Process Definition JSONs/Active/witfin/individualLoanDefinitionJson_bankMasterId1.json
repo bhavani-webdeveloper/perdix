@@ -3495,6 +3495,20 @@
                                 "Application"
                             ]
                         },
+                         "routesKms":{
+                            "title":"routesKms",
+                            "type":"number",
+                            "captureStages":[
+                                "Screening", "LoanInitiation"
+                            ]
+                        },
+                        "trips":{
+                             "title":"trips",
+                            "type":"number",
+                            "captureStages":[
+                                "Screening", "LoanInitiation"
+                             ]
+                        },
                         "routeVia": {
                             "title": "routeVia",
                             "type": "string",
