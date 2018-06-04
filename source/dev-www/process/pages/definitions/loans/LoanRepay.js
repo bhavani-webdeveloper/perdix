@@ -17,8 +17,6 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                 }
             }
 
-
-
             var _pageGlobals = {};
             var pageData = {};
 
@@ -496,17 +494,18 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                             if (model.repayment.transactionName == 'Pre-closure') {
                                                 if(model.repayment.totalPayoffAmountToBePaid){
                                                     model.repayment.amount = model.repayment.totalPayoffAmountToBePaid;
-                                                }   
+                                                }
                                             } else if (model.repayment.transactionName == 'Scheduled Demand') {
                                                 if(model.repayment.totalDue){
                                                     model.repayment.amount = Utils.ceil(model.repayment.totalDue);
-                                                }   
+                                                }
                                             } else {
                                                 model.repayment.amount = null;
                                             }
                                             model.repayment.demandAmount = model.repayment.amount || 0;
                                         }
-                                    }*/   
+
+                                    }*/
                                 }
                             },
                             {
@@ -626,7 +625,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 key: "repayment.bankAccountNumber",
                                 type: "lov",
                                 lovonly: true,
-                                condition:"model.repayment.instrument=='NEFT' || model.repayment.instrument=='RTGS'||model.repayment.instrument=='ACH' || model.repayment.instrument == 'INTERNAL' || model.repayment.instrument == 'SECURITY_DEPOSIT'",
+                                condition:"model.repayment.instrument=='NEFT' || model.repayment.instrument=='RTGS'||model.repayment.instrument=='ACH' || model.repayment.instrument == 'INTERNAL'",
                                 title:"REPAYMENT_TO_ACCOUNT",
                                 required: true,
                                 bindMap: {
@@ -935,7 +934,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                                 } else if (postData.loanCollection.instrumentType == 'Suspense'){
                                                     resp.stage = "CreditValidation";
                                                     resp.loanCollection.bankAccountNumber = model.additional.suspenseCode;
-                                                } else if (postData.loanCollection.instrumentType == 'SECURITY_DEPOSIT') {                                    
+                                                } else if (postData.loanCollection.instrumentType == 'SECURITY_DEPOSIT') {
                                                     resp.stage = "CreditValidation";
                                                 } else {
                                                     resp.stage = "BRSValidation";
