@@ -6,19 +6,12 @@ define(["require", "exports"], function (require, exports) {
                 onNew: {
                     "defaults": [
                         {
-                            "name": "LoadTransactionBranchData",
+                            "name": "LoadBranchData",
                             "arguments": null
                         }
                     ]
                 },
-                onLoad: {
-                // "defaults": [
-                //     {
-                //         "name": "LoadTotalAmountPolicy",
-                //         "arguments": {}
-                //     }
-                // ]
-                },
+                onLoad: {},
                 beforeProceed: {},
                 beforeSave: {},
             },

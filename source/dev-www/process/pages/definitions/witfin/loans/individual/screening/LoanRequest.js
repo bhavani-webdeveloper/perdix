@@ -681,12 +681,12 @@ define([], function() {
                                 "PreliminaryInformation": {
                                     "readonly": true
                                 },
-                                "VehicleAssetUse": {
-                                    "readonly": true
-                                },
-                                "VehicleRouteDetails": {
-                                    "readonly": true
-                                },
+                                // "VehicleAssetUse": {
+                                //     "readonly": true
+                                // },
+                                // "VehicleRouteDetails": {
+                                //     "readonly": true
+                                // },
                                 "VehicleAssetViability": {
                                     "readonly": true
                                 },
@@ -751,6 +751,8 @@ define([], function() {
                     "VehicleRouteDetails.vehicleRouteDetails.routeFrom",
                     "VehicleRouteDetails.vehicleRouteDetails.routeTo",
                     "VehicleRouteDetails.vehicleRouteDetails.routeVia",
+                    "vehicleRouteDetails.vehicleRouteDetails.trips",
+                    "vehicleRouteDetails.vehicleRouteDetails.routesKms",
                     "VehicleAssetUse",
                     "VehicleAssetUse.segment",
                     "VehicleAssetUse.subSegnment",
@@ -908,10 +910,10 @@ define([], function() {
                                 "required": true
                             },
                             "VehicleAssetUse": {
-                                "condition": "model.loanAccount.vehicleLoanDetails.usedFor == 'Commercial' && (model.loanAccount.loanPurpose1 == 'Purchase – New Vehicle' ||model.loanAccount.loanPurpose1 == 'Purchase – Used Vehicle' || model.loanAccount.loanPurpose1 == 'Refinance')"
+                                "condition": "model.loanAccount.loanPurpose1 == 'Purchase - New Vehicle' || model.loanAccount.loanPurpose1 == 'Purchase - Used Vehicle' || model.loanAccount.loanPurpose1 == 'Refinance'"
                             },
                             "VehicleRouteDetails": {
-                                "condition": "model.loanAccount.vehicleLoanDetails.usedFor == 'Commercial' && (model.loanAccount.loanPurpose1 == 'Purchase – New Vehicle' ||model.loanAccount.loanPurpose1 == 'Purchase – Used Vehicle' || model.loanAccount.loanPurpose1 == 'Refinance')"
+                                "condition": "model.loanAccount.loanPurpose1 == 'Purchase - New Vehicle' || model.loanAccount.loanPurpose1 == 'Purchase - Used Vehicle' || model.loanAccount.loanPurpose1 == 'Refinance'"
                             },
                             "DeductionsFromLoan.estimatedEmi": {
                                 "readonly": true,
