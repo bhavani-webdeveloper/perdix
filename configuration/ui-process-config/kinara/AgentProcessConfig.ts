@@ -1,31 +1,40 @@
 let config = {
-    'policies': {
-        'default' : {
-            onNew: {
-                "defaults": [  {
+    "policies": {
+        "default" : {
+            "onNew": {
+                "defaults": [
+                    {
                         "name": "DefaultRelatedCustomersPolicy",
                         "arguments": {
                             "applicant": true                            
                         }
-                    }]
+                    }
+                ]
             },
-            onLoad: {
+            "onLoad": {
                 "defaults": [
-                         {
+                    {
                         "name": "LoadRelatedCustomersPolicy",
                         "arguments": {}
-                        }
-                  ]
+                    }
+                ]
             },
-            beforeProceed: {
-                "defaults": []
+            "beforeSave": {
+                "defaults": [            
+                ]
             },
-            beforeSave: {
-                "defaults": []
+            "afterSave": {
+                "overrides": [                    
+                ]
             },
+            "beforeProceed": {
+                "overrides": [
+                   
+                ]
+            }
         },
-        'command': {
-            'OverlayLeadData': {
+        "command": {
+            "OverlayLeadData": {
 
             }
         }

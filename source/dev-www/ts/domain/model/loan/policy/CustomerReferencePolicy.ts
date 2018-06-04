@@ -40,23 +40,23 @@ export class CustomerReferencePolicy extends IPolicy<LoanProcess> {
         }
 
 
-        if(_.hasIn(loanProcess, "applicantEnrolmentProcess") && _.hasIn(loanProcess.applicantEnrolmentProcess, "customer")) {
-            for(let index = 0; index < loanProcess.applicantEnrolmentProcess.customer.verifications.length; index++) {
-                let existing = _.findIndex(loanProcess.loanAccount.telecallingDetails, function(item){
-                    return item.contactNumber == loanProcess.applicantEnrolmentProcess.customer.verifications[index].mobileNo;
-                });
-                if (existing != -1){
-                    continue;
-                }
-                tlc = new TelecallingDetails();
-                let verification = loanProcess.applicantEnrolmentProcess.customer.verifications[index];
-                tlc.personContacted = verification.referenceFirstName;
-                tlc.contactNumber = verification.mobileNo;
-                tlc.occupation = verification.occupation;
-                tlc.address = verification.address;
-                loanProcess.loanAccount.telecallingDetails.push(tlc);
-            }
-        }
+        // if(_.hasIn(loanProcess, "applicantEnrolmentProcess") && _.hasIn(loanProcess.applicantEnrolmentProcess, "customer")) {
+        //     for(let index = 0; index < loanProcess.applicantEnrolmentProcess.customer.verifications.length; index++) {
+        //         let existing = _.findIndex(loanProcess.loanAccount.telecallingDetails, function(item){
+        //             return item.contactNumber == loanProcess.applicantEnrolmentProcess.customer.verifications[index].mobileNo;
+        //         });
+        //         if (existing != -1){
+        //             continue;
+        //         }
+        //         tlc = new TelecallingDetails();
+        //         let verification = loanProcess.applicantEnrolmentProcess.customer.verifications[index];
+        //         tlc.personContacted = verification.referenceFirstName;
+        //         tlc.contactNumber = verification.mobileNo;
+        //         tlc.occupation = verification.occupation;
+        //         tlc.address = verification.address;
+        //         loanProcess.loanAccount.telecallingDetails.push(tlc);
+        //     }
+        // }
 
             return Observable.of(loanProcess);
 

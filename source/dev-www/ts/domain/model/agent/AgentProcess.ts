@@ -29,7 +29,7 @@ export class AgentProcess {
     agentRepo: IAgentRepository;
 
     
-    enterpriseEnrolmentAgentProcess: EnrolmentProcess;
+    loanCustomerEnrolmentProcess: EnrolmentProcess;
     applicantEnrolmentProcess: EnrolmentProcess;
 
     constructor() {
@@ -38,6 +38,7 @@ export class AgentProcess {
 
     public setRelatedCustomerWithRelation(enrolmentProcess: EnrolmentProcess): AgentProcess {            
             this.applicantEnrolmentProcess = enrolmentProcess;
+            this.loanCustomerEnrolmentProcess = enrolmentProcess;
         return this;
     }
 

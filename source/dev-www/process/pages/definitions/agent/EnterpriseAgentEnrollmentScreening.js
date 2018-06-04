@@ -58,11 +58,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                 PageHelper.hideLoader();
                                 bundleModel.agentProcess = agentProcess;
                                 var agentProcess = agentProcess;
-
-
+                                
                                 $this.bundlePages.push({
                                     pageClass: 'business',
                                     model: {
+                                        enrolmentProcess: agentProcess.loanCustomerEnrolmentProcess,
                                         agentProcess: agentProcess,
                                     }
                                 });
@@ -87,6 +87,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                 $this.bundlePages.push({
                                     pageClass: "business",
                                     model: {
+                                        enrolmentProcess: agentProcess.loanCustomerEnrolmentProcess,
                                         agentProcess: agentProcess,
                                     }
                                 });

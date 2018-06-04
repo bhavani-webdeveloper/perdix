@@ -64,7 +64,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                     pageClass: 'applicant',
                                     model: {
                                         agentProcess: agentProcess,
-                                        enrolmentProcess: agentProcess,
+                                        enrolmentProcess: agentProcess.applicantEnrolmentProcess
                                     }
                                 });
                                 $this.bundlePages.push({
@@ -81,8 +81,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                         AgentProcess.createNewProcess()
                             .subscribe(function(agentProcess) {
                                 bundleModel.agentProcess = agentProcess;
-                                console.log(agentProcess);
-                                console.log("agentProcess");
+                             
                                 // loanProcess.loanAccount.currentStage = 'Screening';
                                 $this.bundlePages.push({
                                     pageClass: "applicant",

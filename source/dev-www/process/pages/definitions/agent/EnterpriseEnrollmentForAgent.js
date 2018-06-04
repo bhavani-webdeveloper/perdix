@@ -81,238 +81,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                         "BankAccounts.customerBankAccounts.accountType"                      
                     ];
 
-                }
-                // var configFile = function() {
-                //     return {
-                //         "loanProcess.loanAccount.currentStage": {
-                //             "Screening": {
-                //                 "overrides": {
-                //                     "EnterpriseInformation": {
-                //                         "readonly": "true"
-                //                     },
-                //                     "Liabilities": {
-                //                         "readonly": "true"
-                //                     },
-                //                     "EnterpriseAssets": {
-                //                         "readonly": "true"
-                //                     }
-                //                 },
-                //                 "excludes": [
-                //                     "EnterpriseReferences"
-                //                 ]
-                //             },
-                //             "ScreeningReview": {
-                //                 "overrides": {
-                //                     "EnterpriseInformation": {
-                //                         "readonly": true
-                //                     },
-                //                     "EnterpriseInformation.enterpriseType": {
-                //                         "readonly": true
-                //                     },
-                //                     "Liabilities": {
-                //                         "readonly": true
-                //                     },
-                //                     "EnterpriseAssets": {
-                //                         "readonly": true
-                //                     },
-                //                     "BankAccounts": {
-                //                         "readonly": true
-                //                     },
-                //                     "ContactInformation": {
-                //                         "readonly": true
-                //                     },
-                //                     "TrackDetails": {
-                //                         "readonly": true
-                //                     },
-                //                     "tangibleNetworth": {
-                //                         "readonly": true
-                //                     }
-                //                 },
-                //                 "excludes": [
-                //                     "EnterpriseReferences"
-                //                 ]
-                //             },
-                //             "ApplicationReview": {
-                //                 "overrides": {
-                //                     "EnterpriseInformation": {
-                //                         "readonly": true
-                //                     },
-                //                     "EnterpriseInformation.enterpriseType": {
-                //                         "readonly": true
-                //                     },
-                //                     "Liabilities": {
-                //                         "readonly": true
-                //                     },
-                //                     "EnterpriseAssets": {
-                //                         "readonly": true
-                //                     },
-                //                     "BankAccounts": {
-                //                         "readonly": true
-                //                     },
-                //                     "ContactInformation": {
-                //                         "readonly": true
-                //                     },
-                //                     "EnterpriseReferences": {
-                //                         "readonly": true
-                //                     },
-                //                     "TrackDetails": {
-                //                         "readonly": true
-                //                     },
-                //                     "tangibleNetworth": {
-                //                         "readonly": true
-                //                     }
-                //                 }
-                //             },
-                //             "BranchCreditAppraisal": {
-                //                 "overrides": {
-                //                     "EnterpriseInformation": {
-                //                         "readonly": true
-                //                     },
-                //                     "EnterpriseInformation.enterpriseType": {
-                //                         "readonly": true
-                //                     },
-                //                     "Liabilities": {
-                //                         "readonly": true
-                //                     },
-                //                     "EnterpriseAssets": {
-                //                         "readonly": true
-                //                     },
-                //                     "BankAccounts": {
-                //                         "readonly": true
-                //                     },
-                //                     "ContactInformation": {
-                //                         "readonly": true
-                //                     },
-                //                     "EnterpriseReferences": {
-                //                         "readonly": true
-                //                     },
-                //                     "TrackDetails": {
-                //                         "readonly": true
-                //                     },
-                //                     "tangibleNetworth": {
-                //                         "readonly": true
-                //                     }
-                //                 }
-                //             },
-                //             "HOCreditAppraisal": {
-                //                 "overrides": {
-                //                     "EnterpriseInformation": {
-                //                         "readonly": true
-                //                     },
-                //                     "EnterpriseInformation.enterpriseType": {
-                //                         "readonly": true
-                //                     },
-                //                     "Liabilities": {
-                //                         "readonly": true
-                //                     },
-                //                     "EnterpriseAssets": {
-                //                         "readonly": true
-                //                     },
-                //                     "BankAccounts": {
-                //                         "readonly": true
-                //                     },
-                //                     "ContactInformation": {
-                //                         "readonly": true
-                //                     },
-                //                     "EnterpriseReferences": {
-                //                         "readonly": true
-                //                     },
-                //                     "TrackDetails": {
-                //                         "readonly": true
-                //                     },
-                //                     "tangibleNetworth": {
-                //                         "readonly": true
-                //                     }
-                //                 }
-                //             },
-                //             "ManagementCommittee": {
-                //                 "overrides": {
-                //                     "EnterpriseInformation": {
-                //                         "readonly": true
-                //                     },
-                //                     "EnterpriseInformation.enterpriseType": {
-                //                         "readonly": true
-                //                     },
-                //                     "Liabilities": {
-                //                         "readonly": true
-                //                     },
-                //                     "EnterpriseAssets": {
-                //                         "readonly": true
-                //                     },
-                //                     "BankAccounts": {
-                //                         "readonly": true
-                //                     },
-                //                     "ContactInformation": {
-                //                         "readonly": true
-                //                     },
-                //                     "EnterpriseReferences": {
-                //                         "readonly": true
-                //                     },
-                //                     "TrackDetails": {
-                //                         "readonly": true
-                //                     },
-                //                     "tangibleNetworth": {
-                //                         "readonly": true
-                //                     }
-                //                 }
-                //             },
-                //             "REJECTED": {
-                //                 "overrides": {
-                //                     "EnterpriseInformation": {
-                //                         "readonly": true
-                //                     },
-                //                     "EnterpriseInformation.enterpriseType": {
-                //                         "readonly": true
-                //                     },
-                //                     "Liabilities": {
-                //                         "readonly": true
-                //                     },
-                //                     "EnterpriseAssets": {
-                //                         "readonly": true
-                //                     },
-                //                     "BankAccounts": {
-                //                         "readonly": true
-                //                     },
-                //                     "ContactInformation": {
-                //                         "readonly": true
-                //                     }
-                //                 }
-                //             }
-
-            //         },
-            //         "loanProcess.loanAccount.isReadOnly": {
-            //             "Yes": {
-            //                 "overrides": {
-            //                     "EnterpriseInformation": {
-            //                         "readonly": true
-            //                     },
-            //                     "EnterpriseInformation.enterpriseType": {
-            //                         "readonly": true
-            //                     },
-            //                     "Liabilities": {
-            //                         "readonly": true
-            //                     },
-            //                     "EnterpriseAssets": {
-            //                         "readonly": true
-            //                     },
-            //                     "BankAccounts": {
-            //                         "readonly": true
-            //                     },
-            //                     "ContactInformation": {
-            //                         "readonly": true
-            //                     },
-            //                     "EnterpriseReferences": {
-            //                         "readonly": true
-            //                     },
-            //                     "TrackDetails": {
-            //                         "readonly": true
-            //                     }
-            //                 }
-
-            //             }
-            //         }
-            //     }
-            // }
+                }              
 
 
 
@@ -327,13 +96,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                     }
 
                     /* Setting data recieved from Bundle */
-                    model.loanCustomerRelationType = "Customer";
+                    
                     model.currentStage = bundleModel.currentStage;
                     /* End of setting data recieved from Bundle */
 
 
                     /* Setting data for the form */
-                     model.customer = model.agentProcess.customer;
+                    model.customer = model.enrolmentProcess.customer;
                     /* End of setting data for the form */
                     var calculateVehiclesFree = function(modelValue, form, model) {}
                     var p1 = UIRepository.getEnrolmentProcessUIRepository().$promise;
@@ -434,7 +203,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                 schema: function() {
                     return Enrollment.getSchema().$promise;
                 },
-                actions: {
+                   actions: {
                     preSave: function(model, form, formName) {
                         var deferred = $q.defer();
                         if (model.customer.firstName) {
@@ -445,22 +214,23 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                         }
                         return deferred.promise;
                     },
-                    save: function(model, formCtrl, formName) {
+                    save: function(model, formCtrl, formName){
 
                     },
-                    submit: function(model, form, formName) {
+                    submit: function(model, form, formName){
                         PageHelper.clearErrors();
-                        if (PageHelper.isFormInvalid(form)) {
+                        if(PageHelper.isFormInvalid(form)) {
                             return false;
                         }
                         PageHelper.showProgress('enrolment', 'Updating Customer');
                         PageHelper.showLoader();
 
                         model.enrolmentProcess.save()
-                            .finally(function() {
+                            .finally(function(){
                                 PageHelper.hideLoader();
                             })
-                            .subscribe(function() {
+                            .subscribe(function(){
+                                model.loanProcess.refreshRelatedCustomers();
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 model.enrolmentProcess.proceed()
                                     .subscribe(function(enrolmentProcess) {
@@ -476,23 +246,23 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                             });
 
                     },
-                    proceed: function(model, form) {
+                    proceed: function(model, form){
                         PageHelper.clearErrors();
-                        if (PageHelper.isFormInvalid(form)) {
+                        if(PageHelper.isFormInvalid(form)) {
                             return false;
                         }
                         PageHelper.showProgress('enrolment', 'Updating Customer');
                         PageHelper.showLoader();
                         model.enrolmentProcess.proceed()
-                            .finally(function() {
+                            .finally(function () {
                                 PageHelper.hideLoader();
                             })
-                            .subscribe(function(enrolmentProcess) {
+                            .subscribe(function (enrolmentProcess) {
                                 formHelper.resetFormValidityState(form);
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 PageHelper.clearErrors();
-                                BundleManager.pushEvent(model.pageClass + "-updated", model._bundlePageObj, enrolmentProcess);
-                            }, function(err) {
+                                BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
+                            }, function (err) {
                                 PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                 PageHelper.showErrors(err);
                                 PageHelper.hideLoader();

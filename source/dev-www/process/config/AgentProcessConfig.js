@@ -1,17 +1,19 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
     var config = {
-        'policies': {
-            'default': {
-                onNew: {
-                    "defaults": [{
+        "policies": {
+            "default": {
+                "onNew": {
+                    "defaults": [
+                        {
                             "name": "DefaultRelatedCustomersPolicy",
                             "arguments": {
                                 "applicant": true
                             }
-                        }]
+                        }
+                    ]
                 },
-                onLoad: {
+                "onLoad": {
                     "defaults": [
                         {
                             "name": "LoadRelatedCustomersPolicy",
@@ -19,15 +21,18 @@ define(["require", "exports"], function (require, exports) {
                         }
                     ]
                 },
-                beforeProceed: {
+                "beforeSave": {
                     "defaults": []
                 },
-                beforeSave: {
-                    "defaults": []
+                "afterSave": {
+                    "overrides": []
                 },
+                "beforeProceed": {
+                    "overrides": []
+                }
             },
-            'command': {
-                'OverlayLeadData': {}
+            "command": {
+                "OverlayLeadData": {}
             }
         }
     };
