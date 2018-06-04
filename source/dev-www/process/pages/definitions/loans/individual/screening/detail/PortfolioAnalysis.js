@@ -20,7 +20,7 @@ define({
                 
                 self.form = [{
 					"type": "section",
-					"html": '<br><div style="text-align:center">Waiting for customerHistory..<br><br><ripple-loader></ripple-loader></div>'
+					"html": '<br><div style="text-align:center">Waiting for customerHistory ..<br><br><ripple-loader></ripple-loader></div>'
 				}];
                 /*--Utility function's for table view --*/
                 self.strongRender = function(data, type, full, meta) {
@@ -127,7 +127,7 @@ define({
                 var renderRequiredEvents = ['financial-summary'];
                 model.renderReady = function(eventName) {
                     renderRequiredEvents.splice(renderRequiredEvents.indexOf(eventName), 1);
-	                if (!renderRequiredEvents.length) {
+	                if (!renderRequiredEvents.length && model.existingCustomerStr=='Existing Customer') {
 		                self.renderForm();
 	                }
                 };
