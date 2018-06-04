@@ -6,7 +6,7 @@ irf.pageCollection.factory(
     {
         	return {
         		"type": "page-bundle",
-        		"title": "SCREENING",
+        		"title": "SCREENING_INPUT",
         		"subTitle": "LOAN_BOOKING_BUNDLE_SUB_TITLE",
                 "bundleDefinitionPromise": function() {
                     return $q.resolve([

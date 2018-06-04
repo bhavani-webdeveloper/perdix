@@ -58,7 +58,7 @@ function (
 */
         	return {
         		"type": "page-bundle",
-        		"title": "SCREENING",
+        		"title": "SCREENING_TEST",
         		"subTitle": "LOAN_BOOKING_BUNDLE_SUB_TITLE",
                 "bundleDefinitionPromise": function() {
                     return $q.resolve([

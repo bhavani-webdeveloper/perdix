@@ -13,7 +13,7 @@ define({
         }
         return {
             "type": "search-list",
-            "title": "CREDIT_APPROVAL_1_QUEUE",
+            "title": "CREDIT_APPROVAL_QUEUE",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 // model.branch = branch;
