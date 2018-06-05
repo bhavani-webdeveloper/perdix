@@ -3060,14 +3060,16 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                     return;
                                 }
 
-                                for (var i=0;i<d.length;i++){
+                                for (var i=0;i<d.length;i++) {
                                     var item = d[i];
                                     if (item.status != 'finished'){
-                                        if (item.status == 'failed') {
+                                        if (item.status.toLowerCase() == 'failed')
                                             PageHelper.showProgress("dedupe-status", "Dedupe has failed. Please Contact IT", 5000);
-                                        } else {
+                                        else if (item.status.toLowerCase() == 'pending')
+                                            PageHelper.showProgress("dedupe-status", "Dedupe is in Pending Stage. Please Wait", 5000);
+                                        else  
                                             PageHelper.showProgress("dedupe-status", "Dedupe process is not completed for all the customers. Please save & try after some time", 5000);
-                                        }
+                                        
                                         mandatoryToProceedLoan['Dedupe'] = false;
                                         break;
                                     }

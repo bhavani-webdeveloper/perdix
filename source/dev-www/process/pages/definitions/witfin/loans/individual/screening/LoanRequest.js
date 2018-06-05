@@ -814,6 +814,7 @@ define([], function() {
                     "VehicleViability.noOfTyres",
                     "VehicleViability.costOfTyre",
                     "VehicleViability.lifeOfTyre",
+                    "VehicleViability.fuelConsumptionPerHour",
                     "VehicleViability1",
                     "VehicleViability1.grossVehicleWeight1",
                     "VehicleViability1.payLoad1",
@@ -823,6 +824,7 @@ define([], function() {
                     "VehicleViability1.noOfTyres1",
                     "VehicleViability1.costOfTyre1",
                     "VehicleViability1.lifeOfTyre1",
+                    "VehicleViability1.fuelConsumptionPerHour1",
                     "TeleVerification",
                     "TeleVerification.verifications",
                     "TeleVerification.verifications.personContacted",
@@ -985,7 +987,6 @@ define([], function() {
                                     model.loanAccount.vehicleLoanDetails.make = null;
                                     model.loanAccount.vehicleLoanDetails.make1 = null;
                                     model.loanAccount.vehicleLoanDetails.vehicleModel = null;
-                                    model.loanAccount.vehicleLoanDetails.yearOfManufacture = null;
                                     model.loanAccount.vehicleLoanDetails.price = null;
                                 },
                                 "required": true
@@ -995,10 +996,8 @@ define([], function() {
                                 "enumCode": "vehicle_type",
                                 onChange: function(modelValue, form, model) {
                                     model.loanAccount.vehicleLoanDetails.make = null;
-                                    model.loanAccount.vehicleLoanDetails.make1 = null
+                                    model.loanAccount.vehicleLoanDetails.make1 = null;
                                     model.loanAccount.vehicleLoanDetails.vehicleModel = null;
-                                    model.loanAccount.vehicleLoanDetails.yearOfManufacture = null;
-                                    model.loanAccount.vehicleLoanDetails.price = null;
                                 },
                                 "required": true
                             },
@@ -1017,7 +1016,7 @@ define([], function() {
                                     var out = [];
                                     var res = $filter('filter')(vehicleDetails, {
                                         'segment': model.vehicleDetails.segment,
-                                        'asset_type': model.vehicleDetails.category
+                                        'category': model.vehicleDetails.category
                                     }, true);
                                     out = _.uniqBy(res, 'manufacturer');
                                     return $q.resolve({
@@ -1030,8 +1029,6 @@ define([], function() {
                                 onSelect: function(valueObj, model, context) {
                                     model.loanAccount.vehicleLoanDetails.make = valueObj.manufacturer;
                                     model.loanAccount.vehicleLoanDetails.vehicleModel = null;
-                                    model.loanAccount.vehicleLoanDetails.yearOfManufacture = null;
-                                    model.loanAccount.vehicleLoanDetails.price = null;
                                 },
                                 getListDisplayItem: function(item, index) {
                                     return [
@@ -1054,7 +1051,7 @@ define([], function() {
                                     var out = [];
                                     var res = $filter('filter')(vehicleDetails, {
                                         'segment': model.loanAccount.vehicleLoanDetails.segment,
-                                        'asset_type': model.loanAccount.vehicleLoanDetails.category,
+                                        'category': model.loanAccount.vehicleLoanDetails.category,
                                         'manufacturer': model.loanAccount.vehicleLoanDetails.make
                                     }, true);
                                     out = _.uniqBy(res, 'model');
@@ -1067,8 +1064,36 @@ define([], function() {
                                 },
                                 onSelect: function(valueObj, model, context) {
                                     model.loanAccount.vehicleLoanDetails.vehicleModel = valueObj.model;
-                                    model.loanAccount.vehicleLoanDetails.yearOfManufacture = null;
                                     model.loanAccount.vehicleLoanDetails.price = null;
+                                    model.loanAccount.vehicleLoanDetails.viabilityCategory = valueObj.viability_category;
+                                    model.loanAccount.vehicleLoanDetails.grossVehicleWeight = valueObj.gvw;
+                                    model.loanAccount.vehicleLoanDetails.payLoad = valueObj.payload;
+                                    model.loanAccount.vehicleLoanDetails.typeofLoad = valueObj.type_of_load;
+                                    model.loanAccount.vehicleLoanDetails.ratePerTrip = valueObj.rate_per_trip;
+                                    model.loanAccount.vehicleLoanDetails.mileage = valueObj.mileage;
+                                    model.loanAccount.vehicleLoanDetails.fuelConsumptionPerHour = valueObj.fuel_consumption;
+                                    model.loanAccount.vehicleLoanDetails.noOfTyres = valueObj.no_of_tyres;
+                                    model.loanAccount.vehicleLoanDetails.costOfTyre = valueObj.cost_of_tyre;
+                                    model.loanAccount.vehicleLoanDetails.lifeOfTyre = valueObj.life_of_tyre;
+
+                                     // Vehicle Income Details
+                                     if (model.loanAccount && model.loanAccount.vehicleLoanDetails && model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes && _.isArray(model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes)) {
+                                            model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes = [];   
+                                            model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes.push({
+                                                'incomeType': 'Total Monthly Revenue',
+                                                'incomeAmount': 25
+                                            });
+                                        }
+                                     
+                                    // vehicle Expense Details
+
+                                    if (model.loanAccount && model.loanAccount.vehicleLoanDetails && model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses && _.isArray(model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses)) {
+                                            model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses = [];
+                                            
+                                        
+                                        }
+
+
                                 },
                                 getListDisplayItem: function(item, index) {
                                     return [
@@ -1510,6 +1535,12 @@ define([], function() {
                                            "title": "LIFE_OF_TYRE",
                                            "type": "number",
                                            "readonly": "true"
+                                        },
+                                        "fuelConsumptionPerHour": {
+                                            "key": "loanAccount.vehicleLoanDetails.fuelConsumptionPerHour",
+                                            "title": "FUEL_CONSUMPTION_PER_HOUR",
+                                            "type": "number",
+                                            "readonly": "true"
                                         }
                                     }
                                 },
@@ -1565,6 +1596,12 @@ define([], function() {
                                            "title": "LIFE_OF_TYRE",
                                            "type": "number",
                                            "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'YES'"
+                                        },
+                                        "fuelConsumptionPerHour1": {
+                                            "key": "loanAccount.vehicleLoanDetails.fuelConsumptionPerHour",
+                                            "title": "FUEL_CONSUMPTION_PER_HOUR",
+                                            "type": "number",
+                                            "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'YES'"
                                         }
                                     }
                                 }
@@ -1746,7 +1783,7 @@ define([], function() {
                     },
                     "get-vehicle-details": function(bundleModel, model, obj) {
                         $log.info(obj);
-                        model.vehicleDetails = obj;
+                        model.vehicleDetails = obj.results;
                     }
                 },
                 form: [],

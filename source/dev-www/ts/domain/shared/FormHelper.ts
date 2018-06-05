@@ -69,7 +69,7 @@ export class FormHelper extends NeedsAngularInjector implements IFormHelper {
     }
 
     getExpenseType(): any {
-        return this.getInjector().enum('vehicle_expense_types').data;
+        return this.getInjector().enum('vehicle_expense').data;
     }
 
     getReferencetype(): any {
