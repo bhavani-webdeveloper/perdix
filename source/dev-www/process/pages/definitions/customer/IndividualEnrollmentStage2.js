@@ -673,6 +673,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                     "assets.physicalAssets":{
                         titleExpr: "model.customer.physicalAssets[arrayIndex].ownedAssetDetails | translate",
                         remove:null,
+                        add: null,
                         onArrayAdd: function(value, form, model, formCtrl, event) {
                             if ((model.customer.physicalAssets.length - 1) === 0) {
                                 PageHelper.showLoader();
@@ -751,7 +752,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                         required: true,
                     },
                     "Expenditures1.expenditures": {
-                        required: true,
+                        startEmpty: true
                     },
                     "Expenditures1.expenditures.expendituresSection.expenditureSource": {
                         required: true,
@@ -1369,10 +1370,6 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                         $log.warn("Invalid Data, returning false");
                         return false;
                     }
-                    if(!model.customer.expenditures || model.customer.expenditures.length<=0){
-                        irfProgressMessage.pop('enrollment-submit', 'Please add Expenditure information to proceed.', 5000);
-                        return false;
-                    }
                     if (!model.customer.familyMembers || model.customer.familyMembers.length < 0) {
                         irfProgressMessage.pop('enrollment-submit', 'Please add Family Details information to proceed.', 5000);
                         return false;
@@ -1403,6 +1400,10 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                             irfProgressMessage.pop('enrollment-submit', 'Please add customer Spouse information in Family Details section also to proceed.', 5000);
                             return false;
                         }
+                    }
+                    if(!model.customer.expenditures || model.customer.expenditures.length == 0) {
+                        irfProgressMessage.pop('enrollment-submit', 'Please add expenditure details in Expenditure section to proceed.', 5000);
+                        return false;
                     }
                     model.siteCode = SessionStore.getGlobalSetting('siteCode');
 

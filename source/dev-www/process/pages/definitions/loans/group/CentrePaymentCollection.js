@@ -222,6 +222,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 									if (v.totalToBeCollected > v.installmentAmount) {
 										v.amountPaid = v.totalToBeCollected;
 										v.overdue = true;
+										v.overdueAmount = v.amountPaid - v.installmentAmount;
 									}
 									totalToBeCollected += v.amountPaid;
 									if (!v.groupCode) v.groupCode = 'Individual Loans';
@@ -241,6 +242,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 										if (v.totalToBeCollected > v.installmentAmount) {
 											v.amountPaid = v.totalToBeCollected;
 											v.overdue = true;
+											v.overdueAmount = v.amountPaid - v.installmentAmount;
 										}
 										groupName = v.groupName;
 										grouptobecollected += v.amountPaid;
@@ -320,6 +322,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 												if (v.totalToBeCollected > v.installmentAmount) {
 													v.amountPaid = v.totalToBeCollected;
 													v.overdue = true;
+													v.overdueAmount = v.amountPaid - v.installmentAmount;
 												}
 												totalToBeCollected += v.amountPaid;
 											});
@@ -436,11 +439,11 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 									"htmlClass": "col-xs-5",
 									"items": [{
 										"type": "section",
-										"html": "{{'INSTALLMENT_AMOUNT'|translate}}: {{(model.groupCollectionDemand[arrayIndexes[0]].collectiondemand[arrayIndexes[1]].totalToBeCollected|irfCurrency)+(model.groupCollectionDemand[arrayIndexes[0]].collectiondemand[arrayIndexes[1]].overdue?' (with overdue)':'')}}<br><small style='color:tomato'>{{model.groupCollectionDemand[arrayIndexes[0]].collectiondemand[arrayIndexes[1]].error}}</small>",
+										"html": "{{'INSTALLMENT_AMOUNT'|translate}}: {{(model.groupCollectionDemand[arrayIndexes[0]].collectiondemand[arrayIndexes[1]].installmentAmount|irfCurrency)+(model.groupCollectionDemand[arrayIndexes[0]].collectiondemand[arrayIndexes[1]].overdue?' (without overdue)':'')}}<br><small style='color:tomato'>{{model.groupCollectionDemand[arrayIndexes[0]].collectiondemand[arrayIndexes[1]].error}}</small>",
 									}]
 								},{
 									"type": "section",
-									"htmlClass": "col-xs-5",
+									"htmlClass": "col-xs-6",
 									"items": [{
 										"key": "groupCollectionDemand[].collectiondemand[].amountPaid",
 										"type": "amount",
@@ -476,7 +479,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 											model.notcollected= notcollected;
 										}
 									},{
-										"key": "groupCollectionDemand[].collectiondemand[].overdue",
+										"key": "groupCollectionDemand[].collectiondemand[].overdueAmount",
 										"title":"Overdue Amount",
 										"readonly":true,
 										"type": "amount"
@@ -486,7 +489,8 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 									"htmlClass": "col-xs-2",
 									"items": [{
 										"key": "groupCollectionDemand[].collectiondemand[].attendance",
-										"notitle": true
+										"notitle": false,
+										"title": "ATTENDANCE"
 									}]
 								}]
 							},

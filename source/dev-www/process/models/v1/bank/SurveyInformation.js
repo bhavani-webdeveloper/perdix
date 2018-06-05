@@ -26,7 +26,7 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                     "branchId": {
                         "type": ["integer", "null"],
                         "title": "BRANCH_NAME",
-                        "enumCode": "branch_id",
+                        "enumCode": "userbranches",
                         "x-schema-form": {
                             "type": "select"
                         }

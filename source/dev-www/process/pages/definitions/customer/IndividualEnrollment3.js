@@ -280,9 +280,6 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                     "Liabilities1.liabilities.liabilityLoanPurpose": {
                         required: false,
                     },
-                    "Expenditures1.expenditures": {
-                        remove: null,
-                    }
                 };
             } else if (model.siteCode == "KGFS") {
                 return {
