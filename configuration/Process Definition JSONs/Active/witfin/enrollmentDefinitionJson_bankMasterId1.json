@@ -788,6 +788,16 @@
               "Completed"
             ]
           },
+"distanceFromBranch": {
+            "title": "Existing Loan",
+            "type": "string",
+            "minimum": 0,
+            "maximum": 100,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
           "ownership": {
             "title": "Ownershop",
             "type": "string",
