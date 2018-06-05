@@ -60,7 +60,11 @@ irf.pageCollection.factory(irf.page("bank.Survey"),
                 "items": [
                     "bank_survey.surveyDate",
                     "bank_survey.surveyOfficerName",
-                    "bank_survey.branchId",
+                    {
+                        "key": "bank_survey.branchId",
+                        "type": "select",
+                        "readonly": true
+                    },
                     "bank_survey.surveyVillage",
                     "bank_survey.surveyBlock",
                     "bank_survey.population",

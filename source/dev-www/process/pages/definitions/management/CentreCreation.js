@@ -1,9 +1,9 @@
 define({
     pageUID: "management.CentreCreation",
     pageType: "Engine",
-    dependencies: ["$log","formHelper","PageHelper","CentreCreationResource","$state","SessionStore","Utils","irfNavigator","$stateParams", "RolesPages", "$filter", "Enrollment", "Queries", "$q"],
+    dependencies: ["$log","formHelper","PageHelper","CentreCreationResource","$state","SessionStore","Utils","irfNavigator","$stateParams", "RolesPages", "$filter", "Enrollment", "Queries", "$q","PagesDefinition"],
     $pageFn: 
-    function($log, formHelper, PageHelper, CentreCreationResource,$state, SessionStore, Utils,irfNavigator,$stateParams, RolesPages, $filter, Enrollment, Queries, $q){
+    function($log, formHelper, PageHelper, CentreCreationResource,$state, SessionStore, Utils,irfNavigator,$stateParams, RolesPages, $filter, Enrollment, Queries, $q,PagesDefinition){
     //var branch = SessionStore.getBranch();
     return {
                 "type": "schema-form",
@@ -15,9 +15,13 @@ define({
                     model.centre.branchId = SessionStore.getBranchId();
                     model.centre.status= model.centre.status||'ACTIVE';
                     model.centre.centreGpsCaptureDate = model.centre.centreGpsCaptureDate || SessionStore.getCBSDate();
+                    PagesDefinition.getPageConfig("Page/Engine/management.CentreCreation")
+                        .then(function(data){
+                            model.pageConfig = data;                            
+                        });
                     if ($stateParams.pageId) {
                         model.editMode = false;
-                        var id = $stateParams.pageId;
+                        var id = $stateParams.pageId;                        
                         PageHelper.showLoader();                        
                         CentreCreationResource.centreGetByID({
                             centreid: id
@@ -55,18 +59,37 @@ define({
                                     {
                                         key: "centre.branchId",
                                         type: "select",
-                                       // "readonly": true,
+                                        readonly: true,
+                                        title: "BRANCH_NAME",
+                                        enumCode: "branch_id",
+                                        condition:"model.editMode && model.pageConfig.AllowedBranches=='ACTIVE_BRANCH'"
+
+                                    },
+                                    {
+                                        key: "centre.branchId",
+                                        type: "select",
+                                        //"readonly": true,
                                         title: "BRANCH_NAME",
                                         enumCode: "branch_id",
                                         condition:"model.editMode"
+                                        //condition:"model.editMode && (model.pageConfig.AllowedBranches=='USER_BRANCHES' || model.pageConfig.AllowedBranches=='ALL_BRANCHES')"
 
+                                    },
+                                    {
+                                        key: "centre.branchId",
+                                        type: "select",
+                                        readonly: true,
+                                        title: "BRANCH_NAME",
+                                        enumCode: "branch_id",
+                                        condition: "!model.editMode && model.pageConfig.AllowedBranches=='ACTIVE_BRANCH'"                                        
                                     },
                                     {
                                         key: "centre.branchId",
                                         type: "select",
                                         title: "BRANCH_NAME",
                                         enumCode: "branch_id",
-                                        condition: "!model.editMode"                                        
+                                        condition:"!model.editMode"
+                                        //condition: "!model.editMode && (model.pageConfig.AllowedBranches=='USER_BRANCHES' || model.pageConfig.AllowedBranches=='ALL_BRANCHES')"                                        
                                     },
                                     {
                                         key: "centre.centreName",

@@ -372,6 +372,12 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                     },
                     "CustomerInformation.centreId": {
                         "title": "CENTRE",
+                        "readonly": true,
+                        "condition":"model.customer.currentStage.toLowerCase()=='completed'"
+                    },
+                    "CustomerInformation.centreId": {
+                        "title": "CENTRE",
+                        "condition":"model.customer.currentStage.toLowerCase()!='completed'"
                     },
                     "CustomerInformation.spouseFirstName": {
                         "required": true
@@ -745,7 +751,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                         required: true,
                     },
                     "Expenditures1.expenditures": {
-                        remove: null
+                        required: true,
                     },
                     "Expenditures1.expenditures.expendituresSection.expenditureSource": {
                         required: true,
@@ -1361,6 +1367,10 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                     $log.warn(model);
                     if (!EnrollmentHelper.validateData(model)) {
                         $log.warn("Invalid Data, returning false");
+                        return false;
+                    }
+                    if(!model.customer.expenditures || model.customer.expenditures.length<=0){
+                        irfProgressMessage.pop('enrollment-submit', 'Please add Expenditure information to proceed.', 5000);
                         return false;
                     }
                     if (!model.customer.familyMembers || model.customer.familyMembers.length < 0) {

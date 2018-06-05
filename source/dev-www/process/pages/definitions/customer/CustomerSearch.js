@@ -53,7 +53,7 @@ function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionSto
                 	{
                 		key: "bankId",
                 		readonly: true, 
-                		condition: "model.showBankFilter && !model.fullAccess"
+                		condition: "model.showBankFilter && !model.fullAccess && model.siteCode.toLowerCase()=='kgfs'"
                 	},
                 	{
                 		key: "bankId",
@@ -228,7 +228,7 @@ function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionSto
 	                                var centrevalue = filterFilter(centres, {
 	                                    "value": Number(full.centreId)
 	                                }, true);
-	                                data = centrevalue[0].name;
+	                                data = (centrevalue.length>0)?centrevalue[0].name:"";
 	                            }
 	                            return data;
 							}	
