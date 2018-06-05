@@ -17,7 +17,11 @@ define({
                     model.centre.centreGpsCaptureDate = model.centre.centreGpsCaptureDate || SessionStore.getCBSDate();
                     PagesDefinition.getPageConfig("Page/Engine/management.CentreCreation")
                         .then(function(data){
-                            model.pageConfig = data;                            
+                            model.pageConfig = data; 
+                            
+                            
+                            /* Handle Allowed Branches */
+                            
                         });
                     if ($stateParams.pageId) {
                         model.editMode = false;
@@ -61,7 +65,7 @@ define({
                                         type: "select",
                                         readonly: true,
                                         title: "BRANCH_NAME",
-                                        enumCode: "branch_id",
+                                        enumCode: "userbranches",
                                         condition:"model.editMode && model.pageConfig.AllowedBranches=='ACTIVE_BRANCH'"
 
                                     },
@@ -71,7 +75,7 @@ define({
                                         //"readonly": true,
                                         title: "BRANCH_NAME",
                                         enumCode: "branch_id",
-                                        condition:"model.editMode"
+                                        condition:"model.editMode && model.pageConfig.AllowedBranches!='ACTIVE_BRANCH'"
                                         //condition:"model.editMode && (model.pageConfig.AllowedBranches=='USER_BRANCHES' || model.pageConfig.AllowedBranches=='ALL_BRANCHES')"
 
                                     },
@@ -80,7 +84,7 @@ define({
                                         type: "select",
                                         readonly: true,
                                         title: "BRANCH_NAME",
-                                        enumCode: "branch_id",
+                                        enumCode: "userbranches",
                                         condition: "!model.editMode && model.pageConfig.AllowedBranches=='ACTIVE_BRANCH'"                                        
                                     },
                                     {
@@ -88,7 +92,7 @@ define({
                                         type: "select",
                                         title: "BRANCH_NAME",
                                         enumCode: "branch_id",
-                                        condition:"!model.editMode"
+                                        condition:"!model.editMode && model.pageConfig.AllowedBranches!='ACTIVE_BRANCH'"
                                         //condition: "!model.editMode && (model.pageConfig.AllowedBranches=='USER_BRANCHES' || model.pageConfig.AllowedBranches=='ALL_BRANCHES')"                                        
                                     },
                                     {
