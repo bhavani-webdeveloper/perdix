@@ -521,57 +521,109 @@ define({
                 }
             });
 
+            $log.info(model);
+
             form.push({
                 "type": "box",
-                "colClass": "col-sm-12 table-box",
-                "title": "Business Summary",
                 "readonly": true,
-                condition: " model.siteCode != 'IREPDhan'",
+                "colClass": "col-sm-12",
+                "title": "Business Summary",
                 "items": [{
-                    type: "section",
-                    htmlClass: "row",
-                    items: [{
-                        type: "section",
-                        htmlClass: "col-sm-6",
-                        items: bsLeft
+                    "type": "grid",
+                    "orientation": "horizontal",
+                    "items": [{
+                        "type": "grid",
+                        "orientation": "vertical",
+                        "items": [ {
+                            "key": "customer.firstName",
+                            "title": "Enterprise Name"
+                        },{
+                            "key": "customer_detail.applicant.name",
+                            "title": "Applicant Name"
+                        },{
+                            "key": "customer_detail.coApplicants.name[0]",
+                            "title": "Co-Applicant 1"
+                        }, {
+                            "key": "customer_detail.coApplicants.name[1]",
+                            "title": "Co-Applicant 2",
+                            "condition": "model.customer_detail.coApplicants.id[1]"
+                        }, {
+                            "key": "customer_detail.coApplicants.name[2]",
+                            "title": "Co-Applicant 3",
+                            "condition": "model.customer_detail.coApplicants.id[2]"
+                        }, {
+                            "key": "customer_detail.coApplicants.name[3]",
+                            "title": "Co-Applicant 4",
+                            "condition": "model.customer_detail.coApplicants.id[3]"
+                        }, {
+                            "key": "customer_detail.guarantors.name[0]",
+                            "title": "Guarantor 1",
+                            "condition": "model.customer_detail.guarantors.id[0]"
+                        }, {
+                            "key": "customer_detail.guarantors.name[1]",
+                            "title": "Guarantor 2",
+                            "condition": "model.customer_detail.guarantors.id[1]"
+                        }, {
+                            "key": "customer_detail.guarantors.name[2]",
+                            "title": "Guarantor 3",
+                            "condition": "model.customer_detail.guarantors.id[2]"
+                        }, {
+                            "key": "customer_detail.guarantors.name[3]",
+                            "title": "Guarantor 4",
+                            "condition": "model.customer_detail.guarantors.id[3]"
+                        },]
                     }, {
-                        type: "section",
-                        htmlClass: "col-sm-6",
-                        items: bsRight
+                        "type": "grid",
+                        "orientation": "vertical",
+                        "items": [
+                            {
+                                "key": "enterpriseDetailsData.Business Type",
+                                "title": "Business Type"
+                            }, {
+                            "key": "enterpriseDetailsData.Business Activity",
+                            "title": "Business Activity"
+                        }, {
+                            "key": "enterpriseDetailsData.Sector",
+                            "title": "Sector"
+                        },{
+                            "key": "enterpriseDetailsData.Sub-Sector",
+                            "title": "Sub-Sector"
+                        }]
                     }]
-                }]
-            })
-
-            var items = [];
-            if (_.isArray(model.liabilitiesSummary.subgroups) && model.liabilitiesSummary.subgroups.length > 0) {
-                for (var i = 0; i < model.liabilitiesSummary.subgroups.length; i++) {
-                    items.push({
-                        type: "section",
-                        colClass: "col-sm-12",
-                        html: '<h3 ng-if="model.currentStage!=\'ScreeningReview\'">{{model.liabilitiesSummary.subgroups[' + i + '].summary["Name"]}} - {{model.liabilitiesSummary.subgroups[' + i + '].summary["Relation"]}}</h3> \
-                        <irf-simple-summary-table irf-table-def="model.liabilitiesSummary.subgroups[' + i + ']"></irf-simple-summary-table>\
-                        <strong>Total EMI </strong> &nbsp; &nbsp; {{model.liabilitiesSummary.subgroups[' + i + '].summary["Total Monthly Installment"] | irfCurrency}} <br />\
-                        <strong>Total Outstanding Loan Amount</strong> &nbsp; &nbsp; {{model.liabilitiesSummary.subgroups[' + i + '].summary["Total Outstanding Loan Amount"] | irfCurrency}}\
-                        <hr>\
-                        '
-                    });
-                }
-            }
-
-            var machineryDetailsTable = "<irf-simple-summary-table irf-table-def = 'model.machineryDetails'></irf-simple-summary-table>";
-
-            form.push({
-                type: "box",
-                colClass: "col-sm-12 table-box",
-                title: model.machineryDetails.title,
-                items: [{
-                    type: "section",
-                    colClass: "col-sm-12",
-                    html: machineryDetailsTable
                 }]
             });
 
-            var businessBankStmtSummaryTable = "<irf-simple-summary-table irf-table-def = 'model.businessBankStmtSummary'></irf-simple-summary-table>";
+
+            form.push({
+                "type": "box",
+                "readonly": true,
+                "colClass": "col-sm-12",
+                "title": "Business Income",
+                "items": [{
+                    "type": "grid",
+                    "orientation": "horizontal",
+                    "items": [{
+                        "type": "grid",
+                        "orientation": "vertical",
+                        "items": [{
+                            key: "customer.enterprise.monthlyTurnover",
+                            title: "MONTHLY_TURNOVER",
+                            required: true,
+                            type: "amount"
+                        }, {
+                            key: "customer.enterprise.monthlyBusinessExpenses",
+                            title: "MONTHLY_BUSINESS_EXPENSES",
+                            type: "amount"
+                        }, {
+                            key: "customer.enterprise.avgMonthlyNetIncome",
+                            title: "AVERAGE_MONTHLY_NET_INCOME",
+                            type: "amount"
+                        }, ]
+                    }]
+                }]
+            });
+
+                        var businessBankStmtSummaryTable = "<irf-simple-summary-table irf-table-def = 'model.businessBankStmtSummary'></irf-simple-summary-table>";
 
             form.push({
                 type: "box",
@@ -604,6 +656,35 @@ define({
                     type: "section",
                     colClass: "col-sm-12",
                     html: '<div ng-repeat="bankAccount in model.bankAccountDetails.BankAccounts"><table class="table table-condensed" style="width:50%"><colgroup><col width="40%"><col width="60%"></colgroup><tbody><tr class="table-sub-header"><td>{{ "ACCOUNT_NAME" | translate }}</td><td>{{ bankAccount["Account Holder Name"] }}</td></tr><tr><td> {{ "LOAN_RELATION" | translate }}</td><td>{{ bankAccount["Customer Relation"] }}</td></tr><tr><td>{{ "ACCOUNT_TYPE" | translate }}</td><td>{{ bankAccount["Account Type"] }}</td></tr><tr><td>{{ "BANK_NAME" | translate }}</td><td>{{ bankAccount["Bank Name"] }}</td></tr><tr><td>{{ "ACCOUNT_NUMBER" | translate }}</td><td>{{ bankAccount["Account Number"] }}</td></tr><tr><td>{{ "IFS_CODE" | translate }}</td><td>{{ bankAccount["IFS Code"] }}</td></tr><tr><td>{{ "LIMIT" | translate }}</td><td>{{ bankAccount["Limit"] }}</td></tr></tbody></table><div class="clearfix"></div><table class="table table-condensed"><colgroup><col width="20%"><col width="20%"><col width="20%"><col width="20%"><col width="20%"></colgroup><thead><tr><th> {{ "MONTH" | translate }}</th><th> {{ "BANK_BALANCE" | translate }}</th><th> {{ "DEPOSITS" | translate }}</th><th> {{ "EMI_BOUNCED" | translate }}</th><th> {{ "NO_OF_CHEQUE_BOUNCED_SP" | translate }}</th></tr></thead><tbody><tr ng-repeat="bankStatement in bankAccount.BankStatements"><td>{{ bankStatement["Month"] }}</td><td>{{ bankStatement["Balance"] | irfCurrency}}</td><td>{{ bankStatement["Deposits"] | irfCurrency}}</td><td>{{ bankStatement["EMI Bounced"] }}</td><td>{{ bankStatement["Non-EMI Cheque Bounced"] }}</td></tr><tr class="top-bar with-bold"><td></td><td>{{ "AVERAGE_BANK_BALANCE" | translate }} <br /> {{ bankAccount["Average Bank Balance"] | irfCurrency}}</td><td>{{ "AVERAGE_BANK_DEPOSIT" | translate }} <br /> {{ bankAccount["Average Bank Deposit"] | irfCurrency}}</td><td>{{ "TOTAL_EMI_BOUNCED" | translate }} <br /> {{ bankAccount["Total EMI Bounced"] }}</td><td>{{ "TOTAL_CHEQUEU_BOUNCED_NON_EMI" | translate }} <br /> {{ bankAccount["Total Cheque Bounced (Non EMI)"] }}</td></tr></tbody></table> <br/><hr class="dotted"> <br/></div>'
+                }]
+            });
+
+            var items = [];
+            if (_.isArray(model.liabilitiesSummary.subgroups) && model.liabilitiesSummary.subgroups.length > 0) {
+                for (var i = 0; i < model.liabilitiesSummary.subgroups.length; i++) {
+                    items.push({
+                        type: "section",
+                        colClass: "col-sm-12",
+                        html: '<h3 ng-if="model.currentStage!=\'ScreeningReview\'">{{model.liabilitiesSummary.subgroups[' + i + '].summary["Name"]}} - {{model.liabilitiesSummary.subgroups[' + i + '].summary["Relation"]}}</h3> \
+                        <irf-simple-summary-table irf-table-def="model.liabilitiesSummary.subgroups[' + i + ']"></irf-simple-summary-table>\
+                        <strong>Total EMI </strong> &nbsp; &nbsp; {{model.liabilitiesSummary.subgroups[' + i + '].summary["Total Monthly Installment"] | irfCurrency}} <br />\
+                        <strong>Total Outstanding Loan Amount</strong> &nbsp; &nbsp; {{model.liabilitiesSummary.subgroups[' + i + '].summary["Total Outstanding Loan Amount"] | irfCurrency}}\
+                        <hr>\
+                        '
+                    });
+                }
+            }
+
+            var machineryDetailsTable = "<irf-simple-summary-table irf-table-def = 'model.machineryDetails'></irf-simple-summary-table>";
+
+            form.push({
+                type: "box",
+                colClass: "col-sm-12 table-box",
+                title: model.machineryDetails.title,
+                items: [{
+                    type: "section",
+                    colClass: "col-sm-12",
+                    html: machineryDetailsTable
                 }]
             });
 
@@ -775,6 +856,8 @@ define({
                 model.siteCode = SessionStore.getGlobalSetting('siteCode');
                 model.currentStage = "PendingForPartner";
                 model.loanAccount = bundleModel.loanAccount;
+                model.additional=model.additional||{};
+                model.customer_detail = bundleModel.customer_detail;
 
                 BundleManager.pushEvent('loanAccount', model._bundlePageObj, model.loanAccount);
 

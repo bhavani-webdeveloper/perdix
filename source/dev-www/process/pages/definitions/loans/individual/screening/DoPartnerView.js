@@ -123,88 +123,102 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.DoPartnerView'),
                                     irfNavigator.goBack();
                                     return;
                                 }*/
-
-                                for (var i = 0; i < res.loanCustomerRelations.length; i++) {
-                                    var cust = res.loanCustomerRelations[i];
-                                    if (cust.relation == 'APPLICANT' || cust.relation == 'Applicant' || cust.relation == 'Sole Proprieter') {
-                                        bundleModel.urnNos.push(cust.urn);
-                                        customerIds.applicant = cust.customerId;
-                                        bundleModel.customer_detail.applicant.id = cust.customerId;
-                                        bundleModel.customer_detail.applicant.urn = cust.urn;
-                                    } else if (cust.relation == 'COAPPLICANT' || cust.relation == 'Co-Applicant') {
-                                        bundleModel.urnNos.push(cust.urn);
-                                        customerIds.coApplicants.push(cust.customerId);
-                                        bundleModel.customer_detail.coApplicants.id.push(cust.customerId);
-                                        bundleModel.customer_detail.coApplicants.urn.push(cust.urn);
-
-                                    } else if (cust.relation == 'GUARANTOR' || cust.relation == 'Guarantor') {
-                                        customerIds.guarantors.push(cust.customerId);
-                                        bundleModel.customer_detail.guarantors.id.push(cust.customerId);
-                                        bundleModel.customer_detail.guarantors.urn.push(cust.urn);
+                                if (_.hasIn(res, 'loanCustomerRelations') &&
+                                    res.loanCustomerRelations != null &&
+                                    res.loanCustomerRelations.length > 0) {
+                                    var lcr = res.loanCustomerRelations;
+                                    var idArr = [];
+                                    for (var i = 0; i < lcr.length; i++) {
+                                        idArr.push(lcr[i].customerId);
                                     }
-                                }
+                                    Queries.getCustomerBasicDetails({
+                                            'ids': idArr
+                                        })
+                                        .then(function(result) {
+                                            if (result && result.ids) {
+                                                for (var i = 0; i < lcr.length; i++) {
+                                                    var cust = result.ids[lcr[i].customerId];
+                                                    if (cust) {
+                                                        lcr[i].name = cust.first_name;
+                                                    }
 
-                                $this.bundlePages.push({
-                                    pageClass: 'summary',
-                                    model: {
-                                        customerId: res.customerId,
-                                        cbModel: {
-                                            customerId: res.customerId,
-                                            loanId: bundleModel.loanId,
-                                            scoreName: 'RiskScore3'
-                                        }
-                                    }
-                                });
+                                                    var custl = lcr[i];
 
-                                /*if(SessionStore.getGlobalSetting('siteCode') != 'IREPDhan' || SessionStore.getGlobalSetting('siteCode') == 'IREPDhan') {
-                                    $this.bundlePages.push({
-                                        pageClass: 'summaryView',
-                                        model: {
-                                            cbModel: {
-                                                customerId: res.customerId,
-                                                loanId: bundleModel.loanId,
-                                                scoreName: 'RiskScore3',
-                                                customerDetail: bundleModel.customer_detail
+                                                    if (custl.relation == 'APPLICANT' || custl.relation == 'Applicant' || custl.relation == 'Sole Proprieter') {
+                                                        bundleModel.urnNos.push(custl.urn);
+                                                        customerIds.applicant = custl.customerId;
+                                                        bundleModel.customer_detail.applicant.id = custl.customerId;
+                                                        bundleModel.customer_detail.applicant.urn = custl.urn;
+                                                        bundleModel.customer_detail.applicant.name = custl.name;
+                                                    } else if (custl.relation == 'COAPPLICANT' || custl.relation == 'Co-Applicant') {
+                                                        bundleModel.urnNos.push(custl.urn);
+                                                        customerIds.coApplicants.push(custl.customerId);
+                                                        bundleModel.customer_detail.coApplicants.id.push(custl.customerId);
+                                                        bundleModel.customer_detail.coApplicants.urn.push(custl.urn);
+                                                        bundleModel.customer_detail.coApplicants.name.push(custl.name);
+
+                                                    } else if (custl.relation == 'GUARANTOR' || custl.relation == 'Guarantor') {
+                                                        customerIds.guarantors.push(custl.customerId);
+                                                        bundleModel.customer_detail.guarantors.id.push(custl.customerId);
+                                                        bundleModel.customer_detail.guarantors.urn.push(custl.urn);
+                                                        bundleModel.customer_detail.guarantors.name.push(custl.name);
+                                                    }
+
+                                                }
                                             }
-                                        }
-                                    });
-                                }
-*/
-                                $this.bundlePages.push({
-                                    pageClass: 'applicant',
-                                    model: {
-                                        customerId: customerIds.applicant
-                                    }
-                                });
 
-                                for (i in customerIds.coApplicants) {
-                                    $this.bundlePages.push({
-                                        pageClass: 'co-applicant',
-                                        model: {
-                                            customerId: customerIds.coApplicants[i]
-                                        }
-                                    });
-                                }
+                                            $this.bundlePages.push({
+                                                pageClass: 'summary',
+                                                model: {
+                                                    customerId: res.customerId,
+                                                    cbModel: {
+                                                        customerId: res.customerId,
+                                                        loanId: bundleModel.loanId,
+                                                        scoreName: 'RiskScore3',
+                                                        customerDetail: bundleModel.customer_detail
+                                                    }
+                                                }
+                                            });
 
-                                for (i in customerIds.guarantors) {
-                                    $this.bundlePages.push({
-                                        pageClass: 'guarantor',
-                                        model: {
-                                            customerId: customerIds.guarantors[i]
-                                        }
-                                    });
-                                }
 
-                                $this.bundlePages.push({
-                                    pageClass: 'business',
-                                    model: {
-                                        customerId: res.customerId,
-                                        loanAccount: res
-                                    }
-                                });
+                                            $this.bundlePages.push({
+                                                pageClass: 'applicant',
+                                                model: {
+                                                    customerId: customerIds.applicant
+                                                }
+                                            });
+
+                                            for (i in customerIds.coApplicants) {
+                                                $this.bundlePages.push({
+                                                    pageClass: 'co-applicant',
+                                                    model: {
+                                                        customerId: customerIds.coApplicants[i]
+                                                    }
+                                                });
+                                            }
+
+                                            for (i in customerIds.guarantors) {
+                                                $this.bundlePages.push({
+                                                    pageClass: 'guarantor',
+                                                    model: {
+                                                        customerId: customerIds.guarantors[i]
+                                                    }
+                                                });
+                                            }
+
+                                            $this.bundlePages.push({
+                                                pageClass: 'business',
+                                                model: {
+                                                    customerId: res.customerId,
+                                                    loanAccount: res
+                                                }
+                                            });
+                                            deferred.resolve();
+                                        });
+                                }
 
                                
-                                deferred.resolve();
+                                
                             },
                             function(httpRes) {
                                 deferred.reject();
