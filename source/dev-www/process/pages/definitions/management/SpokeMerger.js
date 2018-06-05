@@ -14,6 +14,7 @@ irf.pageCollection.factory(irf.page("management.SpokeMerger"), ["$log", "Mainten
                 model.interbranchMerge = ($stateParams.pageId === "interbranch") ? true : false;
                 form[0].title = ($stateParams.pageId === "interbranch") ? 'SPOKE_MERGER' : 'INTRA_HUB_SPOKE_MERGER',
                 model = Utils.removeNulls(model, true);
+                model.siteCode = SessionStore.getGlobalSetting('siteCode');
                 $log.info("Spoke Merger page ");
                 var branches = formHelper.enum('branch_id').data;
                 $log.info(branches);
@@ -31,6 +32,7 @@ irf.pageCollection.factory(irf.page("management.SpokeMerger"), ["$log", "Mainten
                             key: "branchId1",
                             title: "Hub Name",
                             type: "select",
+                            condition:"model.siteCode.toLowerCase()!='sambandh'",
                             enumCode: "branch_id",
                             onChange: function(modelValue, form, model, formCtrl, event) {
                                 console.log("inside");
@@ -44,13 +46,14 @@ irf.pageCollection.factory(irf.page("management.SpokeMerger"), ["$log", "Mainten
                             title: "From Spoke Name",
                             type: "select",
                             enumCode: "centre",
+                            condition:"model.siteCode.toLowerCase()!='sambandh'",
                             parentEnumCode: "branch_id",
                             parentValueExpr: "model.branchId1",
                             screenFilter: true
                         },{
                             key: "branchId2",
                             title: "Hub Name",
-                            condition: "model.interbranchMerge",
+                            condition: "model.interbranchMerge && model.siteCode.toLowerCase() !='sambandh'",
                             type: "select",
                             enumCode: "branch_id",
                             onChange: function(modelValue, form, model, formCtrl, event) {
@@ -63,7 +66,7 @@ irf.pageCollection.factory(irf.page("management.SpokeMerger"), ["$log", "Mainten
                         }, {
                             key: "customer.toCentreId",
                             title: "To Spoke Name",
-                            condition: "!model.interbranchMerge",
+                            condition: "!model.interbranchMerge && model.siteCode.toLowerCase()!='sambandh'",
                             type: "select",
                             enumCode: "centre",
                             parentEnumCode: "branch_id",
@@ -72,7 +75,60 @@ irf.pageCollection.factory(irf.page("management.SpokeMerger"), ["$log", "Mainten
                         },{
                             key: "customer.toCentreId",
                             title: "To Spoke Name",
-                            condition: "model.interbranchMerge",
+                            condition: "model.interbranchMerge && model.siteCode.toLowerCase()!='sambandh'",
+                            type: "select",
+                            enumCode: "centre",
+                            parentEnumCode: "branch_id",
+                            parentValueExpr: "model.branchId2",
+                            screenFilter: true
+                        }, {
+                            key: "branchId1",
+                            title: "Branch Name",
+                            type: "select",
+                            condition:"model.siteCode.toLowerCase()=='sambandh'",
+                            enumCode: "branch_id",
+                            onChange: function(modelValue, form, model, formCtrl, event) {
+                                console.log("inside");
+                                if(model.branchId1 === model.branchId2){
+                                    Utils.alert("From Branch Name and To Branch Name can not be same. Select a different Branch");
+                                    model.branchId1 = undefined;
+                                }
+                            }
+                        }, {
+                            key: "customer.fromCentreId",
+                            title: "From Centre Name",
+                            type: "select",
+                            enumCode: "centre",
+                            condition:"model.siteCode.toLowerCase()=='sambandh'",
+                            parentEnumCode: "branch_id",
+                            parentValueExpr: "model.branchId1",
+                            screenFilter: true
+                        },{
+                            key: "branchId2",
+                            title: "Branch Name",
+                            condition: "model.interbranchMerge && model.siteCode.toLowerCase() =='sambandh'",
+                            type: "select",
+                            enumCode: "branch_id",
+                            onChange: function(modelValue, form, model, formCtrl, event) {
+                                console.log("inside");
+                                if(model.branchId1 === model.branchId2){
+                                    Utils.alert("From Branch Name and To Branch Name can not be same. Select a different Branch");
+                                    model.branchId2 = undefined;
+                                }
+                            }
+                        }, {
+                            key: "customer.toCentreId",
+                            title: "To Centre Name",
+                            condition: "!model.interbranchMerge && model.siteCode.toLowerCase()=='sambandh'",
+                            type: "select",
+                            enumCode: "centre",
+                            parentEnumCode: "branch_id",
+                            parentValueExpr: "model.branchId1",
+                            screenFilter: true
+                        },{
+                            key: "customer.toCentreId",
+                            title: "To Centre Name",
+                            condition: "model.interbranchMerge && model.siteCode.toLowerCase()=='sambandh'",
                             type: "select",
                             enumCode: "centre",
                             parentEnumCode: "branch_id",

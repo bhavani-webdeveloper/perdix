@@ -936,7 +936,7 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                     },
                     "surveyFacilityDistance": {
                         "type": "array",
-                        "title": "SURVER_FACILITY_DISTANCE",
+                        "title": "SURVEY_FACILITY_DISTANCE",
                         "items": {
                             "type": "object",
                             "properties": {

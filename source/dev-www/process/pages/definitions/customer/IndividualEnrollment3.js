@@ -29,6 +29,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                     },
                     "CustomerInformation.spouseFirstName": {
                         "required": true,
+                        "title": "HUSBAND_FIRST_NAME",
                         schema: {
                             pattern: "^[a-zA-Z\. ]+$",
                             type: ["string", "null"],
@@ -39,6 +40,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                     },
                     "CustomerInformation.spouseDateOfBirth": {
                         "required": true,
+                        "title": "HUSBAND_DOB"
                     },
                     "CustomerInformation.fatherFirstName": {
                         schema: {

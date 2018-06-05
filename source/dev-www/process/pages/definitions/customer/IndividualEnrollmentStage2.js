@@ -651,6 +651,10 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                             "No": "No",
                         }
                     },
+                    "familyDetails.familyMembers.incomes.incomeEarned":{
+                        "title":"CASH_INFLOW"
+
+                    },
                     "familyDetails.additionalDetails.privateHospitalTreatment": {
                         title: "HOSPITAL_TREATMENT_QUESTION",
                         required: true,
@@ -795,6 +799,12 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                     "Liabilities1.liabilities.liabilityLoanPurpose": {
                         required: false,
                     },
+                    "Expenditures1":{
+                        "title": "CASH_OUTFLOW"
+                    },
+                    "BusinessOccupationDetails":{
+                        "title": "LOAN_PURPOSE_ENTERPRISE_DETAILS"
+                    }
                 };
             }
         }
