@@ -92,6 +92,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 maximum: 1,
                                 order:90
                             },
+                            {
+                                pageName: 'witfin.loans.individual.screening.detail.Scoring',
+                                title: 'Scoring',
+                                pageClass: 'scoring',
+                                minimum: 1,
+                                maximum: 1,
+                                order: 5
+                            }
                         ]);
                     },
                     "bundlePages": [],
@@ -238,6 +246,18 @@ define(["perdix/domain/model/loan/LoanProcess",
                                             loanAccount: loanProcess.loanAccount,
                                         }
                                     });
+
+                                $this.bundlePages.push({
+                                    pageClass: 'scoring',
+                                    model: {
+                                        cbModel: {
+                                            customerId: loanAccount.customerId,
+                                            loanId: loanProcess.loanAccount.id,
+                                            scoreName: 'ConsolidatedScore',
+                                            customerDetail: bundleModel.customer_detail
+                                        }
+                                    }
+                                });
 
                                 deferred.resolve();
 

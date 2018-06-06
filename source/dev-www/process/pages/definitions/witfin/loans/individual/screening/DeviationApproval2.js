@@ -83,6 +83,13 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 minimum: 1,
                                 maximum: 1,
                                 order:80
+                            },{
+                                pageName: 'witfin.loans.individual.screening.detail.Scoring',
+                                title: 'Scoring',
+                                pageClass: 'scoring',
+                                minimum: 1,
+                                maximum: 1,
+                                order: 5
                             },
                             {
                                 pageName: 'witfin.loans.individual.screening.VehicleDetails',
@@ -91,7 +98,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 minimum: 1,
                                 maximum: 1,
                                 order:90
-                            },
+                            }
                         ]);
                     },
                     "bundlePages": [],
@@ -233,11 +240,23 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 });
 
                                $this.bundlePages.push({
-                                        pageClass: 'loan-review',
-                                        model: {
-                                            loanAccount: loanProcess.loanAccount,
+                                    pageClass: 'loan-review',
+                                    model: {
+                                        loanAccount: loanProcess.loanAccount,
+                                    }
+                                });
+
+                               $this.bundlePages.push({
+                                    pageClass: 'scoring',
+                                    model: {
+                                        cbModel: {
+                                            customerId: loanAccount.customerId,
+                                            loanId: loanProcess.loanAccount.id,
+                                            scoreName: 'ConsolidatedScore',
+                                            customerDetail: bundleModel.customer_detail
                                         }
-                                    });
+                                    }
+                                });
 
                                 deferred.resolve();
 
