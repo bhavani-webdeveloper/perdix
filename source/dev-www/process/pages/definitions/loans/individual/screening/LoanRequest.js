@@ -812,7 +812,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                             {
                                 urn: model.enterprise.urnNo
                             }).$promise.then(function(res){
-                                if(res.body && res.body.length){
+                                if(res && res.body && res.body.length && res.body.length>0){
                                     for(i in res.body){
                                         if(res.body[i].operationalStatus=='Active'){
                                             out.push(res.body[i]);
@@ -823,6 +823,13 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                             "x-total-count": out.length
                                         },
                                         body: out
+                                    });
+                                }else{
+                                    return $q.resolve({
+                                        headers: {
+                                            "x-total-count": res.body.length
+                                        },
+                                        body: res.body
                                     });
                                 }
                             });
