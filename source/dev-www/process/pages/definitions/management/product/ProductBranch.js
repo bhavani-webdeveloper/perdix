@@ -58,7 +58,7 @@ define({
         }
         return {
             "type": "schema-form",
-            "title": "PRODUCT_MAINTENANCE",
+            "title": "BRANCH_TO_PRODUCT_MAPPING",
             initialize: function(model, form, formCtrl) {
                 PageHelper.showLoader();
                 model.myClick = function(cond,productData){
@@ -94,7 +94,7 @@ define({
             },
             form: [{
                 "type": "box",
-                "title": "PRODUCT_BRANCH_DETAILS",
+                "title": "BRANCH_DETAILS",
                 "items": [{
                     "key": "branch",
                     "type": "select",
@@ -107,7 +107,7 @@ define({
                 }]
             }, {
                 "type": "box",
-                "title": "PRODUCT_BRANCH_DETAILS",
+                "title": "PRODUCT_DETAILS",
                 "condition": "model.showProductBranchDetails",
                 "items": [{
                     type: "section",
