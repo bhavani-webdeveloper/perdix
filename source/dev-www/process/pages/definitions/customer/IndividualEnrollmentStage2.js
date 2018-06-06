@@ -385,9 +385,6 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                     "CustomerInformation.spouseDateOfBirth": {
                         "required": true,
                     },
-                    "ContactInformation.mobilePhone": {
-                        "required": true,
-                    },
                     "AdditionalKYC.additionalKYCs": {
                         startEmpty: true,
                         schema: {
