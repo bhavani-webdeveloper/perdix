@@ -379,6 +379,9 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                         "title": "CENTRE",
                         "condition":"model.customer.currentStage.toLowerCase()!='completed'"
                     },
+                    "ContactInformation.mobilePhone": {
+                        "required": false,
+                    },
                     "CustomerInformation.spouseFirstName": {
                         "required": true
                     },
