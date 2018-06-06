@@ -12,17 +12,17 @@ define({
                 model.product = model.product || {};
                 model.userLoginDate = SessionStore.getCBSDate();
                 model.allPurposes = [];
-                var productId = $stateParams.pageId;
+                model.productId = $stateParams.pageId;
                 PageHelper.showLoader();
                 Queries.getAllLoanPurposesMapping().then(function(value) {
                     PageHelper.hideLoader();
                     model.product.purposes = model.product.purposes || value;
-                    if (!productId) {
+                    if (!model.productId) {
                         model.allPurposes = model.product.purposes;
                     } else {
                         PageHelper.showLoader();
                         Product.get({
-                                id: productId
+                                id: model.productId
                             },
                             function(res) {
                                 PageHelper.hideLoader();
@@ -55,29 +55,41 @@ define({
                 }, {
                     "key": "product.productCode",
                     "type": "string",
+                    "condition":"!model.productId"
                 }, {
+                    "key": "product.productCode",
+                    "type": "string",
+                    "condition":"model.productId",
+                    "readonly":true
+                    },
+                     {
                     "key": "product.productName",
                     "type": "string",
                 }, {
                     "key": "product.productType",
-                    "type": "select",
-                    "titleMap": [{
-                        "name": "EQ",
-                        "value": "EQ"
-                    }, {
-                        "name": "OD",
-                        "value": "OD"
-                    }, {
-                        "name": "BULLET",
-                        "value": "BULLET",
-                    }]
+                    "readonly" : true,
+                    "condition": "model.productId",
+                    "required": true
                 }, {
+                    "key": "product.productType",
+                    "condition": "!model.productId",
+                    "required": true
+                },{
                     "key": "product.partnerCode",
+                    "condition": "model.productId",
+                    "type": "select",
+                    "enumCode": "partner",
+                    "required": true,
+                     "readonly" : true,
+                },{
+                    "key": "product.partnerCode",
+                    "condition": "!model.productId",
                     "type": "select",
                     "enumCode": "partner",
                     "required": true
                 }, {
                     "key": "product.loanType",
+                    "condition":"!model.productId",
                     "type": "select",
                     "titleMap": [{
                         "name": "JLG",
@@ -92,8 +104,42 @@ define({
                         "name": "UNSECURED",
                         "value": "UNSECURED",
                     }]
-                }, {
+                },
+                {
+                    "key": "product.loanType",
+                    "readonly" : true,
+                    "type": "string",
+                    "condition":"model.productId"
+                },  {
                     "key": "product.frequency",
+                    "type": "select",
+                    "condition":"!model.productId",
+                    "titleMap": [{
+                        "name": "Monthly",
+                        "value": "M"
+                    }, {
+                        "name": "Weekly",
+                        "value": "W"
+                    }, {
+                        "name": "Fornightly",
+                        "value": "F",
+                    }, {
+                        "name": "Quarterly",
+                        "value": "Q",
+                    }, {
+                        "name": "Half Yearly",
+                        "value": "H",
+                    }, {
+                        "name": "Yearly",
+                        "value": "Y",
+                    }, {
+                        "name": "Daily",
+                        "value": "D",
+                    }]
+                },{
+                    "key": "product.frequency",
+                    "readonly" : true,
+                    "condition":"model.productId",
                     "type": "select",
                     "titleMap": [{
                         "name": "Monthly",
@@ -506,6 +552,7 @@ define({
                         "type": "string",
                     }, {
                         "key": "product.lmsProductMasters[].status",
+                        "required":true,
                         "type": "select",
                         "title": "STATUS",
                         "titleMap": [{
@@ -794,7 +841,7 @@ define({
                                         },
                                         "valueForDropDown": {
                                             "title": "ALLOWED_VALUES",
-                                            "type": "string"
+                                            "type":["string","null"] 
                                         },
                                         "isMandatory": {
                                             "type": "boolean",
@@ -835,7 +882,7 @@ define({
                                             "title": "BANK_ID"
                                         },
                                         "cmsProductName": {
-                                            "type": "string",
+                                            "type": ["string","null"],
                                             "title": "ENCORE_PRODUCT_NAME"
                                         },
                                         "moduleStatus": {
