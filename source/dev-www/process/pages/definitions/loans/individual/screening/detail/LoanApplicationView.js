@@ -286,6 +286,7 @@ var navigateToQueue = function(model) {
                         title: "LINKED_ACCOUNT_NUMBER",
                         type: "lov",
                         autolov: true,
+                        readonly:true,
                         searchHelper: formHelper,
                         search: function(inputModel, form, model, context) {
                             return LoanProcess.viewLoanaccount({

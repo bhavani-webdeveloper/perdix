@@ -1002,10 +1002,10 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 "type": "box",
                 "title": "PRELIMINARY_INFORMATION",
                 "condition": "model.currentStage=='ScreeningReview' || model.currentStage == 'Dedupe' || model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisal'|| model.currentStage == 'FieldAppraisalReview' ||model.currentStage == 'ZonalRiskReview'|| model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
-
                 "items": [
                     {
                         key:"loanAccount.linkedAccountNumber",
+                        "condition": "model.currentStage !='FieldAppraisal'",
                         title:"LINKED_ACCOUNT_NUMBER",
                         type: "lov",
                         lovonly: true,
@@ -1017,6 +1017,57 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                             {
                                 urn: model.enterprise.urnNo
                             }).$promise;
+                            return promise;
+                        },
+                        getListDisplayItem: function(item, index) {
+                            $log.info(item);
+                            return [
+                                item.accountId,
+                                item.glSubHead,
+                                item.amount,
+                                item.npa,
+                            ];
+                        },
+                        onSelect: function(valueObj, model, context) {
+                            model.loanAccount.npa = valueObj.npa;
+                            model.loanAccount.linkedAccountNumber = valueObj.accountId;
+                        }
+                    },
+                    {
+                        key:"loanAccount.linkedAccountNumber",
+                        title:"LINKED_ACCOUNT_NUMBER",
+                        "condition": "model.currentStage =='FieldAppraisal'",
+                        type: "lov",
+                        lovonly: true,
+                        autolov: true,
+                        searchHelper: formHelper,
+                        search: function(inputModel, form, model, context) {
+                            var out=[];
+                            var promise = LoanProcess.viewLoanaccount(
+                            {
+                                urn: model.enterprise.urnNo
+                            }).$promise.then(function(res){
+                                if(res && res.body && res.body.length && res.body.length>0){
+                                    for(i in res.body){
+                                        if(res.body[i].operationalStatus=='Active'){
+                                            out.push(res.body[i]);
+                                        }
+                                    }
+                                    return $q.resolve({
+                                        headers: {
+                                            "x-total-count": out.length
+                                        },
+                                        body: out
+                                    });
+                                }else{
+                                    return $q.resolve({
+                                        headers: {
+                                            "x-total-count": res.body.length
+                                        },
+                                        body: res.body
+                                    });
+                                }
+                            });
                             return promise;
                         },
                         getListDisplayItem: function(item, index) {
