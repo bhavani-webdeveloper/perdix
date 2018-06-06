@@ -452,10 +452,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 }, {
                                     "name": "ACH",
                                     "value": "ACH"
-                                }, {
-                                    "name": "PDC",
-                                    "value": "PDC"
-                                }, {
+                                },{
                                     "name": "Suspense",
                                     "value": "Suspense"
                                 },
@@ -468,7 +465,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                     "value": "SECURITY_DEPOSIT"
                                 }
                                 ],
-                                onChange: function(value, form, model) {
+                                /*onChange: function(value, form, model) {
                                     if (value == 'PDC') {
                                         PageHelper.showLoader();
                                         Queries.getPDCDemands({
@@ -487,7 +484,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                             }
                                         )
                                     }
-                                    /*else {
+                                    else {
                                         model.repayment.chequeNumber = "";
                                         model.repayment.amount = "";
                                         if (model.repayment.transactionName) {
@@ -505,8 +502,8 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                             model.repayment.demandAmount = model.repayment.amount || 0;
                                         }
 
-                                    }*/
-                                }
+                                    }
+                                }*/
                             },
                             {
                                 key: "repayment.securityDeposit",
