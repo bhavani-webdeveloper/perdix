@@ -127,7 +127,7 @@ define({
                 var renderRequiredEvents = ['financial-summary'];
                 model.renderReady = function(eventName) {
                     renderRequiredEvents.splice(renderRequiredEvents.indexOf(eventName), 1);
-	                if (!renderRequiredEvents.length && model.existingCustomerStr=='Existing Customer') {
+	                if (!renderRequiredEvents.length) {
 		                self.renderForm();
 	                }
                 };
