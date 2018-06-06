@@ -1005,7 +1005,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 "items": [
                     {
                         key:"loanAccount.linkedAccountNumber",
-                        "condition": "model.currentStage !='FieldAppraisal'",
+                        "condition": "(model.currentStage !='FieldAppraisal' && model.currentStage !='Sanction')",
                         title:"LINKED_ACCOUNT_NUMBER",
                         type: "lov",
                         lovonly: true,
@@ -1036,7 +1036,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     {
                         key:"loanAccount.linkedAccountNumber",
                         title:"LINKED_ACCOUNT_NUMBER",
-                        "condition": "model.currentStage =='FieldAppraisal'",
+                        "condition": "model.currentStage =='FieldAppraisal'|| model.currentStage =='Sanction'",
                         type: "lov",
                         lovonly: true,
                         autolov: true,
