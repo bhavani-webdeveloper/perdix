@@ -57,7 +57,7 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
                         form.type = "number";
                         break;
                     case 'AMOUNT':
-                        form.type = "amount";
+                        form.type = "integer";
                         break;
                     case 'DATE':
                         form.type = "date";
