@@ -21,12 +21,12 @@ define({
                     "properties": {
                         "productCode": {
                             "title": "PRODUCT_CODE",
-                            "type": "string"
+                            "type": ["string","null"],
                         },
                         "partnerCode": {
                             "key": "product.partnerCode",
                             "title": "PARTNER_CODE",
-                            "type": "string",
+                            "type": ["string","null"],
                             "enumCode": "partner",
                             "x-schema-form": {
                                 "type": "select"
@@ -35,7 +35,7 @@ define({
                         "loanType": {
                             "key": "product.loanType",
                             "title": "LOAN_TYPE",
-                            "type": "string",
+                            "type": ["string","null"],
                             "x-schema-form": {
                                 "type": "select",
                                 "titleMap": [{
@@ -56,7 +56,7 @@ define({
                         "productType": {
                             "key": "product.productType",
                             "title": "PRODUCT_TYPE",
-                            "type": "string",
+                            "type": ["string","null"],
                             "x-schema-form": {
                                 "type": "select",
                                 "titleMap": [{
@@ -74,7 +74,7 @@ define({
                         "frequency": {
                             "key": "product.frequency",
                             "title": "FREQUENCY",
-                            "type": "string",
+                            "type": ["string","null"],
                             "enumCode": "frequency",
                             "x-schema-form": {
                                 "type": "select"
@@ -84,7 +84,7 @@ define({
                         "processType": {
                             "key": "product.processType",
                             "title": "PROCESS_TYPE",
-                            "type": "string",
+                            "type": ["string","null"],
                             "x-schema-form": {
                                 "type": "select",
                                 "titleMap": [{
@@ -128,6 +128,8 @@ define({
                     var promise = Product.search({
                         'partnerCode': searchOptions.partnerCode,
                         'productCode': searchOptions.productCode,
+                        'processType':searchOptions.processType,
+                        'productType' : searchOptions.productType,
                         'loanType': searchOptions.loanType,
                         'frequency': searchOptions.frequency,
                         'page': pageOpts.loanType,
