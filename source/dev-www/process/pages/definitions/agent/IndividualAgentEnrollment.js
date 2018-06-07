@@ -20,7 +20,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
 
             var overridesFields = function(bundlePageObj) {
                 return {
-                    "agentInformation.customerId": {
+                    "AgentInformation.customerId": {
                         type: "lov",
                         lovonly: true,
                         bindMap: {},

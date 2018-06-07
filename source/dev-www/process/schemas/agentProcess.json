@@ -1,0 +1,132 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "isMinimumFingerPrintRequired": 1,
+    "properties": {
+        "agent": {
+            "type": "object",
+            "properties": {
+                "agentId": {
+                    "type": ["integer", "null"],
+                    "title": "AGENT_ID"
+                },
+                "customerId": {
+                    "type": ["integer", "null"]
+                },
+                "agentCompanyId": {
+                    "type": ["integer", "null"],
+                    "title": "AGENT_COMPANT_ID"
+                },
+                "agentRegistrationNumber": {
+                    "type": ["string", "null"],
+                    "title": "AGENT_REGISTRATION_NUMBER"
+                },
+                "agentType": {
+                    "title": "AGENT_TYPE",
+                    "type": "select",
+                    "enumCode": "agent_type"
+                },
+                "companyName": {
+                    "type": ["string", "null"],
+                    "title": "COMPANY_NAME"
+                },
+                "agentName ": {
+                    "type": ["string", "null"],
+                    "title": "AGENT_NAME"
+                },
+                "subType": {
+                    "type": ["string", "null"],
+                    "title": "SUB_TYPE"
+                },
+                "designation": {
+                    "type": ["string", "null"],
+                    "title": "DESIGNATION"
+                },
+                "agentEmployees": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "customerId": {
+                                "type": ["integer", "null"]
+                            },
+                            "agentCompanyId": {
+                                "type": ["integer", "null"],
+                                "title": "AGENT_COMPANT_ID"
+                            },
+                            "agentName ": {
+                                "type": ["string", "null"],
+                                "title": "AGENT_NAME"
+                            },
+                            "agentRegistrationNumber": {
+                                "type": ["string", "null"],
+                                "title": "AGENT_REGISTRATION_NUMBER"
+                            },
+                            "agentType": {
+                                "title": "AGENT_TYPE",
+                                "type": "select",
+                                "enumCode": "agent_type"
+                            },
+                            "companyName": {
+                                "type": ["string", "null"],
+                                "title": "COMPANY_NAME"
+                            },
+                            "subType": {
+                                "type": ["string", "null"],
+                                "title": "SUB_TYPE"
+                            },
+                            "designation": {
+                                "type": ["string", "null"],
+                                "title": "DESIGNATION"
+                            }
+                        },
+                        "required": []
+                    }
+                },
+                "agentFeeDetails": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "agentId": {
+                                "type": ["integer", "null"],
+                                "title": "AGENT_ID"
+                            },
+                            "customerId": {
+                                "type": ["integer", "null"]
+                            },
+                            "dateOfIncorporation": {
+                                "type": ["string", "null"],
+                                "title": "DATE_OF_INCORPORATION",
+                                "format": "date"
+                            },
+                            "feeAmount": {
+                                "type": ["string", "null"],
+                                "title": "FEE_AMOUT"
+                            },
+                            "feeName": {
+                                "type": ["string", "null"],
+                                "title": "FEE_NAME"
+                            },
+                            "feeType": {
+                                "title": "FEE_TYPE",
+                                "type": "select",
+                                "enumCode": "fee_type"
+                            },
+                            "frequency": {
+                                "type": ["string", "null"],
+                                "title": "FREQUENCY"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "required": [
+            "agentId"
+        ]
+    }
+
+
+
+}

@@ -31,8 +31,12 @@ define({
                     "title": 'SEARCH_OPTIONS',
                     "properties": {
                         "agent": {
-                            "title": "AGENT",
-                            "type": "string"
+                            "type": ["string", "null"],
+                            'title': "AGENT",
+                            "enumCode": "agent",
+                            "x-schema-form": {
+                                "type": "select"
+                            }
                         },
                         "agentName": {
                             "title": "AGENT_NAME",
@@ -61,8 +65,8 @@ define({
                         'agentId': searchOptions.agentId,
                         'currentStage': '',
                         'agentName': searchOptions.agentName,
-                        'agentType': searchOptions.agentType,
-                        'customerType': '',
+                        'agentType': searchOptions.agentType, 
+                        'customerType': searchOptions.agent,
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage
                     }).$promise;
@@ -102,7 +106,10 @@ define({
                         };
                     },
                     getColumns: function() {
-                         return [{
+                        return [{
+                            title: 'AGENT',
+                            data: 'customerType'
+                        }, {
                             title: 'AGENT_ID',
                             data: 'id'
                         }, {
@@ -111,9 +118,6 @@ define({
                         }, {
                             title: 'AGENT_TYPE',
                             data: 'agentType'
-                        }, {
-                            title: 'CUSTOMER_TYPE',
-                            data: 'customerType'
                         }]
                     },
                     getActions: function() {
