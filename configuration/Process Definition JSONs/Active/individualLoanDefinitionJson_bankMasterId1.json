@@ -1820,7 +1820,7 @@
                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
                   ] 
                },
-               "vehcileModel": {
+               "vehicleModel": {
                   "title": "Vehicle Model",
                   "type": "string",
                  "minLength":1,
@@ -1829,6 +1829,15 @@
                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
                   ] 
                },
+               "category": {
+                    "title": "Category",
+                    "type": "string",
+                    "minLength":1,
+                    "maxLength":100,
+                    "captureStages":[
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                    ]   
+                },
                "valuationPurpose":{
                   "title":"valuationPurpose",
                   "type":"string",
