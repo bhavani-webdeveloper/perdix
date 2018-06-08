@@ -677,30 +677,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                     "assets.physicalAssets":{
                         titleExpr: "model.customer.physicalAssets[arrayIndex].ownedAssetDetails | translate",
                         remove:null,
-                        add: null,
-                        onArrayAdd: function(value, form, model, formCtrl, event) {
-                            if ((model.customer.physicalAssets.length - 1) === 0) {
-                                PageHelper.showLoader();
-                                var physicalAssets=[];
-                                Queries.getPhysicalAssetsList().then(function(res){
-                                    $log.info(res);
-                                    if(res && res.length && res.length>0){
-                                        for(i in res){
-                                            var obj={};
-                                            obj.assetType= res[i].asset;
-                                            obj.ownedAssetDetails=res[i].asset_details;
-                                            obj.numberOfOwnedAsset=1;
-                                            physicalAssets.push(obj);   
-                                        }
-                                      model.customer.physicalAssets=physicalAssets;
-                                    }
-                                    PageHelper.hideLoader();
-                                },function(err){
-                                    $log.info(err);
-                                    PageHelper.hideLoader();
-                                });
-                            }
-                        },
+                        add: null
                     },
                     "assets.physicalAssets.assetType":{
                         "type":"string",
@@ -818,6 +795,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                     //"CustomerInformation.groupName",
                     //"CustomerInformation.loanCycle",
                     "CustomerInformation.firstName",
+                    "CustomerInformation.photoImageId",
                     "CustomerInformation.gender",
                     "CustomerInformation.age",
                     "CustomerInformation.dateOfBirth",
@@ -1204,6 +1182,30 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                 ];
             }
         }
+        var populatePhysicalAssets = function (model) {
+
+            if (!model.customer.physicalAssets || model.customer.physicalAssets.length == 0) {
+                PageHelper.showLoader();
+                var physicalAssets=[];
+                Queries.getPhysicalAssetsList().then(function(res){
+                    $log.info(res);
+                    if(res && res.length && res.length>0){
+                        for(i in res){
+                            var obj={};
+                            obj.assetType= res[i].asset;
+                            obj.ownedAssetDetails=res[i].asset_details;
+                            obj.numberOfOwnedAsset=1;
+                            physicalAssets.push(obj);   
+                        }
+                      model.customer.physicalAssets=physicalAssets;
+                    }
+                    PageHelper.hideLoader();
+                },function(err){
+                    $log.info(err);
+                    PageHelper.hideLoader();
+                });
+            }
+        }
         return {
             "type": "schema-form",
             "title": "INDIVIDUAL_ENROLLMENT_3",
@@ -1295,6 +1297,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                             pageId: null
                         });
                     }
+                    populatePhysicalAssets(model);
                     if (model.customer.dateOfBirth) {
                         model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                     }
