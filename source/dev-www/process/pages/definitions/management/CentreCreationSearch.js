@@ -24,13 +24,19 @@ define({
                 },
                 {
 					"key":"branchId",
-					"title": "BRANCH_ID",
+					"title": "BRANCH_NAME",
                     "enumCode":"userbranches",
                     "condition": "model.siteCode =='sambandh'",
 				},
 				{
 					"key":"centreName",
-					"title":"CENTRE_NAME_"
+					"title":"CENTRE_CODE",
+					"condition": "model.siteCode =='sambandh'"
+				},
+				{
+					"key":"centreName",
+					"title":"CENTRE_NAME_",
+					"condition": "model.siteCode !='sambandh'",
 				}
 			],
 			searchSchema: {
