@@ -53,6 +53,19 @@ define({
 						},
 						"centre": {
 							"title": "CENTRE_NAME",
+							"condition": "model.siteCode.toLowerCase()!='sambandh'",
+							"type": ["string", "null"],
+							"x-schema-form": {
+								"type": "select",
+								"enumCode": "centre_code",
+								"parentEnumCode": "branch_id",
+                                "parentValueExpr": "model.branchId",
+                                "screenFilter": true
+							}
+						},
+						"centre": {
+							"title": "CENTRE_CODE",
+							"condition":"model.siteCode.toLowerCase()=='sambandh'",
 							"type": ["string", "null"],
 							"x-schema-form": {
 								"type": "select",
