@@ -13,6 +13,36 @@
                 "customerId": {
                     "type": ["integer", "null"]
                 },
+                "firstName": {
+                    "key": "customer.firstName",
+                    "title": "ENTITY_NAME",
+                    "type": "string"
+                },
+                "urnNo": {
+                    "key": "agent.urnNo",
+                    "title": "URN_NO",
+                    "type": "string"
+                },
+                "customerBranchId": {
+                    "key": "agent.customerBranchId",
+                    "title": "BRANCH_NAME",
+                    "type": "select"
+                },
+                "centreName": {
+                    "key": "agent.centreName",
+                    "title": "CENTRE_NAME",
+                    "type": "string"
+                },
+                "centreId": {
+                    "key": "agent.centreId",
+                    "type": "select",
+                    "title": "CENTRE_NAME",
+                    "filter": {
+                        "parentCode": "branch_id"
+                    },
+                    "parentValueExpr": "model.agent.customerBranchId",
+                    "parentEnumCode": "branch_id"
+                },
                 "agentCompanyId": {
                     "type": ["integer", "null"],
                     "title": "AGENT_COMPANT_ID"

@@ -74,11 +74,11 @@ export class AgentProcess {
     proceed(): any {
         /* Calls all business policies assocaited with proceed */
         this.agentProcessAction = "SAVE";
-        // let pmBeforeUpdate: PolicyManager<AgentProcess> = new PolicyManager(this, AgentPolicyFactory.getInstance(), 'beforeProceed', AgentProcess.getProcessConfig());
-        // let obs1 = pmBeforeUpdate.applyPolicies();
-        let obs2 = this.agentRepo.update(this);
-        // let pmAfterUpdate: PolicyManager<AgentProcess> = new PolicyManager(this, AgentPolicyFactory.getInstance(), 'afterProceed', AgentProcess.getProcessConfig());
-        // let obs3 = pmAfterUpdate.applyPolicies();
+        let pmBeforeUpdate: PolicyManager<AgentProcess> = new PolicyManager(this, AgentPolicyFactory.getInstance(), 'beforeProceed', AgentProcess.getProcessConfig());
+        let obs1 = pmBeforeUpdate.applyPolicies();
+        let obs2 = this.agentRepo.save(this);
+        let pmAfterUpdate: PolicyManager<AgentProcess> = new PolicyManager(this, AgentPolicyFactory.getInstance(), 'afterProceed', AgentProcess.getProcessConfig());
+        let obs3 = pmAfterUpdate.applyPolicies();
         return Observable.concat(obs2).last();
     }
 

@@ -25,9 +25,7 @@ class AgentProcessFactory {
 
     }
 
-    static fromLoanAccountObject(loanAccount: any): AgentProcess{
-        return null;
-    }
+
 
      static createNew(): Observable<AgentProcess>{
         return Observable.defer(() => {

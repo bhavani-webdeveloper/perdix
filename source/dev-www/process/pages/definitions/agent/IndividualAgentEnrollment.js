@@ -27,29 +27,32 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                         key: "agent.customerId",
                         "inputMap": {
                             "firstName": {
-                                "key": "customer.firstName",
-                                "title": "CUSTOMER_NAME"
+                                "key": "agent.firstName",
+                                "title": "CUSTOMER_NAME",
+                                "type": "string"
                             },
                             "urnNo": {
-                                "key": "customer.urnNo",
+                                "key": "agent.urnNo",
                                 "title": "URN_NO",
                                 "type": "string"
                             },
                             "customerBranchId": {
-                                "key": "customer.customerBranchId",
+                                "key": "agent.customerBranchId",
                                 "type": "select",
                                 "screenFilter": true,
+                                 "title": "CUSTOMER_BRANCH",
                                 "readonly": true
                             },
                             "centreName": {
-                                "key": "customer.place",
+                                "key": "agent.centreName",
                                 "title": "CENTRE_NAME",
                                 "type": "string",
                                 "readonly": true,
 
                             },
                             "centreId": {
-                                key: "customer.centreId",
+                                "title": "CENTRE",
+                                key: "agent.centreId",
                                 type: "lov",
                                 autolov: false,
                                 lovonly: true,
@@ -91,8 +94,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                             },
                         },
                         "outputMap": {
-                            "urnNo": "customer.urnNo",
-                            "firstName": "customer.firstName"
+                            "urnNo": "agent.id",
+                            "urnNo": "agent.urnNo",
+                            "firstName": "agent.firstName"
                         },
                         "searchHelper": formHelper,
                         "search": function(inputModel, form) {
@@ -116,7 +120,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                             return [
                                 [data.firstName, data.fatherFirstName].join(' | '),
                                 data.firstName,
-                                data.urnNo
+                                data.urnNo,
+                                data.id,
                             ];
                         },
                         onSelect: function(valueObj, model, context) {
@@ -129,11 +134,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                     /* Setting on the current page */
                                     model.enrolmentProcess = enrolmentProcess;
                                     model.customer = enrolmentProcess.customer;
+                                    model.agent.customerId = valueObj.id
 
                                     BundleManager.pushEvent(model.pageClass + "-updated", model._bundlePageObj, enrolmentProcess);
                                 })
-
-                            model.agent.customerId = valueObj.id;
                         }
                     },
                     "AgentInformation.agentId": {
@@ -258,13 +262,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                         "excludes": [],
                         "options": {
                             "repositoryAdditions": {
-                                "agentInformation": {
+                                "AgentInformation": {
                                     "type": "box",
                                     "title": "PERSIONAL_INFORMATION",
-                                    "orderNo": 10,
+                                    "orderNo": 1,
                                     "items": {
                                         "customerId": {
-                                            "key": "agent.id",
+                                            "key": "agent.customerId",
                                             "title": "CUSTOMER_ID",
                                             "type": "lov",
                                             "lovonly": false
@@ -296,20 +300,20 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                     /* Form rendering ends */
                 },
 
-                // preDestroy: function(model, form, formCtrl, bundlePageObj, bundleModel) {
-                //     // console.log("Inside preDestroy");
-                //     // console.log(arguments);
-                //     if (bundlePageObj) {
-                //         var enrolmentDetails = {
-                //                 'customerId': model.customer.id,
-                //                 'customerClass': bundlePageObj.pageClass,
-                //                 'firstName': model.customer.firstName
-                //             }
-                //             // BundleManager.pushEvent('new-enrolment',  {customer: model.customer})
-                //         BundleManager.pushEvent("enrolment-removed", model._bundlePageObj, enrolmentDetails)
-                //     }
-                //     return $q.resolve();
-                // },
+                preDestroy: function(model, form, formCtrl, bundlePageObj, bundleModel) {
+                    // console.log("Inside preDestroy");
+                    // console.log(arguments);
+                    if (bundlePageObj) {
+                        var enrolmentDetails = {
+                                'customerId': model.agent.customerId,
+                                'customerClass': bundlePageObj.pageClass,
+                                'firstName': model.agent.firstName
+                            }
+                            // BundleManager.pushEvent('new-enrolment',  {customer: model.customer})
+                        BundleManager.pushEvent("enrolment-removed", model._bundlePageObj, enrolmentDetails)
+                    }
+                    return $q.resolve();
+                },
                 eventListeners: {
                     "test-listener": function(bundleModel, model, obj) {
 

@@ -255,13 +255,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                         "excludes": [],
                         "options": {
                             "repositoryAdditions": {
-                                "agentInformation": {
+                                "AgentInformation": {
                                     "type": "box",
                                     "title": "PERSIONAL_INFORMATION",
                                     "orderNo": 10,
                                     "items": {
                                         "customerId": {
-                                            "key": "agent.id",
+                                            "key": "agent.customerId",
                                             "title": "CUSTOMER_ID",
                                             "type": "lov",
                                             "lovonly": false
