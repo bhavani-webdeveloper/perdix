@@ -1802,6 +1802,33 @@
                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
                   ]
                },
+               "vehicleType": {
+                 "title":"Vehicle Type",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                  ] 
+               },
+               "endUse": {
+                  "title": "End Use",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                  ] 
+               },
+               "vehcileModel": {
+                  "title": "Vehicle Model",
+                  "type": "string",
+                 "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                  ] 
+               },
                "valuationPurpose":{
                   "title":"valuationPurpose",
                   "type":"string",
@@ -3660,7 +3687,8 @@
                   "captureStages": [
                      "Screening", "LoanInitiation", "PendingForPartner"
                   ]
-               }
+               },
+               "udf5"
             }
          },
          "userDefinedDateFields":{
