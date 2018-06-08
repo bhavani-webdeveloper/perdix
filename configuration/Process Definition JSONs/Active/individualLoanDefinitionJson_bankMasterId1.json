@@ -3696,8 +3696,7 @@
                   "captureStages": [
                      "Screening", "LoanInitiation", "PendingForPartner"
                   ]
-               },
-               "udf5"
+               }
             }
          },
          "userDefinedDateFields":{
