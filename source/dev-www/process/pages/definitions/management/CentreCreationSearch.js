@@ -24,7 +24,7 @@ define({
                 },
                 {
 					"key":"branchId",
-					"title": "CENTRE_NAME_",
+					"title": "BRANCH_ID",
                     "enumCode":"userbranches",
                     "condition": "model.siteCode =='sambandh'",
 				},

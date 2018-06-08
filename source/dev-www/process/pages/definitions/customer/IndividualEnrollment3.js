@@ -15,6 +15,45 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         validationMessage: {
                             202: "Only alphabets and space are allowed."
                         },
+                    },"KYC.IdentityProof1.identityProofImageId": {
+                        "viewParams": function(modelValue, form, model) {
+                            return {
+                                customerId: model.customer.id
+                            };
+                        },
+                        fileType: "image/*",
+                        offline: false,
+                        using:"",//using scanner for document scanner trigger
+                    },
+                    "KYC.IdentityProof1.identityProofReverseImageId": {
+                        "viewParams": function(modelValue, form, model) {
+                            return {
+                                customerId: model.customer.id
+                            };
+                        },
+                        fileType: "image/*",
+                        offline: false,
+                        using:"",
+                    },
+                    "KYC.addressProof1.addressProofImageId": {
+                        "viewParams": function(modelValue, form, model) {
+                            return {
+                                customerId: model.customer.id
+                            };
+                        },
+                        fileType: "image/*",
+                        offline: false,
+                        using:""
+                    },
+                    "KYC.addressProof1.addressProofReverseImageId": {
+                        "viewParams": function(modelValue, form, model) {
+                            return {
+                                customerId: model.customer.id
+                            };
+                        },
+                        fileType: "image/*",
+                        offline: false,
+                        using:""
                     },
                     "AdditionalKYC.additionalKYCs": {
                         add: true,

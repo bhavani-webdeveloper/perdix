@@ -7,7 +7,7 @@ irf.pageCollection.factory(irf.page("management.SpokeMerger"), ["$log", "Mainten
 
         return {
             "type": "schema-form",
-            "title": "Spoke Merger",
+            "title": "SPOKE_MERGER",
 
             initialize: function(model, form, formCtrl, bundlePageObj, bundleModel) {
                 model.customer = model.customer || {};
@@ -27,7 +27,7 @@ irf.pageCollection.factory(irf.page("management.SpokeMerger"), ["$log", "Mainten
 
             "form": [{
                     "type": "box",
-                    "title": "Spoke Merger",
+                    "title": "SPOKE_MERGER",
                     "items": [{
                             key: "branchId1",
                             title: "Hub Name",
