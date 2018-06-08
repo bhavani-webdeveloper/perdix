@@ -60,6 +60,16 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         remove: true,
                         startEmpty: true,
                     },
+                    "AdditionalKYC.additionalKYCs.kyc1ImagePath": {
+                        required: true,
+                        fileType: "image/*",
+                        "using":"",
+                        "viewParams": function(modelValue, form, model) {
+                            return {
+                                customerId: model.customer.id
+                            };
+                        },
+                    },
                     "CustomerInformation.customerBranchId": {
                         enumCode: "userbranches"
                     }, 

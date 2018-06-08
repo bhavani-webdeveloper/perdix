@@ -394,6 +394,61 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                             maxItems: 1
                         }
                     },
+                    "KYC.IdentityProof1.identityProofImageId": {
+                        "viewParams": function(modelValue, form, model) {
+                            return {
+                                customerId: model.customer.id
+                            };
+                        },
+                        fileType: "image/*",
+                        offline: false,
+                        using:"",//using scanner for document scanner trigger
+                    },
+                    "KYC.IdentityProof1.identityProofReverseImageId": {
+                        "viewParams": function(modelValue, form, model) {
+                            return {
+                                customerId: model.customer.id
+                            };
+                        },
+                        fileType: "image/*",
+                        offline: false,
+                        using:"",
+                    },
+                    "KYC.addressProof1.addressProofImageId": {
+                        "viewParams": function(modelValue, form, model) {
+                            return {
+                                customerId: model.customer.id
+                            };
+                        },
+                        fileType: "image/*",
+                        offline: false,
+                        using:""
+                    },
+                    "KYC.addressProof1.addressProofReverseImageId": {
+                        "viewParams": function(modelValue, form, model) {
+                            return {
+                                customerId: model.customer.id
+                            };
+                        },
+                        fileType: "image/*",
+                        offline: false,
+                        using:""
+                    },
+                    "AdditionalKYC.additionalKYCs": {
+                        add: true,
+                        remove: true,
+                        startEmpty: true,
+                    },
+                    "AdditionalKYC.additionalKYCs.kyc1ImagePath": {
+                        required: true,
+                        fileType: "image/*",
+                        "using":"",
+                        "viewParams": function(modelValue, form, model) {
+                            return {
+                                customerId: model.customer.id
+                            };
+                        },
+                    },
                     "ContactInformation.CustomerResidentialAddress": {
                         "orderNo": 21
                     },
