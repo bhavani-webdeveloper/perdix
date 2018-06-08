@@ -1183,6 +1183,9 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                     model.customer.addressProof = model.customer.addressProof || "Aadhar Card";
                     model.customer.mailSameAsResidence = false;
                 }
+                if (model.siteCode == 'sambandh') {
+                    model.customer.gender = model.customer.gender || 'FEMALE';
+                }
                 var centres = SessionStore.getCentres();
                 if (centres && centres.length > 0) {
                     model.customer.centreId = model.customer.centreId || centres[0].id;
