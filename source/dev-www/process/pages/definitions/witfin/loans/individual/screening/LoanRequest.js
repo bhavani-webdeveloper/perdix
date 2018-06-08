@@ -1233,7 +1233,7 @@ define([], function() {
                                                         case 'Yearly':
                                                             frequencyRequested1 = 1;
                                                     }
-                                                    model.loanAccount.expectedInterestRate = (Math.pow((2 * parseFloat(model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5) * parseFloat(model.loanAccount.tenureRequested) / parseFloat(model.loanAccount.tenureRequested) + 1) + 1, 1 / frequencyRequested1) - 1) * frequencyRequested1;
+                                                    model.loanAccount.expectedInterestRate = (Math.pow((((parseFloat((model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5)/100)*2*parseFloat(model.loanAccount.tenureRequested))/(parseFloat(model.loanAccount.tenureRequested)+1))+1),(1/frequencyRequested1))-1)*frequencyRequested1
                                                 } else {
                                                     PageHelper.showErrors({
                                                         data: {
@@ -1242,7 +1242,7 @@ define([], function() {
                                                     });
                                                     return false;
                                                 }
-                                                if (model.loanAccount.expectedInterestRate && model.loanAccount.tenureRequested && model.loanAccount.frequencyRequested && model.loanAccount.loanAmountRequested) {
+                                                if (parseFloat(model.loanAccount.expectedInterestRate) && model.loanAccount.tenureRequested && model.loanAccount.frequencyRequested && model.loanAccount.loanAmountRequested) {
                                                     switch (model.loanAccount.frequencyRequested) {
                                                         case 'Daily':
                                                             frequencyRequested2 = 365;
@@ -1427,7 +1427,7 @@ define([], function() {
                                                         case 'Yearly':
                                                             frequencyRequested = 1;
                                                     }
-                                                    model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = (Math.pow((((2 * parseFloat(model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5) * parseFloat(model.loanAccount.tenure)) / (parseFloat(model.loanAccount.tenure) + 1)) + 1), 1 / frequencyRequested) - 1) * frequencyRequested;
+                                                    model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = (Math.pow((((2 * parseFloat((model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5)/100) * parseFloat(model.loanAccount.tenure)) / (parseFloat(model.loanAccount.tenure) + 1)) + 1), 1 / frequencyRequested) - 1) * frequencyRequested;
                                                 }
                                             }
                                         }
