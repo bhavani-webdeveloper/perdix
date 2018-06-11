@@ -14,6 +14,7 @@ define({
                 model.bundleModel = bundleModel;
                 model.loanAccount = bundleModel.loanAccount;
 
+
                 model.loanCustomerRelation = {};
                 model.loanCustomerRel = []
                 Queries.getLoanCustomerDetails(model.bundleModel.loanId).then(function(res) {
@@ -49,7 +50,7 @@ define({
 
                     /*machine pics */
                     var machineDocs = _.filter(self.form, {
-                        title: "Machinery/Stocks/Non-Machinery Asset Details"
+                        title: "Machinery"
                     });
                     var machineData = [];
                     var machineBills = [];
@@ -201,6 +202,7 @@ define({
 
                 if (self.form[self.form.length - 1].title != "VIEW_UPLOADS") {
                     var fileForms = [];
+                    console.log(model.customer);
                     for (i in model.loanAccount.loanDocuments) {
                         fileForms.push({
                             "key": "loanAccount.loanDocuments[" + i + "].documentId",
@@ -599,7 +601,8 @@ define({
                 "colClass": "col-sm-12",
                 "overrideType": "default-view",
                 "readonly": true,
-                "title": "Machinery/Stocks/Non-Machinery Asset Details",
+               // "title": "Machinery/Stocks/Non-Machinery Asset Details",
+                "title": "Machinery",
                 "items": [{
                     "type": "grid",
                     "orientation": "horizontal",
@@ -750,6 +753,9 @@ define({
                             }, {
                                 "title": "% of Loan Amount",
                                 "data": "Percn Of Loan Amount"
+                            },{
+                                "title": "Hypothecated to",
+                                "data": "Hypothecated to"
                             }];
                         },
                         getActions: function() {
@@ -816,6 +822,9 @@ define({
                             }, {
                                 "title": "% of Loan Amount",
                                 "data": "Asset Type"
+                            },{
+                                "title": "Hypothecated to",
+                                "data": "Hypothecated to"
                             }];
                         },
                         getActions: function() {
@@ -859,7 +868,7 @@ define({
                             "key": "overAllHypoValue['color_hexadecimal']",
                             //condition: "model.currentStage!='ScreeningReview'",
                             "title": "Status",
-                            html: '<span class="col-sm-6">Status</span> <span class="col-sm-6"><span class="square-color-box" style="background: {{model.overAllHypoValue.color_hexadecimal}}"> </span></span>' 
+                            html: '<span class="col-sm-6">Status</span> <span class="col-sm-6 pull-right"><span class="square-color-box" style="background: {{model.overAllHypoValue.color_hexadecimal}}"> </span></span>' 
                         }]
                         // {
                         //     type: "section",
