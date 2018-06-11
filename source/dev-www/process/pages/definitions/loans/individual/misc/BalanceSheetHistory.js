@@ -57,7 +57,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                             businessPL.loanId = res[i].loanId;
                             businessPL.currentStage = res[i].currentStage;
 
-                            if(resp.length >= 3 && resp[2] ){
+                            /* if(resp.length >= 3 && resp[2] ){
                                 var columns = resp[2].columns;
                                 for(var len = 0 ; len < resp[2].columns.length; len++ ){
                                     if(keybasicLoanInfo.indexOf(columns[len].data) > -1){
@@ -66,7 +66,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                                         loanRepaymentHistory.loanOverview[columns[len].data] = resp[2].data[0][columns[len].data];
                                     }                                
                                 }
-                            }
+                            } */
                             
                             model.businessPLs.push(businessPL);
                             model.loanRepaymentHistory.push(loanRepaymentHistory);

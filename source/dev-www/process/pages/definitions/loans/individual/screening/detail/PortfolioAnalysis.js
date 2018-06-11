@@ -132,8 +132,16 @@ define({
 	                }
                 };
                 self.renderForm= function(){
+                    if(model.existingCustomerStr == "Existing Customer"){
                     self.form=[];
                     self.form= self.formData;
+                    } else {
+                        self.form=[];
+                        self.form = [{
+                            "type": "section",
+                            "html": '<br><div style="text-align:center">Its a new customer no data will be available..<br><br><ripple-loader></ripple-loader></div>'
+                        }];
+                    }
                 }
             },
             formData: [
@@ -261,6 +269,26 @@ define({
                                 {
                                     "title": "Other Data Points",
                                     "data": ""
+                                },
+                                {
+                                    "title": "DSCR",
+                                    "data": "DSCR"
+                                },
+                                {
+                                    "title": "DSO",
+                                    "data": "DSONonTrading"
+                                },
+                                {
+                                    "title": "Current Ratio",
+                                    "data": "CurrentRatio"
+                                },
+                                {
+                                    "title": "Hypothecation Value- Loan Amount",
+                                    "data": "LoanAmount"
+                                },
+                                {
+                                    "title": "LUC Status",
+                                    "data": "luc_status"
                                 }
 
                             ];
@@ -402,11 +430,11 @@ define({
                     model.centreName=params[0].data[0]['Spoke Name'];
                     let ExistingCustomer=params[0].data[0]['Existing Customer'];
                     if(ExistingCustomer.toLowerCase() =='yes'){
-                        model.existingCustomerStr = "Existing Customer"
+                        model.existingCustomerStr = "Existing Customer";
                     }
                     else{
                         model.existingCustomerStr = "New Customer"
-                    };
+                    };                    
 
                     let prepareFinancialData={};
                         if(params){
