@@ -2,7 +2,6 @@
 include_once "bootload.php";
 use Illuminate\Database\Capsule\Manager as DB;
 
-require_once 'Classes/PHPExcel/IOFactory.php';
 $queryString = $_SERVER['QUERY_STRING'];
 $key = $_GET["key"];
 
@@ -51,10 +50,10 @@ try {
             for ($x = 0; $x < sizeOf($jsonColumns); $x++) {
                 $val = '';
                 if (isset($jsonColumns[$x]['fieldName'])) {
-                    $idx = $excelColumnIndex[$jsonColumns[$x]['fieldName']];
                     if (!isset($excelColumnIndex[$jsonColumns[$x]['fieldName']])) {
                         throw new Exception('Field "' . $jsonColumns[$x]['fieldName'] . '" is missing');
                     }
+                    $idx = $excelColumnIndex[$jsonColumns[$x]['fieldName']];
                     $val = $rowData[$n][$idx];
                     if (isset($jsonColumns[$x]['required']) && $jsonColumns[$x]['required'] == true && empty($val)) {
                         throw new Exception('"' . $jsonColumns[$x]['fieldName'] . '" is required on row ' . ($n + 1));
