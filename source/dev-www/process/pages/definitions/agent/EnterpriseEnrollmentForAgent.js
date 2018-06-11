@@ -16,6 +16,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
             var pageParams = {
                 readonly: true
             };
+            var validateRequest = function(req) {
+                if (req.customer && req.customer.customerBankAccounts) {
+                    for (var i = 0; i < req.customer.customerBankAccounts.length; i++) {
+                        var bankAccount = req.customer.customerBankAccounts[i];
+                        if (bankAccount.accountNumber != bankAccount.confirmedAccountNumber) {
+                            PageHelper.showProgress('validate-error', 'Bank Accounts: Account Number doesnt match with Confirmed Account Number', 5000);
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            }
             var getLocation = function() {
                 return new Promise(function(resolve, reject) {
                     navigator.geolocation.getCurrentPosition(function(p) {
@@ -28,62 +40,87 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                 });
             };
             var getIncludes = function(model) {
-                    return [
-                        "EnterpriseInformation",
-                        "EnterpriseInformation.firstName",
-                        "EnterpriseInformation.customerId",
-                        "EnterpriseInformation.customerBranchId",
-                        "EnterpriseInformation.entityId",
-                        "EnterpriseInformation.urnNo",
-                        "EnterpriseInformation.centreId",
-                        "EnterpriseInformation.firstName",
-                        "EnterpriseInformation.companyOperatingSince",
-                        "EnterpriseInformation.companyEmailId",
-                        "EnterpriseInformation.ownership",
-                        "EnterpriseInformation.businessConstitution",
-                        "EnterpriseInformation.businessHistory",
-                        "EnterpriseInformation.companyRegistered",
-                        "EnterpriseInformation.isGSTAvailable",
+                return [
+                    "EnterpriseInformation",
+                    "EnterpriseInformation.firstName",
+                    "EnterpriseInformation.customerId",
+                    "EnterpriseInformation.customerBranchId",
+                    "EnterpriseInformation.entityId",
+                    "EnterpriseInformation.urnNo",
+                    "EnterpriseInformation.centreId",
+                    "EnterpriseInformation.firstName",
+                    "EnterpriseInformation.companyOperatingSince",
+                    "EnterpriseInformation.companyEmailId",
+                    "EnterpriseInformation.ownership",
+                    "EnterpriseInformation.businessConstitution",
+                    "EnterpriseInformation.businessHistory",
+                    "EnterpriseInformation.companyRegistered",
+                    "EnterpriseInformation.isGSTAvailable",
 
-                        "EnterpriseInformation.enterpriseRegistrations",
-                        "EnterpriseInformation.enterpriseRegistrations.registrationType",
-                        "EnterpriseInformation.enterpriseRegistrations.registrationNumber",
-                        "EnterpriseInformation.enterpriseRegistrations.registeredDate",
-                        "EnterpriseInformation.enterpriseRegistrations.expiryDate",
-                        "EnterpriseInformation.enterpriseRegistrations.documentId",
-                        "EnterpriseInformation.businessType",
-                        "EnterpriseInformation.businessActivity",
+                    "EnterpriseInformation.enterpriseRegistrations",
+                    "EnterpriseInformation.enterpriseRegistrations.registrationType",
+                    "EnterpriseInformation.enterpriseRegistrations.registrationNumber",
+                    "EnterpriseInformation.enterpriseRegistrations.registeredDate",
+                    "EnterpriseInformation.enterpriseRegistrations.expiryDate",
+                    "EnterpriseInformation.enterpriseRegistrations.documentId",
+                    "EnterpriseInformation.businessType",
+                    "EnterpriseInformation.businessActivity",
 
-                        "ContactInformation",
-                        "ContactInformation.mobilePhone",
-                        "ContactInformation.landLineNo",
-                        "ContactInformation.doorNo",
-                        "ContactInformation.street",
-                        "ContactInformation.postOffice",
-                        "ContactInformation.landmark",
-                        "ContactInformation.pincode",
-                        "ContactInformation.locality",
-                        "ContactInformation.villageName",
-                        "ContactInformation.district",
-                        "ContactInformation.state",
-                        "ContactInformation.distanceFromBranch",
-                        "ContactInformation.businessInPresentAreaSince",
-                        "ContactInformation.businessInCurrentAddressSince",
+                    "ContactInformation",
+                    "ContactInformation.mobilePhone",
+                    "ContactInformation.landLineNo",
+                    "ContactInformation.doorNo",
+                    "ContactInformation.street",
+                    "ContactInformation.postOffice",
+                    "ContactInformation.landmark",
+                    "ContactInformation.pincode",
+                    "ContactInformation.locality",
+                    "ContactInformation.villageName",
+                    "ContactInformation.district",
+                    "ContactInformation.state",
+                    "ContactInformation.distanceFromBranch",
+                    "ContactInformation.businessInPresentAreaSince",
+                    "ContactInformation.businessInCurrentAddressSince",
 
-                        "BankAccounts",
-                        "BankAccounts.customerBankAccounts",
-                        "BankAccounts.customerBankAccounts.ifscCode",
-                        "BankAccounts.customerBankAccounts.customerBankName",
-                        "BankAccounts.customerBankAccounts.customerBankBranchName",
-                        "BankAccounts.customerBankAccounts.customerNameAsInBank",
-                        "BankAccounts.customerBankAccounts.accountNumber",
-                        "BankAccounts.customerBankAccounts.confirmedAccountNumber",
-                        "BankAccounts.customerBankAccounts.accountType"                      
-                    ];
+                    "BankAccounts",
+                    "BankAccounts.customerBankAccounts",
+                    "BankAccounts.customerBankAccounts.ifscCode",
+                    "BankAccounts.customerBankAccounts.customerBankName",
+                    "BankAccounts.customerBankAccounts.customerBankBranchName",
+                    "BankAccounts.customerBankAccounts.customerNameAsInBank",
+                    "BankAccounts.customerBankAccounts.accountNumber",
+                    "BankAccounts.customerBankAccounts.confirmedAccountNumber",
+                    "BankAccounts.customerBankAccounts.accountType"
+                ];
 
-                }              
+            }
 
+            var configFile = function() {
+                return {
+                    "loanProcess.loanAccount.isReadOnly": {
+                        "Yes": {
+                            "overrides": {
+                                "EnterpriseInformation": {
+                                    "readonly": true
+                                },
+                                "EnterpriseInformation.enterpriseType": {
+                                    "readonly": true
+                                },
+                                "BankAccounts": {
+                                    "readonly": true
+                                },
+                                "ContactInformation": {
+                                    "readonly": true
+                                },
+                                "EnterpriseReferences": {
+                                    "readonly": true
+                                }
+                            }
 
+                        }
+                    }
+                }
+            }
 
             return {
                 "type": "schema-form",
@@ -96,7 +133,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                     }
 
                     /* Setting data recieved from Bundle */
-                    
+
                     model.currentStage = bundleModel.currentStage;
                     /* End of setting data recieved from Bundle */
 
@@ -133,7 +170,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                 "ContactInformation.pincode": {
                                     "fieldType": "number",
                                     "resolver": "PincodeLOVConfiguration"
-                                },                                
+                                },
                                 "EnterpriseInformation.centreId": {
                                     "readonly": true
                                 },
@@ -142,7 +179,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                 },
                                 "BankAccounts.customerBankAccounts": {
                                     "startEmpty": true
-                                }
+                                },
+                                "EnterpriseInformation.centreId": {
+                                    "readonly": true
+                                },
+                                "EnterpriseInformation.customerBranchId": {
+                                    "readonly": true
+                                },
+                                "BankAccounts.customerBankAccounts": {
+                                    startEmpty: true
+                                },
 
                             },
                             "includes": getIncludes(model),
@@ -203,7 +249,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                 schema: function() {
                     return Enrollment.getSchema().$promise;
                 },
-                   actions: {
+                actions: {
                     preSave: function(model, form, formName) {
                         var deferred = $q.defer();
                         if (model.customer.firstName) {
@@ -214,22 +260,25 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                         }
                         return deferred.promise;
                     },
-                    save: function(model, formCtrl, formName){
+                    save: function(model, formCtrl, formName) {
 
                     },
-                    submit: function(model, form, formName){
+                    submit: function(model, form, formName) {
                         PageHelper.clearErrors();
-                        if(PageHelper.isFormInvalid(form)) {
+                        if (PageHelper.isFormInvalid(form)) {
                             return false;
                         }
                         PageHelper.showProgress('enrolment', 'Updating Customer');
                         PageHelper.showLoader();
-
+                        var reqData = _.cloneDeep(model);
+                        if (!(validateRequest(reqData))) {
+                            return;
+                        }
                         model.enrolmentProcess.save()
-                            .finally(function(){
+                            .finally(function() {
                                 PageHelper.hideLoader();
                             })
-                            .subscribe(function(){
+                            .subscribe(function() {
                                 model.loanProcess.refreshRelatedCustomers();
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 model.enrolmentProcess.proceed()
@@ -246,23 +295,27 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                             });
 
                     },
-                    proceed: function(model, form){
+                    proceed: function(model, form) {
                         PageHelper.clearErrors();
-                        if(PageHelper.isFormInvalid(form)) {
+                        if (PageHelper.isFormInvalid(form)) {
                             return false;
+                        }
+                        var reqData = _.cloneDeep(model);
+                        if (!(validateRequest(reqData))) {
+                            return;
                         }
                         PageHelper.showProgress('enrolment', 'Updating Customer');
                         PageHelper.showLoader();
                         model.enrolmentProcess.proceed()
-                            .finally(function () {
+                            .finally(function() {
                                 PageHelper.hideLoader();
                             })
-                            .subscribe(function (enrolmentProcess) {
+                            .subscribe(function(enrolmentProcess) {
                                 formHelper.resetFormValidityState(form);
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 PageHelper.clearErrors();
-                                BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
-                            }, function (err) {
+                                BundleManager.pushEvent(model.pageClass + "-updated", model._bundlePageObj, enrolmentProcess);
+                            }, function(err) {
                                 PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                 PageHelper.showErrors(err);
                                 PageHelper.hideLoader();

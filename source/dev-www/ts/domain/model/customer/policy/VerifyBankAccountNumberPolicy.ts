@@ -11,6 +11,7 @@ import {ValidationError} from "../../../../ui/errors/ValidationError";
 import FamilyMember = require("../FamilyMember");
 import Expenditure = require("../Expenditure");
 import {EnrolmentProcess} from "../EnrolmentProcess";
+import {AgentProcess} from "../../agent/AgentProcess";
 import AngularResourceService = require("../../../../infra/api/AngularResourceService");
 import * as _ from 'lodash';
 

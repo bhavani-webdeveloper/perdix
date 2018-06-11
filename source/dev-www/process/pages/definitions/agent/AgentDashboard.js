@@ -4,24 +4,16 @@ irf.pageCollection.controller(irf.controller("agent.AgentDashboard"), ['$log', '
         $scope.$templateUrl = "process/pages/templates/Page.Dashboard.html";
         var currentBranch = SessionStore.getCurrentBranch();
 
-
-        /* ScreeningQueue : KYC & CB SUBMISSION queue,
-           ScreeningReviewQueue : Kyc and cb review ,
-           Application Queue : Appraisal Queue ,
-           Application Review Queue : Appraisal Review Queue,
-           Zonal RiskReview Queue : Tele Verification ,
-           Central Risk Review Queue : Evaluation ,         
-        */
-
         var fullDefinition = {
             "title": "Agent Dashboard",
             "iconClass": "fa fa-users-secret",
             "items": [
                 "Page/Bundle/agent.IndividualAgentEnrollmentScreening",
                 "Page/Bundle/agent.EnterpriseAgentEnrollmentScreening",
-                "Page/Engine/agent.EnrollAgent",
                 "Page/Engine/agent.ApproveAgent",
                 "Page/Engine/agent.AgentSearch",
+                "Page/Engine/agent.EnrollAgent"               
+                
             ]
         };
 

@@ -16,6 +16,21 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
             var pageParams = {
                 readonly: true
             };
+            var validateRequest = function(req) {
+                if (req.customer && req.customer.customerBankAccounts) {
+                    for (var i = 0; i < req.customer.customerBankAccounts.length; i++) {
+                        var bankAccount = req.customer.customerBankAccounts[i];
+                        if (bankAccount.accountNumber != bankAccount.confirmedAccountNumber) {
+                            PageHelper.showProgress('validate-error', 'Bank Accounts: Account Number doesnt match with Confirmed Account Number', 5000);
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            }
+
+            var preSaveOrProceed = function(reqData) {}
+
 
             var overridesFields = function(bundlePageObj) {
                 return {
@@ -46,6 +61,19 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                         lovonly: true,
                         bindMap: {},
                         key: "customer.id",
+                        initialize: function(model, form, parentModel, context) {
+                            model.customerBranchId = parentModel.customer.customerBranchId;
+                            model.centreId = parentModel.customer.centreId;
+                            var centreCode = formHelper.enum('centre').data;
+
+                            var centreName = $filter('filter')(centreCode, {
+                                value: parentModel.customer.centreId
+                            }, true);
+                            if (centreName && centreName.length > 0) {
+                                model.centreName = centreName[0].name;
+                            }
+
+                        },
                         "inputMap": {
                             "firstName": {
                                 "key": "customer.firstName",
@@ -72,12 +100,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                             "centreId": {
                                 key: "customer.centreId",
                                 type: "lov",
-                                autolov: false,
+                                autolov: true,
                                 lovonly: true,
                                 bindMap: {},
                                 searchHelper: formHelper,
                                 search: function(inputModel, form, model, context) {
                                     var centres = SessionStore.getCentres();
+                                    // $log.info("hi");
+                                    // $log.info(centres);
+
                                     var centreCode = formHelper.enum('centre').data;
                                     var out = [];
                                     if (centres && centres.length) {
@@ -210,11 +241,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                     }
                     /* Setting data recieved from Bundle */
                     model.pageClass = bundlePageObj.pageClass;
-                        /* Setting data for the form */
+                    /* Setting data for the form */
                     model.customer = model.enrolmentProcess.customer;
                     /* End of setting data for the form */
                     // model.currentStage = bundleModel.currentStage;
-                    /* End of setting data recieved from Bundle */                
+                    /* End of setting data recieved from Bundle */
 
                     /* Form rendering starts */
                     self = this;
@@ -245,6 +276,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                 "items": [{
                                     "type": "submit",
                                     "title": "SUBMIT"
+                                }]
+                            }, {
+                                "targetID": "IndividualInformation",
+                                "items": [{
+                                    "key": "customer.centreId",
+                                    "type": "select",
+                                    "enumCode": "centre",
+                                    "title": "CENTRE_NAME",
+                                    "orderNo": 21,
+                                    "readonly": true
                                 }]
                             }, {
                                 "type": "actionbox",
@@ -288,23 +329,22 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                     "test-listener": function(bundleModel, model, obj) {
 
                     },
-                    "lead-loaded": function (bundleModel, model, obj) {
+                    "lead-loaded": function(bundleModel, model, obj) {
                         return $q.when()
-                            .then(function(){
-                                if (obj.applicantCustomerId){
+                            .then(function() {
+                                if (obj.applicantCustomerId) {
                                     return EnrolmentProcess.fromCustomerID(obj.applicantCustomerId).toPromise();
                                 } else {
                                     return null;
                                 }
                             })
-                            .then(function(enrolmentProcess){
-                                if (enrolmentProcess!=null){
+                            .then(function(enrolmentProcess) {
+                                if (enrolmentProcess != null) {
                                     model.enrolmentProcess = enrolmentProcess;
                                     model.customer = enrolmentProcess.customer;
-                                    model.loanProcess.setRelatedCustomerWithRelation(enrolmentProcess, model.loanCustomerRelationType);
-                                    BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
+                                    BundleManager.pushEvent(model.pageClass + "-updated", model._bundlePageObj, enrolmentProcess);
                                 }
-                                if(obj.leadCategory == 'Existing' || obj.leadCategory == 'Return') {
+                                if (obj.leadCategory == 'Existing' || obj.leadCategory == 'Return') {
                                     model.customer.existingLoan = 'YES';
                                 } else {
                                     model.customer.existingLoan = 'NO';
@@ -325,7 +365,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                 model.customer.villageName = obj.cityTownVillage;
                                 model.customer.landLineNo = obj.alternateMobileNo;
                                 model.customer.dateOfBirth = obj.dob;
-                                model.customer.age = moment().diff(moment(obj.dob, SessionStore.getSystemDateFormat()), 'years');
+                                model.customer.age = moment().diff(moment(obj.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                                 model.customer.gender = obj.gender;
                                 model.customer.referredBy = obj.referredBy;
                                 model.customer.landLineNo = obj.alternateMobileNo;
@@ -334,14 +374,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                 model.customer.customerCategory = obj.leadCategory;
                                 model.customer.parentLoanAccount = obj.parentLoanAccount;
 
-                               })
-
-
-
-
-
-
-
+                            })
 
                     },
                     "origination-stage": function(bundleModel, model, obj) {
@@ -363,11 +396,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                 },
                 actions: {
                     setProofs: function(model) {
-                        model.customer.addressProofNo = model.customer.aadhaarNo;
-                        model.customer.identityProofNo = model.customer.aadhaarNo;
-                        model.customer.identityProof = 'Aadhar card';
-                        model.customer.addressProof = 'Aadhar card';
-                        model.customer.addressProofSameAsIdProof = true;
                         if (model.customer.yearOfBirth) {
                             model.customer.dateOfBirth = model.customer.yearOfBirth + '-01-01';
                         }
@@ -384,7 +412,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                     },
                     reload: function(model, formCtrl, form, $event) {
                         $state.go("Page.Engine", {
-                            pageName: 'customer.IndividualEnrollment',
+                            pageName: 'agent.IndividualEnrollmentForAgent',
                             pageId: model.customer.id
                         }, {
                             reload: true,
@@ -392,10 +420,49 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                             notify: true
                         });
                     },
+                    save: function(model, formCtrl, form, $event) {
+                        PageHelper.clearErrors();
+                        if (PageHelper.isFormInvalid(formCtrl)) {
+                            return false;
+                        }
+                        var reqData = _.cloneDeep(model);
+
+                        if (!(validateRequest(reqData))) {
+                            return;
+                        }
+                        formCtrl.scope.$broadcast('schemaFormValidate');
+
+                        if (formCtrl && formCtrl.$invalid) {
+                            PageHelper.showProgress("enrolment", "Your form have errors. Please fix them.", 5000);
+                            return false;
+                        }
+
+                        // $q.all start
+                        model.enrolmentProcess.save()
+                            .finally(function() {
+                                PageHelper.hideLoader();
+                            })
+                            .subscribe(function(value) {
+                                formHelper.resetFormValidityState(formCtrl);
+                                Utils.removeNulls(value, true);
+                                PageHelper.showProgress('enrolment', 'Customer Saved.', 5000);
+                                PageHelper.clearErrors();
+                                BundleManager.pushEvent()
+                            }, function(err) {
+                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                PageHelper.showErrors(err);
+                                PageHelper.hideLoader();
+                            });
+                    },
                     proceed: function(model, form, formName) {
                         PageHelper.clearErrors();
                         if (PageHelper.isFormInvalid(form)) {
                             return false;
+                        }
+                        var reqData = _.cloneDeep(model);
+
+                        if (!(validateRequest(reqData))) {
+                            return;
                         }
                         PageHelper.showProgress('enrolment', 'Updating Customer');
                         // PageHelper.showLoader();
@@ -418,6 +485,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                         PageHelper.clearErrors();
                         if (PageHelper.isFormInvalid(form)) {
                             return false;
+                        }
+                        var reqData = _.cloneDeep(model);
+
+                        if (!(validateRequest(reqData))) {
+                            return;
                         }
                         PageHelper.showProgress('enrolment', 'Updating Customer');
                         PageHelper.showLoader();
