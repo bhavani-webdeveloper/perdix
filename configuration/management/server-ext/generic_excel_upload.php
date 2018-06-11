@@ -1,13 +1,14 @@
 <?php
 include_once "bootload.php";
 use Illuminate\Database\Capsule\Manager as DB;
+use EllipseSynergie\ApiResponse\Contracts\Response;
+$response = get_response_obj();
 
 $queryString = $_SERVER['QUERY_STRING'];
 $key = $_GET["key"];
 
 try {
     // reading the json
-    $input = "  ";
     $str = file_get_contents('excel_upload_definition.json');
     $json = json_decode($str, true);
 
@@ -74,7 +75,7 @@ try {
         }
         if ($res1) {
             DB::commit();
-            echo json_encode(["message" => 'Excel uploaded sucessfully']);
+            $response->setStatusCode(200)->json(["message" => 'Excel uploaded sucessfully']);
         } else {
             DB::rollback();
             throw new Exception('Row ' . ($n + 1) . ' failed');
@@ -84,5 +85,5 @@ try {
         throw $dbe;
     }
 } catch (Exception $e) {
-    die(json_encode(["error" => $e->getMessage()]));
+    $response->setStatusCode(400)->json(["error" => $e->getMessage()]);
 }

@@ -1,5 +1,5 @@
 {
-    "promotional_sms": {
+    "Promotional SMS": {
         "table": "sms_scheduler_details",
         "columns": [
             {
