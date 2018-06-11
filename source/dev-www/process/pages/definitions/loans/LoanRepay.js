@@ -221,7 +221,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                 },
                 offline: false,
                 form: [
-                    {
+                    
                         "type": "box",
                         "title": "REPAY",
                         "items": [
@@ -311,8 +311,15 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             {
                                 key: "repayment.bookedNotDuePenalInterest",
                                 readonly: true,
-                                condition: "model.repayment.transactionName=='PenalInterestPayment'",
-                                title: "PRECLOSURE_FEE",
+                                condition: "model.repayment.transactionName=='PenalInterestPayment'||model.repayment.transactionName=='Scheduled Demand'",
+                                title: "BOOKED_NOT_DUE_PENAL_INTEREST",
+                                type: "amount"
+                            },
+                            {
+                                key: "repayment.totalPenalInterestDue",
+                                readonly: true,
+                                condition: "model.repayment.totalPenalInterestDue && (model.repayment.transactionName=='PenalInterestPayment'||model.repayment.transactionName=='Scheduled Demand')",
+                                title: "TOTAL_PENAL_INTEREST_DUE",
                                 type: "amount"
                             },
                             {
@@ -874,6 +881,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                     postData.loanCollection.payeeName = model.repayment.payeeName;
                                     postData.loanCollection.payeeMobileNumber = model.repayment.payeeMobileNumber;
                                     postData.loanCollection.payeeRelationToApplicant = model.repayment.payeeRelationToApplicant;
+                                    postData.loanCollection.bookedNotDuePenalInterest=model.repayment.bookedNotDuePenalInterest;
 
                                     if (model.repayment.id) {
                                         postData.loanCollection.feeAmount = 0;
