@@ -2809,6 +2809,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 title:"MACHINE_PURCHASED_YEAR",
                                 type: "number",
                                 "schema":{
+                                    "minimum":1000,
                                     "maximum":9999 
                                 }
                             },
@@ -2874,12 +2875,11 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             {
                                 key: "customer.fixedAssetsMachinaries[].machineImage",
                                 title:"MACHINE_IMAGE",
-                                "category":"Loan",
-                                "subCategory":"DOC1",
-                                required: true,
-                                type: "file",
-                                fileType:"application/pdf",
-                                using: "scanner",
+                                "type": "file",
+                                "fileType": "image/*",
+                                "category": "Loan",
+                                "subCategory": "COLLATERALPHOTO",
+                               
                                 offline:true
                             },
                          ]
