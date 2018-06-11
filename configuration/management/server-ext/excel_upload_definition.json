@@ -1,0 +1,65 @@
+{
+    "promotional_sms": {
+        "table": "sms_scheduler_details",
+        "columns": [
+            {
+                "columnName": "version",
+                "default": "0"
+            },
+            {
+                "columnName": "customer_id",
+                "default": "0"
+            },
+            {
+                "columnName": "module_config_master_id",
+                "default": "0"
+            },
+            {
+                "columnName": "product_transaction_id",
+                "default": "0"
+            },
+            {
+                "fieldName": "Mobile No",
+                "columnName": "mobile_no",
+                "required": true
+            },
+            {
+                "columnName": "out_going_message",
+                "default": "NULL"
+            },
+            {
+                "columnName": "number_of_failures",
+                "default": "0"
+            },
+            {
+                "columnName": "transaction_ref_no",
+                "default": "NULL"
+            },
+            {
+                "fieldName": "Text Message",
+                "columnName": "text_message",
+                "required": true
+            },
+            {
+                "columnName": "sms_type",
+                "default": "Promotional"
+            },
+            {
+                "columnName": "created_by",
+                "default": "system"
+            },
+            {
+                "columnName": "created_at",
+                "default": "NOW()"
+            },
+            {
+                "columnName": "last_edited_by",
+                "default": "SYSTEM"
+            },
+            {
+                "columnName": "last_edited_at",
+                "default": "NOW()"
+            }
+        ]
+    }
+}
