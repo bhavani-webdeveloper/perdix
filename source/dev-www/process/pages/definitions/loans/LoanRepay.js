@@ -221,7 +221,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                 },
                 offline: false,
                 form: [
-                    
+                    {
                         "type": "box",
                         "title": "REPAY",
                         "items": [
@@ -663,6 +663,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 type:"date"
                             }
                         ]
+                
                     },
                     {
                         "type":"actionbox",
