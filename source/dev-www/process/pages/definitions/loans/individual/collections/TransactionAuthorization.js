@@ -503,7 +503,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                                 PageHelper.showProgress("waiver","Fees * Charges waiver amount is more than the Fees & Charges to be collected",5000);
                                 return false;
                             }
-                            if ( math.add(math.bignumber(model._transAuth.feeAmount), math.bignumber(model._transAuth.scheduleDemandAmount), math.bignumber(model._transAuth.securityEmiAmount) ).toNumber() != model.loanCollection.repaymentAmount) {
+                            if ( math.add(math.bignumber(model._transAuth.feeAmount), math.bignumber(model._transAuth.scheduleDemandAmount), math.bignumber(model._transAuth.securityEmiAmount), math.bignumber(model._transAuth.bookedNotDuePenalInterest) ).toNumber() != model.loanCollection.repaymentAmount) {
                                 PageHelper.showProgress("waiver", "Amount mismatch. Please verify the amount allocation breakup and amount collected.", 5000);
                                 return false;
                             }
