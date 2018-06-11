@@ -45,6 +45,26 @@
                 "Page/Engine/loans.individual.PendingClearingQueue"
             ]
         },
+        "Page/DocumentTrackingDashboard", {
+            "title": "INDIVIDUAL_LOANS",
+            "iconClass": "fa fa-female",
+            "items": [
+                "Page/LoansDashboard",
+                "Page/Engine/loans.individual.Queue",
+                "Page/Engine/loans.individual.screening.LoanOriginationQueue",
+                "Page/LoansBookingDashboard",
+                "Page/LoansDisbursementDashboard",
+                "Page/LoansACHPDCDashboard",
+                "Page/LoansCollectionsDashboard",
+                "Page/Engine/loans.individual.reversal.Search",
+                "Page/Engine/loans.LOMSReversal",
+                "Page/Engine/loans.PaymentReversal",
+                "Page/Engine/loans.individual.writeoff.WriteOffQueue",
+                "Page/Engine/loans.individual.booking.LoanBookingQueue",
+                "Page/Engine/loans.individual.PendingCashQueue",
+                "Page/Engine/loans.individual.PendingClearingQueue"
+            ]
+        },
         "Page/LUCDashboard",
         "Page/CreditMonitoringDashboard",
         "Page/InventoryDashboard",
@@ -106,6 +126,14 @@
         },
         "Page/ReportsDashboard",
         "Page/ScoreDashboard",
-        "Page/Adhoc/audit.AuditDashboard"
+        "Page/Adhoc/audit.AuditDashboard", {
+            "title": "EXCEL_UPLOAD",
+            "iconClass": "fa fa-upload",
+            "items": [
+                "Page/Engine/excelUpload.ExcelUpload",
+               
+            ]
+        },
+
     ]
 }
