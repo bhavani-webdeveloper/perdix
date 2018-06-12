@@ -703,6 +703,7 @@ define([], function() {
                     "PreliminaryInformation.frequencyRequested",
                     "PreliminaryInformation.tenureRequested",
                     "PreliminaryInformation.udf5",
+                    "PreliminaryInformation.parentLoanAccount",
                     "PreliminaryInformation.expectedInterestRate",
                     "PreliminaryInformation.calculateEmi",
                     "PreliminaryInformation.estimatedEmi",
@@ -798,6 +799,7 @@ define([], function() {
                                 "readonly": true,
                                 "condition": "model.loanAccount.securityEmiRequired == 'YES'"
                             },
+                            
                             "PreliminaryInformation.loanAmountRequested": {
                                 onChange: function(modelValue, form, model) {
                                     model.loanAccount.estimatedEmi = null;
@@ -919,8 +921,13 @@ define([], function() {
                                             "type": "string",
                                             "orderNo" : 75
                                         },
+                                        "parentLoanAccount": {
+                                            "key": "loanAccount.parentLoanAccount",
+                                            "title": "PARENT_LOAN_ACCOUNT"
+                                        }
                                     }
                                 },
+                                
                                 "DeductionsFromLoan": {
                                     "items": {
                                         "dsaPayout": {
@@ -1267,6 +1274,7 @@ define([], function() {
                         model.loanAccount.loanPurpose2 = obj.loanPurpose2;
                         model.loanAccount.vehicleLoanDetails.registrationNumber = obj.vehicleRegistrationNumber;
                         model.loanAccount.screeningDate = obj.screeningDate || moment().format("YYYY-MM-DD");
+               		    model.loanAccount.parentLoanAccount = obj.parentLoanAccount;
                     }
                 },
                 form: [],

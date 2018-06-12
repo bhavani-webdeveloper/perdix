@@ -167,7 +167,7 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                                         "parentLoanAccount": {
                                             "key": "lead.parentLoanAccount",
                                             "title": "PARENT_LOAN_ACCOUNT",
-                                            "condition": "model.lead.interestedInProduct==='YES'",
+                                            "condition": "model.lead.loanPurpose1==='Insurance Loan'",
                                             "orderNo": 40
                                         },
                                         "vehicleRegistrationNumber": {
