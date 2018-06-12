@@ -1,40 +1,54 @@
 let config = {
-    "policies": {
-        "default" : {
-            "onNew": {
+    'policies': {
+        'default' : {
+            onNew: {
                 "defaults": [
                     {
                         "name": "DefaultRelatedCustomersPolicy",
                         "arguments": {
-                            "applicant": true                            
+                            "applicant": true,
+                            "loanCustomer": true,
+                            "loanCustomerType": "Enterprise"
                         }
                     }
                 ]
             },
-            "onLoad": {
+            onLoad: {
                 "defaults": [
                     {
                         "name": "LoadRelatedCustomersPolicy",
                         "arguments": {}
                     }
+                ],
+                "overrides": []
+            },
+            beforeSave: {
+                "defaults": [
+                    {
+                        "name":"MandatoryFieldsPolicy",
+                        "arguments": null
+                    }
                 ]
             },
-            "beforeSave": {
-                "defaults": [            
-                ]
-            },
-            "afterSave": {
-                "overrides": [                    
-                ]
-            },
-            "beforeProceed": {
+            afterSave: {
                 "overrides": [
-                   
+                  
+                ]
+            },
+            beforeProceed: {
+                "defaults": [
+                    {
+                        "name": "CustomerEnrolmentCompletedPolicy",
+                        "arguments": {}
+                    }
+                ],
+                "overrides": [                  
+                  
                 ]
             }
         },
-        "command": {
-            "OverlayLeadData": {
+        'command': {
+            'OverlayLeadData': {
 
             }
         }

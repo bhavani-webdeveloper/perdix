@@ -56,6 +56,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
 
                         }
                     },
+                    "BankAccounts.customerBankAccounts.accountNumber": {
+                        "type": "password",
+                        "required": true
+                    },
+                    "BankAccounts.customerBankAccounts.confirmedAccountNumber": {
+                        "type": "string",
+                        "required": true
+                    },
                     "IndividualInformation.customerId": {
                         type: "lov",
                         lovonly: true,

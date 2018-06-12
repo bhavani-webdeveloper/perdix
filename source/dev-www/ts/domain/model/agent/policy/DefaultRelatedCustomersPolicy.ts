@@ -30,7 +30,17 @@ export class DefaultRelatedCustomersPolicy extends IPolicy<AgentProcess> {
             observables.push(applicantProcessObs);
         }
 
-       
+
+        if (this.args.loanCustomer == true){
+            let customerType:CustomerTypes = <CustomerTypes>this.args.loanCustomerType;
+            let loanCustomerProcessObs: Observable<EnrolmentProcess> = EnrolmentProcess
+                .createNewProcess(customerType)
+                .map((enrolmentProcess: EnrolmentProcess) => {
+                    agentProcess.loanCustomerEnrolmentProcess = enrolmentProcess;
+                    return agentProcess;
+                })
+            observables.push(loanCustomerProcessObs);
+        }      
 
         return Observable.merge(...observables).last();
     }
@@ -38,5 +48,7 @@ export class DefaultRelatedCustomersPolicy extends IPolicy<AgentProcess> {
 
 export interface DefaultRelatedCustomersPolicyType {
     applicant: boolean;
+    loanCustomerType: string;
+    loanCustomer: boolean;
 
 }

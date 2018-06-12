@@ -58,14 +58,17 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                 PageHelper.hideLoader();
                                 bundleModel.agentProcess = agentProcess;
                                 var agentProcess = agentProcess;
-                                
-                                $this.bundlePages.push({
-                                    pageClass: 'business',
-                                    model: {
-                                        enrolmentProcess: agentProcess.loanCustomerEnrolmentProcess,
-                                        agentProcess: agentProcess,
-                                    }
-                                });
+
+                                if (agentProcess.loanCustomerEnrolmentProcess) {
+                                    $this.bundlePages.push({
+                                        pageClass: "business",
+                                        model: {
+                                            enrolmentProcess: agentProcess.loanCustomerEnrolmentProcess,
+                                            agentProcess: agentProcess,
+                                        }
+                                    });
+
+                                }
 
                                 $this.bundlePages.push({
                                     pageClass: 'agent',
@@ -84,13 +87,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                 bundleModel.agentProcess = agentProcess;
                                 // loanProcess.loanAccount.currentStage = 'Screening';
                                 PageHelper.hideLoader();
-                                $this.bundlePages.push({
-                                    pageClass: "business",
-                                    model: {
-                                        enrolmentProcess: agentProcess.loanCustomerEnrolmentProcess,
-                                        agentProcess: agentProcess,
-                                    }
-                                });
+                                if (agentProcess.loanCustomerEnrolmentProcess) {
+                                    $this.bundlePages.push({
+                                        pageClass: "business",
+                                        model: {
+                                            enrolmentProcess: agentProcess.loanCustomerEnrolmentProcess,
+                                            agentProcess: agentProcess,
+                                        }
+                                    });
+
+                                }
 
                                 $this.bundlePages.push({
                                     pageClass: 'agent',

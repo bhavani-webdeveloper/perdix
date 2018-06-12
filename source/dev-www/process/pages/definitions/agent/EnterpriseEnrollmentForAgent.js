@@ -97,7 +97,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
 
             var configFile = function() {
                 return {
-                    "loanProcess.loanAccount.isReadOnly": {
+                    "agentProcess.loanAccount.isReadOnly": {
                         "Yes": {
                             "overrides": {
                                 "EnterpriseInformation": {
@@ -279,7 +279,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                 PageHelper.hideLoader();
                             })
                             .subscribe(function() {
-                                model.loanProcess.refreshRelatedCustomers();
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 model.enrolmentProcess.proceed()
                                     .subscribe(function(enrolmentProcess) {
