@@ -1,0 +1,46 @@
+{  
+   "operators":[  
+      {  
+         "name":"=",
+         "value":"="
+      },
+      {  
+         "name":"<",
+         "value":"<"
+      },
+      {  
+         "name":">",
+         "value":">"
+      },
+      {  
+         "name":"IN",
+         "value":"IN"
+      },
+      {  
+         "name":"between",
+         "value":"between"
+      }
+   ],
+"type":[  
+      {  
+         "name":"list",
+         "value":"list"
+      },
+      {  
+         "name":"select",
+         "value":"select"
+      },
+      {  
+         "name":"date",
+         "value":"date"
+      },
+	 {  
+         "name":"text",
+         "value":"text"
+      }
+   ]
+
+
+
+
+}

@@ -141,6 +141,11 @@ irf.pages.config([
 		url: "/ServiceRequestDashboard",
 		templateUrl: "process/pages/templates/Page.Dashboard.html",
 		controller: "ServiceRequestDashboardCtrl"		
+	},{
+		name: "Page.ManagementReportDashboard",
+		url: "/ManagementReportDashboard",
+		templateUrl: "process/pages/templates/Page.Dashboard.html",
+		controller: "PageManagementReportDashboardCtrl"		
 	}];
 
 	angular.forEach(statesDefinition, function(value, key){

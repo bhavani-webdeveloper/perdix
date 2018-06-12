@@ -83,7 +83,8 @@
                         "Page/Engine/management.audit.AuditStage",
                         "Page/Engine/management.audit.AuditStageActivities"
                     ]
-                }
+                },
+                "Page/ManagementReportDashboard"
             ]
         }, {
             "title": "PSYCHOMETRIC",
