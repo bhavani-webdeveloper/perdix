@@ -19,15 +19,15 @@ define([], function() {
                 initialize: function(model, form, formCtrl) {
                     $log.info("Add Account got initialized");
 
-                    var promise1 = ChartOfAccount.list().$promise;
-                    promise1.then((res) => {
-                        console.log((res));
-                        model.data1 = res;
-                        PageHelper.hideLoader();
-                    }, (err) => {
-                        console.log(err);
-                        PageHelper.hideLoader();
-                    });
+                    // var promise1 = ChartOfAccount.list().$promise;
+                    // promise1.then((res) => {
+                    //     console.log((res));
+                    //     model.data1 = res;
+                    //     PageHelper.hideLoader();
+                    // }, (err) => {
+                    //     console.log(err);
+                    //     PageHelper.hideLoader();
+                    // });
 
                     model.glAccount = model.glAccount || {};
                     if (!(model && model.glAccount && model.glAccount.id)) {
@@ -238,7 +238,6 @@ define([], function() {
                             model.parentId = 0;
                         }
                         model.glAccount.branchSetCode = 'ALL';
-                        model.glAccount.glType = 'LEDGER';
                         var reqData = model.glAccount;
                         $log.info(reqData);
                         var promise = ChartOfAccount.post(reqData).$promise;
