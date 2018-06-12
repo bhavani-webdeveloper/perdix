@@ -54,14 +54,14 @@ try{
 	when oc_cat.occupation_category='Business' and ifnull(ifnull(ti.household_income,0)/nullif(sz.cnt,0),0)>=121573 and ifnull(ifnull(ai.household_income,0)/nullif(ti.household_income,0),0)>=0  and ifnull(ifnull(ai.household_income,0)/nullif(ti.household_income,0),0)<=100 then 'business high income'
 
 
-	when oc_cat.occupation_category='Salary' and ifnull(ifnull(ti.household_income,0)/nullif(sz.cnt,0),0)>=0 and ifnull(ifnull(ti.household_income,0)/nullif(sz.cnt,0),0)<73623 and ifnull(ifnull(ai.household_income,0)/nullif(ti.household_income,0),0)>=0  and ifnull(ifnull(ai.household_income,0)/nullif(ti.household_income,0),0)<=25 then 'labour low income'
+	when oc_cat.occupation_category='Salary' and ifnull(ifnull(ti.household_income,0)/nullif(sz.cnt,0),0)>=0 and ifnull(ifnull(ti.household_income,0)/nullif(sz.cnt,0),0)<73623 and ifnull(ifnull(ai.household_income,0)/nullif(ti.household_income,0),0)>=0  and ifnull(ifnull(ai.household_income,0)/nullif(ti.household_income,0),0)<=25 then 'salary low income'
 
-	when oc_cat.occupation_category='Salary' and ifnull(ifnull(ti.household_income,0)/nullif(sz.cnt,0),0)>=73623 and ifnull(ifnull(ti.household_income,0)/nullif(sz.cnt,0),0)<140605 and ifnull(ifnull(ai.household_income,0)/nullif(ti.household_income,0),0)>=0  and ifnull(ifnull(ai.household_income,0)/nullif(ti.household_income,0),0)<=25 then 'labour mid income'
+	when oc_cat.occupation_category='Salary' and ifnull(ifnull(ti.household_income,0)/nullif(sz.cnt,0),0)>=73623 and ifnull(ifnull(ti.household_income,0)/nullif(sz.cnt,0),0)<140605 and ifnull(ifnull(ai.household_income,0)/nullif(ti.household_income,0),0)>=0  and ifnull(ifnull(ai.household_income,0)/nullif(ti.household_income,0),0)<=25 then 'salary mid income'
 
 
-	when oc_cat.occupation_category='Salary' and ifnull(ifnull(ti.household_income,0)/nullif(sz.cnt,0),0)>=140605 and ifnull(ifnull(ai.household_income,0)/nullif(ti.household_income,0),0)>=0  and ifnull(ifnull(ai.household_income,0)/nullif(ti.household_income,0),0)<=25 then 'labour high income'
+	when oc_cat.occupation_category='Salary' and ifnull(ifnull(ti.household_income,0)/nullif(sz.cnt,0),0)>=140605 and ifnull(ifnull(ai.household_income,0)/nullif(ti.household_income,0),0)>=0  and ifnull(ifnull(ai.household_income,0)/nullif(ti.household_income,0),0)<=25 then 'salary high income'
 
-	when oc_cat.occupation_category='Salary' and ifnull(ifnull(ti.household_income,0)/nullif(sz.cnt,0),0)>=0  and ifnull(ifnull(ai.household_income,0)/nullif(ti.household_income,0),0)>25  and ifnull(ifnull(ai.household_income,0)/nullif(ti.household_income,0),0)<=100 then 'labour agri income'
+	when oc_cat.occupation_category='Salary' and ifnull(ifnull(ti.household_income,0)/nullif(sz.cnt,0),0)>=0  and ifnull(ifnull(ai.household_income,0)/nullif(ti.household_income,0),0)>25  and ifnull(ifnull(ai.household_income,0)/nullif(ti.household_income,0),0)<=100 then 'salary agri income'
 
 	when oc_cat.occupation_category='Labour' and ifnull(ifnull(ti.household_income,0)/nullif(sz.cnt,0),0)>=0 and ifnull(ifnull(ti.household_income,0)/nullif(sz.cnt,0),0)<56816 and ifnull(ifnull(ai.household_income,0)/nullif(ti.household_income,0),0)>=0  and ifnull(ifnull(ai.household_income,0)/nullif(ti.household_income,0),0)<=25 then 'labour low income'
 
