@@ -113,7 +113,7 @@ try{
 	 (case 
 	 when oc.income_source='Working Abroad' then 'Working Abroad' 
 	 when oc.income_source in ('Goat rearing','Agriculture','Dairy','Fishing') then 'Agriculture'
-	 when oc.income_source in ('Salaried - Govt','	Salaried - Others','Retired / Pensioner') then 'Salary'
+	 when oc.income_source in ('Salaried - Govt','Salaried - Others','Retired / Pensioner') then 'Salary'
 	 when oc.income_source in ('Agri Trading','Rental Income','Shop Owner','Business - Others','Driver','Small Industry','Professional') then 'Business'
 	 when oc.income_source in ('Performing Arts','Labour','Migrant Labour','Unemployed','House-wife','Student') then 'Labour'
 	 when oc.income_source is NULL then 'missing data'
@@ -209,17 +209,17 @@ SELECT 'Female' as Dependants,
 	
 	
 	$result_loan_count =DB::connection("bietl_db")->select("select 'Active' As Status , 
-	sum(case when apd.product like '%jlg%' and apd.product_close_date>curdate() and apd.household_id=? then 1 else 0 end) as JLG,
-	sum(case when apd.product like 'MEL|Retail' and apd.product_close_date>curdate() and apd.household_id=? then 1 else 0 end) as MEL,
-	sum(case when apd.product like '%personal%' and apd.product_close_date>curdate() and apd.household_id=? then 1 else 0 end)as PERSONAL,
-	sum(case when apd.product  not rlike 'JLG|MEL|Retail|Personal' and apd.product_close_date>curdate() and apd.household_id=? then 1 else 0 end) as OTHERS
+	sum(case when apd.product like '%jlg%' and apd.principal_outstanding>0 and apd.household_id=? then 1 else 0 end) as JLG,
+	sum(case when apd.product like 'MEL|Retail' and apd.principal_outstanding>0 and apd.household_id=? then 1 else 0 end) as MEL,
+	sum(case when apd.product like '%Personal Loan%' and apd.principal_outstanding>0 and apd.household_id=? then 1 else 0 end)as PERSONAL,
+	sum(case when apd.product  not rlike 'JLG|MEL|Retail|Personal' and apd.principal_outstanding>0 and apd.household_id=? then 1 else 0 end) as OTHERS
 from bietl.`all_products_dump` apd where  apd.household_id=?
 UNION ALL
 	SELECT 'Closed' As Status,
-	sum(case when apd.product like '%jlg%' and apd.product_close_date<curdate() and apd.household_id=? then 1 else 0 end) as JLG,
-	sum(case when apd.product like 'MEL|Retail' and apd.product_close_date<curdate() and apd.household_id=? then 1 else 0 end) as MEL,
-	sum(case when apd.product like '%personal%' and apd.product_close_date<curdate() and apd.household_id=? then 1 else 0 end) as PERSONAL,
-	sum(case when apd.product not rlike 'JLG|MEL|Retail|Personal' and apd.product_close_date<curdate() and apd.household_id=? then 1 else 0 end) as OTHERS
+	sum(case when apd.product like '%jlg%' and apd.principal_outstanding<=0 and apd.household_id=? then 1 else 0 end) as JLG,
+	sum(case when apd.product like 'MEL|Retail' and apd.principal_outstanding<=0 and apd.household_id=? then 1 else 0 end) as MEL,
+	sum(case when apd.product like '%Personal Loan%' and apd.principal_outstanding<=0 and apd.household_id=? then 1 else 0 end) as PERSONAL,
+	sum(case when apd.product not rlike 'JLG|MEL|Retail|Personal' and apd.principal_outstanding<=0 and apd.household_id=? then 1 else 0 end) as OTHERS
 
 	from bietl.`all_products_dump` apd where  apd.household_id=?",array($id[0]->id,$id[0]->id,$id[0]->id,$id[0]->id,$id[0]->id,$id[0]->id,$id[0]->id,$id[0]->id,$id[0]->id,$id[0]->id));
 	
