@@ -3994,6 +3994,42 @@
                      "captureStages":[
                         "LoanBooking"
                      ]
+                  },
+                  "linkedAccountTotalPrincipalDue": {
+                     "title": "linkedAccountTotalPrincipalDue",
+                     "type": "string",
+                     "minLength": 1,
+                     "maxLength": 100,
+                     "captureStages": [
+                        "LoanBooking"
+                     ]
+                  },
+                  "linkedAccountNormalInterestDue": {
+                     "title": "linkedAccountNormalInterestDue",
+                     "type": "string",
+                     "minLength": 1,
+                     "maxLength": 100,
+                     "captureStages": [
+                        "LoanBooking"
+                     ]
+                  },
+                  "linkedAccountPenalInterestDue": {
+                     "title": "linkedAccountPenalInterestDue",
+                     "type": "string",
+                     "minLength": 1,
+                     "maxLength": 100,
+                     "captureStages": [
+                        "LoanBooking"
+                     ]
+                  },
+                  "linkedAccountTotalFeeDue": {
+                     "title": "linkedAccountTotalFeeDue",
+                     "type": "string",
+                     "minLength": 1,
+                     "maxLength": 100,
+                     "captureStages": [
+                        "LoanBooking"
+                     ]
                   }
                }
             }
