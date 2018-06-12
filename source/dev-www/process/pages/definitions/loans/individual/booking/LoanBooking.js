@@ -894,7 +894,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     PageHelper.showProgress('preclosure', 'Getting PreClosure Details', 2000);
                     var reqData={
                         linkedAccountId:model.loanAccount.linkedAccountNumber,
-                        valueDate:  moment(model._currentDisbursement.scheduledDisbursementDate).format("YYYY-MM-DD")
+                        valueDate:moment(model._currentDisbursement.scheduledDisbursementDate).format("YYYY-MM-DD")
                     };
                     IndividualLoan.getPreClosureDetails(reqData).$promise.then(function(response){
                         PageHelper.hideLoader();
@@ -902,10 +902,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         model.loanAccount.precloseuredetails=true;
                         model.loanAccount.precloseurePayOffAmount=response.part1;
                         model.loanAccount.precloseurePayOffAmountWithDue=response.part2;
-                        model.loanAccount.precloseurePrincipal=response.part3;
-                        model.loanAccount.precloseureNormalInterest=response.part4;
-                        model.loanAccount.precloseurePenalInterest=response.part5;
-                        model.loanAccount.precloseureTotalFee=response.part6;
+                        model.loanAccount.precloseurePrincipal=model.loanAccount.disbursementSchedules[0].linkedAccountTotalPrincipalDue= (response.part3.slice(3)).replace(/\,/g,"");
+                        model.loanAccount.precloseureNormalInterest=model.loanAccount.disbursementSchedules[0].linkedAccountNormalInterestDue=(response.part4.slice(3)).replace(/\,/g,"");
+                        model.loanAccount.precloseurePenalInterest=model.loanAccount.disbursementSchedules[0].linkedAccountPenalInterestDue=(response.part5.slice(3)).replace(/\,/g,"");
+                        model.loanAccount.precloseureTotalFee=model.loanAccount.disbursementSchedules[0].linkedAccountTotalFeeDue=(response.part6.slice(3)).replace(/\,/g,"");
                     },function(error){
                         model.loanAccount.precloseuredetails=false;
                         PageHelper.showProgress('preclosure', 'Error Getting Preclosure loan details', 2000);
