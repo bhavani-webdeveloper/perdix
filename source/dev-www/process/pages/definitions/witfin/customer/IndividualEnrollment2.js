@@ -573,25 +573,25 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "HouseVerification": {
                         "title": "RESIDENCE"
                     },
-                    "Liabilities.liabilities.loanSource1": {
-                        orderNo : 12
+                    "Liabilities.liabilities": {
+                                    startEmpty: true
                     },
-                    "Liabilities.liabilities.loanSourceCategory": {
-                        onChange: function(modelValue, form, model) {
-                            if (modelValue == 'Friends') {
-                                model.customer.liabilities[form.arrayIndex].loanSource = 'Friends';
-                            } else if (modelValue == 'Relatives') {
-                                model.customer.liabilities[form.arrayIndex].loanSource = 'Relatives';
-                            }
-                        }
+                    "Liabilities.liabilities.frequencyOfInstallment": {
+                                    "title": "REPAYMENT_FREQUENCY",
+                                    "required": true
                     },
-                    "Liabilities.liabilities.loanSource": {
-                        "condition" : "model.customer.liabilities[arrayIndex].loanSourceCategory == 'Bank/NBFC'"
+                    "Liabilities.liabilities.noOfInstalmentPaid": {
+                                    "title": "TENURE",
+                                    "required": true
                     },
-                    "Liabilities.liabilities.liabilityLoanPurpose": {
-                        "enumCode": "loan_purpose_1",
-                        "type": "select"
+                    "Liabilities.liabilities.startDate": {
+                                    "title": "LOAN_START_DATE",
+                                    "required": true
                     },
+                    
+                    
+                    
+                    
                     "FamilyDetails.familyMembers.familyMemberFirstName": {
                         "condition": "model.customer.familyMembers[arrayIndex].relationShip.toUpperCase() != 'SELF'"
                     },
@@ -919,21 +919,17 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "IndividualFinancials.expenditures.frequency",
                     "Liabilities",
                     "Liabilities.liabilities",
-                    "Liabilities.liabilities.loanSourceCategory",
-                    "Liabilities.liabilities.loanSource",
-                    "Liabilities.liabilities.loanSource1",
-                    "Liabilities.liabilities.loanType",
                     "Liabilities.liabilities.loanAmountInPaisa",
                     "Liabilities.liabilities.installmentAmountInPaisa",
-                    "Liabilities.liabilities.outstandingAmountInPaisa",
                     "Liabilities.liabilities.startDate",
-                    "Liabilities.liabilities.maturityDate",
                     "Liabilities.liabilities.noOfInstalmentPaid",
                     "Liabilities.liabilities.frequencyOfInstallment",
-                    "Liabilities.liabilities.liabilityLoanPurpose",
-                    "Liabilities.liabilities.interestOnly",
-                    "Liabilities.liabilities.interestRate",
-                    "Liabilities.liabilities.proofDocuments",
+                    "Liabilities.liabilities.udf1",
+                    "Liabilities.liabilities.customerLiabilityRepayments",
+                    "Liabilities.liabilities.customerLiabilityRepayments.emiNo",
+                    "Liabilities.liabilities.customerLiabilityRepayments.emiAmount",
+                    "Liabilities.liabilities.customerLiabilityRepayments.emiDueDate",
+                    "Liabilities.liabilities.customerLiabilityRepayments.actualRepaymentDate",
                     "HouseVerification",
                     "HouseVerification.ownership",
                     "HouseVerification.inCurrentAddressSince",
@@ -1188,12 +1184,43 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "items": {
                                         "liabilities": {
                                             "items": {
-                                                "loanSource1": {
-                                                    "condition":"model.customer.liabilities[arrayIndex].loanSourceCategory == 'Friends' ||  model.customer.liabilities[arrayIndex].loanSourceCategory == 'Relatives'",
-                                                    "key": "customer.liabilities[].loanSource",
-                                                    "title":"LOAN_SOURCE",
-                                                    "readonly": true
-                                                }
+                                                "udf1": {
+                                                        "title": "VEHICLE_MODEL",
+                                                        "type": "string",
+                                                        "key": "customer.liabilities[].udf1"
+                                                    },
+                                                    "customerLiabilityRepayments" : {
+                                                        "key": "customer.liabilities[].customerLiabilityRepayments",
+                                                        "type": "array",
+                                                        "startEmpty": true,
+                                                        "title": "REPAYMENT_DETAILS",
+                                                        "items": {
+                                                            "emiNo": {
+                                                                "key": "customer.liabilities[].customerLiabilityRepayments[].emiNo",
+                                                                "title": "EMI_NO",
+                                                                "type": "number",
+                                                                "required": true
+                                                            },
+                                                            "emiAmount": {
+                                                              "key": "customer.liabilities[].customerLiabilityRepayments[].emiAmount",
+                                                              "title": "EMI_AMOUNT",
+                                                              "type": "number",
+                                                              "required": true
+                                                            },
+                                                            "emiDueDate": {
+                                                              "key": "customer.liabilities[].customerLiabilityRepayments[].emiDueDate",
+                                                              "title": "EMI_DUE_DATE",
+                                                              "type": "date",
+                                                              "required": true
+                                                            },
+                                                            "actualRepaymentDate": {
+                                                                "key": "customer.liabilities[].customerLiabilityRepayments[].actualRepaymentDate",
+                                                                "title": "ACTUAL_REPAYMENT_DATE",
+                                                                "type": "date",
+                                                                "required": true
+                                                            }
+                                                        }
+                                                    }
                                             }
                                         }
                                     }
@@ -1206,11 +1233,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "type": "select",
                                             "enumCode": "lead_category",
                                             "orderNo": 85
-                                        },
-                                        "parentLoanAccount": {
-                                            "key": "customer.parentLoanAccount",
-                                            "title": "PARENT_LOAN_ACCOUNT"
                                         }
+                                        
                                     }
                                 },
                                 "HouseVerification": {

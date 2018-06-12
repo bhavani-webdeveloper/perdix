@@ -191,7 +191,7 @@ define({
                     },
                     getActions: function() {
                         return [{
-                            name: "SCREENING",
+                            name: "CREDIT_APPRAISAL_QUEUE",
                             desc: "",
                             icon: "fa fa-pencil-square-o",
                             fn: function(item, index) {
