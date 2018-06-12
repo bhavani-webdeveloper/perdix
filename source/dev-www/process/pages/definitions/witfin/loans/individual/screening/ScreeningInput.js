@@ -51,6 +51,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:40
                         },
                         {
+                            pageName: 'witfin.loans.individual.screening.VehicleDetails',
+                            title: 'VEHICLE_DETAILS',
+                            pageClass: 'vehicle-details',
+                            minimum: 1,
+                            maximum: 1,
+                            order:45
+                        },
+                        {
                             pageName: 'witfin.loans.individual.screening.LoanRequest',
                             title: 'LOAN_REQUEST',
                             pageClass: 'loan-request',
@@ -81,14 +89,6 @@ define(["perdix/domain/model/loan/LoanProcess",
                             minimum: 1,
                             maximum: 1,
                             order:80
-                        },
-                        {
-                            pageName: 'witfin.loans.individual.screening.VehicleDetails',
-                            title: 'VEHICLE_DETAILS',
-                            pageClass: 'vehicle-details',
-                            minimum: 1,
-                            maximum: 1,
-                            order:90
                         }
                     ]);
                 },

@@ -30,6 +30,10 @@ define(["require", "exports"], function (require, exports) {
                         {
                             "name": "DefaultVehicleDocumentsPolicy",
                             "arguments": {}
+                        },
+                        {
+                            "name": "DefaultCalculatedVehicleDetailsPolicy",
+                            "arguments": {}
                         }
                     ],
                     "overrides": [
@@ -44,7 +48,7 @@ define(["require", "exports"], function (require, exports) {
                                 {
                                     "name": "DefaultVehicleAccessoriesPolicy",
                                     "arguments": {}
-                                }
+                                },
                             ]
                         },
                         {

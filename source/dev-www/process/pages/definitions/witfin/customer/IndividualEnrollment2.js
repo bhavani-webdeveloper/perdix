@@ -37,10 +37,24 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 return true;
             }
 
+            // Calculate calculating vehicle fee for track details.
+            var calculateVehiclesFree = function(modelValue, form, model) {
+                model.customer.vehiclesFree = model.customer.vehiclesOwned - model.customer.vehiclesFinanced;
+            }
+
             var configFile = function () {
                 return {
                     "loanProcess.loanAccount.currentStage": {
-
+                        "Screening": {
+                            "overrides": {
+                                
+                            },
+                            "excludes": [
+                                "IndividualReferences",
+                                "PhysicalAssets",
+                                "ResidenceVerification"
+                            ]
+                        },
                         "ScreeningReview": {
                             "overrides": {
                                 "KYC": {
@@ -59,9 +73,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "Liabilities": {
                                     "readonly": true
                                 },
-                                "IndividualReferences": {
-                                    "readonly": true
-                                },
                                 "HouseVerification": {
                                     "readonly": true
                                 },
@@ -70,22 +81,42 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
                             },
                             "excludes": [
-                                "ResidenceVerification",
-                                "FamilyDetails.familyMembers.dateOfBirth",
-                                "PhysicalAssets",
-                                "FamilyDetails.familyMembers.dateOfBirth",
-                                "FamilyDetails.familyMembers.maritalStatus",
-                                "FamilyDetails.familyMembers.primaryOccupation",
-                                "FamilyDetails.familyMembers.familyMemberFirstName",
-                                "FamilyDetails.familyMembers.anualEducationFee",
-                                "FamilyDetails.familyMembers.salary",
-                                "FamilyDetails.familyMembers.incomes",
-                                "FamilyDetails.expenditures",
                                 "IndividualReferences",
-                                "ContactInformation.whatsAppMobileNoOption"
+                                "PhysicalAssets",
+                                "ResidenceVerification"
                             ]
                         },
-                        "Application": {
+                        "GoNoGoApproval1": {
+                            "overrides": {
+                                "FamilyDetails": {
+                                    "title": "HOUSEHOLD_DETAILS"
+                                },
+                                "KYC.customerId": {
+                                    "readonly": true
+                                }
+                            },
+                            "excludes": [
+                                "IndividualReferences",
+                                "PhysicalAssets",
+                                "ResidenceVerification"
+                            ]
+                        },
+                        "GoNoGoApproval2": {
+                            "overrides": {
+                                "FamilyDetails": {
+                                    "title": "HOUSEHOLD_DETAILS"
+                                },
+                                "KYC.customerId": {
+                                    "readonly": true
+                                }
+                            },
+                            "excludes": [
+                                "IndividualReferences",
+                                "PhysicalAssets",
+                                "ResidenceVerification"
+                            ]
+                        },
+                        "FieldInvestigation": {
                             "overrides": {
                                 "FamilyDetails": {
                                     "title": "HOUSEHOLD_DETAILS"
@@ -96,166 +127,314 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             },
                             "excludes": [
                                 "ContactInformation.location"
-                                // "IndividualReferences.verifications.ReferenceCheck"
                             ]
                         },
-                        "ApplicationReview": {
-                            "excludes": [
-                                "ContactInformation.whatsAppMobileNoOption"
-                                // "IndividualReferences.verifications.ReferenceCheck"
-                            ],
+                        "TeleVerification": {
                             "overrides": {
-                                "KYC": {
-                                    "readonly": true
-                                },
-                                "IndividualInformation": {
-                                    "readonly": true
-                                },
-                                "ContactInformation": {
-                                    "readonly": true
-                                },
-                                "FamilyDetails": {
-                                    "readonly": true,
-                                    "title": "HOUSEHOLD_DETAILS"
-                                },
-                                "Liabilities": {
-                                    "readonly": true
-                                },
                                 "IndividualReferences": {
-                                    "readonly": true
-                                },
-                                "reference": {
-                                    "readonly": true
-                                },
-                                "HouseVerification": {
-                                    "readonly": true
-                                },
-                                "ResidenceVerification":{
                                     "readonly": true
                                 },
                                 "PhysicalAssets": {
                                     "readonly": true
                                 },
-                                "IndividualInformation.customerCategory": {
-                                    "readonly": true
-                                }
-                            }
-
-                        },
-                        "BranchCreditAppraisal": {
-                            "overrides": {
-                                "KYC": {
-                                    "readonly": true
-                                },
-                                "IndividualInformation": {
-                                    "readonly": true
-                                },
-                                "ContactInformation": {
-                                    "readonly": true
-                                },
-                                "FamilyDetails": {
-                                    "readonly": true,
-                                    "title": "HOUSEHOLD_DETAILS"
-                                },
-                                "Liabilities": {
-                                    "readonly": true
-                                },
-                                "IndividualReferences": {
-                                    "readonly": true
-                                },
-                                "HouseVerification": {
-                                    "readonly": true
-                                },
-                                "ResidenceVerification":{
-                                    "readonly": true
-                                },
-                                "PhysicalAssets": {
-                                    "readonly": true
-                                },
-                                "IndividualInformation.customerCategory": {
+                                "ResidenceVerification": {
                                     "readonly": true
                                 }
                             },
                             "excludes": [
-                                "ContactInformation.whatsAppMobileNoOption"
-                                // "IndividualReferences.verifications.ReferenceCheck"
+                                "ContactInformation.location"
                             ]
                         },
-                        "HOCreditAppraisal": {
+                        "CreditAppraisal": {
                             "overrides": {
-                                "KYC": {
-                                    "readonly": true
-                                },
-                                "IndividualInformation": {
-                                    "readonly": true
-                                },
-                                "ContactInformation": {
-                                    "readonly": true
-                                },
-                                "FamilyDetails": {
-                                    "readonly": true,
-                                    "title": "HOUSEHOLD_DETAILS"
-                                },
-                                "Liabilities": {
-                                    "readonly": true
-                                },
                                 "IndividualReferences": {
-                                    "readonly": true
-                                },
-                                "HouseVerification": {
-                                    "readonly": true
-                                },
-                                "ResidenceVerification":{
                                     "readonly": true
                                 },
                                 "PhysicalAssets": {
                                     "readonly": true
                                 },
-                                "IndividualInformation.customerCategory": {
+                                "ResidenceVerification": {
                                     "readonly": true
                                 }
                             },
                             "excludes": [
-                                "ContactInformation.whatsAppMobileNoOption"
+                                "ContactInformation.location"
                                 // "IndividualReferences.verifications.ReferenceCheck"
                             ]
                         },
-                        "ManagementCommittee": {
+                        "DeviationApproval1": {
                             "overrides": {
-                                "KYC": {
-                                    "readonly": true
-                                },
-                                "IndividualInformation": {
-                                    "readonly": true
-                                },
-                                "ContactInformation": {
-                                    "readonly": true
-                                },
                                 "FamilyDetails": {
-                                    "readonly": true,
                                     "title": "HOUSEHOLD_DETAILS"
                                 },
-                                "Liabilities": {
+                                "KYC.customerId": {
                                     "readonly": true
                                 },
                                 "IndividualReferences": {
                                     "readonly": true
                                 },
-                                "HouseVerification": {
+                                "PhysicalAssets": {
                                     "readonly": true
                                 },
-                                "ResidenceVerification":{
+                                "ResidenceVerification": {
+                                    "readonly": true
+                                }
+                            },
+                            "excludes": [
+                                "ContactInformation.location"
+                                // "IndividualReferences.verifications.ReferenceCheck"
+                            ]
+                        },
+                        "DeviationApproval2": {
+                            "overrides": {
+                                "FamilyDetails": {
+                                    "title": "HOUSEHOLD_DETAILS"
+                                },
+                                "KYC.customerId": {
+                                    "readonly": true
+                                },
+                                "IndividualReferences": {
                                     "readonly": true
                                 },
                                 "PhysicalAssets": {
                                     "readonly": true
                                 },
-                                "IndividualInformation.customerCategory": {
+                                "ResidenceVerification": {
                                     "readonly": true
                                 }
                             },
                             "excludes": [
-                                "ContactInformation.whatsAppMobileNoOption"
+                                "ContactInformation.location"
+                                // "IndividualReferences.verifications.ReferenceCheck"
+                            ]
+                        },
+                        "BusinessApproval1": {
+                            "overrides": {
+                                "FamilyDetails": {
+                                    "title": "HOUSEHOLD_DETAILS"
+                                },
+                                "KYC.customerId": {
+                                    "readonly": true
+                                },
+                                "IndividualReferences": {
+                                    "readonly": true
+                                },
+                                "PhysicalAssets": {
+                                    "readonly": true
+                                },
+                                "ResidenceVerification": {
+                                    "readonly": true
+                                }
+                            },
+                            "excludes": [
+                                "ContactInformation.location"
+                                // "IndividualReferences.verifications.ReferenceCheck"
+                            ]
+                        },
+                        "BusinessApproval2": {
+                            "overrides": {
+                                "FamilyDetails": {
+                                    "title": "HOUSEHOLD_DETAILS"
+                                },
+                                "KYC.customerId": {
+                                    "readonly": true
+                                },
+                                "IndividualReferences": {
+                                    "readonly": true
+                                },
+                                "PhysicalAssets": {
+                                    "readonly": true
+                                },
+                                "ResidenceVerification": {
+                                    "readonly": true
+                                }
+                            },
+                            "excludes": [
+                                "ContactInformation.location"
+                                // "IndividualReferences.verifications.ReferenceCheck"
+                            ]
+                        },
+                        "BusinessApproval3": {
+                            "overrides": {
+                                "FamilyDetails": {
+                                    "title": "HOUSEHOLD_DETAILS"
+                                },
+                                "KYC.customerId": {
+                                    "readonly": true
+                                },
+                                "IndividualReferences": {
+                                    "readonly": true
+                                },
+                                "PhysicalAssets": {
+                                    "readonly": true
+                                },
+                                "ResidenceVerification": {
+                                    "readonly": true
+                                }
+                            },
+                            "excludes": [
+                                "ContactInformation.location"
+                                // "IndividualReferences.verifications.ReferenceCheck"
+                            ]
+                        },
+                        "BusinessApproval4": {
+                            "overrides": {
+                                "FamilyDetails": {
+                                    "title": "HOUSEHOLD_DETAILS"
+                                },
+                                "KYC.customerId": {
+                                    "readonly": true
+                                },
+                                "IndividualReferences": {
+                                    "readonly": true
+                                },
+                                "PhysicalAssets": {
+                                    "readonly": true
+                                },
+                                "ResidenceVerification": {
+                                    "readonly": true
+                                }
+                            },
+                            "excludes": [
+                                "ContactInformation.location"
+                                // "IndividualReferences.verifications.ReferenceCheck"
+                            ]
+                        },
+                        "BusinessApproval5": {
+                            "overrides": {
+                                "FamilyDetails": {
+                                    "title": "HOUSEHOLD_DETAILS"
+                                },
+                                "KYC.customerId": {
+                                    "readonly": true
+                                },
+                                "IndividualReferences": {
+                                    "readonly": true
+                                },
+                                "PhysicalAssets": {
+                                    "readonly": true
+                                },
+                                "ResidenceVerification": {
+                                    "readonly": true
+                                }
+                            },
+                            "excludes": [
+                                "ContactInformation.location"
+                                // "IndividualReferences.verifications.ReferenceCheck"
+                            ]
+                        },
+                        "CreditApproval1": {
+                            "overrides": {
+                                "FamilyDetails": {
+                                    "title": "HOUSEHOLD_DETAILS"
+                                },
+                                "KYC.customerId": {
+                                    "readonly": true
+                                },
+                                "IndividualReferences": {
+                                    "readonly": true
+                                },
+                                "PhysicalAssets": {
+                                    "readonly": true
+                                },
+                                "ResidenceVerification": {
+                                    "readonly": true
+                                }
+                            },
+                            "excludes": [
+                                "ContactInformation.location"
+                                // "IndividualReferences.verifications.ReferenceCheck"
+                            ]
+                        },
+                        "CreditApproval2": {
+                            "overrides": {
+                                "FamilyDetails": {
+                                    "title": "HOUSEHOLD_DETAILS"
+                                },
+                                "KYC.customerId": {
+                                    "readonly": true
+                                },
+                                "IndividualReferences": {
+                                    "readonly": true
+                                },
+                                "PhysicalAssets": {
+                                    "readonly": true
+                                },
+                                "ResidenceVerification": {
+                                    "readonly": true
+                                }
+                            },
+                            "excludes": [
+                                "ContactInformation.location"
+                                // "IndividualReferences.verifications.ReferenceCheck"
+                            ]
+                        },
+                        "CreditApproval3": {
+                            "overrides": {
+                                "FamilyDetails": {
+                                    "title": "HOUSEHOLD_DETAILS"
+                                },
+                                "KYC.customerId": {
+                                    "readonly": true
+                                },
+                                "IndividualReferences": {
+                                    "readonly": true
+                                },
+                                "PhysicalAssets": {
+                                    "readonly": true
+                                },
+                                "ResidenceVerification": {
+                                    "readonly": true
+                                }
+                            },
+                            "excludes": [
+                                "ContactInformation.location"
+                                // "IndividualReferences.verifications.ReferenceCheck"
+                            ]
+                        },
+                        "CreditApproval4": {
+                            "overrides": {
+                                "FamilyDetails": {
+                                    "title": "HOUSEHOLD_DETAILS"
+                                },
+                                "KYC.customerId": {
+                                    "readonly": true
+                                },
+                                "IndividualReferences": {
+                                    "readonly": true
+                                },
+                                "PhysicalAssets": {
+                                    "readonly": true
+                                },
+                                "ResidenceVerification": {
+                                    "readonly": true
+                                }
+                            },
+                            "excludes": [
+                                "ContactInformation.location"
+                                // "IndividualReferences.verifications.ReferenceCheck"
+                            ]
+                        },
+                        "CreditApproval5": {
+                            "overrides": {
+                                "FamilyDetails": {
+                                    "title": "HOUSEHOLD_DETAILS"
+                                },
+                                "KYC.customerId": {
+                                    "readonly": true
+                                },
+                                "IndividualReferences": {
+                                    "readonly": true
+                                },
+                                "PhysicalAssets": {
+                                    "readonly": true
+                                },
+                                "ResidenceVerification": {
+                                    "readonly": true
+                                }
+                            },
+                            "excludes": [
+                                "ContactInformation.location"
                                 // "IndividualReferences.verifications.ReferenceCheck"
                             ]
                         },
@@ -333,6 +512,33 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             }
             var overridesFields = function (bundlePageObj) {
                 return {
+                    "EnterpriseReferences": {
+                        "title": "NEIGHBOUR_CHECK"
+                    },
+                    "EnterpriseReferences.verifications.referenceFirstName": {
+                        "title":"NAME_OF_NEIGHBOUR",
+                        "required": true
+                    },
+                    "EnterpriseReferences.verifications.knownSince": {
+                        "title":"KNOWN_SINCE_(_IN_YEARS_)",
+                        "type" : "number",
+                        "required": true
+                    },
+                    "EnterpriseReferences.verifications.customerResponse": {
+                        "title":"NEIGHBOUR_REFERENCE"
+                    },
+                    "EnterpriseReferences.verifications.opinion": {
+                        "title":"COMMENTS_OF_NEIGHBOUR"
+                    },
+                    "TrackDetails.vehiclesFree": {
+                        "readonly": true
+                    },
+                    "TrackDetails.vehiclesOwned": {
+                        "onChange": calculateVehiclesFree
+                    },
+                    "TrackDetails.vehiclesFinanced": {
+                        "onChange": calculateVehiclesFree
+                    },
                     "IndividualInformation.photoImageId": {
                         "required": true
                     },
@@ -769,7 +975,17 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "customerLicenceDetails.customerLicenceDetails",
                     "customerLicenceDetails.customerLicenceDetails.licence1Type",
                     "customerLicenceDetails.customerLicenceDetails.licence1ValidFrom",
-                    "customerLicenceDetails.customerLicenceDetails.licence1ValidTo"
+                    "customerLicenceDetails.customerLicenceDetails.licence1ValidTo",
+                    "TrackDetails",
+                    "TrackDetails.vehiclesOwned",
+                    "TrackDetails.vehiclesFinanced",
+                    "TrackDetails.vehiclesFree",
+                    "EnterpriseReferences",
+                    "EnterpriseReferences.verifications",
+                    "EnterpriseReferences.verifications.referenceFirstName",
+                    "EnterpriseReferences.verifications.knownSince",
+                    "EnterpriseReferences.verifications.customerResponse",
+                    "EnterpriseReferences.verifications.opinion",                   
                 ];
 
             }
@@ -809,7 +1025,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     /* Setting data for the form */
                     model.customer = model.enrolmentProcess.customer;
                     /* End of setting data for the form */
-
 
                     /* Form rendering starts */
                     self = this;

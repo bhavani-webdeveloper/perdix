@@ -93,12 +93,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "ContactInformation.distanceFromBranch",
                     "ContactInformation.businessInPresentAreaSince",
                     "ContactInformation.businessInCurrentAddressSince",
-                    "EnterpriseReferences",
-                    "EnterpriseReferences.verifications",
-                    "EnterpriseReferences.verifications.referenceFirstName",
-                    "EnterpriseReferences.verifications.knownSince",
-                    "EnterpriseReferences.verifications.customerResponse",
-                    "EnterpriseReferences.verifications.opinion",
                     "Liabilities",
                     "Liabilities.liabilities",
                     // "Liabilities.liabilities.loanType",
@@ -157,10 +151,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "BankAccounts.customerBankAccounts.bankStatements.noOfEmiChequeBounced",
                     "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto",
                     "BankAccounts.customerBankAccounts.isDisbersementAccount",
-                    "TrackDetails",
-                    "TrackDetails.vehiclesOwned",
-                    "TrackDetails.vehiclesFinanced",
-                    "TrackDetails.vehiclesFree",
                     "TangibleNetWorth",
                     "TangibleNetWorth.enterpriseNetworth",
                     "TangibleNetWorth.enterpriseNetworth.tangibleNetworth",
@@ -175,6 +165,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
             var configFile = function() {
                 return {
                         "loanProcess.loanAccount.currentStage": {
+                            "Screening": {
+                                "overrides": {
+                                    
+                                },
+                                "excludes": [
+                                    
+                                ]
+                            },
                             "ScreeningReview": {
                                 "overrides": {
                                     "EnterpriseInformation": {
@@ -195,15 +193,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "ContactInformation": {
                                         "readonly": true
                                     },
-                                    "TrackDetails": {
-                                        "readonly": true
-                                    },
                                     "tangibleNetworth": {
                                       "readonly": true
                                     }
                                 },
                                 "excludes": [
-                                    "EnterpriseReferences"
+                                    
                                 ]
                             },
                             "GoNoGoApproval1": {
@@ -226,15 +221,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "ContactInformation": {
                                         "readonly": true
                                     },
-                                    "TrackDetails": {
-                                        "readonly": true
-                                    },
                                     "tangibleNetworth": {
                                       "readonly": true
                                     }
                                 },
                                 "excludes": [
-                                    "EnterpriseReferences"
+                                
                                 ]
                             },
                             "GoNoGoApproval2": {
@@ -257,15 +249,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "ContactInformation": {
                                         "readonly": true
                                     },
-                                    "TrackDetails": {
-                                        "readonly": true
-                                    },
                                     "tangibleNetworth": {
                                       "readonly": true
                                     }
                                 },
                                 "excludes": [
-                                    "EnterpriseReferences"
+                                    
                                 ]
                             },
                             "DeviationApproval1": {
@@ -288,15 +277,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "ContactInformation": {
                                         "readonly": true
                                     },
-                                    "TrackDetails": {
-                                        "readonly": true
-                                    },
                                     "tangibleNetworth": {
                                       "readonly": true
                                     }
                                 },
                                 "excludes": [
-                                    "EnterpriseReferences"
+                                    
                                 ]
                             },
                             "DeviationApproval2": {
@@ -319,15 +305,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "ContactInformation": {
                                         "readonly": true
                                     },
-                                    "TrackDetails": {
-                                        "readonly": true
-                                    },
                                     "tangibleNetworth": {
                                       "readonly": true
                                     }
                                 },
                                 "excludes": [
-                                    "EnterpriseReferences"
+                                    
                                 ]
                             },
                             "BusinessApproval1": {
@@ -350,15 +333,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "ContactInformation": {
                                         "readonly": true
                                     },
-                                    "TrackDetails": {
-                                        "readonly": true
-                                    },
                                     "tangibleNetworth": {
                                       "readonly": true
                                     }
                                 },
                                 "excludes": [
-                                    "EnterpriseReferences"
+                                    
                                 ]
                             },
                             "BusinessApproval2": {
@@ -381,15 +361,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "ContactInformation": {
                                         "readonly": true
                                     },
-                                    "TrackDetails": {
-                                        "readonly": true
-                                    },
                                     "tangibleNetworth": {
                                       "readonly": true
                                     }
                                 },
                                 "excludes": [
-                                    "EnterpriseReferences"
+                                    
                                 ]
                             },
                             "BusinessApproval3": {
@@ -412,15 +389,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "ContactInformation": {
                                         "readonly": true
                                     },
-                                    "TrackDetails": {
-                                        "readonly": true
-                                    },
                                     "tangibleNetworth": {
                                       "readonly": true
                                     }
                                 },
                                 "excludes": [
-                                    "EnterpriseReferences"
+                                    
                                 ]
                             },
                             "BusinessApproval4": {
@@ -443,15 +417,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "ContactInformation": {
                                         "readonly": true
                                     },
-                                    "TrackDetails": {
-                                        "readonly": true
-                                    },
                                     "tangibleNetworth": {
                                       "readonly": true
                                     }
                                 },
                                 "excludes": [
-                                    "EnterpriseReferences"
+                                    
                                 ]
                             },
                             "BusinessApproval5": {
@@ -474,15 +445,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "ContactInformation": {
                                         "readonly": true
                                     },
-                                    "TrackDetails": {
-                                        "readonly": true
-                                    },
                                     "tangibleNetworth": {
                                       "readonly": true
                                     }
                                 },
                                 "excludes": [
-                                    "EnterpriseReferences"
+                                    
                                 ]
                             },
                             "CreditApproval1": {
@@ -505,15 +473,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "ContactInformation": {
                                         "readonly": true
                                     },
-                                    "TrackDetails": {
-                                        "readonly": true
-                                    },
                                     "tangibleNetworth": {
                                       "readonly": true
                                     }
                                 },
                                 "excludes": [
-                                    "EnterpriseReferences"
+                                    
                                 ]
                             },
                             "CreditApproval2": {
@@ -536,15 +501,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "ContactInformation": {
                                         "readonly": true
                                     },
-                                    "TrackDetails": {
-                                        "readonly": true
-                                    },
                                     "tangibleNetworth": {
                                       "readonly": true
                                     }
                                 },
                                 "excludes": [
-                                    "EnterpriseReferences"
+                                    
                                 ]
                             },
                             "CreditApproval3": {
@@ -567,15 +529,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "ContactInformation": {
                                         "readonly": true
                                     },
-                                    "TrackDetails": {
-                                        "readonly": true
-                                    },
                                     "tangibleNetworth": {
                                       "readonly": true
                                     }
                                 },
                                 "excludes": [
-                                    "EnterpriseReferences"
+                                    
                                 ]
                             },
                             "CreditApproval4": {
@@ -598,15 +557,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "ContactInformation": {
                                         "readonly": true
                                     },
-                                    "TrackDetails": {
-                                        "readonly": true
-                                    },
                                     "tangibleNetworth": {
                                       "readonly": true
                                     }
                                 },
                                 "excludes": [
-                                    "EnterpriseReferences"
+                                    
                                 ]
                             },
                             "CreditApproval5": {
@@ -629,15 +585,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "ContactInformation": {
                                         "readonly": true
                                     },
-                                    "TrackDetails": {
-                                        "readonly": true
-                                    },
                                     "tangibleNetworth": {
                                       "readonly": true
                                     }
                                 },
                                 "excludes": [
-                                    "EnterpriseReferences"
+                                    
                                 ]
                             },
                             // "ApplicationReview": {
@@ -808,12 +761,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "ContactInformation": {
                                         "readonly": true
-                                    },
-                                    "EnterpriseReferences": {
-                                        "readonly": true
-                                    },
-                                    "TrackDetails": {
-                                        "readonly": true
                                     }
                                 }
 
@@ -841,14 +788,17 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     /* Setting data for the form */
                     model.customer = model.enrolmentProcess.customer;
                     /* End of setting data for the form */
-                    var calculateVehiclesFree = function(modelValue, form, model) {
-                        model.customer.vehiclesFree = model.customer.vehiclesOwned - model.customer.vehiclesFinanced;
-                    }
                     var p1 = UIRepository.getEnrolmentProcessUIRepository().$promise;
                     var self = this;
                     p1.then(function(repo){
                         var formRequest = {
                             "overrides": {
+                                "Liabilities": {
+                                    "condition": "model.customer.enterprise.enterpriseType=='Enterprise'"
+                                },
+                                "TangibleNetWorth": {
+                                    "condition": "model.customer.enterprise.enterpriseType=='Enterprise'"
+                                },
                                 "BankAccounts.customerBankAccounts.accountNumber": {
                                     "type": "password",
                                     "required": true
@@ -856,15 +806,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 "BankAccounts.customerBankAccounts.confirmedAccountNumber": {
                                     "type": "string",
                                     "required": true
-                                },
-                                "TrackDetails.vehiclesFree": {
-                                    "readonly": true
-                                },
-                                "TrackDetails.vehiclesOwned": {
-                                    "onChange": calculateVehiclesFree
-                                },
-                                "TrackDetails.vehiclesFinanced": {
-                                    "onChange": calculateVehiclesFree
                                 },
                                 "ContactInformation.locality": {
                                     "readonly": true
@@ -948,24 +889,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 },
                                 "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerName" :{
                                     "readonly": true
-                                },
-                                "EnterpriseReferences": {
-                                    "title": "NEIGHBOUR_CHECK"
-                                },
-                                "EnterpriseReferences.verifications.referenceFirstName": {
-                                    "title":"NAME_OF_NEIGHBOUR",
-                                    "required": true
-                                },
-                                "EnterpriseReferences.verifications.knownSince": {
-                                    "title":"KNOWN_SINCE_(_IN_YEARS_)",
-                                    "type" : "number",
-                                    "required": true
-                                },
-                                "EnterpriseReferences.verifications.customerResponse": {
-                                    "title":"NEIGHBOUR_REFERENCE"
-                                },
-                                "EnterpriseReferences.verifications.opinion": {
-                                    "title":"COMMENTS_OF_NEIGHBOUR"
                                 }
                             },
                             "includes": getIncludes(model),

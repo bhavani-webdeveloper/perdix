@@ -2672,10 +2672,7 @@
             "maxItems":null,
             "items":null,
             "required":[
-            "modelUnderProduction",
-            "insurancePolicyType",
-            "insurancePolicyNumber",
-            "variant"
+                "modelUnderProduction",
             ],
             "properties":{
                "registrationNumber":{
