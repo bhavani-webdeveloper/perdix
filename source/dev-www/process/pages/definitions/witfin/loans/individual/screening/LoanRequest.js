@@ -518,10 +518,10 @@ define([], function() {
                     "PreliminaryInformation.loanPurpose2",
                     "PreliminaryInformation.loanAmountRequested",
                     "PreliminaryInformation.loanToValue",
-                    "PreliminaryInformation.frequencyRequested",
-                    "PreliminaryInformation.tenureRequested",
-                    "PreliminaryInformation.udf5",
                     "PreliminaryInformation.parentLoanAccount",
+                    "PreliminaryInformation.frequencyRequested",
+                    "PreliminaryInformation.udf5",
+                    "PreliminaryInformation.tenureRequested",    
                     "PreliminaryInformation.expectedInterestRate",
                     "PreliminaryInformation.calculateEmi",
                     "PreliminaryInformation.estimatedEmi",
@@ -616,8 +616,7 @@ define([], function() {
                             "DeductionsFromLoan.estimatedEmi": {
                                 "readonly": true,
                                 "condition": "model.loanAccount.securityEmiRequired == 'YES'"
-                            },
-                            
+                            },                            
                             "PreliminaryInformation.loanAmountRequested": {
                                 onChange: function(modelValue, form, model) {
                                     model.loanAccount.estimatedEmi = null;
@@ -635,13 +634,6 @@ define([], function() {
                                     model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = null;
                                 }
                             },
-                            "PreliminaryInformation.tenureRequested": {
-                                "required": true,
-                                onChange: function(modelValue, form, model) {
-                                    model.loanAccount.estimatedEmi = null;
-                                    model.loanAccount.expectedInterestRate = null;
-                                }
-                            },
                             "PreliminaryInformation.udf5": {
                                 "required": true,
                                 onChange: function(modelValue, form, model) {
@@ -650,6 +642,14 @@ define([], function() {
                                     model.loanAccount.expectedInterestRate = null;
                                 }
                             },
+                            "PreliminaryInformation.tenureRequested": {
+                                "required": true,
+                                onChange: function(modelValue, form, model) {
+                                    model.loanAccount.estimatedEmi = null;
+                                    model.loanAccount.expectedInterestRate = null;
+                                }
+                            },
+                            
                             "PreliminaryInformation.expectedInterestRate": {
                                 "required": true,
                                 "title": "NOMINAL_RATE",
@@ -665,6 +665,17 @@ define([], function() {
                             "repositoryAdditions": {
                                 "PreliminaryInformation": {
                                     "items": {
+                                        "parentLoanAccount": {
+                                            "key": "loanAccount.parentLoanAccount",
+                                            "title": "PARENT_LOAN_ACCOUNT",
+                                            "orderNo" : 45
+                                        },
+                                        "udf5": {
+                                            "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5",
+                                            "title" : "FLAT_RATE",
+                                            "type": "string",
+                                            "orderNo" : 75
+                                        },
                                         "calculateEmi": {
                                             "title": "CALCULATE_EMI",
                                             "type": "button",
@@ -732,17 +743,9 @@ define([], function() {
                                                     return false;
                                                 }
                                             }
-                                        },
-                                        "udf5": {
-                                            "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5",
-                                            "title" : "FLAT_RATE",
-                                            "type": "string",
-                                            "orderNo" : 75
-                                        },
-                                        "parentLoanAccount": {
-                                            "key": "loanAccount.parentLoanAccount",
-                                            "title": "PARENT_LOAN_ACCOUNT"
                                         }
+                                        
+                                        
                                     }
                                 },
                                 
@@ -1092,7 +1095,7 @@ define([], function() {
                         model.loanAccount.loanPurpose2 = obj.loanPurpose2;
                         model.loanAccount.vehicleLoanDetails.registrationNumber = obj.vehicleRegistrationNumber;
                         model.loanAccount.screeningDate = obj.screeningDate || moment().format("YYYY-MM-DD");
-               		    model.loanAccount.parentLoanAccount = obj.parentLoanAccount;
+                        model.loanAccount.parentLoanAccount = obj.parentLoanAccount;
                     }
                 },
                 form: [],

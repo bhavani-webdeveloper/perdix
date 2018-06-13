@@ -107,16 +107,16 @@ define({
                         required: true,
                         "title": "TRANSACTION_DESCRIPTION"
                     },
-                    {
-                        key: "journal.transactionType",
-                        type: "select",
-                        required: true,
-                        "title": "TRANSACTION_TYPE",
-                        //"enumCode": 'journal_transaction_type'
-                        titleMap: {
-                            "Entry": "Entry"
-                        }
-                    },
+                    // {
+                    //     key: "journal.transactionType",
+                    //     type: "select",
+                    //     required: true,
+                    //     "title": "TRANSACTION_TYPE",
+                    //     //"enumCode": 'journal_transaction_type'
+                    //     titleMap: {
+                    //         "Entry": "Entry"
+                    //     }
+                    // },
                     {
                         key: "journal.productType",
                         type: "select",
@@ -266,6 +266,7 @@ define({
                         "title": "UPDATE_JOURNAL",
                         onClick: function(model, formCtrl) {
                             $log.info("Inside submit()");
+                            model.journal.transactionType = "Entry"; 
                             PageHelper.showLoader();
                             PageHelper.showProgress("Journal Save", "Working...");
                             var branches = formHelper.enum('branch_id').data;
@@ -335,10 +336,10 @@ define({
                                 "title": "BATCH_NAME",
                                 "type": "string"
                             },
-                            "transactionType": {
-                                "title": "BATCH_NAME",
-                                "type": "string"
-                            },
+                            // "transactionType": {
+                            //     "title": "BATCH_NAME",
+                            //     "type": "string"
+                            // },
                             "productType": {
                                 "title": "PRODUCY_TYPE",
                                 "type": "string"
@@ -382,6 +383,7 @@ define({
                 submit: function(model, form, formName) {
                     $log.info("Inside submit()");
                     // PageHelper.showLoader();
+                    model.journal.transactionType = "Entry";
                     var branches = [];
                     model.journal.journalBranches.map(function(item) {
                         if(_.hasIn(item, '$selected') && item.$selected) {

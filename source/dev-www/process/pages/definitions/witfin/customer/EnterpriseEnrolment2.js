@@ -70,7 +70,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseInformation.businessSector",
                     "EnterpriseInformation.businessSubsector",
                     "EnterpriseInformation.itrAvailable",
-                    "EnterpriseInformation.HouseVerificationPhoto",
+               //     "EnterpriseInformation.HouseVerificationPhoto",
                     "EnterpriseInformation.enterpriseCustomerRelations",
                     "EnterpriseInformation.enterpriseCustomerRelations.relationshipType",
                     "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerId",
@@ -953,26 +953,26 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "EnterpriseInformation": {
                                         "items": {
-                                            "HouseVerificationPhoto": {
-                                                "key": "customer.houseVerificationPhoto",
-                                                "type": "file",
-                                                "title": "HOUSE_VERIFICATION_PHOTO",
-                                                "category": "CustomerEnrollment",
-                                                "subCategory": "PHOTO",
-                                                "onChange": function(){
-                                                    console.log("INSIDE ONCHANGE1");
-                                                },
-                                                "viewParams" : function(modelValue, form, model) {
-                                                    getLocation().then((pos)=>{
-                                                        console.log("successful");
-                                                        model.customer.latitude = pos.coords.latitude;
-                                                        model.customer.longitude = pos.coords.longitude;
-                                                    });
-                                                    getLocation().catch((err)=>{
-                                                        console.log(err);
-                                                    });
-                                                }
-                                            },
+                                            // "HouseVerificationPhoto": {
+                                            //     "key": "customer.houseVerificationPhoto",
+                                            //     "type": "file",
+                                            //     "title": "HOUSE_VERIFICATION_PHOTO",
+                                            //     "category": "CustomerEnrollment",
+                                            //     "subCategory": "PHOTO",
+                                            //     "onChange": function(){
+                                            //         console.log("INSIDE ONCHANGE1");
+                                            //     },
+                                            //     "viewParams" : function(modelValue, form, model) {
+                                            //         getLocation().then((pos)=>{
+                                            //             console.log("successful");
+                                            //             model.customer.latitude = pos.coords.latitude;
+                                            //             model.customer.longitude = pos.coords.longitude;
+                                            //         });
+                                            //         getLocation().catch((err)=>{
+                                            //             console.log(err);
+                                            //         });
+                                            //     }
+                                            // },
                                             "netBusinessIncome": {
                                                 "type": "number",
                                                 "title": "CASH_PROFIT",

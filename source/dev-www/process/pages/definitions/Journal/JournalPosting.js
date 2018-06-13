@@ -62,7 +62,8 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                 "BranchPostingEntry.instrumentDate",
                 "BranchPostingEntry.ifscCode",
                 "BranchPostingEntry.valueDate",
-                "BranchPostingEntry.relatedAccountNo"
+                "BranchPostingEntry.relatedAccountNo",
+                "BranchPostingEntry.relatedAccountNo1"
                 ]
             }
 
@@ -107,17 +108,37 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                                 "type": "lov",
                                 "lovonly": true
                             },
+                            "BranchPostingEntry.relatedAccountNo1": {
+                                "resolver": "JournalIFSCAccountNoConfiguration",
+                                "type": "lov",
+                                "lovonly": true,
+                                "condition": 'model.journal.journalEntryDto.productType == ("Payment")|| model.journal.journalEntryDto.productType == ("Receipt") || model.journal.journalEntryDto.productType == ("Journal") || model.journal.journalEntryDto.productType == ("Contra")'
+                            },
                             "BranchPostingEntry.relatedAccountNo": {
                                 "resolver": "JournalIFSCAccountNoConfiguration",
                                 "type": "lov",
-                                "lovonly": true
+                                "lovonly": true,
+                                "condition": 'model.journal.journalEntryDto.productType == ("Payment - Account")|| model.journal.journalEntryDto.productType == ("Receipt - Account") || model.journal.journalEntryDto.productType == ("Journal - Account") || model.journal.journalEntryDto.productType == ("Contra - Account")',
+                                "required" : true
                             }
+                            
                         },
                         "includes": getIncludes (model),
                         "excludes": [
                         ""
                         ],
                         "options": {
+                            "repositoryAdditions": {
+                                "BranchPostingEntry": {
+                                    "items": {
+                                        "relatedAccountNo1": {
+                                            "key": "journal.journalEntryDto.relatedAccountNo",
+                                            "title": "RELATED_ACCOUNT_NO",
+                                            "orderNo": 140
+                                        },
+                                    }
+                                }
+                            },
                             "additions": [
                             {
                                 "type": "actionbox",
@@ -521,6 +542,10 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                                             "type": "number"
                                         },
                                         "relatedAccountNo": {
+                                            "title": "RELATED_ACCOUNT_NO",
+                                            "type": "string"
+                                        },
+                                        "relatedAccountNo1": {
                                             "title": "RELATED_ACCOUNT_NO",
                                             "type": "string"
                                         },

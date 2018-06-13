@@ -855,7 +855,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "IndividualInformation",
                     "IndividualInformation.existingLoan",
                     "IndividualInformation.customerCategory",
-                    "IndividualInformation.parentLoanAccount",
                     "IndividualInformation.customerBranchId",
                     "IndividualInformation.centreId",
                     "IndividualInformation.photoImageId",
@@ -955,6 +954,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "ResidenceVerification.localityType",
                     "ResidenceVerification.typeOfAccomodation",
                     "ResidenceVerification.areaSQFT",
+                    "ResidenceVerification.HouseVerificationPhoto",
                     "ResidenceVerification.remarksOnBusiness",
                     "PhysicalAssets",
                     "PhysicalAssets.physicalAssets",
@@ -1170,10 +1170,50 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                 "type": "string"
                                             }
                                         },
+                                        "HouseVerificationPhoto": {
+                                            "key": "customer.houseVerificationPhoto",
+                                            "title": "HOUSE VERIFICATION PHOTO",
+                                            "orderNo": 150,
+                                            "type": "file",
+                                            "category": "CustomerEnrollment",
+                                            "subCategory": "PHOTO",
+                                            "onChange": function(){
+                                                console.log("INSIDE ONCHANGE1");
+                                            },
+                                            "viewParams" : function(modelValue, form, model) {
+                                                    getLocation().then((pos)=>{
+                                                        console.log("successful");
+                                                        model.customer.latitude = pos.coords.latitude;
+                                                        model.customer.longitude = pos.coords.longitude;
+                                                    });
+                                                    getLocation().catch((err)=>{
+                                                        console.log(err);
+                                                    });
+                                                }
+
+                                            //     "title": "HOUSE_VERIFICATION_PHOTO",
+                                            //     "category": "CustomerEnrollment",
+                                            //     "subCategory": "PHOTO",
+                                            //     "onChange": function(){
+                                            //         console.log("INSIDE ONCHANGE1");
+                                            //     },
+                                            //     "viewParams" : function(modelValue, form, model) {
+                                            //         getLocation().then((pos)=>{
+                                            //             console.log("successful");
+                                            //             model.customer.latitude = pos.coords.latitude;
+                                            //             model.customer.longitude = pos.coords.longitude;
+                                            //         });
+                                            //         getLocation().catch((err)=>{
+                                            //             console.log(err);
+                                            //         });
+                                            //     }
+                                            
+                                        },
+
                                         "remarksOnBusiness": {
                                             "key": "customer.udf.userDefinedFieldValues.udf9",
                                             "title": "REMAKRS_ON_BUISNESS",
-                                            "orderNo": 150,
+                                            "orderNo": 160,
                                             "schema": {
                                                 "type": "string"
                                             }
@@ -1425,7 +1465,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 model.customer.landmark = obj.landmark;
                                 model.customer.postOffice = obj.postOffice;
                                 model.customer.customerCategory = obj.leadCategory;
-                                model.customer.parentLoanAccount = obj.parentLoanAccount;
 
                                 for (var i = 0; i < model.customer.familyMembers.length; i++) {
                                     // $log.info(model.customer.familyMembers[i].relationShip);
