@@ -2017,9 +2017,7 @@
           "nameOfRo",
           "date",
           "place",
-          "houseVerificationPhoto",
-          "latitude",
-          "longitude"
+          "houseVerificationPhoto"
         ],
         "properties": {
           "nameOfRo": {
