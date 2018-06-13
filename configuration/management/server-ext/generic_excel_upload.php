@@ -85,5 +85,6 @@ try {
         throw $dbe;
     }
 } catch (Exception $e) {
-    $response->setStatusCode(400)->json(["error" => $e->getMessage()]);
+    http_response_code(500);
+    $response->setStatusCode(500)->json(["error" => $e->getMessage()]);
 }
