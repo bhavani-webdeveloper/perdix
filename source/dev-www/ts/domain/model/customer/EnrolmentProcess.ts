@@ -9,9 +9,11 @@ import {PolicyManager} from "../../shared/PolicyManager";
 import {AgentProcess} from "../agent/AgentProcess";
 import {Customer, CustomerTypes} from "./Customer";
 import {EnrolmentPolicyFactory} from "./policy/EnrolmentPolicyFactory";
-// import {LoanProcess} from "../loan/LoanProcess";
+import {LoanProcess} from "../loan/LoanProcess";
 import EnrolmentProcessFactory = require("./EnrolmentProcessFactory");
 import EnterpriseCustomerRelation = require("./EnterpriseCustomerRelation");
+import * as _ from 'lodash';
+
 
 
 declare var enrolmentProcessConfig: Object;
@@ -128,6 +130,28 @@ export class EnrolmentProcess {
             }
         }
     }
+
+     public refreshEnterpriseCustomerAgentRelations(agentProcess: AgentProcess): void{
+        /* Loan customer */
+
+        this.customer.enterpriseCustomerRelations = this.customer.enterpriseCustomerRelations || [];
+
+        if (_.hasIn(agentProcess.applicantEnrolmentProcess, 'customer.id')) {
+            let aIndex = _.findIndex(this.customer.enterpriseCustomerRelations, (item) => {
+                return item.customerId == agentProcess.applicantEnrolmentProcess.customer.id;
+            });
+
+            /* @TODO Code to insert to enterprise customer relations */
+
+            if (aIndex==-1){
+                let a:EnterpriseCustomerRelation = new EnterpriseCustomerRelation();
+                a.customerId = agentProcess.applicantEnrolmentProcess.customer.id;
+                this.customer.enterpriseCustomerRelations.push(a);
+            }
+
+        }
+    }
+
 
     addEnterpriseCustomerRelation(customer: Customer){
         let i = _.findIndex(this.customer.enterpriseCustomerRelations, function(item){

@@ -27,6 +27,16 @@ class AgentRepository implements IAgentRepository {
 		return Ro.fromPromise(this.agentService.submit(reqData).$promise);
 	}
 
+	create(agentProcess: any): Observable<any> {
+		return Ro.fromPromise(this.agentService.create(agentProcess).$promise)
+            .map( (obj:any) => {
+                let agent:Agent = <Agent>plainToClass<Agent, Object>(Agent, obj.loanAccount);
+                _.merge(agentProcess.agent, agent);
+                return agentProcess;
+            })
+
+	}
+
 	update(reqData: Object): Observable<any> {
 		return Ro.fromPromise(this.agentService.update(reqData).$promise);
 	}	

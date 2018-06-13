@@ -266,7 +266,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                 "IndividualInformation": {
                                     "type": "box",
                                     "title": "PERSIONAL_INFORMATION",
-                                    "orderNo": 10,
+                                    "orderNo": 1,
                                     "items": {
                                         "customerId": {
                                             "key": "customer.id",

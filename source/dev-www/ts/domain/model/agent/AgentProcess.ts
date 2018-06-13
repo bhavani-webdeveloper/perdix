@@ -31,6 +31,7 @@ export class AgentProcess {
     
     loanCustomerEnrolmentProcess: EnrolmentProcess;
     applicantEnrolmentProcess: EnrolmentProcess;
+    agentProcess: AgentProcess;
 
     constructor() {
         this.agentRepo = RepositoryFactory.createRepositoryObject(RepositoryIdentifiers.AgentProcess);
@@ -49,8 +50,11 @@ export class AgentProcess {
         let obs1 = pmBeforeUpdate.applyPolicies();
         let obs2 = null;
         if (this.agent.id){
-            obs2 = this.agentRepo.update(this);
+            obs2 = this.agentRepo.update(this.agent);
         } 
+        else {
+            obs2 = this.agentRepo.create(this.agent);
+        }
         let pmAfterUpdate: PolicyManager<AgentProcess> = new PolicyManager(this, AgentPolicyFactory.getInstance(), 'afterSave', AgentProcess.getProcessConfig());
         let obs3 = pmAfterUpdate.applyPolicies();
         return Observable.concat(obs1, obs2, obs3).last();
@@ -63,8 +67,11 @@ export class AgentProcess {
         let obs1 = pmBeforeUpdate.applyPolicies();
         let obs2 = null;
         if (this.agent.id){
-            obs2 = this.agentRepo.update(this);
-        } 
+            obs2 = this.agentRepo.update(this.agent);
+        }
+        else {
+            obs2 = this.agentRepo.create(this.agent);
+        }
 
         let pmAfterUpdate: PolicyManager<AgentProcess> = new PolicyManager(this, AgentPolicyFactory.getInstance(), 'afterSave', AgentProcess.getProcessConfig());
         let obs3 = pmAfterUpdate.applyPolicies();
@@ -76,7 +83,7 @@ export class AgentProcess {
         this.agentProcessAction = "SAVE";
         let pmBeforeUpdate: PolicyManager<AgentProcess> = new PolicyManager(this, AgentPolicyFactory.getInstance(), 'beforeProceed', AgentProcess.getProcessConfig());
         let obs1 = pmBeforeUpdate.applyPolicies();
-        let obs2 = this.agentRepo.save(this);
+        let obs2 = this.agentRepo.update(this);
         let pmAfterUpdate: PolicyManager<AgentProcess> = new PolicyManager(this, AgentPolicyFactory.getInstance(), 'afterProceed', AgentProcess.getProcessConfig());
         let obs3 = pmAfterUpdate.applyPolicies();
         return Observable.concat(obs2).last();
@@ -124,8 +131,6 @@ export class AgentProcess {
                 }
             )
     }
-
-
    
     static createNewProcess(): Observable<AgentProcess> {
         return AgentProcessFactory

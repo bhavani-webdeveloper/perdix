@@ -9,26 +9,25 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
             return {
                 "type": "page-bundle",
                 "title": "INDIVIDUAL_AGENT",
-                // "subTitle": "LOAN_BOOKING_BUNDLE_SUB_TITLE",
                 "bundleDefinitionPromise": function() {
                     return $q.resolve([{
                         pageName: 'agent.IndividualEnrollmentForAgent',
                         title: 'CUSTOMER',
                         pageClass: 'applicant',
                         minimum: 1,
-                        maximum: 0,
+                        maximum: 1,
                         order: 10
                     }, {
                         pageName: 'agent.IndividualAgentEnrollment',
                         title: 'AGENT',
                         pageClass: 'agent',
                         minimum: 1,
-                        maximum: 0,
+                        maximum: 1,
                         order: 20
                     }]);
                 },
                 "bundlePages": [],
-                "offline": true, 
+                "offline": true,
                 "getOfflineDisplayItem": function(value, index) {
                     var out = new Array(2);
                     for (var i = 0; i < value.bundlePages.length; i++) {
@@ -42,7 +41,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                     return out;
                 },
                 "onAddNewTab": function(definition, bundleModel) { /* returns model on promise resolution. */
-                
+
                 },
 
                 "pre_pages_initialize": function(bundleModel) {
@@ -71,6 +70,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                     pageClass: 'agent',
                                     model: {
                                         agentProcess: agentProcess,
+                                        enrolmentProcess: agentProcess.applicantEnrolmentProcess
+
                                     }
                                 });
                                 deferred.resolve();
@@ -81,19 +82,21 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                         AgentProcess.createNewProcess()
                             .subscribe(function(agentProcess) {
                                 bundleModel.agentProcess = agentProcess;
-                             
+
                                 // loanProcess.loanAccount.currentStage = 'Screening';
                                 $this.bundlePages.push({
                                     pageClass: "applicant",
                                     model: {
-                                        enrolmentProcess :agentProcess.applicantEnrolmentProcess,
-                                        agentProcess: agentProcess, 
+                                        enrolmentProcess: agentProcess.applicantEnrolmentProcess,
+                                        agentProcess: agentProcess,
                                     }
                                 });
-                                 $this.bundlePages.push({
+                                $this.bundlePages.push({
                                     pageClass: 'agent',
                                     model: {
                                         agentProcess: agentProcess,
+                                        enrolmentProcess: agentProcess.applicantEnrolmentProcess
+
                                     }
                                 });
 
@@ -103,6 +106,29 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                     return deferred.promise;
 
                 },
+                // "post_pages_initialize": function(bundleModel) {
+                //     $log.info("Inside post_page_initialize");
+                //     BundleManager.broadcastEvent('origination-stage', 'Screening');
+                //     if (_.hasIn($stateParams.pageData, 'agent_id') && _.isNumber($stateParams.pageData['agent_id'])) {
+                //         PageHelper.showLoader();
+                //         PageHelper.showProgress("screening-input", 'Loading lead details');
+                //         var _agentId = $stateParams.pageData['agent_id'];
+                //         Agengtt.get({
+                //                 id: _agentId
+                //             })
+                //             .$promise
+                //             .then(function(res) {
+                //                 PageHelper.showProgress('screening-input', 'Done.', 5000);
+                //                 BundleManager.broadcastEvent('agent-loaded', res);
+                //             }, function(httpRes) {
+                //                 PageHelper.showErrors(httpRes);
+                //             })
+                //             .finally(function() {
+                //                 PageHelper.hideLoader();
+                //             })
+                //     }                    
+
+                // },
                 eventListeners: {
                     "on-customer-load": function(pageObj, bundleModel, params) {
                         BundleManager.broadcastEvent("test-listener", {
@@ -114,42 +140,54 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                         if (pageObj.pageClass == 'applicant') {
                             BundleManager.broadcastEvent("applicant-updated", params.customer);
                         }
-
                     },
-                    // "new-enrolment": function(pageObj, bundleModel, params) {
-                    //     switch (pageObj.pageClass) {
-                    //         case 'applicant':
-                    //             $log.info("New applicant");
-                    //             bundleModel.applicant = params.customer;
-                    //             BundleManager.broadcastEvent("new-applicant", params);
-                    //             break;
-                    //         case 'co-applicant':
-                    //             $log.info("New co-applicant");
-                    //             if (!_.hasIn(bundleModel, 'coApplicants')) {
-                    //                 bundleModel.coApplicants = [];
-                    //             }
-                    //             BundleManager.broadcastEvent("new-co-applicant", params);
-                    //             bundleModel.coApplicants.push(params.customer);
-                    //             break;
+                    "applicant-updated": function(pageObj, bundlePageObj, obj) {
+                        /* Update other pages */
+                        BundleManager.broadcastEvent("applicant-updated", obj);
+                    },
+                    "new-enrolment": function(pageObj, bundleModel, params) {
+                        switch (pageObj.pageClass) {
+                            case 'applicant':
+                                $log.info("New applicant");
+                                bundleModel.applicant = params.customer;
+                                BundleManager.broadcastEvent("new-applicant", params);
+                                break;
+                            case 'agent':
+                                $log.info("New Business Enrolment");
+                                bundleModel.agent = params.customer;
+                                BundleManager.broadcastEvent("new-business", params);
+                                break;
 
-                    //         default:
-                    //             $log.info("Unknown page class");
-                    //             break;
+                            default:
+                                $log.info("Unknown page class");
+                                break;
 
-                    //     }
-                    // },
-                    // "enrolment-removed": function(pageObj, bundlePageObj, enrolmentDetails) {
-                    //     if (enrolmentDetails.customerId) {
-                    //         BundleManager.broadcastEvent('remove-customer-relation', enrolmentDetails);
-                    //     }
-                    // },
-                    // "cb-check-done": function(pageObj, bundlePageObj, cbCustomer) {
-                    //     $log.info(cbCustomer);
-                    //     if (cbCustomer.customerId) {
-                    //         BundleManager.broadcastEvent('cb-check-update', cbCustomer);
-                    //     }
-                    // }
+                        }
+                    },
+                    "enrolment-removed": function(pageObj, bundlePageObj, enrolmentDetails) {
+                        if (enrolmentDetails.customerId) {
+                            BundleManager.broadcastEvent('remove-customer-relation', enrolmentDetails);
+                        }
+                    },
+                    "cb-check-done": function(pageObj, bundlePageObj, cbCustomer) {
+                        $log.info(cbCustomer);
+                        if (cbCustomer.customerId) {
+                            BundleManager.broadcastEvent('cb-check-update', cbCustomer);
+                        }
+                    }
                 },
+                preSave: function(offlineData) {
+                    var defer = $q.defer();
+                    for (var i = 0; i < offlineData.bundlePages.length; i++) {
+                        var page = offlineData.bundlePages[i];
+                        if (page.pageClass == "applicant" && !page.model.customer.firstName) {
+                            PageHelper.showProgress("screening", "Applicant first name is required to save offline", 5000);
+                            defer.reject();
+                        }
+                    }
+                    defer.resolve();
+                    return defer.promise;
+                }
             }
         }
     }

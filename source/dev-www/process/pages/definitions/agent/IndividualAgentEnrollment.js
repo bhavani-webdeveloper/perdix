@@ -20,190 +20,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
 
             var overridesFields = function(bundlePageObj) {
                 return {
-                    "AgentInformation.customerId": {
-                        type: "lov",
-                        lovonly: true,
-                        bindMap: {},
-                        key: "agent.customerId",
-                        "inputMap": {
-                            "firstName": {
-                                "key": "agent.firstName",
-                                "title": "CUSTOMER_NAME",
-                                "type": "string"
-                            },
-                            "urnNo": {
-                                "key": "agent.urnNo",
-                                "title": "URN_NO",
-                                "type": "string"
-                            },
-                            "customerBranchId": {
-                                "key": "agent.customerBranchId",
-                                "type": "select",
-                                "screenFilter": true,
-                                 "title": "CUSTOMER_BRANCH",
-                                "readonly": true
-                            },
-                            "centreName": {
-                                "key": "agent.centreName",
-                                "title": "CENTRE_NAME",
-                                "type": "string",
-                                "readonly": true,
-
-                            },
-                            "centreId": {
-                                "title": "CENTRE",
-                                key: "agent.centreId",
-                                type: "lov",
-                                autolov: false,
-                                lovonly: true,
-                                bindMap: {},
-                                searchHelper: formHelper,
-                                search: function(inputModel, form, model, context) {
-                                    var centres = SessionStore.getCentres();
-                                    var centreCode = formHelper.enum('centre').data;
-                                    var out = [];
-                                    if (centres && centres.length) {
-                                        for (var i = 0; i < centreCode.length; i++) {
-                                            for (var j = 0; j < centres.length; j++) {
-                                                if (centreCode[i].value == centres[j].id) {
-
-                                                    out.push({
-                                                        name: centreCode[i].name,
-                                                        id: centreCode[i].value
-                                                    })
-                                                }
-                                            }
-                                        }
-                                    }
-                                    return $q.resolve({
-                                        headers: {
-                                            "x-total-count": out.length
-                                        },
-                                        body: out
-                                    });
-                                },
-                                onSelect: function(valueObj, model, context) {
-                                    model.centreId = valueObj.id;
-                                    model.centreName = valueObj.name;
-                                },
-                                getListDisplayItem: function(item, index) {
-                                    return [
-                                        item.name
-                                    ];
-                                }
-                            },
-                        },
-                        "outputMap": {
-                            "urnNo": "agent.id",
-                            "urnNo": "agent.urnNo",
-                            "firstName": "agent.firstName"
-                        },
-                        "searchHelper": formHelper,
-                        "search": function(inputModel, form) {
-                            $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
-                            var branches = formHelper.enum('branch_id').data;
-                            var branchName;
-                            for (var i = 0; i < branches.length; i++) {
-                                if (branches[i].code == inputModel.customerBranchId)
-                                    branchName = branches[i].name;
-                            }
-                            var promise = Enrollment.search({
-                                'branchName': branchName || SessionStore.getBranch(),
-                                'firstName': inputModel.firstName,
-                                'centreId': inputModel.centreId,
-                                'customerType': "individual",
-                                'urnNo': inputModel.urnNo
-                            }).$promise;
-                            return promise;
-                        },
-                        getListDisplayItem: function(data, index) {
-                            return [
-                                [data.firstName, data.fatherFirstName].join(' | '),
-                                data.firstName,
-                                data.urnNo,
-                                data.id,
-                            ];
-                        },
-                        onSelect: function(valueObj, model, context) {
-                            PageHelper.showProgress('customer-load', 'Loading customer...');
-                            EnrolmentProcess.fromCustomerID(valueObj.id)
-                                .finally(function() {
-                                    PageHelper.showProgress('customer-load', 'Done.', 5000);
-                                })
-                                .subscribe(function(enrolmentProcess) {
-                                    /* Setting on the current page */
-                                    model.enrolmentProcess = enrolmentProcess;
-                                    model.customer = enrolmentProcess.customer;
-                                    model.agent.customerId = valueObj.id
-
-                                    BundleManager.pushEvent(model.pageClass + "-updated", model._bundlePageObj, enrolmentProcess);
-                                })
-                        }
-                    },
-                    "AgentInformation.agentId": {
-                        type: "lov",
-                        lovonly: true,
-                        bindMap: {},
-                        key: "agent.agentId",
-                        "inputMap": {
-                            "agentId": {
-                                "key": "agent.agentId",
-                                "type": "number"
-                            },
-                            // "agentName": {
-                            //     "key": "agent.agentName", 
-                            //     "type": "string"
-                            // },            
-                            "agentType": {
-                                "key": "agent.agentType",
-                                "type": "select",
-                                "enumCode": "agent_type",
-                                "title": "AGENT_TYPE"
-                            },
-                        },
-                        "outputMap": {
-                            "agentId": "agent.agentId",
-                            'agentName': "agent.agentName",
-                            'agentType': "agent.agentType"
-                        },
-                        "searchHelper": formHelper,
-                        "search": function(inputModel, form) {
-                            var promise = Agent.search({
-                                'agentId': inputModel.agentId,
-                                'agentName': inputModel.agentName,
-                                'agentType': inputModel.agentType,
-                                'currentStage': "",
-                                'customerType': ""
-                            }).$promise;
-                            return promise;
-                        },
-                        getListDisplayItem: function(data, index) {
-                            return [
-                                data.agentId,
-                                data.agentType,
-                                data.agentName
-                            ];
-                        },
-                        onSelect: function(valueObj, model, context) {
-                            PageHelper.showProgress('customer-load', 'Loading customer...');
-                            model.agent.agentId = valueObj.id;
-                            model.agent.agentCompanyId = valueObj.agentCompanyId;
-                            model.agent.agentName = valueObj.agentName;
-                            model.agent.agentRegistrationNumber = valueObj.agentRegistrationNumber;
-                            model.agent.companyName = valueObj.companyName;
-                        }
-
-                    },
                     "AgentFeeDetails.agentFeeDetails.feeAmount": {
                         "key": "agent.feeAmount",
                         "title": "FEE_AMOUT",
                         "type": "amount"
                     },
-                    "AgentFeeDetails.agentFeeDetails.agentId": {
-                        "key": "agent.agentType",
-                        "title": "AGENT_TYPE",
-                        "type": "select",
-                        "enumCode": "agent_type"
+                    "AgentInformation.customerId": {
+                        "key": "agent.customerId",
+                        "title": "CUSTOMER_ID",
+                        "type": "integer",
+                        "readonly": true
                     }
                 }
             }
@@ -212,7 +38,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
 
                 return [
                     "AgentInformation",
-                    "AgentInformation.agentId",
+                    "AgentInformation.agentId1",
                     "AgentInformation.customerId",
                     "AgentInformation.agentCompanyId",
                     "AgentInformation.agentRegistrationNumber",
@@ -221,7 +47,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
 
                     "AgentFeeDetails",
                     "AgentFeeDetails.agentFeeDetails",
-                    "AgentFeeDetails.agentFeeDetails.agentId",
                     "AgentFeeDetails.agentFeeDetails.feeAmount",
                     "AgentFeeDetails.agentFeeDetails.feeName",
                     "AgentFeeDetails.agentFeeDetails.feeType",
@@ -264,14 +89,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                             "repositoryAdditions": {
                                 "AgentInformation": {
                                     "type": "box",
-                                    "title": "PERSIONAL_INFORMATION",
-                                    "orderNo": 1,
+                                    "orderNo": 0,
                                     "items": {
-                                        "customerId": {
-                                            "key": "agent.customerId",
-                                            "title": "CUSTOMER_ID",
-                                            "type": "lov",
-                                            "lovonly": false
+                                        "agentId1": {
+                                            "key": "agent.id",
+                                            "title": "AGENT_ID",
+                                            "type": "integer",
+                                            "readonly": true,
+                                            "orderNo": 10
                                         }
                                     }
                                 }
@@ -315,29 +140,35 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                     return $q.resolve();
                 },
                 eventListeners: {
+                    "applicant-updated": function(bundleModel, model, params) {
+                        $log.info("inside applicant-updated of AgentEnrolment");
+                        /* Load an existing customer associated with applicant, if exists. Otherwise default details*/
+                        model.enrolmentProcess.refreshEnterpriseCustomerAgentRelations(model.agentProcess);
+                        model.agent.customerId = params.customer.id;
+                    },
                     "test-listener": function(bundleModel, model, obj) {
 
                     },
-                    "lead-loaded": function(bundleModel, model, obj) {
-                        return $q.when()
-                            .then(function() {
-                                if (obj.applicantCustomerId) {
-                                    return EnrolmentProcess.fromCustomerID(obj.applicantCustomerId).toPromise();
-                                } else {
-                                    return null;
-                                }
-                            })
-                            .then(function(enrolmentProcess) {
-                                if (enrolmentProcess != null) {
-                                    model.enrolmentProcess = enrolmentProcess;
-                                    model.customer = enrolmentProcess.customer;
-                                    BundleManager.pushEvent(model.pageClass + "-updated", model._bundlePageObj, enrolmentProcess);
-                                }
-                                model.agent.customerId = obj.id;
+                    // "agent-loaded": function(bundleModel, model, obj) {
+                    //     return $q.when()
+                    //         .then(function() {
+                    //             if (obj.applicantCustomerId) {
+                    //                 return EnrolmentProcess.fromCustomerID(obj.applicantCustomerId).toPromise();
+                    //             } else {
+                    //                 return null;
+                    //             }
+                    //         })
+                    //         .then(function(enrolmentProcess) {
+                    //             if (enrolmentProcess != null) {
+                    //                 model.enrolmentProcess = enrolmentProcess;
+                    //                 model.customer = enrolmentProcess.customer;
+                    //                 BundleManager.pushEvent(model.pageClass + "-updated", model._bundlePageObj, enrolmentProcess);
+                    //             }
+                    //             model.agent.customerId = obj.id;
 
 
-                            })
-                    },
+                    //         })
+                    // },
                     "origination-stage": function(bundleModel, model, obj) {
                         model.currentStage = obj
                     }
