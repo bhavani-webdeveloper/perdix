@@ -400,7 +400,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                 }]
             }, {
                 "type": "actionbox",
-                "condition": "model.ui.submissionDone==true",
+                //"condition": "model.ui.submissionDone==true",
                 "items": [{
                     "type": "button",
                     "style": "btn-theme",
@@ -659,14 +659,13 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                             var pData;
                             for (var i = 0; i < model.repayments.length; i++) {
                                 if (model.repayments[i].amount != 0) {
-                                    (function(i) {
-                                        var r = model.repayments[i];
-                                        var totalSatisfiedDemands = 0;
-                                        var pendingInstallment = 0;
+                                    (function(i, r) {
                                         promise[i] = LoanAccount.get({
                                             accountId: r.accountId
                                         }).$promise.then(function(resp) {
                                             $log.info(resp);
+                                            var totalSatisfiedDemands = 0;
+                                            var pendingInstallment = 0;
                                             if (resp.repaymentSchedule && resp.repaymentSchedule.length) {
                                                 for (i = 0; i < resp.repaymentSchedule.length; i++) {
                                                     if(resp.repaymentSchedule[i].status == 'true') {
@@ -680,20 +679,13 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                                     }
                                                 }
                                             }
-                                            /*if (resp.transactions && resp.transactions.length) {
-                                                for (i = 0; i < resp.transactions.length; i++) {
-                                                    if (resp.transactions[i].transactionId == r.transactionId) {
-                                                        r.transactionType = resp.transactions[i].transactionName
-                                                    }
-                                                }
-                                            }*/
                                             $log.info(totalSatisfiedDemands);
                                             $log.info(pendingInstallment);
                                             r.totalSatisfiedDemands = totalSatisfiedDemands;
                                             r.pendingInstallment = pendingInstallment;
                                             r.payOffAmount=resp.payOffAmount;
                                         });
-                                    })(i);
+                                    })(i, model.repayments[i]);
                                 }
                             }
 
@@ -741,16 +733,14 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                         {
                             var promise = [];
                             for (var i = 0; i < model.repaymentResponse.loanDemandScheduleDto.length; i++) {
-                                (function(i) {
-                                    var r = model.repaymentResponse.loanDemandScheduleDto[i];
-                                    var totalSatisfiedDemands = 0;
-                                    var pendingInstallment = 0;
+                                (function(i, r) {
                                     var pData;
-
                                     promise[i] = LoanAccount.get({
                                         accountId: r.encoreAccountNo
                                     }).$promise.then(function(resp) {
                                         $log.info(resp);
+                                        var totalSatisfiedDemands = 0;
+                                        var pendingInstallment = 0;
                                         if (resp.repaymentSchedule && resp.repaymentSchedule.length) {
                                             for (i = 0; i < resp.repaymentSchedule.length; i++) {
                                                 if(resp.repaymentSchedule[i].status == 'true') {
@@ -775,13 +765,13 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
 
                                         $log.info(totalSatisfiedDemands);
                                         $log.info(pendingInstallment);
-                                        r.totalSatisfiedDemands = totalSatisfiedDemands;
-                                        r.pendingInstallment = pendingInstallment;
+                                        r.totalSatisfiedDemands = totalSatisfiedDemands||0;
+                                        r.pendingInstallment = pendingInstallment||0;
                                         r.accountName = resp.accountName;
                                         r.payOffAmount=resp.payOffAmount;
                                         r.demandAmount=resp.equatedInstallment;
                                     });
-                                })(i);
+                                })(i,model.repaymentResponse.loanDemandScheduleDto[i]);
                             }
 
                             $log.info(promise);
