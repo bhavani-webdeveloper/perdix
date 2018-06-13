@@ -717,41 +717,90 @@ function($log,formHelper,Enrollment,EnrollmentHelper,$state, $stateParams,elemen
                                {
                                    key: "customer.physicalAssets[].assetType",
                                    "title": "ASSET_TYPE",
-                                   "enumCode": "asset_type",
-                                   type: "select"
-                               }, {
-                                   key: "customer.physicalAssets[].ownedAssetDetails",
                                    type: "lov",
                                    autolov: true,
                                    lovonly:true,
                                    bindMap: {},
                                    searchHelper: formHelper,
                                    search: function(inputModel, form, model, context) {
-                                       var assetType = model.customer.physicalAssets[context.arrayIndex].assetType;
-                                       var ownedAssetDetails = formHelper.enum('asset_Details').data;
-                                       var out = [];
-                                       if (ownedAssetDetails && ownedAssetDetails.length) {
-                                           for (var i = 0; i < ownedAssetDetails.length; i++) {
-                                               
-                                                   if ((ownedAssetDetails[i].parentCode).toUpperCase() == (assetType).toUpperCase()) {
-                                                       out.push({
-                                                           name: ownedAssetDetails[i].name,
-                                                           id: ownedAssetDetails[i].value
-                                                       })
-                                                   }
-                                           }
-                                       }
-                                       if(!out.length)
+                                       var assetDetails =[];
+                                       assetDetails = formHelper.enum('asset_type').data;
+                                       if(!assetDetails.length)
                                        {
-                                            out.push({
+                                            assetDetails.push({
                                                 name: "No Records",
                                             })
                                        }
                                        return $q.resolve({
                                            headers: {
-                                               "x-total-count": out.length
+                                               "x-total-count": assetDetails.length
                                            },
-                                           body: out
+                                           body: assetDetails
+                                       });
+                                   },
+                                    onSelect: function(valueObj, model, context) {
+                                        if (valueObj.name == "No Records") {
+                                            model.customer.physicalAssets[context.arrayIndex].assetType = '';
+                                            model.customer.physicalAssets[context.arrayIndex].ownedAssetDetails = '';
+                                            model.customer.physicalAssets[context.arrayIndex].unit = '';
+                                            model.customer.ownedAssetDetails = [];
+                                            model.customer.assetunit = [];
+                                        } else {
+                                            var assetType = model.customer.physicalAssets[context.arrayIndex].assetType = valueObj.name;
+                                            model.customer.physicalAssets[context.arrayIndex].ownedAssetDetails = '';
+                                            model.customer.physicalAssets[context.arrayIndex].unit = '';
+                                            var ownedAssetDetails = formHelper.enum('asset_Details').data;
+                                            var assetunit = formHelper.enum('asset_unit').data;
+                                            model.customer.ownedAssetDetails = [];
+                                            model.customer.assetunit = [];
+                                            if (ownedAssetDetails && ownedAssetDetails.length) {
+                                                for (var i = 0; i < ownedAssetDetails.length; i++) {
+
+                                                    if ((ownedAssetDetails[i].parentCode).toUpperCase() == (assetType).toUpperCase()) {
+                                                        model.customer.ownedAssetDetails.push({
+                                                            name: ownedAssetDetails[i].name,
+                                                            id: ownedAssetDetails[i].value
+                                                        })
+                                                    }
+                                                }
+                                            }
+                                            if (assetunit && assetunit.length) {
+                                                for (var i = 0; i < assetunit.length; i++) {
+                                                    if ((assetunit[i].parentCode).toUpperCase() == (assetType).toUpperCase()) {
+                                                        model.customer.assetunit.push({
+                                                            name: assetunit[i].name,
+                                                        })
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                   getListDisplayItem: function(item, index) {
+                                        return [
+                                            item.name
+                                        ];
+                                   }
+                               }, {
+                                   key: "customer.physicalAssets[].ownedAssetDetails",
+                                   condition:"model.customer.ownedAssetDetails && (model.customer.ownedAssetDetails.length>0)",
+                                   "required":true,
+                                   type: "lov",
+                                   autolov: true,
+                                   lovonly:true,
+                                   bindMap: {},
+                                   searchHelper: formHelper,
+                                   search: function(inputModel, form, model, context) {
+                                       if(!model.customer.ownedAssetDetails.length)
+                                       {
+                                            model.customer.ownedAssetDetails.push({
+                                                name: "No Records",
+                                            })
+                                       }
+                                       return $q.resolve({
+                                           headers: {
+                                               "x-total-count": model.customer.ownedAssetDetails.length
+                                           },
+                                           body: model.customer.ownedAssetDetails
                                        });
                                    },
                                    onSelect: function(valueObj, model, context) {
@@ -770,36 +819,25 @@ function($log,formHelper,Enrollment,EnrollmentHelper,$state, $stateParams,elemen
                                }, {
                                    key: "customer.physicalAssets[].unit",
                                    "title": "UNIT",
+                                   condition:"model.customer.assetunit && (model.customer.assetunit.length>0)",
+                                   "required":true,
                                    type: "lov",
                                    autolov: true,
                                    lovonly:true,
                                    bindMap: {},
                                    searchHelper: formHelper,
                                    search: function(inputModel, form, model, context) {
-                                       var assetType = model.customer.physicalAssets[context.arrayIndex].assetType;
-                                       var assetunit = formHelper.enum('asset_unit').data;
-                                       var out = [];
-                                       if (assetunit && assetunit.length) {
-                                           for (var i = 0; i < assetunit.length; i++) {
-                                               
-                                                   if ((assetunit[i].parentCode).toUpperCase() == (assetType).toUpperCase() ){
-                                                       out.push({
-                                                           name: assetunit[i].name,
-                                                       })
-                                                   }
-                                           }
-                                       }
-                                       if(!out.length)
+                                       if(!model.customer.assetunit.length)
                                        {
-                                            out.push({
+                                            model.customer.assetunit.push({
                                                 name: "No Records",
                                             })
                                        }
                                        return $q.resolve({
                                            headers: {
-                                               "x-total-count": out.length
+                                               "x-total-count": model.customer.assetunit.length
                                            },
-                                           body: out
+                                           body: model.customer.assetunit
                                        });
                                    },
                                    onSelect: function(valueObj, model, context) {
