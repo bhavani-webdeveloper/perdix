@@ -20,7 +20,7 @@ define({
                 
                 self.form = [{
 					"type": "section",
-					"html": '<br><div style="text-align:center">Waiting for customerHistory ..<br><br><ripple-loader></ripple-loader></div>'
+					"html": '<br><div style="text-align:center">Waiting for Customer History ..<br><br><ripple-loader></ripple-loader></div>'
 				}];
                 /*--Utility function's for table view --*/
                 self.strongRender = function(data, type, full, meta) {
@@ -124,7 +124,7 @@ define({
                 /* --Utility function for showing loader till the event loaded - 
                 rendering on financial summary atleast not snapshot because they may be empty 
                 so possibility that it never get fired*/
-                var renderRequiredEvents = ['financial-summary'];
+                var renderRequiredEvents = ['financial-summary','customer-history-fin-snap'];
                 model.renderReady = function(eventName) {
                     renderRequiredEvents.splice(renderRequiredEvents.indexOf(eventName), 1);
 	                if (!renderRequiredEvents.length) {
@@ -139,7 +139,7 @@ define({
                         self.form=[];
                         self.form = [{
                             "type": "section",
-                            "html": '<br><div style="text-align:center">Its a new customer no data will be available..<br><br><ripple-loader></ripple-loader></div>'
+                            "html": '<br><div style="text-align:center">Its a new customer no data will be available..<br><br></div>'
                         }];
                     }
                 }
@@ -423,7 +423,7 @@ define({
                         })
 
                     });
-                     /* model.renderReady('customer-history-fin-snap'); */
+                     model.renderReady('customer-history-fin-snap');
                 },                
                 "financial-summary": function(bundleModel, model, params){
                     model.branchName=params[0].data[0]['Hub Name'];
