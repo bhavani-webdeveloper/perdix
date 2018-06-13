@@ -52,6 +52,555 @@ define(
 
                             }
                         },
+                        "ScreeningReview": {
+                            "excludes": [
+                                "VehicleViability.calculateVehicleDetails",
+                                "VehicleViability1.calculateVehicleDetails1"
+                            ],
+                            "overrides": {
+                                 "VehicleLoanIncomesInformation": {
+                                    "readonly": true
+                                },
+                                "VehicleExpensesInformation": {
+                                    "readonly": true
+                                },
+                                "VehicleViability": {
+                                    "readonly": true
+                                },
+                                "VehicleViability1": {
+                                    "readonly": true
+                                },
+                                "NewVehicleDetails": {
+                                    "readonly": true
+                                },
+                                "VehicleAssetUse": {
+                                    "readonly": true
+                                },
+                                "VehicleRouteDetails": {
+                                    "readonly": true
+                                },
+                                "vehicleLoanDocuments": {
+                                    "readonly": true
+                                },
+                                "VehiclePhotoCaptures": {
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "GoNoGoApproval1": {
+                            "excludes": [
+                                "VehicleViability.calculateVehicleDetails",
+                                "VehicleViability1.calculateVehicleDetails1"
+                            ],
+                            "overrides": {
+                                "VehicleLoanIncomesInformation": {
+                                    "readonly": true
+                                },
+                                "VehicleExpensesInformation": {
+                                    "readonly": true
+                                },
+                                "VehicleViability": {
+                                    "readonly": true
+                                },
+                                "VehicleViability1": {
+                                    "readonly": true
+                                },
+                                "NewVehicleDetails": {
+                                    "readonly": true
+                                },
+                                "VehicleAssetUse": {
+                                    "readonly": true
+                                },
+                                "VehicleRouteDetails": {
+                                    "readonly": true
+                                },
+                                "vehicleLoanDocuments": {
+                                    "readonly": true
+                                },
+                                "VehiclePhotoCaptures": {
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "GoNoGoApproval2": {
+                            "excludes": [
+                                "VehicleViability.calculateVehicleDetails",
+                                "VehicleViability1.calculateVehicleDetails1"
+                            ],
+                            "overrides": {
+                                "VehicleLoanIncomesInformation": {
+                                    "readonly": true
+                                },
+                                "VehicleExpensesInformation": {
+                                    "readonly": true
+                                },
+                                "VehicleViability": {
+                                    "readonly": true
+                                },
+                                "VehicleViability1": {
+                                    "readonly": true
+                                },
+                                "NewVehicleDetails": {
+                                    "readonly": true
+                                },
+                                "VehicleAssetUse": {
+                                    "readonly": true
+                                },
+                                "VehicleRouteDetails": {
+                                    "readonly": true
+                                },
+                                "vehicleLoanDocuments": {
+                                    "readonly": true
+                                },
+                                "VehiclePhotoCaptures": {
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "FieldInvestigation": {
+                            "excludes": [
+
+                            ],
+                            "overrides": {
+
+                            }
+                        },
+                        "TeleVerification": {
+                            "excludes": [
+
+                            ],
+                            "overrides": {
+
+                            }
+                        },
+                        "CreditAppraisal": {
+                            "excludes": [
+
+                            ],
+                            "overrides": {
+
+                            }
+                        },
+                        "DeviationApproval1": {
+                            "excludes": [
+                                "VehicleViability.calculateVehicleDetails",
+                                "VehicleViability1.calculateVehicleDetails1"                                
+                            ],
+                            "overrides": {
+                                "VehicleLoanIncomesInformation": {
+                                    "readonly": true
+                                },
+                                "VehicleExpensesInformation": {
+                                    "readonly": true
+                                },
+                                "VehicleViability": {
+                                    "readonly": true
+                                },
+                                "VehicleViability1": {
+                                    "readonly": true
+                                },
+                                "NewVehicleDetails": {
+                                    "readonly": true
+                                },
+                                "VehicleAssetUse": {
+                                    "readonly": true
+                                },
+                                "VehicleRouteDetails": {
+                                    "readonly": true
+                                },
+                                "vehicleLoanDocuments": {
+                                    "readonly": true
+                                },
+                                "VehiclePhotoCaptures": {
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "DeviationApproval2": {
+                            "excludes": [
+                                "VehicleViability.calculateVehicleDetails",
+                                "VehicleViability1.calculateVehicleDetails1"
+                            ],
+                            "overrides": {
+                                "VehicleLoanIncomesInformation": {
+                                    "readonly": true
+                                },
+                                "VehicleExpensesInformation": {
+                                    "readonly": true
+                                },
+                                "VehicleViability": {
+                                    "readonly": true
+                                },
+                                "VehicleViability1": {
+                                    "readonly": true
+                                },
+                                "NewVehicleDetails": {
+                                    "readonly": true
+                                },
+                                "VehicleAssetUse": {
+                                    "readonly": true
+                                },
+                                "VehicleRouteDetails": {
+                                    "readonly": true
+                                },
+                                "vehicleLoanDocuments": {
+                                    "readonly": true
+                                },
+                                "VehiclePhotoCaptures": {
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "BusinessApproval1": {
+                            "excludes": [
+                                "VehicleViability.calculateVehicleDetails",
+                                "VehicleViability1.calculateVehicleDetails1"
+                            ],
+                            "overrides": {
+                                "VehicleLoanIncomesInformation": {
+                                    "readonly": true
+                                },
+                                "VehicleExpensesInformation": {
+                                    "readonly": true
+                                },
+                                "VehicleViability": {
+                                    "readonly": true
+                                },
+                                "VehicleViability1": {
+                                    "readonly": true
+                                },
+                                "NewVehicleDetails": {
+                                    "readonly": true
+                                },
+                                "VehicleAssetUse": {
+                                    "readonly": true
+                                },
+                                "VehicleRouteDetails": {
+                                    "readonly": true
+                                },
+                                "vehicleLoanDocuments": {
+                                    "readonly": true
+                                },
+                                "VehiclePhotoCaptures": {
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "BusinessApproval2": {
+                            "excludes": [
+                                "VehicleViability.calculateVehicleDetails",
+                                "VehicleViability1.calculateVehicleDetails1"
+                            ],
+                            "overrides": {
+                                "VehicleLoanIncomesInformation": {
+                                    "readonly": true
+                                },
+                                "VehicleExpensesInformation": {
+                                    "readonly": true
+                                },
+                                "VehicleViability": {
+                                    "readonly": true
+                                },
+                                "VehicleViability1": {
+                                    "readonly": true
+                                },
+                                "NewVehicleDetails": {
+                                    "readonly": true
+                                },
+                                "VehicleAssetUse": {
+                                    "readonly": true
+                                },
+                                "VehicleRouteDetails": {
+                                    "readonly": true
+                                },
+                                "vehicleLoanDocuments": {
+                                    "readonly": true
+                                },
+                                "VehiclePhotoCaptures": {
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "BusinessApproval3": {
+                            "excludes": [
+                               "VehicleViability.calculateVehicleDetails",
+                               "VehicleViability1.calculateVehicleDetails1" 
+                            ],
+                            "overrides": {
+                                "VehicleLoanIncomesInformation": {
+                                    "readonly": true
+                                },
+                                "VehicleExpensesInformation": {
+                                    "readonly": true
+                                },
+                                "VehicleViability": {
+                                    "readonly": true
+                                },
+                                "VehicleViability1": {
+                                    "readonly": true
+                                },
+                                "NewVehicleDetails": {
+                                    "readonly": true
+                                },
+                                "VehicleAssetUse": {
+                                    "readonly": true
+                                },
+                                "VehicleRouteDetails": {
+                                    "readonly": true
+                                },
+                                "vehicleLoanDocuments": {
+                                    "readonly": true
+                                },
+                                "VehiclePhotoCaptures": {
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "BusinessApproval4": {
+                            "excludes": [
+                               "VehicleViability.calculateVehicleDetails",
+                               "VehicleViability1.calculateVehicleDetails1" 
+                            ],
+                            "overrides": {
+                                "VehicleLoanIncomesInformation": {
+                                    "readonly": true
+                                },
+                                "VehicleExpensesInformation": {
+                                    "readonly": true
+                                },
+                                "VehicleViability": {
+                                    "readonly": true
+                                },
+                                "VehicleViability1": {
+                                    "readonly": true
+                                },
+                                "NewVehicleDetails": {
+                                    "readonly": true
+                                },
+                                "VehicleAssetUse": {
+                                    "readonly": true
+                                },
+                                "VehicleRouteDetails": {
+                                    "readonly": true
+                                },
+                                "vehicleLoanDocuments": {
+                                    "readonly": true
+                                },
+                                "VehiclePhotoCaptures": {
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "BusinessApproval5": {
+                            "excludes": [
+                               "VehicleViability.calculateVehicleDetails",
+                               "VehicleViability1.calculateVehicleDetails1" 
+                            ],
+                            "overrides": {
+                                "VehicleLoanIncomesInformation": {
+                                    "readonly": true
+                                },
+                                "VehicleExpensesInformation": {
+                                    "readonly": true
+                                },
+                                "VehicleViability": {
+                                    "readonly": true
+                                },
+                                "VehicleViability1": {
+                                    "readonly": true
+                                },
+                                "NewVehicleDetails": {
+                                    "readonly": true
+                                },
+                                "VehicleAssetUse": {
+                                    "readonly": true
+                                },
+                                "VehicleRouteDetails": {
+                                    "readonly": true
+                                },
+                                "vehicleLoanDocuments": {
+                                    "readonly": true
+                                },
+                                "VehiclePhotoCaptures": {
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "CreditApproval1": {
+                            "excludes": [
+                              "VehicleViability.calculateVehicleDetails",
+                              "VehicleViability1.calculateVehicleDetails1"  
+                            ],
+                            "overrides": {
+                                "VehicleLoanIncomesInformation": {
+                                    "readonly": true
+                                },
+                                "VehicleExpensesInformation": {
+                                    "readonly": true
+                                },
+                                "VehicleViability": {
+                                    "readonly": true
+                                },
+                                "VehicleViability1": {
+                                    "readonly": true
+                                },
+                                "NewVehicleDetails": {
+                                    "readonly": true
+                                },
+                                "VehicleAssetUse": {
+                                    "readonly": true
+                                },
+                                "VehicleRouteDetails": {
+                                    "readonly": true
+                                },
+                                "vehicleLoanDocuments": {
+                                    "readonly": true
+                                },
+                                "VehiclePhotoCaptures": {
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "CreditApproval2": {
+                            "excludes": [
+                              "VehicleViability.calculateVehicleDetails",
+                              "VehicleViability1.calculateVehicleDetails1"  
+                            ],
+                            "overrides": {
+                                "VehicleLoanIncomesInformation": {
+                                    "readonly": true
+                                },
+                                "VehicleExpensesInformation": {
+                                    "readonly": true
+                                },
+                                "VehicleViability": {
+                                    "readonly": true
+                                },
+                                "VehicleViability1": {
+                                    "readonly": true
+                                },
+                                "NewVehicleDetails": {
+                                    "readonly": true
+                                },
+                                "VehicleAssetUse": {
+                                    "readonly": true
+                                },
+                                "VehicleRouteDetails": {
+                                    "readonly": true
+                                },
+                                "vehicleLoanDocuments": {
+                                    "readonly": true
+                                },
+                                "VehiclePhotoCaptures": {
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "CreditApproval3": {
+                            "excludes": [
+                              "VehicleViability.calculateVehicleDetails",
+                              "VehicleViability1.calculateVehicleDetails1" 
+                            ],
+                            "overrides": {
+                                "VehicleLoanIncomesInformation": {
+                                    "readonly": true
+                                },
+                                "VehicleExpensesInformation": {
+                                    "readonly": true
+                                },
+                                "VehicleViability": {
+                                    "readonly": true
+                                },
+                                "VehicleViability1": {
+                                    "readonly": true
+                                },
+                                "NewVehicleDetails": {
+                                    "readonly": true
+                                },
+                                "VehicleAssetUse": {
+                                    "readonly": true
+                                },
+                                "VehicleRouteDetails": {
+                                    "readonly": true
+                                },
+                                "vehicleLoanDocuments": {
+                                    "readonly": true
+                                },
+                                "VehiclePhotoCaptures": {
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "CreditApproval4": {
+                            "excludes": [
+                              "VehicleViability.calculateVehicleDetails",
+                              "VehicleViability1.calculateVehicleDetails1" 
+                            ],
+                            "overrides": {
+                                "VehicleLoanIncomesInformation": {
+                                    "readonly": true
+                                },
+                                "VehicleExpensesInformation": {
+                                    "readonly": true
+                                },
+                                "VehicleViability": {
+                                    "readonly": true
+                                },
+                                "VehicleViability1": {
+                                    "readonly": true
+                                },
+                                "NewVehicleDetails": {
+                                    "readonly": true
+                                },
+                                "VehicleAssetUse": {
+                                    "readonly": true
+                                },
+                                "VehicleRouteDetails": {
+                                    "readonly": true
+                                },
+                                "vehicleLoanDocuments": {
+                                    "readonly": true
+                                },
+                                "VehiclePhotoCaptures": {
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "CreditApproval5": {
+                            "excludes": [
+                              "VehicleViability.calculateVehicleDetails",
+                              "VehicleViability1.calculateVehicleDetails1" 
+                            ],
+                            "overrides": {
+                                "VehicleLoanIncomesInformation": {
+                                    "readonly": true
+                                },
+                                "VehicleExpensesInformation": {
+                                    "readonly": true
+                                },
+                                "VehicleViability": {
+                                    "readonly": true
+                                },
+                                "VehicleViability1": {
+                                    "readonly": true
+                                },
+                                "NewVehicleDetails": {
+                                    "readonly": true
+                                },
+                                "VehicleAssetUse": {
+                                    "readonly": true
+                                },
+                                "VehicleRouteDetails": {
+                                    "readonly": true
+                                },
+                                "vehicleLoanDocuments": {
+                                    "readonly": true
+                                },
+                                "VehiclePhotoCaptures": {
+                                    "readonly": true
+                                }
+                            }
+                        },
 
                     }
                 }

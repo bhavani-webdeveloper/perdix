@@ -41,7 +41,8 @@ define([], function() {
                         "Screening": {
                             "excludes": [
                                 "TeleVerification",
-                                "FieldInvestigationDetails"
+                                "FieldInvestigationDetails",
+                                "LoanRecommendation"
                             ],
                             "overrides": {
 
@@ -49,8 +50,6 @@ define([], function() {
                         },
                         "ScreeningReview": {
                             "excludes": [
-                                "calculateEmi",
-                                "VehiclePhotoCaptures",
                                 "PreliminaryInformation.calculateEmi",
                                 "TeleVerification",
                                 "FieldInvestigationDetails"
@@ -66,19 +65,12 @@ define([], function() {
                                     "readonly": true
                                 },
                                 "PayerDetails": {
-                                    "readonly": true
-                                },
-                                "NewVehicleDetails": {
                                     "readonly": true
                                 }
                             }
                         },
                         "GoNoGoApproval1": {
                             "excludes": [
-                                "calculateEmi",
-                                "VehicleRouteDetails",
-                                "VehicleAssetViability",
-                                "VehiclePhotoCaptures",
                                 "PreliminaryInformation.calculateEmi",
                                 "TeleVerification",
                                 "FieldInvestigationDetails"
@@ -94,19 +86,12 @@ define([], function() {
                                     "readonly": true
                                 },
                                 "PayerDetails": {
-                                    "readonly": true
-                                },
-                                "NewVehicleDetails": {
                                     "readonly": true
                                 }
                             }
                         },
                         "GoNoGoApproval2": {
                             "excludes": [
-                                "calculateEmi",
-                                "VehicleRouteDetails",
-                                "VehicleAssetViability",
-                                "VehiclePhotoCaptures",
                                 "PreliminaryInformation.calculateEmi",
                                 "TeleVerification",
                                 "FieldInvestigationDetails"
@@ -122,9 +107,6 @@ define([], function() {
                                     "readonly": true
                                 },
                                 "PayerDetails": {
-                                    "readonly": true
-                                },
-                                "NewVehicleDetails": {
                                     "readonly": true
                                 }
                             }
@@ -132,9 +114,6 @@ define([], function() {
                         "FieldInvestigation": {
                             "excludes": [
                                 "LoanRecommendation",
-                                "VehicleRouteDetails",
-                                "VehicleAssetViability",
-                                "VehiclePhotoCaptures",
                                 "TeleVerification"
                             ],
                             "overrides": {
@@ -144,10 +123,6 @@ define([], function() {
                         "TeleVerification": {
                             "excludes": [
                                 "LoanRecommendation",
-                                "VehicleRouteDetails",
-                                "VehicleAssetViability",
-                                "VehiclePhotoCaptures",
-                                "TeleVerification"
                             ],
                             "overrides": {
                                 "FieldInvestigationDetails": {
@@ -175,10 +150,6 @@ define([], function() {
                         },
                         "DeviationApproval1": {
                             "excludes": [
-                                "calculateEmi",
-                                "VehicleRouteDetails",
-                                "VehicleAssetViability",
-                                "VehiclePhotoCaptures",
                                 "PreliminaryInformation.calculateEmi",
                             ],
                             "overrides": {
@@ -198,19 +169,12 @@ define([], function() {
                                     "readonly": true
                                 },
                                 "PayerDetails": {
-                                    "readonly": true
-                                },
-                                "NewVehicleDetails": {
                                     "readonly": true
                                 }
                             }
                         },
                         "DeviationApproval2": {
                             "excludes": [
-                                "calculateEmi",
-                                "VehicleRouteDetails",
-                                "VehicleAssetViability",
-                                "VehiclePhotoCaptures",
                                 "PreliminaryInformation.calculateEmi",
                             ],
                             "overrides": {
@@ -230,19 +194,12 @@ define([], function() {
                                     "readonly": true
                                 },
                                 "PayerDetails": {
-                                    "readonly": true
-                                },
-                                "NewVehicleDetails": {
                                     "readonly": true
                                 }
                             }
                         },
                         "BusinessApproval1": {
                             "excludes": [
-                                "calculateEmi",
-                                "VehicleRouteDetails",
-                                "VehicleAssetViability",
-                                "VehiclePhotoCaptures",
                                 "PreliminaryInformation.calculateEmi",
                             ],
                             "overrides": {
@@ -263,18 +220,11 @@ define([], function() {
                                 },
                                 "PayerDetails": {
                                     "readonly": true
-                                },
-                                "NewVehicleDetails": {
-                                    "readonly": true
                                 }
                             }
                         },
                         "BusinessApproval2": {
                             "excludes": [
-                                "calculateEmi",
-                                "VehicleRouteDetails",
-                                "VehicleAssetViability",
-                                "VehiclePhotoCaptures",
                                 "PreliminaryInformation.calculateEmi"
                             ],
                             "overrides": {
@@ -294,19 +244,12 @@ define([], function() {
                                     "readonly": true
                                 },
                                 "PayerDetails": {
-                                    "readonly": true
-                                },
-                                "NewVehicleDetails": {
                                     "readonly": true
                                 }
                             }
                         },
                         "BusinessApproval3": {
                             "excludes": [
-                                "calculateEmi",
-                                "VehicleRouteDetails",
-                                "VehicleAssetViability",
-                                "VehiclePhotoCaptures",
                                 "PreliminaryInformation.calculateEmi"
                             ],
                             "overrides": {
@@ -326,19 +269,12 @@ define([], function() {
                                     "readonly": true
                                 },
                                 "PayerDetails": {
-                                    "readonly": true
-                                },
-                                "NewVehicleDetails": {
                                     "readonly": true
                                 }
                             }
                         },
                         "BusinessApproval4": {
                             "excludes": [
-                                "calculateEmi",
-                                "VehicleRouteDetails",
-                                "VehicleAssetViability",
-                                "VehiclePhotoCaptures",
                                 "PreliminaryInformation.calculateEmi"
                             ],
                             "overrides": {
@@ -358,19 +294,12 @@ define([], function() {
                                     "readonly": true
                                 },
                                 "PayerDetails": {
-                                    "readonly": true
-                                },
-                                "NewVehicleDetails": {
                                     "readonly": true
                                 }
                             }
                         },
                         "BusinessApproval5": {
                             "excludes": [
-                                "calculateEmi",
-                                "VehicleRouteDetails",
-                                "VehicleAssetViability",
-                                "VehiclePhotoCaptures",
                                 "PreliminaryInformation.calculateEmi"
                             ],
                             "overrides": {
@@ -390,19 +319,12 @@ define([], function() {
                                     "readonly": true
                                 },
                                 "PayerDetails": {
-                                    "readonly": true
-                                },
-                                "NewVehicleDetails": {
                                     "readonly": true
                                 }
                             }
                         },
                         "CreditApproval1": {
                             "excludes": [
-                                "calculateEmi",
-                                "VehicleRouteDetails",
-                                "VehicleAssetViability",
-                                "VehiclePhotoCaptures",
                                 "PreliminaryInformation.calculateEmi"
                             ],
                             "overrides": {
@@ -422,18 +344,12 @@ define([], function() {
                                     "readonly": true
                                 },
                                 "PayerDetails": {
-                                    "readonly": true
-                                },
-                                "NewVehicleDetails": {
                                     "readonly": true
                                 }
                             }
                         },
                         "CreditApproval2": {
                             "excludes": [
-                                "calculateEmi",
-                                "VehicleAssetViability",
-                                "VehiclePhotoCaptures",
                                 "PreliminaryInformation.calculateEmi"
                             ],
                             "overrides": {
@@ -453,19 +369,12 @@ define([], function() {
                                     "readonly": true
                                 },
                                 "PayerDetails": {
-                                    "readonly": true
-                                },
-                                "NewVehicleDetails": {
                                     "readonly": true
                                 }
                             }
                         },
                         "CreditApproval3": {
                             "excludes": [
-                                "calculateEmi",
-                                "VehicleRouteDetails",
-                                "VehicleAssetViability",
-                                "VehiclePhotoCaptures",
                                 "PreliminaryInformation.calculateEmi"
                             ],
                             "overrides": {
@@ -485,19 +394,12 @@ define([], function() {
                                     "readonly": true
                                 },
                                 "PayerDetails": {
-                                    "readonly": true
-                                },
-                                "NewVehicleDetails": {
                                     "readonly": true
                                 }
                             }
                         },
                         "CreditApproval4": {
                             "excludes": [
-                                "calculateEmi",
-                                "VehicleRouteDetails",
-                                "VehicleAssetViability",
-                                "VehiclePhotoCaptures",
                                 "PreliminaryInformation.calculateEmi"
                             ],
                             "overrides": {
@@ -517,19 +419,12 @@ define([], function() {
                                     "readonly": true
                                 },
                                 "PayerDetails": {
-                                    "readonly": true
-                                },
-                                "NewVehicleDetails": {
                                     "readonly": true
                                 }
                             }
                         },
                         "CreditApproval5": {
                             "excludes": [
-                                "calculateEmi",
-                                "VehicleRouteDetails",
-                                "VehicleAssetViability",
-                                "VehiclePhotoCaptures",
                                 "PreliminaryInformation.calculateEmi"
                             ],
                             "overrides": {
@@ -549,9 +444,6 @@ define([], function() {
                                     "readonly": true
                                 },
                                 "PayerDetails": {
-                                    "readonly": true
-                                },
-                                "NewVehicleDetails": {
                                     "readonly": true
                                 }
                             }
@@ -594,12 +486,6 @@ define([], function() {
                                 "PreliminaryInformation": {
                                     "readonly": true
                                 },
-                                // "VehicleAssetUse": {
-                                //     "readonly": true
-                                // },
-                                // "VehicleRouteDetails": {
-                                //     "readonly": true
-                                // },
                                 "VehicleAssetViability": {
                                     "readonly": true
                                 },
@@ -613,9 +499,6 @@ define([], function() {
                                     "readonly": true
                                 },
                                 "PayerDetails": {
-                                    "readonly": true
-                                },
-                                "NewVehicleDetails": {
                                     "readonly": true
                                 }
                             }
