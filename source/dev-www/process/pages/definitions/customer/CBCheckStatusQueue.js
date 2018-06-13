@@ -11,6 +11,7 @@ function($log, formHelper, CreditBureau, CreditBureau, SessionStore, $state, ent
 		initialize: function (model, form, formCtrl) {
 			model.branchName = SessionStore.getCurrentBranch().branchName;
 			model.branchId = SessionStore.getCurrentBranch().branchId;
+			model.siteCode = SessionStore.getGlobalSetting("siteCode");
 			$log.info("search-list sample got initialized");
 		},
 		definition: {
@@ -156,11 +157,14 @@ function($log, formHelper, CreditBureau, CreditBureau, SessionStore, $state, ent
 									}
 								});
 						},
-						isApplicable: function(item, index){
-							if (item.status === 'PENDING') {
+						isApplicable: function(item, model){
+							if (model.siteCode=='KGFS' && (item.status === 'PENDING' || item.status === 'ERROR')) {
 								return true;
-							}
-							return false;
+							}else if(item.status === 'PENDING'){
+ 								return true;
+							}else{
+								return false;
+							}	
 						}
 					},{
 						name: "Enroll Customer",

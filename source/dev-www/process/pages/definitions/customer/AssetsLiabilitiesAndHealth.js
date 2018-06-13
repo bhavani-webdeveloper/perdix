@@ -1037,6 +1037,7 @@ function($log,formHelper,Enrollment,EnrollmentHelper,$state, $stateParams,elemen
                         "title": "HOUSE_LOCATION",
                         "type": "geotag",
                         //readonly: true,
+                        "required":false,
                         "latitude": "customer.latitude",
                         "longitude": "customer.longitude",
                         "onChange": "fillGeolocation(modelValue, form)"
