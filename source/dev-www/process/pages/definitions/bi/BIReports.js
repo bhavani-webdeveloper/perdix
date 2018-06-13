@@ -217,7 +217,7 @@ irf.pageCollection.factory(irf.page("bi.BIReports"), ["$log", "RolesPages", "BIR
                           {responseType: 'arraybuffer'}
                         ).then(function (response) {
                           var headers = response.headers();
-                          if (headers['content-type'].indexOf('json') != -1 ) {
+                          if (headers['content-type'].indexOf('json') != -1 && !headers["content-disposition"]) {
                             var decodedString = String.fromCharCode.apply(null, new Uint8Array(response.data));
                             console.log(decodedString);
                             PageHelper.showErrors({data: {error: decodedString}});
