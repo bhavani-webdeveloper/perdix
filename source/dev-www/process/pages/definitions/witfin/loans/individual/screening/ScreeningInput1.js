@@ -39,6 +39,13 @@ irf.pageCollection.factory(
                             maximum: 1
                         },
                         {
+                            pageName: 'witfin.loans.individual.screening.VehicleDetails',
+                            title: 'VEHICLE_DETAILS',
+                            pageClass: 'vehicle-details',
+                            minimum: 1,
+                            maximum: 1,
+                        },
+                        {
                             pageName: 'witfin.loans.individual.screening.LoanRequest',
                             title: 'LOAN_REQUEST',
                             pageClass: 'loan-request',
@@ -153,7 +160,12 @@ irf.pageCollection.factory(
                                             loanAccount: res
                                         }
                                     });
-
+                                    $this.bundlePages.push({
+                                    pageClass: 'vehicle-details',
+                                    model: {
+                                            loanProcess: res
+                                        }
+                                    });
                                     $this.bundlePages.push({
                                         pageClass: 'cb-check',
                                         model: {

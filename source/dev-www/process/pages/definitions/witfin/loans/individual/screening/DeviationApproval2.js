@@ -89,7 +89,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 pageClass: 'scoring',
                                 minimum: 1,
                                 maximum: 1,
-                                order: 5
+                                order: 50
                             },
                             {
                                 pageName: 'witfin.loans.individual.screening.VehicleDetails',
@@ -97,7 +97,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 pageClass: 'vehicle-details',
                                 minimum: 1,
                                 maximum: 1,
-                                order:90
+                                order:45
                             }
                         ]);
                     },
