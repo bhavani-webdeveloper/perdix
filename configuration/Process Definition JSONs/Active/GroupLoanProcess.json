@@ -562,7 +562,9 @@
             "maxItems": null,
             "items": {
                "type": "object",
-               "required": [],
+               "required": [
+                  "scheduledDisbursementDate"
+               ],
                "properties": {
                   "loanPurpose": {
                      "title": "Loan Purpose",
@@ -820,18 +822,20 @@
                      "title": "firstRepaymentDate",
                      "type": "string",
                      "captureStages": [
-                        "GroupCreation",
                         "LoanBooking",
-                        "GRT"
+                        "GRT",
+                        "LoanDisbursement",
+                        "ApplicationPending"
                      ]
                   },
                   "scheduledDisbursementDate": {
                      "title": "scheduledDisbursementDate",
                      "type": "string",
                      "captureStages": [
-                        "GroupCreation",
                         "LoanBooking",
-                        "GRT"
+                        "GRT",
+                        "LoanDisbursement",
+                        "ApplicationPending"
                      ]
                   },
                   "modeOfDisbursement": {

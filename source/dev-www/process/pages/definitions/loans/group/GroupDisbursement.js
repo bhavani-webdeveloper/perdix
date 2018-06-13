@@ -165,17 +165,15 @@ define({
                         "title": "TENURE",
                     }, {
                         "key": "group.scheduledDisbursementDate",
-                        "required":true,
                         "readonly": true,
                         "title": "SCHEDULED_DISBURSEMENT_DATE",
-                        "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
+                        "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'||model.siteCode == 'KGFS'",
                         "type": "date",
                     }, {
                         "key": "group.firstRepaymentDate",
                         "title": "FIRST_REPAYMENT_DATE",
-                        "required":true,
                         "readonly": true,
-                        "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
+                        "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'||model.siteCode == 'KGFS'",
                         "type": "date",
                     }, {
                         "key": "group.groupPhotoFileId",
