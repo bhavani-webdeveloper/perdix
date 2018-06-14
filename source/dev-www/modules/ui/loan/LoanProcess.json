@@ -454,8 +454,9 @@
                 "key": "loanAccount.vehicleLoanDetails.vehicleRouteDetails",
                 "type": "array",
                 "title": "Route",
-                "startEmpty": true,
-                "titleExpr": "model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[arrayIndexes[0]].routeFrom + '~' + model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[arrayIndexes[0]].routeTo",
+                "add": null,
+                "remove": null,
+                "view": "fixed",
                 "items": {
                     "routeFrom": {
                         "key": "loanAccount.vehicleLoanDetails.vehicleRouteDetails[].routeFrom",
@@ -471,6 +472,16 @@
                         "key": "loanAccount.vehicleLoanDetails.vehicleRouteDetails[].routeVia",
                         "title": "VEHICLE_ROUTE_VIA",
                         "type": "string"
+                    },
+                    "trips": {
+                        "key": "loanAccount.vehicleLoanDetails.vehicleRouteDetails[].trips",
+                        "title": "TRIPS",
+                        "type": "number"
+                    },
+                    "routesKms": {
+                        "key": "loanAccount.vehicleLoanDetails.vehicleRouteDetails[].routesKms",
+                        "title": "ROUTE_KMS",
+                        "type": "number"
                     }
                 }
             }
