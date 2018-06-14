@@ -11,7 +11,7 @@ define({
             "title": "GENERIC_EXCEL_UPLOAD",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
-                model.upload=model.upload||{};
+                model.upload = model.upload || {};
                 $log.info("DocumentTrackingBulkUpload  Page got initialized");
             },
             offline: false,
@@ -25,12 +25,14 @@ define({
                     title: "EXCEL_TYPE",
                     type: "select",
                     enumCode: "excel_type",
+                    "required": true
                 }, {
                     "key": "upload.upload",
                     "title": "EXCEL_UPLOAD",
                     "category": "ACH",
                     "subCategory": "cat2",
                     "type": "file",
+                    "required": true,
                     "fileType": "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                     customHandle: function(file, progress, modelValue, form, model) {
                         ExcelUpload.ExcelFileUpload(file, progress, model.upload.excel_type).then(function(resp) {
