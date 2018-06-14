@@ -73,7 +73,18 @@ define({
                 }, {
                     "key": "product.productType",
                     "condition": "!model.productId",
-                    "required": true
+                    "required": true,
+                    "type": "select",
+                    "titleMap": [{
+                            "name": "EQ",
+                            "value": "EQ"
+                        }, {
+                            "name": "OD",
+                            "value": "OD"
+                        }, {
+                            "name": "BULLET",
+                            "value": "BULLET",
+                        }]
                 },{
                     "key": "product.partnerCode",
                     "condition": "model.productId",
@@ -239,10 +250,12 @@ define({
                 "condition": "model.product.loanType === 'JLG'",
                 "items": [{
                     "key": "product.groupMemberMinimum",
-                    "type": "number"
+                    "type": "number",
+                    "required": true
                 }, {
                     "key": "product.groupMemberMaximum",
                     "type": "number",
+                    "required": true
                 }],
             }, {
                 "type": "box",
@@ -930,8 +943,6 @@ define({
                             "expiryDate",
                             "minInterestRate",
                             "maxInterestRate",
-                            "groupMemberMinimum",
-                            "groupMemberMaximum",
                             "numberOfGuarantors",
                             "lmsProductMasters[].investorId",
                             "lmsProductMasters[].bankId",

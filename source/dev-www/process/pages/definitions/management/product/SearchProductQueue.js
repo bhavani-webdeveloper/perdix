@@ -117,13 +117,13 @@ define({
                             searchOptions.frequency = "Q";
                             break;
                         case 'Daily':
-                            searchOptions.frequency = "D"
+                            searchOptions.frequency = "D";
                             break;
                         case 'Fortnightly':
-                            searchOptions.frequency = "F"
+                            searchOptions.frequency = "F";
                             break;
                         default:
-                            return;
+                            searchOptions.frequency ="";
                     }};
                     var promise = Product.search({
                         'partnerCode': searchOptions.partnerCode,
@@ -135,6 +135,29 @@ define({
                         'page': pageOpts.loanType,
                         'per_page': pageOpts.itemsPerPage,
                     }).$promise;
+                    if(searchOptions.frequency){
+                        switch (searchOptions.frequency) {
+                            case 'W':
+                                searchOptions.frequency = "Weekly";
+                                break;
+                            case 'M':
+                                searchOptions.frequency = "Monthly";
+                                break;
+                            case 'Y':
+                                searchOptions.frequency = "Yearly";
+                                break;
+                            case 'Q':
+                                searchOptions.frequency = "Quarterly";
+                                break;
+                            case 'D':
+                                searchOptions.frequency = "Daily";
+                                break;
+                            case 'F':
+                                searchOptions.frequency = "Fortnightly";
+                                break;
+                            default:
+                                searchOptions.frequency ="Choose Frequency";
+                        }};
                     return promise;
                 },
                 paginationOptions: {
@@ -180,7 +203,19 @@ define({
                             data: 'productCode'
                         }, {
                             title: 'PARTNER_CODE',
-                            data: 'partnerCode'
+                            data: 'partnerCode',
+                            render: function(data, type, full, meta){
+                                switch(data){
+                                    case 'DO Partner2':
+                                        return "SCUF";
+                                        break;
+                                    case 'DO Partner1-IC':
+                                        return "Northern Arc Capital Limited & Kinara";
+                                        break;
+                                    default: 
+                                        return data
+                                }
+                            }
                         }, {
                             title: 'LOAN_TYPE',
                             data: 'loanType'
@@ -223,7 +258,7 @@ define({
                                         return "Bullet";
                                         break;
                                     default:
-                                        return;
+                                        return "";
                                 }
                             }
                         }]
