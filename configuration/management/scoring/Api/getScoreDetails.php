@@ -623,6 +623,20 @@ if (isset($_GET)) {
         $db = ConnectDb();
         $FinalInputs = $db->prepare(substr($InsertValues, 0, -1));
         $FinalInputs->execute();
+		
+		// sub score calculation
+		$subScoreCalculation = $db->prepare("INSERT INTO sc_subscore_calcualtion(`sc_calculaiton_id`, `subscore_name`, `score`, `max_score`) SELECT
+		c.id AS 'sc_calculaiton_id',
+		ci.subscore_name AS 'subscore_name',
+		IFNULL(ROUND(SUM(ci.WeightedScore)/SUM(ci.MaxWeightedScore)*MAX(p.subscore_weightage), 2), 0) AS 'score', 
+		MAX(p.subscore_weightage) AS `max_score`
+		FROM 
+		sc_calculation_inputs ci, sc_calculation c, sc_parameters p
+		WHERE 
+		c.id=ci.score_calc_id AND p.ParameterName=ci.ParameterName AND p.ScoreName = :ScoreName AND ci.subscore_name IS NOT NULL AND ci.subscore_name != '' AND c.id=:AutoID group by ci.subscore_name");
+		$subScoreCalculation->bindParam(":AutoID", $AutoID);
+        $subScoreCalculation->bindParam(":ScoreName", $ScoreName);
+		$subScoreCalculation->execute();
         $db = null;
     } catch (PDOException $e) {
         $error_log['InsertValues'] = $e->getMessage();
