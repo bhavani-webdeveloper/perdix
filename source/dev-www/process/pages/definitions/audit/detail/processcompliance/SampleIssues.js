@@ -374,6 +374,7 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                             "key": "sample.issue_details[" + i + "].assignee_det[0].assignee_id",
                             "type": "lov",
                             "lovonly": true,
+                            "clear":true,
                             "title": "RESPONSIBILITY",
                             "inputMap": {
                                 "branch_id": {
@@ -399,6 +400,7 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                             "key": "sample.issue_details[" + i + "].assignee_det[1].assignee_id",
                             "type": "lov",
                             "lovonly": true,
+                            "clear":true,
                             "title": "ADDL_RESPONSIBILITY",
                             "condition": "model.sample.issue_details[" + i + "].assignee_det[0].assignee_id",
                             "inputMap": {
@@ -455,6 +457,7 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                                 "key": "sample.issue_details[" + i + "].assignee_det[0].spot_assignee_id",
                                 "condition": "model.sample.issue_details[" + i + "].spot_fixed == '1'",
                                 "type": "lov",
+                                "clear":true,
                                 "lovonly": true,
                                 "required": true,
                                 "title": "SPOTFIX_RESPONSIBILITY",

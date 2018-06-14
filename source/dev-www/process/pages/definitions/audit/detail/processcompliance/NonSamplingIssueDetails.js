@@ -292,6 +292,7 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.NonSamplingI
                         "key": "manual_issue.assignee_det[0].assignee_id",
                         "type": "lov",
                         "lovonly": true,
+                        "clear":true,
                         "required": true,
                         "title": "RESPONSIBILITY",
                         "inputMap": {
@@ -318,6 +319,7 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.NonSamplingI
                     }, {
                         "key": "manual_issue.assignee_det[1].assignee_id",
                         "type": "lov",
+                        "clear":true,
                         "lovonly": true,
                         "title": "ADDL_RESPONSIBILITY",
                         "condition": "model.manual_issue.assignee_det[0].assignee_id",
