@@ -28,6 +28,28 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                 model.liabilityAccount.liabilityComplianceDocuments[index].liablityAccountId = model.liabilityAccount.id
             };
 
+            var calFeeAmount = function(modelValue,form,model){
+                if(form.arrayIndex && model.liabilityAccount.loanAmount != null && model.liabilityAccount.liabilityFeeDetails[form.arrayIndex].processingFeeInPercentage != null ){
+                   model.liabilityAccount.liabilityFeeDetails[form.arrayIndex].feeAmount = (model.liabilityAccount.loanAmount/100) *model.liabilityAccount.liabilityFeeDetails[form.arrayIndex].processingFeeInPercentage;
+                }
+                else{
+                    _.forEach (model.liabilityAccount.liabilityFeeDetails,function(liabilityFeeDetail){
+                        if(liabilityFeeDetail.processingFeeInPercentage!= null && model.liabilityAccount.loanAmount){
+                           liabilityFeeDetail.feeAmount = (model.liabilityAccount.loanAmount/100) *liabilityFeeDetail.processingFeeInPercentage;
+                        }
+                    })
+                }
+                model.liabilityAccount.totalDeductions = 0 
+                _.forEach(model.liabilityAccount.liabilityFeeDetails, function(liabilityFeeDet){
+                    model.liabilityAccount.totalDeductions= model.liabilityAccount.totalDeductions+liabilityFeeDet.feeAmount;
+                })
+            }
+            var calNetDisbAmount = function (model){
+                if(model.liabilityAccount.loanAmount != null && model.liabilityAccount.totalDeductions != null && model.liabilityAccount.securityAmount != null){
+                    model.liabilityAccount.netDisbursementAmount = model.liabilityAccount.loanAmount - (model.liabilityAccount.totalDeductions + model.liabilityAccount.securityAmount) ;
+                }
+            }
+
             var overridesFields = function(bundlePageObj) {
                 return {
                     "LenderAccountDetails": {
@@ -124,6 +146,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                         "condition": "model.liabilityAccount.liabilityLenderDocuments[arrayIndex].documentName == 'Others'",
                         "required": true
                     },
+
                     "DisbursementConfirmation": {
                         "orderNo": 60
                     },
@@ -150,7 +173,11 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     },
                     "DisbursementDetails.loanAmount": {
                         "required": true,
-                        "orderNo": 110
+                        "orderNo": 110,
+                        "onChange": function (modelValue,form,model){
+                          calNetDisbAmount(model);  
+                          calFeeAmount (modelValue , form , model) ; 
+                        }
                     },
                     "DisbursementDetails.disbursementDate": {
                         "required": true,
@@ -194,6 +221,13 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                         "required": true,
                         "orderNo": 200
                     },
+                    "LoanAmountDeduction.securityAmount":{
+                        "required": true,
+                        "onChange": function (modelValue,form,model){
+                          //calFeeAmount (modelValue , form , model) ; 
+                          calNetDisbAmount(model);
+                        }
+                    },
                     "LoanAmountDeduction.liabilityFeeDetails.feeName": {
                         "required": true
                     },
@@ -201,13 +235,20 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                         "required": true
                     },
                     "LoanAmountDeduction.liabilityFeeDetails.feeAmount": {
-                        "required": true
+                        "required": true,
+                        "readonly":true
                     },
                     "LoanAmountDeduction.totalDeductions": {
-                        "required": true
+                        "required": true,
+                        "readonly":true,
+                        "onChange": function (modelValue,form,model){
+                         
+                          calNetDisbAmount(model);
+                        }
                     },
                     "LoanAmountDeduction.netDisbursementAmount": {
-                        "required": true
+                        "required": true,
+                        "readonly":true
                     },
                     "LoanAmountDeduction.expectedDisbursementDate": {
                         "required": true
@@ -223,6 +264,11 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     },
                     "LoanAmountDeduction.maturityDate": {
                         "required": true
+                    },
+                    "LoanAmountDeduction.liabilityFeeDetails.processingFeeInPercentage":{
+                          "onChange": function(modelValue, form, model) {
+                           calFeeAmount(modelValue,form,model) ;
+                        },
                     },
                     "Document.liabilityLenderDocuments.liabilityLenderDocuments": {
                         onArrayAdd: function(modelValue, form, model, formCtrl, $event) {
