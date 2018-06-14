@@ -26,7 +26,9 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
                 "Page/Engine/witfin.loans.individual.screening.GoNoGoApproval1Queue",
                 "Page/Engine/witfin.loans.individual.screening.GoNoGoApproval2Queue",
                 "Page/Engine/witfin.loans.individual.screening.VehicleValuationQueue",
-                "Page/Engine/witfin.loans.individual.screening.FieldInvestigationQueue",
+                "Page/Engine/witfin.loans.individual.screening.FieldInvestigation1Queue",
+                "Page/Engine/witfin.loans.individual.screening.FieldInvestigation2Queue",
+                "Page/Engine/witfin.loans.individual.screening.FieldInvestigation3Queue",
                 "Page/Engine/witfin.loans.individual.screening.TeleVerificationQueue",
                 "Page/Engine/witfin.loans.individual.screening.CreditAppraisalQueue",
                 "Page/Engine/witfin.loans.individual.screening.DeviationApproval1Queue",
@@ -281,10 +283,10 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
                 });
             }
 
-            var fiq1Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.FieldInvestigationQueue"];
+            var fiq1Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.FieldInvestigation1Queue"];
             if (fiq1Menu) {
                 IndividualLoan.search({
-                    'stage': 'FieldInvestigation',
+                    'stage': 'FieldInvestigation1',
                     'enterprisePincode': '',
                     'applicantName': '',
                     'area': '',
@@ -299,6 +301,41 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
                 });
             }
 
+            var fiq2Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.FieldInvestigation2Queue"];
+            if (fiq2Menu) {
+                IndividualLoan.search({
+                    'stage': 'FieldInvestigation2',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                }).$promise.then(function(response, headerGetter) {
+                    fiq1Menu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    fiq1Menu.data = '-';
+                });
+            }
+
+            var fiq3Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.FieldInvestigation3Queue"];
+            if (fiq3Menu) {
+                IndividualLoan.search({
+                    'stage': 'FieldInvestigation3',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                }).$promise.then(function(response, headerGetter) {
+                    fiq1Menu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    fiq1Menu.data = '-';
+                });
+            }
             var tvq1Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.TeleVerificationQueue"];
             if (tvq1Menu) {
                 IndividualLoan.search({
