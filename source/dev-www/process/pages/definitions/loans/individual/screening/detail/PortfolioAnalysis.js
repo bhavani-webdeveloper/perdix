@@ -177,11 +177,11 @@ define({
                                     "render": self.strongRender
                                 }, 
                                 {
-                                    "title": "disbursement_date",
+                                    "title": "Disbursement Date",
                                     "data": "disbursement_date"
                                 },
                                 {
-                                    "title": "monthly_turnover",
+                                    "title": "Monthly Turnover",
                                     "data": "monthly_turnover"
                                 },
                                 {
@@ -195,42 +195,42 @@ define({
                                     "render": self.currencyRightRender
                                 },                                
                                 {
-                                    "title": "net_business_income",
+                                    "title": "Net business income",
                                     "data": "net_business_income",
                                     "render": self.currencyRightRender
                                 }, 
                                 {
-                                    "title": "net_business_income_pct",
+                                    "title": "Net business income pct",
                                     "data": "net_business_income_pct"
                                 },
                                 {
-                                    "title": "business_liabilities",
+                                    "title": "Business liabilities",
                                     "data": "business_liabilities",
                                     "render": self.currencyRightRender
                                 },
                                 {
-                                    "title": "net_income",
+                                    "title": "Net income",
                                     "data": "net_income",
                                     "render": self.currencyRightRender
                                 },
                                 {
-                                    "title": "kinara_emi",
+                                    "title": "Kinara emi",
                                     "data": "kinara_emi",
                                     "render": self.currencyRightRender
                                 },
                                 {
-                                    "title": "kinara_emi_pct",
+                                    "title": "Kinara emi pct",
                                     "data": "kinara_emi_pct"
                                 },                                
                                 {
-                                    "title": "Total_current_assets",
+                                    "title": "Total current assets",
                                     "data": "Total_current_assets",
                                     "render": function(data, type, full, meta){
                                         return '<strong>'+self.currencyRightRender(data)+'</strong>';
                                     }
                                 },                                
                                 {
-                                    "title": "Total_fixed_assets",
+                                    "title": "Total fixed assets",
                                     "data": "Total_fixed_assets",
                                     "render": self.strongRender,
                                     "render": function(data, type, full, meta){
@@ -245,24 +245,24 @@ define({
                                     }
                                 },
                                 {
-                                    "title": "Total_current_liabilities",
+                                    "title": "Total current liabilities",
                                     "data": "Total_current_liabilities",
                                     "render": self.currencyRightRender
                                 },                                
                                 {
-                                    "title": "Total_long-term_liabilities",
+                                    "title": "Total long term liabilities",
                                     "data": "Total_long-term_liabilities",
                                     "render": self.currencyRightRender
                                 },                               
                                 {
-                                    "title": "Total_Liabilities",
+                                    "title": "Total Liabilities",
                                     "data": "Total_Liabilities",
                                     "render": function(data, type, full, meta){
                                         return '<strong>'+self.currencyRightRender(data)+'</strong>';
                                     }
                                 },
                                 {
-                                    "title": "Own_capital",
+                                    "title": "Own capital",
                                     "data": "Own_capital",
                                     "render": self.currencyRightRender
                                 },
@@ -420,7 +420,7 @@ define({
                             'y' : histData['Cash'],
                             'series' : 1,
 	                        'key' : 'Own Capital'
-                        })
+                        });
 
                     });
                      model.renderReady('customer-history-fin-snap');
@@ -461,7 +461,12 @@ define({
                                 'Total_current_liabilities': balancesheet['Total current liabilities'],
                                 'Total_long-term_liabilities': balancesheet['Total long-term liabilities'],
                                 'Total_Liabilities': balancesheet['Total Liabilities'],
-                                'Own_capital': balancesheet['Own capital']
+                                'Own_capital': balancesheet['Own capital'],
+                                'DSCR': params[3].data[3]["Actual Value"],
+                                'DSONonTrading':params[3].data[4]["Actual Value"],
+                                'CurrentRatio':"",
+                                'LoanAmount':"",
+                                'luc_status':""
                             }
                         }
                     model.customerHistoryFinancials['tableData'].push(prepareFinancialData);
