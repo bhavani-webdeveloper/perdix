@@ -13,7 +13,7 @@ try {
     $json = json_decode($str, true);
 
     if (!isset($json[$key])) {
-        throw new Exception("key is not defined");
+        throw new Exception("Excel Type required");
     }
 
     $tableName = $json[$key]['table'];
