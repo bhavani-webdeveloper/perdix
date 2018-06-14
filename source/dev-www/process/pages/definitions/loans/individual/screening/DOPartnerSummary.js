@@ -862,6 +862,8 @@ define({
                 BundleManager.pushEvent('loanAccount', model._bundlePageObj, model.loanAccount);
 
 
+
+
                 if (model.loanAccount.portfolioInsuranceUrn == model.loanAccount.applicant) {
                     model.additional.portfolioUrnSelector = "applicant";
                 }
@@ -935,6 +937,7 @@ define({
                         onSuccessPromise.then(function(res) {
                             prepareData(res, model);
                             model.$prepared = true;
+                            BundleManager.pushEvent('financialSummary', model._bundlePageObj, res);
                             prepareDataDeferred.resolve();
                         });
 
