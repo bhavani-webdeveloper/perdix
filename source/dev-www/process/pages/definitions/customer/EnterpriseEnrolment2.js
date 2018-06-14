@@ -2393,7 +2393,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         title: "PRESENT_VALUE",
                         type: "amount",
                     }, {
-                        key: "customer.enterpriseAssets[].description",
+                        key: "customer.enterpriseAssets[].details",
                         title: "DESCRIPTION",
                         condition : "model.customer.enterpriseAssets[arrayIndex].assetType  == 'Furniture' || model.customer.enterpriseAssets[arrayIndex].assetType  == 'Fixtures'",
                         type: "string",
