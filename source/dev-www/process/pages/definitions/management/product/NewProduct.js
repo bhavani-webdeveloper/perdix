@@ -959,15 +959,15 @@ define({
                     if (date2 < date1) {
                         PageHelper.showErrors("");
                     }
-                    if (date1 < date3) {
-                        PageHelper.showErrors({
-                            data: {
-                                error: "EffectiveDate should not be less than Branch working date "
-                            }
-                        });
-                        PageHelper.hideLoader();
-                    } else {
-                        console.log(date1, date2, date2 < date1)
+                    // if (date1 < date3) {
+                    //     PageHelper.showErrors({
+                    //         data: {
+                    //             error: "EffectiveDate should not be less than Branch working date "
+                    //         }
+                    //     });
+                    //     PageHelper.hideLoader();
+                    // } else {
+                        
                         PageHelper.showProgress("New product", "Working...");
                         model.product.lmsProductMasters.maxAmt = 0;
                         model.product.lmsProductMasters.minAmt = 0;
@@ -1011,7 +1011,7 @@ define({
                                     PageHelper.hideLoader();
                                 })
                         }
-                    }
+                    
                 }
             }
         }
