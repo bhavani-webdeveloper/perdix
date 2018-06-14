@@ -3207,7 +3207,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                         // }
                                         if (enterpriseAsset.hypothecatedToUs == "YES" || enterpriseAsset.hypothecatedToUs == "Yes"){
                                             var c = {
-                                                collateralDescription: enterpriseAssetsenterpriseAsset.description,
+                                                collateralDescription: enterpriseAsset.description,
                                                 collateralType: enterpriseAsset.assetType,
                                                 collateralCategory:"non machinery",
                                                 loanToValue: enterpriseAsset.valueOfAsset,
