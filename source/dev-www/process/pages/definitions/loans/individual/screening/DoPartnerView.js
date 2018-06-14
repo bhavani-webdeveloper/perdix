@@ -105,11 +105,13 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.DoPartnerView'),
                                     applicant: {},
                                     coApplicants: {
                                         id: [],
-                                        urn: []
+                                        urn: [],
+                                        name: []
                                     },
                                     guarantors: {
                                         id: [],
-                                        urn: []
+                                        urn: [],
+                                        name: []
                                     }
                                 }
                                 var customerIds = {
@@ -163,7 +165,6 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.DoPartnerView'),
                                                         bundleModel.customer_detail.guarantors.urn.push(custl.urn);
                                                         bundleModel.customer_detail.guarantors.name.push(custl.name);
                                                     }
-
                                                 }
                                             }
 

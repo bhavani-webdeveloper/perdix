@@ -708,40 +708,24 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                 },
                 {
                     "type": "fieldset",
-                    "title":"WAIVER_DETAILS",
+                    "title": "WAIVER_DETAILS",
                     "condition": "model.loanAccount.precloseuredetails",
-                    "items": [
-                        {
-                            key: "loanAccount.disbursementSchedules",
-                            "title":"WAIVER_DETAILS",
-                            add: null,
-                            remove: null,
-                            "schema": {
-                                "maxItems": 1
-                            },
-                            items: [/*{
-                                "key": "loanAccount.disbursementSchedules[].principalDuePayment",
-                                "title": "TOTAL_PRINCIPAL_DUE",
-                                "type": "amount",
-                                "onChange": "actions.validateWaiverAmount(model.loanAccount.disbursementSchedules.principalDuePayment,model.loanAccount.precloseurePrincipal)"
-                            },*/ {
-                                "key": "loanAccount.disbursementSchedules[].normalInterestDuePayment",
-                                "title": "TOTAL_INTEREST_DUE",
-                                "type": "amount",
-                                "onChange": "actions.validateWaiverAmount(model.loanAccount.disbursementSchedules.normalInterestDuePayment,model.loanAccount.precloseureNormalInterest)"
-                            }, {
-                                "key": "loanAccount.disbursementSchedules[].penalInterestDuePayment",
-                                "title": "TOTAL_PENAL_INTEREST_DUE",
-                                "type": "amount",
-                                "onChange": "actions.validateWaiverAmount(model.loanAccount.disbursementSchedules.penalInterestDuePayment,model.loanAccount.precloseurePenalInterest)"
-                            }, {
-                                "key": "loanAccount.disbursementSchedules[].feeAmountPayment",
-                                "title": "TOTAL_FEE_DUE",
-                                "type": "amount",
-                                "onChange": "actions.validateWaiverAmount(model.loanAccount.disbursementSchedules.feeAmountPayment,model.loanAccount.precloseureTotalFee)"
-                            }]
-                        }   
-                    ]
+                    "items": [{
+                        "key": "loanAccount.disbursementSchedules[0].normalInterestDuePayment",
+                        "title": "TOTAL_INTEREST_DUE",
+                        "type": "amount",
+                        "onChange": "actions.validateWaiverAmount(model.loanAccount.disbursementSchedules[0].normalInterestDuePayment,model.loanAccount.precloseureNormalInterest)"
+                    }, {
+                        "key": "loanAccount.disbursementSchedules[0].penalInterestDuePayment",
+                        "title": "TOTAL_PENAL_INTEREST_DUE",
+                        "type": "amount",
+                        "onChange": "actions.validateWaiverAmount(model.loanAccount.disbursementSchedules[0].penalInterestDuePayment,model.loanAccount.precloseurePenalInterest)"
+                    }, {
+                        "key": "loanAccount.disbursementSchedules[0].feeAmountPayment",
+                        "title": "TOTAL_FEE_DUE",
+                        "type": "amount",
+                        "onChange": "actions.validateWaiverAmount(model.loanAccount.disbursementSchedules[0].feeAmountPayment,model.loanAccount.precloseureTotalFee)"
+                    }]
                 }
                 ]
             },
@@ -919,7 +903,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     if (amount1> parseInt(amount2)) {
                         PageHelper.clearErrors();
                         PageHelper.setError({
-                            message: "Amount should not be greater then" + amount2
+                            message: "Amount should not be greater then" +" " + amount2
                         });
                     }
                 },

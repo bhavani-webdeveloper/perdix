@@ -77,14 +77,13 @@ irf.pageCollection.factory(irf.page('customer360.loans.Service'),
                                         })
                                     },
                                     isApplicable: function(item, index){
-                                        //if (index%2==0){
-                                        //	return false;
-                                        //}
-                                         var siteCode = SessionStore.getGlobalSetting('siteCode');
-                                        if(siteCode !== 'sambandh' && siteCode !== 'saija')
+                                        var siteCode = SessionStore.getGlobalSetting('siteCode');
+                                        if(siteCode !== 'sambandh' && siteCode !== 'saija'){
                                             return true;
-                                        else 
-                                            return false
+                                        }
+                                        else{
+                                          return false  
+                                        }        
                                     }
                                 },
                                 {
@@ -97,7 +96,13 @@ irf.pageCollection.factory(irf.page('customer360.loans.Service'),
                                         })
                                     },
                                     isApplicable: function(item, index){
-                                        return true;
+                                        var siteCode = SessionStore.getGlobalSetting('siteCode');
+                                        if(siteCode !== 'Kinara'){
+                                            return true;
+                                        }
+                                        else{
+                                          return false  
+                                        }
                                     }
                                 }
                             ];

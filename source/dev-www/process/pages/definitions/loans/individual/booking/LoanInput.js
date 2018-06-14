@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
-["$log","SessionStore","$state", "$stateParams", "SchemaResource","PageHelper","Enrollment","formHelper","IndividualLoan","Utils","$filter","$q","irfProgressMessage", "Queries","LoanProducts", "LoanBookingCommons", "BundleManager", "irfNavigator","PagesDefinition",
-    function($log, SessionStore,$state,$stateParams, SchemaResource,PageHelper,Enrollment,formHelper,IndividualLoan,Utils,$filter,$q,irfProgressMessage, Queries,LoanProducts, LoanBookingCommons, BundleManager,irfNavigator,PagesDefinition){
+["$log","SessionStore","$state","LoanAccount", "$stateParams", "SchemaResource","PageHelper","Enrollment","formHelper","IndividualLoan","Utils","$filter","$q","irfProgressMessage", "Queries","LoanProducts", "LoanBookingCommons", "BundleManager", "irfNavigator","PagesDefinition",
+    function($log, SessionStore,$state,LoanAccount,$stateParams, SchemaResource,PageHelper,Enrollment,formHelper,IndividualLoan,Utils,$filter,$q,irfProgressMessage, Queries,LoanProducts, LoanBookingCommons, BundleManager,irfNavigator,PagesDefinition){
 
         var branchId = SessionStore.getBranchId();
         var branchName = SessionStore.getBranch();
@@ -365,6 +365,18 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         if (model.loanAccount.disbursementSchedules.length >= 0 && _.isNumber(model.loanAccount.disbursementSchedules[0].moratoriumPeriodInDays)) {
                             model._currentDisbursement = model.loanAccount.disbursementSchedules[0];
                             model.loanAccount.scheduleStartDate = moment(model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate, "YYYY-MM-DD").add(model.loanAccount.disbursementSchedules[0].moratoriumPeriodInDays, 'days').format("YYYY-MM-DD");
+                        }
+                        model.linkedAccount={};
+
+                        if(model.loanAccount.linkedAccountNumber && model.siteCode == 'kinara'){
+                            LoanAccount.get({
+                                    accountId: model.loanAccount.linkedAccountNumber
+                                })
+                                .$promise.then(function(res){
+                                    model.linkedAccount=res;
+                                },function(err){
+                                    $log.info(err);
+                                });
                         }
 
                         init(model, form, formCtrl); // init call
@@ -739,7 +751,26 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "key": "loanAccount.transactionType",
                                 "type":"select",
                                 "title":"TRANSACTION_TYPE",
-                                "condition": "model.siteCode == 'kinara'"
+                                "titleMap":{
+                                    "New Loan":"New Loan"
+                                },
+                                "schema":{
+                                    "enumCode":undefined
+                                },
+                                "condition": "model.siteCode == 'kinara' && !model.loanAccount.linkedAccountNumber"
+                            },
+                            {
+                                "key": "loanAccount.transactionType",
+                                "type":"select",
+                                "titleMap":{
+                                    "Loan Restructure":"Loan Restructure",
+                                    "Internal Foreclosure":"Internal Foreclosure"
+                                },
+                                "title":"TRANSACTION_TYPE",
+                                 "schema":{
+                                    "enumCode":undefined
+                                },
+                                "condition": "model.siteCode == 'kinara' && model.loanAccount.linkedAccountNumber"
                             },
                             {
                                 "key": "loanAccount.loanAmount",
@@ -2838,6 +2869,14 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     if (!preLoanSaveOrProceed(model)){
                         return;
                     }
+                    if(model.loanAccount.linkedAccountNumber && model.siteCode == 'kinara' && model.linkedAccount){
+                        if(parseInt(model.loanAccount.disbursementSchedules[0].disbursementAmount) < parseInt(model.linkedAccount.accountBalance)){
+                            PageHelper.setError({
+                                message: "first Schedule disbursementAmount" + " " +model.loanAccount.disbursementSchedules[0].disbursementAmount+ " "+ "should  be greater then Linked Account Balence" +"  " + model.linkedAccount.accountBalance
+                            });
+                           return; 
+                        }
+                    }
                     populateLoanCustomerRelations(model);
                     Utils.confirm("Are You Sure?")
                         .then(
@@ -2907,6 +2946,15 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
 
                     if (!validateForm(form)){
                         return;
+                    }
+                    
+                    if(model.loanAccount.linkedAccountNumber && model.siteCode == 'kinara' && model.linkedAccount){
+                        if(parseInt(model.loanAccount.disbursementSchedules[0].disbursementAmount) < parseInt(model.linkedAccount.accountBalance)){
+                            PageHelper.setError({
+                                message: "first Schedule disbursementAmount" + " " +model.loanAccount.disbursementSchedules[0].disbursementAmount+ " "+ "should  be greater then Linked Account Balence" +"  " + model.linkedAccount.accountBalance
+                            });
+                           return; 
+                        }
                     }
 
                     model.loanAccount.psychometricCompleted = model.loanAccount.psychometricCompleted || "N";
@@ -2989,6 +3037,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             trancheTotalAmount+=(model.loanAccount.disbursementSchedules[i].disbursementAmount || 0);
                         }
                     }
+
                     if (model.additional.product && model.additional.product.productType != 'OD' && trancheTotalAmount > model.loanAccount.loanAmount){
                         PageHelper.showProgress("loan-create","Total tranche amount is more than the Loan amount",5000);
                         return false;
