@@ -113,7 +113,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "LenderInformation.firstName",
                     "LenderInformation.lenderType",
                     //"LenderInformation.source",
-                    //"LenderInformation.businessConstitution",
                     "LenderInformation.companyOperatingSince",
 
                     "LenderContactDetails",
