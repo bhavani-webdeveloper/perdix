@@ -65,7 +65,25 @@
         },
         {
             "order": 6,
-            "code": "FieldInvestigation",
+            "code": "FieldInvestigation1",
+            "name": "Field Investigation",
+            "stageType": "CAPTURE",
+            "sendSms": "No",
+            "smsCategory": "LoanBooking",
+            "isAccountOpening": false
+        },
+        {
+            "order": 6,
+            "code": "FieldInvestigation2",
+            "name": "Field Investigation",
+            "stageType": "CAPTURE",
+            "sendSms": "No",
+            "smsCategory": "LoanBooking",
+            "isAccountOpening": false
+        },
+        {
+            "order": 6,
+            "code": "FieldInvestigation3",
             "name": "Field Investigation",
             "stageType": "CAPTURE",
             "sendSms": "No",
