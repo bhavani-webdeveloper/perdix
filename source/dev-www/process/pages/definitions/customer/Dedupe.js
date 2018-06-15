@@ -160,6 +160,19 @@ function(IndividualLoan, $log, $state, Enrollment, EnrollmentHelper, SessionStor
                     {
                         "type": "box",
                         "title": "REMARKS",
+                        "condition": "model.allMarkedAsNotDuplicate==true",
+                        "items": [
+                            {
+                                "key": "dedupeData.remarks",
+                                "title": "PROCEED_REMARKS",
+                                "required": true,
+                                "type": "textarea"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "box",
+                        "title": "REMARKS",
                         "condition": "model.allMarkedAsNotDuplicate==false",
                         "items": [
                             {
@@ -191,7 +204,7 @@ function(IndividualLoan, $log, $state, Enrollment, EnrollmentHelper, SessionStor
                                 "title": "PROCEED",
                                 "onClick": "actions.proceed(model, formCtrl, form, $event)"
                             }]
-                    },
+                    }
                 ]
             ,
             schema: function(){
@@ -229,7 +242,7 @@ function(IndividualLoan, $log, $state, Enrollment, EnrollmentHelper, SessionStor
                     Utils.confirm("Are You Sure?").then(function(){
                         var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                         reqData.loanProcessAction = "PROCEED";
-
+                        reqData.remarks = model.dedupeData.remarks;
                         PageHelper.showProgress("update-loan", "Working...");
                         IndividualLoan.update(reqData)
                         .$promise

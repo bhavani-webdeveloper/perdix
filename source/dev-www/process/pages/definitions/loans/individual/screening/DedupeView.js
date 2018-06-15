@@ -13,81 +13,92 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.DedupeView'),
                 "readonly": true,
                 "bundleDefinition": [
                     {
+                        pageName: 'customer.Dedupe',
+                        title: 'DEDUPE',
+                        pageClass: 'dedupe',
+                        minimum: 1,
+                        maximum: 1,
+                        order: 10
+                    },
+                    {
                         pageName: 'customer.IndividualEnrolment2',
                         title: 'APPLICANT',
                         pageClass: 'applicant',
                         minimum: 1,
-                        maximum: 1
+                        maximum: 1,
+                        order: 20
                     },
                     {
                         pageName: 'customer.IndividualEnrolment2',
                         title: 'CO_APPLICANT',
                         pageClass: 'co-applicant',
                         minimum: 0,
-                        maximum: 3
+                        maximum: 3,
+                        order: 30
                     },
                     {
                         pageName: 'customer.IndividualEnrolment2',
                         title: 'GUARANTOR',
                         pageClass: 'guarantor',
                         minimum: 0,
-                        maximum: 3
+                        maximum: 3,
+                        order: 40
                     },
                     {
                         pageName: 'customer.EnterpriseEnrolment2',
                         title: 'BUSINESS',
                         pageClass: 'business',
                         minimum: 1,
-                        maximum: 1
+                        maximum: 1,
+                        order: 50
                     },
                     {
                         pageName: 'loans.individual.screening.LoanRequest',
                         title: 'LOAN_REQUEST',
                         pageClass: 'loan-request',
                         minimum: 1,
-                        maximum: 1
+                        maximum: 1,
+                        order: 60
                     },
                     {
                         pageName: 'loans.individual.screening.CBCheck',
                         title: 'CB_CHECK',
                         pageClass: 'cb-check',
                         minimum: 1,
-                        maximum: 1
+                        maximum: 1,
+                        order: 70
                     },
                     {
                         pageName: 'loans.individual.screening.Summary',
                         title: 'SUMMARY',
                         pageClass: 'summary',
                         minimum: 1,
-                        maximum: 1
+                        maximum: 1,
+                        order: 70
                     },
                     {
                         pageName: 'loans.individual.screening.CreditBureauView',
                         title: 'CREDIT_BUREAU',
                         pageClass: 'cbview',
                         minimum: 1,
-                        maximum: 1
+                        maximum: 1,
+                        order: 80
                     },
                     {
                         pageName: 'loans.individual.screening.Review',
                         title: 'REVIEW',
                         pageClass: 'loan-review',
                         minimum: 1,
-                        maximum: 1
+                        maximum: 1,
+                        order: 90
                     },
                     {
                         pageName: 'loans.individual.misc.BalanceSheetHistory',
                         title: 'BALANCE_SHEET_HISTORY',
                         pageClass: 'balance-sheet-history',
                         minimum: 1,
-                        maximum: 1
-                    },
-                    {
-                        pageName: 'customer.Dedupe',
-                        title: 'DEDUPE',
-                        pageClass: 'dedupe',
-                        minimum: 1,
-                        maximum: 1
+                        maximum: 1,
+                        order: 100
                     }
                 ],
                 "bundlePages": [],
