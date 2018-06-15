@@ -24,6 +24,15 @@ define({
                         function(res) {
                             _.assign(model.branch, res);
                             $log.info(model.branch);
+                            
+                            if (model.branch.branchOpenTime && model.branch.branchOpenDate) {
+                                model.branch.branchOpenTime = model.branch.branchOpenDate + " " + model.branch.branchOpenTime;
+                                model.branch.branchOpenTime = new Date(model.branch.branchOpenTime);
+                            }
+                            if (model.branch.branchCloseTime && model.branch.branchOpenDate) {
+                                model.branch.branchCloseTime = model.branch.branchOpenDate + " " + model.branch.branchCloseTime;
+                                model.branch.branchCloseTime = new Date(model.branch.branchCloseTime);
+                            }
                             model.branch.kgfsBankName = model.branch.kgfsBankName||SessionStore.getBankName();
                             var banks = formHelper.enum('bank').data;
                             for (var i = 0; i < banks.length; i++) {
@@ -275,6 +284,12 @@ define({
                 submit: function(model, form, formName) {
                     $log.info("Inside submit()");
                     console.warn(model);
+                    if (model.branch.branchOpenTime) {
+                        model.branch.branchOpenTime = moment(model.branch.branchOpenTime).format("HH:mm:ss");
+                    }
+                    if (model.branch.branchCloseTime) {
+                        model.branch.branchCloseTime = moment(model.branch.branchCloseTime).format("HH:mm:ss");
+                    }
                     PageHelper.showLoader();
                     PageHelper.showProgress("Journal Save", "Working...");
                     if (model.branch.id) {
@@ -284,7 +299,7 @@ define({
                                 PageHelper.showProgress("Branch Save", "Branch Updated with id" + '  ' + res.id, 3000);
                                 $log.info(res);
                                 model.branch = res;
-                                //$state.go('Page.JournalMaintenanceDashboard', null);
+                                $state.go('Page/Adhoc/management.BranchCreationDashboard', null);
                             }, function(httpRes) {
                                 PageHelper.showProgress("Branch Save", "Oops. Some error occured.", 3000);
                                 PageHelper.showErrors(httpRes);
@@ -298,7 +313,7 @@ define({
                                 PageHelper.showProgress("Branch Save", "Branch Created with id" + '  ' + res.id, 3000);
                                 $log.info(res);
                                 model.branch = res;
-                                //$state.go('Page.JournalMaintenanceDashboard', null);
+                                $state.go('Page/Adhoc/management.BranchCreationDashboard', null);
                             }, function(httpRes) {
                                 PageHelper.showProgress("Branch Save", "Oops. Some error occured.", 3000);
                                 PageHelper.showErrors(httpRes);
