@@ -625,8 +625,8 @@ if (isset($_GET)) {
         $FinalInputs->execute();
 		
 		// sub score calculation
-		$subScoreCalculation = $db->prepare("INSERT INTO sc_subscore_calcualtion(`sc_calculaiton_id`, `subscore_name`, `score`, `max_score`) SELECT
-		c.id AS 'sc_calculaiton_id',
+		$subScoreCalculation = $db->prepare("INSERT INTO sc_subscore_calculation(`sc_calculation_id`, `subscore_name`, `score`, `max_score`) SELECT
+		c.id AS 'sc_calculation_id',
 		ci.subscore_name AS 'subscore_name',
 		IFNULL(ROUND(SUM(ci.WeightedScore)/SUM(ci.MaxWeightedScore)*MAX(p.subscore_weightage), 2), 0) AS 'score', 
 		MAX(p.subscore_weightage) AS `max_score`
