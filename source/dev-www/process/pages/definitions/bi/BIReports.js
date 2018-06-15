@@ -236,7 +236,9 @@ irf.pageCollection.factory(irf.page("bi.BIReports"), ["$log", "RolesPages", "BIR
                           link.click();
                           irfProgressMessage.pop("Reports","Report downloaded.", 5000);
                         }, function(err) {
-                            PageHelper.showErrors(err);
+                            var decodedString = String.fromCharCode.apply(null, new Uint8Array(err.data));
+                            PageHelper.showErrors({data: {error:decodedString}});
+                            irfProgressMessage.pop("Reports","Report download failed.", 5000);
                         }).finally(function(){
                             PageHelper.hideLoader();
                         });
