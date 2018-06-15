@@ -37,11 +37,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 return true;
             }
 
-            // Calculate calculating vehicle fee for track details.
-            var calculateVehiclesFree = function(modelValue, form, model) {
-                model.customer.vehiclesFree = model.customer.vehiclesOwned - model.customer.vehiclesFinanced;
-            }
-
             var configFile = function () {
                 return {
                     "loanProcess.loanAccount.currentStage": {
@@ -50,6 +45,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 
                             },
                             "excludes": [
+                                "EnterpriseReferences",
                                 "IndividualReferences",
                                 "PhysicalAssets",
                                 "ResidenceVerification"
@@ -81,6 +77,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
                             },
                             "excludes": [
+                                "EnterpriseReferences",
                                 "IndividualReferences",
                                 "PhysicalAssets",
                                 "ResidenceVerification"
@@ -96,6 +93,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
                             },
                             "excludes": [
+                                "EnterpriseReferences",
                                 "IndividualReferences",
                                 "PhysicalAssets",
                                 "ResidenceVerification"
@@ -111,12 +109,39 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
                             },
                             "excludes": [
+                                "EnterpriseReferences",
                                 "IndividualReferences",
                                 "PhysicalAssets",
                                 "ResidenceVerification"
                             ]
                         },
-                        "FieldInvestigation": {
+                        "FieldInvestigation1": {
+                            "overrides": {
+                                "FamilyDetails": {
+                                    "title": "HOUSEHOLD_DETAILS"
+                                },
+                                "KYC.customerId": {
+                                    "readonly": true
+                                }
+                            },
+                            "excludes": [
+                                "ContactInformation.location"
+                            ]
+                        },
+                        "FieldInvestigation2": {
+                            "overrides": {
+                                "FamilyDetails": {
+                                    "title": "HOUSEHOLD_DETAILS"
+                                },
+                                "KYC.customerId": {
+                                    "readonly": true
+                                }
+                            },
+                            "excludes": [
+                                "ContactInformation.location"
+                            ]
+                        },
+                        "FieldInvestigation3": {
                             "overrides": {
                                 "FamilyDetails": {
                                     "title": "HOUSEHOLD_DETAILS"
@@ -131,9 +156,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         },
                         "TeleVerification": {
                             "overrides": {
-                                "IndividualReferences": {
-                                    "readonly": true
-                                },
                                 "PhysicalAssets": {
                                     "readonly": true
                                 },
@@ -142,14 +164,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
                             },
                             "excludes": [
-                                "ContactInformation.location"
+                                "ContactInformation.location",
+                                "IndividualReferences"
                             ]
                         },
                         "CreditAppraisal": {
                             "overrides": {
-                                "IndividualReferences": {
-                                    "readonly": true
-                                },
                                 "PhysicalAssets": {
                                     "readonly": true
                                 },
@@ -158,7 +178,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
                             },
                             "excludes": [
-                                "ContactInformation.location"
+                                "ContactInformation.location",
+                                "IndividualReferences"
                                 // "IndividualReferences.verifications.ReferenceCheck"
                             ]
                         },
@@ -170,9 +191,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.customerId": {
                                     "readonly": true
                                 },
-                                "IndividualReferences": {
-                                    "readonly": true
-                                },
+                                
                                 "PhysicalAssets": {
                                     "readonly": true
                                 },
@@ -181,7 +200,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
                             },
                             "excludes": [
-                                "ContactInformation.location"
+                                "ContactInformation.location",
+                                "IndividualReferences"
                                 // "IndividualReferences.verifications.ReferenceCheck"
                             ]
                         },
@@ -193,9 +213,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.customerId": {
                                     "readonly": true
                                 },
-                                "IndividualReferences": {
-                                    "readonly": true
-                                },
                                 "PhysicalAssets": {
                                     "readonly": true
                                 },
@@ -204,7 +221,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
                             },
                             "excludes": [
-                                "ContactInformation.location"
+                                "ContactInformation.location",
+                                "IndividualReferences"
                                 // "IndividualReferences.verifications.ReferenceCheck"
                             ]
                         },
@@ -216,9 +234,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.customerId": {
                                     "readonly": true
                                 },
-                                "IndividualReferences": {
-                                    "readonly": true
-                                },
                                 "PhysicalAssets": {
                                     "readonly": true
                                 },
@@ -227,7 +242,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
                             },
                             "excludes": [
-                                "ContactInformation.location"
+                                "ContactInformation.location",
+                                "IndividualReferences"
                                 // "IndividualReferences.verifications.ReferenceCheck"
                             ]
                         },
@@ -239,9 +255,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.customerId": {
                                     "readonly": true
                                 },
-                                "IndividualReferences": {
-                                    "readonly": true
-                                },
                                 "PhysicalAssets": {
                                     "readonly": true
                                 },
@@ -250,7 +263,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
                             },
                             "excludes": [
-                                "ContactInformation.location"
+                                "ContactInformation.location",
+                                "IndividualReferences"
                                 // "IndividualReferences.verifications.ReferenceCheck"
                             ]
                         },
@@ -262,9 +276,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.customerId": {
                                     "readonly": true
                                 },
-                                "IndividualReferences": {
-                                    "readonly": true
-                                },
                                 "PhysicalAssets": {
                                     "readonly": true
                                 },
@@ -273,7 +284,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
                             },
                             "excludes": [
-                                "ContactInformation.location"
+                                "ContactInformation.location",
+                                "IndividualReferences"
                                 // "IndividualReferences.verifications.ReferenceCheck"
                             ]
                         },
@@ -285,9 +297,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.customerId": {
                                     "readonly": true
                                 },
-                                "IndividualReferences": {
-                                    "readonly": true
-                                },
+                                
                                 "PhysicalAssets": {
                                     "readonly": true
                                 },
@@ -296,7 +306,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
                             },
                             "excludes": [
-                                "ContactInformation.location"
+                                "ContactInformation.location",
+                                "IndividualReferences"
                                 // "IndividualReferences.verifications.ReferenceCheck"
                             ]
                         },
@@ -308,9 +319,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.customerId": {
                                     "readonly": true
                                 },
-                                "IndividualReferences": {
-                                    "readonly": true
-                                },
                                 "PhysicalAssets": {
                                     "readonly": true
                                 },
@@ -319,7 +327,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
                             },
                             "excludes": [
-                                "ContactInformation.location"
+                                "ContactInformation.location",
+                                "IndividualReferences"
                                 // "IndividualReferences.verifications.ReferenceCheck"
                             ]
                         },
@@ -331,9 +340,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.customerId": {
                                     "readonly": true
                                 },
-                                "IndividualReferences": {
-                                    "readonly": true
-                                },
+                                
                                 "PhysicalAssets": {
                                     "readonly": true
                                 },
@@ -342,7 +349,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
                             },
                             "excludes": [
-                                "ContactInformation.location"
+                                "ContactInformation.location",
+                                "IndividualReferences"
                                 // "IndividualReferences.verifications.ReferenceCheck"
                             ]
                         },
@@ -354,9 +362,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.customerId": {
                                     "readonly": true
                                 },
-                                "IndividualReferences": {
-                                    "readonly": true
-                                },
+                                
                                 "PhysicalAssets": {
                                     "readonly": true
                                 },
@@ -365,7 +371,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
                             },
                             "excludes": [
-                                "ContactInformation.location"
+                                "ContactInformation.location",
+                                "IndividualReferences"
                                 // "IndividualReferences.verifications.ReferenceCheck"
                             ]
                         },
@@ -377,9 +384,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.customerId": {
                                     "readonly": true
                                 },
-                                "IndividualReferences": {
-                                    "readonly": true
-                                },
+                                
                                 "PhysicalAssets": {
                                     "readonly": true
                                 },
@@ -388,7 +393,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
                             },
                             "excludes": [
-                                "ContactInformation.location"
+                                "ContactInformation.location",
+                                "IndividualReferences"
                                 // "IndividualReferences.verifications.ReferenceCheck"
                             ]
                         },
@@ -411,7 +417,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
                             },
                             "excludes": [
-                                "ContactInformation.location"
+                                "ContactInformation.location",
+                                "IndividualReferences"
                                 // "IndividualReferences.verifications.ReferenceCheck"
                             ]
                         },
@@ -423,9 +430,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.customerId": {
                                     "readonly": true
                                 },
-                                "IndividualReferences": {
-                                    "readonly": true
-                                },
+                                
                                 "PhysicalAssets": {
                                     "readonly": true
                                 },
@@ -434,7 +439,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
                             },
                             "excludes": [
-                                "ContactInformation.location"
+                                "ContactInformation.location",
+                                "IndividualReferences"
                                 // "IndividualReferences.verifications.ReferenceCheck"
                             ]
                         },
@@ -530,15 +536,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "EnterpriseReferences.verifications.opinion": {
                         "title":"COMMENTS_OF_NEIGHBOUR"
                     },
-                    "TrackDetails.vehiclesFree": {
-                        "readonly": true
-                    },
-                    "TrackDetails.vehiclesOwned": {
-                        "onChange": calculateVehiclesFree
-                    },
-                    "TrackDetails.vehiclesFinanced": {
-                        "onChange": calculateVehiclesFree
-                    },
+                    // "TrackDetails.vehiclesFree": {
+                    //     "readonly": true
+                    // },
+                    // "TrackDetails.vehiclesOwned": {
+                    //     "onChange": calculateVehiclesFree
+                    // },
+                    // "TrackDetails.vehiclesFinanced": {
+
+                    //     "onChange": calculateVehiclesFree
+                    // },
                     "IndividualInformation.photoImageId": {
                         "required": true
                     },
@@ -613,9 +620,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "ContactInformation.state": {
                         "readonly": true
                     },
-                    "IndividualInformation.existingLoan" :{
-                        "readonly": true
-                    },
+                    // "IndividualInformation.existingLoan" :{
+                    //     "readonly": true
+                    // },
                     "HouseVerification.inCurrentAddressSince": {
                         "key": "customer.udf.userDefinedFieldValues.udf29",
                     },
@@ -853,7 +860,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "KYC.additionalKYCs.kyc1ImagePath",
                     "KYC.additionalKYCs.kyc1ValidUptoDate",
                     "IndividualInformation",
-                    "IndividualInformation.existingLoan",
+                   // "IndividualInformation.existingLoan",
                     "IndividualInformation.customerCategory",
                     "IndividualInformation.customerBranchId",
                     "IndividualInformation.centreId",
@@ -972,10 +979,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "customerLicenceDetails.customerLicenceDetails.licence1Type",
                     "customerLicenceDetails.customerLicenceDetails.licence1ValidFrom",
                     "customerLicenceDetails.customerLicenceDetails.licence1ValidTo",
-                    "TrackDetails",
-                    "TrackDetails.vehiclesOwned",
-                    "TrackDetails.vehiclesFinanced",
-                    "TrackDetails.vehiclesFree",
+                    // "TrackDetails",
+                    // "TrackDetails.vehiclesOwned",
+                    // "TrackDetails.vehiclesFinanced",
+                    // "TrackDetails.vehiclesFree",
                     "EnterpriseReferences",
                     "EnterpriseReferences.verifications",
                     "EnterpriseReferences.verifications.referenceFirstName",
@@ -1438,9 +1445,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
                                 }
                                 if(obj.leadCategory == 'Existing' || obj.leadCategory == 'Return') {
-                                    model.customer.existingLoan = 'YES';
+                              //      model.customer.existingLoan = 'YES';
                                 } else {
-                                    model.customer.existingLoan = 'NO';
+                              //      model.customer.existingLoan = 'NO';
                                 }
                                 model.customer.mobilePhone = obj.mobileNo;
                                 model.customer.gender = obj.gender;

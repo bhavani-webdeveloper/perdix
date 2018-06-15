@@ -84,16 +84,19 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccountingReview"), 
                                 "condition": "model.showFeild"
                             },
                             "FinconAccounting.instrumentSection.instrumentDate": {
-                                "condition": "model.showFeild"
+                               "condition": "model.journal.journalHeader.instrumentType !='CASH' && model.showFeild "
+                                //"condition": "FinconAccounting.instrumentSection.instrumentType !='CASH' && model.showFeild "
+                              //  "condition": "model.showFeild"
                             },
+                            
                             "FinconAccounting.instrumentSection.instrumentNumber": {
-                                "condition": "model.showFeild"
+                                "condition": "model.journal.journalHeader.instrumentType !='CASH' && model.showFeild "
                             },
                             "FinconAccounting.instrumentSection.instrumentBankName": {
-                                "condition": "model.showFeild"
+                                "condition": "model.journal.journalHeader.instrumentType !='CASH' && model.showFeild "
                             },
                             "FinconAccounting.instrumentSection.instrumentBranchName": {
-                                "condition": "model.showFeild"
+                                "condition": "model.journal.journalHeader.instrumentType !='CASH' && model.showFeild "
                             },
                             "FinconAccounting.transactionSection.entryType": {
                                 "type": "string"
@@ -115,9 +118,9 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccountingReview"), 
                             "FinconAccounting.instrumentSection.billUpload",
                             "FinconAccounting.instrumentSection.instrumentType",
                             "FinconAccounting.instrumentSection.instrumentDate",
-                            "FinconAccounting.instrumentSection.instrumentNumber",
-                            "FinconAccounting.instrumentSection.instrumentBankName",
-                            "FinconAccounting.instrumentSection.instrumentBranchName",
+                           "FinconAccounting.instrumentSection.instrumentNumber",
+                           "FinconAccounting.instrumentSection.instrumentBankName",
+                           "FinconAccounting.instrumentSection.instrumentBranchName",
                             "Entries"
                         ]
 

@@ -22,6 +22,21 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
             //     return deferred.promise;
             // }
 
+            var calculateVehiclesFree = function(modelValue, form, model) {
+                if( model.customer.vehiclesOwned > model.customer.vehiclesFinanced){
+                    model.customer.vehiclesFree = model.customer.vehiclesOwned - model.customer.vehiclesFinanced;
+                }
+                else {
+                    PageHelper.showErrors({
+                        data: {
+                            error: "No of vehicle financed cannot be greater than no of vehicle owned."
+                        }
+                    });
+                    return false;
+                }
+            }
+
+
             var getLocation = function() {
                 return new Promise(function(resolve, reject) {
                     navigator.geolocation.getCurrentPosition(function(p) {
@@ -116,6 +131,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "Liabilities.liabilities.customerLiabilityRepayments.emiAmount",
                     "Liabilities.liabilities.customerLiabilityRepayments.emiDueDate",
                     "Liabilities.liabilities.customerLiabilityRepayments.actualRepaymentDate",
+                    "TrackDetails",
+                    "TrackDetails.vehiclesOwned",
+                    "TrackDetails.vehiclesFinanced",
+                    "TrackDetails.vehiclesFree",
+                    "IndividualReferences",
+                    "IndividualReferences.verifications",
+                    "IndividualReferences.verifications.referenceFirstName",
+                    "IndividualReferences.verifications.mobileNo",
+                    "IndividualReferences.verifications.knownSince",
+                    "IndividualReferences.verifications.relationship",
                     "EnterpriseAssets",
                     "EnterpriseAssets.enterpriseAssets",
                     "EnterpriseAssets.enterpriseAssets.assetType",
@@ -170,7 +195,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     
                                 },
                                 "excludes": [
-                                    
+                                    "IndividualReferences"                                    
                                 ]
                             },
                             "ScreeningReview": {
@@ -184,6 +209,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "Liabilities": {
                                         "readonly": true
                                     },
+                                    "TrackDetails":{
+                                        "readonly": true
+                                    },
                                     "EnterpriseAssets": {
                                         "readonly": true
                                     },
@@ -198,7 +226,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     }
                                 },
                                 "excludes": [
-                                    
+                                    "IndividualReferences"                                    
                                 ]
                             },
                             "GoNoGoApproval1": {
@@ -212,6 +240,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "Liabilities": {
                                         "readonly": true
                                     },
+                                    "TrackDetails":{
+                                        "readonly": true
+                                    },
                                     "EnterpriseAssets": {
                                         "readonly": true
                                     },
@@ -226,7 +257,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     }
                                 },
                                 "excludes": [
-                                
+                                "IndividualReferences"                                
                                 ]
                             },
                             "GoNoGoApproval2": {
@@ -240,6 +271,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "Liabilities": {
                                         "readonly": true
                                     },
+                                    "TrackDetails":{
+                                        "readonly": true
+                                    },
                                     "EnterpriseAssets": {
                                         "readonly": true
                                     },
@@ -254,7 +288,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     }
                                 },
                                 "excludes": [
-                                    
+                                "IndividualReferences"                                    
                                 ]
                             },
                             "DeviationApproval1": {
@@ -266,6 +300,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "readonly": true
                                     },
                                     "Liabilities": {
+                                        "readonly": true
+                                    },
+                                    "TrackDetails":{
                                         "readonly": true
                                     },
                                     "EnterpriseAssets": {
@@ -296,6 +333,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "Liabilities": {
                                         "readonly": true
                                     },
+                                    "TrackDetails":{
+                                        "readonly": true
+                                    },
                                     "EnterpriseAssets": {
                                         "readonly": true
                                     },
@@ -322,6 +362,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "readonly": true
                                     },
                                     "Liabilities": {
+                                        "readonly": true
+                                    },
+                                    "TrackDetails":{
                                         "readonly": true
                                     },
                                     "EnterpriseAssets": {
@@ -352,6 +395,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "Liabilities": {
                                         "readonly": true
                                     },
+                                    "TrackDetails":{
+                                        "readonly": true
+                                    },
                                     "EnterpriseAssets": {
                                         "readonly": true
                                     },
@@ -378,6 +424,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "readonly": true
                                     },
                                     "Liabilities": {
+                                        "readonly": true
+                                    },
+                                    "TrackDetails":{
                                         "readonly": true
                                     },
                                     "EnterpriseAssets": {
@@ -408,6 +457,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "Liabilities": {
                                         "readonly": true
                                     },
+                                    "TrackDetails":{
+                                        "readonly": true
+                                    },
                                     "EnterpriseAssets": {
                                         "readonly": true
                                     },
@@ -434,6 +486,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "readonly": true
                                     },
                                     "Liabilities": {
+                                        "readonly": true
+                                    },
+                                    "TrackDetails":{
                                         "readonly": true
                                     },
                                     "EnterpriseAssets": {
@@ -464,6 +519,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "Liabilities": {
                                         "readonly": true
                                     },
+                                    "TrackDetails":{
+                                        "readonly": true
+                                    },
                                     "EnterpriseAssets": {
                                         "readonly": true
                                     },
@@ -490,6 +548,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "readonly": true
                                     },
                                     "Liabilities": {
+                                        "readonly": true
+                                    },
+                                    "TrackDetails":{
                                         "readonly": true
                                     },
                                     "EnterpriseAssets": {
@@ -520,6 +581,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "Liabilities": {
                                         "readonly": true
                                     },
+                                    "TrackDetails":{
+                                        "readonly": true
+                                    },
                                     "EnterpriseAssets": {
                                         "readonly": true
                                     },
@@ -548,6 +612,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "Liabilities": {
                                         "readonly": true
                                     },
+                                    "TrackDetails":{
+                                        "readonly": true
+                                    },
                                     "EnterpriseAssets": {
                                         "readonly": true
                                     },
@@ -574,6 +641,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "readonly": true
                                     },
                                     "Liabilities": {
+                                        "readonly": true
+                                    },
+                                    "TrackDetails":{
                                         "readonly": true
                                     },
                                     "EnterpriseAssets": {
@@ -728,6 +798,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "Liabilities": {
                                         "readonly": true
                                     },
+                                    "TrackDetails":{
+                                        "readonly": true
+                                    },
                                     "EnterpriseAssets": {
                                         "readonly": true
                                     },
@@ -751,6 +824,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "readonly": true
                                     },
                                     "Liabilities": {
+                                        "readonly": true
+                                    },
+                                    "TrackDetails":{
                                         "readonly": true
                                     },
                                     "EnterpriseAssets": {
@@ -795,6 +871,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             "overrides": {
                                 "Liabilities": {
                                     "condition": "model.customer.enterprise.enterpriseType=='Enterprise'"
+                                },
+                                "IndividualReferences":{
+                                    "condition": "model.customer.enterprise.enterpriseType=='Enterprise' || model.customer.enterprise.enterpriseType.toLowerCase() == 'sole proprietorship'"
+                                },
+                                "TrackDetails":{
+                                    "condition": "model.customer.enterprise.enterpriseType=='Enterprise' || model.customer.enterprise.enterpriseType.toLowerCase() == 'sole proprietorship'"
                                 },
                                 "TangibleNetWorth": {
                                     "condition": "model.customer.enterprise.enterpriseType=='Enterprise'"
@@ -875,6 +957,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 "Liabilities.liabilities": {
                                     startEmpty: true
                                 },
+
                                 "Liabilities.liabilities.frequencyOfInstallment": {
                                     "title": "REPAYMENT_FREQUENCY",
                                     "required": true
@@ -886,6 +969,42 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 "Liabilities.liabilities.startDate": {
                                     "title": "LOAN_START_DATE",
                                     "required": true
+                                },
+                                "TrackDetails.vehiclesFree": {
+                                    "readonly": true
+                                },
+                                "TrackDetails.vehiclesOwned": {
+                                    "onChange": calculateVehiclesFree
+                                },
+                                "TrackDetails.vehiclesFinanced": {
+
+                                    "onChange": calculateVehiclesFree
+                                },
+                                "IndividualReferences.verifications": {
+                                    "titleExpr": "model.customer.verifications[arrayIndexes[0]].relationship",
+                                    "add": null,
+                                    "remove": null
+                                },
+                                "IndividualReferences.verifications.relationship": {
+                                    "type": "select",
+                                    "enumCode": "reference_type",
+                                    "title": "REFERENCE_TYPE",
+                                    "orderNo": 10,
+                                    "required": true
+                                },
+                                "IndividualReferences.verifications.referenceFirstName": {
+                                    "orderNo": 20,
+                                    "title": "NAME",
+                                    "required": true
+                                },
+                                "IndividualReferences.verifications.mobileNo": {
+                                    "orderNo": 30,
+                                    "title": "PHONE_NO",
+                                    "required": true
+                                },
+                                "IndividualReferences.verifications.knownSince": {
+                                    "title": "KNOWN_SINCE_(_IN_YEARS_)",
+                                    "orderNo": 40
                                 },
                                 "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerName" :{
                                     "readonly": true

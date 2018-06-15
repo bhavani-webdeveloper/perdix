@@ -111,7 +111,25 @@ define([], function() {
                                 }
                             }
                         },
-                        "FieldInvestigation": {
+                        "FieldInvestigation1": {
+                            "excludes": [
+                                "LoanRecommendation",
+                                "TeleVerification"
+                            ],
+                            "overrides": {
+
+                            }
+                        },
+                        "FieldInvestigation2": {
+                            "excludes": [
+                                "LoanRecommendation",
+                                "TeleVerification"
+                            ],
+                            "overrides": {
+
+                            }
+                        },
+                        "FieldInvestigation3": {
                             "excludes": [
                                 "LoanRecommendation",
                                 "TeleVerification"
