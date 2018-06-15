@@ -220,7 +220,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
 
                 },
                 offline: false,
-                form: [
+                form: [ 
                     {
                         "type": "box",
                         "title": "REPAY",

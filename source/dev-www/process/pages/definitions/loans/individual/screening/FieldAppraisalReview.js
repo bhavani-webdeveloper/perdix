@@ -40,7 +40,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisalRe
                 order: 50
             }, {
                 pageName: 'loans.individual.screening.detail.PortfolioAnalysis',
-                title: 'PORTFOLIO_ANALYSIS',
+                title: 'CUSTOMER HISTORY',
                 pageClass: 'portfolio-analysis',
                 minimum: 1,
                 maximum: 1,

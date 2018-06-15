@@ -9,7 +9,7 @@ define({
         var self= null;
         return {
             "type": "schema-form",
-            "title": "PORTFOLIO ANALYSIS",
+            "title": "CUSTOMER HISTORY",
             "subTitle": "",
             initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
                 self=this;
@@ -155,7 +155,7 @@ define({
                 },
                 {
                     "type": "box",
-                    "title": "CUST_HIST_FINANCIALS",
+                    "title": "Customer HistoricaL Financials",
                     "readOnly": true,
                     "colClass": "col-sm-12",
                     "items":[{

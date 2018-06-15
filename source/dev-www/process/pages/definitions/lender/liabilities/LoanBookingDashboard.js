@@ -17,6 +17,7 @@ irf.pageCollection.controller(irf.controller("lender.liabilities.LoanBookingDash
 
         PagesDefinition.getUserAllowedDefinition(fullDefinition).then(function(resp) {
             $scope.dashboardDefinition = resp;
+            
 
             var lbqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/lender.liabilities.LoanBookingQueue"];
             if (lbqMenu) {
