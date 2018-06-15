@@ -9,8 +9,7 @@ irf.pageCollection.controller(irf.controller("management.BranchCreationDashboard
             "title": "BRANCH_CREATION_DASHBOARD",
             "items": [
                 "Page/Engine/management.BranchMaintenance",
-                "Page/Engine/management.BranchCreationSearch",
-                "Page/Engine/management.BranchDeleteQueue"
+                "Page/Engine/management.BranchCreationSearch"
             ]
         };
         PagesDefinition.getUserAllowedDefinition(fullDefinition).then(function(resp) {
@@ -26,7 +25,7 @@ irf.pageCollection.controller(irf.controller("management.BranchCreationDashboard
                     branchCreationSearch.data = Number(response.headers['x-total-count']) || 0;
                 });
             }
-            var branchDeleteQueue = $scope.dashboardDefinition.$menuMap["Page/Engine/management.BranchDeleteQueue"];
+            /*var branchDeleteQueue = $scope.dashboardDefinition.$menuMap["Page/Engine/management.BranchDeleteQueue"];
             if (branchDeleteQueue) {
                 branchDeleteQueue.data = '-';
                 BranchCreationResource.branchSearch({
@@ -35,7 +34,7 @@ irf.pageCollection.controller(irf.controller("management.BranchCreationDashboard
                 }, function(response) {
                     branchDeleteQueue.data = Number(response.headers['x-total-count']) || 0;
                 });
-            }
+            }*/
 
         });
     }

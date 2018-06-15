@@ -74,7 +74,7 @@ define({
 				getColumns: function(){
 					return [
 						{
-							title:'BRANCH_NAMR',
+							title:'BRANCH_NAME',
 							data: 'branchName'
 						},
 						{
