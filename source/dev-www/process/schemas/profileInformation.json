@@ -1689,7 +1689,7 @@
                                 "title": "ACCOUNT_NUMBER"
                             },
                             "confirmedAccountNumber": {
-                                "type": ["string","null"],
+                                "type": ["string","null","integer","number"],
                                 "title": "CONFIRMED_ACCOUNT_NUMBER"
                             },
                             "limit": {
