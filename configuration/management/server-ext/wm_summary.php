@@ -212,21 +212,23 @@ SELECT 'Female' as Dependants,
 	sum(case when apd.product like '%jlg%' and apd.principal_outstanding>0 and apd.household_id=? then 1 else 0 end) as JLG,
 	sum(case when apd.product like 'MEL|Retail' and apd.principal_outstanding>0 and apd.household_id=? then 1 else 0 end) as MEL,
 	sum(case when apd.product like '%Personal Loan%' and apd.principal_outstanding>0 and apd.household_id=? then 1 else 0 end)as PERSONAL,
-	sum(case when apd.product  not rlike 'JLG|MEL|Retail|Personal' and apd.principal_outstanding>0 and apd.household_id=? then 1 else 0 end) as OTHERS
+	sum(case when apd.product  not rlike 'JLG|MEL|Retail|Personal' and apd.principal_outstanding>0 and apd.product_category='Loans' and apd.household_id=? then 1 else 0 end) as OTHERS
 from bietl.`all_products_dump` apd where  apd.household_id=?
 UNION ALL
 	SELECT 'Closed' As Status,
 	sum(case when apd.product like '%jlg%' and apd.principal_outstanding<=0 and apd.household_id=? then 1 else 0 end) as JLG,
 	sum(case when apd.product like 'MEL|Retail' and apd.principal_outstanding<=0 and apd.household_id=? then 1 else 0 end) as MEL,
 	sum(case when apd.product like '%Personal Loan%' and apd.principal_outstanding<=0 and apd.household_id=? then 1 else 0 end) as PERSONAL,
-	sum(case when apd.product not rlike 'JLG|MEL|Retail|Personal' and apd.principal_outstanding<=0 and apd.household_id=? then 1 else 0 end) as OTHERS
+	sum(case when apd.product not rlike 'JLG|MEL|Retail|Personal' and apd.principal_outstanding<=0 and apd.product_category='Loans' and apd.household_id=? then 1 else 0 end) as OTHERS
 
 	from bietl.`all_products_dump` apd where  apd.household_id=?",array($id[0]->id,$id[0]->id,$id[0]->id,$id[0]->id,$id[0]->id,$id[0]->id,$id[0]->id,$id[0]->id,$id[0]->id,$id[0]->id));
 	
-	$result_loan_outstanding =DB::connection("bietl_db")->select("select odm.product,sum(apd.principal_outstanding) as outstanding_amt,apd.product_close_date as maturity_date,odm.days_overdue
-	from bietl.all_products_dump apd left join  bietl.overdue_master_daily_latest_unique odm on apd.product_number=odm.account_number
-	where  odm.date=curdate()-1 and apd.household_id=?
-	group by product",array($id[0]->id));
+	$result_loan_outstanding =DB::connection("bietl_db")->select("select apd.product,apd.principal_outstanding as outstanding_amt,odm.days_overdue as overdue_days,apd.product_close_date as maturity_date
+	from bietl.all_products_dump apd 
+	left join  bietl.overdue_master_daily_latest_unique odm 
+	on apd.product_number=odm.account_number and odm.date=curdate()-1 
+	where  apd.household_id=? and apd.principal_outstanding>0
+	group by apd.product_number",array($id[0]->id));
 
 
 	$result_owns_shop =DB::connection("bietl_db")->select("select 
@@ -264,7 +266,7 @@ WHERE cs.id=?",array($id[0]->id));
 	 (case 
 	 when oc.income_source='Working Abroad' then 'Working Abroad' 
 	 when oc.income_source in ('Goat rearing','Agriculture','Dairy','Fishing') then 'Agriculture'
-	 when oc.income_source in ('Salaried - Govt','	Salaried - Others','Retired / Pensioner') then 'Salary'
+	 when oc.income_source in ('Salaried - Govt','Salaried - Others','Retired / Pensioner') then 'Salary'
 	 when oc.income_source in ('Agri Trading','Rental Income','Shop Owner','Business - Others','Driver','Small Industry','Professional') then 'Business'
 	 when oc.income_source in ('Performing Arts','Labour','Migrant Labour','Unemployed','House-wife','Student') then 'Labour' else 'Labour' end) as occupation_category from
 	 
@@ -346,7 +348,7 @@ WHERE eps.customer_id=cs.id and freq.frequency=eps.frequency and cs.id=?) tex
 	) as all_loans_active_score from
 	(SELECT apd.household_id,count(*) as count_loans_active 
 	FROM bietl.`all_products_dump` apd 
-	where apd.product_category='Loans' and apd.product_close_date>curdate() and apd.household_id=?) lc where lc.household_id=?",array($id[0]->id,$id[0]->id));
+	where apd.product_category='Loans' and apd.principal_outstanding>0 and apd.household_id=?) lc where lc.household_id=?",array($id[0]->id,$id[0]->id));
 	
 	$risk_score += (count($risk_all_loans_active_score) > 0 && isset($risk_all_loans_active_score[0]->all_loans_active_score)) ? $risk_all_loans_active_score[0]->all_loans_active_score : 0;
 	
@@ -358,7 +360,7 @@ WHERE eps.customer_id=cs.id and freq.frequency=eps.frequency and cs.id=?) tex
 	) as all_loans_closed_score from
 	(SELECT apd.customer_id,count(*) as count_loans_closed 
 	FROM bietl.`all_products_dump` apd 
-	where apd.product_category='Loans' and apd.product_close_date<curdate() and apd.customer_id=?) lc where lc.customer_id=?",array($id[0]->id,$id[0]->id));
+	where apd.product_category='Loans' and apd.principal_outstanding<=0 and apd.customer_id=?) lc where lc.customer_id=?",array($id[0]->id,$id[0]->id));
 	
 	$risk_score += (count($risk_all_loans_closed_score) > 0 && isset($risk_all_loans_closed_score[0]->all_loans_closed_score)) ? $risk_all_loans_closed_score[0]->all_loans_closed_score : 0;
 	
@@ -422,7 +424,9 @@ WHERE eps.customer_id=cs.id and freq.frequency=eps.frequency and cs.id=?) tex
 	
 	//urn_no
 	$result_urn =DB::connection("bietl_db")->select("select urn_no from financialForms.customer where id=?",array($query['cid']));
-	
+	$cust_name=DB::select("select concat(first_name,' ',last_name) as name from financialForms.customer where id=?",array($query['cid']));
+	//kgfs name
+	$kgfs_name=DB::select("select kgfs_name from financialForms.customer where id=?",array($query['cid']));
 
 	// risk score calculation
 	$denom=192;
@@ -441,9 +445,16 @@ WHERE eps.customer_id=cs.id and freq.frequency=eps.frequency and cs.id=?) tex
 	$urn=$result_urn[0]->urn_no;
 	$segment_par="&entry.1591633300=";
 	$segment_val=$result_segment[0]->Segment;
+	$customer_name_par="&entry.952945995=";
+	$customer_name_f=$cust_name[0]->name;
+	$branch_par="&entry.902300270=";
+	$branch_1=$kgfs_name[0]->kgfs_name;
 	
-	$finurl=$glink.$cid.$urn_par.$urn.$segment_par.$segment_val;
+	$form_filled=DB::select("select  (case when ? in (select household_id from bietl.cgap_pilot_survey) then 'already done' else 'yet' end) as status", array($id[0]->id));
 
+	
+	$finurl=($form_filled[0]->status=='yet')?$glink.$cid.$urn_par.$urn.$customer_name_par.$customer_name_f.$branch_par.$branch_1.$segment_par.$segment_val:"Already fllled";
+	
 	
 	// Eligibility calculation
 	
@@ -671,7 +682,7 @@ SELECT
 	//result aggregation
 	$result = [
 		'Segment' => [
-			'Segment'=>(isset($result_segment) && count($result_segment)>0 && isset($result_segment[0]->Segment))? $result_segment[0]->Segment:"no data",
+			'Segment'=>(isset($result_segment) && count($result_segment)>0 && isset($result_segment[0]->Segment))? $result_segment[0]->Segment." / URN: ".$urn:"no data",
 			'Last_edited_date'=>(isset($result_last_edited_at) && count($result_last_edited_at)>0 && isset($result_last_edited_at[0]->last_edited_at))? $result_last_edited_at[0]->last_edited_at:"no data"
 			
 			],
