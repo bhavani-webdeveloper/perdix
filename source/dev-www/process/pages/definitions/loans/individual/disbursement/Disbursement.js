@@ -55,6 +55,13 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         model.loanAccountDisbursementSchedule.principalDuePayment= resp[0].principalDuePayment;
                         model.loanAccountDisbursementSchedule.linkedAccountNumber= resp[0].linkedAccountNumber;
 
+                        model.loanAccountDisbursementSchedule.linkedAccountTotalFeeDue= resp[0].linkedAccountTotalFeeDue;
+                        model.loanAccountDisbursementSchedule.linkedAccountPenalInterestDue= resp[0].linkedAccountPenalInterestDue;
+                        model.loanAccountDisbursementSchedule.linkedAccountNormalInterestDue= resp[0].linkedAccountNormalInterestDue;
+                        model.loanAccountDisbursementSchedule.linkedAccountTotalPrincipalDue= resp[0].linkedAccountTotalPrincipalDue;
+
+
+
 
                         /*if(model.siteCode == 'KGFS' && resp[0].fees) {
                             model.additional.feeamount = [];
@@ -413,29 +420,54 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
             },
             {
                 "type": "box",
-                "title": "INTERNAL_FORE_CLOSURE_WAIVER_DETAILS", 
+                "title": "Internal ForeClosure Details",
                 "condition": "model.siteCode == 'kinara' && model.loanAccountDisbursementSchedule.linkedAccountNumber",
-                "items": [
-                    {
-                        "key": "loanAccountDisbursementSchedule.linkedAccountNumber",
-                        "title": "LINKED_ACCOUNT_NUMBER",
-                        "readonly": true
+                "items": [{
+                        "type": "fieldset",
+                        "title": "Linked Account Outstanding Loan Details",
+                        "items": [{
+                                "key": "loanAccountDisbursementSchedule.linkedAccountNumber",
+                                "title": "LINKED_ACCOUNT_NUMBER",
+                                "readonly": true
+                            }, {
+                                "key": "loanAccountDisbursementSchedule.linkedAccountTotalPrincipalDue",
+                                "title": "TOTAL_PRINCIPAL_DUE",
+                                "readonly": true
+                            }, {
+                                "key": "loanAccountDisbursementSchedule.linkedAccountNormalInterestDue",
+                                "title": "TOTAL_INTEREST_DUE",
+                                "readonly": true
+                            }, {
+                                "key": "loanAccountDisbursementSchedule.linkedAccountPenalInterestDue",
+                                "title": "TOTAL_PENAL_INTEREST_DUE",
+                                "readonly": true
+                            }, {
+                                "key": "loanAccountDisbursementSchedule.linkedAccountTotalFeeDue",
+                                "title": "TOTAL_FEE_DUE",
+                                "readonly": true
+                            }
+                        ]
                     }, {
-                        "key": "loanAccountDisbursementSchedule.normalInterestDuePayment",
-                        "type": "amount",
-                        "title": "TOTAL_INTEREST_DUE",
-                        "readonly": true
-                    },{
-                        "key": "loanAccountDisbursementSchedule.penalInterestDuePayment",
-                        "type": "amount",
-                        "title": "TOTAL_PENAL_INTEREST_DUE",
-                        "readonly": true
-                    },{
-                        "key": "loanAccountDisbursementSchedule.feeAmountPayment",
-                        "type": "amount",
-                        "title": "TOTAL_FEE_DUE",
-                        "readonly": true
-                    },
+                        "type": "fieldset",
+                        "title": "WAIVER_DETAILS",
+                        "items": [{
+                                "key": "loanAccountDisbursementSchedule.normalInterestDuePayment",
+                                "type": "amount",
+                                "title": "TOTAL_INTEREST_DUE",
+                                "readonly": true
+                            }, {
+                                "key": "loanAccountDisbursementSchedule.penalInterestDuePayment",
+                                "type": "amount",
+                                "title": "TOTAL_PENAL_INTEREST_DUE",
+                                "readonly": true
+                            }, {
+                                "key": "loanAccountDisbursementSchedule.feeAmountPayment",
+                                "type": "amount",
+                                "title": "TOTAL_FEE_DUE",
+                                "readonly": true
+                            }
+                        ]
+                    }
                 ]
             }
             
