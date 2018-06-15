@@ -1555,7 +1555,6 @@
             "vehicleLoanDocuments": {
                 "type": "array",
                 "title": "VEHICLE_DOCUMENTS",
-                "startEmpty": true,
                 "key": "loanAccount.vehicleLoanDetails.vehicleLoanDocuments",
                 "items": {
                     "docType": {
