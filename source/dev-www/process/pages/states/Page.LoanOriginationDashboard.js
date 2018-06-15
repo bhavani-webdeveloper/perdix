@@ -1,5 +1,5 @@
-irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHelper", "$state", "$q", "Utils", 'PagesDefinition', 'SessionStore', "entityManager", "IndividualLoan", "LoanBookingCommons","Messaging",
-    function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionStore, entityManager, IndividualLoan, LoanBookingCommons, Messaging) {
+irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHelper", "$state", "$q", "Utils", 'PagesDefinition', 'SessionStore', "entityManager", "IndividualLoan","Messaging",
+    function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionStore, entityManager, IndividualLoan, Messaging) {
         $log.info("Page.LoanOriginationDashboard.html loaded");
 
         var currentBranch = SessionStore.getCurrentBranch();
