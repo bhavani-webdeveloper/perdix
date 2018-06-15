@@ -1,53 +1,56 @@
         irf.pageCollection.factory(irf.page("management.ReportMasterSearch"),
         ["$log", "formHelper", "filterFilter", "ReportMaintenance","Queries","$state", "SessionStore", "Utils", "PagesDefinition", "irfNavigator", "PageHelper", "$q",
         function($log, formHelper, filterFilter , ReportMaintenance,Queries,$state, SessionStore, Utils, PagesDefinition, irfNavigator, PageHelper, $q ){
+           
             var branch = SessionStore.getBranch();
             return {
                 "type": "search-list",
                 "title": "SEARCH_REPORTS_MASTER",
                 "subTitle": "",
                 initialize: function (model, form, formCtrl) { 
-                    PageHelper.showLoader();
-                    var defered = $q.defer();
-                   var self = this;
-                   self.searchSources = [];  
-                   self.formCtrl = formCtrl;   
-                   var p1 = ReportMaintenance.reportGroupName().$promise.then(function(resp) {
+                 var defered = $q.defer();             
+                 var self = this;  
 
-                 self.definition.searchForm[0].items[0].titleMap =  resp.DataResponse; 
-                                  
-                 setTimeout(function(){self.formCtrl.submit();}, 0);                  
-                 }, function(errResp) {
-                     PageHelper.showErrors(errResp);
-                 });
-
-                 $q.all([ p1 ]).then(function(value) {
-
-                   // self.searchSources = self.definition.searchSources; 
-
-                }).finally(function() {
-                    
-                    PageHelper.hideLoader();
-                });  
-                return defered.promise;
+                formCtrl.submit();                  
                 },
                 definition: {
                     title: "SEARCH_REPORTS_MASTER",
-                   // searchForm: [],
-                    searchSources: [],
-                        searchForm: [
+                //    searchForm: [],
+                    autoSearch : false,
+                   // searchSources: [],
+                   searchForm: [
                         {
                             "type": "section",
                             items: [
                             {
                                 key: "group", 
                                 title: "GROUP",
-                                type: "select",
-                                titleMap: {
-                                           "MIS": "MIS",
-                                           "Accounts": "Accounts",
-                                           "Finance": "Finance",
-                                           }
+                                type: "lov",
+                                lovonly: true,
+                                searchHelper: formHelper,
+                                search: function(inputModel, form, model) {
+                                    var defered = $q.defer();
+                                    ReportMaintenance.reportGroupName().$promise.then(
+                                        function(data){
+                                            defered.resolve({
+                                                headers: {
+                                                    "x-total-count": data.DataResponse.length
+                                                },
+                                                body: data.DataResponse
+                                            });
+                                    }, function(err){
+                                        defered.reject(err);
+                                    });
+                                    return defered.promise;
+                                },
+                                getListDisplayItem: function(item, index) {
+                                    return [
+                                        item.name
+                                    ];
+                                },
+                                onSelect: function(result, model, context) {
+                                    model.group = result.value
+                                }
                             },
                             {
                                 key: "report_display_name", 
@@ -212,7 +215,7 @@
                                     desc: "",
                                     icon: "fa fa-pencil",
                                     fn: function(item, model){
-                                            var biDownloadUrl = irf.BI_BASE_URL_LOCALHOST+'/server-ext/reportmaster/report_master_export_sql.php?report_name='+item.report_name;
+                                            var biDownloadUrl = irf.MANAGEMENT_BASE_URL+'/server-ext/reportmaster/report_master_export_sql.php?report_name='+item.report_name;
                                             $log.info(biDownloadUrl);
                                             window.open(biDownloadUrl);
                                     },

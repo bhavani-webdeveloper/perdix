@@ -1,23 +1,31 @@
 {  
    "operators":[  
       {  
-         "name":"=",
+         "name":"Equal to",
          "value":"="
       },
       {  
-         "name":"<",
+         "name":"Less than",
          "value":"<"
       },
       {  
-         "name":">",
+         "name":"Greater than",
          "value":">"
       },
+      {  
+            "name":"Less than or Equal to",
+            "value":"<="
+         },
+         {  
+            "name":"Greater than or Equal to",
+            "value":">="
+         },
       {  
          "name":"IN",
          "value":"IN"
       },
       {  
-         "name":"between",
+         "name":"Between",
          "value":"between"
       }
    ],

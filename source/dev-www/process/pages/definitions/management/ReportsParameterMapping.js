@@ -11,9 +11,6 @@
                     model.report = {};
                     model.report.role = SessionStore.getUserRole();
                     $log.info(model.report.role.id);
-                    model.done = function(val) {
-                        return val === 'true' ? true : false;
-                    }
                     var self = this;
                     self.form = []; 
                     
@@ -37,35 +34,22 @@
                  var p3 = ReportMaintenance.getConfigurationJson({name:"reportListOperator.json"}).$promise.then(function(resp) {
 
                     self.param_type = resp.type;   
-                    self.formSource[1].items[0].items[1].titleMap =self.param_type;
+                   self.formSource[1].items[0].items[1].titleMap =self.param_type;
                                                
                  }, function(errResp) {
                      PageHelper.showErrors(errResp);
                  });
                  var p4 = ReportMaintenance.reportList().$promise.then(function(resp) {
-                        RolesPages.getReportsByRole({
-                            roleId: model.report.role.id
-                        }).$promise.then(function(response) {
-                            var object=[];
-                            for (i in resp) {
-                                if (response && response.body && response.body.length) {
-                                    for (j in response.body) {
-                                        if (resp[i].value == response.body[j].report_name)
-                                        {
-                                            object.push(resp[i]);
-                                        }
-                                    }
-                                }
-                            }
-                            $log.info(object);
-                            self.formSource[0].items[0].titleMap = object; 
-                             model.report.masterData = object;
-                            
-                        });
+                    
+                            self.formSource[0].items[0].titleMap = resp; 
+                     
                     }, function(errResp) {
                         PageHelper.showErrors(errResp);
+                    }).finally(function() {
+                        
+                        PageHelper.hideLoader();
                     });                    
-                    $q.all([ p1,p2,p3,p4 ]).then(function(value) {
+                    $q.all([ p1, p2, p3, p4 ]).then(function(value) {
 
                         self.form = self.formSource;
 
@@ -73,8 +57,6 @@
                         
                         PageHelper.hideLoader();
                     });
-
-                    return defered.promise;
                 },
                 modelPromise: function(pageId, model) {
                     var self = this;
@@ -93,7 +75,7 @@
                         onChange: function(modelValue, form, model, formCtrl, event){
                             PageHelper.showLoader();
                         var promise =  ReportMaintenance.reportParameterList({report_name : model.management.report_name}).$promise;
-                        promise .then(function(resp) {  
+                        promise .then(function(resp) { 
                             model.selectedReport = resp;                              
                             delete model.management._filterCollection;
                             model.management._filterCollection = [];
@@ -126,19 +108,18 @@
                             key: "management._filterCollection",
                             type: "array",
                             title: "PARAMETERS_LIST",
-                            "titleExpr": "model.management._filterCollection[arrayIndex].name",
-                             startEmpty: true,
+                            "titleExpr": "model.management._filterCollection[arrayIndex].parameter",
                             items: [                               
                                 {
-                                    key: "management._filterCollection[].name",
+                                    key: "management._filterCollection[].parameter",
                                     title:"PARAMETER_NAME", 
                                     type: "select", 
                                      onChange: function(modelValue, form, model, formCtrl, event){ 
                                         for (var i = 0; i < model.management._filterCollection.length; i++) {       
                                            if(i != form.arrayIndex){                                   
-                                        if(model.management._filterCollection[i].name == modelValue){
+                                        if(model.management._filterCollection[i].parameter == modelValue){
                                             Utils.alert("already selected");
-                                        delete model.management._filterCollection[form.arrayIndex].name;
+                                        delete model.management._filterCollection[form.arrayIndex].parameter;
                                         }
                                           }
                                         }                                    
@@ -163,13 +144,13 @@
                                    key: "management._filterCollection[].query",
                                    title:"PARAMETER_QUERY", 
                                    condition:"model.management._filterCollection[arrayIndex].type == 'select'",
-                                   type: "textarea", 
-                                  //required:true                               
+                                   type: "textarea",                               
                                 } ,                                                              
                                 {
                                     key:"management._filterCollection[].required",
                                     title: "PARAMETER_REQUIRED",
                                     type:"radios",
+                                    required:true,
                                     titleMap:{
                                         1 : "yes",
                                         0 : "No"
@@ -215,7 +196,7 @@
                         title: "DOWNLOAD_SQL",
                         icon: "fa fa-pencil", 
                         onClick: function(model, form, formName) {
-                            var DownloadUrl = irf.BI_BASE_URL_LOCALHOST+'/server-ext/reportmaster/report_parameter_mapping_export_sql.php?report_name='+model.management.report_name;
+                            var DownloadUrl = irf.MANAGEMENT_BASE_URL+'/server-ext/reportmaster/report_parameter_mapping_export_sql.php?report_name='+model.management.report_name;
                             $log.info(DownloadUrl);
                             window.open(DownloadUrl);
                         }                      
@@ -232,7 +213,7 @@
                 },
                
             ], schema: function() {
-                return ReportMaintenance.getReportSchema().$promise;
+                return ReportMaintenance.getConfigurationJson({name:"reportParameterMapping.json"}).$promise;
             },
                 actions: {
                     submit: function(model, form, formName) {
@@ -241,10 +222,10 @@
                             parameter: []
                         };   
                          for (var i = 0; i < model.management._filterCollection.length; i++) {
-                            if (model.management._filterCollection[i].name) {
+                            if (model.management._filterCollection[i].parameter) {
                                 var parameter_list = {
                                     report_name: model.management.report_name,
-                                    parameter_name: model.management._filterCollection[i].name,
+                                    parameter_name: model.management._filterCollection[i].parameter,
                                     type: model.management._filterCollection[i].type,
                                     operator:JSON.stringify( model.management._filterCollection[i].operators),
                                     query: model.management._filterCollection[i].query,

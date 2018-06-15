@@ -19,17 +19,6 @@ irf.pages.controller("PageManagementReportDashboardCtrl",
     PagesDefinition.getUserAllowedDefinition(fullDefinition).then(function(resp){
         $scope.dashboardDefinition = resp;
         $log.info(resp);
-        $scope.dashboardDefinition.$menuMap['Page/ManagementReportDashboard'].onClick = function(event, menu) {
-            var deferred = $q.defer();
-            PagesDefinition.getRolePageConfig('Page/ManagementReportDashboard').then(function(config) {
-                if (config.pageId) {
-                    menu.stateParams.pageId = config.pageId;
-                    menu.stateParams.pageData = null;
-                    deferred.resolve(menu);
-                }
-            });
-            return deferred.promise;
-        };
     });
     
 }]);

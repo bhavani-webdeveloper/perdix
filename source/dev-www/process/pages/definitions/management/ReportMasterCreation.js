@@ -1,13 +1,13 @@
 irf.pageCollection.factory(irf.page("management.ReportMasterCreation"), 
-["$log", "$state","ReportMaintenance", "formHelper", "$q", "irfProgressMessage","PageHelper", "Utils",
-function($log, $state, ReportMaintenance, formHelper, $q, irfProgressMessage,PageHelper, Utils){
+["$log", "$state","ReportMaintenance", "formHelper", "$q", "irfProgressMessage","PageHelper", "Utils", "irfNavigator",
+function($log, $state, ReportMaintenance, formHelper, $q, irfProgressMessage,PageHelper, Utils, irfNavigator){
 
     return {
         "type": "schema-form",
         "title": "REPORT_MANAGEMENT", 
         "subTitle": "",
         initialize: function (model, form, formCtrl) {  
-
+            var defered = $q.defer();  
             var ReportGroupName = [];
             PageHelper.showLoader();
             self = this;
@@ -78,19 +78,15 @@ function($log, $state, ReportMaintenance, formHelper, $q, irfProgressMessage,Pag
                     model.is_active = 'yes';
                 }else{
                     model.is_active = 'no';
-                }   
-
-                // irfProgressMessage.pop("enrollment-save","Load Complete",2000);
-                deferred.resolve(model);
-                PageHelper.hideLoader();
+                }      
             },function(resp){
-                /*
-                @todo implement show error
-                */
+                deferred.resolve(resp);               
                 PageHelper.hideLoader();
-                // irfProgressMessage.pop("enrollment-save","An Error Occurred1. Failed to fetch Data",5000);
+                   }, function(err){
+                defered.reject(err);
+                PageHelper.hideLoader();
             });
-        return deferred.promise;
+            return defered.promise;
 
         },
         form: [ ],
@@ -182,12 +178,12 @@ function($log, $state, ReportMaintenance, formHelper, $q, irfProgressMessage,Pag
             }
         ],
         schema: function() {
-            return ReportMaintenance.getSchema().$promise;
+            return ReportMaintenance.getConfigurationJson({name:"reportManagementInformation.json"}).$promise;
         },
         actions: {
             submit: function(model, form, formName){ 
                     var reportArray = [];
-
+                    var defered = $q.defer();  
                     reportArray.push(model);   
                     PageHelper.showLoader();
                     if(reportArray[0].is_header_less == "yes"){
@@ -206,7 +202,7 @@ function($log, $state, ReportMaintenance, formHelper, $q, irfProgressMessage,Pag
                     if(model.id === 0 || model.id == null){
                     ReportMaintenance.reportCreate(reportArray).$promise.then(function(resp){
                        Utils.alert("Reports Created Successfully");
-                       $state.go('Page.ManagementReportDashboard', null);
+                       irfNavigator.goBack();
                         
                         }, function(errResp){
                             PageHelper.hideLoader();
@@ -219,7 +215,7 @@ function($log, $state, ReportMaintenance, formHelper, $q, irfProgressMessage,Pag
                     }else{
                         ReportMaintenance.reportUpdate(reportArray).$promise.then(function(resp){
                         Utils.alert("Reports Updated Successfully");
-                        $state.go('Page.ManagementReportDashboard', null);
+                        irfNavigator.goBack();
                         deferred.resolve(resp);
                         }, function(errResp){
                             PageHelper.showErrors(errResp);

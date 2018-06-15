@@ -13,6 +13,6 @@ $queryString = $_SERVER['QUERY_STRING'];
 $query = [];
 parse_str($queryString, $query);
 
-$branches = DB::table('report_parameters_master')->select('parameter AS name','name AS value')->get();
+$branches = DB::table('report_parameters_master')->select('name AS name','parameter AS value')->get();
 $Response= '{"DataResponse":'.json_encode($branches, JSON_NUMERIC_CHECK).'}';
 echo $Response;

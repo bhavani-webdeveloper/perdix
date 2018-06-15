@@ -1,0 +1,68 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+        "management": {
+            "type": "object",
+            "properties": {              
+                "report_name": {
+                    "type": ["string","null"],
+                    "title": "REPORT_NAME"
+                },
+                "_filterCollection": {
+                    "type": "array",
+                    "items": {
+                        "properties": {
+
+                            "parameter": {
+                                "type": ["string","null"],
+                                "title": "PARAMETER_NAME"
+                            },
+
+                            "type": {
+                                "type": ["string","null"],
+                                "title": "TYPE"
+                            },
+                            "operators": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "array",
+                                      "properties": {
+                                        "operator": {
+                                          "type": ["string", "null"]
+                                        }
+                                      }
+                                    }                                 
+                               
+                            },
+
+                            "report_query_column_name": {
+                                "type": ["string","null"],
+                                "title": "Report_Query_Column_Name"
+                            },
+
+                            "query":{
+                                "type":["string","null"],                    
+                                "title":"QUERY"
+                            },
+
+                            "required": {
+                                "type": ["string","null"],
+                                "title": "REQUIRED"
+                               
+                            }
+                        }
+                    }
+                }              
+            },
+            "required": [
+                "required",
+                "parameter"
+
+            ]
+        }
+    },
+    "required": [
+        "management"
+    ]
+}
