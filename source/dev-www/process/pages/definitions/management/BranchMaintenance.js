@@ -1,9 +1,9 @@
 define({
     pageUID: "management.BranchMaintenance",
     pageType: "Engine",
-    dependencies: ["$log","Pages_ManagementHelper","Enrollment","BranchCreationResource", "$q",'PageHelper', 'formHelper','irfProgressMessage',
+    dependencies: ["$log","Pages_ManagementHelper","Queries","Lead","Enrollment","BranchCreationResource", "$q",'PageHelper', 'formHelper','irfProgressMessage',
         'SessionStore', "$state", "$stateParams", "Masters", "authService"],
-    $pageFn: function($log,Pages_ManagementHelper,Enrollment,BranchCreationResource, $q, PageHelper, formHelper, irfProgressMessage,
+    $pageFn: function($log,Pages_ManagementHelper,Queries,Lead,Enrollment,BranchCreationResource, $q, PageHelper, formHelper, irfProgressMessage,
         SessionStore, $state, $stateParams, Masters, authService) {
 
         return {
@@ -67,13 +67,15 @@ define({
                 },{
                     "key": "branch.hubId",
                     "required":true,
-                    "type": "number",
+                    "type": "select",
+                    "enumCode":"hub_master",
                     "title": "BRANCH_HUB_NAME",
                     "condition":"!model.branch.id"
                 },{
                     "key": "branch.hubId",
                     "readonly":true,
-                    "type": "number",
+                    "type": "select",
+                    "enumCode":"hub_master",
                     "title": "BRANCH_HUB_NAME",
                     "condition":"model.branch.id"
                 }, {
@@ -88,13 +90,7 @@ define({
                     "type": "string",
                     "title": "BRANCH_NAME",
                     "condition":"model.branch.id"
-                }, {
-                    "key": "branch.branchCode",
-                    "required":true,
-                    "type": "string",
-                    "title": "BRANCH_CODE",
-                    "condition":"!model.branch.id"
-                }, {
+                },{
                     "key": "branch.branchCode",
                     "readonly":true,
                     "type": "string",
@@ -104,31 +100,61 @@ define({
                     "key": "branch.branchMailId",
                     "required":true,
                     "type": "string",
-                    "title": "BRANCH_MAIL_ID"
+                    "title": "BRANCH_MAIL_ID",
+                    "schema":{
+                        "pattern": "^\\S+@\\S+$",
+                    }
                 },{
                     "key": "branch.branchContactNo",
                     "type": "string",
-                    "title": "BRANCH_CONTACT_NO"
-                }, {
-                    "key": "branch.pinCode",
-                    "required":true,
-                    "type": "number",
-                    "title": "PIN_CODE"
-                }, {
+                    "title": "BRANCH_CONTACT_NO",
+                    "schema":{
+                        "pattern":"^[0-9]{10}$"
+                    }
+                }, 
+                {
+                    key: "branch.pinCode",
+                    "title": "PIN_CODE",
+                    type: "lov",
+                    fieldType: "number",
+                    autolov: true,
+                    inputMap: {
+                        "pincode": "lead.pincode",
+                        "district": {
+                            key: "lead.district"
+                        },
+                        "state": {
+                            key: "lead.state"
+                        }
+                    },
+                    searchHelper: formHelper,
+                    search: function(inputModel, form, model) {
+                        return Queries.searchPincodeMaster(inputModel.pincode, inputModel.district, inputModel.state);
+                    },
+                    getListDisplayItem: function(item, index) {
+                        return [
+                            item.division + ', ' + item.region,
+                            item.pincode,
+                            item.district + ', ' + item.state
+                        ];
+                    },
+                    onSelect: function (valueObj, model, context) {
+                        model.branch.pinCode = parseInt(valueObj.pincode);
+                        model.branch.districtId=parseInt(valueObj.district_id);
+                        model.branch.stateId=parseInt(valueObj.state_id);
+                    },
+                },
+                {
                     "key": "branch.districtId",
-                    //"required":true,
+                    "readonly":true,
                     "type": "select",
-                    // "enumCode":"district_master",
-                    // parentEnumCode: "bankname",
-                    // parentValueExpr: "model.branch.kgfsBankName",
+                    "enumCode":"district_master1",
                     "title": "DISTRICT"
                 },{
                     "key": "branch.stateId",
-                    //"required":true,
+                    "readonly":true,
                     "type":"select",
-                    // "enumCode": "state_master",
-                    // parentEnumCode: "bankname",
-                    // parentValueExpr: "model.branch.kgfsBankName",
+                    "enumCode": "state_master1",
                     "title": "STATE"
                 },{
                     "key": "branch.branchOpenDate",
@@ -158,15 +184,6 @@ define({
                     "longitude": "branch.branchLongitude",
                     "title": "BRANCH_LOCATION"
                 },
-                // {
-                //     "key": "branch.branchLongitude",
-                //     "type": "number",
-                //     "title": "BRANCH_LONGITUDE"
-                // },{
-                //     "key": "branch.branchAltitude",
-                //     "type": "number",
-                //     "title": "BRANCH_ALTITUDE"
-                // },
                 {
                     "key": "branch.branchAddress1",
                     "type": "string",
@@ -252,8 +269,7 @@ define({
                 }]
             }],
             schema: function() {
-                return Pages_ManagementHelper.getCentreSchemaPromise();
-               
+                 return Lead.getLeadSchema().$promise;  
             },
             actions: {
                 submit: function(model, form, formName) {

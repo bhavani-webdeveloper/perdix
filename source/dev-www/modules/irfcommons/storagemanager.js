@@ -365,6 +365,9 @@ irf.commons.run(["irfStorageService", "SessionStore", "$q", "$log", "filterFilte
 
 			createEnum("bank", "bank", codeAsNumberToValue);
 			createEnum("centre", "centre", codeAsNumberToValue);
+			createEnum("hub_master", "hub_master", codeAsNumberToValue);
+			createEnum("district_master1", "district_master1", codeAsNumberToValue);
+			createEnum("state_master1", "state_master1", codeAsNumberToValue);
 			createEnum("branch_id", "branch", codeAsNumberToValue);
 			createEnum("mutualFundScheme", "mutualFundScheme", codeAsNumberToValue);
 			createEnum("loan_product", "loan_product", function(s, o) {

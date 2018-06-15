@@ -45,6 +45,30 @@ irf.models.factory('Queries', [
             return deferred.promise;
         };
 
+        resource.searchPincodeMaster = function(pincode, district, state, division, region, taluk) {
+            var deferred = $q.defer();
+            var request = {
+                "pincode": pincode || '',
+                "district": district || '',
+                "state": state || '',
+                "division": division || '',
+                "region": region || '',
+                "taluk": taluk || '',
+            };
+            resource.getResult("pincodeMaster.list", request, 10).then(function(records) {
+                if (records && records.results) {
+                    var result = {
+                        headers: {
+                            "x-total-count": records.results.length
+                        },
+                        body: records.results
+                    };
+                    deferred.resolve(result);
+                }
+            }, deferred.reject);
+            return deferred.promise;
+        };
+
         resource.getAccountDetails = function(accountNumbers) {
             var deferred = $q.defer();
             var request = {

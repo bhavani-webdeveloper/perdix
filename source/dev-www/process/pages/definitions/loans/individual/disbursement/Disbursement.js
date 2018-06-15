@@ -421,11 +421,6 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         "title": "LINKED_ACCOUNT_NUMBER",
                         "readonly": true
                     }, {
-                        "key": "loanAccountDisbursementSchedule.principalDuePayment",
-                        "type": "amount",
-                        "title": "TOTAL_PRINCIPAL_DUE",
-                        "readonly": true
-                    },{
                         "key": "loanAccountDisbursementSchedule.normalInterestDuePayment",
                         "type": "amount",
                         "title": "TOTAL_INTEREST_DUE",
