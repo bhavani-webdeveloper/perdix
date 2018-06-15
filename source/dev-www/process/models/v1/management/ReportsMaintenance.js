@@ -1,6 +1,6 @@
     irf.models.factory('ReportMaintenance', function($resource, $httpParamSerializer, BASE_URL,searchResource, formHelper, SessionStore, Enrollment, IndividualLoan) {
         
-    var endpoint = irf.BI_BASE_URL;
+    var endpoint = irf.MANAGEMENT_BASE_URL;
    
     var res = $resource(endpoint, null, {
         reportGroupName:{
