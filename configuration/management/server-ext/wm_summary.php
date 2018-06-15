@@ -453,7 +453,7 @@ WHERE eps.customer_id=cs.id and freq.frequency=eps.frequency and cs.id=?) tex
 	$form_filled=DB::select("select  (case when ? in (select household_id from bietl.cgap_pilot_survey) then 'already done' else 'yet' end) as status", array($id[0]->id));
 
 	
-	$finurl=($form_filled[0]->status=='yet')?$glink.$cid.$urn_par.$urn.$customer_name_par.$customer_name_f.$branch_par.$branch_1.$segment_par.$segment_val:"Already fllled";
+	$finurl=($form_filled[0]->status=='yet')?$glink.$cid.$urn_par.$urn.$customer_name_par.$customer_name_f.$branch_par.$branch_1.$segment_par.$segment_val:"";
 	
 	
 	// Eligibility calculation
