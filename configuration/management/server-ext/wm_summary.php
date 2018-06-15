@@ -424,9 +424,9 @@ WHERE eps.customer_id=cs.id and freq.frequency=eps.frequency and cs.id=?) tex
 	
 	//urn_no
 	$result_urn =DB::connection("bietl_db")->select("select urn_no from financialForms.customer where id=?",array($query['cid']));
-	$cust_name=DB::select("select concat(first_name,' ',last_name) as name from financialForms.customer where id=?",array($query['cid']));
+	$cust_name  =DB::connection("bietl_db")->select("select concat(first_name,' ',last_name) as name from financialForms.customer where id=?",array($query['cid']));
 	//kgfs name
-	$kgfs_name=DB::select("select kgfs_name from financialForms.customer where id=?",array($query['cid']));
+	$kgfs_name=DB::connection("bietl_db")->select("select kgfs_name from financialForms.customer where id=?",array($query['cid']));
 
 	// risk score calculation
 	$denom=192;
@@ -450,10 +450,10 @@ WHERE eps.customer_id=cs.id and freq.frequency=eps.frequency and cs.id=?) tex
 	$branch_par="&entry.902300270=";
 	$branch_1=$kgfs_name[0]->kgfs_name;
 	
-	$form_filled=DB::select("select  (case when ? in (select household_id from bietl.cgap_pilot_survey) then 'already done' else 'yet' end) as status", array($id[0]->id));
+	$form_filled=DB::connection("bietl_db")->select("select  (case when ? in (select household_id from bietl.cgap_pilot_survey) then 'already done' else 'yet' end) as status", array($id[0]->id));
 
 	
-	$finurl=($form_filled[0]->status=='yet')?$glink.$cid.$urn_par.$urn.$customer_name_par.$customer_name_f.$branch_par.$branch_1.$segment_par.$segment_val:"";
+	$finurl=($form_filled[0]->status=='yet')?$glink.$cid.$urn_par.$urn.$customer_name_par.$customer_name_f.$branch_par.$branch_1.$segment_par.$segment_val:'';
 	
 	
 	// Eligibility calculation
