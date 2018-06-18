@@ -1205,8 +1205,8 @@ define({
 					})
 					bpl.household_income=household_income;
 					bpl.ExistingLoanRepayments= params[0].data[0]['Existing Loan Repayments'];
-					bpl.avgMonDep=model.business.summary.bankStatement.averageMonthlyDeposit;
-					bpl.avgMonBal=model.business.summary.bankStatement.averageMonthlyBalance;
+					bpl.avgMonDep=model.business.summary?model.business.summary.bankStatement.averageMonthlyDeposit:"0.00";
+					bpl.avgMonBal=model.business.summary?model.business.summary.bankStatement.averageMonthlyBalance:"0.00";
 
 					/*purchase splitup calculation under profit and loss*/
                     
