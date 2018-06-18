@@ -74,7 +74,7 @@ export class FormHelper extends NeedsAngularInjector implements IFormHelper {
 
     getReferencetype(): any {
          return this.getInjector().enum('reference_type').data;
-    },
+    }
     getVehicleDocuments() : any {
         return this.getInjector().enum('vehicle_doc_type').data;
     }
