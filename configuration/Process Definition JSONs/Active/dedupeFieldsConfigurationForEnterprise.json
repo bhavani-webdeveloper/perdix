@@ -1,5 +1,5 @@
 {
-  "dedupeCutoffPercentage": 60,
+  "dedupeCutoffPercentage": 30,
   "dedupeFieldsConfigurationDTOs": [
     {
       "dedupeType": "Enterprise",
