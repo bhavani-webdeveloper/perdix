@@ -2690,7 +2690,7 @@
             "maxItems":null,
             "items":null,
             "required":[
-                "modelUnderProduction",
+                "modelUnderProduction"
             ],
             "properties":{
                "registrationNumber":{
