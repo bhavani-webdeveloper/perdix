@@ -5,28 +5,28 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.DoPartnerView'),
         $log.info("Inside LoanBookingBundle");
         var getBundleDefinition = function() {
             var definition = [{
-                pageName: 'loans.individual.screening.detail.IndividualEnrollmentView',
+                pageName: 'loans.individual.screening.DOPartner.DOPartnerIndividualEnrollmentView',
                 title: 'APPLICANT',
                 pageClass: 'applicant',
                 minimum: 1,
                 maximum: 1,
                 order: 10
             }, {
-                pageName: 'loans.individual.screening.detail.IndividualEnrollmentView',
+                pageName: 'loans.individual.screening.DOPartner.DOPartnerIndividualEnrollmentView',
                 title: 'CO_APPLICANT',
                 pageClass: 'co-applicant',
                 minimum: 1,
                 maximum: 1,
                 order: 20
             }, {
-                pageName: 'loans.individual.screening.detail.IndividualEnrollmentView',
+                pageName: 'loans.individual.screening.DOPartner.DOPartnerIndividualEnrollmentView',
                 title: 'GUARANTOR',
                 pageClass: 'guarantor',
                 minimum: 1,
                 maximum: 1,
                 order: 30
             }, {
-                pageName: 'loans.individual.screening.detail.EnterpriseEnrollmentView',
+                pageName: 'loans.individual.screening.DOPartner.DOPartnerEnterpriseEnrollmentView',
                 title: 'BUSINESS',
                 pageClass: 'business',
                 minimum: 1,
