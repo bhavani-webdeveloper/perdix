@@ -783,6 +783,20 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
 
                     //$log.info(BackedDatedDiffmonth);
 
+                    if(model.loanAccount.linkedAccountNumber && model.siteCode == 'kinara'){
+                        var loanfee = parseInt(model.loanAccount.processingFeeInPaisa / 100) + model.loanAccount.commercialCibilCharge + model.loanAccount.portfolioInsurancePremium + parseInt(model.loanAccount.portfolioInsuranceServiceCharge - model.loanAccount.portfolioInsuranceServiceTax) + model.loanAccount.fee3 + model.loanAccount.fee4 + model.loanAccount.fee5 + model.loanAccount.securityEmi;
+                        if (loanfee) {
+                            var netdisbursementamount = model.loanAccount.loanAmount - loanfee;
+                        }
+                        var linkedaccountoutstanding=(parseInt(model.loanAccount.precloseurePrincipal) +parseInt(model.loanAccount.precloseureNormalInterest)+parseInt(model.loanAccount.precloseurePenalInterest)+parseInt(model.loanAccount.precloseureTotalFee))-(model.loanAccount.disbursementSchedules[0].normalInterestDuePayment+model.loanAccount.disbursementSchedules[0].penalInterestDuePayment+model.loanAccount.disbursementSchedules[0].feeAmountPayment);
+                        if(parseInt(netdisbursementamount) < parseInt(linkedaccountoutstanding)){
+                            PageHelper.setError({
+                                message: "New loan Net disbursement amount" + " " +netdisbursementamount+ " "+ "should  be greater then Linked Account Balence with Waiver amount" +"  " + linkedaccountoutstanding
+                            });
+                           return;
+                        }
+                    }
+
                     if(model.siteCode != 'sambandh' && model.siteCode != 'saija'){
 
                         if(model.postDatedTransactionNotAllowed) {
@@ -899,7 +913,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                 },
                 validateWaiverAmount: function(amount1,amount2) {
                     PageHelper.clearErrors();
-                    amount2= (amount2.slice(3)).replace(/\,/g,"");
+                    amount2= parseInt(amount2);
                     if (amount1> parseInt(amount2)) {
                         PageHelper.clearErrors();
                         PageHelper.setError({
