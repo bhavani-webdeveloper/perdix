@@ -18,7 +18,7 @@ define({
                 model.loanCustomerRel = []
                 Queries.getLoanCustomerDetails(model.bundleModel.loanId).then(function(res) {
                     model.loanCustomerRelation = res;
-                    model.loanCustomerRel.push(res.applicant);
+                    //model.loanCustomerRel.push(res.applicant);
                     _.each(model.loanCustomerRelation.coApplicants, function(coApp) {
                         model.loanCustomerRel.push(coApp);
                     })
