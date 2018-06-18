@@ -9,7 +9,7 @@ define({
         var self= null;
         return {
             "type": "schema-form",
-            "title": "CUSTOMER HISTORY",
+            "title": "Customer History",
             "subTitle": "",
             initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
                 self=this;
@@ -265,10 +265,29 @@ define({
                                     "title": "Own capital",
                                     "data": "Own_capital",
                                     "render": self.currencyRightRender
-                                },
-                                {
-                                    "title": "Other Data Points",
-                                    "data": ""
+                                }
+                            ];
+                            },
+                            getActions: function() {
+                                return [];
+                            }                            
+                        },{
+                            "type": "tableview",
+                            "key": "customerHistoryFinancials.tableData",
+                            "transpose" : true,
+                            "title": "Other Data Points",
+                            "selectable": "false",
+                            "editable": "false",
+                            "tableConfig":{
+                                "searching": false,
+                                "paginate": false,
+                                "pageLength": 10,
+                            },
+                            getColumns: function() {
+                                return [{
+                                    "title": "Category",
+                                    "data": "Category",
+                                    "render": self.strongRender
                                 },
                                 {
                                     "title": "DSCR",
