@@ -74,20 +74,11 @@ define({
                     "readonly":true,
                     enumCode: "bank",
                 },{
-                    "key": "branch.hubId",
-                    "required":true,
+                    "key": "branch.parentBranchId",
                     "type": "select",
-                    "enumCode":"hub_master",
-                    "title": "BRANCH_HUB_NAME",
-                    "condition":"!model.branch.id"
+                    "enumCode":"branch_id",
+                    "title": "PARENT_BRANCH"
                 },{
-                    "key": "branch.hubId",
-                    "readonly":true,
-                    "type": "select",
-                    "enumCode":"hub_master",
-                    "title": "BRANCH_HUB_NAME",
-                    "condition":"model.branch.id"
-                }, {
                     "key": "branch.branchName",
                     "required":true,
                     "type": "string",
