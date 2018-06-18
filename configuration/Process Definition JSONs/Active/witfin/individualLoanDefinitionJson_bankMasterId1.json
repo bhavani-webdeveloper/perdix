@@ -2707,6 +2707,62 @@
                     "LoanInitiation"
                 ]
                },
+               "vehicleType": {
+                 "title":"Vehicle Type",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                    "Screening", 
+                    "VehicleValuation", 
+                    "FieldInvestigation", 
+                    "TeleVerification",
+                    "CreditAppraisal",
+                    "LoanInitiation"
+                  ] 
+               },
+               "endUse": {
+                  "title": "End Use",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                    "Screening", 
+                    "VehicleValuation", 
+                    "FieldInvestigation", 
+                    "TeleVerification",
+                    "CreditAppraisal",
+                    "LoanInitiation"
+                  ] 
+               },
+               "vehicleModel": {
+                  "title": "Vehicle Model",
+                  "type": "string",
+                 "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                    "Screening", 
+                    "VehicleValuation", 
+                    "FieldInvestigation", 
+                    "TeleVerification",
+                    "CreditAppraisal",
+                    "LoanInitiation"
+                  ] 
+               },
+               "category": {
+                    "title": "Category",
+                    "type": "string",
+                    "minLength":1,
+                    "maxLength":100,
+                    "captureStages":[
+                        "Screening", 
+                        "VehicleValuation", 
+                        "FieldInvestigation", 
+                        "TeleVerification",
+                        "CreditAppraisal",
+                        "LoanInitiation"
+                    ]   
+                },
                "valuationPurpose":{
                   "title":"valuationPurpose",
                   "type":"string",
@@ -2719,7 +2775,6 @@
                     "TeleVerification",
                     "CreditAppraisal",
                     "LoanInitiation"
-
                   ]
                },
                "valuationDate":{
