@@ -2870,6 +2870,169 @@
                     "LoanInitiation"
                 ]
                },
+               "viabilityCategory":{
+                  "title":"viabilityCategory",
+                   "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                    "Screening", 
+                    "VehicleValuation", 
+                    "FieldInvestigation", 
+                    "TeleVerification",
+                    "CreditAppraisal",
+                    "LoanInitiation"
+                  ]
+               },
+"grossVehicleWeight":{
+                  "title":"grossVehicleWeight",
+                   "type":"number",
+                  
+                  "captureStages":[
+                     "Screening", 
+                    "VehicleValuation", 
+                    "FieldInvestigation", 
+                    "TeleVerification",
+                    "CreditAppraisal",
+                    "LoanInitiation"
+                  ]
+               },
+"payLoad":{
+                  "title":"payLoad",
+                   "type":"string",
+                  "minLength":1,
+                  "maxLength":45,
+                  "captureStages":[
+                     "Screening", 
+                    "VehicleValuation", 
+                    "FieldInvestigation", 
+                    "TeleVerification",
+                    "CreditAppraisal",
+                    "LoanInitiation"
+                  ]
+               },
+"typeofLoad":{
+                  "title":"typeofLoad",
+                   "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", 
+                    "VehicleValuation", 
+                    "FieldInvestigation", 
+                    "TeleVerification",
+                    "CreditAppraisal",
+                    "LoanInitiation"
+                  ]
+               },
+"ratePerTrip":{
+                  "title":"ratePerTrip",
+                   "type":"number",
+                  "captureStages":[
+                     "Screening", 
+                    "VehicleValuation", 
+                    "FieldInvestigation", 
+                    "TeleVerification",
+                    "CreditAppraisal",
+                    "LoanInitiation"
+                  ]
+               },
+"mileage":{
+                  "title":"mileage",
+                   "type":"number",
+                  "captureStages":[
+                     "Screening", 
+                    "VehicleValuation", 
+                    "FieldInvestigation", 
+                    "TeleVerification",
+                    "CreditAppraisal",
+                    "LoanInitiation"
+                  ]
+               },
+"fuelConsumptionPerHour":{
+                  "title":"fuelConsumptionPerHour",
+                   "type":"number",
+                  "captureStages":[
+                     "Screening", 
+                    "VehicleValuation", 
+                    "FieldInvestigation", 
+                    "TeleVerification",
+                    "CreditAppraisal",
+                    "LoanInitiation"
+                  ]
+               },
+"noOfTyres":{
+                  "title":"noOfTyres",
+                   "type":"number",
+                  "captureStages":[
+                     "Screening", 
+                    "VehicleValuation", 
+                    "FieldInvestigation", 
+                    "TeleVerification",
+                    "CreditAppraisal",
+                    "LoanInitiation"
+                  ]
+               },
+"costOfTyre":{
+                  "title":"costOfTyre",
+                   "type":"number",
+                  "captureStages":[
+                     "Screening", 
+                    "VehicleValuation", 
+                    "FieldInvestigation", 
+                    "TeleVerification",
+                    "CreditAppraisal",
+                    "LoanInitiation"
+                  ]
+               },
+"lifeOfTyre":{
+                  "title":"lifeOfTyre",
+                   "type":"number",
+                  "captureStages":[
+                    "Screening", 
+                    "VehicleValuation", 
+                    "FieldInvestigation", 
+                    "TeleVerification",
+                    "CreditAppraisal",
+                    "LoanInitiation"
+                  ]
+               },
+"dailyWorkingHours":{
+                  "title":"dailyWorkingHours",
+                   "type":"number",
+                  "captureStages":[
+                    "Screening", 
+                    "VehicleValuation", 
+                    "FieldInvestigation", 
+                    "TeleVerification",
+                    "CreditAppraisal",
+                    "LoanInitiation"
+                  ]
+               },
+"monthlyWorkingDays":{
+                  "title":"monthlyWorkingDays",
+                   "type":"number",
+                  "captureStages":[
+                    "Screening", 
+                    "VehicleValuation", 
+                    "FieldInvestigation", 
+                    "TeleVerification",
+                    "CreditAppraisal",
+                    "LoanInitiation"
+                  ]
+               },
+"hourlyRate":{
+                  "title":"hourlyRate",
+                   "type":"number",
+                  "captureStages":[
+                    "Screening", 
+                    "VehicleValuation", 
+                    "FieldInvestigation", 
+                    "TeleVerification",
+                    "CreditAppraisal",
+                    "LoanInitiation"
+                  ]
+               },
                 "insuredDeclaredValue":{
                   "title":"Insured Declared Value",
                    "type":"number",
