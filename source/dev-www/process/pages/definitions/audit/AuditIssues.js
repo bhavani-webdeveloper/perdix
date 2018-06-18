@@ -45,7 +45,7 @@ irf.pageCollection.factory(irf.page("audit.AuditIssues"), ["$log", "translateFil
                             case 'SAMPLE':
                                 _.map(issuesList, function(iss) {
                                     if (iss.sample_id == model.viewTypeId) {
-                                        iss.sampleName = model.report.sampleName;
+                                        iss.sampleName = model.report.sampleName[iss.sample_id];
                                         model.issues.push(iss);
                                     }
                                 })
@@ -53,7 +53,7 @@ irf.pageCollection.factory(irf.page("audit.AuditIssues"), ["$log", "translateFil
                             case 'PROCESS':
                                 _.map(issuesList, function(iss) {
                                     if (iss.process_id == model.viewTypeId) {
-                                        iss.sampleName = model.report.sampleName;
+                                        iss.sampleName = model.report.sampleName[iss.sample_id];
                                         model.issues.push(iss);
                                     }
                                 })
@@ -61,7 +61,7 @@ irf.pageCollection.factory(irf.page("audit.AuditIssues"), ["$log", "translateFil
                             case 'RISK':
                                 _.map(issuesList, function(iss) {
                                     if (master.typeofissues[iss.type_of_issue_id].risk_classification == model.viewTypeId) {
-                                        iss.sampleName = model.report.sampleName;
+                                        iss.sampleName = model.report.sampleName[iss.sample_id];
                                         model.issues.push(iss);
                                     }
                                 })
