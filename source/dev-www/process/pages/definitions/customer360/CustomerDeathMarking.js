@@ -5,15 +5,17 @@ irf.pageCollection.factory(irf.page("customer360.CustomerDeathMarking"), ["$log"
        
             return {
             "type": "schema-form",
-            "title": "Death Marking",
+            "title": "DEATH_MARKING",
             "subTitle": "",
-            initialize: function(model, form, formCtrl) {                
-                    var defered = $q.defer();
+            initialize: function(model, form, formCtrl) {   
+                PageHelper.showLoader();              
+                    var defered = $q.defer();                     
                 model.deathMarking = {}; 
                  var customerId = $stateParams.pageId.split(':');
                 Enrollment.getCustomerById({
                     id: customerId
-                }).$promise.then(function(resp) {                
+                }).$promise.then(function(resp) {
+                                  
                     model.deathMarking.familyMemberName = resp.firstName;
                     model.deathMarking.familyMembers = resp.familyMembers;                    
                         for(var i=0; i<resp.familyMembers.length; i++){
@@ -33,9 +35,11 @@ irf.pageCollection.factory(irf.page("customer360.CustomerDeathMarking"), ["$log"
                                     model.deathMarking.dateOfDeath =  model.deceaseDetails[i].date_of_incident || {};
                                     model.deathMarking.deathMarkingStatus =  model.deceaseDetails[i].admin_confirmation_status || {};
                                     }
-                                    }});
+                                    }
+                                });
                             }                           
-                        }                                          
+                        }                       
+                       
                     PageHelper.hideLoader();
                 }, function(errResp) {
                     PageHelper.showErrors(errResp);
@@ -46,11 +50,11 @@ irf.pageCollection.factory(irf.page("customer360.CustomerDeathMarking"), ["$log"
             form: [
                 {
                     "type": "box",
-                    "title": "Details",
+                    "title": "DEATH_MARKING_DETAILS",
                     "items": [
                         {
                             key: "deathMarking.familyMemberName",
-                            title: "Family member  Name",
+                            title: "FAMILY_MEMBER_NAME",
                             type: "lov",
                             lovonly: true,
                             searchHelper: formHelper,
@@ -90,48 +94,46 @@ irf.pageCollection.factory(irf.page("customer360.CustomerDeathMarking"), ["$log"
                                     model.deathMarking.reasonForDeath = "";
                                     model.deathMarking.dateOfDeath = "";
                                      model.deathMarking.deathMarkingStatus = "";
-
-
                                     }
                                 }
-                               
+
                             },
                             required: true
                         },
                         {
                             key: "deathMarking.familyMemberRelation",//form element type select( dropdown)
                             type: "string",
-                            title:"Family member  relation",
+                            title:"FAMILY_MEMBER_RELATION",
                             readonly:true
                         },
                         {
                             key: "deathMarking.familyMemberId",//form element type select( dropdown)
                             type: "number",
-                            title:"Family member  ID",        
+                            title:"FAMILY_MEMBER_ID",        
                             readonly:true
                         },
                         {
                             key: "deathMarking.dateOfBirth",
-                            title: "DOB",
+                            title: "DATE_OF_BIRTH",
                             type: "date",
                             readonly:true
                         },
                         {
                             key: "deathMarking.dateOfDeath",
-                            title: "Date of Death",
+                            title: "DATE_OF_DEATH",
                             condition:"model.deathMarking.familyMemberId == model.deathMarking.family_member_id",                                      
                             type: "date",
                             readonly:true
                         },
                         {
                             key: "deathMarking.dateOfDeath",
-                            title: "Date of Death",
+                            title: "DATE_OF_DEATH",
                             condition:"model.deathMarking.family_member_id =='' || model.deathMarking.familyMemberId != model.deathMarking.family_member_id",                                      
                             type: "date"
                         },
                         {
                             key: "deathMarking.deathMarkingStatus",
-                            title: "Death Marking Status",
+                            title: "DEATH_MARKING_STATUS",
                             type: "select",
                             readonly:true,
                             condition:"model.deathMarking.familyMemberId == model.deathMarking.family_member_id", 
@@ -144,69 +146,57 @@ irf.pageCollection.factory(irf.page("customer360.CustomerDeathMarking"), ["$log"
                         },
                         {
                             key: "deathMarking.reasonForDeath",
-                            title: "Reason For Death",
+                            title: "REASON_FOR_DEATH",
                             type: "select",
                             required: true,
-                            enumCode: "death_reason" ,
+                            enumCode: "reason_for_death",
                             readonly:true,
                             condition:"model.deathMarking.familyMemberId == model.deathMarking.family_member_id",                                      
-                                                     
-                           
+                                
                         },
                         {
                             key: "deathMarking.furtherDetails",
-                            title: "Further Details",
+                            title: "FURTHER_DETAILS",
                             type: "select",
                             readonly:true,
-                            condition: "model.deathMarking.reasonForDeath == 'NATURAL' && model.deathMarking.familyMemberId == model.deathMarking.family_member_id",
+                            condition: "model.deathMarking.familyMemberId == model.deathMarking.family_member_id && model.deathMarking.reasonForDeath != 'SUCIDE'",
                             required: true,
-                            enumCode: "natural"
-                        }, {
-                            key: "deathMarking.furtherDetails",
-                            title: "Further Details",
-                            type: "select",
-                            readonly:true,
-                            condition: "model.deathMarking.reasonForDeath == 'ACCIDENT' && model.deathMarking.familyMemberId == model.deathMarking.family_member_id",
-                            required: true,
-                            enumCode: "accident"
+                            parentEnumCode:"reason_for_death",
+                            parentValueExpr:"model.deathMarking.reasonForDeath",
+                            enumCode: "further_details"
                         },
                         {
-                            key: "deathMarking.comments",//form element type select( dropdown)
+                            key: "deathMarking.comments",
                             type: "textarea",
-                            title:"Comments",
+                            title:"COMMENTS",
                             readonly:true,
                             condition:"model.deathMarking.familyMemberId == model.deathMarking.family_member_id",                                      
                             
                         },
                         {
                             key: "deathMarking.reasonForDeath",
-                            title: "Reason For Death",
+                            title: "REASON_FOR_DEATH",
                             condition:"model.deathMarking.family_member_id =='' || model.deathMarking.familyMemberId != model.deathMarking.family_member_id",                                      
                             type: "select",
                             required: true,
-                            enumCode: "death_reason"                          
+                            enumCode: "reason_for_death"                          
                            
                         },
                         {
                             key: "deathMarking.furtherDetails",
-                            title: "Further Details",
+                            title: "FURTHER_DETAILS",
                             type: "select",
-                            condition: "model.deathMarking.reasonForDeath == 'NATURAL' && model.deathMarking.familyMemberId != model.deathMarking.family_member_id",
+                            condition: "model.deathMarking.familyMemberId != model.deathMarking.family_member_id && model.deathMarking.reasonForDeath != 'SUCIDE'",
                             required: true,
-                            enumCode: "natural"
-                        }, {
-                            key: "deathMarking.furtherDetails",
-                            title: "Further Details",
-                            type: "select",
-                            condition: "model.deathMarking.reasonForDeath == 'ACCIDENT' && model.deathMarking.familyMemberId != model.deathMarking.family_member_id",
-                            required: true,
-                            enumCode: "accident"
+                            parentEnumCode:"reason_for_death",
+                            parentValueExpr:"model.deathMarking.reasonForDeath",
+                            enumCode: "further_details"
                         },
                         {
-                            key: "deathMarking.comments",//form element type select( dropdown)
+                            key: "deathMarking.comments",
                             type: "textarea",
                             condition:"model.deathMarking.family_member_id =='' || model.deathMarking.familyMemberId != model.deathMarking.family_member_id",
-                            title:"Comments"
+                            title:"COMMENTS"
                         },
                     ]
                 },
@@ -216,7 +206,7 @@ irf.pageCollection.factory(irf.page("customer360.CustomerDeathMarking"), ["$log"
                     items: [
                         {
                             type: "submit",
-                            title: "Submit",                           
+                            title: "SUBMIT",                           
                         }                    
                     ]
                 },{
@@ -224,7 +214,7 @@ irf.pageCollection.factory(irf.page("customer360.CustomerDeathMarking"), ["$log"
                     items: [
                         {
                             type: "button",
-                            title: "Back",
+                            title: "BACK",
                             onClick: function(model, form, formName) {
                                 irfNavigator.goBack();
                             }
