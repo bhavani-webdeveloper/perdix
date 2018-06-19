@@ -7,7 +7,7 @@ define(["perdix/domain/model/loan/LoanProcess",
         var EnrolmentProcess = EnrolmentProcess["EnrolmentProcess"];
         var LoanCustomerRelationTypes = LoanCustomerRelation["LoanCustomerRelationTypes"];
         return {
-            pageUID: "witfin.loans.individual.screening.FieldInvestigation",
+            pageUID: "witfin.loans.individual.screening.FieldInvestigation1",
             pageType: "Bundle",
             dependencies: ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager","formHelper", "$stateParams", "Enrollment"
             ,"LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
