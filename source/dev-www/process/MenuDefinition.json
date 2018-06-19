@@ -85,7 +85,8 @@
                         "Page/Engine/management.audit.AuditStageActivities"
                     ]
                 },
-                "Page/ManagementReportDashboard"
+                "Page/ManagementReportDashboard",
+                "Page/Engine/management.DeathMarkingSearch"
             ]
         }, {
             "title": "PSYCHOMETRIC",

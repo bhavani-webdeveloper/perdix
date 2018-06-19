@@ -943,6 +943,16 @@ irf.models.factory('Queries', [
             }, deferred.reject)
         return deferred.promise;
     }
+    resource.deseaseDetails = function(customerId) {
+        var deferred = $q.defer();
+        var request = {
+            "customer_id":customerId
+        };
+        resource.getResult("deseaseDetails", request).then(function(response) {
+              deferred.resolve(response);           
+        }, deferred.reject);
+        return deferred.promise;
+    }
 
     return resource;
     }

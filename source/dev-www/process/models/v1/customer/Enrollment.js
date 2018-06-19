@@ -182,7 +182,15 @@ irf.models.factory('Enrollment',function($resource,$httpParamSerializer,BASE_URL
         lenderSearch: searchResource({
             method: 'GET',
             url: endpoint + '/findInternal/'
-        })
+        }),
+        getCustomerDeathMarking:{
+            method:'GET',
+            url:'process/schemas/customerDeathMarking.json'
+        },
+        postCustomerDeathMarking:{
+            method: 'POST',
+            url: endpoint + '/capturedeathdetails/:customerId',
+        }
     });
 });
 

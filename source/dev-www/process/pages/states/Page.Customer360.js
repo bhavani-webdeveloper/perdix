@@ -67,7 +67,7 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 			},
 			"Page/Engine/customer360.Recapture",
 			"Page/Engine/customer360.CustomerHistorySummary",
-			
+			"Page/Engine/customer360.CustomerDeathMarking"
 		]
 	};
 	//"Page/CustomerHistory",
@@ -436,6 +436,12 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 
 		if ($scope.dashboardDefinition.$menuMap['Page/Engine/customer360.CustomerHistorySummary'])
 		$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.CustomerHistorySummary'].onClick = function(event, menu) {
+			menu.stateParams.pageId = $scope.customerId;
+			return $q.resolve(menu);
+		};
+
+		if ($scope.dashboardDefinition.$menuMap['Page/Engine/customer360.CustomerDeathMarking'])
+		$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.CustomerDeathMarking'].onClick = function(event, menu) {
 			menu.stateParams.pageId = $scope.customerId;
 			return $q.resolve(menu);
 		};
