@@ -130,7 +130,7 @@ irf.pageCollection.factory(irf.page("audit.RejectedAuditsQueue"), ["$log", "Quer
                     var deferred = $q.defer();
                     Audit.online.findAuditInfo({
                         'audit_id': searchOptions.audit_id,
-                        'auditor_id': SessionStore.getLoginname(),
+                        'auditor_id': searchOptions.auditor_id,
                         'branch_id': searchOptions.branch_id,
                         'audit_type': searchOptions.audit_type,
                         'start_date': searchOptions.start_date ? searchOptions.start_date + " 00:00:00" : "",
