@@ -207,7 +207,7 @@ define({
                 }, {
                     "key": "product.insuranceRateCode",
                     "type": "select",
-                    "enumCode":"fee_master"
+                    "enumCode":"insurance_rate_codes"
                 }, {
                     "key": "product.insuranceRequired",
                 }, {
@@ -854,7 +854,7 @@ define({
                                         },
                                         "valueForDropDown": {
                                             "title": "ALLOWED_VALUES",
-                                            "type":["string","null"] 
+                                            "type":["string","null"]
                                         },
                                         "isMandatory": {
                                             "type": "boolean",
