@@ -460,6 +460,31 @@ define({
 
                 }
             }
+
+
+            model.loanSummary={};
+            model.loanRemarksSummary=[];
+            if (_.hasIn(model, 'loanAccount.id') && _.isNumber(model.loanAccount.id)){
+                $log.info('Printing Loan Account');
+                IndividualLoan.loanRemarksSummary({id: model.loanAccount.id})
+                .$promise
+                .then(function (resp){
+                    model.loanSummary = resp;
+                    if(model.loanSummary && model.loanSummary.length)
+                    {
+                        for(i=0;i<model.loanSummary.length;i++)
+                        {
+                            if(model.loanSummary[i].preStage=='LoanInitiation'||model.loanSummary[i].preStage=='LoanBooking'||model.loanSummary[i].preStage=='PendingForPartner')
+                            {
+                               model.loanRemarksSummary.push(model.loanSummary[i]);
+                            }
+                        }
+                    }
+                },function (errResp){
+
+                });
+            }
+
             model.additional = {};
             model.additional = {
                 deviations: {
@@ -743,6 +768,55 @@ define({
                         }, {
                             "key": "loanAccount.loanPurpose2",
                             "title": "Loan SubPurpose"
+                        }]
+                    }]
+                }]
+            });
+
+            form.push({
+                "type": "box",
+                "title": "Post Review Decision",
+                "colClass": "col-sm-12",
+                "items": [{
+                    type: "section",
+                    "htmlClass": "row",
+                    "items": [{
+                        "type": "section",
+                        "htmlClass": "col-sm-12",
+                        "items": [{
+                            type: "tableview",
+                            "title": "Previous Remarks",
+                            htmlClass: "table-striped",
+                            listStyle: "table",
+                            key: "loanRemarksSummary",
+                            selectable: false,
+                            expandable: true,
+                            paginate: false,
+                            searching: false,
+                            getColumns: function() {
+                                return [{
+                                    title: 'User Name',
+                                    data: 'userId'
+                                }, {
+                                    title: 'Remarks',
+                                    data: 'remarks'
+                                }, {
+                                    title: 'From Stage',
+                                    data: 'preStage'
+                                }, {
+                                    title: 'To Stage',
+                                    data: 'postStage'
+                                }, {
+                                    title: 'Remarks Date',
+                                    data: 'createdDate',
+                                    render: function(data, type, full, meta) {
+                                        return (moment(data).format("DD-MM-YYYY"));
+                                    }
+                                }]
+                            },
+                            getActions: function(item) {
+                                return [];
+                            }
                         }]
                     }]
                 }]
