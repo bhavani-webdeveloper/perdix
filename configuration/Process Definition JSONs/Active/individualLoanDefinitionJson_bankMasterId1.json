@@ -768,6 +768,15 @@
                      "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                   ]
                },
+               "baseLoanAccount":{
+                "title":"Base Loan Account",
+               "type":"string",
+                "minLength":1,
+                "maxLength":1000,
+                "captureStages":[
+                   "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                ]
+             },
             "verificationReason":{
                   "title":"verificationReason",
                  "type":"string",
