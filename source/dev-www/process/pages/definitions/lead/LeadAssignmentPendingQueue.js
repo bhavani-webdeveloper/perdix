@@ -100,6 +100,7 @@ irf.pageCollection.factory(irf.page("lead.leadAssignmentPendingQueue"),
 							item.addressLine1,
 							item.cityTownVillage,
 							item.pincode,
+							item.transactionType,
 							item.mobileNo
 						]
 					},
@@ -132,7 +133,10 @@ irf.pageCollection.factory(irf.page("lead.leadAssignmentPendingQueue"),
 						}, {
 							title: 'Pincode',
 							data: 'pincode'
-						},{
+						}, {
+							title: 'Type',
+							data: 'transactionType'
+						}, {
 							title: 'Mobile No',
 							data: 'mobileNo'
 						}]
@@ -174,7 +178,23 @@ irf.pageCollection.factory(irf.page("lead.leadAssignmentPendingQueue"),
 							isApplicable: function(items) {
 								return true;
 							}
-						}];
+						}/* ,{
+							name: "Reject Lead",
+							desc: "",
+							fn: function(items) {
+								if (items.length == 0) {
+									PageHelper.showProgress("bulk-reject", "Atleast one loan should be selected for Batch Rejecton", 5000);
+									return false;
+								}
+								$state.go("Page.Engine", {
+									pageName: "lead.LeadRejectedQueue",
+									pageData: items
+								});
+							},
+							isApplicable: function(items) {
+                                return true;
+							}
+						} */];
 					}
 				}
 			}

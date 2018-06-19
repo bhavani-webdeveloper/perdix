@@ -56,6 +56,9 @@ class Lead {
     occupation1: string;
     ownership: string;
     pincode: number;
+    transactionType: string; 
+    linkedLoanAccountNo: string; 
+    baseLoanAccount: string;
     productAcceptAdditinalRemarks: string;
     productAcceptReason: string;
     productCategory: string;
