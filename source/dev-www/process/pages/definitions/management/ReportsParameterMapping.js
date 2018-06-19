@@ -21,40 +21,31 @@
                      PageHelper.showErrors(errResp);
                  });
 
-
                  var p2 = ReportMaintenance.getConfigurationJson({name:"reportListOperator.json"}).$promise.then(function(resp) {
-
                     self.param_operator = resp.operators;   
-                    self.formSource[1].items[0].items[5].items[0].titleMap = self.param_operator
-                                               
-                 }, function(errResp) {
+                    self.formSource[1].items[0].items[5].items[0].titleMap = self.param_operator;
+                   }, function(errResp) {
                      PageHelper.showErrors(errResp);
                  });
                  
                  var p3 = ReportMaintenance.getConfigurationJson({name:"reportListOperator.json"}).$promise.then(function(resp) {
-
                     self.param_type = resp.type;   
-                   self.formSource[1].items[0].items[1].titleMap =self.param_type;
-                                               
+                   self.formSource[1].items[0].items[1].titleMap =self.param_type;                                               
                  }, function(errResp) {
                      PageHelper.showErrors(errResp);
                  });
-                 var p4 = ReportMaintenance.reportList().$promise.then(function(resp) {
-                    
-                            self.formSource[0].items[0].titleMap = resp; 
-                     
-                    }, function(errResp) {
-                        PageHelper.showErrors(errResp);
-                    }).finally(function() {
-                        
-                        PageHelper.hideLoader();
-                    });                    
+
+                 var p4 = ReportMaintenance.reportList().$promise.then(function(resp) {                    
+                    self.formSource[0].items[0].titleMap = resp;                      
+                }, function(errResp) {
+                    PageHelper.showErrors(errResp);
+                }).finally(function() {                        
+                    PageHelper.hideLoader();
+                });       
+
                     $q.all([ p1, p2, p3, p4 ]).then(function(value) {
-
                         self.form = self.formSource;
-
-                    }).finally(function() {
-                        
+                    }).finally(function() {                        
                         PageHelper.hideLoader();
                     });
                 },
@@ -88,11 +79,10 @@
                                      } 
                                 }
                             }
-
                             PageHelper.hideLoader();
                         },function(resp){
                             PageHelper.hideLoader();
-                            PageHelper.showProgress("Report-mater","An Error Occurred. Failed to fetch Data",5000);                             
+                            PageHelper.showProgress("Report-master","An Error Occurred. Failed to fetch Data",5000);                             
                         });
 
                         }
@@ -108,7 +98,7 @@
                             key: "management._filterCollection",
                             type: "array",
                             title: "PARAMETERS_LIST",
-                            "titleExpr": "model.management._filterCollection[arrayIndex].parameter",
+                            "titleExpr": "model.management._filterCollection[arrayIndex].name || ('PARAMETERS_LIST' | translate)",
                             items: [                               
                                 {
                                     key: "management._filterCollection[].parameter",
@@ -138,7 +128,6 @@
                                     title: "REPORT_QUERY_COLUMN_NAME",
                                     type:"textarea",
                                     required:true
-                                    // screenFilter: true
                                 },
                                 {
                                    key: "management._filterCollection[].query",

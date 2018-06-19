@@ -36,6 +36,7 @@ $parsedArrAch = \GuzzleHttp\json_decode($responseBody, true);
 //echo $_GET['id']; exit;
 $input=$_GET['id'];
 
-$branches = DB::table('report_master')->select('*')->where('id',$input)->get();
+$branches = DB::connection("bi_db")->table('report_master')->select('*')->where('id',$input)->get();
+
 $Response= '{"DataResponse":'.json_encode($branches, JSON_NUMERIC_CHECK).'}';
 echo $Response;

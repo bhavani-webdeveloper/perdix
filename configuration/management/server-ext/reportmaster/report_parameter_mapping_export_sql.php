@@ -35,10 +35,11 @@ $searchdata=$_GET['report_name'];
 $search_table_name = 'report_parameter_mapping';
 $search_column_name = 'report_name';
 function query_builder($searchdata,$search_table_name,$search_column_name)
-{
-    $columns_results = DB::getSchemaBuilder()->getColumnListing($search_table_name);
-    $current_values_root = DB::table($search_table_name)->select('*')->where($search_column_name,$searchdata)->get()->toArray();
-     $current_values_query = array();
+{     
+    $columns_results =DB::connection("bi_db")->getSchemaBuilder()->getColumnListing($search_table_name);
+    $current_values_root = DB::connection("bi_db")->table($search_table_name)->select('*')->where($search_column_name,$searchdata)->get()->toArray();
+    
+    $current_values_query = array();
    
         foreach($current_values_root as $key=>$current_value_root){
           $current_values_query_sub = array();

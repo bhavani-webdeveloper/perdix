@@ -8,5 +8,6 @@ class ReportParameterMapping extends \Illuminate\Database\Eloquent\Model {
 
     protected $table = 'report_parameter_mapping';
     const TABLE_NAME = 'report_parameter_mapping';
+    protected $connection = 'bi_db';
     public $timestamps = false;
 }

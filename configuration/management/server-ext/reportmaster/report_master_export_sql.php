@@ -36,9 +36,9 @@ $search_table_name = 'report_master';
 $search_column_name = 'report_name';
 
 function query_builder($searchdata,$search_table_name,$search_column_name)
-{
-    $columns_results = DB::getSchemaBuilder()->getColumnListing($search_table_name);
-    $current_values = DB::table($search_table_name)->select('*')->where($search_column_name,$searchdata)->get()->toArray();
+{  
+    $columns_results = DB::connection("bi_db")->getSchemaBuilder()->getColumnListing($search_table_name);
+    $current_values = DB::connection("bi_db")->table($search_table_name)->select('*')->where($search_column_name,$searchdata)->get()->toArray();
      $current_values_query = array();
     if(isset($current_values[0])){
         foreach($current_values[0] as $key=>$current_value){

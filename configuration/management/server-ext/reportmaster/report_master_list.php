@@ -6,7 +6,6 @@ include_once("../bootload.php");
 use GuzzleHttp\Client as GuzzleClient;
 use Illuminate\Database\Capsule\Manager as DB;
 use EllipseSynergie\ApiResponse\Contracts\Response;
-use App\Models\ReportMaster;
 
 $queryString = $_SERVER['QUERY_STRING'];
 // $authHeader = $_SERVER['HTTP_AUTHORIZATION'];	
@@ -16,9 +15,9 @@ parse_str($queryString, $query);
 // Fetching the messaging details depends on the conversation ID
 //$branches = DB::table('report_master')->get();
 
-
-   $report_list = DB::table('report_master')->select('*');
-
+   //$report_list = DB::table('report_master')->select('*');
+   $report_list = DB::connection("bi_db")->table("report_master")->select('*');
+   
    if(isset($_GET['group']) && !empty($_GET['group'])){
             $report_list->where('group', $_GET['group']);
     }    
