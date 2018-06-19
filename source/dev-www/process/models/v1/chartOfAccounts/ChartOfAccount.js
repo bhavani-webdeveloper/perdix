@@ -20,11 +20,10 @@ irf.models.factory('ChartOfAccount',
 				method: "GET",
 				url: endpoint + '/listAccountCode'
 			}),
-            list: {
+            list: searchResource({
                method: "GET",
-               url: endpoint + '/listAccountCode',
-               isArray: true
-            },
+               url: endpoint + '/listAccountCode'
+            }),
             getSchema:{
                 method:'GET',
                 url:'process/schemas/chartOfAccounts/chartOfAccount.json'

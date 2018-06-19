@@ -1,16 +1,15 @@
-irf.pageCollection.controller(irf.controller(""), ['$log', '$scope', 'PageHelper', '$stateParams',
-    'irfStorageService', 'SessionStore', 'PagesDefinition', 'GroupProcess', 'Product',
+irf.pageCollection.controller(irf.controller("coa.ChartOfAccountDashboard"), 
+    ['$log', '$scope', 'PageHelper', '$stateParams',
+    'irfStorageService', 'SessionStore', 'PagesDefinition',
     function($log, $scope, PageHelper, $stateParams,
-        irfStorageService, SessionStore, PagesDefinition, GroupProcess, Product) {
+        irfStorageService, SessionStore, PagesDefinition) {
         $scope.$templateUrl = "process/pages/templates/Page.Dashboard.html";
         PageHelper.clearErrors();
         var fullDefinition = {
-            "title": "LOAN_PRODUCT_DASHBOARD",
+            "title": "CHART_OF_ACCOUNT_DASHBOARD",
+            "iconClass": "fa fa-users",     
             "items": [
-                "Page/Engine/management.product.NewProduct",
-                "Page/Engine/management.product.SearchProductQueue",
-                "Page/Engine/management.product.ProductBranch",
-                "Page/Engine/management.product.BranchProduct"
+                "Page/Engine/coa.ListOfAccount"
             ]
         };
         PagesDefinition.getUserAllowedDefinition(fullDefinition).then(function(resp) {
@@ -25,13 +24,13 @@ irf.pageCollection.controller(irf.controller(""), ['$log', '$scope', 'PageHelper
                     centreId.push(centres[i].centreId);
                 }
             }
-            var edtLoanProduct = $scope.dashboardDefinition.$menuMap["Page/Engine/management.product.SearchProductQueue"];
-            if (edtLoanProduct) {
-                edtLoanProduct.data = '-';
-                Product.search({}, function(response) {
-                    edtLoanProduct.data = Number(response.headers['x-total-count']) || 0;
-                });
-            }
+            // var coaQueue = $scope.dashboardDefinition.$menuMap["Page/Engine/coa.ListOfAccount"];
+            // if (coaQueue) {
+            //     // coaQueue.data = '-';
+            //     // Product.search({}, function(response) {
+            //     //     edtLoanProduct.data = Number(response.headers['x-total-count']) || 0;
+            //     // });
+            // }
         });
     }
 ]);

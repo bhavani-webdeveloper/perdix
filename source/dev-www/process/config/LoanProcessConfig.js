@@ -131,7 +131,7 @@ define(["require", "exports"], function (require, exports) {
                         },
                         {
                             "type": "expr",
-                            "expr": "this.loanAccount.currentStage=='BranchCreditAppraisal' || this.loanAccount.currentStage=='HOCreditAppraisal' || this.loanAccount.currentStage=='ManagementCommittee'",
+                            "expr": "this.loanAccount.currentStage=='CreditApproval5' || this.loanAccount.currentStage=='CreditApproval4' || this.loanAccount.currentStage=='CreditApproval3' || this.loanAccount.currentStage=='CreditApproval2' || this.loanAccount.currentStage=='CreditApproval1' ",
                             "add": [{
                                     "name": "CollateralFieldPolicy",
                                     "arguments": {

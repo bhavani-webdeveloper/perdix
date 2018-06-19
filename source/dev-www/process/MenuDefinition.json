@@ -22,7 +22,7 @@
         },
         "Page/ServiceRequestDashboard",
         "Page/LeadDashboard",
-        "Page/coa.ChartOfAccountDashboard",
+        "Page/Adhoc/coa.ChartOfAccountDashboard",
         "Page/LoanOriginationDashboard",
         "Page/Adhoc/irep.loans.LoanOriginationDashboard",
         "Page/Adhoc/witfin.loans.LoanOriginationDashboard",

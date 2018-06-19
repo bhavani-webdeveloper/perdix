@@ -35,6 +35,7 @@ export class CollateralFieldPolicy extends IPolicy<LoanProcess> {
                     col.manufacturer = vehicleDetails.make;
                     col.modelNo = vehicleDetails.vehicleModel;
                     col.serialNo = vehicleDetails.registrationNumber;
+                    col.machineOld = vehicleDetails.vehicleType;
                     loanProcess.loanAccount.collateral.push(col); 
                 }    
            }

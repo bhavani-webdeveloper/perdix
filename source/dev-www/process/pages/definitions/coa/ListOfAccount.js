@@ -1,82 +1,145 @@
-irf.pageCollection.directive("irfNestedList", function(){
-    return {
-        restrict: 'E',
-        scope: { listData: '=irfNestedListDef'},
-        replace: true,
-        template: "<ul><member ng-repeat='member in listData' member= 'member'></member></ul>",
-        link: function(scope, elem, attrs) {
-            console.log("Inside irfNestedList directive");
-        }
-    }
-});
-
-irf.pageCollection.directive("member", function ($compile) {
-    return {
-        restrict: "E",
-        replace: true,
-        scope : {
-            member: '='
-        },
-        template: "<li>{{member.glName}}</li>",
-        link: function(scope, elem, attrs) {
-            console.log("Inside member directive");
-            if (angular.isArray(scope.member.children)) {
-                elem.append("<irf-nested-list irf-nested-list-def='member.children'></irf-nested-list>");
-                $compile(elem.contents())(scope)
+irf.pageCollection.factory(irf.page("coa.ListOfAccount"), 
+    ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons", "irfNavigator", "ChartOfAccount",
+    function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons, irfNavigator, ChartOfAccount) {
+        var branch = SessionStore.getBranch();
+        var centres = SessionStore.getCentres();
+        var centreId=[];
+        if (centres && centres.length) {
+            for (var i = 0; i < centres.length; i++) {
+                centreId.push(centres[i].centreId);
             }
         }
-    }
-});
+        return {
+            "type": "search-list",
+            "title": "LIST_OF_ACCOUNT",
+            "subTitle": "",
+            initialize: function(model, form, formCtrl) {
+                // model.branch = branch;
+                $log.info("search-list sample got initialized");
 
-irf.pageCollection.controller(irf.controller("coa.ListOfAccount"), ["$scope","$log", "$q", 'SchemaResource', 'PageHelper', 'formHelper', "elementsUtils",
-    'irfProgressMessage', 'SessionStore', "$state", "$stateParams", "Utils","BundleManager", "IrfFormRequestProcessor", "UIRepository", "$injector", "irfNavigator", "ChartOfAccount",
-    function($scope, $log, $q, SchemaResource, PageHelper, formHelper, elementsUtils,irfProgressMessage, SessionStore, $state, $stateParams, Utils, BundleManager, IrfFormRequestProcessor, UIRepository, $injector, irfNavigator, ChartOfAccount) {
-            console.log("Inside List of Accounts");
-            PageHelper.clearErrors();
-            $scope.$templateUrl = "process/pages/templates/chartOfAccount/ListOfAccount.html";
-            $scope.model = {
-                "readonly":1,
-                "type": 1
-            };
-
-            var list_to_tree = function(list) {
-                var node, roots = [], i;
-                for (i = 0; i < list.length; i += 1) {
-                    list[i].children = [];
-                }
-
-                for (i = 0; i < list.length; i += 1) {
-                    node = list[i];
-                    if (node.parentId != 0) {
-                        for (j = 0; j < list.length; j++) {
-                            if (node.parentId == list[j].id) {
-                                list[j].children.push(node);
-                            }
+            },
+            definition: {
+                title: "SEARCH",
+                searchForm: [
+                    "*"
+                ],
+                autoSearch: true,
+                searchSchema: {
+                    "type": 'object',
+                    "title": 'SEARCH_OPTIONS',
+                    "properties": {
+                        "glName": {
+                            "title": "GL_NAME",
+                            "type": "string"
+                        },
+                        "productCode": {
+                            "title": "GL_PRODUCT_CODE",
+                            "type": "string"
+                        },
+                        'glType': {
+                            'title': "GL_TYPE",
+                            "type": "string"
+                        },
+                        "status": {
+                            "title": "STATUS",
+                            "type": "string"
                         }
-                    } else {
-                        roots.push(node);
+                    },
+                    "required": []
+                },
+                getSearchFormHelper: function() {
+                    return formHelper;
+                },
+                getResultsPromise: function(searchOptions, pageOpts) {
+                    return ChartOfAccount.list({
+                        'productCode':searchOptions.productCode,
+                        'branchSetCode':searchOptions.branchSetCode,
+                        'glType':searchOptions.glType,
+                        'status':searchOptions.status,                   
+                        'glName': searchOptions.glName,
+                        'page': pageOpts.pageNo,
+                        'per_page': pageOpts.itemsPerPage,
+                    }).$promise;
+                },
+                paginationOptions: {
+                    "getItemsPerPage": function(response, headers) {
+                        return 100;
+                    },
+                    "getTotalItemsCount": function(response, headers) {
+                        return headers['x-total-count']
+                    }
+                },
+                listOptions: {
+                    selectable: false,
+                    expandable: true,
+                    listStyle: "table",
+                    itemCallback: function(item, index) {},
+                    getItems: function(response, headers) {
+                        if (response != null && response.length && response.length != 0) {
+                            return response;
+                        }
+                        return [];
+                    },
+                    getListItem: function(item) {
+                        return [
+                            item.branchSetCode,
+                            item.glName,
+                            item.glType,
+                        ]
+                    },
+                    getTableConfig: function() {
+                        return {
+                            "serverPaginate": true,
+                            "paginate": true,
+                            "pageLength": 10
+                        };
+                    },
+                    getColumns: function() {
+                        return [
+                            {
+                                title: 'GL_NAME',
+                                data: 'glName'
+                            },
+                            {
+                                title: 'GL_TYPE',
+                                data: 'glType'
+                            },
+                            {
+                                title: 'GL_PRODUCT_CODE',
+                                data: 'productCode'
+                            },
+                            {
+                                title: 'STATUS',
+                                data: 'status'
+                            }
+                        ]
+                    },
+                    getActions: function() {
+                        return [{
+                            name: "ADD_ACCOUNT",
+                            desc: "",
+                            icon: "fa fa-pencil-square-o",
+                            fn: function(item, index) {
+                                entityManager.setModel('coa.AddAccount', {
+                                    _request: item
+                                });
+                                irfNavigator.go({
+                                    state: "Page.Engine",
+                                    pageName: "coa.AddAccount",
+                                    pageId: item.loanId
+                                }, {
+                                    state: 'Page.Engine',
+                                    pageName: "coa.ListOfAccount"
+                                });
+                            },
+                            isApplicable: function(item, index) {
+
+                                return true;
+                            }
+                        }];
                     }
                 }
-                return roots;
-            };
-
-
-            var promise = ChartOfAccount.list().$promise;
-            promise.then((res) => {
-                console.log(list_to_tree(res));
-                $scope.model.data = list_to_tree(res);
-
-            }, (err) => {
-                console.log(err);
-                PageHelper.hideLoader();
-            })
-
-
-            $scope.formHelper = formHelper;
-            // $scope.formName = irf.form($scope.pageName);
-            $scope.initialize = function(model, form, formCtrl) {};
-            // $scope.schema = function () {
-            //     return ChartOfAccount.getSchema().$promise;
-            // }
+            }
+        };
     }
 ]);
