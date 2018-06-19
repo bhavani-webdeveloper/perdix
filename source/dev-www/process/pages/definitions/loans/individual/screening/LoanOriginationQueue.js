@@ -23,7 +23,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.LoanOriginationQ
 						"stage": {
 							"title": "STAGE",
 							"type": ["string", "null"],
-							"enumCode": "origination_stage",
+							"enumCode": "origination_stage_witfin",
 							"x-schema-form": {
 								"type": "select",
 
@@ -57,10 +57,6 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.LoanOriginationQ
 							"title": "BUSINESS_NAME",
 							"type": "string"
 						},
-						"customerId": {
-							"title": "CUSTOMER_ID",
-							"type": "string"
-						},
 						"accountNumber": {
 							"title": "ACCOUNT_NUMBER",
 							"type": "string"
@@ -76,15 +72,15 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.LoanOriginationQ
 						"pincode": {
 							"title": "PIN_CODE",
 							"type": "string"
-						},
-						"status": {
-							"type": "string",
-							"title": "STATUS",
-							"enumCode": "origination_status",
-							"x-schema-form": {
-								"type": "select"
-							}
 						}
+						// "status": {
+						// 	"type": "string",
+						// 	"title": "STATUS",
+						// 	"enumCode": "origination_status",
+						// 	"x-schema-form": {
+						// 		"type": "select"
+						// 	}
+						// }
 					},
 					"required": []
 				},
@@ -103,7 +99,6 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.LoanOriginationQ
 	                    'applicantName':searchOptions.applicantName,
 	                    'accountNumber':searchOptions.accountNumber,
 	                    'area':searchOptions.area,
-	                    'status':searchOptions.status,
 	                    'villageName':searchOptions.villageName,	                    
 	                    'customerName': searchOptions.businessName,
 	                    'page': pageOpts.pageNo,
