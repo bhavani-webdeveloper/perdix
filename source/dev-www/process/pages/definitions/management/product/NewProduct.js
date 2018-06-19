@@ -247,7 +247,7 @@ define({
             }, {
                 "type": "box",
                 "title": "GROUP_SIZE",
-                "condition": "model.product.loanType === 'JLG'",
+                "condition": "model.product.loanType == 'JLG'",
                 "items": [{
                     "key": "product.groupMemberMinimum",
                     "type": "number",
@@ -1006,6 +1006,8 @@ define({
                                     PageHelper.hideLoader();
                                 })
                         } else {
+                            model.product.groupMemberMinimum=model.product.loanType=='JLG'?model.product.groupMemberMinimum:null;
+                            model.product.groupMemberMaximum=model.product.loanType=='JLG'?model.product.groupMemberMaximum:null;
                             if (model.product.purposes)
                                 Product.createProduct(model.product)
                                 .$promise
@@ -1013,11 +1015,12 @@ define({
                                     PageHelper.showProgress("Product Save", "Product Created with id" + '  ' + res.id, 3000);
                                     $log.info("PRODUCT CREATED");
                                     model.product = res;
-                                    irfNavigator.goBack();
+                                    $state.go("Page.Adhoc", {pageName:"management.product.LoanProductDashboard", pageId:null});
+                                    //irfNavigator.goBack();
                                 }, function(httpRes) {
                                     PageHelper.showProgress("Product Save", "Oops. Some error occured.", 3000);
                                     PageHelper.showErrors(httpRes);
-                                    $state.go('LoanProductDashboard', null);
+                                    //$state.go("Page.Adhoc", {pageName:"management.product.LoanProductDashboard", pageId:null});
                                 }).finally(function() {
                                     PageHelper.hideLoader();
                                 })
