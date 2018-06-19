@@ -756,11 +756,30 @@ define({
                         key: "loanAccount.partnerApprovalStatus",
                         type: "radios",
                         titleMap: {
-                            "DECLINE": "DECLINE",
+                            "DECLINE": "REJECT",
                             "ACCEPT": "ACCEPT",
-                            "HOLD": "HOLD"
+                            "HOLD": "HOLD",
+                            "SendBack":"Send Back with Remarks"
                         }
-                    }, {
+                    }, 
+                    {
+                        type: "section",
+                        condition: "model.loanAccount.partnerApprovalStatus=='SendBack'",
+                        items: [{
+                                title: "REMARKS",
+                                key: "loanAccount.partnerRemarks",
+                                required: true
+                            },
+                            {
+                                key: "review.rejectButton",
+                                type: "button",
+                                title: "SEND_BACK",
+                                required: true,
+                                onClick: "actions.reject(model, formCtrl, form, $event)"
+                            }
+                        ]
+                    },
+                    {
                         type: "section",
                         condition: "model.loanAccount.partnerApprovalStatus=='DECLINE'",
                         items: [{
@@ -784,7 +803,8 @@ define({
                                 onClick: "actions.reject(model, formCtrl, form, $event)"
                             }
                         ]
-                    }, {
+                    },
+                    {
                         type: "section",
                         condition: "model.loanAccount.partnerApprovalStatus=='HOLD'",
                         items: [{
