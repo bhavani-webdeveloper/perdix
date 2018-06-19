@@ -161,8 +161,26 @@
                   "captureStages":["PaymentInitiation","PaymentApproval","ReadyForManualDispatch","PaymentCompleted","PaymentRejected","RejectedPaymentProcessed"
                   ]
                },
-               "beneficiaryBankAddress":{  
-                  "title":"beneficiaryBankAddress",
+               "beneficiaryBankBranch":{  
+                  "title":"beneficiaryBankBranch",
+                  "type":"string",
+                  "captureStages":["PaymentInitiation","PaymentApproval","ReadyForManualDispatch","PaymentCompleted","PaymentRejected","RejectedPaymentProcessed"
+                  ]
+               },
+			   "beneficiaryName":{  
+                  "title":"beneficiaryName",
+                  "type":"string",
+                  "captureStages":["PaymentInitiation","PaymentApproval","ReadyForManualDispatch","PaymentCompleted","PaymentRejected","RejectedPaymentProcessed"
+                  ]
+               },
+			   "accountNumber":{  
+                  "title":"accountNumber",
+                  "type":"string",
+                  "captureStages":["PaymentInitiation","PaymentApproval","ReadyForManualDispatch","PaymentCompleted","PaymentRejected","RejectedPaymentProcessed"
+                  ]
+               },
+			   "paymentPurpose":{  
+                  "title":"paymentPurpose",
                   "type":"string",
                   "captureStages":["PaymentInitiation","PaymentApproval","ReadyForManualDispatch","PaymentCompleted","PaymentRejected","RejectedPaymentProcessed"
                   ]
