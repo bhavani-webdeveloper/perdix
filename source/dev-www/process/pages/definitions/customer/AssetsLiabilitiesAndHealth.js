@@ -958,7 +958,7 @@ function($log,formHelper,Enrollment,EnrollmentHelper,$state, $stateParams,elemen
                             var promise = BiometricService.capture(model);
                             promise.then(function(data){
                                 model.customer.$fingerprint = data;
-                                model.customer.$fingerprintquality = EnrollmentHelper.checkBiometricQuality(model);
+                                //model.customer.$fingerprintquality = EnrollmentHelper.checkBiometricQuality(model);
                                 // console.log(data[0]);
                                 $log.info(data);
                             }, function(reason){
@@ -1277,7 +1277,7 @@ function($log,formHelper,Enrollment,EnrollmentHelper,$state, $stateParams,elemen
                 PageHelper.showLoader();
 
                 var out = model.customer.$fingerprint;
-                var BiometricQuality = SessionStore.getGlobalSetting("BiometricQuality");
+                //var BiometricQuality = SessionStore.getGlobalSetting("BiometricQuality");
 
                 if (model.customer.verifications && model.customer.verifications.length) {
                     for (i in model.customer.verifications) {
@@ -1435,7 +1435,6 @@ function($log,formHelper,Enrollment,EnrollmentHelper,$state, $stateParams,elemen
                     $log.info(reqData);
                 })
             }
-
         }
     }
 }]);
