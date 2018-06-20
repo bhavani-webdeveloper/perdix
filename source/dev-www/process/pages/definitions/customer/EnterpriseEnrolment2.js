@@ -2369,10 +2369,131 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     }]
 
                 }]
+            },   {       
+                type: "box",
+                condition: "model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
+                readonly:true,
+                title: "STOCKS",
+                items: [{
+                    key: "customer.currentAssets",
+                    type: "pivotarray",
+                    startEmpty: false,
+                    view: "fixed",
+                    addButtonExpr: " ('ADD'| translate ) + ' ' + (pivotValue | translate)",
+                    pivotFieldEnumCode: 'stock_current_assets',
+                    pivotField: "assetCategory",
+                   // title: "RAW_MATERIAL",
+                    items: [{
+                        key: "customer.currentAssets[].description",
+                        title:"DESCRIPTION",
+                        type: "string",
+                    },
+                    {
+                        key: "customer.currentAssets[].assetType",
+                        title:"TYPE",
+                        type: "select",
+                        enumCode:"stock_asset_type",
+                        parentEnumCode:"stock_current_assets",
+                        parentValueExpr:"model.customer.currentAssets[arrayIndex].assetCategory",
+                    },{
+                        key: "customer.currentAssets[].assetValue",
+                        title:"PRESENT_VALUE",
+                        type: "amount",
+                    },{
+                        key: "customer.currentAssets[].isHypothecated",
+                        title:"IS_THE_MACHINE_HYPOTHECATED",
+                        type: "radios",
+                        titleMap: {
+                            "No": "No",
+                            "Yes": "Yes"
+                        }
+                    },{
+                        key: "customer.currentAssets[].hypothecatedToUs",
+                        condition : "model.customer.currentAssets[arrayIndex].isHypothecated == 'No' ",
+                        title:"HYPOTHECATED_TO_KINARA",
+                        type: "radios",
+                        titleMap: {
+                            "No": "No",
+                            "Yes": "Yes"
+                        }
+                    },{
+                        key: "customer.currentAssets[].assetImageId",
+                        title:"IMAGE",
+                        "type": "file",
+                        "fileType": "image/*",
+                        "category": "Loan",
+                        "subCategory": "COLLATERALPHOTO"
+                    }]
+
+                }]
             },
             {
                 type: "box",
                 condition: "model.currentStage == 'Application' || model.currentStage=='FieldAppraisal'",
+                startEmpty: true,
+                title: "ENTERPRICE_ASSETS",
+                items: [{
+                    key: 'customer.enterpriseAssets',
+                    type: 'array',
+                    startEmpty: true,
+                    view: "fixed",
+                    title: "ENTERPRICE_ASSETS",
+                    items: [{
+                        key: "customer.enterpriseAssets[].assetType",
+                        title: "ASSET_TYPE",
+                        type: "select",
+                        enumCode: "stock_enterprise_assets",
+                        required: true,
+                    }, {
+                        key: "customer.enterpriseAssets[].valueOfAsset",
+                        // condition : "model.customer.enterpriseAssets[form.arrayIndex].assetType  == 'Furniture'",
+                        title: "PRESENT_VALUE",
+                        type: "amount",
+                    }, {
+                        key: "customer.enterpriseAssets[].details",
+                        title: "DESCRIPTION",
+                        condition : "model.customer.enterpriseAssets[arrayIndex].assetType  == 'Furniture' || model.customer.enterpriseAssets[arrayIndex].assetType  == 'Fixtures'",
+                        type: "string",
+                    },{
+                        key: "customer.enterpriseAssets[].assetName",
+                        condition : "model.customer.enterpriseAssets[arrayIndex].assetType  == 'Furniture' || model.customer.enterpriseAssets[arrayIndex].assetType  == 'Fixtures'",
+                        title: "TYPE",
+                        type: "select",
+                        enumCode: "enterprise_asset_name"        
+                    }, {
+                        key: "customer.enterpriseAssets[].isHypothecated",
+                        condition : "model.customer.enterpriseAssets[arrayIndex].assetType  == 'Furniture' || model.customer.enterpriseAssets[arrayIndex].assetType  == 'Fixtures'",
+                        title: "IS_THE_MACHINE_HYPOTHECATED" ,       
+                        type: "radios",
+                        titleMap: {
+                            "No": "No",
+                            "Yes": "Yes"
+                        }
+                    },
+                     {
+                        key: "customer.enterpriseAssets[].hypothecatedToUs",
+                        title: "HYPOTHECATED_TO_KINARA",
+                        condition : "model.customer.enterpriseAssets[arrayIndex].isHypothecated == 'No'",
+                        type: "radios",
+                        titleMap: {
+                            "No": "No",
+                            "Yes": "Yes"
+                        }
+                    },
+                     {
+                        key: "customer.enterpriseAssets[].assetImageId",
+                        condition : "model.customer.enterpriseAssets[arrayIndex].assetType  == 'Furniture' || model.customer.enterpriseAssets[arrayIndex].assetType  == 'Fixtures'",
+                        title: "IMAGE",
+                        "type": "file",
+                        "fileType": "image/*",
+                        "category": "Loan",
+                        "subCategory": "COLLATERALPHOTO"
+                    }]
+                }]
+            },{
+                type: "box",
+                condition: "model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
+                readonly:true,
                 startEmpty: true,
                 title: "ENTERPRICE_ASSETS",
                 items: [{
@@ -2663,46 +2784,46 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                     title: "CASH_AT_BANK",
                                     type: "amount"
                                 },
-                                {
-                                    key: "customer.enterprise.rawMaterial",
-                                    title: "RAW_MATERIAL",
-                                    type: "amount"
-                                },
-                                {
-                                    key: "customer.enterprise.workInProgress",
-                                    title: "WIP",
-                                    type: "amount"
-                                },
-                                {
-                                    key: "customer.enterprise.finishedGoods",
-                                    title: "FINISHED_GOODS",
-                                    type: "amount"
-                                },
-                                {
-                                    key: 'customer.enterpriseAssets',
-                                    type: 'array',
-                                    startEmpty: true,
-                                    title: "ENTERPRICE_ASSETS",
-                                    items: [
-                                        {
-                                            key: "customer.enterpriseAssets[].assetType",
-                                            title: "ASSET_TYPE",
-                                            type: "string",
-                                            //enumCode: "enterprise_asset_types"
-                                        },
-                                        {
-                                            key: "customer.enterpriseAssets[].vehicleMakeModel",
-                                            title: "VEHICLE_MAKE_MODEL",
-                                            type: "string",
-                                            condition:"model.customer.enterpriseAssets[arrayIndex].assetType=='Vehicle'"
-                                        },
-                                        {
-                                            key: "customer.enterpriseAssets[].valueOfAsset",
-                                            title: "VALUE_OF_THE_ASSET",
-                                            type: "amount"
-                                        },
-                                    ]
-                                },
+                                // {
+                                //     key: "customer.enterprise.rawMaterial",
+                                //     title: "RAW_MATERIAL",
+                                //     type: "amount"
+                                // },
+                                // {
+                                //     key: "customer.enterprise.workInProgress",
+                                //     title: "WIP",
+                                //     type: "amount"
+                                // },
+                                // {
+                                //     key: "customer.enterprise.finishedGoods",
+                                //     title: "FINISHED_GOODS",
+                                //     type: "amount"
+                                // },
+                                // {
+                                //     key: 'customer.enterpriseAssets',
+                                //     type: 'array',
+                                //     startEmpty: true,
+                                //     title: "ENTERPRICE_ASSETS",
+                                //     items: [
+                                //         {
+                                //             key: "customer.enterpriseAssets[].assetType",
+                                //             title: "ASSET_TYPE",
+                                //             type: "string",
+                                //             //enumCode: "enterprise_asset_types"
+                                //         },
+                                //         {
+                                //             key: "customer.enterpriseAssets[].vehicleMakeModel",
+                                //             title: "VEHICLE_MAKE_MODEL",
+                                //             type: "string",
+                                //             condition:"model.customer.enterpriseAssets[arrayIndex].assetType=='Vehicle'"
+                                //         },
+                                //         {
+                                //             key: "customer.enterpriseAssets[].valueOfAsset",
+                                //             title: "VALUE_OF_THE_ASSET",
+                                //             type: "amount"
+                                //         },
+                                //     ]
+                                // },
 
 
 
@@ -2896,7 +3017,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                       key:"customer.fixedAssetsMachinaries",
                        type:"array",
                        startEmpty: true,
-                       title:"MACHINERY_SECTION",
+                       title:"MACHINERY",
                        items:[
                             {
                                 key:"customer.fixedAssetsMachinaries[].machineDescription",
