@@ -18,6 +18,7 @@ import FinconRepository = require('../model/journal/finconaccounting/FinconRepos
 import {AgentProcess} from '../model/agent/AgentProcess';
 import AgentRepository = require('../model/agent/AgentRepository');
 
+import {PaymentRepository} from '../model/payment/PaymentRepository';
 
 //import {TagMasterRepository} from "../model/TMaster/TagMasterRepository"
 
@@ -44,7 +45,9 @@ class RepositoryFactory {
             case RepositoryIdentifiers.FinconPostingProcess:
                 return new FinconRepository();      
             case RepositoryIdentifiers.AgentProcess:
-                return new AgentRepository();      
+                return new AgentRepository();     
+            case RepositoryIdentifiers.Payment:
+                return new PaymentRepository();   
 
             // case RepositoryIdentifiers.TagMasterProcess:
             //     return new TagMasterRepository();
