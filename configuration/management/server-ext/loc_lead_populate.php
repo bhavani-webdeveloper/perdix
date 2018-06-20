@@ -58,7 +58,7 @@ WHERE
 l.loan_purpose_1 = 'Line of credit' AND 
 l.account_number IS NOT NULL
 AND cb.NoOfEMI = gl.value AND gl.value-3  <= cb.EMIPaid
-AND l.account_number NOT IN (select linked_loan_account_no FROM $perdix_db.leads)");
+AND l.account_number NOT IN (select linked_loan_account_no FROM $perdix_db.leads WHERE linked_loan_account_no IS NOT NULL)");
 
 foreach($customers as $customer){
 	$allInsertParameters = array(
