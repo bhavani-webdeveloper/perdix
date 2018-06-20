@@ -686,7 +686,8 @@ define([], function() {
                                         "parentLoanAccount": {
                                             "key": "loanAccount.parentLoanAccount",
                                             "title": "PARENT_LOAN_ACCOUNT",
-                                            "orderNo" : 45
+                                            "orderNo" : 45,
+                                            "condition": "loanAccount.loanPurpose1 == 'Insurance Loan'"
                                         },
                                         "udf5": {
                                             "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5",

@@ -98,7 +98,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 pageClass: 'scoring',
                                 minimum: 1,
                                 maximum: 1,
-                                order: 50
+                                order: 5
                             }                                                        
                         ]);
                     },

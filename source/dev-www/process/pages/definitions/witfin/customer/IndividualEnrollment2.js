@@ -1279,7 +1279,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "title": "CUSTOMER_CATEGORY",
                                             "type": "select",
                                             "enumCode": "lead_category",
-                                            "orderNo": 85
+                                            "orderNo": 85,
+                                            "required":true
                                         }
                                         
                                     }
