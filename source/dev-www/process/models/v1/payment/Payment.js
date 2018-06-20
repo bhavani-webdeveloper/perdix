@@ -1,4 +1,4 @@
-    irf.models.factory('LiabilityAccountProcess', ["$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "Upload", "$q", "PageHelper",
+    irf.models.factory('Payment', ["$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "Upload", "$q", "PageHelper",
     function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q, PageHelper) {
     	var endpoint = BASE_URL + '/api/payments';
     	var resource = $resource(endpoint, null, {
