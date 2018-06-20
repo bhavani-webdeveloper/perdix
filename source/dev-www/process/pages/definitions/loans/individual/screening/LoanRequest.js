@@ -3209,8 +3209,8 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                         if (enterpriseAsset.hypothecatedToUs == "YES" || enterpriseAsset.hypothecatedToUs == "Yes"){
                                             var c = {
                                                 collateralDescription: enterpriseAsset.description,
-                                                collateralType: enterpriseAsset.assetType,
-                                                collateralCategory:"non machinery",
+                                                collateralType: enterpriseAsset.assetName,
+                                                collateralCategory:enterpriseAsset.assetType,
                                                 loanToValue: enterpriseAsset.valueOfAsset,
                                                 photoFilePath: enterpriseAsset.assetImageId,
                                                  udf1 : "Adhoc"
