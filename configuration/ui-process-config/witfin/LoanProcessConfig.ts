@@ -12,6 +12,36 @@ let config = {
                             "loanCustomer": true,
                             "loanCustomerType": "Enterprise"
                         }
+                    },
+                    {
+                        "name": "DefaultVehicleDocumentsPolicy",
+                        "arguments": {
+                            "applicant": true,
+                            "coApplicant": false,
+                            "guarantor": false,
+                            "loanCustomer": true,
+                            "loanCustomerType": "Enterprise"
+                        }
+                    },
+                    {
+                        "name": "DefaultCalculatedVehicleDetailsPolicy",
+                        "arguments": {
+                            "applicant": true,
+                            "coApplicant": false,
+                            "guarantor": false,
+                            "loanCustomer": true,
+                            "loanCustomerType": "Enterprise"
+                        }
+                    },
+                    {
+                        "name": "DefaultExpensePolicy",
+                        "arguments": {
+                            "applicant": true,
+                            "coApplicant": false,
+                            "guarantor": false,
+                            "loanCustomer": true,
+                            "loanCustomerType": "Enterprise"
+                        }
                     }
                 ]
             },
@@ -23,14 +53,6 @@ let config = {
                     },
                     {
                         "name": "CustomerReferencePolicy",
-                        "arguments": {}
-                    },
-                    {
-                        "name": "DefaultVehicleDocumentsPolicy",
-                        "arguments": {}
-                    },
-                    {
-                        "name": "DefaultCalculatedVehicleDetailsPolicy",
                         "arguments": {}
                     }
                 ],
