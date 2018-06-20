@@ -24,14 +24,6 @@ export class PaymentProcess {
 		this.paymentRepo = RepositoryFactory.createRepositoryObject(RepositoryIdentifiers.Payment);
 	}
 
-	create(): Observable<PaymentProcess> {
-		let pp = new PaymentProcess();  
-        pp.payment = new Payment();          	
-        pp.stage = 'PaymentInitiation';
-        let pm: PolicyManager<PaymentProcess> = new PolicyManager<PaymentProcess>(pp, PaymentPolicyFactory.getInstance(), 'onNew', PaymentProcess.getProcessConfig());
-        return pm.applyPolicies();
-	}
-
 	get(id:number): Observable<PaymentProcess> {
 		return this.paymentRepo.get(id).map(
 			(value: any)=> {
@@ -81,6 +73,14 @@ export class PaymentProcess {
         let pmAfterUpdate: PolicyManager<PaymentProcess> = new PolicyManager(this, PaymentPolicyFactory.getInstance(), 'afterReject', PaymentProcess.getProcessConfig());
         let obs3 = pmAfterUpdate.applyPolicies();
         return Observable.concat(obs1, obs2, obs3).last();
+    }
+
+    static create(): Observable<PaymentProcess> {
+        let pp = new PaymentProcess();  
+        pp.payment = new Payment();              
+        pp.stage = 'PaymentInitiation';
+        let pm: PolicyManager<PaymentProcess> = new PolicyManager<PaymentProcess>(pp, PaymentPolicyFactory.getInstance(), 'onNew', PaymentProcess.getProcessConfig());
+        return pm.applyPolicies();
     }
 
     static getProcessConfig() {
