@@ -99,6 +99,15 @@
                      "journalPosting"
                   ]
                },
+               "entryType": {
+                  "title": "entryType",
+                  "type": "string",
+                 
+                  "captureStages": [
+                     "journalEntry",
+                     "journalPosting"
+                  ]
+               },
                "valueDate": {
                   "title": "Value Date",
                   "type": "string",
