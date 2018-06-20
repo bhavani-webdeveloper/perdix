@@ -1,7 +1,4 @@
 <?php
-
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 include_once("bootload.php");
 use GuzzleHttp\Client as GuzzleClient;
 use Illuminate\Database\Capsule\Manager as DB;
@@ -9,18 +6,27 @@ use EllipseSynergie\ApiResponse\Contracts\Response;
 use App\Models\Leads;
 use App\Models\LeadsSnapshot;
 
-$perdix_db = "default";
-$perdix_db="financialForms";
-$bi_db="bi_dev";
+$etl_file=basename(__FILE__);
+$config_details=DB::connection("bi_db")->select("SELECT * FROM eod_process_master WHERE process_file='$etl_file'");
+
+// Mail content
+$to=$config_details[0]->email;
+$subject=$etl_file." Successful";
+$headers="From: ".$_SERVER['SERVER_NAME']."@ifmr.co.in";
+$mail_body="";
+
+$start_time=date("Y-m-d h:i:s A");
+$mail_body.="\nStarting Time: ".$start_time."\n";
+
+
+$bi_db = $settings['bi_db']['database'];
+$encore_db = $settings['encore_db']['database'];
+$perdix_db = $settings['db']['database'];
+
 $currentDate = DB::connection("default")->table("cbs_banks")->select("current_working_date")->get();
 $currentDate = $currentDate->toArray();
 
-$dates = explode("-",$currentDate[0]->current_working_date);
-
-$mycbsdate = $dates[0] . strtoupper(date("M",strtotime($currentDate[0]->current_working_date))) . $dates[2];
-
-$cbsTableName = "cbs__$mycbsdate";//"cbs_".$cwdate;
-//$cbsTableName = "cbs__31MAY2017";//"cbs_".$cwdate;
+$cbsTableName = "cbs__".strtoupper(date("dMY", strtotime("{$currentDate[0]->current_working_date} -1 days")));
 
 $customers = DB::connection("default")->select("SELECT l.customer_id, l.branch_id, l.bank_id, bm.bank_name, brm.branch_name,
 c.first_name AS lead_name, cem.centre_name, 
@@ -55,7 +61,6 @@ AND cb.NoOfEMI = gl.value AND gl.value-3  <= cb.EMIPaid
 AND l.account_number NOT IN (select linked_loan_account_no FROM $perdix_db.leads)");
 
 foreach($customers as $customer){
-	$allInsertParameters = array();
 	$allInsertParameters = array(
 		'version' => 0,
 		'customer_id' => $customer->customer_id,
@@ -133,6 +138,7 @@ foreach($customers as $customer){
 		$allInsertParameters['version'] = 1;
 		$leadinsert = LeadsSnapshot::create($allInsertParameters);
 	}
-	}
+}
 
-//	Leads::insert($allInsertParameters);
+$mail_body.= "\n\nEnd Time = ".date("Y-m-d h:i:s A")."\n";
+mail($to, $subject, $mail_body, $headers);
