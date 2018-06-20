@@ -516,7 +516,8 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     {
                         for(i=0;i<model.loanSummary.length;i++)
                         {
-                            if(model.loanSummary[i].postStage=="Rejected")
+                            if(model.loanSummary[i].postStage=="Rejected" && 
+                                model.loanSummary[i].preStage != "Rejected")
                             {
                                 if(model.currentStage=='Rejected')
                                 {
