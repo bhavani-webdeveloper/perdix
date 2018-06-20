@@ -23,5 +23,6 @@
             	url: endpoint + '/dispatchment'
             }
 		});
+        return resource;
     }
 	]);
