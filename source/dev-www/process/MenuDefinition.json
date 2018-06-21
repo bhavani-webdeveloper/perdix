@@ -65,7 +65,7 @@
                 "Page/Engine/management.UserRoles",
                 "Page/Engine/management.RolesPages",
                 "Page/Engine/management.RolesReports",
-                "Page/Engine/management.SpokeMerger/interbranch",
+                "Page/Engine/management.SpokeMerger",
                 "Page/Engine/management.SpokeMerger/intrabranch",
                 "Page/Engine/management.BranchMerger",
                 "Page/Engine/management.MasterDataMaintenance",
