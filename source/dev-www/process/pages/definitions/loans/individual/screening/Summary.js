@@ -62,7 +62,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         model.enterpriseDetails = res[0];
         model.scoreDetails = [res[1], res[2], res[3], res[4]];
         model.c = res[25].summary;
-        model.scoreDetails[3].data.push({Parameter:"Hypothecation Status",color_hexadecimal:model.c.status,"Actual Value" :model.c.ActualValue})
+        //model.scoreDetails[3].data.push({Parameter:"Hypothecation Status",color_hexadecimal:model.c.status,"Actual Value" :model.c.ActualValue})
 
 
         var managementScore = model.scoreDetails[0];
