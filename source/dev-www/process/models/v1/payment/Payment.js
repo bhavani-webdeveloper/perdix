@@ -6,11 +6,11 @@
                 method: 'GET',
                 url: endpoint+"/:id"
             },
-            save: {
+            create: {
                 method: 'POST',
                 url: endpoint
             },
-            proceed: {
+            update: {
                 method: 'PUT',
                 url: endpoint
             },

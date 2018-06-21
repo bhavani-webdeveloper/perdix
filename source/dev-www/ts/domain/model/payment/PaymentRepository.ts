@@ -20,7 +20,17 @@ export class PaymentRepository implements IPaymentRepository {
 	}
 
 	update(paymentProcess:PaymentProcess): Observable<PaymentProcess> {
-		let promise = this.paymentService.updateEnrollment(PaymentProcess).$promise;
+		let promise = this.paymentService.update(paymentProcess).$promise;
+        return Observable.fromPromise(promise)
+            .map((obj: any) => {
+                let payemnt: Payment = <Payment>plainToClass<Payment, Object>(Payment, obj.payemnt);
+                _.merge(paymentProcess.payment, payemnt);
+                return paymentProcess;
+            });
+	}
+
+	create(paymentProcess:PaymentProcess): Observable<PaymentProcess> {
+		let promise = this.paymentService.create(paymentProcess).$promise;
         return Observable.fromPromise(promise)
             .map((obj: any) => {
                 let payemnt: Payment = <Payment>plainToClass<Payment, Object>(Payment, obj.payemnt);

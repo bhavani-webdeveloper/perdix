@@ -36,6 +36,10 @@ irf.models.factory('UIRepository', function($resource, $httpParamSerializer, BAS
         getCustomerAgentProcessUIRepository: {
             method: 'GET',
             url: 'modules/ui/agent/CustomerAgentProcess.json'
+        }, 
+        getPaymentDetails: {
+            method: "GET",
+            url: 'modules/ui/payment/payment.json'
         }
     });
 

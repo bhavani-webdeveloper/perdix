@@ -9,6 +9,7 @@ import {PolicyManager} from "../../shared/PolicyManager";
 
 import {Payment} from "./Payment";
 import {IPaymentRepository} from "./IPaymentRepository";
+import {PaymentProcessFactory} from "./PaymentProcessFactory";
 import {PaymentPolicyFactory} from "./policy/PaymentPolicyFactory";
 
 declare var paymentProcessConfig: Object;
@@ -24,14 +25,15 @@ export class PaymentProcess {
 		this.paymentRepo = RepositoryFactory.createRepositoryObject(RepositoryIdentifiers.Payment);
 	}
 
-	get(id:number): Observable<PaymentProcess> {
-		return this.paymentRepo.get(id).map(
-			(value: any)=> {
-				this.payment = value;
-				return this;
-			}
-		);
-	}
+    submit(): any {
+        this.paymentsAction = 'SAVE'; 
+        let pmBeforeUpdate:PolicyManager<PaymentProcess>  = new PolicyManager(this, PaymentPolicyFactory.getInstance(), 'beforeSave', PaymentProcess.getProcessConfig());
+        let obs1 = pmBeforeUpdate.applyPolicies();
+        let obs2 = this.paymentRepo.create(this)
+        let pmAfterUpdate:PolicyManager<PaymentProcess>  = new PolicyManager(this, PaymentPolicyFactory.getInstance(), 'afterSave', PaymentProcess.getProcessConfig());
+        let obs3 = pmAfterUpdate.applyPolicies();
+        return Observable.concat(obs1, obs2, obs3).last();
+    }
 
 	save(): any {
         this.paymentsAction = 'SAVE'; 
@@ -82,6 +84,14 @@ export class PaymentProcess {
         let pm: PolicyManager<PaymentProcess> = new PolicyManager<PaymentProcess>(pp, PaymentPolicyFactory.getInstance(), 'onNew', PaymentProcess.getProcessConfig());
         return pm.applyPolicies();
     }
+
+    static get(id: number): Observable<PaymentProcess> {
+        return PaymentProcessFactory.createFromPaymentID(id)
+            .flatMap((paymentProcess) => {
+                let pm: PolicyManager<PaymentProcess> = new PolicyManager<PaymentProcess>(paymentProcess, PaymentPolicyFactory.getInstance(), 'onLoad', PaymentProcess.getProcessConfig());
+                return pm.applyPolicies();
+            })
+    }    
 
     static getProcessConfig() {
     	return paymentProcessConfig;
