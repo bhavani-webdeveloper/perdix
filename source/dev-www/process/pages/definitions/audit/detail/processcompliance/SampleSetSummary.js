@@ -64,42 +64,40 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleSetSum
                         ];
                         for (i in data) {
                             var r = data[i];
-                            if (r.assignee_det[0].assignee_id || r.deviation) {
-                                var row = [
-                                    master.process[master.typeofissues[r.type_of_issue_id].process_id].process_name,
-                                    master.subprocess[master.typeofissues[r.type_of_issue_id].sub_process_id].sub_process_name,
-                                    master.typeofissues[r.type_of_issue_id].description
-                                ];
-                                if (model.siteCode == "kinara") {
-                                    var options = master.autosampling_typeofissue_sets[r.type_of_issue_id].options.type_of_issue_options;
-                                    for (j in options) {
-                                        if (options[j].option_id == r.option_id) {
-                                            row.push(options[j].option_label);
-                                            break;
-                                        }
-                                    }
-                                    if (row.length == 3) {
-                                        row.push('&nbsp;');
+                            var row = [
+                                master.process[master.typeofissues[r.type_of_issue_id].process_id].process_name,
+                                master.subprocess[master.typeofissues[r.type_of_issue_id].sub_process_id].sub_process_name,
+                                master.typeofissues[r.type_of_issue_id].description
+                            ];
+                            if (model.siteCode == "kinara") {
+                                var options = master.autosampling_typeofissue_sets[r.type_of_issue_id].options.type_of_issue_options;
+                                for (j in options) {
+                                    if (options[j].option_id == r.option_id) {
+                                        row.push(options[j].option_label);
+                                        break;
                                     }
                                 }
-                                row.push(r.deviation || '&nbsp;');
-                                row.push(r.assignee_det[0].assignee_id || '&nbsp;');
-                                if (r.assignee_det[1]) {
-                                    row.push(r.assignee_det[1].assignee_id || '&nbsp;');
+                                if (row.length == 3) {
+                                    row.push('&nbsp;');
+                                }
+                            }
+                            row.push(r.deviation || '&nbsp;');
+                            row.push(r.assignee_det[0].assignee_id || '&nbsp;');
+                            if (r.assignee_det[1]) {
+                                row.push(r.assignee_det[1].assignee_id || '&nbsp;');
+                            } else {
+                                row.push('&nbsp;');
+                            }
+                            if (model.siteCode == "KGFS") {
+                                row.push(r.spot_fixed || '&nbsp;');
+                                row.push(r.spot_action || '&nbsp;');
+                                if (r.assignee_det[0]) {
+                                    row.push(r.assignee_det[0].spot_assignee_id || '&nbsp;');
                                 } else {
                                     row.push('&nbsp;');
                                 }
-                                if (model.siteCode == "KGFS") {
-                                    row.push(r.spot_fixed || '&nbsp;');
-                                    row.push(r.spot_action || '&nbsp;');
-                                    if (r.assignee_det[0]) {
-                                        row.push(r.assignee_det[0].spot_assignee_id || '&nbsp;');
-                                    } else {
-                                        row.push('&nbsp;');
-                                    }
-                                }
-                                table.push('<tr style="border-bottom:1px solid lightgray"><td>' + row.join('</td><td>') + '</td></tr>');
                             }
+                            table.push('<tr style="border-bottom:1px solid lightgray"><td>' + row.join('</td><td>') + '</td></tr>');
                         }
 
                         return data && data.length ? '<table style="border:1px solid lightgray;margin-top:5px"><caption style="border:1px solid lightgray;border-bottom:0;text-align:center;padding:0">Issues</caption>' + table.join('') + '</table>' : '';
