@@ -1646,117 +1646,117 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     }
                 ]
             },
-            // {
-            //     "type": "box",
-            //     "title": "NEW_ASSET_DETAILS",
-            //     "condition": "model.loanAccount.loanPurpose1=='Asset Purchase' && (model.currentStage=='Application' || model.currentStage=='FieldAppraisal')",
-            //     "items": [
-            //         {
-            //           key:"loanAccount.collateral",
-            //            type:"array",
-            //            startEmpty: true,
-            //            title:"ASSET_DETAILS",
-            //            items:[
-            //                 {
-            //                     key: "loanAccount.collateral[].collateralDescription",
-            //                     title:"MACHINE",
-            //                     required:true,
-            //                     type: "string"
-            //                 },
-            //                 {
-            //                     key: "loanAccount.collateral[].collateralValue",
-            //                     title:"PURCHASE_PRICE",
-            //                     required:true,
-            //                     type: "number",
-            //                 },
-            //                 // {
-            //                 //     key: "loanAccount.collateral[].quantity",
-            //                 //     title:"QUANTITY",
-            //                 //     required:true,
-            //                 //     readonly: true,
-            //                 //     type: "number",
-            //                 // },
-            //                 {
-            //                     key: "loanAccount.collateral[].expectedIncome",
-            //                     title:"EXPECTED_INCOME",
-            //                     required:true,
-            //                     type: "number",
-            //                 },
-            //                 {
-            //                     key: "loanAccount.collateral[].collateralType",
-            //                     title:"MACHINE_TYPE",
-            //                     required:true,
-            //                     type: "select",
-            //                     enumCode: "collateral_type"
-            //                 },
-            //                 {
-            //                     key: "loanAccount.collateral[].manufacturer",
-            //                     title:"MANFACTURE_NAME",
-            //                     required:true,
-            //                     type: "string",
-            //                 },
-            //                 {
-            //                     key: "loanAccount.collateral[].modelNo",
-            //                     title:"MACHINE_MODEL",
-            //                     required:true,
-            //                     type: "string",
-            //                 },
-            //                 {
-            //                     key: "loanAccount.collateral[].serialNo",
-            //                     title:"SERIAL_NO",
-            //                     type: "string",
-            //                 },
-            //                 {
-            //                     key: "loanAccount.collateral[].expectedPurchaseDate",
-            //                     title:"EXPECTED_PURCHASE_DATE",
-            //                     required:true,
-            //                     "type": "date",
-            //                     //"format": 'dd-mm-yyyy',
-            //                     "minDate": SessionStore.getCBSDate(),
-            //                 },
-            //                 {
-            //                     key: "loanAccount.collateral[].machineAttachedToBuilding",
-            //                     title:"MACHINE_PERMANENTLY_FIXED_TO_BUILDING",
-            //                     type: "select",
-            //                     required:true,
-            //                     enumCode: "decisionmaker"
-            //                 },
-            //                 {
-            //                     key: "loanAccount.collateral[].hypothecatedToBank",
-            //                     title:"HYPOTHECATED_TO_KINARA",
-            //                     required:true,
-            //                     enumCode: "decisionmaker",
-            //                     type: "select",
-            //                 },
-            //                 {
-            //                  key: "loanAccount.collateral[].electricityAvailable",
-            //                  title: "ELECTRICITY_AVAIALBLE",
-            //                  type: "select",
-            //                  enumCode: "decisionmaker",
-            //                  required: true
-            //                 },
-            //                 {
-            //                  key: "loanAccount.collateral[].spaceAvailable",
-            //                  title: "SPACE_AVAILABLE",
-            //                  type: "select",
-            //                  enumCode: "decisionmaker",
-            //                  required: true
-            //                 },
-            //                 {
-            //                     key: "loanAccount.collateral[].collateral1FilePath",
-            //                     title: "MACHINE_QUOTATION",
-            //                     "category": "Loan",
-            //                     "required":true,
-            //                     "subCategory": "DOC1",
-            //                     type: "file",
-            //                     fileType: "application/pdf",
-            //                     using: "scanner"
-            //                 }
+            {
+                "type": "box",
+                "title": "NEW_ASSET_DETAILS",
+                "condition": "model.loanAccount.loanPurpose1=='Asset Purchase' && (model.currentStage=='Application' || model.currentStage=='FieldAppraisal')",
+                "items": [
+                    {
+                      key:"loanAccount.collateral",
+                       type:"array",
+                       startEmpty: true,
+                       title:"ASSET_DETAILS",
+                       items:[
+                            {
+                                key: "loanAccount.collateral[].collateralDescription",
+                                title:"MACHINE",
+                                required:true,
+                                type: "string"
+                            },
+                            {
+                                key: "loanAccount.collateral[].collateralValue",
+                                title:"PURCHASE_PRICE",
+                                required:true,
+                                type: "number",
+                            },
+                            // {
+                            //     key: "loanAccount.collateral[].quantity",
+                            //     title:"QUANTITY",
+                            //     required:true,
+                            //     readonly: true,
+                            //     type: "number",
+                            // },
+                            {
+                                key: "loanAccount.collateral[].expectedIncome",
+                                title:"EXPECTED_INCOME",
+                                required:true,
+                                type: "number",
+                            },
+                            {
+                                key: "loanAccount.collateral[].collateralType",
+                                title:"MACHINE_TYPE",
+                                required:true,
+                                type: "select",
+                                enumCode: "collateral_type"
+                            },
+                            {
+                                key: "loanAccount.collateral[].manufacturer",
+                                title:"MANFACTURE_NAME",
+                                required:true,
+                                type: "string",
+                            },
+                            {
+                                key: "loanAccount.collateral[].modelNo",
+                                title:"MACHINE_MODEL",
+                                required:true,
+                                type: "string",
+                            },
+                            {
+                                key: "loanAccount.collateral[].serialNo",
+                                title:"SERIAL_NO",
+                                type: "string",
+                            },
+                            {
+                                key: "loanAccount.collateral[].expectedPurchaseDate",
+                                title:"EXPECTED_PURCHASE_DATE",
+                                required:true,
+                                "type": "date",
+                                //"format": 'dd-mm-yyyy',
+                                "minDate": SessionStore.getCBSDate(),
+                            },
+                            {
+                                key: "loanAccount.collateral[].machineAttachedToBuilding",
+                                title:"MACHINE_PERMANENTLY_FIXED_TO_BUILDING",
+                                type: "select",
+                                required:true,
+                                enumCode: "decisionmaker"
+                            },
+                            {
+                                key: "loanAccount.collateral[].hypothecatedToBank",
+                                title:"HYPOTHECATED_TO_KINARA",
+                                required:true,
+                                enumCode: "decisionmaker",
+                                type: "select",
+                            },
+                            {
+                             key: "loanAccount.collateral[].electricityAvailable",
+                             title: "ELECTRICITY_AVAIALBLE",
+                             type: "select",
+                             enumCode: "decisionmaker",
+                             required: true
+                            },
+                            {
+                             key: "loanAccount.collateral[].spaceAvailable",
+                             title: "SPACE_AVAILABLE",
+                             type: "select",
+                             enumCode: "decisionmaker",
+                             required: true
+                            },
+                            {
+                                key: "loanAccount.collateral[].collateral1FilePath",
+                                title: "MACHINE_QUOTATION",
+                                "category": "Loan",
+                                "required":true,
+                                "subCategory": "DOC1",
+                                type: "file",
+                                fileType: "application/pdf",
+                                using: "scanner"
+                            }
 
-            //              ]
-            //          }
-            //     ]
-            // },
+                         ]
+                     }
+                ]
+            },
             {
                 "type": "box",
                 "title": "NEW_ASSET_DETAILS",
