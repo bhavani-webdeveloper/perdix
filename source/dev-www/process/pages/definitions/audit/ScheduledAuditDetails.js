@@ -105,6 +105,14 @@ irf.pageCollection.factory(irf.page("audit.ScheduledAuditDetails"), ["$log", "Pa
                     type: "button",
                     onClick: "actions.update(model, form, formCtrl, 'start')"
                 }]
+            },{
+                "type": "actionbox",
+                "condition": "model.readonly && !model.startable",
+                "items": [{
+                    title: "REJECT",
+                    type: "button",
+                    onClick: "actions.update(model, form, formCtrl, 'reject')"
+                }]
             }],
             schema: {
                 "$schema": "http://json-schema.org/draft-04/schema#",
@@ -144,6 +152,11 @@ irf.pageCollection.factory(irf.page("audit.ScheduledAuditDetails"), ["$log", "Pa
                     formHelper.validate(formCtrl).then(function() {
                         PageHelper.showLoader();
                         model.auditInfo.next_stage = nextStage;
+                        if(nextStage=="reject"){
+                            model.auditInfo.status = "R";
+                        } else {
+                            model.auditInfo.status = "S";
+                        }
                         Audit.online.updateAuditInfo(model.auditInfo).$promise.then(function(res) {
                             model.auditInfo = res;
                             PageHelper.showProgress("audit", _.upperFirst(nextStage) + " request submitted successfully.", 3000);

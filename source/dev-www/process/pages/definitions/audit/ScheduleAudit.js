@@ -184,6 +184,10 @@ irf.pageCollection.factory(irf.page("audit.ScheduleAudit"), ["$log", "translateF
                     title: "CANCEL_REQUEST",
                     type: "button",
                     "onClick": "actions.cancelRequest(model, form, formCtrl)"
+                },{
+                    title: "REJECT",
+                    type: "button",
+                    "onClick": "actions.submit(model, form, formCtrl, 'reject')"
                 }]
             }],
             schema: {
@@ -261,7 +265,7 @@ irf.pageCollection.factory(irf.page("audit.ScheduleAudit"), ["$log", "translateF
                         }
                         model.auditInfo.next_stage = nextStage;
                         model.auditInfo.audit_type = 1;
-                        model.auditInfo.status = "S";
+                        model.auditInfo.status = nextStage=="reject"?"R":"S";
                         PageHelper.showLoader();
                         Audit.online.updateAuditInfo(model.auditInfo).$promise.then(function(res) {
                             model.auditInfo = res;
