@@ -109,6 +109,7 @@
         },
         "Page/ReportsDashboard",
         "Page/ScoreDashboard",
+        "Page/Adhoc/audit.AuditDashboard",
         "Page/Engine/excelUpload.ExcelUpload"
     ]
 }
