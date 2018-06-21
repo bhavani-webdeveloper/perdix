@@ -592,7 +592,10 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "ScreeningReview","Application","ApplicationReview","FieldAppraisal","SanctionInput", "LoanInitiation"
+                     "Screening", "ScreeningReview","Application","ApplicationReview","FieldAppraisal","Sanction", "LoanInitiation", 
+                     "PendingForPartner",
+                      "DocumentUpload",
+                      "DocumentVerification"
                   ]
                },
    
