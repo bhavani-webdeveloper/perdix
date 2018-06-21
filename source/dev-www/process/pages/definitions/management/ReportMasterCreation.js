@@ -92,6 +92,7 @@ function($log, $state, ReportMaintenance, formHelper, $q, irfProgressMessage,Pag
         form: [ ],
         formSource: [{
             "type": "box",
+            colClass: "col-sm-9",
             "title": "REPORT_MASTER_CREATION",
             "items": [
                 {
