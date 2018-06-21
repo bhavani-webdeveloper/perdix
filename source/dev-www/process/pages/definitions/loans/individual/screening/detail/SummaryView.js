@@ -23,7 +23,7 @@ define({
             model.subSecName = res[0].data[0]['Sub-Sector'];
             model.scoreDetails = [res[1], res[2], res[3], res[4]];
             model.c = res[25].summary;
-            model.scoreDetails[3].data.push({Parameter:"Hypothecation Status",color_hexadecimal:model.c.status,"Actual Value" :model.c.ActualValue})
+            //model.scoreDetails[3].data.push({Parameter:"Hypothecation Status",color_hexadecimal:model.c.status,"Actual Value" :model.c.ActualValue})
 
 
 
