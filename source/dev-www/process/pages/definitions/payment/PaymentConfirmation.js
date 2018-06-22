@@ -9,7 +9,7 @@ define([], function() {
 
         $pageFn: function($log, elementsConfig, Enrollment, SessionStore, formHelper, $q,
             PageHelper, PagesDefinition, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository, irfNavigator) {
-
+                                        
             var configFile = function() {
                 return {}
             }
