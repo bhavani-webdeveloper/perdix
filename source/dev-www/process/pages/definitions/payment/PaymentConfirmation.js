@@ -9,7 +9,7 @@ define([], function() {
 
         $pageFn: function($log, elementsConfig, Enrollment, SessionStore, formHelper, $q,
             PageHelper, PagesDefinition, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository, irfNavigator) {
-                                        
+
             var configFile = function() {
                 return {}
             }
@@ -95,7 +95,10 @@ define([], function() {
                 },
                 actions: {
                     save: function(model, formCtrl, form, $event) {
-                        
+                                
+                       console.log();
+                       console.log();
+                       console.log(); 
                     },
                     proceed: function(model, formCtrl, form, $event) {
                         
