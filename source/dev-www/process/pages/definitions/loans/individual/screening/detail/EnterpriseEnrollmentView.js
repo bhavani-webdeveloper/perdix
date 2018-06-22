@@ -821,7 +821,7 @@ define({
                                 "data": "Total Asset Value",
                             }, {
                                 "title": "% of Loan Amount",
-                                "data": "Asset Type"
+                                "data": "Percn Of Loan Amount"
                             },{
                                 "title": "Hypothecated to",
                                 "data": "Hypothecated to"

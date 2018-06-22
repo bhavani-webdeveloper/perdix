@@ -3186,15 +3186,11 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                                 collateralType: currentAsset.assetType,
                                                 collateralCategory:currentAsset.assetCategory,
                                                 loanToValue: currentAsset.assetValue,
-                                               // isHypothecated: currentAsset.isHypothecated,
                                                 photoFilePath: currentAsset.assetImageId,
-                                                 udf1 : "Adhoc"
-                                                // collateralValue: currentAsset.purchasePrice,
-                                                // loanToValue: currentAsset.presentValue,
-                                                // machineOld: !_.isNull(machine.isTheMachineNew)?(machine.isTheMachineNew.toUpperCase() == "YES"?false:true):null,
-                                                // quantity: machine.quantity || 1
+                                                udf1 : "Adhoc",
+                                                quantity: currentAsset.quantity || 1
                                             };
-                                           // c.totalValue = c.quantity * c.loanToValue;
+                                            c.totalValue = c.quantity * c.loanToValue;
                                             reqData.loanAccount.collateral.push(c)
                                         }
                                     }
@@ -3203,9 +3199,6 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                     reqData.loanAccount.collateral = reqData.loanAccount.collateral || [];
                                     for (var i=0;i<enterpriseCustomer.enterpriseAssets.length; i++){
                                         var enterpriseAsset = enterpriseCustomer.enterpriseAssets[i];
-                                        // if(currentAsset.assetName){
-                                        //     currentAsset.assetCategory = currentAsset.assetName
-                                        // }
                                         if (enterpriseAsset.hypothecatedToUs == "YES" || enterpriseAsset.hypothecatedToUs == "Yes"){
                                             var c = {
                                                 collateralDescription: enterpriseAsset.description,
@@ -3215,7 +3208,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                                 photoFilePath: enterpriseAsset.assetImageId,
                                                  udf1 : "Adhoc"
                                             };
-                                            //c.totalValue = c.quantity * c.loanToValue;
+                                            c.totalValue = c.quantity * c.loanToValue;
                                             reqData.loanAccount.collateral.push(c)
                                         }
                                     }
