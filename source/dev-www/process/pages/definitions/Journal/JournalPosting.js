@@ -1,6 +1,6 @@
 define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], function(BranchPostingProcess) {
     BranchPostingProcess = BranchPostingProcess['BranchPostingProcess'];
-
+   
     return {
         pageUID: "Journal.JournalPosting",
         pageType: "Engine",
@@ -63,7 +63,8 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                 "BranchPostingEntry.ifscCode",
                 "BranchPostingEntry.valueDate",
                 "BranchPostingEntry.relatedAccountNo",
-                "BranchPostingEntry.relatedAccountNo1"
+                "BranchPostingEntry.relatedAccountNo1",
+                "BranchPostingEntry.print"
                 ]
             }
 
@@ -245,7 +246,19 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
 
                                 }]
                             }
-                            ]
+                            ],
+                            "repositoryAdditions": {
+                                "BranchPostingEntry":  {
+                                "items":{
+                                    "print": {                                         
+                                    "condition": 'model.journal.journalEntryDto.currentStage == ("Completed") && model.journal.journalEntryDto.transactionType == ("Expenses")',
+                                    "type": "button",
+                                    "title": "PRINT VOUCHER",
+                                    "onClick": "actions.printPDF(model, formCtrl, form, $event)"
+                                    }
+                                }
+                                                           }
+                            }
 
                         }
                     };
@@ -341,161 +354,6 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                 getOfflineDisplayItem: function(item, index) {
                     return []
                 },
-
-                // form: [{
-                //     "type": "box",
-                //     "title": "JOURNAL_POSTING",
-                //     "items": [{
-                //         key: "journal.journalEntryDto.id",
-                //         readonly: true,
-                //         condition: "model.journal.journalEntryDto.id"
-                //     }, {
-                //         key: "journal.journalEntryDto.transactionName",
-                //         "type": "lov",
-                //         lovonly: true,
-                //         "inputMap": {
-                //             "transactionName": {
-                //                 "key": "journal.journalEntryDto.transactionName",
-                //                 "title": "TRANSACTION_NAME",
-                //                 "type": "string"
-                //             },
-                //             "transactionDescription": {
-                //                 "key": "journal.journalEntryDto.transactionDescription",
-                //                 "title": "TRANSACTION_DESCRIPTION",
-                //                 "type": "string"
-                //             },
-                //             "debitGLNo": {
-                //                 "key": "journal.journalEntryDto.debitGLNo",
-                //                 "title": "DEBIT_GL_NO",
-                //                 "type": "string",
-                //             },
-                //             "creditGLNo": {
-                //                 "key": "journal.journalEntryDto.creditGLNo",
-                //                 "title": "CREDIT_GL_NO",
-                //                 "type": "string",
-                //             }
-                //         },
-                //         "outputMap": {
-                //             "id": "journal.journalEntryDto.journalMasterId",
-                //             "transactionName": "journal.journalEntryDto.transactionName",
-                //             "transactionDescription": "journal.journalEntryDto.transactionDescription",
-                //             "debitGLNo": "journal.journalEntryDto.debitGLNo",
-                //             "creditGLNo": "journal.journalEntryDto.creditGLNo",
-                //         },
-                //         "searchHelper": formHelper,
-                //         "search": function(inputModel, form,model) {
-                //             var ret = [];
-                //             var defered = $q.defer();
-                //             Journal.journalSearch({
-                //                 'transactionName': inputModel.transactionName,
-                //                 'transactionDescription': inputModel.transactionDescription,
-                //                 'debitGLNo': inputModel.debitGLNo,
-                //                 'creditGLNo': inputModel.creditGLNo,
-                //                 'isApplicable': 0,
-                //             }).$promise.then(function(response){
-                //                 var count=0;
-                //                 angular.forEach(response.body, function(value, key) {
-                //                     $log.info(value);
-                //                     Journal.get({
-                //                         id: value.id
-                //                     }, function(res) {
-                //                         $log.info(model.journal.journalEntryDto.branchId);
-                //                         if (res.journalBranches && res.journalBranches) {
-                //                             for (k = 0; k < res.journalBranches.length; k++) {
-                //                                 if (res.journalBranches[k].branchId == model.journal.journalEntryDto.branchId) {
-                //                                     $log.info("hi");
-                //                                     ret.push(value);
-                //                                 }
-                //                             }
-                //                         }
-                //                         count++;
-                //                         if(count==response.body.length)
-                //                         {
-                //                             defered.resolve({
-                //                                 headers: {
-                //                                     "x-total-count": ret.length
-                //                                 },
-                //                                 body: ret
-                //                             });
-                //                         }
-                //                     });
-                //                 });
-                //             });
-                //             return defered.promise;
-                //         },
-                //         getListDisplayItem: function(data, index) {
-                //             return [
-                //                 data.id,
-                //                 data.transactionName,
-                //                 data.transactionDescription
-                //             ];
-                //         },
-                //         onSelect: function(valueObj, model, context) {
-
-                //         }
-                //     }, {
-                //         key: "journal.journalEntryDto.transactionDescription",
-                //         readonly: true,
-                //     }, {
-                //         key: "journal.journalEntryDto.creditGLNo",
-                //         readonly: true,
-                //     }, {
-                //         key: "journal.journalEntryDto.debitGLNo",
-                //         readonly: true,
-                //     }, {
-                //         key: "journal.journalEntryDto.transactionAmount",
-                //         "required":true,
-                //         type: "amount"
-                //     }, {
-                //         key: "journal.journalEntryDto.instrumentBankName",
-                //         type: "string"
-                //     }, {
-                //         key: "journal.journalEntryDto.instrumentBranchName",
-                //         type: "string"
-                //     }, {
-                //         key: "journal.journalEntryDto.instrumentType",
-                //         "type": "select",
-                //         "titleMap": [{
-                //             "name": "CASH",
-                //             "value": "CASH"
-                //         }, {
-                //             "name": "CHEQUE",
-                //             "value": "CHEQUE"
-                //         }, {
-                //             "name": "NEFT",
-                //             "value": "NEFT"
-                //         }, {
-                //             "name": "RTGS",
-                //             "value": "RTGS"
-                //         }]
-                //     }, {
-                //         key: "journal.journalEntryDto.instrumentNumber",
-                //         "title": "INSTRUMENT_DATE"
-                //     }, {
-                //         key: "journal.journalEntryDto.instrumentDate",
-                //         "title": "INSTRUMENT_NUMBER",
-                //         type: "date"
-                //     }, {
-                //         key: "journal.journalEntryDto.ifscCode",
-                //         type: "string"
-                //     }, {
-                //         key: "journal.journalEntryDto.valueDate",
-                //         type: "date"
-                //     }, {
-                //         key: "journal.journalEntryDto.relatedAccountNo",
-                //         title: "RELATED_ACCOUNT_NO"
-                //         // "required":true
-                //     }, {
-                //         key: "journal.journalEntryDto.remarks",
-                //         "required":true
-                //     }]
-                // }, {
-                //     "type": "actionbox",
-                //     "items": [{
-                //         "type": "submit",
-                //         "title": "SUBMIT"
-                //     }]
-                // }],
                 form: [],
                 schema: {
                     "$schema": "http://json-schema.org/draft-04/schema#",
@@ -662,50 +520,6 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                             PageHelper.showErrors(err);
                             PageHelper.hideLoader();
                         });
-
-
-                        // model.branchProcess.save().
-                        //     subscribe(function(d) {
-                        //         console.log(d)
-                        //     }, function(err) {
-                        //         console.log(err)
-                        //     })
-                        // $log.info("Inside submit()");
-                        // PageHelper.showLoader();
-                        // PageHelper.showProgress("Journal Save", "Working...");
-                        // if (model.journal.journalEntryDto.id) {
-                        //     model.journal.journalEntryProcessAction = "PROCEED",
-                        //         Journal.updateJournalEntry(model.journal)
-                        //         .$promise
-                        //         .then(function(res) {
-                        //             PageHelper.showProgress("Journal Save", "Journal Updated with id", 3000);
-                        //             $log.info(res);
-                        //             model.journal = res;
-                        //             $state.go('Page.JournalPostingDashboard', null);
-                        //         }, function(httpRes) {
-                        //             PageHelper.showProgress("Journal Save", "Oops. Some error occured.", 3000);
-                        //             PageHelper.showErrors(httpRes);
-                        //         }).finally(function() {
-                        //             PageHelper.hideLoader();
-                        //         })
-                        // } else {
-                        //     model.journal.journalEntryProcessAction = "SAVE",
-                        //         model.journal.journalEntryDto.transactionDate = Utils.getCurrentDate();
-                        //     model.journal.journalEntryDto.transactionType = "Entry";
-                        //     Journal.createJournalEntry(model.journal)
-                        //         .$promise
-                        //         .then(function(res) {
-                        //             PageHelper.showProgress("Journal Save", "Journal Created with id", 3000);
-                        //             $log.info(res);
-                        //             model.journal = res;
-                        //             $state.go('Page.JournalPostingDashboard', null);
-                        //         }, function(httpRes) {
-                        //             PageHelper.showProgress("Journal Save", "Oops. Some error occured.", 3000);
-                        //             PageHelper.showErrors(httpRes);
-                        //         }).finally(function() {
-                        //             PageHelper.hideLoader();
-                        //         })
-                        // }
                     },
 
                     save: function (model, formCtrl, form, $event) {
@@ -785,7 +599,11 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                             PageHelper.showErrors(err);
                             PageHelper.hideLoader();
                         });
-                    }
+                    },
+                    printPDF: function (model, formCtrl, form, $event) {
+                       var biDownloadUrl =irf.FORM_DOWNLOAD_URL+'?form_name=cash_voucher&record_id='+model.branchProcess.journalEntryDto.id;
+                       window.open(biDownloadUrl);
+                     }
                 }
             }
         }
