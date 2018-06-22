@@ -62,13 +62,16 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "tr
                             var roleId = $scope.model.type == 'operation' ? userRole.id : null;
                             if (Audit.utils.isIssueApplicable(master, issue.type_of_issue_id, responsibilityType, roleId)) {
                                 var dropdownOptions = master.autosampling_typeofissue_sets[issue.type_of_issue_id].options.type_of_issue_options;
-                                for (o in dropdownOptions) {
+                                /*for (o in dropdownOptions) {
                                     if (issue.option_id == dropdownOptions[o].option_id && dropdownOptions[o].option_label != 'no') {
                                         dropdownOptions = null;
                                         break;
                                     }
                                 }
                                 if (!dropdownOptions) {
+                                    continue;
+                                }*/
+                                if(issue.status=="IN"){
                                     continue;
                                 }
                                 var reportKey = null;
