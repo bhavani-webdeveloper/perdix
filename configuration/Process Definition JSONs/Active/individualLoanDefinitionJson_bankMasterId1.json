@@ -350,7 +350,7 @@
                   "minimum":1,
                   "maximum":10000000,
                   "captureStages":[
-                     "Screening","LoanInitiation","Application", "FieldAppraisal"
+                     "Screening","LoanInitiation","Application", "FieldAppraisal","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal","Sanction"
                   ]
                },
                 "leadId":{
@@ -777,7 +777,7 @@
                 "minLength":1,
                 "maxLength":1000,
                 "captureStages":[
-                   "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                    "Screening","LoanInitiation","Application", "FieldAppraisal","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal","Sanction"
                 ]
              },
             "verificationReason":{
@@ -841,7 +841,7 @@
                   "minLength":1,
                   "maxLength":1000,
                   "captureStages":[
-                    "Screening","LoanInitiation","Application", "FieldAppraisal"
+                    "Screening","LoanInitiation","Application", "FieldAppraisal","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal","Sanction"
                   ]
                },
              "assignedTo":{
