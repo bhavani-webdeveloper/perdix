@@ -1,3 +1,4 @@
+
 define(["perdix/domain/model/loan/LoanProcess",
     "perdix/domain/model/loan/LoanProcessFactory",
     'perdix/domain/model/customer/EnrolmentProcess',
@@ -98,7 +99,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 pageClass: 'scoring',
                                 minimum: 1,
                                 maximum: 1,
-                                order: 55
+                                order: 5
                             }
                         ]);
                     },

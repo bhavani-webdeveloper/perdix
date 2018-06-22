@@ -757,7 +757,8 @@ define(
                             "NewVehicleDetails.permitType": {
                                 "type": "select",
                                 "enumCode": "permit_type",
-                                "title": "PERMIT_TYPE"
+                                "title": "PERMIT_TYPE",
+                                "orderNo": 130
                             },
                             "NewVehicleDetails.vehicleType": {
                                 "orderNo": 10,
@@ -953,9 +954,14 @@ define(
                                             "required": true
                                         },
                                         "insuredDeclaredValue": {
-                                            "orderNo": 90,
+                                            "orderNo": 150,
                                             "key": "loanAccount.vehicleLoanDetails.insuredDeclaredValue",
                                             "title": "INSURED_DECLARED_VALUE"
+                                        },
+                                        "price":{
+                                            "orderNo":140,
+                                            "key":"loanAccount.vehicleLoanDetails.price",
+                                            "title": "PRICE"
                                         }
                                     }
                                 },

@@ -687,7 +687,7 @@ define([], function() {
                                             "key": "loanAccount.parentLoanAccount",
                                             "title": "PARENT_LOAN_ACCOUNT",
                                             "orderNo" : 45,
-                                            "condition": "loanAccount.loanPurpose1 == 'Insurance Loan'"
+                                            "condition": "model.loanAccount.loanPurpose1 == 'Insurance Loan'"
                                         },
                                         "udf5": {
                                             "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5",
@@ -923,19 +923,19 @@ define([], function() {
                                     "title": "FIELD_INVESTIGATION_DETAILS",
                                     "items": {
                                         "fieldInvestigationDecision": {
-                                            "key": "loanAccount.udf10",
+                                            "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6",
                                             "type": "select",
                                             "title": "FI_DECISION",
                                             "enumCode": "fi_decision"
                                         },
                                         "fieldInvestigationReason": {
-                                            "key": "loanAccount.udf11",
+                                            "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf7",
                                             "type": "select",
                                             "title": "FI_REASON",
-                                            "condition": "model.loanAccount.udf10 == 'Negative' || model.loanAccount.udf10 == 'Refer to Credit'",
+                                            "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 == 'Negative' || model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 == 'Refer to Credit'",
                                             "enumCode": "fi_reason",
                                             "parentEnumCode": "fi_decision",
-                                            "parentValueExpr": "model.loanAccount.udf10"
+                                            "parentValueExpr": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6"
                                         }
                                     }
                                 }

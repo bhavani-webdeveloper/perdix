@@ -125,7 +125,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
                             },
                             "excludes": [
-                                "ContactInformation.location"
+                                "ContactInformation.location",
+                                "IndividualReferences"
                             ]
                         },
                         "FieldInvestigation2": {
@@ -138,7 +139,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
                             },
                             "excludes": [
-                                "ContactInformation.location"
+                                "ContactInformation.location",
+                                "IndividualReferences"
                             ]
                         },
                         "FieldInvestigation3": {
@@ -151,7 +153,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
                             },
                             "excludes": [
-                                "ContactInformation.location"
+                                "ContactInformation.location",
+                                "IndividualReferences"
                             ]
                         },
                         "TeleVerification": {
@@ -633,7 +636,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "condition": "model.customer.ownership == 'Rental'"
                     },
                     "HouseVerification.distanceFromBranch": {
-                        "required": true
+                        //"required": true
                     },
                     "ContactInformation.pincode": {
                         fieldType: "number",
@@ -1384,7 +1387,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 {
                                     "type": "actionbox",
-                                    "condition": "model.customer.currentStage && (model.loanProcess.loanAccount.currentStage=='Screening' || model.loanProcess.loanAccount.currentStage=='Application')",
+                                    "condition": "model.customer.currentStage && (model.loanProcess.loanAccount.currentStage=='Screening' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation1' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation2' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation3' || model.loanProcess.loanAccount.currentStage=='TeleVerification' || model.loanProcess.loanAccount.currentStage=='Application')",
                                     "orderNo": 1200,
                                     "items": [
                                         {
@@ -1606,13 +1609,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 PageHelper.clearErrors();
                                 BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
-                                model.enrolmentProcess.proceed()
-                                .subscribe(function(enrolmentProcess) {
-                                    PageHelper.showProgress('enrolment', 'Done.', 5000);
-                                }, function(err) {
-                                    PageHelper.showErrors(err);
-                                    PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
-                                })
+                                
                             }, function (err) {
                                 PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                 PageHelper.showErrors(err);
