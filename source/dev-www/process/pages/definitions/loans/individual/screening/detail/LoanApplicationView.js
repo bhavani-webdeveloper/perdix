@@ -270,6 +270,17 @@ var navigateToQueue = function(model) {
             }).$promise.then(function(res) {
                 model.customer = res;
             });
+            if(model.loanAccount.transactionType && model.loanAccount.transactionType.toLowerCase() == 'renewal'){
+                model.transactionType='LOC Renewal';
+                var p1 = IndividualLoan.search({
+                    accountNumber:model.loanAccount.linkedAccountNumber
+                }).$promise;
+                p1.then(function(response, headerGetter){
+                  model.linkedLoanAmount=response.body[0]['loanAmount'];
+                },function(err){
+                    $log.info("leadGeneration Individual/find api failure" + err);
+                });
+            }
 
         },
         form: [{
@@ -323,6 +334,21 @@ var navigateToQueue = function(model) {
                         "type": "grid",
                         "orientation": "vertical",
                         "items": [{
+                            "key": "transactionType",
+                            "title": "Transaction Type"
+                        },
+                        {
+                            "key": "loanAccount.linkedAccountNumber",
+                            "title": "Linked Loan Account",
+                            "condition": "model.loanAccount.transactionType.toLowerCase() == 'renewal'"
+                        },
+                        {
+                            "key": "loanAccount.baseLoanAccount",
+                            "title": "Base Loan Account",
+                            "condition": "model.loanAccount.baseLoanAccount"
+
+                        },
+                        {
                             "key": "loanAccount.loanPurpose1",
                             "title": "Loan Purpose"
                         }, {
@@ -1127,7 +1153,18 @@ var navigateToQueue = function(model) {
                     return;
                 }
 */
+if (!_.isNull(model.loanAccount.transactionType) && model.loanAccount.transactionType.toLowerCase == 'renewal') {
+    if (model.linkedLoanAmount && model.loanAccount.loanAmountRequested < model.linkedLoanAmount) {
 
+        var res = {
+            data: {
+                error: 'RequestedLoanAmount is not greater than or equal to linkedLoanAmount'
+            }
+        };
+        PageHelper.showErrors(res)
+        return false;
+    }
+}
 
                     var autoRejected = false;
                     if (model.currentStage == 'CreditCommitteeReview') {
