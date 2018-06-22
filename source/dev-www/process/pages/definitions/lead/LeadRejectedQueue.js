@@ -158,6 +158,7 @@ irf.pageCollection.factory(irf.page("lead.LeadRejectedQueue"), ["$log", "formHel
 							item.addressLine1,
 							item.cityTownVillage,
 							item.pincode,
+							item.transactionType,
 							item.mobileNo
 						]
 					},
@@ -193,6 +194,9 @@ irf.pageCollection.factory(irf.page("lead.LeadRejectedQueue"), ["$log", "formHel
 						}, {
 							title: 'Pincode',
 							data: 'pincode'
+						}, {
+							title: 'Type',
+							data: 'transactionType'
 						}]
 					},
 					getActions: function() {

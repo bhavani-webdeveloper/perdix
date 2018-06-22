@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
-["$log","SessionStore","$state","LoanAccount", "$stateParams", "SchemaResource","PageHelper","Enrollment","formHelper","IndividualLoan","Utils","$filter","$q","irfProgressMessage", "Queries","LoanProducts", "LoanBookingCommons", "BundleManager", "irfNavigator","PagesDefinition",
-    function($log, SessionStore,$state,LoanAccount,$stateParams, SchemaResource,PageHelper,Enrollment,formHelper,IndividualLoan,Utils,$filter,$q,irfProgressMessage, Queries,LoanProducts, LoanBookingCommons, BundleManager,irfNavigator,PagesDefinition){
+["$log","SessionStore","$state","LoanAccount", "$stateParams", "SchemaResource","PageHelper","Enrollment","formHelper","IndividualLoan","Utils","$filter","$q","irfProgressMessage", "Queries","LoanProducts", "LoanBookingCommons", "BundleManager", "irfNavigator","PagesDefinition","LoanAccount",
+    function($log, SessionStore,$state,LoanAccount,$stateParams, SchemaResource,PageHelper,Enrollment,formHelper,IndividualLoan,Utils,$filter,$q,irfProgressMessage, Queries,LoanProducts, LoanBookingCommons, BundleManager,irfNavigator,PagesDefinition,LoanAccount){
 
         var branchId = SessionStore.getBranchId();
         var branchName = SessionStore.getBranch();
@@ -338,7 +338,22 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         getProductDetails(model.loanAccount.productCode,model);
 
                     LoanBookingCommons.getLoanAccountRelatedCustomersLegacy(model.loanAccount);
-                };
+                    if(_.hasIn(model.loanAccount, 'linkedAccountNumber') && !_.isNull(model.loanAccount.linkedAccountNumber) && _.hasIn(model.loanAccount, 'transactionType') && !_.isNull(model.loanAccount.transactionType) && model.loanAccount.transactionType.toLowerCase()=='renewal'){
+                        var p1 = ILoanAccount.get({
+                            accountId: model.loanAccount.linkedAccountNumber
+                            }).$promise;
+                            p1.then(function(response, headerGetter){
+                               model.existingLoanDues={
+                                totalPrincipalDue: response['totalPrincipalDue'],
+                                totalNormalInterestDue: response['totalNormalInterestDue'],
+                                totalPenalInterestDue: response['totalPenalInterestDue'],
+                                totalFeeDue: response['totalFeeDue']
+                            }
+                            },function(err){
+                                $log.info("loanProcessApi on Loan input is failing");
+                            });  }
+                    };
+                        
                 // code for existing loan
                 $log.info("Loan Number:::" + $stateParams.pageId);
                 if ($stateParams.pageId) {
@@ -1350,6 +1365,38 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         ]
                     }
                 ]
+            },
+            {
+                "type": "box",
+                "title": "Existing Loan Outstanding",
+                "colClass": "col-sm-6",
+                "condition": "model.loanAccount.transactionType.toLowerCase()=='renewal'",
+                "readonly": true,
+                "items": [{
+                    "key": "loanAccount.linkedAccountNumber",
+                    "title": "Linked Account Number"
+                },
+                {
+                    "key": "existingLoanDues.totalPrincipalDue",
+                    "title":"Principal Outstanding"
+                },
+                {
+                    "key": "existingLoanDues.totalNormalInterestDue",
+                    "title": "Interest Outstanding"
+                },
+                {
+                    "key": "existingLoanDues.totalPenalInterestDue",
+                    "title": "Penal Interest Outstanding"
+                },
+                {
+                    "key": "existingLoanDues.totalFeeDue",
+                    "title":"Total Fee Due"
+                },
+                {
+                    "key": "",
+                    "title":"Total Outstanding"
+                }
+            ]
             },
             {
                 "type": "box",

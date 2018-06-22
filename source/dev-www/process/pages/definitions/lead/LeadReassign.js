@@ -318,6 +318,11 @@ irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$state", "$s
                     for(i=0;i<reqData.leads.length;i++)
                     {
                        reqData.leads[i].branchId=model.customer.branchId;
+                       if(reqData.leads[i].transactionType.toLowerCase()=='renewal'){
+                           reqData.stage='Inprocess';
+                           reqData.centreId=reqData.leads[i].centreId;
+                           reqData.leads[i].leadStatus='FollowUp'
+                       }
                        $log.info(model.customer.branchId);
                     }
 

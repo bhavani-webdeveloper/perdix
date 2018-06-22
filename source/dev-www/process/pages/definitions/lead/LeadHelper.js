@@ -100,6 +100,27 @@ irf.pageCollection.factory("LeadHelper", ["$log", "Queries", "$q", "Lead", 'Page
             return deferred.promise;
         };
 
+        var BulkLeadStatusUpdate = function(res) {
+            var deferred = $q.defer();
+            $log.info("Attempting to BulkLeadStatus Reject");
+            $log.info(res);
+            PageHelper.clearErrors();
+            PageHelper.showLoader();
+            irfProgressMessage.pop('LeadBulkUpdate', 'Working ... ');
+            Lead.bulkLeadStatusUpdate(res, function(res, headers) {
+                PageHelper.hideLoader();
+                irfProgressMessage.pop('Bulk-lead-Reject', 'Done. lead Rejected', 5000);
+                deferred.resolve(res);
+            }, function(res, headers){
+                PageHelper.hideLoader();
+                irfProgressMessage.pop('Bulk-lead-Reject', 'Oops. Some error.', 2000);
+                PageHelper.showErrors(res);
+                deferred.reject(res);
+            });
+            return deferred.promise;
+
+        };
+
         var followData = function(res) {
             var deferred = $q.defer();
             $log.info("Attempting Proceed");
@@ -131,6 +152,8 @@ irf.pageCollection.factory("LeadHelper", ["$log", "Queries", "$q", "Lead", 'Page
             proceedData: proceedData,
             followData: followData,
             AssignLead:AssignLead,
+            BulkLeadStatusUpdate:BulkLeadStatusUpdate,
+
         };
     }
 ]);

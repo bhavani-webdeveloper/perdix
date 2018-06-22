@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("lead.leadAssignmentPendingQueue"),
- ["$log", "formHelper","PageHelper", "Lead", "$state", "$q", "SessionStore", "Utils", "entityManager",
-	function($log, formHelper,PageHelper, Lead, $state, $q, SessionStore, Utils, entityManager) {
+ ["$log", "formHelper","PageHelper", "Lead", "$state", "$q", "SessionStore", "Utils", "entityManager","LeadHelper","irfProgressMessage",
+	function($log, formHelper,PageHelper, Lead, $state, $q, SessionStore, Utils, entityManager, LeadHelper,irfProgressMessage) {
 		var branch = SessionStore.getBranch();
 
 		
@@ -178,23 +178,28 @@ irf.pageCollection.factory(irf.page("lead.leadAssignmentPendingQueue"),
 							isApplicable: function(items) {
 								return true;
 							}
-						}/* ,{
+						}, {
 							name: "Reject Lead",
 							desc: "",
+							htmlClass: "style='margin-left:10px'",
 							fn: function(items) {
 								if (items.length == 0) {
 									PageHelper.showProgress("bulk-reject", "Atleast one loan should be selected for Batch Rejecton", 5000);
 									return false;
 								}
-								$state.go("Page.Engine", {
-									pageName: "lead.LeadRejectedQueue",
-									pageData: items
-								});
+								_.each(items, function (item) {
+									item.leadStatus="Reject";
+									item.currentStage="Inprocess";
+								  });
+								  LeadHelper.BulkLeadStatusUpdate(items).then(function(resp) {
+									
+									irfProgressMessage.pop('Bulk-lead-Reject', 'Done. lead Rejected', 5000);
+								});  
 							},
 							isApplicable: function(items) {
                                 return true;
 							}
-						} */];
+						}];
 					}
 				}
 			}

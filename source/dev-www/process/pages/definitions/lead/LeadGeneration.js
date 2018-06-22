@@ -1,8 +1,8 @@
 irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment", "$state", "$filter", "$stateParams", "Lead", "LeadHelper", "SessionStore", "formHelper", "entityManager", "$q", "irfProgressMessage",
-    "PageHelper", "Utils", "entityManager", "BiometricService", "PagesDefinition", "Queries",
+    "PageHelper", "Utils", "entityManager", "BiometricService", "PagesDefinition", "Queries","IndividualLoan",
 
     function ($log, Enrollment, $state, $filter, $stateParams, Lead, LeadHelper, SessionStore, formHelper, entityManager, $q, irfProgressMessage,
-              PageHelper, Utils, entityManager, BiometricService, PagesDefinition, Queries) {
+              PageHelper, Utils, entityManager, BiometricService, PagesDefinition, Queries, IndividualLoan) {
 
         var branch = SessionStore.getBranch();
         return {
@@ -42,6 +42,18 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                             _.assign(model.lead, res);
                             if (model.siteCode == 'sambandh' || model.siteCode == 'saija' || model.siteCode == 'IREPDhan') {
                                 model.lead.customerTypeString = model.lead.customerType;
+                            }
+                            if(model.lead.currentStage=="Inprocess" && model.lead.transactionType && model.lead.transactionType.toLowerCase() == 'renewal'){
+                                model.lead.interestedInProduct = 'YES';
+                                model.transactionType='LOC Renewal';
+                                var p1 = IndividualLoan.search({
+                                    accountNumber:model.lead.linkedLoanAccountNo
+                                }).$promise;
+                                p1.then(function(response, headerGetter){
+                                  model.linkedLoanAmount=response.body[0]['loanAmount'];
+                                },function(err){
+                                    $log.info("leadGeneration Individual/find api failure" + err);
+                                });
                             }
                             if (model.lead.currentStage == 'Incomplete') {
                                 model.lead.customerType = "Enterprise";
@@ -828,6 +840,25 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                     title: "PRODUCT_DETAILS",
                     condition: "model.siteCode == 'kinara'",
                     items: [{
+                            key: "transactionType",
+                            title: "Transaction Type",
+                            condition: "model.lead.currentStage=='Inprocess'",
+                            readonly: true
+                        }, 
+                        {
+                            key: "lead.linkedLoanAccountNo",
+                            title: "Linked Loan Account No.",
+                            condition: "model.lead.transactionType.toLowerCase() == 'renewal' && model.lead.currentStage=='Inprocess'",
+                            readonly: true
+
+                        },
+                        {
+                            key: "lead.baseLoanAccount",
+                            title: "Base Loan Account",
+                            condition: "model.lead.transactionType.toLowerCase() == 'renewal' && model.lead.currentStage=='Inprocess'",
+                            readonly: true
+                        },
+                    {
                         key: "lead.interestedInProduct",
                         title: "INTERESTED_IN_LOAN_PRODUCT",
                         type: "select",
@@ -874,10 +905,10 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                         {
                             key: "lead.loanAmountRequested",
                             type: "amount",
-                            condition: "model.lead.interestedInProduct==='YES'&& model.lead.productSubCategory !== 'investment'",
+                            condition: "model.lead.interestedInProduct==='YES'&& (model.lead.productSubCategory !== 'investment' || model.lead.transactionType=='Renewal')",
                         }, {
                             key: "lead.loanPurpose1",
-                            condition: "model.lead.interestedInProduct==='YES'&& model.lead.productSubCategory !== 'investment'",
+                            condition: "model.lead.interestedInProduct==='YES'&& (model.lead.productSubCategory !== 'investment' || model.lead.transactionType=='Renewal')",
                             type: "select",
                             enumCode: "loan_purpose_1"
                             /*titleMap: {
@@ -888,6 +919,12 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
 
                              }*/
                         }, {
+                            key: "lead.loanPurpose2",
+                            condition: "model.lead.transactionType=='Renewal' && model.lead.interestedInProduct=='YES'",
+                            /* type: select,
+                               enumCode: ?
+                             */
+                        },{
                             key: "lead.productRequiredBy",
                             type: "select",
                             condition: "model.lead.interestedInProduct==='YES'",
@@ -1153,6 +1190,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                 {
                     type: "box",
                     title: "LEAD_INTERACTIONS",
+                    condition: "model.lead.transactionType!='Renewal'",
                     items: [{
                         key: "lead.leadInteractions",
                         type: "array",
@@ -1264,13 +1302,25 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                                 $state.go('Page.LeadDashboard', null);
                             });
                         } else {
-                            LeadHelper.proceedData(reqData).then(function (resp) {
-                                $state.go('Page.LeadDashboard', null);
-                            }, function (err) {
-                                PageHelper.showErrors(err);
-                                // Utils.removeNulls(resp.lead, true);
-                                // model.lead = resp.lead;
-                            });
+                            
+                            if (!(model.linkedLoanAmount && model.lead.transactionType && model.lead.transactionType.toLowerCase() == 'renewal' && model.lead.loanAmountRequested < model.linkedLoanAmount)) {
+                                LeadHelper.proceedData(reqData).then(function (resp) {
+                                    $state.go('Page.LeadDashboard', null);
+                                }, function (err) {
+                                    PageHelper.showErrors(err);
+                                    // Utils.removeNulls(resp.lead, true);
+                                    // model.lead = resp.lead;
+                                });
+                            }else {
+                                var res = {
+                                    data: {
+                                        error: 'RequestedLoanAmount should be greater than or equal to linkedLoanAmount'
+                                    }
+                                };
+                                PageHelper.showErrors(res)
+                                return false;
+                            }
+                           
                         }
                     } else {
                         LeadHelper.saveData(reqData).then(function (res) {

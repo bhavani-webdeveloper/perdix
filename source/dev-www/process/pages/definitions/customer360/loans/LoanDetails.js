@@ -492,6 +492,13 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                         "type": "string"
                     },
                     {
+                        key: "loanAccount.baseLoanAccount",
+                        "readonly": true,
+                        title: "Parent Loan Account Number",
+                        condition:"model.loanAccount.transactionType.toLowerCase() == 'renewal'"
+                       
+                    },
+                    {
                         "key": "cbsLoan.accountBalance",
                         "title": "ACCOUNT_BALANCE",
                         "required":false,

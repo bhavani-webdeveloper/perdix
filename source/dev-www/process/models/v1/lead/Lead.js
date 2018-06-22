@@ -27,6 +27,10 @@ irf.models.factory('Lead', ["$resource", "$httpParamSerializer", "BASE_URL", "se
 				method: 'GET',
 				url: endpoint + '/:id'
 			},
+			bulkLeadStatusUpdate:{
+				method: 'POST',
+				url: endpoint + '/bulkLeadStatusUpdate'
+			}
 
 		});
 

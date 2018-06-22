@@ -550,7 +550,6 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         model.applicant.age1 = moment().diff(moment(model.applicant.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                     });
             }
-
             if (_.hasIn(model, 'loanAccount.loanCustomerRelations') &&
                 model.loanAccount.loanCustomerRelations!=null &&
                 model.loanAccount.loanCustomerRelations.length > 0) {
@@ -617,6 +616,20 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 model.loanAccount.loanPurpose1 = obj.loanPurpose1;
                 model.loanAccount.screeningDate = obj.screeningDate;
                 model.loanAccount.leadId  = obj.id;
+                model.loanAccount.linkedAccountNumber= obj.linkedLoanAccountNo;
+                model.loanAccount.baseLoanAccount = obj.baseLoanAccount;
+                model.loanAccount.transactionType = obj.transactionType; 
+                if(obj.transactionType && obj.transactionType.toLowerCase() == 'renewal'){
+                    model.transactionType='LOC Renewal';
+                    var p1 = IndividualLoan.search({
+                        accountNumber:obj.linkedLoanAccountNo
+                    }).$promise;
+                    p1.then(function(response, headerGetter){
+                      model.linkedLoanAmount=response.body[0]['loanAmount'];
+                    },function(err){
+                        $log.info("leadGeneration Individual/find api failure" + err);
+                    });
+                }
             },
             "new-co-applicant": function(bundleModel, model, params){
                 $log.info("Insdie new-co-applicant of LoanRequest");
@@ -798,7 +811,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
             {
                 "type": "box",
                 "title": "PRELIMINARY_INFORMATION",
-                "condition":"model.currentStage=='Screening' || model.currentStage=='Application'",
+                "condition":"model.currentStage == 'Screening' || model.currentStage == 'Application'",
                 "items": [
                     {
                         key:"loanAccount.linkedAccountNumber",
@@ -806,6 +819,8 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         type: "lov",
                         lovonly: true,
                         autolov: true,
+                        condition: "model.loanAccount.transactionType && model.loanAccount.transactionType.toLowerCase() != 'renewal'",
+                        
                         searchHelper: formHelper,
                         search: function(inputModel, form, model, context) {
                             var out=[];
@@ -850,6 +865,23 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                             model.loanAccount.linkedAccountNumber = valueObj.accountId;
                         }
                     },
+                    {
+                        key:"loanAccount.linkedAccountNumber",
+                        title:"LINKED_ACCOUNT_NUMBER",
+                        readonly: true,
+                        condition: "model.loanAccount.transactionType && model.loanAccount.transactionType.toLowerCase() == 'renewal'"
+                    },
+                    {
+                        key: "loanAccount.baseLoanAccount",
+                        title: "Base Loan Account",
+                        condition: "model.loanAccount.transactionType && model.loanAccount.transactionType.toLowerCase() == 'renewal'",
+                        readonly: true
+                     },
+                     {
+                         key: "loanAccount.transactionType",
+                         title: "Transaction Type",
+                         readonly: true
+                     },
                     {
                         key: "loanAccount.npa",
                         title: "IS_NPA",
@@ -1006,7 +1038,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 "items": [
                     {
                         key:"loanAccount.linkedAccountNumber",
-                        "condition": "(model.currentStage !='FieldAppraisal' && model.currentStage !='Sanction')",
+                        "condition": "(model.currentStage !='FieldAppraisal' && model.currentStage !='Sanction'",
                         title:"LINKED_ACCOUNT_NUMBER",
                         type: "lov",
                         lovonly: true,
@@ -1037,7 +1069,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     {
                         key:"loanAccount.linkedAccountNumber",
                         title:"LINKED_ACCOUNT_NUMBER",
-                        "condition": "model.currentStage =='FieldAppraisal'|| model.currentStage =='Sanction'",
+                        "condition": "(model.currentStage =='FieldAppraisal'|| model.currentStage =='Sanction')",
                         type: "lov",
                         lovonly: true,
                         autolov: true,
@@ -2951,6 +2983,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 $log.info(DedupeEnabled);
 
                 $log.info("Inside submit()");
+
                 PageHelper.clearErrors();
                 var nextStage = null;
                 var dedupeCustomerIdArray = [];
@@ -2958,6 +2991,18 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 // if(isEnrollmentsSubmitPending(model)){
                 //     return;
                 // }
+                if(!_.isNull(model.loanAccount.transactionType) && model.loanAccount.transactionType.toLowerCase == 'renewal'){
+                    if(model.linkedLoanAmount && model.loanAccount.loanAmountRequested < model.linkedLoanAmount){
+
+                        var res = {
+                            data: {
+                                error: 'RequestedLoanAmount is not greater than or equal to linkedLoanAmount'
+                            }
+                        };
+                        PageHelper.showErrors(res)
+                        return false;
+                    }
+                }
 
                 if (!validateForm(formCtrl)){
                     return;
