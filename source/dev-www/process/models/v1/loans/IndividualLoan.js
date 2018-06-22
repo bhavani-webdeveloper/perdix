@@ -85,6 +85,10 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource,Upload,$q,PageHe
             method:'GET',
             url:endpoint+'/withhistory/:id'
         },
+        getBatchSearch:{
+            method:'GET',
+            url:'process/schemas/ACHPDCRealizationBatchMonitoring.json'
+        },
         get:{
             method:'GET',
             url:endpoint+'/:id',

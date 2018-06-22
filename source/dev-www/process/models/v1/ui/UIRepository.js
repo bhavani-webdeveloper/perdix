@@ -20,6 +20,9 @@ irf.models.factory('UIRepository', function($resource, $httpParamSerializer, BAS
         getLiabilityRepayment: {
             method: "GET",
             url: 'modules/ui/lender/LiabilityRepayment.json'
+        },getSampleLov: {
+            method: "GET",
+            url: 'modules/ui/payment/paymentlov.json'
         },
         getPostingEntryUIRepository: {
             method: 'GET',

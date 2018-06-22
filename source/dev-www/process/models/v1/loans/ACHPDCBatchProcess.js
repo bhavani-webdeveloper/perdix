@@ -37,6 +37,10 @@ function($resource, $httpParamSerializer, BASE_URL, searchResource, $q, PageHelp
 			method: 'GET',
 			url: endpoint + '/loanrepaybatchlist'
 		}),
+		getBatchSearch: searchResource({
+            method:'GET',
+            url: endpoint + '/batchHeaderList'
+        }),
 		submitDemandForLoanRepay: {
 			method: 'POST',
 			url: endpoint + '/loanrepay',

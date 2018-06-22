@@ -1,0 +1,10 @@
+{
+	"body":[
+        { "batchNumber":1, "batchDate":"22-06-2018","repaymentType":"Manual", "createBy":"Tom" },
+        { "batchNumber":2, "batchDate":"02-06-2018","repaymentType":"Auto", "createBy":"Shijo" },
+        { "batchNumber":3, "batchDate":"12-01-2018","repaymentType":"Manual", "createBy":"Loius" },
+        { "batchNumber":4, "batchDate":"28-09-2018","repaymentType":"Auto", "createBy":"Marky" },
+        { "batchNumber":5, "batchDate":"27-07-2018","repaymentType":"Manual", "createBy":"David" },
+        { "batchNumber":6, "batchDate":"01-05-2018","repaymentType":"Auto", "createBy":"Sharan" }
+	]
+}

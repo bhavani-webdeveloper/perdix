@@ -2,7 +2,7 @@
     function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q, PageHelper) {
     	var endpoint = BASE_URL + '/api/payments';
     	var resource = $resource(endpoint, null, {
-    		 get: {
+    		get: {
                 method: 'GET',
                 url: endpoint+"/:id"
             },
@@ -21,7 +21,11 @@
             createBatch: {
             	method: 'PUT',
             	url: endpoint + '/dispatchment'
-            }
+            },
+            getSchema:{
+                method:'GET',
+                url:'process/schemas/:name'
+            },
 		});
         return resource;
     }

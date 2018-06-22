@@ -24,6 +24,7 @@
         "Page/LeadDashboard",
         "Page/Adhoc/coa.ChartOfAccountDashboard",
         "Page/LoanOriginationDashboard",
+        "Page/PaymentDashboard",
         "Page/Adhoc/irep.loans.LoanOriginationDashboard",
         "Page/Adhoc/witfin.loans.LoanOriginationDashboard",
         "Page/DocumentTrackingDashboard", {

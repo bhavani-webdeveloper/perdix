@@ -46,14 +46,6 @@
             method: 'GET',
             url: endpoint + '/server-ext/reportmaster/report_master_get.php',
         },
-        getSchema:{
-            method:'GET',
-            url:'process/schemas/reportManagementInformation.json'
-        },
-        getReportSchema:{
-            method:'GET',
-            url:'process/schemas/reportmaster.json'
-        },
         deleteReport: {
             method:'GET',
             url: endpoint + '/server-ext/reportmaster/report_master_delete.php'

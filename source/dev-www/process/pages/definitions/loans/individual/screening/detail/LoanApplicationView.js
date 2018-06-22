@@ -1246,7 +1246,7 @@ var navigateToQueue = function(model) {
                                         .$promise
                                         .then(function(res) {
 
-                                            if (res.stage = "Rejected" && autoRejected) {
+                                            if (res.stage == "Rejected" && autoRejected) {
                                                 Utils.alert("Loan Application Auto-Rejected due to Negative Proxy Indicators");
                                             }
 

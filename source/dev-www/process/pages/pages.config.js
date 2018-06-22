@@ -86,6 +86,11 @@ irf.pages.config([
 		url: "/LoanOriginationDashboard",
 		templateUrl: "process/pages/templates/Page.Dashboard.html",
 		controller: "LoanOriginationDashboardCtrl"
+	},,{
+		name: "Page.PaymentDashboard",
+		url: "/PaymentDashboard",
+		templateUrl: "process/pages/templates/Page.Dashboard.html",
+		controller: "PaymentDashboardCtrl"
 	},{
 		name: "Page.UserDashboard",
 		url: "/UserDashboard",

@@ -1,7 +1,7 @@
 irf.pageCollection.factory(irf.page("customer360.CustomerDeathMarking"), ["$log", "irfNavigator", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
-    "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "translateFilter", "$stateParams", "SchemaResource",
+    "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "translateFilter", "$stateParams", "SchemaResource","DeathMarking",
     function($log, irfNavigator, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage,
-        PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, translateFilter, $stateParams, SchemaResource) {
+        PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, translateFilter, $stateParams, SchemaResource, DeathMarking) {
        
             return {
             "type": "schema-form",
@@ -23,24 +23,29 @@ irf.pageCollection.factory(irf.page("customer360.CustomerDeathMarking"), ["$log"
                                 model.deathMarking.dateOfBirth = resp.familyMembers[i].dateOfBirth;
                                 model.deathMarking.familyMemberRelation = resp.familyMembers[i].relationShip;
                                 model.deathMarking.familyMemberId = resp.familyMembers[i].familySequenceId;
+                                model.deathMarking.customerId = resp.familyMembers[i].customerId;
+                                model.deathMarking.enrollmentId = resp.familyMembers[i].enrollmentId;
+                                model.deathMarking.familyMemberFirstName = resp.familyMembers[i].familyMemberFirstName;
                                 model.deathMarking.dead = resp.familyMembers[i].dead;
                                 Queries.deseaseDetails(customerId).then(function(response) {
                                     model.deceaseDetails = response.results;
-                                    for(var i=0; i < model.deceaseDetails.length; i++){                                   
-                                    if( resp.familyMembers[i].relationShip =='self'){
+                                    for(var i=0; i < model.deceaseDetails.length; i++){    
+                                       if(model.deathMarking.familyMemberId == model.deceaseDetails[i].family_member_id){ 
                                     model.deathMarking.comments =  model.deceaseDetails[i].comments || {};
                                     model.deathMarking.family_member_id =  model.deceaseDetails[i].family_member_id || {};
                                     model.deathMarking.furtherDetails =  model.deceaseDetails[i].further_details || {};
                                     model.deathMarking.reasonForDeath =  model.deceaseDetails[i].reason_for_death || {};
                                     model.deathMarking.dateOfDeath =  model.deceaseDetails[i].date_of_incident || {};
                                     model.deathMarking.deathMarkingStatus =  model.deceaseDetails[i].admin_confirmation_status || {};
+                                   }
                                     }
-                                    }
-                                });
+                                    PageHelper.hideLoader();
+                                }, function(errResp) {
+                                    PageHelper.showErrors(errResp);
+                                    PageHelper.hideLoader();
+                                });                
                             }                           
-                        }                       
-                       
-                    PageHelper.hideLoader();
+                        }      
                 }, function(errResp) {
                     PageHelper.showErrors(errResp);
                     PageHelper.hideLoader();
@@ -77,10 +82,13 @@ irf.pageCollection.factory(irf.page("customer360.CustomerDeathMarking"), ["$log"
                                 model.deathMarking.dateOfBirth = valueObj.dateOfBirth;
                                 model.deathMarking.familyMemberRelation = valueObj.relationShip;
                                 model.deathMarking.familyMemberId = valueObj.familySequenceId;
+                                model.deathMarking.customerId = valueObj.customerId;
+                                model.deathMarking.enrollmentId = valueObj.enrollmentId;
+                                model.deathMarking.familyMemberFirstName = valueObj.familyMemberFirstName;
                                 model.deathMarking.dead = valueObj.dead;
                                model.deceaseDetails = model.deceaseDetails || {};
                                     for(var i=0; i<model.deceaseDetails.length; i++){
-                                    if(model.deceaseDetails[i].family_member_id == valueObj.familySequenceId){                                   
+                                    if(model.deceaseDetails[i].family_member_id == valueObj.familySequenceId){                                                                          
                                     model.deathMarking.comments = model.deceaseDetails[i].comments;
                                     model.deathMarking.family_member_id = model.deceaseDetails[i].family_member_id;
                                     model.deathMarking.furtherDetails = model.deceaseDetails[i].further_details;
@@ -88,12 +96,13 @@ irf.pageCollection.factory(irf.page("customer360.CustomerDeathMarking"), ["$log"
                                     model.deathMarking.dateOfDeath = model.deceaseDetails[i].date_of_incident;
                     model.deathMarking.deathMarkingStatus = model.deceaseDetails[i].admin_confirmation_status;
                                     }
-                                    else{ model.deathMarking.comments =  "";
-                                    model.deathMarking.family_member_id = "";
-                                    model.deathMarking.furtherDetails =  "";
-                                    model.deathMarking.reasonForDeath = "";
-                                    model.deathMarking.dateOfDeath = "";
-                                     model.deathMarking.deathMarkingStatus = "";
+                                    else{
+                                         delete model.deathMarking.comments;
+                                         delete model.deathMarking.family_member_id;
+                                         delete model.deathMarking.furtherDetails;
+                                         delete model.deathMarking.reasonForDeath;
+                                         delete model.deathMarking.dateOfDeath;
+                                         delete model.deathMarking.deathMarkingStatus;
                                     }
                                 }
 
@@ -101,13 +110,13 @@ irf.pageCollection.factory(irf.page("customer360.CustomerDeathMarking"), ["$log"
                             required: true
                         },
                         {
-                            key: "deathMarking.familyMemberRelation",//form element type select( dropdown)
+                            key: "deathMarking.familyMemberRelation",
                             type: "string",
                             title:"FAMILY_MEMBER_RELATION",
                             readonly:true
                         },
                         {
-                            key: "deathMarking.familyMemberId",//form element type select( dropdown)
+                            key: "deathMarking.familyMemberId",
                             type: "number",
                             title:"FAMILY_MEMBER_ID",        
                             readonly:true
@@ -121,14 +130,14 @@ irf.pageCollection.factory(irf.page("customer360.CustomerDeathMarking"), ["$log"
                         {
                             key: "deathMarking.dateOfDeath",
                             title: "DATE_OF_DEATH",
-                            condition:"model.deathMarking.familyMemberId == model.deathMarking.family_member_id",                                      
+                            condition:"model.deathMarking.deathMarkingStatus",                                      
                             type: "date",
                             readonly:true
                         },
                         {
                             key: "deathMarking.dateOfDeath",
                             title: "DATE_OF_DEATH",
-                            condition:"model.deathMarking.family_member_id =='' || model.deathMarking.familyMemberId != model.deathMarking.family_member_id",                                      
+                            condition:"!model.deathMarking.deathMarkingStatus",                                      
                             type: "date"
                         },
                         {
@@ -136,7 +145,7 @@ irf.pageCollection.factory(irf.page("customer360.CustomerDeathMarking"), ["$log"
                             title: "DEATH_MARKING_STATUS",
                             type: "select",
                             readonly:true,
-                            condition:"model.deathMarking.familyMemberId == model.deathMarking.family_member_id", 
+                            condition:"model.deathMarking.deathMarkingStatus", 
                             titleMap: {
                                 "PENDING" : "Submitted - Approval Pending",
                                 'APPROVED': "Submitted - Approved",
@@ -151,7 +160,7 @@ irf.pageCollection.factory(irf.page("customer360.CustomerDeathMarking"), ["$log"
                             required: true,
                             enumCode: "reason_for_death",
                             readonly:true,
-                            condition:"model.deathMarking.familyMemberId == model.deathMarking.family_member_id",                                      
+                            condition:"model.deathMarking.deathMarkingStatus",                                      
                                 
                         },
                         {
@@ -159,7 +168,7 @@ irf.pageCollection.factory(irf.page("customer360.CustomerDeathMarking"), ["$log"
                             title: "FURTHER_DETAILS",
                             type: "select",
                             readonly:true,
-                            condition: "model.deathMarking.familyMemberId == model.deathMarking.family_member_id && model.deathMarking.reasonForDeath != 'SUCIDE'",
+                            condition: "model.deathMarking.deathMarkingStatus && model.deathMarking.reasonForDeath != 'SUCIDE'",
                             required: true,
                             parentEnumCode:"reason_for_death",
                             parentValueExpr:"model.deathMarking.reasonForDeath",
@@ -170,13 +179,13 @@ irf.pageCollection.factory(irf.page("customer360.CustomerDeathMarking"), ["$log"
                             type: "textarea",
                             title:"COMMENTS",
                             readonly:true,
-                            condition:"model.deathMarking.familyMemberId == model.deathMarking.family_member_id",                                      
+                            condition:"model.deathMarking.deathMarkingStatus",                                      
                             
                         },
                         {
                             key: "deathMarking.reasonForDeath",
                             title: "REASON_FOR_DEATH",
-                            condition:"model.deathMarking.family_member_id =='' || model.deathMarking.familyMemberId != model.deathMarking.family_member_id",                                      
+                            condition:"!model.deathMarking.deathMarkingStatus",                                      
                             type: "select",
                             required: true,
                             enumCode: "reason_for_death"                          
@@ -186,7 +195,7 @@ irf.pageCollection.factory(irf.page("customer360.CustomerDeathMarking"), ["$log"
                             key: "deathMarking.furtherDetails",
                             title: "FURTHER_DETAILS",
                             type: "select",
-                            condition: "model.deathMarking.familyMemberId != model.deathMarking.family_member_id && model.deathMarking.reasonForDeath != 'SUCIDE'",
+                            condition: "!model.deathMarking.deathMarkingStatus && model.deathMarking.reasonForDeath != 'SUCIDE'",
                             required: true,
                             parentEnumCode:"reason_for_death",
                             parentValueExpr:"model.deathMarking.reasonForDeath",
@@ -195,14 +204,14 @@ irf.pageCollection.factory(irf.page("customer360.CustomerDeathMarking"), ["$log"
                         {
                             key: "deathMarking.comments",
                             type: "textarea",
-                            condition:"model.deathMarking.family_member_id =='' || model.deathMarking.familyMemberId != model.deathMarking.family_member_id",
+                            condition:"!model.deathMarking.deathMarkingStatus",
                             title:"COMMENTS"
                         },
                     ]
                 },
                 {
                     type: "actionbox",
-                    condition:"model.deathMarking.familyMemberId != model.deathMarking.family_member_id",
+                    condition:"!model.deathMarking.deathMarkingStatus",
                     items: [
                         {
                             type: "submit",
@@ -225,36 +234,28 @@ irf.pageCollection.factory(irf.page("customer360.CustomerDeathMarking"), ["$log"
                 
             ],
             schema: function() {               
-                return Enrollment.getCustomerDeathMarking().$promise;
+                return DeathMarking.getCustomerDeathMarking().$promise;
             },
             actions: {
-                submit: function(model, form, formName) {    
-                    
-                    
-                    for (var i = 0; i < model.deathMarking.familyMembers.length; i++) {
-                if(model.deathMarking.familyMemberId == model.deathMarking.familyMembers[i].familySequenceId){
-                    model.deathMarking.familyMembers.customerId = model.deathMarking.familyMembers[i].customerId;
-                    model.deathMarking.familyMembers.enrollmentId = model.deathMarking.familyMembers[i].enrollmentId;
-                    model.deathMarking.familyMembers.familyMemberFirstName = model.deathMarking.familyMembers[i].familyMemberFirstName;
-                }
-                    }
+                submit: function(model, form, formName) { 
+                
                     var req = {
                         //adminConfirmationStatus: "1",
                         "comments": model.deathMarking.comments,
-                        "customerId": model.deathMarking.familyMembers.customerId,
+                        "customerId": model.deathMarking.customerId,
                         "dateOfBirth": model.deathMarking.dateOfBirth,
                         "dateOfIncident":  model.deathMarking.dateOfDeath,
-                        "famillyEnrollmentId": model.deathMarking.familyMembers.enrollmentId,
+                        "famillyEnrollmentId": model.deathMarking.enrollmentId,
                         "familyMemberId": model.deathMarking.familyMemberId,
                         "familyMemberRelation": model.deathMarking.familyMemberRelation,
-                        "familyMemberName": model.deathMarking.familyMembers.familyMemberFirstName,
+                        "familyMemberName": model.deathMarking.familyMemberFirstName,
                         "furtherDetails": model.deathMarking.furtherDetails,
                         "reasonForDeath": model.deathMarking.reasonForDeath,
                     };
                    // req.parameter.push(parameter_list);
                     Utils.confirm("Are you sure?").then(function() {
                         PageHelper.showLoader();
-                        Enrollment.postCustomerDeathMarking(req).$promise.then(function(resp) {
+                        DeathMarking.postCustomerDeathMarking(req).$promise.then(function(resp) {
                             PageHelper.showProgress("customerdeathmarking-pages", "Page customer death marking saved", 3000);
                             irfNavigator.goBack();
                         }, function(err) {
