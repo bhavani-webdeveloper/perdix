@@ -393,16 +393,26 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         "items": [
                             {
                                 "key":"loanAccount.collateral",
-                                "title":"COLLATERAL",
+                                "title":"HYPOTHECATION",
                                 "type":"array",
                                 "readonly": true,
                                 "items":[
                                     {
-                                        "key":"loanAccount.collateral[].collateralType",
-                                        "type":"select"
+                                        "key": "loanAccount.collateral[].collateralCategory",
+                                        "type": "select",
+                                        "enumCode": "hypothecation_type",
+                                        "title": "HYPOTHECATION_TYPE"
+                                    }, {
+                                        "key": "loanAccount.collateral[].collateralType",
+                                        "type": "select",
+                                        "enumCode": "hypothication_sub_type",
+                                        "title": "HYPOTHECATION_SUB_TYPE",
+                                        "parentEnumCode": "hypothecation_type",
+                                        "parentValueExpr": "model.loanAccount.collateral[arrayIndex].collateralCategory",
                                     },
                                     {
-                                        "key":"loanAccount.collateral[].collateralDescription"
+                                        "key":"loanAccount.collateral[].collateralDescription",
+                                         "title": "HYPOTHECATION_DESCRIPTION"
                                     },
                                     {
                                         "key":"loanAccount.collateral[].manufacturer"
@@ -434,27 +444,27 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                                         "type":"amount",
                                         "title":"TOTAL_VALUE"
                                     },
-                                    {
-                                        "key":"loanAccount.collateral[].collateral1FilePath",
-                                        "type":"file",
-                                        "title":"DOCUMENT_1"
-                                    },
-                                    {
-                                        "key":"loanAccount.collateral[].collateral2FilePath",
-                                        "type":"file",
-                                        "title":"DOCUMENT_2"
-                                    },
-                                    {
-                                        "key":"loanAccount.collateral[].collateral3FilePath",
-                                        "type":"file",
-                                        "title":"DOCUMENT_3"
-                                    },
-                                    {
-                                        "key":"loanAccount.collateral[].photoFilePath",
-                                        "type":"file",
-                                        "fileType":"image/*",
-                                        "title":"PHOTO"
-                                    }
+                                    // {
+                                    //     "key":"loanAccount.collateral[].collateral1FilePath",
+                                    //     "type":"file",
+                                    //     "title":"DOCUMENT_1"
+                                    // },
+                                    // {
+                                    //     "key":"loanAccount.collateral[].collateral2FilePath",
+                                    //     "type":"file",
+                                    //     "title":"DOCUMENT_2"
+                                    // },
+                                    // {
+                                    //     "key":"loanAccount.collateral[].collateral3FilePath",
+                                    //     "type":"file",
+                                    //     "title":"DOCUMENT_3"
+                                    // },
+                                    // {
+                                    //     "key":"loanAccount.collateral[].photoFilePath",
+                                    //     "type":"file",
+                                    //     "fileType":"image/*",
+                                    //     "title":"PHOTO"
+                                    // }
                                 ]
                             }
                         ]
