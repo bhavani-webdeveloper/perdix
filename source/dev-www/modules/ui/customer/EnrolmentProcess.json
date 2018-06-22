@@ -1692,6 +1692,7 @@
                     },
                     "numberOfOwnedAsset": {
                         "key": "customer.physicalAssets[].numberOfOwnedAsset",
+                        "type":"number",
                         "title": "NUMBER_OF_OWNED_ASSET"
                     },
                     "registeredOwner": {
