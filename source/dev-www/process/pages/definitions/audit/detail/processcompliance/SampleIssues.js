@@ -44,7 +44,7 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                     var dropdowOptions = issue.options.type_of_issue_options;
                     for (j in dropdowOptions) {
                         if (dropdowOptions[j].option_id == id.option_id) {
-                            if (dropdowOptions[j].option_label == 'NA') {
+                            if (dropdowOptions[j].option_label == 'NA' && !id.deviation) {
                                 continue;
                             }
                             if (dropdowOptions[j].marks === 0) {
