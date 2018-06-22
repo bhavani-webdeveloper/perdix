@@ -841,7 +841,7 @@
                   "minLength":1,
                   "maxLength":1000,
                   "captureStages":[
-                     "LoanInitiation"
+                    "Screening","LoanInitiation","Application", "FieldAppraisal"
                   ]
                },
              "assignedTo":{
