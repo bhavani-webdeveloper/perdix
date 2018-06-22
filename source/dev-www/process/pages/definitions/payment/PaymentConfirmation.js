@@ -95,10 +95,7 @@ define([], function() {
                 },
                 actions: {
                     save: function(model, formCtrl, form, $event) {
-                                
-                       console.log();
-                       console.log();
-                       console.log(); 
+
                     },
                     proceed: function(model, formCtrl, form, $event) {
                         
