@@ -12,7 +12,7 @@ $config_details=DB::connection("bi_db")->select("SELECT * FROM eod_process_maste
 // Mail content
 $to=$config_details[0]->email;
 $subject=$etl_file." Successful";
-$headers="From: ".$_SERVER['SERVER_NAME']."@ifmr.co.in";
+$headers="From: ".$_SERVER['SERVER_NAME']."@dvara.com";
 $mail_body="";
 
 $start_time=date("Y-m-d h:i:s A");
@@ -28,115 +28,90 @@ $currentDate = $currentDate->toArray();
 
 $cbsTableName = "cbs__".strtoupper(date("dMY", strtotime("{$currentDate[0]->current_working_date} -1 days")));
 
-$customers = DB::connection("default")->select("SELECT l.customer_id, l.branch_id, l.bank_id, bm.bank_name, brm.branch_name,
-c.first_name AS lead_name, cem.centre_name, 
-c.customer_type, c.area, c.door_no AS address_line1, c.street AS address_line2, c.village_name AS city_town_village, c.pincode, 
-c.state, c.district, c.locality AS location, c.centre_id, c.gender, c.mobile_phone AS mobile_no,
-c.mobile_number_2 AS alternate_mobile_no, c.date_of_birth AS dob, c.marital_status,
-enp.business_description AS business_name, enp.enterprise_type AS business_type, enp.business_activity, enp.company_operating_since, 
-enp.ownership, enp.is_company_registered,
-crn.id AS applicant_customer_id, cfm.education_status,
-l.loan_purpose_1 AS loan_purpose1, l.loan_purpose_2 AS loan_purpose2, l.loan_purpose_3 AS loan_purpose3,
+$customers = DB::connection("default")->select("
+SELECT 
+l.customer_id, 
+l.branch_id, 
+l.bank_id, 
+bm.bank_name, 
+brm.branch_name,
+cem.centre_name, 
+applicant.first_name AS lead_name,  
+applicant.area, 
+applicant.door_no AS address_line1, 
+applicant.street AS address_line2, 
+applicant.village_name AS city_town_village, 
+applicant.pincode, 
+applicant.state, 
+applicant.district, 
+applicant.locality AS location, 
+applicant.centre_id, 
+applicant.gender, 
+applicant.mobile_phone AS mobile_no,
+applicant.mobile_number_2 AS alternate_mobile_no, 
+applicant.date_of_birth AS dob, 
+applicant.marital_status,
+applicant.id AS applicant_customer_id, 
+c.first_name AS business_name, 
+enp.enterprise_type AS business_type, 
+enp.business_activity, 
+enp.company_operating_since, 
+enp.ownership, 
+enp.is_company_registered,
+cfm.education_status,
+l.loan_purpose_1 AS loan_purpose1, 
+l.loan_purpose_2 AS loan_purpose2, 
+l.loan_purpose_3 AS loan_purpose3,
 l.loan_amount_requested_in_paisa AS loan_amount_requested,
-l.account_number AS linked_loan_account_no,
-(SELECT account_number FROM $perdix_db.loan_accounts where customer_id=l.customer_id ORDER BY id ASC
- LIMIT 1) AS base_loan_account,
-(SELECT account_number FROM $perdix_db.loan_accounts where customer_id=l.customer_id ORDER BY id ASC
- LIMIT 1) AS parent_loan_account
- FROM $perdix_db.loan_accounts l
+l.account_number AS linked_account_number,
+IFNULL(l.base_loan_account, l.account_number) AS base_loan_account,
+'Enterprise' AS 'customer_type',
+0 AS 'version',
+'Renewal' AS transaction_type,
+'SYSTEM' as created_by,
+NOW() as created_at,
+'Asset' AS 'product_category',
+'Loan' AS 'product_sub_category',
+'YES' AS 'interested_in_product',
+'YES' AS 'eligible_for_product',
+'FollowUp' AS 'lead_status',
+'Assignment Pending' AS 'current_stage',
+COUNT(d.account_id) AS EMICount,
+COUNT(r.account_id) AS paidEMI,
+gl.value
+FROM $perdix_db.loan_accounts l
 INNER JOIN $perdix_db.customer c ON c.id = l.customer_id 
 INNER JOIN $bi_db.$cbsTableName cb ON cb.AccountNumber = l.account_number
 INNER JOIN $perdix_db.bank_master bm ON l.bank_id = bm.id 
 INNER JOIN $perdix_db.branch_master brm ON l.branch_id = brm.id 
 INNER JOIN $perdix_db.loan_centre lc ON l.id = lc.loan_id 
 INNER JOIN $perdix_db.centre_master cem ON lc.centre_id = cem.id 
-LEFT JOIN $perdix_db.family_details cfm ON l.customer_id = cfm.customer_id AND cfm.relationship = 'self'
-LEFT JOIN $perdix_db.customer crn ON crn.urn_no = l.urn_no 
+LEFT JOIN $perdix_db.customer applicant ON applicant.urn_no = l.applicant 
+LEFT JOIN $perdix_db.family_details cfm ON cfm.customer_id = applicant.id AND cfm.relationship = 'self'
 LEFT JOIN $perdix_db.enterprise enp ON c.enterprise_id = enp.id 
-LEFT JOIN $perdix_db.global_settings gl ON gl.name = 'LOCEMILimitForLeadPopulation' 
+LEFT JOIN $perdix_db.global_settings gl ON gl.name = 'LOCEMILimitForLeadPopulation'
+LEFT JOIN $encore_db.loan_od_demands d ON d.account_id = l.account_number AND d.tenant_code = 'KGFS' AND scheduled_demand = 1
+LEFT JOIN $encore_db.loan_od_repayments r ON r.account_id = d.account_id AND r.last_satisfied_demand_num=(
+      -- get the satisfied demand num
+      SELECT MIN(last_satisfied_demand_num) FROM $encore_db.loan_od_repayments WHERE last_satisfied_demand_num>=d.demand_num AND account_id = d.account_id AND tenant_code = 'KGFS'
+) AND r.tenant_code = 'KGFS'
+
 WHERE 
 l.loan_purpose_1 = 'Line of credit' AND 
 l.account_number IS NOT NULL
-AND cb.NoOfEMI = gl.value AND gl.value-3  <= cb.EMIPaid
-AND l.account_number NOT IN (select linked_loan_account_no FROM $perdix_db.leads WHERE linked_loan_account_no IS NOT NULL)");
+AND l.account_number NOT IN (select linked_account_number  FROM $perdix_db.leads WHERE linked_account_number IS NOT NULL) GROUP BY l.account_number
+HAVING (EMICount = gl.value AND gl.value-3 <= paidEMI)");
 
 foreach($customers as $customer){
-	$allInsertParameters = array(
-		'version' => 0,
-		'customer_id' => $customer->customer_id,
-		'bank_id' => $customer->bank_id,	
-		'branch_id' => $customer->branch_id,
-		'bank_name' => $customer->bank_name,
-		'branch_name' => $customer->branch_name,
-		'lead_name' => $customer->lead_name,
-		'centre_name' => $customer->centre_name,		
-		'customer_type' => $customer->customer_type,
-		'area' => $customer->area,
-		'address_line1' => $customer->address_line1,
-		'address_line2' => $customer->address_line2,
-		'city_town_village' => $customer->city_town_village,	
-		'pincode' => $customer->pincode,
-		'state' => $customer->state,	
-		'district' => $customer->district,
-		'location' => $customer->location,
-		'centre_id' => $customer->centre_id,
-		'gender' => $customer->gender,
-		'mobile_no' => $customer->mobile_no,
-		'alternate_mobile_no' => $customer->alternate_mobile_no,
-		'dob' => $customer->dob,
-		'marital_status' => $customer->marital_status,
-		'education_status' => $customer->education_status,		
-		'business_name' => $customer->business_name,	
-		'business_type' => $customer->business_type,
-		'business_activity' => $customer->business_activity,
-		'company_operating_since' => $customer->company_operating_since,
-		'ownership' => $customer->ownership,
-		'is_company_registered' => $customer->is_company_registered,	
-		'product_category' => 'Asset',
-		'product_sub_category' => 'Loan',
-		'interested_in_product' => 'YES',		
-		'product_required_by' => NULL,
-		'screening_date' => NULL,		
-		'loan_purpose1' => $customer->loan_purpose1,
-		'loan_purpose2' => $customer->loan_purpose2,
-		'loan_purpose3' => $customer->loan_purpose3,
-		'loan_amount_requested' => $customer->loan_amount_requested,		
-		'eligible_for_product' => "YES",
-		'product_accept_reason' => NULL,
-		'product_accept_additinal_remarks' => NULL,
-		'product_reject_reason' => NULL,
-		'product_reject_additinal_remarks' => NULL,		
-		'lead_status' => "FollowUp",
-		'follow_up_date' => NULL,
-		'udf_id' => NULL,
-		'lead_category' => NULL,
-		'lead_source' => NULL,
-		'referred_by' => NULL,
-		'occupation1' => NULL,
-		'license_type' => NULL,
-		'latitude' => NULL,
-		'longitude' => NULL,
-		'altitude' => NULL,
-		'post_office' => NULL,
-		'parent_loan_account' => $customer->parent_loan_account,
-		'vehicle_registration_number' => NULL,
-		'transaction_type' => NULL,
-		'linked_loan_account_no' => $customer->linked_loan_account_no,
-		'base_loan_account' => $customer->base_loan_account,
-		'landmark' => "",
-		'applicant_customer_id' => $customer->applicant_customer_id,
-		'current_stage' => "Assignment Pending",
-		'created_by' => "",//get current user id
-		'created_at' => DATE("Y-m-d H:i:s"),
-		'last_edited_by' => "",//get current user id
-		'last_edited_at' => DATE("Y-m-d H:i:s")		
-	);
-
-	$leadinsert = Leads::create($allInsertParameters);
+	unset($customer->EMICount);
+	unset($customer->paidEMI);
+	unset($customer->value);
+	$customer = (array)$customer;
+	$leadinsert = Leads::create($customer);
+	
 	if($leadinsert->id){
-		$allInsertParameters['lead_id'] = $leadinsert->id;
-		$allInsertParameters['version'] = 1;
-		$leadinsert = LeadsSnapshot::create($allInsertParameters);
+		$customer['lead_id'] = $leadinsert->id;
+		$leadinsert = LeadsSnapshot::create($customer);
 	}
 }
 
