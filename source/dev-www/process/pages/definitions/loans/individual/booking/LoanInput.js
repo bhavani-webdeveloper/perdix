@@ -1516,7 +1516,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
             },
             {
                 "type":"box",
-                "title":"HYPOTHECATION",
+                "title":"COLLATERAL",
                 "condition": "model.siteCode == 'witfin'",
                 "items":[
                     {
