@@ -3161,6 +3161,10 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),["$log", "$
                         !_.isNull(reqData.customer.addressProofNo)){
                         reqData.customer.aadhaarNo = reqData.customer.addressProofNo;
                     }
+                     if (reqData.customer.identityProof == 'Pan Card' &&
+                        !_.isNull(reqData.customer.identityProofNo)){
+                        reqData.customer.panNo = reqData.customer.identityProofNo;
+                    }
 
                     if (preSaveOrProceed(reqData) == false){
                         return;
