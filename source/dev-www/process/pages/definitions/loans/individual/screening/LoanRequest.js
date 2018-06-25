@@ -868,19 +868,23 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     {
                         key:"loanAccount.linkedAccountNumber",
                         title:"LINKED_ACCOUNT_NUMBER",
-                        readonly: true,
+                        readonly:true,
+                        required: false,
                         condition: "model.loanAccount.transactionType && model.loanAccount.transactionType.toLowerCase() == 'renewal'"
                     },
                     {
                         key: "loanAccount.baseLoanAccount",
                         title: "Base Loan Account",
-                        condition: "model.loanAccount.transactionType && model.loanAccount.transactionType.toLowerCase() == 'renewal'",
-                        readonly: true
+                        readonly:true,
+                        required: false,
+                        condition: "model.loanAccount.transactionType && model.loanAccount.transactionType.toLowerCase() == 'renewal'"
+                        
                      },
                      {
                          key: "loanAccount.transactionType",
                          title: "Transaction Type",
-                         readonly: true
+                         readonly:true,
+                         required: false
                      },
                     {
                         key: "loanAccount.npa",
@@ -1117,6 +1121,27 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                             model.loanAccount.linkedAccountNumber = valueObj.accountId;
                         }
                     },
+                    {
+                        key:"loanAccount.linkedAccountNumber",
+                        title:"LINKED_ACCOUNT_NUMBER",
+                        readonly:true,
+                        required: false,
+                        condition: "model.loanAccount.transactionType && model.loanAccount.transactionType.toLowerCase() == 'renewal'"
+                    },
+                    {
+                        key: "loanAccount.baseLoanAccount",
+                        title: "Base Loan Account",
+                        readonly:true,
+                        required: false,
+                        condition: "model.loanAccount.transactionType && model.loanAccount.transactionType.toLowerCase() == 'renewal'"
+                        
+                     },
+                     {
+                         key: "loanAccount.transactionType",
+                         title: "Transaction Type",
+                         readonly:true,
+                         required: false
+                     },
                     {
                         key: "loanAccount.npa",
                         title: "IS_NPA",
