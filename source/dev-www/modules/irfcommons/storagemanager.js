@@ -233,6 +233,27 @@ function($log, $state, irfStorageService, SessionStore,$state,$stateParams, enti
 			$log.error('No record found for enum key: ' + key);
 			return null;
 		},
+		userbranch: function() {
+			var branches = helperObj.enum("branch_id").data;
+			var listToTree = function(list, id, parentId) { // credits: https://stackoverflow.com/users/722762/halcyon
+				var map = {}, node, roots = [], i;
+				for (i = 0; i < list.length; i++) {
+					map[list[i][id]] = i; // initialize the map
+					list[i].children = []; // initialize the children
+				}
+				for (i = 0; i < list.length; i += 1) {
+					node = list[i];
+					if (node[parentId] && node[parentId] !== "0") {
+						// if you have dangling branches check that map[node[parentId]] exists
+						list[map[node[parentId]]].children.push(node);
+					} else {
+						roots.push(node);
+					}
+				}
+				return roots;
+			}
+			var roots = listToTree(branches, "code", "field2");
+		},
 		save: function(model, formCtrl, formName, actions) {
 			var pageName = formName.substring(6).replace(/\_/g, '.').replace(/\.\./g, '__');
 			var promise = true;
