@@ -37,6 +37,12 @@ class AgentRepository implements IAgentRepository {
 
 	}
 
+	getCustomerById(id: any): Observable<EnrolmentProcess> {
+        let customerPromise = this.agentService.getCustomerById({id: id}).$promise;
+        return Observable.fromPromise(customerPromise);
+    }
+
+
 	update(reqData: Object): Observable<any> {
 		return Ro.fromPromise(this.agentService.update(reqData).$promise);
 	}	

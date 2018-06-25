@@ -59,6 +59,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                 bundleModel.Agent = agentProcess;
                                 var agentProcess = agentProcess;
 
+                                if (_.hasIn($stateParams.pageData, 'agent_id') && _.isNumber($stateParams.pageData['agent_id'])) {
+                                    var _agent_id = $stateParams.pageData['agent_id'];
+                                    loanProcess.loanAccount.leadId = _agent_id;
+
+                                }
+
                                 $this.bundlePages.push({
                                     pageClass: 'applicant',
                                     model: {
@@ -109,24 +115,24 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                 // "post_pages_initialize": function(bundleModel) {
                 //     $log.info("Inside post_page_initialize");
                 //     BundleManager.broadcastEvent('origination-stage', 'Screening');
-                //     if (_.hasIn($stateParams.pageData, 'agent_id') && _.isNumber($stateParams.pageData['agent_id'])) {
+                //     if (_.hasIn($stateParams.pageData, 'lead_id') && _.isNumber($stateParams.pageData['lead_id'])) {
                 //         PageHelper.showLoader();
                 //         PageHelper.showProgress("screening-input", 'Loading lead details');
-                //         var _agentId = $stateParams.pageData['agent_id'];
-                //         Agengtt.get({
-                //                 id: _agentId
+                //         var _leadId = $stateParams.pageData['lead_id'];
+                //         Lead.get({
+                //                 id: _leadId
                 //             })
                 //             .$promise
                 //             .then(function(res) {
                 //                 PageHelper.showProgress('screening-input', 'Done.', 5000);
-                //                 BundleManager.broadcastEvent('agent-loaded', res);
+                //                 BundleManager.broadcastEvent('lead-loaded', res);
                 //             }, function(httpRes) {
                 //                 PageHelper.showErrors(httpRes);
                 //             })
                 //             .finally(function() {
                 //                 PageHelper.hideLoader();
                 //             })
-                //     }                    
+                //     }
 
                 // },
                 eventListeners: {

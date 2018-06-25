@@ -43,6 +43,19 @@ export class AgentProcess {
         return this;
     }
 
+    public removeRelatedEnrolmentProcess(enrolmentProcess: EnrolmentProcess) {
+
+
+        if (this.applicantEnrolmentProcess === enrolmentProcess ) {
+            this.applicantEnrolmentProcess = null;
+        } else if (this.loanCustomerEnrolmentProcess === enrolmentProcess){
+            this.loanCustomerEnrolmentProcess = null;
+        }
+
+        // this.refreshRelatedCustomers();
+    }
+
+
     save(): any {
         /* Calls all business policies associated with save */
       
@@ -132,6 +145,14 @@ export class AgentProcess {
             )
     }
    
+    static fromCustomerID(id: number): Observable<AgentProcess> {
+        return AgentProcessFactory.createFromCustomerID(id)
+            .flatMap((agentProcess) => {
+                let pm: PolicyManager<AgentProcess> = new PolicyManager<AgentProcess>(agentProcess, AgentPolicyFactory.getInstance(), 'onLoad', EnrolmentProcess.getProcessConfig());
+                return pm.applyPolicies();
+            })
+    }
+
     static createNewProcess(): Observable<AgentProcess> {
         return AgentProcessFactory
             .createNew()

@@ -30,6 +30,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                         "title": "CUSTOMER_ID",
                         "type": "integer",
                         "readonly": true
+                    },
+                    "AgentInformation.agentCompanyId": {
+                        "key": "agent.agentCompanyId",
+                        "title": "AGENT_ENTERPRISE_ID"
                     }
                 }
             }
@@ -148,24 +152,24 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                     "test-listener": function(bundleModel, model, obj) {
 
                     },
-                    // "agent-loaded": function(bundleModel, model, obj) {
-                    //     return $q.when()
-                    //         .then(function() {
-                    //             if (obj.applicantCustomerId) {
-                    //                 return EnrolmentProcess.fromCustomerID(obj.applicantCustomerId).toPromise();
-                    //             } else {
-                    //                 return null;
-                    //             }
-                    //         })
-                    //         .then(function(enrolmentProcess) {
-                    //             if (enrolmentProcess != null) {
-                    //                 model.enrolmentProcess = enrolmentProcess;
-                    //                 model.customer = enrolmentProcess.customer;
-                    //                 BundleManager.pushEvent(model.pageClass + "-updated", model._bundlePageObj, enrolmentProcess);
-                    //             }
-                    //             model.agent.customerId = obj.id;
-                    //         })
-                    // },
+                    "agent-loaded": function(bundleModel, model, obj) {
+                        return $q.when()
+                            .then(function() {
+                                if (obj.applicantCustomerId) {
+                                    return AgentProcess.fromCustomerID(obj.applicantCustomerId).toPromise();
+                                } else {
+                                    return null;
+                                }
+                            })
+                            .then(function(enrolmentProcess) {
+                                if (agentProcess != null) {
+                                    model.agentProcess = agentProcess;
+                                    model.agent = agentProcess.agent;
+                                    BundleManager.pushEvent(model.pageClass + "-updated", model._bundlePageObj, agentProcess);
+                                }
+                                model.agent.agentId1 = obj.id;
+                            })
+                    },
                     "origination-stage": function(bundleModel, model, obj) {
                         model.currentStage = obj
                     }
@@ -195,6 +199,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                 PageHelper.hideLoader();
                             })
                             .subscribe(function(agentProcess) {
+                                $log.info(agentProcess);
+                                $log.info("agentProcess");
                                 formHelper.resetFormValidityState(form);
 
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);

@@ -11,6 +11,8 @@ import {plainToClass} from "class-transformer";
 import {Utils} from "../../shared/Utils";
 class AgentProcessFactory {
 
+     static agentPolicyFactory:AgentPolicyFactory = AgentPolicyFactory.getInstance();
+
     static agentRepo:IAgentRepository = RepositoryFactory.createRepositoryObject(RepositoryIdentifiers.AgentProcess);
 
     static createFromAgentId(id: number): Observable<AgentProcess> {
@@ -25,8 +27,26 @@ class AgentProcessFactory {
 
     }
 
+    static fromCustomer(obj: Customer): Observable<AgentProcess> {
+        let ep = new AgentProcess();
+        ep.customer = obj;
+        let pm: PolicyManager<AgentProcess> = new PolicyManager<AgentProcess>(ep, AgentProcessFactory.agentPolicyFactory, 'onLoad', AgentProcess.getProcessConfig());
+        return pm.applyPolicies();
+    }
 
-
+    static createFromCustomerID(id){
+        let agentRepo: IAgentRepository = RepositoryFactory.createRepositoryObject(RepositoryIdentifiers.Enrolment);
+        return agentRepo.getCustomerById(id)
+            .map(
+                (value: Object) => {
+                    let obj: Object = Utils.toJSObj(value);
+                    let ep: EnrolmentProcess = new EnrolmentProcess();
+                    let cs: Customer = <Customer>plainToClass<Customer, Object>(Customer, obj);
+                    ep.customer = cs;
+                    return ep;
+                }
+            )
+    }
      static createNew(): Observable<AgentProcess>{
         return Observable.defer(() => {
             let lp: AgentProcess = new AgentProcess();
