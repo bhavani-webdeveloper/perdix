@@ -2,13 +2,14 @@ irf.pageCollection.controller(irf.controller("MutualFund.MutualFundEKYC"), ["$lo
     function($log, Enrollment, $q, Utils, $stateParams, $scope, PagesDefinition, PageHelper, irfNavigator, Audit, formHelper, SessionStore, elementsUtils) {
         $scope.$templateUrl = "process/pages/templates/mutualFund/MutualFundEKYC.html";
 
-        Enrollment.getCustomerById {
+
+        
+        Enrollment.getCustomerById ({
             id: $stateParams.pageId
-        }.then(function(data) {
+        }).then(function(data) {
             irfProgressMessage.clear();
             $scope.ekycdashboard = 
-
-                PageHelper.hideLoader();
+            PageHelper.hideLoader();
         }, function(err) {
             irfProgressMessage.clear();
             PageHelper.hideLoader();
