@@ -1,13 +1,21 @@
-irf.pageCollection.controller(irf.controller("MutualFund.MutualFundEKYC"), ["$log", "$q", "Utils", "$stateParams", "$scope", "PagesDefinition", "PageHelper", "irfNavigator", "Audit", "formHelper", "SessionStore", "elementsUtils",
-    function($log, $q, Utils, $stateParams, $scope, PagesDefinition, PageHelper, irfNavigator, Audit, formHelper, SessionStore, elementsUtils) {
+irf.pageCollection.controller(irf.controller("MutualFund.MutualFundEKYC"), ["$log", "Enrollment", "$q", "Utils", "$stateParams", "$scope", "PagesDefinition", "PageHelper", "irfNavigator", "Audit", "formHelper", "SessionStore", "elementsUtils",
+    function($log, Enrollment, $q, Utils, $stateParams, $scope, PagesDefinition, PageHelper, irfNavigator, Audit, formHelper, SessionStore, elementsUtils) {
         $scope.$templateUrl = "process/pages/templates/mutualFund/MutualFundEKYC.html";
-        
-        var ekycForm = function() {
 
-        }
-
-        Enrollment.getCustomerById({
+        Enrollment.getCustomerById {
             id: $stateParams.pageId
-        }).$promise.then(ekycForm, PageHelper.showErrors).finally(PageHelper.hideLoader);
+        }.then(function(data) {
+            irfProgressMessage.clear();
+            $scope.ekycdashboard = 
+
+                PageHelper.hideLoader();
+        }, function(err) {
+            irfProgressMessage.clear();
+            PageHelper.hideLoader();
+            PageHelper.showProgress('EKYC', 'EKYC login failed.', 5000);
+            PageHelper.showErrors(err);
+        });
+
+
     }
 ]);
