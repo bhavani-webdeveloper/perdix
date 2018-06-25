@@ -499,6 +499,18 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                        
                     },
                     {
+                        key: "loanAccount.linkedAccountNumber",
+                        readonly: true,
+                        title: "Linked Loan Account",
+                        condition:"model.loanAccount.transactionType.toLowerCase() == 'renewal'"
+                    },
+                    {
+                        key: "loanAccount.transactionType",
+                        readonly: true,
+                        title: "Transaction Type",
+
+                    },
+                    {
                         "key": "cbsLoan.accountBalance",
                         "title": "ACCOUNT_BALANCE",
                         "required":false,
