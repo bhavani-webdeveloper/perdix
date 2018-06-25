@@ -161,7 +161,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                             default:
                                 $log.info("Unknown page class");
                                 break;
-
                         }
                     },
                     "enrolment-removed": function(pageObj, bundlePageObj, enrolmentDetails) {

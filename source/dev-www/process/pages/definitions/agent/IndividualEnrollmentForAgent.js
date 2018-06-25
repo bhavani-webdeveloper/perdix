@@ -80,7 +80,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                             if (centreName && centreName.length > 0) {
                                 model.centreName = centreName[0].name;
                             }
-
                         },
                         "inputMap": {
                             "firstName": {

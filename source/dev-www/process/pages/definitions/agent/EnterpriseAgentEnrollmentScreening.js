@@ -137,36 +137,23 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                             default:
                                 $log.info("Unknown page class");
                                 break;
-
                         }
                     },
-                    // "new-loan": function(pageObj, bundleModel, params) {
-                    //     $log.info("Inside new-loan of CBCheck");
-                    //     BundleManager.broadcastEvent("new-loan", params);
-                    // },
-                    // "applicant-updated": function(pageObj, bundlePageObj, obj) {
-                    //     /* Update other pages */
-                    //     BundleManager.broadcastEvent("applicant-updated", obj);
-                    // },
-                    // "co-applicant-updated": function(pageObj, bundlePageObj, obj) {
-                    //     /* Update other pages */
-                    //     BundleManager.broadcastEvent("co-applicant-updated", obj);
-                    // },
-                    // "guarantor-updated": function(pageObj, bundlePageObj, obj) {
-                    //     /* Update other pages */
-                    //     BundleManager.broadcastEvent("guarantor-updated", obj);
-                    // },
-                    // "enrolment-removed": function(pageObj, bundlePageObj, enrolmentDetails) {
-                    //     if (enrolmentDetails.customerId) {
-                    //         BundleManager.broadcastEvent('remove-customer-relation', enrolmentDetails);
-                    //     }
-                    // },
-                    // "cb-check-done": function(pageObj, bundlePageObj, cbCustomer) {
-                    //     $log.info(cbCustomer);
-                    //     if (cbCustomer.customerId) {
-                    //         BundleManager.broadcastEvent('cb-check-update', cbCustomer);
-                    //     }
-                    // }
+                    "business-updated": function(pageObj, bundlePageObj, obj) {
+                        /* Update other pages */
+                        BundleManager.broadcastEvent("business-updated", obj);
+                    },
+                    "enrolment-removed": function(pageObj, bundlePageObj, enrolmentDetails) {
+                        if (enrolmentDetails.customerId) {
+                            BundleManager.broadcastEvent('remove-customer-relation', enrolmentDetails);
+                        }
+                    },
+                    "cb-check-done": function(pageObj, bundlePageObj, cbCustomer) {
+                        $log.info(cbCustomer);
+                        if (cbCustomer.customerId) {
+                            BundleManager.broadcastEvent('cb-check-update', cbCustomer);
+                        }
+                    }  
                 },
                 preSave: function(offlineData) {
                     var defer = $q.defer();

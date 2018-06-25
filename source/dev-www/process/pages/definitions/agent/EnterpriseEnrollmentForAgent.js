@@ -132,6 +132,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                         model._bundlePageObj = _.cloneDeep(bundlePageObj);
                     }
 
+                    model.pageClass=bundlePageObj.pageClass;
+
                     /* Setting data recieved from Bundle */
 
                     model.currentStage = bundleModel.currentStage;
@@ -189,6 +191,135 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                 "BankAccounts.customerBankAccounts": {
                                     startEmpty: true
                                 },
+                                "EnterpriseInformation.customerId": {
+                                    type: "lov",
+                                    lovonly: true,
+                                    bindMap: {},
+                                    key: "customer.id",
+                                    initialize: function(model, form, parentModel, context) {
+                                        model.customerBranchId = parentModel.customer.customerBranchId;
+                                        model.centreId = parentModel.customer.centreId;
+                                        var centreCode = formHelper.enum('centre').data;
+
+                                        var centreName = $filter('filter')(centreCode, {
+                                            value: parentModel.customer.centreId
+                                        }, true);
+                                        if (centreName && centreName.length > 0) {
+                                            model.centreName = centreName[0].name;
+                                        }
+                                    },
+                                    "inputMap": {
+                                        "firstName": {
+                                            "key": "customer.firstName",
+                                            "title": "CUSTOMER_NAME"
+                                        },
+                                        "urnNo": {
+                                            "key": "customer.urnNo",
+                                            "title": "URN_NO",
+                                            "type": "string"
+                                        },
+                                        "customerBranchId": {
+                                            "key": "customer.customerBranchId",
+                                            "type": "select",
+                                            "screenFilter": true,
+                                            "readonly": true
+                                        },
+                                        "centreName": {
+                                            "key": "customer.place",
+                                            "title": "CENTRE_NAME",
+                                            "type": "string",
+                                            "readonly": true,
+
+                                        },
+                                        "centreId": {
+                                            key: "customer.centreId",
+                                            type: "lov",
+                                            autolov: true,
+                                            lovonly: true,
+                                            bindMap: {},
+                                            searchHelper: formHelper,
+                                            search: function(inputModel, form, model, context) {
+                                                var centres = SessionStore.getCentres();
+                                                // $log.info("hi");
+                                                // $log.info(centres);
+
+                                                var centreCode = formHelper.enum('centre').data;
+                                                var out = [];
+                                                if (centres && centres.length) {
+                                                    for (var i = 0; i < centreCode.length; i++) {
+                                                        for (var j = 0; j < centres.length; j++) {
+                                                            if (centreCode[i].value == centres[j].id) {
+
+                                                                out.push({
+                                                                    name: centreCode[i].name,
+                                                                    id: centreCode[i].value
+                                                                })
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                return $q.resolve({
+                                                    headers: {
+                                                        "x-total-count": out.length
+                                                    },
+                                                    body: out
+                                                });
+                                            },
+                                            onSelect: function(valueObj, model, context) {
+                                                model.centreId = valueObj.id;
+                                                model.centreName = valueObj.name;
+                                            },
+                                            getListDisplayItem: function(item, index) {
+                                                return [
+                                                    item.name
+                                                ];
+                                            }
+                                        },
+                                    },
+                                    "outputMap": {
+                                        "urnNo": "customer.urnNo",
+                                        "firstName": "customer.firstName"
+                                    },
+                                    "searchHelper": formHelper,
+                                    "search": function(inputModel, form) {
+                                        $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                                        var branches = formHelper.enum('branch_id').data;
+                                        var branchName;
+                                        for (var i = 0; i < branches.length; i++) {
+                                            if (branches[i].code == inputModel.customerBranchId)
+                                                branchName = branches[i].name;
+                                        }
+                                        var promise = Enrollment.search({
+                                            'branchName': branchName || SessionStore.getBranch(),
+                                            'firstName': inputModel.firstName,
+                                            'centreId': inputModel.centreId,
+                                            'customerType': "Enterprise",
+                                            'urnNo': inputModel.urnNo
+                                        }).$promise;
+                                        return promise;
+                                    },
+                                    getListDisplayItem: function(data, index) {
+                                        return [
+                                            [data.firstName, data.fatherFirstName].join(' | '),
+                                            data.firstName,
+                                            data.urnNo
+                                        ];
+                                    },
+                                    onSelect: function(valueObj, model, context) {
+                                        PageHelper.showProgress('customer-load', 'Loading customer...');
+                                        EnrolmentProcess.fromCustomerID(valueObj.id)
+                                            .finally(function() {
+                                                PageHelper.showProgress('customer-load', 'Done.', 5000);
+                                            })
+                                            .subscribe(function(enrolmentProcess) {
+                                                /* Setting on the current page */
+                                                model.enrolmentProcess = enrolmentProcess;
+                                                model.customer = enrolmentProcess.customer;
+
+                                                BundleManager.pushEvent(model.pageClass + "-updated", model._bundlePageObj, enrolmentProcess);
+                                            })
+                                    }
+                                }
 
                             },
                             "includes": getIncludes(model),
@@ -292,7 +423,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                 PageHelper.showErrors(err);
                                 PageHelper.hideLoader();
                             });
-
                     },
                     proceed: function(model, form) {
                         PageHelper.clearErrors();

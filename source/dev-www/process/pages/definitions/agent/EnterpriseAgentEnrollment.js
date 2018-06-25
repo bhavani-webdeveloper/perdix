@@ -20,10 +20,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
             var overridesFields = function(bundlePageObj) {
                 return {
                     "AgentEmployees.agentEmployees.customerId": {
+                        "orderNo":10,
                         type: "lov",
                         lovonly: true,
                         bindMap: {},
-                        key: "agent.customerId",
+                        //key: "agent.customerId",
                         "inputMap": {
                             "firstName": {
                                 "key": "customer.firstName",
@@ -131,8 +132,53 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
 
                                     BundleManager.pushEvent(model.pageClass + "-updated", model._bundlePageObj, enrolmentProcess);
                                 })
-
                             model.agent.customerId = valueObj.id;
+                        }
+                    },
+                    "AgentEmployees.agentEmployees.agentId": {
+                        type: "lov",
+                        "orderNo":5,
+                        lovonly: true,
+                        bindMap: {},
+                        "inputMap": {
+                            "agentId": {
+                                "key": "agent.agentId",
+                                "type": "number"
+                            },           
+                            "agentType": {
+                                "key": "agent.agentType",
+                                "type": "select",
+                                "enumCode": "agent_type",
+                                "title": "AGENT_TYPE"
+                            },
+                        },
+                        "searchHelper": formHelper,
+                        "search": function(inputModel, form) {
+                            var promise = Agent.search({
+                                'agentId': inputModel.agentId,
+                                'agentName': inputModel.agentName,
+                                'agentType': inputModel.agentType,
+                                'currentStage': "",
+                                'customerType': "individual"
+                            }).$promise;
+                            return promise;
+                        },
+                        getListDisplayItem: function(data, index) {
+                            return [
+                                "Agent Id:" + " " +data.id,
+                                "Agent Name:" + " " +data.agentName,
+                                "Agent Type:" + " " +data.agentType,
+                            ];
+                        },
+                        onSelect: function(valueObj, model, context) {
+                            PageHelper.showProgress('customer-load', 'Loading customer...');
+                            model.agent.agentEmployees[context.arrayIndex].agentId = valueObj.id;
+                            model.agent.agentEmployees[context.arrayIndex].customerId= valueObj.customerId;
+                            model.agent.agentEmployees[context.arrayIndex].agentCompanyId = valueObj.agentCompanyId;
+                            model.agent.agentEmployees[context.arrayIndex].agentName = valueObj.agentName;
+                            model.agent.agentEmployees[context.arrayIndex].agentRegistrationNumber = valueObj.agentRegistrationNumber;
+                            model.agent.agentEmployees[context.arrayIndex].companyName = valueObj.companyName;
+                            model.agent.agentEmployees[context.arrayIndex].designation = valueObj.designation;
                         }
                     },
                     "AgentFeeDetails.agentFeeDetails.feeAmount": {
@@ -142,9 +188,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                     },
                     "AgentInformation.agentId": {
                         type: "lov",
+                        "orderNo":5,
                         lovonly: true,
                         bindMap: {},
-                        key: "agent.agentId",
+                        key: "agent.id",
                         "inputMap": {
                             "agentId": {
                                 "key": "agent.agentId",
@@ -186,14 +233,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                         },
                         onSelect: function(valueObj, model, context) {
                             PageHelper.showProgress('customer-load', 'Loading customer...');
-                            model.agent.agentId = valueObj.id;
+                            model.agent.id = valueObj.id;
                             model.agent.agentCompanyId = valueObj.agentCompanyId;
                             model.agent.agentName = valueObj.agentName;
                             model.agent.agentRegistrationNumber = valueObj.agentRegistrationNumber;
                             model.agent.companyName = valueObj.companyName;
                             model.agent.designation = valueObj.designation;
                         }
-
                     }
                 }
             }
@@ -202,25 +248,24 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
 
                 return [
                     "AgentInformation",
-                    "AgentInformation.agentId",
-
+                    "AgentInformation.agentId1",
                     "AgentEmployees",
                     "AgentEmployees.agentEmployees",
+                    "AgentEmployees.agentEmployees.agentId",
                     "AgentEmployees.agentEmployees.agentCompanyId",
                     "AgentEmployees.agentEmployees.agentRegistrationNumber",
                     "AgentEmployees.agentEmployees.agentType",
                     "AgentEmployees.agentEmployees.companyName",
                     "AgentEmployees.agentEmployees.designation",
-
                     "AgentFeeDetails",
                     "AgentFeeDetails.agentFeeDetails",
                     "AgentFeeDetails.agentFeeDetails.feeAmount",
                     "AgentFeeDetails.agentFeeDetails.feeName",
                     "AgentFeeDetails.agentFeeDetails.feeType",
                     "AgentFeeDetails.agentFeeDetails.frequency",
-                    "AgentFeeDetails.agentFeeDetails.dateOfIncorporation"
+                    "AgentFeeDetails.agentFeeDetails.dateOfIncorporation",
+                    "AgentInformation.customerId"
                 ];
-
             }
 
             function getLoanCustomerRelation(pageClass) {
@@ -262,9 +307,33 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                     "items": {
                                         "customerId": {
                                             "key": "agent.customerId",
-                                            "title": "CUSTOMER_ID",
-                                            "type": "lov",
-                                            "lovonly": false
+                                            "title": "ENTITY_ID",
+                                            "readonly":true
+                                        },
+                                        "agentId1": {
+                                            "key": "agent.id",
+                                            "title": "AGENT_ID",
+                                            "type": "integer",
+                                            "readonly": true,
+                                            "orderNo": 10
+                                        }
+                                    }
+                                },
+                                "AgentEmployees": {
+                                    "type": "box",
+                                    "title": "AGENT_EMPLOYEES",
+                                    "items": {
+                                        "agentEmployees": {
+                                            "type": "array",
+                                            "startEmpty": true,
+                                            "title": "AGENT_EMPLOYEES",
+                                            "key": "agent.agentEmployees",
+                                            "items": {
+                                                "agentId": {
+                                                    "key": "agent.agentEmployees[].agentId",
+                                                    "title": "AGENT_ID"
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -312,6 +381,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                 eventListeners: {
                     "test-listener": function(bundleModel, model, obj) {
 
+                    },
+                    "business-updated": function(bundleModel, model, params) {
+                        $log.info("inside applicant-updated of AgentEnrolment");
+                        /* Load an existing customer associated with applicant, if exists. Otherwise default details*/
+                       // model.enrolmentProcess.refreshEnterpriseCustomerAgentRelations(model.agentProcess);
+                        model.agent.customerId = params.customer.id;
                     },
 
                     "origination-stage": function(bundleModel, model, obj) {

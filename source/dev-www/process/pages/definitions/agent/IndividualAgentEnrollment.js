@@ -44,7 +44,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                     "AgentInformation.agentRegistrationNumber",
                     "AgentInformation.agentType",
                     "AgentInformation.companyName",
-
                     "AgentFeeDetails",
                     "AgentFeeDetails.agentFeeDetails",
                     "AgentFeeDetails.agentFeeDetails.feeAmount",
@@ -165,8 +164,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                     //                 BundleManager.pushEvent(model.pageClass + "-updated", model._bundlePageObj, enrolmentProcess);
                     //             }
                     //             model.agent.customerId = obj.id;
-
-
                     //         })
                     // },
                     "origination-stage": function(bundleModel, model, obj) {
@@ -199,6 +196,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                             })
                             .subscribe(function(agentProcess) {
                                 formHelper.resetFormValidityState(form);
+
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 PageHelper.clearErrors();
                                 BundleManager.pushEvent(model.pageClass + "-updated", model._bundlePageObj, agentProcess);
@@ -208,7 +206,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                 PageHelper.hideLoader();
                             });
                     },
-
                 }
             }
         }
