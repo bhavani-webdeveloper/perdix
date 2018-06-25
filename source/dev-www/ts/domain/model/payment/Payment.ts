@@ -1,15 +1,17 @@
 import { Type } from "class-transformer";
 
 export class Payment {
-	amount: number;
+	accountNumber: string;
+    amount: number;
     beneficiaryAccountName: string;
     beneficiaryAccountNumber: string;
-    beneficiaryBankAddress: string;
+    beneficiaryBankBranch: string;
     beneficiaryBankCode: string;
     beneficiaryBankName: string;
     beneficiaryEmailId: string;
     beneficiaryIfsc: string;
     beneficiaryMobileNumber: string;
+    beneficiaryName: string;
     beneficiaryTransactionParticulars: string;
     beneficiaryTransactionRemarks: string;
     branchId: number;
@@ -29,6 +31,7 @@ export class Payment {
     journalTransactionId: string;
     modeOfPayment: string;
     paymentDate: string;
+    paymentPurpose: string;
     paymentStatus: string;
     ponum: string;
     responseReferenceNumber: string;
@@ -49,3 +52,4 @@ export class Payment {
     utrReferenceNumber: string;
     version: number;
 }
+
