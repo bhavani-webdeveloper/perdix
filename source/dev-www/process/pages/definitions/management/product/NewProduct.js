@@ -8,6 +8,9 @@ define({
         return {
             "type": "schema-form",
             "title": "PRODUCT_MAINTENANCE",
+            "formOptions": {
+                "destroyStrategy": "remove"
+            },
             initialize: function(model, form, formCtrl) {
                 model.product = model.product || {};
                 model.userLoginDate = SessionStore.getCBSDate();
@@ -978,7 +981,7 @@ define({
                     //     });
                     //     PageHelper.hideLoader();
                     // } else {
-                        
+
                         PageHelper.showProgress("New product", "Working...");
                         model.product.lmsProductMasters.maxAmt = 0;
                         model.product.lmsProductMasters.minAmt = 0;
@@ -1025,7 +1028,7 @@ define({
                                     PageHelper.hideLoader();
                                 })
                         }
-                    
+
                 }
             }
         }
