@@ -239,9 +239,12 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             model.customer.loanSaved = false;
             model.idenCheckParam = SessionStore.getGlobalSetting("IdentCheckSettings");
             model.idenCheck = {};
-            model.idenCheck.reqServiceType = model.idenCheckParam.split('~')[0];
-            model.idenCheck.dobSegmentRequired = Boolean(model.idenCheckParam.split('~')[1]);
-            model.idenCheck.addressSegmentReqired = Boolean(model.idenCheckParam.split('~')[2]);
+            if(model.idenCheckParam != null){
+                model.idenCheck.reqServiceType = model.idenCheckParam.split('~')[0];
+                model.idenCheck.dobSegmentRequired = Boolean(model.idenCheckParam.split('~')[1]);
+                model.idenCheck.addressSegmentReqired = Boolean(model.idenCheckParam.split('~')[2]);   
+            }
+            
 
             model.CBType= SessionStore.getGlobalSetting("CBCheckType");
             if(model.CBType){
@@ -250,6 +253,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             //model.CBType = JSON.parse(SessionStore.getGlobalSetting("CBCheckType").replace(/'/g, '"'));
             if (model.CBType && model.CBType.length) {
                 for (i in model.CBType) {
+                    if()
                     (model.CBType[i] == "CIBIL")?model.CIBIL = true:(model.CBType[i] == "BASE"?model.BASE = true:(model.CBType[i] == "EQUIFAX"?model.EQUIFAX = true:(model.CBType[i] == "CHMHUB"?model.CHMHUB=true:false)));
                 }
             } else {
