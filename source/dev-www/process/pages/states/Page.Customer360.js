@@ -56,6 +56,20 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 				]
 			},
 			{
+                "title": "CREDIT_BUREAU",
+                "iconClass": "fa fa-user",
+                "items": [
+                    {
+                        "title": "CREDIT_BUREAU",
+                        "iconClass": "fa fa-user",
+                        "items": [
+                            ]
+                    },
+                    "Page/Engine/customer360.Idencheck",
+					"Page/Engine/customer360.CreditBureauResults"
+                ]
+            } ,
+			{
 				"title": "REQUEST_RECAPTURE",
 				"shortTitle": "REQUEST",
 				"iconClass": "fa fa-lightbulb-o",
@@ -436,6 +450,17 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 
 		if ($scope.dashboardDefinition.$menuMap['Page/Engine/customer360.CustomerHistorySummary'])
 		$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.CustomerHistorySummary'].onClick = function(event, menu) {
+			menu.stateParams.pageId = $scope.customerId;
+			return $q.resolve(menu);
+		};
+
+		if ($scope.dashboardDefinition.$menuMap['Page/Engine/customer360.Idencheck'])
+		$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.Idencheck'].onClick = function(event, menu) {
+			menu.stateParams.pageId = $scope.customerId;
+			return $q.resolve(menu);
+		};
+		if ($scope.dashboardDefinition.$menuMap['Page/Engine/customer360.CreditBureauResults'])
+		$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.CreditBureauResults'].onClick = function(event, menu) {
 			menu.stateParams.pageId = $scope.customerId;
 			return $q.resolve(menu);
 		};

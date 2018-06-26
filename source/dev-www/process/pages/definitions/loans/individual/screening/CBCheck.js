@@ -1,3 +1,5 @@
+
+
 irf.pageCollection.factory(irf.page("loans.individual.screening.CBCheck"),
 ["$log", "$q","LoanAccount", 'SchemaResource', 'PageHelper','formHelper',"elementsUtils",
 'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch","CreditBureau","Enrollment","BundleManager",
@@ -29,12 +31,36 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
         loanPurpose = 'Business Loan - General';
         //loanPurpose = 'Agriculture';
         PageHelper.clearErrors();
-        CreditBureau.postcreditBureauCheck({
-            customerId: customerId,
-            type: CBType,
-            purpose: loanPurpose,
-            loanAmount: loanAmount
-        }, function(response){
+        if (CBType != 'CHMHUB') {
+            CreditBureau.postcreditBureauCheck({
+                customerId: customerId,
+                type: CBType,
+                purpose: loanPurpose,
+                loanAmount: loanAmount
+            }, function(response) {
+
+                checkResponse(response, model, customerType, CBType, index);
+
+            }, function(errorResponse) {
+                PageHelper.hideLoader();
+                PageHelper.showErrors(errorResponse);
+                if (errorResponse && errorResponse.data && errorResponse.data.error)
+                    PageHelper.showProgress("cb-check", errorResponse.data.error, 5000);
+                else
+                    PageHelper.showProgress("cb-check", "Failed while placing Credit Bureau Request", 5000);
+            });
+        } else {
+            model.idenCheck.customerId = model.customer.applicantid;
+            model.idenCheck.type = CBType;
+            Enrollment.idenCheckVerification(model.idenCheck).$promise.
+            then(function(response) {
+                checkResponse(response, model, customerType, CBType, index);
+            }, function(error) {
+                PageHelper.showErrors(error);
+                PageHelper.hideLoader();
+            })
+        }
+       var checkResponse = function(response,model, customerType, CBType, index){
             if(CBType == 'BASE'){
                 if (customerType == 'APP'){
                     model.customer.inqUnqRefNo = response.inqUnqRefNo;
@@ -99,22 +125,42 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                     model.customer.guarantors[index].cibilStatus = response.status;
                 }
             }
+            if(CBType == 'CHMHUB'){
+                if (customerType == 'APP'){
+                    model.customer.inqUnqRefNo = response.inqUnqRefNo;
+                    model.customer.idenCheckStatus = response.status;
+                    if(response.status != 'SUCCESS' && response.status != 'PROCESSED')
+                        model.customer.applicantIdenCheckFailed = true;
+                    else
+                        model.customer.applicantIdenCheckFailed = false;
+
+                }
+                else if(customerType == 'CO-APP'){
+                    model.customer.coapplicants[index].inqUnqRefNo = response.inqUnqRefNo;
+                    model.customer.coapplicants[index].idenCheckStatus = response.status;
+                    if(response.status != 'SUCCESS' && response.status != 'PROCESSED')
+                        model.customer.coapplicants[index].applicantIdenCheckFailed = true;
+                    else
+                        model.customer.coapplicants[index].applicantIdenCheckFailed = false;
+                }
+                else if(customerType == 'GUARANTOR'){
+                    model.customer.guarantors[index].inqUnqRefNo = response.inqUnqRefNo;
+                    model.customer.guarantors[index].idenCheckStatus = response.status;
+                    if(response.status != 'SUCCESS' && response.status != 'PROCESSED')
+                        model.customer.guarantors[index].applicantIdenCheckFailed = true;
+                    else
+                        model.customer.guarantors[index].applicantIdenCheckFailed = false;
+                }
+            }
             if(response.status == 'SUCCESS' || response.status == 'PROCESSED'){
                 PageHelper.showProgress("cb-check", "Credit Bureau Request Placed..", 5000);
                 BundleManager.pushEvent('cb-check-done', model._bundlePageObj, {customerId: customerId, cbType:CBType})
             }
             else if(response.status == 'ERROR' || response.status == 'Error'){
-                PageHelper.showProgress("cb-check", "Error while placing Credit Bureau Request", 5000);
+                PageHelper.showProgress("Idencheck", "Error while placing Idencheck Resuest Request", 5000);
             }
             PageHelper.hideLoader();
-        }, function(errorResponse){
-            PageHelper.hideLoader();
-            PageHelper.showErrors(errorResponse);
-            if(errorResponse && errorResponse.data && errorResponse.data.error)
-                PageHelper.showProgress("cb-check", errorResponse.data.error, 5000);
-            else
-                PageHelper.showProgress("cb-check", "Failed while placing Credit Bureau Request", 5000);
-        });
+        }
     }
 
     var retry = function(model, customerType, index){
@@ -191,6 +237,12 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             model.customer.coapplicants = model.customer.coapplicants || [];
             model.customer.guarantors = model.customer.guarantors || [];
             model.customer.loanSaved = false;
+            model.idenCheckParam = SessionStore.getGlobalSetting("IdentCheckSettings");
+            model.idenCheck = {};
+            model.idenCheck.reqServiceType = model.idenCheckParam.split('~')[0];
+            model.idenCheck.dobSegmentRequired = Boolean(model.idenCheckParam.split('~')[1]);
+            model.idenCheck.addressSegmentReqired = Boolean(model.idenCheckParam.split('~')[2]);
+
             model.CBType= SessionStore.getGlobalSetting("CBCheckType");
             if(model.CBType){
                 model.CBType=JSON.parse((model.CBType).replace(/'/g, '"'));
@@ -198,7 +250,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             //model.CBType = JSON.parse(SessionStore.getGlobalSetting("CBCheckType").replace(/'/g, '"'));
             if (model.CBType && model.CBType.length) {
                 for (i in model.CBType) {
-                    (model.CBType[i] == "CIBIL")?model.CIBIL = true:(model.CBType[i] == "BASE"?model.BASE = true:(model.CBType[i] == "EQUIFAX"?model.EQUIFAX = true:false));
+                    (model.CBType[i] == "CIBIL")?model.CIBIL = true:(model.CBType[i] == "BASE"?model.BASE = true:(model.CBType[i] == "EQUIFAX"?model.EQUIFAX = true:(model.CBType[i] == "CHMHUB"?model.CHMHUB=true:false)));
                 }
             } else {
                 model.CIBIL = true;
@@ -677,6 +729,109 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                         }]
                                     }
                                 ]
+                            },
+
+                            {
+                                type: "fieldset",
+                                condition:"model.CHMHUB",
+                                title: "IDENCHECK",
+                                items: [{
+                                        key: "customer.applicantname",
+                                        title: "ApplicantName",
+                                        readonly: true,
+                                        type: "string",
+                                    }, {
+                                        type: 'button',
+                                        "condition": "model.customer.loanSaved",
+                                        title: 'Submit for CBCheck',
+                                        "onClick":"actions.save(model,'APP','CHMHUB', null)"
+                                       
+                                    }, {
+                                        "key": "customer.idenCheckStatus",
+                                        "condition": "model.customer.idenCheckStatus",
+                                        readonly: true,
+                                        title: "Status"
+                                    }, {
+                                        type: 'button',
+                                        title: 'Retry',
+                                        "condition": "model.customer.applicantIdenCheckFailed",
+                                        "onClick": function(model, schemaForm, form, event) {
+                                            retry(model, 'APP', null);
+                                        }
+                                    }, {
+                                        key: "customer.coapplicants",
+                                        type: "array",
+                                        title: ".",
+                                        view: "fixed",
+                                        notitle: true,
+                                        "startEmpty": true,
+                                        "add": null,
+                                        "remove": null,
+                                        items: [{
+                                            key: "customer.coapplicants[].coapplicantname",
+                                            title: "Co ApplicantName",
+                                            readonly: true,
+                                            type: "string"
+                                        }, {
+                                            type: 'button',
+                                            key: "customer.coapplicants[].idenCheckbutton",
+                                            title: 'Submit for CBCheck',
+                                            "condition": "model.customer.loanSaved && model.customer.coapplicants.length",
+                                            "onClick": function(model, schemaForm, form, event) {
+                                                fnPost(model, 'CO-APP', 'CHMHUB', event.arrayIndex);
+                                            }
+                                        }, {
+                                            "key": "customer.coapplicants[].idenCheckStatus",
+                                            "condition": "model.customer.coapplicants[arrayIndex].idenCheckStatus",
+                                            readonly: true,
+                                            title: "Status"
+                                        }, {
+                                            type: 'button',
+                                            key: "customer.coapplicants[].retrybutton",
+                                            title: 'Retry',
+                                            "condition": "model.customer.coapplicants[arrayIndex].applicantIdenCheckFailed",
+                                            "onClick": function(model, schemaForm, form, event) {
+                                                retry(model, 'CO-APP', event.arrayIndex);
+                                            }
+                                        }]
+                                    }, {
+                                        key: "customer.guarantors",
+                                        type: "array",
+                                        title: ".",
+                                        view: "fixed",
+                                        notitle: true,
+                                        "startEmpty": true,
+                                        "add": null,
+                                        "remove": null,
+                                        items: [{
+                                            key: "customer.guarantors[].guarantorname",
+                                            title: "Guarantor Name",
+                                            readonly: true,
+                                            type: "string"
+                                        }, {
+                                            type: 'button',
+                                            key: "customer.guarantors[].idenCheckbutton",
+                                            title: 'Submit for CBCheck',
+                                            "condition": "model.customer.loanSaved && model.customer.guarantors.length",
+                                            "onClick": function(model, schemaForm, form, event) {
+                                                fnPost(model, 'GUARANTOR', 'CHMHUB', event.arrayIndex);
+                                            }
+                                        }, {
+                                            "key": "customer.guarantors[].idenCheckStatus",
+                                            "condition": "model.customer.guarantors[arrayIndex].idenCheckStatus",
+                                            readonly: true,
+                                            title: "Status"
+                                        }, {
+                                            type: 'button',
+                                            key: "customer.guarantors[].retrybutton",
+                                            title: 'Retry',
+                                            "condition": "model.customer.guarantors[arrayIndex].applicantIdenCheckFailed",
+                                            "onClick": function(model, schemaForm, form, event) {
+                                                retry(model, 'GUARANTOR', event.arrayIndex);
+                                            }
+                                        }]
+                                    }
+                                ]
                             },   
                         ]
             }   
@@ -685,8 +840,9 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             return SchemaResource.getLoanAccountSchema().$promise;
         },
         actions: {
-            save: function(model,customerType, CBType, index){
-                fnPost(model,customerType, CBType, index);
+            save: function(model, customerType, CBType, index) {
+
+                fnPost(model, customerType, CBType, index);
             }
         }
 
@@ -694,3 +850,4 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
 }
 
 ]);
+    

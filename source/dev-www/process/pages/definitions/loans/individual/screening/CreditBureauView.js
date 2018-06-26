@@ -1,3 +1,6 @@
+
+
+
 irf.pageCollection.factory("CIBILAppendix", [function(){
     var accountTypes = {
         "01": {
@@ -451,6 +454,62 @@ var EQUIFAX_HTML =
     '<br>'+
 '</div>';
 
+   var IDENCHECK_HTML =
+'<div>'+
+    '<div ng-show="CBDATA.idenCheckResponseDTO != null && CBDATA.idenCheckResponseDTO.highmarkScores.length != 0" class= "row" style="margin:0px;margin-top:10px;">'+
+    '<div class= "row" style="margin-top:10px;">'+
+        '<div class = "col-sm-3" style="color: #204064;">'+
+            '<span class="col-sm-4" style="FONT-SIZE: 45PX;font-weight: bold;MARGIN-LEFT: 10PX;FONT-STYLE: ITALIC;padding: 10px;">CRIF</span>'+
+            '<span class="col-sm-6" style="margin-top: 10px;"><span class="col-sm-12" style="FONT-SIZE: 15PX;font-weight: bold;FONT-STYLE: ITALIC;padding-top: 15px;padding-left: 4px;">HIGH</span><span class="col-sm-12" style="    FONT-SIZE: 16PX;font-weight: bold;FONT-STYLE: ITALIC;padding-left: 0px;margin-left: 0px;margin-top: -5px;">MARK</span></span>'+
+        '</div>'+
+        '<div class = "col-sm-4 text-center"><h3 style="font-weight:bold;color:#ccc;">VERIFICATION REPORT</h3></div>'+
+        '<div class = "col-sm-5 pull-right" style="margin-top:10px;"><p class= "col-sm-12" style="margin: 0px;"><span class= "col-sm-6">CHM Ref#</span><span class="col-sm-6">{{CBDATA.idenCheckResponseDTO.reportId}}</span</p><p class= "col-sm-12" style="margin: 0px;"><span class="col-sm-6">Prepared For</span><span class="col-sm-6">{{CBDATA.idenCheckResponseDTO.preparedFor}}</span></p><p class= "col-sm-12" style="margin: 0px;"><span class="col-sm-6">Date of Request</span><span class="col-sm-6"> {{CBDATA.idenCheckResponseDTO.dateOfRequest}}</span></p><p class= "col-sm-12" style="margin: 0px;"><span class="col-sm-6">Date of Issue</span><span class="col-sm-6"> {{CBDATA.idenCheckResponseDTO.dateOfIssue}}</span></p></div>'+
+    '</div>'+
+    '<div class= "row" style="margin:10px 0px 0px 0px;border-bottom: 2px solid #ccc;"></div>'+
+    '<div class= "row" style="margin:10px 0px 0px 0px;color: white;background-color: #0F3F6B;">Inquiry Details</div>'+
+    '<div class= "row" style = "margin:10px 0px 0px 0px;">'+
+        '<div class ="col-sm-4" >'+
+            '<span class ="col-sm-12"><span class = "col-sm-6" style = "color:#0F3F6B;">NAME:</span><span class = "col-sm-6">{{CBDATA.idenCheckResponseDTO.name}}</span></span>'+
+            '<span class ="col-sm-12"><span class = "col-sm-6" style = "color:#0F3F6B;">FATHER:</span><span class = "col-sm-6">{{CBDATA.idenCheckResponseDTO.name}}</span></span>'+
+            '<span class ="col-sm-12"><span class = "col-sm-6" style = "color:#0F3F6B;">PHONE NUMBER:</span><span class = "col-sm-6">{{CBDATA.idenCheckResponseDTO.personalInfoVariations[1].variationValue}}</span></span>'+
+        '</div>'+
+        '<div class ="col-sm-4">'+
+            '<span class ="col-sm-12"><span class = "col-sm-4" style = "color:#0F3F6B;">DOB/AGE:</span><span class = "col-sm-8">{{CBDATA.idenCheckResponseDTO.dob}}</span></span>'+
+            '<span class ="col-sm-12"><span class = "col-sm-4" style = "color:#0F3F6B;">SPOUSE:</span><span class = "col-sm-8">{{CBDATA.idenCheckResponseDTO.spouse}}</span></span>'+
+            '<span class ="col-sm-12"><span class = "col-sm-4" style = "color:#0F3F6B;">ID(S):</span><span class = "col-sm-8"></span></span>'+
+        '</div>'+
+        '<div class ="col-sm-4" >'+
+            '<span class ="col-sm-12"><span class = "col-sm-4" style = "color:#0F3F6B;">GENDER:</span><span class = "col-sm-6">{{CBDATA.idenCheckResponseDTO.gender}}</span></span>'+
+            '<span class ="col-sm-12"><span class = "col-sm-4" style = "color:#0F3F6B;">MOTHER:</span><span class = "col-sm-6">{{CBDATA.idenCheckResponseDTO.name}}</span></span>'+
+            '<span class ="col-sm-12"><span class = "col-sm-4" style = "color:#0F3F6B;">EMAIL ID:</span><span class = "col-sm-6">{{CBDATA.idenCheckResponseDTO.personalInfoVariations[1].variationValue}}</span></span>'+
+        '</div>'+
+        '</div>'+
+        '<p class= "row" style = "margin-top:10px;"><span class="col-sm-2" style = "color:#0F3F6B;"> CURRENT ADDRESS</span><span class = "col-sm-10">{{CBDATA.idenCheckResponseDTO.personalInfoVariations[0].variationValue}}</span> </p>'+
+        '<div class= "row" style="margin:10px 0px 0px 0px;color: white;background-color: #0F3F6B;">Verification Response</div>'+
+        '<div class= "row" style="margin:0px;border-bottom: 2px solid #ccc;">'+
+            '<span class= "col-sm-1 col-sm-offset-8" style = "color:#2A557C;padding-left: 35px;">Status</span>'+
+            '<span class="col-sm-2" style="padding: 0px; margin-left: 50px;">'+
+                '<span class ="col-sm-12" style = "color:#2A557C;">Score</span><span class ="col-sm-12" style = "color:#2A557C;">(Score range 0-100)</span></span>'+
+        '</div>'+
+        '<div class= "row" style="margin:10px 0px 0px 0px; background-color: #E6E6FF"; ng-repeat="idenCheckResponse in CBDATA.idenCheckResponseDTO.idenCheckResponses">'+
+            '<p class = "col-sm-1" style="background-color: #0F3F6B;width: 1%;padding-bottom: 2.5%;margin-bottom: 0px;color: white;padding-top: 2.5%;">{{$index + 1}}</p>'+
+            '<span class = "col-sm-8">'+
+                '<span class= "col-sm-12"><span class = "col-sm-4" style = "color:#41658D;"> Verification for:</span><span class = "col-sm-8" style = "color:#B84D05;"> {{idenCheckResponse.requestServiceType}}</span></span>'+
+                '<span class= "col-sm-12"><span class = "col-sm-2" style = "color:#41658D;"> Description:</span><span class = "col-sm-10" style = "color:#9B9BA2;"> {{idenCheckResponse.description}}</span></span>'+
+                '<span class= "col-sm-12"><span class = "col-sm-2" style = "color:#41658D;"> Remark:</span><span class = "col-sm-10" style = "color:#9B9BA2;"> {{idenCheckResponse.remarks}}</span></span>'+
+            '</span>'+
+            '<span class = "col-sm-1" ng-show = "{{idenCheckResponse.status}}" style = "color: #06D456; margin-top: 22px;background-color: #06D456;padding: 8px;width: 5%;"></span>'+
+            '<span class = "col-sm-1" ng-hide = "{{idenCheckResponse.status}}" style = "color: #0F3F6B; margin-top: 22px;background-color: #FE403F;padding: 8px;width: 5%;"></span>'+
+            '<span class = "col-sm-2" style=" margin-left: 50px; margin-top: 10px;">'+
+                '<span class= "col-sm-12" style = "color:#2A557C;margin-top: 12px;"> {{idenCheckResponse.scoreValue}}</span>'+
+            '</span>'+
+        '</div>'+
+        '</div>'+
+    '<div ng-hide="CBDATA.idenCheckResponseDTO != null">'+
+        '<center><b style="color:tomato">{{CBDATA.customer.first_name||CBDATA.customerId}} - IDENCHECK Scores NOT available</b></center>'+
+    '</div>'
+'</div>';
+
     var objectifiedBureaus = {};
 
     var refreshCB = function(model) {
@@ -543,15 +602,32 @@ var EQUIFAX_HTML =
                             }
                         }
                         // Data processing for UI - ends
+                        var idencheckMethod = function(httpres){
+                           if( httpres.idenCheckResponseDTO != null &&  httpres.idenCheckResponseDTO.length != 0){
+                                    for(i in httpres.idenCheckResponseDTO.idenCheckResponses){
+                                       if(httpres.idenCheckResponseDTO.idenCheckResponses[i].status != 'Y' ){
+                                            httpres.idenCheckResponseDTO.idenCheckResponses[i].status = false
+                                       }
+                                       else{
+                                            httpres.idenCheckResponseDTO.idenCheckResponses[i].status = true
+                                       }
+                                       httpres.idenCheckResponseDTO.idenCheckResponses[i].scoreValue =  httpres.idenCheckResponseDTO.highmarkScores[i].scoreValue
+                                    }
+                           }
+                        }
 
                         for (j in model.loanAccount.loanCustomerRelations) {
                             var relationGuy = model.loanAccount.loanCustomerRelations[j];
                             if (relationGuy.customerId == httpres.customerId) {
                                 if (relationGuy.relation == 'Applicant') {
+                                    idencheckMethod(httpres);
                                     model.applicant = httpres;
+                                    console.log(model.applicant)
                                 } else if (relationGuy.relation == 'Co-Applicant') {
+                                    idencheckMethod(httpres);
                                     model.coapplicants.push(httpres);
                                 } else if (relationGuy.relation == 'Guarantor') {
+                                    idencheckMethod(httpres);
                                     model.guarantors.push(httpres);
                                 }
                             }
@@ -622,7 +698,7 @@ var EQUIFAX_HTML =
             //model.CBType = JSON.parse(SessionStore.getGlobalSetting("CBCheckType").replace(/'/g, '"'));
             if (model.CBType && model.CBType.length) {
                 for (i in model.CBType) {
-                    (model.CBType[i] == "CIBIL")?model.CIBIL = true:(model.CBType[i] == "BASE"?model.BASE = true:(model.CBType[i] == "EQUIFAX"?model.EQUIFAX = true:false));
+                    (model.CBType[i] == "CIBIL")?model.CIBIL = true:(model.CBType[i] == "BASE"?model.BASE = true:(model.CBType[i] == "EQUIFAX"?model.EQUIFAX = true:(model.CBType[i] == "CHMHUB"?model.CHMHUB=true:false)));
                 }
             } else {
                 model.CIBIL = true;
@@ -662,12 +738,13 @@ var EQUIFAX_HTML =
             {
                 "type": "box",
                 "colClass": "col-sm-12",
+
                 title:"APPLICANT",
                 readonly:true,
                 "items": [
                     {
                         type: "section",
-                        html: '<div ng-init="CBDATA=model.applicant">' + '<div ng-show="model.BASE">'+HIGHMARK_HTML+'</div>'+'<div ng-show="model.CIBIL">'+ CIBIL_HTML +'</div>'+ '<div ng-show="model.EQUIFAX">'+EQUIFAX_HTML+'</div>'+ '</div>'
+                        html: '<div ng-init="CBDATA=model.applicant">' + '<div ng-show="model.BASE">'+HIGHMARK_HTML+'</div>'+'<div ng-show="model.CIBIL">'+ CIBIL_HTML +'</div>'+ '<div ng-show="model.EQUIFAX">'+EQUIFAX_HTML+'</div>'+'<div ng-show="model.CHMHUB">'+IDENCHECK_HTML+'</div>'+ '</div>'
                     }
                 ]
             },
@@ -680,7 +757,7 @@ var EQUIFAX_HTML =
                 "items": [
                     {
                         type: "section",
-                        html: '<div ng-repeat="CBDATA in model.coapplicants">' + '<div ng-show="model.BASE">'+HIGHMARK_HTML+'</div>'+'<div ng-show="model.CIBIL">'+ CIBIL_HTML +'</div>'+ '<div ng-show="model.EQUIFAX">'+EQUIFAX_HTML+'</div>' + '<hr><hr></div>'
+                        html: '<div ng-repeat="CBDATA in model.coapplicants">' + '<div ng-show="model.BASE">'+HIGHMARK_HTML+'</div>'+'<div ng-show="model.CIBIL">'+ CIBIL_HTML +'</div>'+ '<div ng-show="model.EQUIFAX">'+EQUIFAX_HTML+'</div>' +'<div ng-show="model.CHMHUB">'+IDENCHECK_HTML+'</div>'+ '<hr><hr></div>'
                     }
                 ]
             },
@@ -693,7 +770,7 @@ var EQUIFAX_HTML =
                 "items": [
                     {
                         type: "section",
-                        html: '<div ng-repeat="CBDATA in model.guarantors">' + '<div ng-show="model.BASE">'+HIGHMARK_HTML+'</div>'+'<div ng-show="model.CIBIL">'+ CIBIL_HTML +'</div>'+ '<div ng-show="model.EQUIFAX">'+EQUIFAX_HTML+'</div>'+ '<hr><hr></div>'
+                        html: '<div ng-repeat="CBDATA in model.guarantors">' + '<div ng-show="model.BASE">'+HIGHMARK_HTML+'</div>'+'<div ng-show="model.CIBIL">'+ CIBIL_HTML +'</div>'+ '<div ng-show="model.EQUIFAX">'+EQUIFAX_HTML+'</div>'+'<div ng-show="model.CHMHUB">'+IDENCHECK_HTML+'</div>'+ '<hr><hr></div>'
                     }
                 ]
             }
