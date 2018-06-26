@@ -1,3 +1,5 @@
+
+
 irf.pageCollection.factory(irf.page("customer360.CustomerProfile"),
 ["$log", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
 "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch",
@@ -1390,6 +1392,14 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     model.enrollmentAction = "PROCEED";
                     $log.info(model);
                     var reqData = _.cloneDeep(model);
+                    if (reqData.customer.addressProof == 'Aadhar Card' &&
+                        !_.isNull(reqData.customer.addressProofNo)){
+                        reqData.customer.aadhaarNo = reqData.customer.addressProofNo;
+                    }
+                     if (reqData.customer.identityProof == 'Pan Card' &&
+                        !_.isNull(reqData.customer.identityProofNo)){
+                        reqData.customer.panNo = reqData.customer.identityProofNo;
+                    }
                     Enrollment.updateEnrollment(reqData, function (res, headers) {
                         PageHelper.hideLoader();
                         irfProgressMessage.pop('PROFILE', 'Done. Customer Updated, ID : ' + res.customer.id, 2000);
