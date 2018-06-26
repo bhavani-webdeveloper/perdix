@@ -191,7 +191,7 @@ define({
                     },
                     getActions: function() {
                         return [{
-                            name: "GO_NO_GO_APPROVAL",
+                            name: "REVIEW",
                             desc: "",
                             icon: "fa fa-pencil-square-o",
                             fn: function(item, index) {

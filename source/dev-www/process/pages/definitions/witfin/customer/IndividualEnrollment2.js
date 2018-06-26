@@ -69,6 +69,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "Liabilities": {
                                     "readonly": true
                                 },
+                                "customerLicenceDetails": {
+                                    "readonly": true
+                                },
                                 "HouseVerification": {
                                     "readonly": true
                                 },
@@ -88,6 +91,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "FamilyDetails": {
                                     "title": "HOUSEHOLD_DETAILS"
                                 },
+                                "customerLicenceDetails": {
+                                    "readonly": true
+                                },
                                 "KYC.customerId": {
                                     "readonly": true
                                 }
@@ -103,6 +109,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             "overrides": {
                                 "FamilyDetails": {
                                     "title": "HOUSEHOLD_DETAILS"
+                                },
+                                "customerLicenceDetails": {
+                                    "readonly": true
                                 },
                                 "KYC.customerId": {
                                     "readonly": true
@@ -194,7 +203,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.customerId": {
                                     "readonly": true
                                 },
-                                
+                                "customerLicenceDetails": {
+                                    "readonly": true
+                                },
                                 "PhysicalAssets": {
                                     "readonly": true
                                 },
@@ -214,6 +225,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "title": "HOUSEHOLD_DETAILS"
                                 },
                                 "KYC.customerId": {
+                                    "readonly": true
+                                },
+                                "customerLicenceDetails": {
                                     "readonly": true
                                 },
                                 "PhysicalAssets": {
@@ -237,6 +251,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.customerId": {
                                     "readonly": true
                                 },
+                                "customerLicenceDetails": {
+                                    "readonly": true
+                                },
                                 "PhysicalAssets": {
                                     "readonly": true
                                 },
@@ -256,6 +273,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "title": "HOUSEHOLD_DETAILS"
                                 },
                                 "KYC.customerId": {
+                                    "readonly": true
+                                },
+                                "customerLicenceDetails": {
                                     "readonly": true
                                 },
                                 "PhysicalAssets": {
@@ -279,6 +299,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.customerId": {
                                     "readonly": true
                                 },
+                                "customerLicenceDetails": {
+                                    "readonly": true
+                                },
                                 "PhysicalAssets": {
                                     "readonly": true
                                 },
@@ -300,7 +323,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.customerId": {
                                     "readonly": true
                                 },
-                                
+                                "customerLicenceDetails": {
+                                    "readonly": true
+                                },
                                 "PhysicalAssets": {
                                     "readonly": true
                                 },
@@ -320,6 +345,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "title": "HOUSEHOLD_DETAILS"
                                 },
                                 "KYC.customerId": {
+                                    "readonly": true
+                                },
+                                "customerLicenceDetails": {
                                     "readonly": true
                                 },
                                 "PhysicalAssets": {
@@ -343,7 +371,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.customerId": {
                                     "readonly": true
                                 },
-                                
+                                "customerLicenceDetails": {
+                                    "readonly": true
+                                },
                                 "PhysicalAssets": {
                                     "readonly": true
                                 },
@@ -365,7 +395,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.customerId": {
                                     "readonly": true
                                 },
-                                
+                                "customerLicenceDetails": {
+                                    "readonly": true
+                                },
                                 "PhysicalAssets": {
                                     "readonly": true
                                 },
@@ -387,7 +419,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.customerId": {
                                     "readonly": true
                                 },
-                                
+                                "customerLicenceDetails": {
+                                    "readonly": true
+                                },
                                 "PhysicalAssets": {
                                     "readonly": true
                                 },
@@ -407,6 +441,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "title": "HOUSEHOLD_DETAILS"
                                 },
                                 "KYC.customerId": {
+                                    "readonly": true
+                                },
+                                "customerLicenceDetails": {
                                     "readonly": true
                                 },
                                 "IndividualReferences": {
@@ -433,7 +470,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.customerId": {
                                     "readonly": true
                                 },
-                                
+                                "customerLicenceDetails": {
+                                    "readonly": true
+                                },
                                 "PhysicalAssets": {
                                     "readonly": true
                                 },
@@ -463,6 +502,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "title": "HOUSEHOLD_DETAILS"
                                 },
                                 "Liabilities": {
+                                    "readonly": true
+                                },
+                                "customerLicenceDetails": {
                                     "readonly": true
                                 },
                                 "V": {
@@ -500,6 +542,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "title": "HOUSEHOLD_DETAILS"
                                 },
                                 "Liabilities": {
+                                    "readonly": true
+                                },
+                                "customerLicenceDetails": {
                                     "readonly": true
                                 },
                                 "IndividualReferences": {
@@ -583,6 +628,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "HouseVerification": {
                         "title": "RESIDENCE"
                     },
+                    "customerLicenceDetails.customerLicenceDetails": {
+                                     startEmpty: true
+                    },
                     "Liabilities.liabilities": {
                                     startEmpty: true
                     },
@@ -636,7 +684,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "condition": "model.customer.ownership == 'Rental'"
                     },
                     "HouseVerification.distanceFromBranch": {
-                        //"required": true
+                        "required": true
                     },
                     "ContactInformation.pincode": {
                         fieldType: "number",
@@ -1387,7 +1435,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 {
                                     "type": "actionbox",
-                                    "condition": "model.customer.currentStage && (model.loanProcess.loanAccount.currentStage=='Screening' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation1' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation2' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation3' || model.loanProcess.loanAccount.currentStage=='TeleVerification' || model.loanProcess.loanAccount.currentStage=='Application')",
+                                    "condition": "model.customer.currentStage && (model.loanProcess.loanAccount.currentStage=='Screening' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation1' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation2' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation3' || model.loanProcess.loanAccount.currentStage=='TeleVerification' || model.loanProcess.loanAccount.currentStage=='CreditAppraisal' || model.loanProcess.loanAccount.currentStage=='Application')",
                                     "orderNo": 1200,
                                     "items": [
                                         {
