@@ -253,7 +253,6 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             //model.CBType = JSON.parse(SessionStore.getGlobalSetting("CBCheckType").replace(/'/g, '"'));
             if (model.CBType && model.CBType.length) {
                 for (i in model.CBType) {
-                    if()
                     (model.CBType[i] == "CIBIL")?model.CIBIL = true:(model.CBType[i] == "BASE"?model.BASE = true:(model.CBType[i] == "EQUIFAX"?model.EQUIFAX = true:(model.CBType[i] == "CHMHUB"?model.CHMHUB=true:false)));
                 }
             } else {
