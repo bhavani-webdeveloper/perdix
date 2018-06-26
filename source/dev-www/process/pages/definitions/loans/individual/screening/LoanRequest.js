@@ -819,7 +819,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         type: "lov",
                         lovonly: true,
                         autolov: true,
-                        condition: "model.loanAccount.transactionType && model.loanAccount.transactionType.toLowerCase() != 'renewal'",
+                        condition: "model.loanAccount.transactionType.toLowerCase() != 'renewal'",
                         
                         searchHelper: formHelper,
                         search: function(inputModel, form, model, context) {
@@ -870,14 +870,14 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         title:"LINKED_ACCOUNT_NUMBER",
                         readonly:true,
                         required: false,
-                        condition: "model.loanAccount.transactionType && model.loanAccount.transactionType.toLowerCase() == 'renewal'"
+                        condition: "model.loanAccount.transactionType.toLowerCase() == 'renewal'"
                     },
                     {
                         key: "loanAccount.baseLoanAccount",
                         title: "Base Loan Account",
                         readonly:true,
                         required: false,
-                        condition: "model.loanAccount.transactionType && model.loanAccount.transactionType.toLowerCase() == 'renewal'"
+                        condition: "model.loanAccount.transactionType.toLowerCase() == 'renewal'"
                         
                      },
                      {
@@ -1042,7 +1042,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 "items": [
                     {
                         key:"loanAccount.linkedAccountNumber",
-                        "condition": "(model.currentStage !='FieldAppraisal' && model.currentStage !='Sanction'",
+                        "condition": "(model.currentStage !='FieldAppraisal' && model.currentStage !='Sanction' && model.loanAccount.transactionType.toLowerCase() != 'renewal'",
                         title:"LINKED_ACCOUNT_NUMBER",
                         type: "lov",
                         lovonly: true,
@@ -1073,7 +1073,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     {
                         key:"loanAccount.linkedAccountNumber",
                         title:"LINKED_ACCOUNT_NUMBER",
-                        "condition": "(model.currentStage =='FieldAppraisal'|| model.currentStage =='Sanction')",
+                        "condition": "(model.currentStage =='FieldAppraisal'|| model.currentStage =='Sanction' && model.loanAccount.transactionType.toLowerCase() != 'renewal')",
                         type: "lov",
                         lovonly: true,
                         autolov: true,
@@ -1126,14 +1126,14 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         title:"LINKED_ACCOUNT_NUMBER",
                         readonly:true,
                         required: false,
-                        condition: "model.loanAccount.transactionType && model.loanAccount.transactionType.toLowerCase() == 'renewal'"
+                        condition: "model.loanAccount.transactionType.toLowerCase() == 'renewal'"
                     },
                     {
                         key: "loanAccount.baseLoanAccount",
                         title: "Base Loan Account",
                         readonly:true,
                         required: false,
-                        condition: "model.loanAccount.transactionType && model.loanAccount.transactionType.toLowerCase() == 'renewal'"
+                        condition: "model.loanAccount.transactionType.toLowerCase() == 'renewal'"
                         
                      },
                      {
