@@ -484,8 +484,8 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
             }
 
             /* Deviations and Mitigations grouping */
-            if(_.hasIn(model.loanAccount,'transactionType')&& _.isNull(model.loanAccount.transactionType)){
-                model.loanAccount.transactionType = New;
+            if(!_.hasIn(model.loanAccount,'transactionType')){
+                model.loanAccount.transactionType = "New";
             }
             if (_.hasIn(model.loanAccount, 'loanMitigants') && _.isArray(model.loanAccount.loanMitigants)){
                 var loanMitigantsGrouped = {};
