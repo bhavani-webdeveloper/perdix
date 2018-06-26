@@ -1,8 +1,8 @@
 define({
     pageUID: "payment.paymentRejected",
     pageType: "Engine",
-    dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager", "Payment", "LoanBookingCommons"],
-    $pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, Payment, LoanBookingCommons) {
+    dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager", "paymentRejected", "LoanBookingCommons"],
+    $pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, paymentRejected, LoanBookingCommons) {
         var branch = SessionStore.getBranch();
         var centres = SessionStore.getCentres();
         var centreId = [];
@@ -13,7 +13,7 @@ define({
         }
         return {
             "type": "search-list",
-            "title": "PAYMENT_REJECTED_SEARCH",
+            "title": "Payment_Rejected_Search",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 model.branch = branch;
@@ -35,88 +35,66 @@ define({
                     "title": 'SEARCH_OPTIONS',
                     "properties": {
                         "debitAccountName": {
-                            "title": "DEBIT_ACCOUNT_NAME",
+                            "title": "DebitAccountName",
                             "type": "string",
+                            "required": true,
                             "x-schema-form": {
                                 type: "lov",
                                 autolov: true,
                                 bindMap: {},
                                 searchHelper: formHelper,
                                 lovonly: true,
-                                search: function(inputModel, form, model, context) {
-                                    var centres = SessionStore.getCentres();
-                                    var centreCode = formHelper.enum('centre').data;
-                                    var out = [];
-                                    if (centres && centres.length) {
-                                        for (var i = 0; i < centreCode.length; i++) {
-                                            for (var j = 0; j < centres.length; j++) {
-                                                if (centreCode[i].value == centres[j].id) {
-                                                    out.push({
-                                                        name: centreCode[i].name,
-                                                        value: centreCode[i].code
-                                                    })
-                                                }
-                                            }
-                                        }
-                                    }
+                                search: function(inputModel, form, model) {
                                     return $q.resolve({
                                         headers: {
-                                            "x-total-count": out.length
+                                            "x-total-count": [].length
                                         },
-                                        body: out
+                                        body: []
                                     });
                                 },
-                                onSelect: function(valueObj, model, context) {
-                                    model.centre = valueObj.name;
-                                    model.centreCode = valueObj.value;
-                                },
                                 getListDisplayItem: function(item, index) {
-
+                                    return [];
+                                },
+                                onSelect: function(result, model, context) {
+                                    
                                 }
                             }
                         },
                         "paymentDate": {
-                            "title": "PAYMENT_DATE",
-							"type": "string",
-							"x-schema-form": {
-								"type": "date"
-							}
+                            "title": "Payment_Date",
+                            "type": "string"
                         },
                         "branchName": {
-                            "title": "BRANCH_NAME",
+                            "title": "Branch_Name",
                             "type": "string"
                         },
                         "spokeName": {
-                            "title": "SPOKE_NAME",
+                            "title": "Spoke_Name",
                             "type": "string"
                         },
                         "beneficiaryName": {
-                            "title": "BENEFICIARY_NAME",
+                            "title": "Beneficiary_Name",
                             "type": "string"
                         },
                         "paymentType": {
                             "type": "string",
-                            "title": "PAYMENT_TYPE",
+                            "title": "Payment_Type",
                             "x-schema-form": {
-                                "type": "select",
-                                "enumCode":"payment_type"
-                                
+                                "type": "select"
                             }
                         },
                         "paymentMode": {
                             "type": "string",
-                            "title": "PAYMENT_MODE",
+                            "title": "Payment_Mode",
                             "x-schema-form": {
-                                "type": "select",
-                                "enumCode":"mode_of_payment"
+                                "type": "select"
                             }
                         },
                         "paymentPurpose": {
                             "type": "string",
-                            "title": "PAYMENT_PURPOSE",
+                            "title": "Payment_Purpose",
                             "x-schema-form": {
-                                "type": "select",
-                                "enumCode":"payment_purpose"
+                                "type": "select"
                             }
                         },
                     },
@@ -126,16 +104,7 @@ define({
                     return formHelper;
                 },
                 getResultsPromise: function(searchOptions, pageOpts) {
-                    return Payment.search({
-						'paymentDate': searchOptions.paymentDate,
-						'transactionType': searchOptions.transactionType,
-						'modeOfPayment': searchOptions.modeOfPayment,
-						'beneficiaryBankBranch': searchOptions.beneficiaryBankBranch,
-						'debitAccountName': searchOptions.debitAccountName,
-						'paymentPurpose': searchOptions.paymentPurpose,
-                        'beneficiaryName': searchOptions.beneficiaryName,
-                        'currentStage':"PaymentRejected",
-                    }).$promise;
+                    return paymentRejected.getSchema().$promise;
                 },
                 paginationOptions: {
                     "getItemsPerPage": function(response, headers) {
@@ -158,14 +127,14 @@ define({
                     },
                     getListItem: function(item) {
                         return [
-                            item.paymentDate,
-                            item.beneficiaryBankBranch,
-                            item.transactionType,
-                            item.transactionType,
-                            item.modeOfPayment,
-                            item.paymentPurpose,
-                            item.debitAccountName,
-                            item.beneficiaryName,
+                            item.payment_date,
+                            item.branch,
+                            item.spoke,
+                            item.type,
+                            item.payment_mode,
+                            item.payment_purpose,
+                            item.account_name,
+                            item.b_name,
                         ]
                     },
                     getTableConfig: function() {
@@ -177,62 +146,63 @@ define({
                     },
                     getColumns: function() {
                         return [{
-                            title: 'PAYMENT_DATE',
-                            data: 'paymentDate'
+                            title: 'Payment_Date',
+                            data: 'payment_date'
                         }, {
-                            title: 'BRANCH',
-                            data: 'beneficiaryBankBranch'
+                            title: 'Branch',
+                            data: 'branch'
                         }, {
-                            title: 'SPOKE',
-                            data: 'transactionType'
+                            title: 'Spoke',
+                            data: 'spoke'
                         }, {
-                            title: 'PAYMENT_TYPE',
-                            data: 'transactionType'
+                            title: 'Payment_Type',
+                            data: 'type'
                         }, {
-                            title: 'PAYMENT_MODE',
-                            data: 'modeOfPayment'
+                            title: 'Payment_Mode',
+                            data: 'payment_mode'
                         }, {
-                            title: 'PAYMENT_PURPOSE',
-                            data: 'paymentPurpose'
+                            title: 'Payment_Purpose',
+                            data: 'payment_purpose'
                         }, {
-                            title: 'DEBIT_ACCOUNT_NAME',
-                            data: 'debitAccountName'
+                            title: 'Debit_Account_Name',
+                            data: 'account_name'
                         }, {
-                            title: 'BENEFICIARY_NAME',
-                            data: 'beneficiaryName'
+                            title: 'Beneficiary_Name',
+                            data: 'b_name'
                         }]
                     },
-					getActions: function() {
-						return [{
-							name: "VIEW_DETAILS",
-							desc: "",
-							icon: "fa fa-pencil-square-o",
-							fn: function(item, index) {
-								$state.go("Page.Engine", {
-									pageName: "payment.PaymentRejectedQueue",
-									pageId: item.id
-								});
-							},
-							isApplicable: function(item, index) {
-
-								return true;
-							}
-						},{
-							name: "PAYMENT_REINITIATION",
-							desc: "",
-							icon: "fa fa-pencil-square-o",
-							fn: function(item, index) {
-								$state.go("Page.Engine", {
-									pageName: "payment.PaymentInitiation",
-									pageId: item.id
-								});
-							},
-							isApplicable: function(item, index) {
-
-								return true;
-							}
-						}];
-					}
+                    getActions: function() {
+                        return [                           {
+                                    name: "ViewDetails",
+                                    desc: "",
+                                    icon: "fa fa-pencil",
+                                    fn: function(item, model){
+                                        irfNavigator.go({
+                                            state: "Page.Engine",
+                                            pageName: "payment.PaymentInitiation",
+                                            pageId: item.id,
+                                        });
+                                    },
+                                    isApplicable: function(item, model){
+                                         return true;
+                                    }
+                                },
+                                                                 {
+                                    name: "Payment_Reinitiated",
+                                    desc: "",
+                                    icon: "fa fa-pencil",
+                                    fn: function(item, model){
+                                        irfNavigator.go({
+                                            state: "Page.Engine",
+                                            pageName: "payment.PaymentInitiation",
+                                            pageId: item.id,
+                                        });
+                                    },
+                                    isApplicable: function(item, model){
+                                         return true;
+                                    }
+                                }];
+                    }
                 }
             }
         };

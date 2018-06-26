@@ -1,8 +1,8 @@
 define({
     pageUID: "payment.paymentInitiationSearch",
     pageType: "Engine",
-    dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager", "Payment", "LoanBookingCommons"],
-    $pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, Payment, LoanBookingCommons) {
+    dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager", "PaymentInitiationSearch", "LoanBookingCommons"],
+    $pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, PaymentInitiationSearch, LoanBookingCommons) {
         var branch = SessionStore.getBranch();
         var centres = SessionStore.getCentres();
         var centreId = [];
@@ -31,17 +31,7 @@ define({
                     return formHelper;
                 },
                 getResultsPromise: function(searchOptions, pageOpts) {
-                   
-                    var promise = Payment.search({
-                        'id': searchOptions.id,
-                        'debitAccountName': searchOptions.debitAccountName,
-                        'transactionType': searchOptions.transactionType,
-                        'currentStage':"PaymentInitiation",
-                    }).$promise;
-
-                   
-                    return promise;
-                        
+                    return PaymentInitiationSearch.getSchema().$promise;
                 },
                 paginationOptions: {
                     "getItemsPerPage": function(response, headers) {
@@ -63,7 +53,7 @@ define({
                         return [];
                     },
                     getListItem: function(item) {
-                        return [item.id, item.debitAccountName, item.transactionType];
+                        return [item.payment_id, item.account_name, item.type];
                     },
                     getTableConfig: function() {
                         return {
@@ -75,13 +65,13 @@ define({
                     getColumns: function() {
                         return [{
                             title: 'PAYMENT_ID',
-                            data: 'id'
+                            data: 'payment_id'
                         }, {
                             title: 'DEBIT_ACCOUNT_NAME',
-                            data: 'debitAccountName'
+                            data: 'account_name'
                         },{
                             title: 'PAYMENT_TYPE',
-                            data: 'transactionType'
+                            data: 'type'
                         }];
                     },
                     getActions: function() {
@@ -90,9 +80,10 @@ define({
                             desc: "",
                             icon: "fa fa-user",
                             fn: function(item, index){
+                                console.log(item);
                                 $state.go("Page.Engine", {
                                     pageName: "payment.PaymentInitiation",
-                                    pageId: item.id,
+                                    pageId: item.payment_id,
                                     pageData: item
                                 });
                             },

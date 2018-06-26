@@ -1,9 +1,0 @@
-{
-	"body":[
-		{ "id":1, "payment_id":"1", "account_name":"HDFC0002562,HDFC","type":"NEFT" },
-		{ "id":2, "payment_id":"23", "account_name":"HDFC0002562,HDFC","type":"RTGS" },
-		{ "id":3, "payment_id":"34", "account_name":"RBI0522269,RBI","type":"RTGS" },
-		{ "id":4, "payment_id":"453", "account_name":"RBI0522269,RBI","type":"NEFT" },
-		{ "id":5, "payment_id":"423", "account_name":"HDFC0002562,HDFC","type":"RTGS" }
-	]
-}

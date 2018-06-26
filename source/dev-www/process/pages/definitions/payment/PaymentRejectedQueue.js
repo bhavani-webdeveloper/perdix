@@ -34,27 +34,18 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                         lovonly: true,
                         searchHelper: formHelper,
                         search: function(inputModel, form, model) {
-                            var defered = $q.defer();
-                            UIRepository.getSampleLov().$promise.then(
-                                function(data){
-                                    defered.resolve({
-                                        headers: {
-                                            "x-total-count": data.lov.length
-                                        },
-                                        body: data.lov
-                                    });
-                            }, function(err){
-                                defered.reject(err);
+                            return $q.resolve({
+                                headers: {
+                                    "x-total-count": [].length
+                                },
+                                body: []
                             });
-                            return defered.promise;
                         },
                         getListDisplayItem: function(item, index) {
-                            return [
-                                item.name
-                            ];
+                            return [];
                         },
                         onSelect: function(result, model, context) {
-                            model.payment.loanAccount = result.name
+                            
                         }
                     },
                     "DebitAccountDetails.debitAccountName":{
@@ -64,27 +55,18 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                         lovonly: true,
                         searchHelper: formHelper,
                         search: function(inputModel, form, model) {
-                            var defered = $q.defer();
-                            UIRepository.getSampleLov().$promise.then(
-                                function(data){
-                                    defered.resolve({
-                                        headers: {
-                                            "x-total-count": data.lov.length
-                                        },
-                                        body: data.lov
-                                    });
-                            }, function(err){
-                                defered.reject(err);
+                            return $q.resolve({
+                                headers: {
+                                    "x-total-count": [].length
+                                },
+                                body: []
                             });
-                            return defered.promise;
                         },
                         getListDisplayItem: function(item, index) {
-                            return [
-                                item.name
-                            ];
+                            return [];
                         },
                         onSelect: function(result, model, context) {
-                            model.payment.debitAccountName = result.name
+                            
                         }
                     },
                     "BeneficiaryDetails.bankIFSC":{
@@ -98,27 +80,18 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                         lovonly: true,
                         searchHelper: formHelper,
                         search: function(inputModel, form, model) {
-                            var defered = $q.defer();
-                            UIRepository.getSampleLov().$promise.then(
-                                function(data){
-                                    defered.resolve({
-                                        headers: {
-                                            "x-total-count": data.lov.length
-                                        },
-                                        body: data.lov
-                                    });
-                            }, function(err){
-                                defered.reject(err);
+                            return $q.resolve({
+                                headers: {
+                                    "x-total-count": [].length
+                                },
+                                body: []
                             });
-                            return defered.promise;
                         },
                         getListDisplayItem: function(item, index) {
-                            return [
-                                item.name
-                            ];
+                            return [];
                         },
                         onSelect: function(result, model, context) {
-                            model.payment.beneficiaryName = result.name
+                            
                         }
                     }
                     

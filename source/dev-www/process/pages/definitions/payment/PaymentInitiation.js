@@ -68,6 +68,7 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                     "BeneficiaryDetails.beneficiaryName":{
                         "type": "lov",
                         "resolver": "CustomerBankAccountsLOVConfiguration"                       
+                       
                     }
                     
                 };

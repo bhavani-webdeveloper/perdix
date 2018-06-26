@@ -1,11 +1,11 @@
 define({ 
 	pageUID:"payment.PaymentApprovalSearch",
 	pageType: "Engine",
-    dependencies: ["$log", "formHelper", "$state", "SessionStore", "Payment"],
-	$pageFn: function($log, formHelper, $state, SessionStore, Payment) {
+    dependencies: ["$log", "formHelper", "$state", "SessionStore", "PaymentApprove"],
+	$pageFn: function($log, formHelper, $state, SessionStore, PaymentApprove) {
 		return {
 			"type": "search-list",
-			"title": "PAYMENT_APPROVAL_SEARCH",
+			"title": "PAYMENT_APPROVAL",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				$log.info("payment approval list got initialized");
@@ -27,7 +27,7 @@ define({
 								"type": "date"
 							}
 						},
-						"id": {
+						"paymentId": {
 							"title": "PAYMENT_ID",
 							"type": "string"
 						},
@@ -35,20 +35,38 @@ define({
 							"title": "DEBIT_ACCOUNT_NAME",
 							"type": "string",
 						},
-						"transactionType": {
+						"paymentType": {
 							"title": "PAYMENT_TYPE",
 							"type": ["string", "null"],
 							"x-schema-form": {
 								"type": "select",
-								"enumCode":"payment_type"
+								"titleMap": [{
+									"name":"RTGS",
+									"value":"RTGS"
+								},{
+									"name":"NEFT",
+									"value":"NEFT"
+								},{
+									"name":"IMPS",
+									"value":"IMPS"
+								},{
+									"name":"cheque",
+									"value":"cheque"
+								}]
 							}
 						},
-						"modeOfPayment": {
+						"paymentMode": {
 							"title": "PAYMENT_MODE",
 							"type": ["string", "null"],
 							"x-schema-form": {
 								"type": "select",
-								"enumCode":"mode_of_payment"
+								"titleMap": [{
+									"name":"Auto",
+									"value":"auto",
+								},{
+									"name":"Manual",
+									"value":"manual"
+								}]
 							}
 						},
 						"paymentPurpose": {
@@ -56,7 +74,10 @@ define({
 							"type": ["string", "null"],
 							"x-schema-form": {
 								"type": "select",
-								"enumCode":"payment_purpose"
+								"titleMap": [{
+									"name":"Loan Disbursement",
+									"value":"loanDisbursement"
+								}]
 							}
 						},
 						"beneficiaryName": {
@@ -69,16 +90,7 @@ define({
 					return formHelper;
 				},
 				getResultsPromise: function(searchOptions, pageOpts) {
-					return Payment.search({
-						'paymentDate': searchOptions.paymentDate,
-						'transactionType': searchOptions.transactionType,
-						'modeOfPayment': searchOptions.modeOfPayment,
-						'id': searchOptions.id,
-						'debitAccountName': searchOptions.debitAccountName,
-						'paymentPurpose': searchOptions.paymentPurpose,
-						'beneficiaryName': searchOptions.beneficiaryName,
-						'currentStage':"PaymentApproval",
-					}).$promise;
+					return PaymentApprove.getSearch().$promise;
 				},
 				paginationOptions: {
 					"getItemsPerPage": function(response, headers) {
@@ -101,11 +113,11 @@ define({
 					},
 					getListItem: function(item) {
 						return [
-							item.id,
+							item.paymentId,
 							item.paymentDate,
 							item.debitAccountName,
-							item.transactionType,
-							item.modeOfPayment,
+							item.paymentType,
+							item.paymentMode,
 							item.paymentPurpose,
 							item.beneficiaryName
 						]
@@ -119,38 +131,37 @@ define({
 					},
 					getColumns: function() {
 						return [{
-							title: 'Payment_ID',
-							data: 'id'
+							title: 'Payment ID',
+							data: 'paymentId'
 						}, {
-							title: 'Payment_Date',
+							title: 'Payment Date',
 							data: 'paymentDate'
 						}, {
-							title: 'Debit_Account_Name',
+							title: 'Debit Account Name',
 							data: 'debitAccountName'
 						}, {
-							title: 'Payment_Type',
-							data: 'transactionType'
+							title: 'Payment Type',
+							data: 'paymentType'
 						}, {
-							title: 'Payment_Mode',
-							data: 'modeOfPayment'
+							title: 'Payment Mode',
+							data: 'paymentMode'
 						}, {
-							title: 'Payment_Purpose',
+							title: 'Payment Purpose',
 							data: 'paymentPurpose'
 						},
 						{
-							title: 'Beneficiary_Name',
+							title: 'Beneficiary Name',
 							data: 'beneficiaryName'
 						}]
 					},
 					getActions: function() {
 						return [{
-							name: "VIEW_DETAILS",
+							name: "Payment_Approval",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
 								$state.go("Page.Engine", {
-									pageName: "payment.PaymentApproval",
-
+									pageName: "payment",
 									pageId: item.id
 								});
 							},
