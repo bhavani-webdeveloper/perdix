@@ -856,6 +856,26 @@
               "Completed"
             ]
           },
+		  "organisation": {
+            "title": "organisation",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+		  "designation": {
+            "title": "designation",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
        "accomodationType": {
             "title": "accomodationType",
             "type": "string",
@@ -2630,6 +2650,26 @@
               "Completed"
             ]
           },
+		  "organisation": {
+            "title": "organisation",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+		  "designation": {
+            "title": "designation",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
           "landLineNo": {
             "title": "landLineNo",
             "type": "string",
@@ -3338,6 +3378,26 @@
               "Completed"
             ]
           },
+		  "creditRating": {
+            "title": "creditRating",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 45,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+		  "ratingAgency": {
+            "title": "ratingAgency",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
           "monthlyTurnover": {
             "title": "monthlyTurnover",
             "type": "number",
@@ -3628,6 +3688,16 @@
           },
           "linkedToCompleted": {
             "title": "linkedToCompleted",
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1000000,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+		  "shareHoldingPercentage": {
+            "title": "shareHoldingPercentage",
             "type": "number",
             "minimum": 0,
             "maximum": 1000000,
