@@ -5,11 +5,11 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
         pageUID: "payment.PaymentInitiation",
         pageType: "Engine",
         dependencies: ["$http","$log", "irfElementsConfig","$state", "$stateParams", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q",
-            "PageHelper", "Utils", "PagesDefinition", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository", "irfNavigator", "Files"
+            "PageHelper", "Utils", "PagesDefinition", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository", "irfNavigator", "Files", "Payment"
         ],
 
         $pageFn: function($http,$log, elementsConfig,$state, $stateParams, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q,
-            PageHelper, Utils, PagesDefinition, $filter, IrfFormRequestProcessor, $injector, UIRepository, irfNavigator, Files) {
+            PageHelper, Utils, PagesDefinition, $filter, IrfFormRequestProcessor, $injector, UIRepository, irfNavigator, Files, Payment) {
 
             var configFile = function() {
                 return {}
@@ -56,92 +56,18 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                         "orderNo":110
                     },
                     "PaymentDetails.accountNumber":{
-                        "type": "lov",
-                        lovonly: true,
-                        searchHelper: formHelper,
-                        search: function(inputModel, form, model) {
-                            var defered = $q.defer();
-                            UIRepository.getSampleLov().$promise.then(
-                                function(data){
-                                    defered.resolve({
-                                        headers: {
-                                            "x-total-count": data.lov.length
-                                        },
-                                        body: data.lov
-                                    });
-                            }, function(err){
-                                defered.reject(err);
-                            });
-                            return defered.promise;
-                        },
-                        getListDisplayItem: function(item, index) {
-                            return [
-                                item.name
-                            ];
-                        },
-                        onSelect: function(result, model, context) {
-                            model.payment.loanAccount = result.name
-                        }
+                        "resolver": "LoanAccountsLOVConfiguration"                      
                     },
                     "DebitAccountDetails.debitAccountName":{
-                        "type": "lov",
-                        lovonly: true,
-                        searchHelper: formHelper,
-                        search: function(inputModel, form, model) {
-                            var defered = $q.defer();
-                            UIRepository.getSampleLov().$promise.then(
-                                function(data){
-                                    defered.resolve({
-                                        headers: {
-                                            "x-total-count": data.lov.length
-                                        },
-                                        body: data.lov
-                                    });
-                            }, function(err){
-                                defered.reject(err);
-                            });
-                            return defered.promise;
-                        },
-                        getListDisplayItem: function(item, index) {
-                            return [
-                                item.name
-                            ];
-                        },
-                        onSelect: function(result, model, context) {
-                            model.payment.debitAccountName = result.name
-                        }
+                        "resolver": "PaymentBankAccountsLOVConfiguration"
                     },
                     "BeneficiaryDetails.beneficiaryIfsc":{
-                        "resolver": "BankIFSCLOVConfiguration",
+                        "resolver": "PaymentBankIFSCLOVConfiguration",
                         "orderNo":70
                     },
                     "BeneficiaryDetails.beneficiaryName":{
                         "type": "lov",
-                        lovonly: true,
-                        searchHelper: formHelper,
-                        search: function(inputModel, form, model) {
-                            var defered = $q.defer();
-                            UIRepository.getSampleLov().$promise.then(
-                                function(data){
-                                    defered.resolve({
-                                        headers: {
-                                            "x-total-count": data.lov.length
-                                        },
-                                        body: data.lov
-                                    });
-                            }, function(err){
-                                defered.reject(err);
-                            });
-                            return defered.promise;
-                        },
-                        getListDisplayItem: function(item, index) {
-                            return [
-                                item.name
-                            ];
-                        },
-                        onSelect: function(result, model, context) {
-                            model.payment.beneficiaryName = result.name
-                        }
+                        "resolver": "CustomerBankAccountsLOVConfiguration"                       
                     }
                     
                 };
@@ -260,8 +186,57 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                 offline: false,
                 getOfflineDisplayItem: function(item, index) {},
                 form: [],
-                schema: function() {
-                    return Enrollment.getSchema().$promise;
+                schema: {
+                    "$schema": "http://json-schema.org/draft-04/schema#",
+                    "type": "object",
+                    "properties": {
+                        "payment": {
+                            "type": "object",
+                            "required": [],
+                            "properties": {
+                                "beneficiaryIfsc": {
+                                    "title": "BANK_IFSC",
+                                    "type": "string"
+                                },
+                                "beneficiaryBankName": {
+                                    "title": "BANK_NAME",
+                                    "type": "string"
+                                },
+                                "beneficiaryBankBranch": {
+                                    "title": "BRANCH_NAME",
+                                    "type": "string"
+                                },
+                                "debitAccountName": {
+                                    "title": "DEBIT_ACCOUNT_NAME",
+                                    "type": "string"
+                                },
+                                "debitAccountNumber": {
+                                    "title": "DEBIT_ACCOUNT_NO",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "customer": {
+                            "type": "object",
+                            "required": [],
+                            "properties": {
+                                "urnNo": {
+                                    "type": ["string","null"],
+                                    "title": "URN_NO"
+                                }
+                            }
+                        },
+                        "loanAccount": {
+                            "type": "object",
+                            "required": [],
+                            "properties": {
+                                "accountNumber": {
+                                    "title": "ACCOUNT_NUMBER",
+                                    "type": ["string", "null"]
+                                }
+                            }
+                        }
+                    }
                 },
                 actions: {
                     save: function(model, formCtrl, form, $event) {
