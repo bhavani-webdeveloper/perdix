@@ -107,6 +107,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                         model.repayment.preclosureFee = Utils.roundToDecimal(data.preclosureFee);
                         model.repayment.payOffAmount = Utils.roundToDecimal(data.payOffAmount);
                         model.repayment.totalPrincipalDue = Utils.roundToDecimal(data.totalPrincipalDue);
+                        model.repayment.totalPenalInterestDue = Utils.roundToDecimal(data.totalPenalInterestDue);
                         model.repayment.totalDemandDue = Utils.roundToDecimal(data.totalDemandDue);
                         model.repayment.totalDue = Utils.roundToDecimal(data.totalDemandDue + data.totalFeeDue + data.totalSecurityDepositDue);
                         model.repayment.bookedNotDueNormalInterest = Utils.roundToDecimal(data.bookedNotDueNormalInterest);
@@ -318,7 +319,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             {
                                 key: "repayment.totalPenalInterestDue",
                                 readonly: true,
-                                condition: "model.repayment.totalPenalInterestDue && (model.repayment.transactionName=='PenalInterestPayment'||model.repayment.transactionName=='Scheduled Demand')",
+                                condition: "model.repayment.transactionName=='PenalInterestPayment'||model.repayment.transactionName=='Scheduled Demand'",
                                 title: "TOTAL_PENAL_INTEREST_DUE",
                                 type: "amount"
                             },
