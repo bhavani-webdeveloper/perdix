@@ -1,117 +1,118 @@
     define({
-    pageUID: "MutualFund.MutualFundApplication",
-    pageType: "Engine",
-    dependencies: ["$log", "$q", "Enrollment", 'EnrollmentHelper', 'PageHelper', 'formHelper', "elementsUtils",
+        pageUID: "MutualFund.MutualFundApplication",
+        pageType: "Engine",
+        dependencies: ["$log", "$q", "Enrollment", 'EnrollmentHelper', 'PageHelper', 'formHelper', "elementsUtils",
 
-        'irfProgressMessage', 'SessionStore', "$state", "$stateParams", "irfNavigator", "CustomerBankBranch", "MutualFund",
-    ],
+            'irfProgressMessage', 'SessionStore', "$state", "$stateParams", "irfNavigator", "CustomerBankBranch", "MutualFund",
+        ],
 
-    $pageFn: function($log, $q, Enrollment, EnrollmentHelper, PageHelper, formHelper, elementsUtils,
-        irfProgressMessage, SessionStore, $state, $stateParams, irfNavigator, CustomerBankBranch, MutualFund) {
+        $pageFn: function($log, $q, Enrollment, EnrollmentHelper, PageHelper, formHelper, elementsUtils,
+            irfProgressMessage, SessionStore, $state, $stateParams, irfNavigator, CustomerBankBranch, MutualFund) {
 
-        var branch = SessionStore.getBranch();
-        return {
-            "type": "schema-form",
-            "title": "MUTUAL_FUND_APPLICATION",
-            initialize: function(model, form, formCtrl) {
-                model.customer = {};
-                model.formApplication = {};
-                model.application = {
-                    mutualFundAccountProfile: {},
-                    nominations: []
-                };
-                if (!$stateParams.pageId) {
-                    irfNavigator.goBack();
-                }
-                model.isCreated = false;
-                model.customerSummary = {};
-                PageHelper.showLoader();
-                MutualFund.summary({
-                    id: $stateParams.pageId
-                }).$promise.then(function(resp) {
-                    model.customerSummary = resp[0];
-                    if (model.customerSummary.id) {
-                       model.isCreated = true;
-                       PageHelper.hideLoader();
-                       PageHelper.setError({message: "First Purchase is Completed"});
-                    }                    
-                }, function(err) {
-                    //irfProgressMessage.pop("summary-get", "An Error Occurred. Failed to fetch Data", 5000);
-                    PageHelper.hideLoader();
-                }
-                );
-                Enrollment.getCustomerById({
-                    id: $stateParams.pageId
-                }).$promise.then(function(resp) {
-                    model.customer = resp;
-                    model.application.mutualFundAccountProfile.dateOfBirth = model.customer.dateOfBirth;
-                    model.application.mutualFundAccountProfile.mutualFundSchemeMasterId = 1;
-                    model.application.mutualFundAccountProfile.customerId = $stateParams.pageId;
-                    model.application.mutualFundAccountProfile.dateOfBirth = model.customer.dateOfBirth;
-                    model.application.mutualFundAccountProfile.firstName = model.customer.firstName;
-                    model.application.mutualFundAccountProfile.id = $stateParams.pageId;
-                    model.application.mutualFundAccountProfile.middleName = model.customer.middleName;
-                    model.application.mutualFundAccountProfile.pan = model.customer.panNo;
-                    model.application.mutualFundAccountProfile.pekrn = model.customer.pekrn;
-                    model.application.nominations[0] = model.application.nominations[0] || {};
-                    model.application.nominations[0].nomineeDistrict = model.customer.district;
-                    model.application.nominations[0].nomineeDoorNo = model.customer.doorNo;
-                    model.application.nominations[0].nomineeLocality = model.customer.locality;
-                    model.application.nominations[0].nomineePincode = model.customer.pincode;
-                    model.application.nominations[0].nomineeState = model.customer.state;
-                    model.application.nominations[0].nomineeAddressSameAsCustomer = true;
-                    PageHelper.hideLoader();
-                }, function(err) {
-                    irfProgressMessage.pop("enrollment-save", "An Error Occurred. Failed to fetch Data", 5000);
-                    irfNavigator.goBack();
-                    PageHelper.hideLoader();
-                });
-                
-            },
-            form: [{
-                type: "box",
-                title: "KYC_REGISTRATION_INCOMPLETE",
-                condition: "!model.customer.ekycDone",
-                items: [{
-                    "type": "section",
-                    "html": '<hr><t><div>eKYC is incomplete.</t></div>',
-                }, {
-                    "type": "button",
-                    "title": "DO_EKYC",
-                    "onClick": "actions.proceed(model, formCtrl, form, $event)"
-                }]
-            }, {
-                "type": "box",
-                "title": "CUSTOMER_INFORMATION",
-                "condition": "model.customer.ekycDone === true",
-                "readonly": true,
-                "items": [{
-                    key: "customer.firstName",
-                    title: "FULL_NAME",
-                    required: false
-                }, {
-                    key: "customer.fatherFirstName",
-                    title: "FATHER_FULL_NAME",
-                    required: false
-                }, {
-                    title: "MOBILE_NO",
-                    key: "customer.mobilePhone",
-                    required: false
-                }, {
-                    title: "DOB",
-                    key: "customer.dateOfBirth",
-                    type: "date",
-                    required: false
-                }]
-            }, {
-                type: "box",
-                title: "FIRST_PURCHASE",
-                "condition": "model.customer.ekycDone === true && !model.isCreated",
-                key: "formApplication",
-                items: [{
-                    type: "fieldset",
-                    title: "",
+            var branch = SessionStore.getBranch();
+            return {
+                "type": "schema-form",
+                "title": "MUTUAL_FUND_APPLICATION",
+                initialize: function(model, form, formCtrl) {
+                    model.customer = {};
+                    model.formApplication = {};
+                    model.application = {
+                        mutualFundAccountProfile: {},
+                        nominations: []
+                    };
+                    if (!$stateParams.pageId) {
+                        irfNavigator.goBack();
+                    }
+                    model.isCreated = false;
+                    model.customerSummary = {};
+                    PageHelper.showLoader();
+                    MutualFund.summary({
+                        id: $stateParams.pageId
+                    }).$promise.then(function(resp) {
+                        model.customerSummary = resp[0];
+                        if (model.customerSummary.id) {
+                            model.isCreated = true;
+                            PageHelper.hideLoader();
+                            PageHelper.setError({
+                                message: "First Purchase is Completed"
+                            });
+                        }
+                    }, function(err) {
+                        //irfProgressMessage.pop("summary-get", "An Error Occurred. Failed to fetch Data", 5000);
+                        PageHelper.hideLoader();
+                    });
+                    Enrollment.getCustomerById({
+                        id: $stateParams.pageId
+                    }).$promise.then(function(resp) {
+                        model.customer = resp;
+                        model.application.mutualFundAccountProfile.dateOfBirth = model.customer.dateOfBirth;
+                        model.application.mutualFundAccountProfile.mutualFundSchemeMasterId = 1;
+                        model.application.mutualFundAccountProfile.customerId = $stateParams.pageId;
+                        model.application.mutualFundAccountProfile.dateOfBirth = model.customer.dateOfBirth;
+                        model.application.mutualFundAccountProfile.firstName = model.customer.firstName;
+                        model.application.mutualFundAccountProfile.id = $stateParams.pageId;
+                        model.application.mutualFundAccountProfile.middleName = model.customer.middleName;
+                        model.application.mutualFundAccountProfile.pan = model.customer.panNo;
+                        model.application.mutualFundAccountProfile.pekrn = model.customer.pekrn;
+                        model.application.nominations[0] = model.application.nominations[0] || {};
+                        model.application.nominations[0].nomineeDistrict = model.customer.district;
+                        model.application.nominations[0].nomineeDoorNo = model.customer.doorNo;
+                        model.application.nominations[0].nomineeLocality = model.customer.locality;
+                        model.application.nominations[0].nomineePincode = model.customer.pincode;
+                        model.application.nominations[0].nomineeState = model.customer.state;
+                        model.application.nominations[0].nomineeAddressSameAsCustomer = true;
+                        PageHelper.hideLoader();
+                    }, function(err) {
+                        irfProgressMessage.pop("enrollment-save", "An Error Occurred. Failed to fetch Data", 5000);
+                        irfNavigator.goBack();
+                        PageHelper.hideLoader();
+                    });
+
+                },
+                form: [{
+                    type: "box",
+                    title: "KYC_REGISTRATION_INCOMPLETE",
+                    condition: "!model.customer.ekycDone",
                     items: [{
+                        "type": "section",
+                        "html": '<hr><t><div>eKYC is incomplete.</t></div>',
+                    }, {
+                        "type": "button",
+                        "title": "DO_EKYC",
+                        "onClick": "actions.proceed(model, formCtrl, form, $event)"
+                    }]
+                }, {
+                    "type": "box",
+                    "title": "CUSTOMER_INFORMATION",
+                    "condition": "model.customer.ekycDone === true",
+                    "readonly": true,
+                    "items": [{
+                        key: "customer.firstName",
+                        title: "FULL_NAME",
+                        required: false
+                    }, {
+                        key: "customer.fatherFirstName",
+                        title: "FATHER_FULL_NAME",
+                        required: false
+                    }, {
+                        title: "MOBILE_NO",
+                        key: "customer.mobilePhone",
+                        required: false
+                    }, {
+                        title: "DOB",
+                        key: "customer.dateOfBirth",
+                        type: "date",
+                        required: false
+                    }]
+                }, {
+                    type: "box",
+                    title: "FIRST_PURCHASE",
+                    "condition": "model.customer.ekycDone === true && !model.isCreated",
+                    key: "formApplication",
+                    items: [{
+                        type: "fieldset",
+                        title: "",
+                        items: [{
                             title: "INITIAL_INVESTMENT",
                             key: "formApplication.intialInvestment",
                             type: "amount",
@@ -160,7 +161,7 @@
                                     ageDiff = 0;
                                     model.formApplication.nomineeMinorDOB = "";
                                     model.application.nominations[0].nomineeMinorDOB = "";
-                                }                                
+                                }
                                 model.application.nominations[0].nomineeFirstName = result.name;
                                 var ageDiff = moment().diff(result.dateOfBirth, 'years');
                                 if (ageDiff < 18) {
@@ -178,21 +179,22 @@
                             title: "NOMINEE_DOB",
                             type: "date",
                             key: "formApplication.nomineeMinorDOB",
-                            onChange : function (modelValue, form, model) {
+                            onChange: function(modelValue, form, model) {
                                 PageHelper.clearErrors();
                                 model.customer.inputDOB = moment(model.formApplication.nomineeMinorDOB).format("YYYY-MM-DD");
                                 var ageDiff = moment().diff(model.customer.inputDOB, 'years');
                                 var daydiff = moment().diff(model.customer.inputDOB, 'days');
                                 if (ageDiff < 18) {
                                     model.isMinor = true;
-                                    if(daydiff < 0){                                    
-                                    PageHelper.setError({message: "DOB can not be future date"});                                    
+                                    if (daydiff < 0) {
+                                        PageHelper.setError({
+                                            message: "DOB can not be future date"
+                                        });
                                     }
-                                }     
-                                else {
+                                } else {
                                     model.isMinor = false;
-                                }  
-                            }                            
+                                }
+                            }
                         }, {
                             title: "NOMINEE_RELATIONSHIP",
                             key: "formApplication.nomineerRelationship",
@@ -205,8 +207,7 @@
                             required: true,
                             type: "select",
                             enumCode: "gender"
-                        },
-                        {
+                        }, {
                             "condition": "model.isMinor",
                             title: "GUARDIAN_FIRST_NAME",
                             key: "formApplication.guardianFirstName",
@@ -235,8 +236,8 @@
                                     body: out
                                 });
                             },
-                            onSelect: function(result, model, context) {  
-                                model.application.nominations[0].guardianAddressSameAsCustomer = true;  
+                            onSelect: function(result, model, context) {
+                                model.application.nominations[0].guardianAddressSameAsCustomer = true;
                                 model.application.nominations[0].guardianFirstName = result.name;
                                 model.application.nominations[0].guardianDistrict = model.customer.district;
                                 model.application.nominations[0].guardianDoorNo = model.customer.doorNo;
@@ -248,17 +249,17 @@
                                 return [
                                     item.name
                                 ];
-                            }                                 
-                            
-                        },  {
+                            }
+
+                        }, {
                             "condition": "model.isMinor",
                             title: "GUARDIAN_DOB",
                             type: "date",
                             key: "formApplication.guardianDOB",
-                            onChange : function (modelValue, form, model) {
-                                PageHelper.clearErrors();                                
-                            }                            
-                        },  {
+                            onChange: function(modelValue, form, model) {
+                                PageHelper.clearErrors();
+                            }
+                        }, {
                             "condition": "model.isMinor",
                             title: "GUARDIAN_RELATIONSHIP",
                             key: "formApplication.guardianRelationship",
@@ -272,49 +273,51 @@
                             required: true,
                             type: "select",
                             enumCode: "gender"
-                        }
-                    ]
-                }]
+                        }]
+                    }]
 
-            }, {
-                "type": "actionbox",
-                condition: " model.customer.ekycDone === true && !model.isCreated",
-                "items": [{
-                    "type": "submit",
-                    "title": "SUBMIT"
-                }]
-            }],
-            schema: function() {
-                return Enrollment.getSchema().$promise;
-            },
-            actions: {
-                submit: function(model, form, formName) {
-                    PageHelper.showLoader();
-                    PageHelper.clearErrors();
-                    model.application.mutualFundAccountProfile.unitBalance = model.formApplication.unitBalance;
-                    model.application.mutualFundAccountProfile.intialInvestment = model.formApplication.intialInvestment;
-                    model.application.nominations[0].nomineeRelationship = model.formApplication.nomineerRelationship;
-                    model.application.nominations[0].nomineeGender = model.formApplication.nomineerGender;
-                    var reqData = _.cloneDeep(model.application);
-                    MutualFund.createApplication(reqData).$promise.then(function(res) {
-                        PageHelper.hideLoader();
-                        irfProgressMessage.pop("First-Purchase ","Successful", 5000);
-                        irfNavigator.goBack();
-                    }, function(errResp) {
-                        PageHelper.setError({message: "first purchase failed!"});
-                        PageHelper.hideLoader();
-                        irfNavigator.goBack();
-                    });
+                }, {
+                    "type": "actionbox",
+                    condition: " model.customer.ekycDone === true && !model.isCreated",
+                    "items": [{
+                        "type": "submit",
+                        "title": "SUBMIT"
+                    }]
+                }],
+                schema: function() {
+                    return Enrollment.getSchema().$promise;
                 },
-                proceed: function(model, formCtrl, form, $event) {
-                    PageHelper.showLoader();
-                    irfNavigator.go({
-                        'type': 'Page.Adhoc',
-                        'PageName': 'MutualFund.MutualFundEKYC',
-                    })
-                    PageHelper.hideLoader();
+                actions: {
+                    submit: function(model, form, formName) {
+                        PageHelper.showLoader();
+                        PageHelper.clearErrors();
+                        model.application.mutualFundAccountProfile.unitBalance = model.formApplication.unitBalance;
+                        model.application.mutualFundAccountProfile.intialInvestment = model.formApplication.intialInvestment;
+                        model.application.nominations[0].nomineeRelationship = model.formApplication.nomineerRelationship;
+                        model.application.nominations[0].nomineeGender = model.formApplication.nomineerGender;
+                        var reqData = _.cloneDeep(model.application);
+                        MutualFund.createApplication(reqData).$promise.then(function(res) {
+                            PageHelper.hideLoader();
+                            irfProgressMessage.pop("First-Purchase ", "Successful", 5000);
+                            irfNavigator.goBack();
+                        }, function(errResp) {
+                            PageHelper.setError({
+                                message: "first purchase failed!"
+                            });
+                            PageHelper.hideLoader();
+                            irfNavigator.goBack();
+                        });
+                    },
+                    proceed: function(model, formCtrl, form, $event) {
+                        PageHelper.showLoader();
+                        irfNavigator.go({
+                            state: "Page.Adhoc",
+                            pageName: "MutualFund.MutualFundEKYC",
+                            pageId: item.id,
+                        });                       
+                        PageHelper.hideLoader();
+                    }
                 }
-            }
-        };
-    }
-})
+            };
+        }
+    })
