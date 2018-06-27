@@ -3,7 +3,7 @@ irf.models.factory('Enrollment',function($resource,$httpParamSerializer,BASE_URL
     var snapshotFrom = '/snapshotDiff?snapshotIdFrom=';
     var snapshotTo  = 'snapshotIdTo=';
     var managementEndPoint= irf.MANAGEMENT_BASE_URL;
-
+    var endpoint1 = BASE_URL +'/api/creditbureau/verification'; 
     var transformResponse = function(customer){
         if (_.hasIn(customer, "customerBankAccounts") && _.isArray(customer.customerBankAccounts)){
             _.forEach(customer.customerBankAccounts, function(bankAccount){
@@ -33,6 +33,10 @@ irf.models.factory('Enrollment',function($resource,$httpParamSerializer,BASE_URL
         get:{
             method:'GET',
             url:endpoint+'/:service/:id'
+        },
+        idenCheckVerification :{
+            method:'POST',
+            url : endpoint1
         },
         query:{
             method:'GET',
