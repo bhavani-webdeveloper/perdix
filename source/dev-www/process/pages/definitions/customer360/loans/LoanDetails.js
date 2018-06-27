@@ -714,6 +714,12 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                         "type": "number"
                     },
                     {
+                        "key": "cbsLoan.bookedNotDuePenalInterest",
+                        "title": "BOOKED_NOT_DUE_PENAL_INTEREST",
+                        "required":false,
+                        "type": "number"
+                    },
+                    {
                         "key": "cbsLoan.totalFeeRepaid",
                         "title": "TOTAL_FEE_REPAID",
                         "required":false,
