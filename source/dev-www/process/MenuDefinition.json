@@ -20,6 +20,7 @@
                 "Page/Engine/customer360.RecaptureQueue"
             ]
         },
+        "Page/Adhoc/MutualFund.MutualFundDashboard",
         "Page/ServiceRequestDashboard",
         "Page/LeadDashboard",
         "Page/Adhoc/coa.ChartOfAccountDashboard",
