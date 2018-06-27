@@ -155,6 +155,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseAssets.enterpriseAssets.subDetails",
                     "EnterpriseAssets.enterpriseAssets.assetregistrationNumber",
                     "EnterpriseAssets.enterpriseAssets.valueOfAsset",
+                    "TangibleNetWorth",
+                    "TangibleNetWorth.enterpriseNetworth",
+                    "TangibleNetWorth.enterpriseNetworth.tangibleNetworth",
+                    "TangibleNetWorth.enterpriseNetworth.financialYear",
+                    "enterpriseDocuments",
+                    "enterpriseDocuments.enterpriseDocuments",
+                    "enterpriseDocuments.enterpriseDocuments.docType",
+                    "enterpriseDocuments.enterpriseDocuments.fileId",
                     "BankAccounts",
                     "BankAccounts.customerBankAccounts",
                     "BankAccounts.customerBankAccounts.ifscCode",
@@ -175,15 +183,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "BankAccounts.customerBankAccounts.bankStatements.noOfChequeBounced",
                     "BankAccounts.customerBankAccounts.bankStatements.noOfEmiChequeBounced",
                     "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto",
-                    "BankAccounts.customerBankAccounts.isDisbersementAccount",
-                    "TangibleNetWorth",
-                    "TangibleNetWorth.enterpriseNetworth",
-                    "TangibleNetWorth.enterpriseNetworth.tangibleNetworth",
-                    "TangibleNetWorth.enterpriseNetworth.financialYear",
-                    "enterpriseDocuments",
-                    "enterpriseDocuments.enterpriseDocuments",
-                    "enterpriseDocuments.enterpriseDocuments.docType",
-                    "enterpriseDocuments.enterpriseDocuments.fileId"
+                    "BankAccounts.customerBankAccounts.isDisbersementAccount"
                 ];
             }
 

@@ -75,7 +75,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "HouseVerification": {
                                     "readonly": true
                                 },
+                                "CustomerDocumentUpload": {
+                                    "readonly": true
+                                },
                                 "IndividualInformation.customerCategory": {
+                                    "readonly": true
+                                },
+                                "BankAccounts": {
                                     "readonly": true
                                 }
                             },
@@ -96,6 +102,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "KYC.customerId": {
                                     "readonly": true
+                                },
+                                "BankAccounts": {
+                                    "readonly": true
                                 }
                             },
                             "excludes": [
@@ -114,6 +123,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "KYC.customerId": {
+                                    "readonly": true
+                                },
+                                "BankAccounts": {
                                     "readonly": true
                                 }
                             },
@@ -209,6 +221,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "PhysicalAssets": {
                                     "readonly": true
                                 },
+                                "BankAccounts": {
+                                    "readonly": true
+                                },
                                 "ResidenceVerification": {
                                     "readonly": true
                                 }
@@ -235,6 +250,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "ResidenceVerification": {
                                     "readonly": true
+                                },
+                                "BankAccounts": {
+                                    "readonly": true
                                 }
                             },
                             "excludes": [
@@ -258,6 +276,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "ResidenceVerification": {
+                                    "readonly": true
+                                },
+                                "BankAccounts": {
                                     "readonly": true
                                 }
                             },
@@ -283,6 +304,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "ResidenceVerification": {
                                     "readonly": true
+                                },
+                                "BankAccounts": {
+                                    "readonly": true
                                 }
                             },
                             "excludes": [
@@ -306,6 +330,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "ResidenceVerification": {
+                                    "readonly": true
+                                },
+                                "BankAccounts": {
                                     "readonly": true
                                 }
                             },
@@ -331,6 +358,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "ResidenceVerification": {
                                     "readonly": true
+                                },
+                                "BankAccounts": {
+                                    "readonly": true
                                 }
                             },
                             "excludes": [
@@ -354,6 +384,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "ResidenceVerification": {
+                                    "readonly": true
+                                },
+                                "BankAccounts": {
                                     "readonly": true
                                 }
                             },
@@ -379,6 +412,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "ResidenceVerification": {
                                     "readonly": true
+                                },
+                                "BankAccounts": {
+                                    "readonly": true
                                 }
                             },
                             "excludes": [
@@ -403,6 +439,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "ResidenceVerification": {
                                     "readonly": true
+                                },
+                                "BankAccounts": {
+                                    "readonly": true
                                 }
                             },
                             "excludes": [
@@ -426,6 +465,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "ResidenceVerification": {
+                                    "readonly": true
+                                },
+                                "BankAccounts": {
                                     "readonly": true
                                 }
                             },
@@ -454,6 +496,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "ResidenceVerification": {
                                     "readonly": true
+                                },
+                                "BankAccounts": {
+                                    "readonly": true
                                 }
                             },
                             "excludes": [
@@ -477,6 +522,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "ResidenceVerification": {
+                                    "readonly": true
+                                },
+                                "BankAccounts": {
                                     "readonly": true
                                 }
                             },
@@ -511,6 +559,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "HouseVerification": {
+                                    "readonly": true
+                                },
+                                "CustomerDocumentUpload": {
+                                    "readonly": true
+                                },
+                                "BankAccounts": {
                                     "readonly": true
                                 }
                             },
@@ -553,10 +607,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "HouseVerification": {
                                     "readonly": true
                                 },
+                                "CustomerDocumentUpload": {
+                                    "readonly": true
+                                },
                                 "ResidenceVerification":{
                                     "readonly": true
                                 },
                                 "PhysicalAssets": {
+                                    "readonly": true
+                                },
+                                "BankAccounts": {
                                     "readonly": true
                                 }
                             }
@@ -584,6 +644,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "EnterpriseReferences.verifications.opinion": {
                         "title":"COMMENTS_OF_NEIGHBOUR"
                     },
+                    "BankAccounts.customerBankAccounts": {
+                        startEmpty: true
+                    },
+                    "BankAccounts.customerBankAccounts.accountNumber": {
+                        "type": "password",
+                        "required": true
+                    },
+                    "BankAccounts.customerBankAccounts.confirmedAccountNumber": {
+                        "type": "string",
+                        "title": "CONFIRMED_ACCOUNT_NUMBER",
+                        "required": true
+                    },
                     // "TrackDetails.vehiclesFree": {
                     //     "readonly": true
                     // },
@@ -596,6 +668,24 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     // },
                     "IndividualInformation.photoImageId": {
                         "required": true
+                    },
+                    "IndividualInformation.dateOfBirth": {
+                        "onChange": function (modelValue, form, model) {
+                            if (model.customer.dateOfBirth) {
+                                model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                            }
+                        }
+                    },
+                    "IndividualInformation.age": {
+                        "onChange": function (modelValue, form, model) {
+                            if (model.customer.age > 0) {
+                                if (model.customer.dateOfBirth) {
+                                    model.customer.dateOfBirth = moment(new Date()).subtract(model.customer.age, 'years').format('YYYY-') + moment(model.customer.dateOfBirth, 'YYYY-MM-DD').format('MM-DD');
+                                } else {
+                                    model.customer.dateOfBirth = moment(new Date()).subtract(model.customer.age, 'years').format('YYYY-MM-DD');
+                                }
+                            }
+                        }
                     },
                     "IndividualReferences.verifications": {
                         "titleExpr": "model.customer.verifications[arrayIndexes[0]].relationship",
@@ -645,10 +735,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "Liabilities.liabilities.startDate": {
                                     "title": "LOAN_START_DATE",
                                     "required": true
-                    },
-                    
-                    
-                    
+                    },        
                     
                     "FamilyDetails.familyMembers.familyMemberFirstName": {
                         "condition": "model.customer.familyMembers[arrayIndex].relationShip.toUpperCase() != 'SELF'"
@@ -678,10 +765,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "key": "customer.udf.userDefinedFieldValues.udf29",
                     },
                     "HouseVerification.previousRentDetails": {
-                        "condition": "model.customer.udf.userDefinedFieldValues.udf29 == '1 - <3 years' && model.customer.ownership == 'Rental' || model.customer.udf.userDefinedFieldValues.udf29 == '< 1 year' && model.customer.ownership == 'Rental'"
+                        "condition": "model.customer.udf.userDefinedFieldValues.udf29 == '1 - <3 years' && model.customer.ownership == 'Rented' || model.customer.udf.userDefinedFieldValues.udf29 == '< 1 year' && model.customer.ownership == 'Rented'"
                     },
                     "HouseVerification.monthlyRent": {
-                        "condition": "model.customer.ownership == 'Rental'"
+                        "condition": "model.customer.ownership == 'Rented'"
                     },
                     "HouseVerification.distanceFromBranch": {
                         "required": true
@@ -993,11 +1080,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "HouseVerification.distanceFromBranch",
                     "HouseVerification.monthlyRent",
                     "HouseVerification.previousRentDetails",
-                    "HouseVerification.customerDocuments",
-                    "HouseVerification.customerDocuments.fileType",
-                    "HouseVerification.customerDocuments.fileId",
-                    "HouseVerification.customerDocuments.documentDate",
-                    "HouseVerification.customerDocuments.udfDate1",
+                    "CustomerDocumentUpload",
+                    "CustomerDocumentUpload.customerDocuments",
+                    "CustomerDocumentUpload.customerDocuments.fileType",
+                    "CustomerDocumentUpload.customerDocuments.fileId",
+                    "CustomerDocumentUpload.customerDocuments.documentDate",
+                    "CustomerDocumentUpload.customerDocuments.udfDate1",
                     "ResidenceVerification",
                     "ResidenceVerification.location",
                     "ResidenceVerification.locatingHouse",
@@ -1039,7 +1127,28 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "EnterpriseReferences.verifications.referenceFirstName",
                     "EnterpriseReferences.verifications.knownSince",
                     "EnterpriseReferences.verifications.customerResponse",
-                    "EnterpriseReferences.verifications.opinion",                   
+                    "EnterpriseReferences.verifications.opinion",
+                    "BankAccounts",
+                    "BankAccounts.customerBankAccounts",
+                    "BankAccounts.customerBankAccounts.ifscCode",
+                    "BankAccounts.customerBankAccounts.customerBankName",
+                    "BankAccounts.customerBankAccounts.customerBankBranchName",
+                    "BankAccounts.customerBankAccounts.customerNameAsInBank",
+                    "BankAccounts.customerBankAccounts.accountNumber",
+                    "BankAccounts.customerBankAccounts.confirmedAccountNumber",
+                    "BankAccounts.customerBankAccounts.accountType",
+                    "BankAccounts.customerBankAccounts.bankingSince",
+                    "BankAccounts.customerBankAccounts.netBankingAvailable",
+                    "BankAccounts.customerBankAccounts.sanctionedAmount",
+                    "BankAccounts.customerBankAccounts.bankStatements",
+                    "BankAccounts.customerBankAccounts.bankStatements.startMonth",
+                    "BankAccounts.customerBankAccounts.bankStatements.totalDeposits",
+                    "BankAccounts.customerBankAccounts.bankStatements.totalWithdrawals",
+                    "BankAccounts.customerBankAccounts.bankStatements.balanceAsOn15th",
+                    "BankAccounts.customerBankAccounts.bankStatements.noOfChequeBounced",
+                    "BankAccounts.customerBankAccounts.bankStatements.noOfEmiChequeBounced",
+                    "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto",
+                    "BankAccounts.customerBankAccounts.isDisbersementAccount"
                 ];
 
             }
@@ -1336,11 +1445,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         
                                     }
                                 },
-                                "HouseVerification": {
+                                "CustomerDocumentUpload": {
+                                    "type": "box",
+                                    "title": "CUSTOMER_DOCUMENT_UPLOAD",
+                                    "orderNo": 80,
                                     "items": {
                                         "customerDocuments": {
                                             "type": "array",
-                                            "title": "PROOF_OF_RESIDENCE",
+                                            "title": "DOCUMENT_UPLOAD",
                                             "key": "customer.customerDocuments",
                                             "items": {
                                                 "fileType": {
