@@ -518,7 +518,6 @@
                         },
                         "required": [
                             "loanToValue",
-                            "collateralValue",
                             "quantity"
 
                         ]

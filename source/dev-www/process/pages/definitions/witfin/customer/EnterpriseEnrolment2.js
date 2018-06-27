@@ -886,7 +886,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "required": true
                                 },
                                 "BankAccounts.customerBankAccounts.confirmedAccountNumber": {
-                                    "type": "string",
+                                    "type": "number",
                                     "title": "CONFIRMED_ACCOUNT_NUMBER",
                                     "required": true
                                 },
@@ -1129,7 +1129,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         ]
                                     },
                                     {
-                                        "orderNo": 1,
+                                        "orderNo": 1,   
                                         "type": "box",
                                         "title": "BUSINESS_SELECTION",
                                         "items":[
@@ -1220,11 +1220,21 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
 
                     },
                     proceed: function(model, form){
+                        
+                        if(model.customer.customerBankAccounts[0].accountNumber != model.customer.customerBankAccounts[0].confirmedAccountNumber){
+                            PageHelper.showErrors({
+                                data: {
+                                    error: "Account Number and Confirmed Account Number should match."
+                                }
+                            });
+                            return false;
+                        }
+
                         PageHelper.clearErrors();
                         if(PageHelper.isFormInvalid(form)) {
                             return false;
                         }
-                        PageHelper.showProgress('enrolment', 'Updating Customer');
+                        PageHelper.showProgress('enrolment', 'Updating Customer',5000);
                         PageHelper.showLoader();
                         model.enrolmentProcess.proceed()
                             .finally(function () {
