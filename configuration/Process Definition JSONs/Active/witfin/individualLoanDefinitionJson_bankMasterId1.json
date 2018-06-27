@@ -393,14 +393,21 @@
             "minimum": 1,
             "maximum": 12,
             "captureStages": [
-              "Screening",
-              "VehicleValuation",
-              "FieldInvestigation1",
-              "FieldInvestigation2",
-              "FieldInvestigation3",
-              "TeleVerification",
-              "CreditAppraisal",
-              "LoanInitiation"
+               "ScreeningReview",
+                "GoNoGoApproval1",
+                "GoNoGoApproval2",
+                "DeviationApproval1",
+                "DeviationApproval2",
+                "BusinessApproval1",
+                "BusinessApproval2",
+                "BusinessApproval3",
+                "BusinessApproval4",
+                "BusinessApproval5",
+                "CreditApproval1",
+                "CreditApproval2",
+                "CreditApproval3",
+                "CreditApproval4",
+                "CreditApproval5"
             ]
           },
           "productType": {
@@ -457,14 +464,21 @@
             "minimum": 1,
             "maximum": 10000000,
             "captureStages": [
-              "Screening",
-              "VehicleValuation",
-              "FieldInvestigation1",
-              "FieldInvestigation2",
-              "FieldInvestigation3",
-              "TeleVerification",
-              "CreditAppraisal",
-              "LoanInitiation"
+                "ScreeningReview",
+                "GoNoGoApproval1",
+                "GoNoGoApproval2",
+                "DeviationApproval1",
+                "DeviationApproval2",
+                "BusinessApproval1",
+                "BusinessApproval2",
+                "BusinessApproval3",
+                "BusinessApproval4",
+                "BusinessApproval5",
+                "CreditApproval1",
+                "CreditApproval2",
+                "CreditApproval3",
+                "CreditApproval4",
+                "CreditApproval5"
             ]
           },
           "doCustomerLoanAmount": {
@@ -1194,14 +1208,21 @@
             "minimum": 0,
             "maximum": 10000000,
             "captureStages": [
-              "Screening",
-              "VehicleValuation",
-              "FieldInvestigation1",
-              "FieldInvestigation2",
-              "FieldInvestigation3",
-              "TeleVerification",
-              "CreditAppraisal",
-              "LoanInitiation"
+                "ScreeningReview",
+                "GoNoGoApproval1",
+                "GoNoGoApproval2",
+                "DeviationApproval1",
+                "DeviationApproval2",
+                "BusinessApproval1",
+                "BusinessApproval2",
+                "BusinessApproval3",
+                "BusinessApproval4",
+                "BusinessApproval5",
+                "CreditApproval1",
+                "CreditApproval2",
+                "CreditApproval3",
+                "CreditApproval4",
+                "CreditApproval5"
             ]
           },
           "loanCycle": {
@@ -1462,14 +1483,21 @@
             "title": "Interest Rate",
             "type": "float",
             "captureStages": [
-              "Screening",
-              "VehicleValuation",
-              "FieldInvestigation1",
-              "FieldInvestigation2",
-              "FieldInvestigation3",
-              "TeleVerification",
-              "CreditAppraisal",
-              "LoanInitiation"
+                "ScreeningReview",
+                "GoNoGoApproval1",
+                "GoNoGoApproval2",
+                "DeviationApproval1",
+                "DeviationApproval2",
+                "BusinessApproval1",
+                "BusinessApproval2",
+                "BusinessApproval3",
+                "BusinessApproval4",
+                "BusinessApproval5",
+                "CreditApproval1",
+                "CreditApproval2",
+                "CreditApproval3",
+                "CreditApproval4",
+                "CreditApproval5"
             ]
           },
           "processingFeeInPaisa": {
@@ -1490,14 +1518,21 @@
             "title": "Processing Fee Percentage",
             "type": "number",
             "captureStages": [
-              "Screening",
-              "VehicleValuation",
-              "FieldInvestigation1",
-              "FieldInvestigation2",
-              "FieldInvestigation3",
-              "TeleVerification",
-              "CreditAppraisal",
-              "LoanInitiation"
+                "ScreeningReview",
+                "GoNoGoApproval1",
+                "GoNoGoApproval2",
+                "DeviationApproval1",
+                "DeviationApproval2",
+                "BusinessApproval1",
+                "BusinessApproval2",
+                "BusinessApproval3",
+                "BusinessApproval4",
+                "BusinessApproval5",
+                "CreditApproval1",
+                "CreditApproval2",
+                "CreditApproval3",
+                "CreditApproval4",
+                "CreditApproval5"
             ]
           },
           "expectedProcessingFeePercentage": {
@@ -5954,14 +5989,21 @@
           "udf6": {
             "type": "number",
             "captureStages": [
-              "Screening",
-              "VehicleValuation",
-              "FieldInvestigation1",
-              "FieldInvestigation2",
-              "FieldInvestigation3",
-              "TeleVerification",
-              "CreditAppraisal",
-              "LoanInitiation"
+               "ScreeningReview",
+                "GoNoGoApproval1",
+                "GoNoGoApproval2",
+                "DeviationApproval1",
+                "DeviationApproval2",
+                "BusinessApproval1",
+                "BusinessApproval2",
+                "BusinessApproval3",
+                "BusinessApproval4",
+                "BusinessApproval5",
+                "CreditApproval1",
+                "CreditApproval2",
+                "CreditApproval3",
+                "CreditApproval4",
+                "CreditApproval5"
             ]
           }
         }
