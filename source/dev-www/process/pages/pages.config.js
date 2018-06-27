@@ -1,6 +1,6 @@
 irf.pages.config([
-	"$stateProvider", "irfElementsConfigProvider", "Model_ELEM_FC", "irfNavigatorProvider",
-	function($stateProvider, elemConfig, Model_ELEM_FC, irfNavigatorProvider) {
+	"$stateProvider", "irfElementsConfigProvider", "Model_ELEM_FC", "irfNavigatorProvider", "formHelperProvider",
+	function($stateProvider, elemConfig, Model_ELEM_FC, irfNavigatorProvider, formHelperProvider) {
 	var statesDefinition = [{
 		name: "Page.LeadDashboard",
 		url: "/LeadDashboard",
@@ -167,6 +167,8 @@ irf.pages.config([
 	});
 
 	elemConfig.configNavigator(irfNavigatorProvider.factory);
+
+	elemConfig.configFormHelper(formHelperProvider.factory);
 }]);
 irf.pages.run(["Model_ELEM_FC", "$rootScope", "SessionStore", "AuthTokenHelper", function(Model_ELEM_FC, $rootScope, SessionStore, AuthTokenHelper) {
 	$rootScope.$on("irf-login-success", function() {

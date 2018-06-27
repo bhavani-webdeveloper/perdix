@@ -216,43 +216,48 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter, Utils){
 	return factoryObj;
 }]);
 
-irf.commons.factory("formHelper",
-["$log", "$state", "irfStorageService", "SessionStore","$state","$stateParams", "entityManager", "irfProgressMessage",
-"$filter", "Files", "$q", "elementsUtils", "$timeout", "Utils",
-function($log, $state, irfStorageService, SessionStore,$state,$stateParams, entityManager, irfProgressMessage,
-	$filter, Files, $q, elementsUtils, $timeout, Utils){
-	var helperObj = {
+irf.commons.provider("formHelper", function() {
+	var context = {};
+	var $this = this;
+	var listToTree = function(list, id, parentId) { // credits: https://stackoverflow.com/users/722762/halcyon
+		var map = {}, node, roots = [], i;
+		for (i = 0; i < list.length; i++) {
+			map[list[i][id]] = i; // initialize the map
+			list[i].children = []; // initialize the children
+		}
+		for (i = 0; i < list.length; i++) {
+			node = list[i];
+			if (node[parentId] && node[parentId] !== "0") {
+				// if you have dangling branches check that map[node[parentId]] exists
+				list[map[node[parentId]]].children.push(node);
+			} else {
+				roots.push(node);
+			}
+		}
+		return roots;
+	}
+	$this.factory = {
 		enum: function(key) {
-			var r = irfStorageService.getMaster(key);
+			var r = context.irfStorageService.getMaster(key);
 			
 			if (r && _.isArray(r.data)) {
 				var ret = {parentClassifier:r.parentClassifier,data:[]};
 				ret.data = r.data;
 				return ret;
 			}
-			$log.error('No record found for enum key: ' + key);
+			context.$log.error('No record found for enum key: ' + key);
 			return null;
 		},
 		userbranch: function() {
-			var branches = helperObj.enum("branch_id").data;
-			var listToTree = function(list, id, parentId) { // credits: https://stackoverflow.com/users/722762/halcyon
-				var map = {}, node, roots = [], i;
-				for (i = 0; i < list.length; i++) {
-					map[list[i][id]] = i; // initialize the map
-					list[i].children = []; // initialize the children
-				}
-				for (i = 0; i < list.length; i += 1) {
-					node = list[i];
-					if (node[parentId] && node[parentId] !== "0") {
-						// if you have dangling branches check that map[node[parentId]] exists
-						list[map[node[parentId]]].children.push(node);
-					} else {
-						roots.push(node);
-					}
-				}
-				return roots;
-			}
-			var roots = listToTree(branches, "code", "field2");
+			var branches = $this.factory.enum("branch_id").data;
+			var userbranches = context.SessionStore.getItem("UserAllowedBranches").map(x => ''+x.branchId);
+			userbranches.unshift(''+context.SessionStore.session.branchId);
+			var branchTree = _.cloneDeep(branches);
+			var id = "code", parentId = "field2";
+			var roots = listToTree(branchTree, id, parentId);
+			var userBranchTree = branchTree.filter(branch => userbranches.indexOf(branch[id]) >= 0);
+			userBranchTree.branchMap = branches.reduce((map, current) => {map[current[id]] = current; return map}, {});
+			return userBranchTree;
 		},
 		save: function(model, formCtrl, formName, actions) {
 			var pageName = formName.substring(6).replace(/\_/g, '.').replace(/\.\./g, '__');
@@ -261,40 +266,40 @@ function($log, $state, irfStorageService, SessionStore,$state,$stateParams, enti
 				promise = actions.preSave(model, formCtrl, formName);
 				if (promise && _.isFunction(promise.then)) {
 					promise.then(function(){
-						irfStorageService.putJSON(pageName, model);
-						$state.go('Page.EngineOffline', {pageName: pageName});
+						context.irfStorageService.putJSON(pageName, model);
+						context.$state.go('Page.EngineOffline', {pageName: pageName});
 					}).catch(function(){
 						// nothing to do
 					});
 				}
 			} else {
-				irfStorageService.putJSON(pageName, model);
-				$state.go('Page.EngineOffline', {pageName: pageName});
+				context.irfStorageService.putJSON(pageName, model);
+				context.$state.go('Page.EngineOffline', {pageName: pageName});
 			}
 		},
 		submit: function(model, formCtrl, formName, actions) {
-			$log.info("on systemSubmit");
-			// entityManager.setModel(formName, null);
-			//$log.warn(formCtrl);
+			context.$log.info("on systemSubmit");
+			// context.entityManager.setModel(formName, null);
+			//context.$log.warn(formCtrl);
 			if (formCtrl && formCtrl.$invalid) {
-				irfProgressMessage.pop('form-error', 'Your form have errors. Please fix them.',5000);
+				context.irfProgressMessage.pop('form-error', 'Your form have errors. Please fix them.',5000);
 				return false;
 			}
-			$log.warn('Going TO submit');
+			context.$log.warn('Going TO submit');
 			actions.submit(model, formCtrl, formName);
 			return true;
 		},
 		validate: function(formCtrl) {
-			var deferred = $q.defer();
+			var deferred = context.$q.defer();
 			if (!formCtrl) {
 				deferred.reject();
 			}else {
-				$timeout(function(){
+				context.$timeout(function(){
 					formCtrl.scope.$broadcast('schemaFormValidate');
 					if (formCtrl.$valid) {
 						deferred.resolve();
 					} else {
-						irfProgressMessage.pop('form-error', 'Your form have errors. Please fix them.',5000);
+						context.irfProgressMessage.pop('form-error', 'Your form have errors. Please fix them.',5000);
 						deferred.reject();
 					}
 				});
@@ -302,58 +307,74 @@ function($log, $state, irfStorageService, SessionStore,$state,$stateParams, enti
 			return deferred.promise;
 		},
 		getFileStreamAsDataURL: function(fileId, params,stripDescriptors) {
-			return Files.getBase64DataFromFileId(fileId, params,stripDescriptors);
+			return context.Files.getBase64DataFromFileId(fileId, params,stripDescriptors);
 		},
 		resetFormValidityState: function(formCtrl){
 			formCtrl.$setPristine();
 		},
 		isOffline: function() {
-			return SessionStore.session.offline;
+			return context.SessionStore.session.offline;
 		},
 		getPageData: function() {
-			$stateParams.pageData = $stateParams.pageData || {};
-			return $stateParams.pageData;
+			context.$stateParams.pageData = context.$stateParams.pageData || {};
+			return context.$stateParams.pageData;
 		},
 		newOffline: {
 			getKey: function(pageName) {
 				return "NewOffline_" + pageName.replace(/\./g, '$');
 			},
 			saveOffline: function(pageName, item) {
-				irfStorageService.putJSON(this.getKey(pageName), item);
+				context.irfStorageService.putJSON(this.getKey(pageName), item);
 			},
 			getOfflineRecords: function(pageName) {
-				var items = irfStorageService.getMasterJSON(this.getKey(pageName));
+				var items = context.irfStorageService.getMasterJSON(this.getKey(pageName));
 				var offlineItems = [], idx = 0;
 				_.forOwn(items, function(value, key) {
 					offlineItems[idx] = value;
 					idx++;
 				});
-				$log.info(offlineItems);
+				context.$log.info(offlineItems);
 				return offlineItems;
 			},
 			openOfflineRecord: function(pageName, item) {
-				entityManager.setModel(pageName, item.model);
-				$state.go('Page.Engine', {
+				context.entityManager.setModel(pageName, item.model);
+				context.$state.go('Page.Engine', {
 					pageName: pageName,
 					pageId: item.pageId,
 					pageData: item.pageData
 				});
 			},
 			deleteOfflineRecord: function(pageName, item) {
-				var deferred = $q.defer();
-				Utils.confirm("Are You Sure?").then(function() {
-					irfStorageService.deleteJSON(helperObj.newOffline.getKey(pageName), item.$$STORAGE_KEY$$);
+				var deferred = context.$q.defer();
+				context.Utils.confirm("Are You Sure?").then(function() {
+					context.irfStorageService.deleteJSON($this.factory.newOffline.getKey(pageName), item.$$STORAGE_KEY$$);
 					deferred.resolve();
 				}, deferred.reject);
 				return deferred.promise;
 			},
 			deleteOffline: function(pageName, model) {
-				model.$$STORAGE_KEY$$ && irfStorageService.deleteJSON(helperObj.newOffline.getKey(pageName), model.$$STORAGE_KEY$$);
+				model.$$STORAGE_KEY$$ && context.irfStorageService.deleteJSON($this.factory.newOffline.getKey(pageName), model.$$STORAGE_KEY$$);
 			}
 		}
 	};
-	return helperObj;
-}]);
+	this.$get = ["$log", "$state", "irfStorageService", "SessionStore", "$state", "$stateParams", "entityManager", "irfProgressMessage",
+	"Files", "$q", "$timeout", "Utils",
+	function($log, $state, irfStorageService, SessionStore, $state, $stateParams, entityManager, irfProgressMessage,
+	Files, $q, $timeout, Utils) {
+		context.$log = $log;
+		context.$state = $state;
+		context.irfStorageService = irfStorageService;
+		context.SessionStore = SessionStore;
+		context.$stateParams = $stateParams;
+		context.entityManager = entityManager;
+		context.irfProgressMessage = irfProgressMessage;
+		context.Files = Files;
+		context.$q = $q;
+		context.$timeout = $timeout;
+		context.Utils = Utils;
+		return $this.factory;
+	}];
+});
 
 irf.commons.run(["irfStorageService", "SessionStore", "$q", "$log", "filterFilter",
 	function(irfStorageService, SessionStore, $q, $log, filterFilter) {
