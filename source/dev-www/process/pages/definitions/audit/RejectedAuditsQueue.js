@@ -220,25 +220,7 @@ irf.pageCollection.factory(irf.page("audit.RejectedAuditsQueue"), ["$log", "Quer
                     },
                     getActions: function() {
                         return [{
-                            name: "SYNC",
-                            icon: "fa fa-refresh",
-                            fn: function(item, index) {
-                                PageHelper.showLoader();
-                                Audit.online.getAuditData({
-                                    audit_id: item.audit_id
-                                }).$promise.then(function(response) {
-                                    item._offline = true;
-                                    PageHelper.showProgress("audit", "Synchronized successfully", 3000);
-                                    return Audit.offline.setAudit(item.audit_id, response);
-                                }).finally(function() {
-                                    PageHelper.hideLoader();
-                                });
-                            },
-                            isApplicable: function(item, index) {
-                                return !SessionStore.session.offline && !item._offline && item._online;
-                            }
-                        }, {
-                            name: "DO_AUDIT",
+                            name: "VIEW_AUDIT",
                             icon: "fa fa-pencil-square-o",
                             fn: function(item, index) {
                                 if (item.audit_type = 1) {
@@ -247,13 +229,9 @@ irf.pageCollection.factory(irf.page("audit.RejectedAuditsQueue"), ["$log", "Quer
                                         'pageName': 'audit.AuditDetails',
                                         'pageId': item.audit_id,
                                         'pageData': {
-                                            "readonly": item.current_stage !== 'start'
-                                        }
-                                    }, {
-                                        'state': 'Page.Engine',
-                                        'pageName': 'audit.RejectedAuditsQueue',
-                                        'pageData': {
-                                            "page": returnObj.definition.listOptions.tableConfig.page
+                                            "type": "audit",
+                                            "view": "all",
+                                            "readonly": true
                                         }
                                     });
                                 } else if (item.audit_type = 0) {
@@ -261,37 +239,14 @@ irf.pageCollection.factory(irf.page("audit.RejectedAuditsQueue"), ["$log", "Quer
                                         'state': 'Page.Engine',
                                         'pageName': 'audit.detail.SnapAuditDetails',
                                         'pageId': item.audit_id,
-                                        // 'pageData': {
-                                        //     "readonly": item.current_stage !== 'start'
-                                        // }
-                                    }, {
-                                        'state': 'Page.Engine',
-                                        'pageName': 'audit.RejectedAuditsQueue',
                                         'pageData': {
-                                            "page": returnObj.definition.listOptions.tableConfig.page
+                                            "readonly": true
                                         }
                                     });
                                 }
-
                             },
                             isApplicable: function(item, index) {
                                 return true;
-                            }
-                        }, {
-                            name: "DELETE_OFFLINE",
-                            icon: "fa fa-trash",
-                            fn: function(item, index) {
-                                Utils.confirm('Do You Want to Delete?').then(function() {
-                                    PageHelper.showLoader();
-                                    Audit.offline.deleteAudit(item.audit_id).then(function() {
-                                        item._offline = false;
-                                        delete item._dirty;
-                                        delete item._sync;
-                                    }).finally(PageHelper.hideLoader);
-                                });
-                            },
-                            isApplicable: function(item, index) {
-                                return item._offline;
                             }
                         }];
                     }
