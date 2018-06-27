@@ -1,6 +1,3 @@
-
-
-
 irf.pageCollection.factory("CIBILAppendix", [function(){
     var accountTypes = {
         "01": {
@@ -603,7 +600,7 @@ var EQUIFAX_HTML =
                         }
                         // Data processing for UI - ends
                         var idencheckMethod = function(httpres){
-                           if( httpres.idenCheckResponseDTO != null &&  httpres.idenCheckResponseDTO.length != 0){
+                           if( httpres.idenCheckResponseDTO != null ){
                                     for(i in httpres.idenCheckResponseDTO.idenCheckResponses){
                                        if(httpres.idenCheckResponseDTO.idenCheckResponses[i].status != 'Y' ){
                                             httpres.idenCheckResponseDTO.idenCheckResponses[i].status = false

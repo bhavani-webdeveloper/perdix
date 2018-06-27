@@ -1,5 +1,3 @@
-
-
 irf.pageCollection.factory(irf.page("loans.individual.screening.CBCheck"),
 ["$log", "$q","LoanAccount", 'SchemaResource', 'PageHelper','formHelper',"elementsUtils",
 'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch","CreditBureau","Enrollment","BundleManager",
@@ -240,9 +238,10 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             model.idenCheckParam = SessionStore.getGlobalSetting("IdentCheckSettings");
             model.idenCheck = {};
             if(model.idenCheckParam != null){
-                model.idenCheck.reqServiceType = model.idenCheckParam.split('~')[0];
-                model.idenCheck.dobSegmentRequired = Boolean(model.idenCheckParam.split('~')[1]);
-                model.idenCheck.addressSegmentReqired = Boolean(model.idenCheckParam.split('~')[2]);   
+                var idencheckArray =  model.idenCheckParam.split('~');
+                model.idenCheck.reqServiceType = idencheckArray[0];
+                model.idenCheck.dobSegmentRequired = Boolean(idencheckArray[1]);
+                model.idenCheck.addressSegmentReqired = Boolean(idencheckArray[2]);   
             }
             
 

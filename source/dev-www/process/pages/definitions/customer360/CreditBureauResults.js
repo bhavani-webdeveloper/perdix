@@ -1,6 +1,3 @@
-
-
-
 irf.pageCollection.factory("CIBILAppendix", [function(){
     var accountTypes = {
         "01": {
@@ -622,7 +619,12 @@ var EQUIFAX_HTML =
                 model.CIBIL = true;
                 model.BASE = true;
             }
-            return refreshCB(model);
+            return refreshCB(model).then(function(){
+                formCtrl.redraw();
+                $timeout(function() {
+                    refreshUI();
+                });
+            });
         },
         initializeUI: function (model, form, formCtrl, bundlePageObj, bundleModel) {
             refreshUI();
