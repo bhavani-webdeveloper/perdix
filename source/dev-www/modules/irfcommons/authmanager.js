@@ -43,7 +43,7 @@ function(Auth, Account, $q, $log, SessionStore, irfStorageService, AuthTokenHelp
 
 	var removeUserData = function() {
 		userData = null;
-		SessionStore.setSession({});
+		SessionStore.clear();
 	};
 
 	var getUser = function() {
@@ -82,7 +82,7 @@ function(Auth, Account, $q, $log, SessionStore, irfStorageService, AuthTokenHelp
 				irfStorageService.storeJSON('UserData', accountResponse);
 				deferred.resolve(accountResponse);
 			});
-		}, deferred.reject);
+		}, function() {deferred.reject({ 'statusText': 'Perdix server is down. Pl contact administrator' })});
 		return deferred.promise;
 	};
 
