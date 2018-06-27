@@ -3,7 +3,7 @@ import {PolicyManager} from "../../shared/PolicyManager";
 import {AgentPolicyFactory} from "./policy/AgentPolicyFactory";
 import {Observable} from "@reactivex/rxjs";
 import {IAgentRepository} from "./IAgentRepository";
-import {Customer} from "../Customer/Customer";
+import {Customer} from "../customer/Customer";
 import RepositoryFactory = require("../../shared/RepositoryFactory");
 import {RepositoryIdentifiers} from "../../shared/RepositoryIdentifiers";
 import {AgentProcess} from "./AgentProcess";
