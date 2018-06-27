@@ -401,7 +401,7 @@ var EQUIFAX_HTML =
     '<div class= "row" style = "margin:10px 0px 0px 0px;">'+
         '<div class ="col-sm-4" >'+
             '<span class ="col-sm-12"><span class = "col-sm-6" style = "color:#0F3F6B;">NAME:</span><span class = "col-sm-6">{{CBDATA.idenCheckResponseDTO.name}}</span></span>'+
-            '<span class ="col-sm-12"><span class = "col-sm-6" style = "color:#0F3F6B;">FATHER:</span><span class = "col-sm-6">{{CBDATA.idenCheckResponseDTO.name}}</span></span>'+
+            '<span class ="col-sm-12"><span class = "col-sm-6" style = "color:#0F3F6B;">FATHER:</span><span class = "col-sm-6"></span></span>'+
             '<span class ="col-sm-12"><span class = "col-sm-6" style = "color:#0F3F6B;">PHONE NUMBER:</span><span class = "col-sm-6">{{CBDATA.idenCheckResponseDTO.personalInfoVariations[1].variationValue}}</span></span>'+
         '</div>'+
         '<div class ="col-sm-4">'+
@@ -411,8 +411,8 @@ var EQUIFAX_HTML =
         '</div>'+
         '<div class ="col-sm-4" >'+
             '<span class ="col-sm-12"><span class = "col-sm-4" style = "color:#0F3F6B;">GENDER:</span><span class = "col-sm-6">{{CBDATA.idenCheckResponseDTO.gender}}</span></span>'+
-            '<span class ="col-sm-12"><span class = "col-sm-4" style = "color:#0F3F6B;">MOTHER:</span><span class = "col-sm-6">{{CBDATA.idenCheckResponseDTO.name}}</span></span>'+
-            '<span class ="col-sm-12"><span class = "col-sm-4" style = "color:#0F3F6B;">EMAIL ID:</span><span class = "col-sm-6">{{CBDATA.idenCheckResponseDTO.personalInfoVariations[1].variationValue}}</span></span>'+
+            '<span class ="col-sm-12"><span class = "col-sm-4" style = "color:#0F3F6B;">MOTHER:</span><span class = "col-sm-6"></span></span>'+
+            '<span class ="col-sm-12"><span class = "col-sm-4" style = "color:#0F3F6B;">EMAIL ID:</span><span class = "col-sm-6"></span></span>'+
         '</div>'+
         '</div>'+
         '<p class= "row" style = "margin-top:10px;"><span class="col-sm-2" style = "color:#0F3F6B;"> CURRENT ADDRESS</span><span class = "col-sm-10">{{CBDATA.idenCheckResponseDTO.personalInfoVariations[0].variationValue}}</span> </p>'+

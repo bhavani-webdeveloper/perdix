@@ -2493,7 +2493,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             },{
                 type: "box",
                 condition: "model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
-                readonly:true,
+               readonly:true,
                 startEmpty: true,
                 title: "ENTERPRICE_ASSETS",
                 items: [{
