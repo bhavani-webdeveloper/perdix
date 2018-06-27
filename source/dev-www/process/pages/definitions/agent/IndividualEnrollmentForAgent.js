@@ -531,6 +531,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                         }
                         PageHelper.showProgress('enrolment', 'Updating Customer');
                         // PageHelper.showLoader();
+                        model.enrolmentProcess.processType = 'AGENT'; 
                         model.enrolmentProcess.proceed()
                             .finally(function() {
                                 PageHelper.hideLoader();
@@ -558,6 +559,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                         }
                         PageHelper.showProgress('enrolment', 'Updating Customer');
                         PageHelper.showLoader();
+                        model.enrolmentProcess.processType = 'AGENT'; 
                         model.enrolmentProcess.save()
                             .finally(function() {
                                 PageHelper.hideLoader();

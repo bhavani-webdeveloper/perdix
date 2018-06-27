@@ -46,8 +46,7 @@ export class EnrolmentProcess {
     }
 
     save(): any {
-        this.enrollmentAction = 'SAVE';              
-        this.processType = 'AGENT';
+        this.enrollmentAction = 'SAVE';         
         let pmBeforeUpdate:PolicyManager<EnrolmentProcess>  = new PolicyManager(this, EnrolmentPolicyFactory.getInstance(), 'beforeSave', EnrolmentProcess.getProcessConfig());
         let obs1 = pmBeforeUpdate.applyPolicies();
         let obs2 = this.enrolmentRepo.updateEnrollment(this)
@@ -58,7 +57,6 @@ export class EnrolmentProcess {
 
     proceed(): any {
         this.enrollmentAction = 'PROCEED';
-        this.processType = 'AGENT';
         let pmBeforeUpdate:PolicyManager<EnrolmentProcess>  = new PolicyManager(this, EnrolmentPolicyFactory.getInstance(), 'beforeProceed', EnrolmentProcess.getProcessConfig());
         let obs1 = pmBeforeUpdate.applyPolicies();
         let obs2 = this.enrolmentRepo.updateEnrollment(this)
