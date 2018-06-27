@@ -121,7 +121,7 @@ irf.pageCollection.factory(irf.page("coa.ListOfAccount"),
                             icon: "fa fa-pencil-square-o",
                             fn: function(item, index) {
                                 entityManager.setModel('coa.AddAccount', {
-                                    _request: item
+                                    glAccount: item
                                 });
                                 irfNavigator.go({
                                     state: "Page.Engine",

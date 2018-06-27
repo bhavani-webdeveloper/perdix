@@ -145,6 +145,35 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                     "actionbox.submit"
                 ];
             }
+            var formRequest = function (model) {
+                return {
+                    "overrides": getOverrides (model),
+                    "includes": getIncludes (model),
+                    "excludes": [
+                        "",
+                    ],
+                    "options": {
+                        "repositoryAdditions": {
+                            "productDetails": {
+                                "items": {
+                                    "parentLoanAccount": {
+                                        "key": "lead.parentLoanAccount",
+                                        "title": "PARENT_LOAN_ACCOUNT",
+                                        "condition": "model.lead.loanPurpose1==='Insurance Loan'",
+                                        "orderNo": 40
+                                    },
+                                    "vehicleRegistrationNumber": {
+                                        "key": "lead.vehicleRegistrationNumber",
+                                        "title": "REGN_NO",
+                                        "condition": "model.lead.interestedInProduct==='YES' && (model.lead.loanPurpose1 == 'Purchase - Used Vehicle' || model.lead.loanPurpose1 == 'Refinance')",
+                                        "orderNo": 45
+                                    }
+                                }
+                            }
+                        }
+                    }
+                };
+            };
             return {
                 "type": "schema-form",
                 "title": "LEAD_GENERATION",
@@ -190,6 +219,8 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                                 var deferred = $q.defer();
                                 var promise = deferred.promise;
                                 deferred.resolve(Lead.getConfigFile())
+
+                                console.log(model.lead.getLead());
 
                                 promise.then(function(resp) {
                                     self.form = IrfFormRequestProcessor.getFormDefinition('LeadGeneration', formRequest, resp, model);

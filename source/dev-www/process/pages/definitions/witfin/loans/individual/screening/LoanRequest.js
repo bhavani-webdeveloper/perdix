@@ -1108,7 +1108,6 @@ define([], function() {
                 eventListeners: {
                     "lead-loaded": function(bundleModel, model, obj) {
                         model.lead = obj;
-                        model.loanAccount.vehicleLoanDetails = {};
                         model.loanAccount.loanAmountRequested = obj.loanAmountRequested;
                         model.loanAccount.loanPurpose1 = obj.loanPurpose1;
                         model.loanAccount.loanPurpose2 = obj.loanPurpose2;

@@ -19,16 +19,6 @@ define([], function() {
                 initialize: function(model, form, formCtrl) {
                     $log.info("Add Account got initialized");
 
-                    // var promise1 = ChartOfAccount.list().$promise;
-                    // promise1.then((res) => {
-                    //     console.log((res));
-                    //     model.data1 = res;
-                    //     PageHelper.hideLoader();
-                    // }, (err) => {
-                    //     console.log(err);
-                    //     PageHelper.hideLoader();
-                    // });
-
                     model.glAccount = model.glAccount || {};
                     if (!(model && model.glAccount && model.glAccount.id)) {
                         PageHelper.showLoader();
@@ -65,7 +55,7 @@ define([], function() {
                                     "LEDGER": "LEDGER"
                                 }
                             }, {
-                                "title": "GL_TYPE",
+                                "title": "GL_CATEGORY",
                                 "key": "glAccount.category",
                                 "type": "select",
                                 "enumCode": "gl_category",
@@ -273,8 +263,8 @@ define([], function() {
                         PageHelper.showLoader();
                         PageHelper.showProgress('request', 'Updating...');
                         model.glAccount.branchSetCode = 'ALL';
-                        model.glAccount.category = 'Asset';
-                        model.glAccount.glType = 'LEDGER';
+                        // model.glAccount.category = 'Asset';
+                        // model.glAccount.glType = 'LEDGER';
                         var promise = ChartOfAccount.update(model.glAccount).$promise;
                         promise.then((data) => {
                             console.log(data);

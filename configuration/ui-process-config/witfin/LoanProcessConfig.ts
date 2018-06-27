@@ -15,33 +15,7 @@ let config = {
                     },
                     {
                         "name": "DefaultVehicleDocumentsPolicy",
-                        "arguments": {
-                            "applicant": true,
-                            "coApplicant": false,
-                            "guarantor": false,
-                            "loanCustomer": true,
-                            "loanCustomerType": "Enterprise"
-                        }
-                    },
-                    {
-                        "name": "DefaultCalculatedVehicleDetailsPolicy",
-                        "arguments": {
-                            "applicant": true,
-                            "coApplicant": false,
-                            "guarantor": false,
-                            "loanCustomer": true,
-                            "loanCustomerType": "Enterprise"
-                        }
-                    },
-                    {
-                        "name": "DefaultExpensePolicy",
-                        "arguments": {
-                            "applicant": true,
-                            "coApplicant": false,
-                            "guarantor": false,
-                            "loanCustomer": true,
-                            "loanCustomerType": "Enterprise"
-                        }
+                        "arguments": {}
                     }
                 ]
             },
@@ -53,6 +27,10 @@ let config = {
                     },
                     {
                         "name": "CustomerReferencePolicy",
+                        "arguments": {}
+                    },
+                    {
+                        "name": "DefaultCalculatedVehicleDetailsPolicy",
                         "arguments": {}
                     }
                 ],
@@ -70,16 +48,6 @@ let config = {
                                 "arguments": {}
                             },
 
-                        ]
-                    },
-                    {
-                        "type": "expr",
-                        "expr": "this.loanAccount.currentStage=='BranchCreditAppraisal'",
-                        "add": [
-                            {
-                                "name": "CustomerReferencePolicy",
-                                "arguments": {}
-                            }
                         ]
                     },
                     {
