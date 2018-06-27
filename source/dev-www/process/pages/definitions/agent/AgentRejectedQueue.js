@@ -115,7 +115,7 @@ define({
                     },
                     getActions: function() {
                         return [{
-                            name: "AGENT_REVIEW",
+                            name: "Agent 360",
                             desc: "",
                             icon: "fa fa-pencil-square-o",
                             fn: function(item, index) {

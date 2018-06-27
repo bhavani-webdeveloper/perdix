@@ -50,10 +50,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                         fieldType: "number",
                         resolver: "PincodeLOVConfiguration"
                     },
+                    "ContactInformation.whatsAppMobileNo":{
+                        "condition":"model.customer.whatsAppMobileNoOption =='3'"
+                    },
                     "IndividualInformation.dateOfBirth": {
                         onChange: function(valueObj, model, context) {
                             context.customer.age = moment().diff(moment(valueObj, SessionStore.getSystemDateFormat()), 'years');
-
                         }
                     },
                     "BankAccounts.customerBankAccounts.accountNumber": {
@@ -62,6 +64,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                     },
                     "BankAccounts.customerBankAccounts.confirmedAccountNumber": {
                         "type": "string",
+                        "title": "CONFIRMED_ACCOUNT_NUMBER",
                         "required": true
                     },
                     "IndividualInformation.customerId": {
@@ -188,6 +191,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                     /* Setting on the current page */
                                     model.enrolmentProcess = enrolmentProcess;
                                     model.customer = enrolmentProcess.customer;
+                                    if (model.customer.dateOfBirth) {
+                                        model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                                    }
 
                                     BundleManager.pushEvent(model.pageClass + "-updated", model._bundlePageObj, enrolmentProcess);
                                 })

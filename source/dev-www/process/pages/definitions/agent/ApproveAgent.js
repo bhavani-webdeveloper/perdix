@@ -112,7 +112,7 @@ define({
                     },
                     getActions: function() {
                         return [{
-                            name: "APPLICATION_REVIEW",
+                            name: "Agent 360",
                             desc: "",
                             icon: "fa fa-pencil-square-o",
                             fn: function(item, index) {

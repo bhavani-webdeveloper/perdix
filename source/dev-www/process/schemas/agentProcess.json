@@ -110,7 +110,9 @@
                                 "title": "DESIGNATION"
                             }
                         },
-                        "required": []
+                        "required": [
+                            "agentType"
+                        ]
                     }
                 },
                 "agentFeeDetails": {

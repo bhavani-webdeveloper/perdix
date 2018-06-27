@@ -182,6 +182,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                 },
                                 "BankAccounts.customerBankAccounts.confirmedAccountNumber": {
                                     "type": "string",
+                                    "title": "CONFIRMED_ACCOUNT_NUMBER",
                                     "required": true
                                 },
                                 "ContactInformation.locality": {
