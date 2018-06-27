@@ -7,6 +7,7 @@ import {PreSaveCustomerPolicy} from "../../customer/policy/PreSaveCustomerPolicy
 import {LoadEnrolmentCustomerDataPolicy} from "../../customer/policy/LoadEnrolmentCustomerDataPolicy";
 import {EnrolmentDerivedPolicy} from "../../customer/policy/EnrolmentDerivedPolicy";
 import {VerifyBankAccountNumberPolicy} from "../../customer/policy/VerifyBankAccountNumberPolicy";
+import {MandatoryFieldsPolicy} from "../policy/MandatoryFieldsPolicy";
 
 export class AgentPolicyFactory implements IPolicyFactory{
 
@@ -40,7 +41,9 @@ export class AgentPolicyFactory implements IPolicyFactory{
             case 'EnrolmentDerivedPolicy':
                return new EnrolmentDerivedPolicy();
             case 'VerifyBankAccountNumberPolicy':
-               return new VerifyBankAccountNumberPolicy();          
+               return new VerifyBankAccountNumberPolicy(); 
+            case  'MandatoryFieldsPolicy' :
+                 return new  MandatoryFieldsPolicy();     
             default:
                 return null;
 

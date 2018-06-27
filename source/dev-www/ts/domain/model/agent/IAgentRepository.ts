@@ -12,5 +12,4 @@ export interface IAgentRepository {
 	create(reqData: any): Observable<any>;
 	getCustomerById(id: number): Observable<any>;
     // updateEnrollment(reqData: Object): Observable<any>;
-
 }

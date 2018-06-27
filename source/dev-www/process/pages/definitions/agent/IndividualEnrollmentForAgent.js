@@ -234,7 +234,61 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                     "BankAccounts.customerBankAccounts.confirmedAccountNumber",
                     "BankAccounts.customerBankAccounts.accountType"
                 ];
+            }
 
+            var configFile = function() {
+                return {
+                    "agentProcess.agent.currentStage": {
+                        "PendingForApproval": {
+                            "excludes": [
+                               "actionbox" 
+                            ],
+                            "overrides": {
+                                "IndividualInformation":{
+                                    "readonly":true
+                                },
+                                "ContactInformation":{
+                                    "readonly":true
+                                },
+                                "BankAccounts":{
+                                    "readonly":true
+                                }
+                            }
+                        },
+                        "Approved": {
+                            "excludes": [
+                                "actionbox"
+                            ],
+                            "overrides": {
+                                "IndividualInformation":{
+                                    "readonly":true
+                                },
+                                "ContactInformation":{
+                                    "readonly":true
+                                },
+                                "BankAccounts":{
+                                    "readonly":true
+                                }
+                            }
+                        },
+                        "Rejected": {
+                            "excludes": [
+                                "actionbox"
+                            ],
+                            "overrides": {
+                                "IndividualInformation":{
+                                    "readonly":true
+                                },
+                                "ContactInformation":{
+                                    "readonly":true
+                                },
+                                "BankAccounts":{
+                                    "readonly":true
+                                }
+                            }
+                        }
+                    }
+                }
             }
 
             return {
@@ -296,7 +350,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                 }]
                             }, {
                                 "type": "actionbox",
-                                "condition": "model.customer.currentStage && model.customer.id",
+                                "condition": "model.customer.currentStage && model.customer.id && !model.agentProcess.agent.currentStage",
                                 "orderNo": 1200,
                                 "items": [{
                                     "type": "button",
@@ -309,7 +363,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
 
                     UIRepository.getEnrolmentProcessUIRepository().$promise
                         .then(function(repo) {
-                            return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, null, model)
+                            return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model)
                         })
                         .then(function(form) {
                             self.form = form;
@@ -380,9 +434,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                 model.customer.postOffice = obj.postOffice;
                                 model.customer.customerCategory = obj.leadCategory;
                                 model.customer.parentLoanAccount = obj.parentLoanAccount;
-
                             })
-
                     },
                     "origination-stage": function(bundleModel, model, obj) {
                         model.currentStage = obj

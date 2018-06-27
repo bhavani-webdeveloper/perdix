@@ -53,7 +53,7 @@ define({
                 getResultsPromise: function(searchOptions, pageOpts) {
                     return Agent.search({
                         'agentId': searchOptions.agentId,
-                        'currentStage': '',
+                        'currentStage': 'PendingForApproval',
                         'agentName': searchOptions.agentName,
                         'agentType': searchOptions.agentType,
                         'customerType': searchOptions.agent,

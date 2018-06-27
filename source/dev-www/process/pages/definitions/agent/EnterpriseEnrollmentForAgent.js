@@ -92,31 +92,58 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                     "BankAccounts.customerBankAccounts.confirmedAccountNumber",
                     "BankAccounts.customerBankAccounts.accountType"
                 ];
-
             }
 
             var configFile = function() {
                 return {
-                    "agentProcess.loanAccount.isReadOnly": {
-                        "Yes": {
+                    "agentProcess.agent.currentStage": {
+                        "PendingForApproval": {
+                            "excludes": [
+                               "actionbox" 
+                            ],
                             "overrides": {
-                                "EnterpriseInformation": {
-                                    "readonly": true
+                                "EnterpriseInformation":{
+                                    "readonly":true
                                 },
-                                "EnterpriseInformation.enterpriseType": {
-                                    "readonly": true
+                                "ContactInformation":{
+                                    "readonly":true
                                 },
-                                "BankAccounts": {
-                                    "readonly": true
-                                },
-                                "ContactInformation": {
-                                    "readonly": true
-                                },
-                                "EnterpriseReferences": {
-                                    "readonly": true
+                                "BankAccounts":{
+                                    "readonly":true
                                 }
                             }
-
+                        },
+                        "Approved": {
+                            "excludes": [
+                                "actionbox"
+                            ],
+                            "overrides": {
+                                "EnterpriseInformation":{
+                                    "readonly":true
+                                },
+                                "ContactInformation":{
+                                    "readonly":true
+                                },
+                                "BankAccounts":{
+                                    "readonly":true
+                                }
+                            }
+                        },
+                        "Rejected": {
+                            "excludes": [
+                                "actionbox"
+                            ],
+                            "overrides": {
+                                "EnterpriseInformation":{
+                                    "readonly":true
+                                },
+                                "ContactInformation":{
+                                    "readonly":true
+                                },
+                                "BankAccounts":{
+                                    "readonly":true
+                                }
+                            }
                         }
                     }
                 }
@@ -335,7 +362,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                     }]
                                 }, {
                                     "type": "actionbox",
-                                    "condition": "model.customer.currentStage && model.customer.id",
+                                    "condition": "model.customer.currentStage && model.customer.id && !model.agentProcess.agent.currentStage",
                                     "orderNo": 2000,
                                     "items": [{
                                         "type": "button",
@@ -347,7 +374,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                         };
 
 
-                        IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, null, model)
+                        IrfFormRequestProcessor.buildFormDefinition(repo, formRequest,configFile(), model)
                             .then(function(form) {
                                 self.form = form;
                             });

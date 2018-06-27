@@ -5,11 +5,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
     return {
         pageUID: "agent.IndividualAgentEnrollment",
         pageType: "Engine",
-        dependencies: ["$log", "$state", "$stateParams", "Enrollment", "Agent", "EnrollmentHelper", "SessionStore", "formHelper", "$q",
+        dependencies: ["$log", "$state","irfNavigator", "$stateParams", "Enrollment", "Agent", "EnrollmentHelper", "SessionStore", "formHelper", "$q",
             "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository"
         ],
 
-        $pageFn: function($log, $state, $stateParams, Enrollment, Agent, EnrollmentHelper, SessionStore, formHelper, $q,
+        $pageFn: function($log, $state,irfNavigator, $stateParams, Enrollment, Agent, EnrollmentHelper, SessionStore, formHelper, $q,
             PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository) {
 
             var self;
@@ -17,6 +17,52 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
             var pageParams = {
                 readonly: true
             };
+
+            var configFile = function() {
+                return {
+                    "agentProcess.agent.currentStage": {
+                        "PendingForApproval": {
+                            "excludes": [
+                               "actionbox" 
+                            ],
+                            "overrides": {
+                                "AgentInformation":{
+                                    "readonly":true
+                                },
+                                "AgentFeeDetails":{
+                                    "readonly":true
+                                }
+                            }
+                        },
+                        "Approved": {
+                            "excludes": [
+                                "actionbox"
+                            ],
+                            "overrides": {
+                                "AgentInformation":{
+                                    "readonly":true
+                                },
+                                "AgentFeeDetails":{
+                                    "readonly":true
+                                }
+                            }
+                        },
+                        "Rejected": {
+                            "excludes": [
+                                "actionbox"
+                            ],
+                            "overrides": {
+                                "AgentInformation":{
+                                    "readonly":true
+                                },
+                                "AgentFeeDetails":{
+                                    "readonly":true
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
             var overridesFields = function(bundlePageObj) {
                 return {
@@ -54,7 +100,23 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                     "AgentFeeDetails.agentFeeDetails.feeName",
                     "AgentFeeDetails.agentFeeDetails.feeType",
                     "AgentFeeDetails.agentFeeDetails.frequency",
-                    "AgentFeeDetails.agentFeeDetails.dateOfIncorporation"
+                    "AgentFeeDetails.agentFeeDetails.dateOfIncorporation",
+                    "PostReview",
+                    "PostReview.action",
+                    "PostReview.proceed",
+                    "PostReview.proceed.remarks",
+                    "PostReview.proceed.proceedButton",
+                    "PostReview.sendBack",
+                    "PostReview.sendBack.remarks",
+                    "PostReview.sendBack.stage",
+                    "PostReview.sendBack.sendBackButton",
+                    "PostReview.reject",
+                    "PostReview.reject.remarks",
+                    "PostReview.reject.rejectReason",
+                    "PostReview.reject.rejectButton",
+                    "PostReview.hold",
+                    "PostReview.hold.remarks",
+                    "PostReview.hold.holdButton"
                 ];
 
             }
@@ -102,6 +164,113 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                             "orderNo": 10
                                         }
                                     }
+                                },
+                                "PostReview": {
+                                    "type": "box",
+                                    "title": "POST_REVIEW",
+                                    "condition": "model.agentProcess.agent.id",
+                                    "orderNo": 600,
+                                    "items": {
+                                        "action": {
+                                            "key": "review.action",
+                                            "type": "radios",
+                                            "titleMap": {
+                                                "REJECT": "REJECT",
+                                                "SEND_BACK": "SEND_BACK",
+                                                "PROCEED": "PROCEED",
+                                                "HOLD": "HOLD"
+                                            }
+                                        },
+                                        "proceed": {
+                                            "type": "section",
+                                            "condition": "model.review.action=='PROCEED'",
+                                            "items": {
+                                                "remarks": {
+                                                    "title": "REMARKS",
+                                                    "key": "agentProcess.remarks",
+                                                    "type": "textarea",
+                                                    "required": true
+                                                },
+                                                "proceedButton": {
+                                                    "key": "review.proceedButton",
+                                                    "type": "button",
+                                                    "title": "PROCEED",
+                                                    "onClick": "actions.proceed(model, formCtrl, form, $event)"
+                                                }
+                                            }
+                                        },
+                                        "sendBack": {
+                                            "type": "section",
+                                            "condition": "model.review.action=='SEND_BACK'",
+                                            "items": {
+                                                "remarks": {
+                                                    "title": "REMARKS",
+                                                    "key": "agentProcess.remarks",
+                                                    "type": "textarea",
+                                                    "required": true
+                                                },
+                                                "stage": {
+                                                    "key": "agentProcess.stage",
+                                                    "required": true,
+                                                    "type": "lov",
+                                                    "title": "SEND_BACK_TO_STAGE",
+                                                    "resolver": "AgentSendBacktoStageLOVConfiguration"
+                                                },
+                                                "sendBackButton": {
+                                                    "key": "review.sendBackButton",
+                                                    "type": "button",
+                                                    "title": "SEND_BACK",
+                                                    "onClick": "actions.sendBack(model, formCtrl, form, $event)"
+                                                }
+                                            }
+                                        },
+                                        "reject": {
+                                            "type": "section",
+                                            "condition": "model.review.action=='REJECT'",
+                                            "items": {
+                                                "remarks": {
+                                                    "title": "REMARKS",
+                                                    "key": "agentProcess.remarks",
+                                                    "type": "textarea",
+                                                    "required": true
+                                                },
+                                                "rejectReason": {
+                                                    "key": "agent.rejectReason",
+                                                    "type": "lov",
+                                                    "autolov": true,
+                                                    "required": true,
+                                                    "title": "REJECT_REASON",
+                                                    "resolver": "AgentRejectReasonLOVConfiguration"
+                                                },
+                                                "rejectButton": {
+                                                    "key": "review.rejectButton",
+                                                    "type": "button",
+                                                    "title": "REJECT",
+                                                    "required": true,
+                                                    "onClick": "actions.reject(model, formCtrl, form, $event)"
+                                                }
+                                            }
+                                        },
+                                        "hold": {
+                                            "type": "section",
+                                            "condition": "model.review.action=='HOLD'",
+                                            "items": {
+                                                "remarks": {
+                                                    "title": "REMARKS",
+                                                    "key": "agentProcess.remarks",
+                                                    "type": "textarea",
+                                                    "required": true
+                                                },
+                                                "holdButton": {
+                                                    "key": "review.holdButton",
+                                                    "type": "button",
+                                                    "title": "HOLD",
+                                                    "required": true,
+                                                    "onClick": "actions.holdButton(model, formCtrl, form, $event)"
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                             },
                             "additions": [{
@@ -110,8 +279,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                 "orderNo": 1200,
                                 "items": [{
                                     "type": "button",
-                                    "title": "PROCEED",
-                                    "onClick": "actions.proceed(model, formCtrl, form, $event)"
+                                    "title": "SAVE",
+                                    "onClick": "actions.save(model, formCtrl, form, $event)"
                                 }]
                             }]
                         }
@@ -119,7 +288,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
 
                     UIRepository.getAgentProcessUIRepository().$promise
                         .then(function(repo) {
-                            return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, null, model)
+                            return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model)
                         })
                         .then(function(form) {
                             self.form = form;
@@ -170,6 +339,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                 model.agent.agentId1 = obj.id;
                             })
                     },
+                    "agent-updated":function(bundleModel, model, obj) {
+                    },
                     "origination-stage": function(bundleModel, model, obj) {
                         model.currentStage = obj
                     }
@@ -187,6 +358,47 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                     return Agent.getSchema().$promise;
                 },
                 actions: {
+                    save: function(model, form, formName) {
+                        PageHelper.clearErrors();
+                        if (PageHelper.isFormInvalid(form)) {
+                            return false;
+                        }
+                        PageHelper.showProgress('enrolment', 'Updating Customer');
+                        PageHelper.showLoader();
+                        model.agentProcess.save()
+                            .finally(function() {
+                                PageHelper.hideLoader();
+                            })
+                            .subscribe(function(agentProcess) {
+                                $log.info(agentProcess);
+                                $log.info("agentProcess");
+                                formHelper.resetFormValidityState(form);
+                                PageHelper.showProgress('enrolment', 'Done.', 5000);
+                                PageHelper.clearErrors();
+                                model.agentProcess=agentProcess;
+                                BundleManager.pushEvent(model.pageClass + "-updated", model._bundlePageObj, agentProcess);
+                            }, function(err) {
+                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                PageHelper.showErrors(err);
+                                PageHelper.hideLoader();
+                            });
+                    },
+                    reject: function(model, formCtrl, form, $event) {
+                        PageHelper.showLoader();
+                        model.agentProcess.reject()
+                            .finally(function() {
+                                PageHelper.hideLoader();
+                            })
+                            .subscribe(function(value) {
+                                Utils.removeNulls(value, true);
+                                PageHelper.showProgress('enrolment', 'Agent Rejected', 5000);
+                                irfNavigator.goBack();
+                            }, function(err) {
+                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                PageHelper.showErrors(err);
+                                PageHelper.hideLoader();
+                            });
+                    },
                     proceed: function(model, form, formName) {
                         PageHelper.clearErrors();
                         if (PageHelper.isFormInvalid(form)) {
@@ -202,10 +414,60 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                 $log.info(agentProcess);
                                 $log.info("agentProcess");
                                 formHelper.resetFormValidityState(form);
-
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 PageHelper.clearErrors();
                                 BundleManager.pushEvent(model.pageClass + "-updated", model._bundlePageObj, agentProcess);
+                                irfNavigator.goBack();
+                            }, function(err) {
+                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                PageHelper.showErrors(err);
+                                PageHelper.hideLoader();
+                            });
+                    },
+                    holdButton: function(model, form, formName) {
+                        PageHelper.clearErrors();
+                        if (PageHelper.isFormInvalid(form)) {
+                            return false;
+                        }
+                        PageHelper.showProgress('enrolment', 'Updating Customer');
+                        PageHelper.showLoader();
+                        model.agentProcess.hold()
+                            .finally(function() {
+                                PageHelper.hideLoader();
+                            })
+                            .subscribe(function(agentProcess) {
+                                $log.info(agentProcess);
+                                $log.info("agentProcess");
+                                formHelper.resetFormValidityState(form);
+                                PageHelper.showProgress('enrolment', 'Done.', 5000);
+                                PageHelper.clearErrors();
+                                model.agentProcess=agentProcess;
+                                BundleManager.pushEvent(model.pageClass + "-updated", model._bundlePageObj, agentProcess);
+                            }, function(err) {
+                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                PageHelper.showErrors(err);
+                                PageHelper.hideLoader();
+                            });
+                    },
+                    sendBack: function(model, form, formName) {
+                        PageHelper.clearErrors();
+                        if (PageHelper.isFormInvalid(form)) {
+                            return false;
+                        }
+                        PageHelper.showProgress('enrolment', 'Agent Send Back working');
+                        PageHelper.showLoader();
+                        model.agentProcess.sendBack()
+                            .finally(function() {
+                                PageHelper.hideLoader();
+                            })
+                            .subscribe(function(agentProcess) {
+                                $log.info(agentProcess);
+                                $log.info("agentProcess");
+                                formHelper.resetFormValidityState(form);
+                                PageHelper.showProgress('enrolment', 'Done.', 5000);
+                                PageHelper.clearErrors();
+                                BundleManager.pushEvent(model.pageClass + "-updated", model._bundlePageObj, agentProcess);
+                                irfNavigator.goBack();
                             }, function(err) {
                                 PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                 PageHelper.showErrors(err);

@@ -1,5 +1,5 @@
 define({
-    pageUID: "agent.AgentSearch",
+    pageUID: "agent.AgentRejectedQueue",
     pageType: "Engine",
     dependencies: ["$log", "formHelper", "Agent", "irfNavigator", "Lead", "$state", "$q", "SessionStore", "Utils", "entityManager"],
 
@@ -56,7 +56,7 @@ define({
                 getResultsPromise: function(searchOptions, pageOpts) {
                     var promise = Agent.search({
                         'agentId': searchOptions.agentId,
-                        'currentStage': 'Approved',
+                        'currentStage': 'Rejected',
                         'agentName': searchOptions.agentName,
                         'agentType': searchOptions.agentType,
                         'customerType': searchOptions.agent,
@@ -115,7 +115,7 @@ define({
                     },
                     getActions: function() {
                         return [{
-                            name: "APPLICATION_REVIEW",
+                            name: "AGENT_REVIEW",
                             desc: "",
                             icon: "fa fa-pencil-square-o",
                             fn: function(item, index) {

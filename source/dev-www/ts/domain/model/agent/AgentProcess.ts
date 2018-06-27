@@ -58,15 +58,15 @@ export class AgentProcess {
 
     save(): any {
         /* Calls all business policies associated with save */
-      
+        this.agentProcessAction = "SAVE";  
         let pmBeforeUpdate: PolicyManager<AgentProcess> = new PolicyManager(this, AgentPolicyFactory.getInstance(), 'beforeSave', AgentProcess.getProcessConfig());
         let obs1 = pmBeforeUpdate.applyPolicies();
         let obs2 = null;
         if (this.agent.id){
-            obs2 = this.agentRepo.update(this.agent);
+            obs2 = this.agentRepo.update(this);
         } 
         else {
-            obs2 = this.agentRepo.create(this.agent);
+            obs2 = this.agentRepo.create(this);
         }
         let pmAfterUpdate: PolicyManager<AgentProcess> = new PolicyManager(this, AgentPolicyFactory.getInstance(), 'afterSave', AgentProcess.getProcessConfig());
         let obs3 = pmAfterUpdate.applyPolicies();
@@ -80,10 +80,10 @@ export class AgentProcess {
         let obs1 = pmBeforeUpdate.applyPolicies();
         let obs2 = null;
         if (this.agent.id){
-            obs2 = this.agentRepo.update(this.agent);
+            obs2 = this.agentRepo.update(this);
         }
         else {
-            obs2 = this.agentRepo.create(this.agent);
+            obs2 = this.agentRepo.create(this);
         }
 
         let pmAfterUpdate: PolicyManager<AgentProcess> = new PolicyManager(this, AgentPolicyFactory.getInstance(), 'afterSave', AgentProcess.getProcessConfig());
@@ -93,7 +93,7 @@ export class AgentProcess {
 
     proceed(): any {
         /* Calls all business policies assocaited with proceed */
-        this.agentProcessAction = "SAVE";
+        this.agentProcessAction = "PROCEED";
         let pmBeforeUpdate: PolicyManager<AgentProcess> = new PolicyManager(this, AgentPolicyFactory.getInstance(), 'beforeProceed', AgentProcess.getProcessConfig());
         let obs1 = pmBeforeUpdate.applyPolicies();
         let obs2 = this.agentRepo.update(this);
@@ -113,7 +113,7 @@ export class AgentProcess {
     }
 
     reject(): any {
-        this.stage = "REJECTED";
+        this.stage = "Rejected";
         this.agentProcessAction = "PROCEED";
         let pmBeforeUpdate: PolicyManager<AgentProcess> = new PolicyManager(this, AgentPolicyFactory.getInstance(), 'beforeReject', AgentProcess.getProcessConfig());
         let obs1 = pmBeforeUpdate.applyPolicies();

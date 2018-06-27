@@ -1,11 +1,38 @@
 {  
-   "stages":[  
+   "stages":[
       {  
          "order":1,
-         "code":"Screening",
-         "name":"Screening",
+         "code":"AgentInitiation",
+         "name":"AgentInitiation",
          "stageType":"CAPTURE",
          "allowedRoles":[  
+            "WM"
+         ]
+      },  
+      {  
+         "order":2,
+         "code":"PendingForApproval",
+         "name":"PendingForApproval",
+         "stageType":"CAPTURE",
+         "allowedRoles":[  
+            "WM"
+         ]
+      },
+      {  
+         "order":3,
+         "code":"Approved",
+         "name":"Approved",
+         "stageType":"CAPTURE",
+         "allowedRoles":[  
+            "WM"
+         ]
+      },
+      { 
+         "order":4,
+         "code":"Rejected",
+         "name":"Rejected",
+         "stageType":"CAPTURE",
+         "allowedRoles":[
             "WM"
          ]
       }
@@ -32,98 +59,85 @@
                   "type":"string",
                   "minLength":1,
                   "maxLength":100,
-                  "captureStages":["Screening"
-                  ]
+                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
                },
                "subType":{  
                   "title":"subType",
                   "type":"string",
                   "minLength":1,
                   "maxLength":100,
-                  "captureStages":["Screening"
-                  ]
+                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
                },
                "agentType":{  
                   "title":"agentType",
                   "type":"string",
                   "minLength":1,
                   "maxLength":100,
-                  "captureStages":["Screening"
-                  ]
+                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
                },
                "companyName":{  
                   "title":"companyName",
                   "type":"string",
                   "minLength":1,
                   "maxLength":100,
-                  "captureStages":["Screening"
-                  ]
+                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
                },
                "designation":{  
                   "title":"designation",
                   "type":"string",
                   "minLength":1,
                   "maxLength":100,
-                  "captureStages":["Screening"
-                  ]
+                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
                },
                "udf1":{  
                   "title":"udf1",
                   "type":"string",
                   "minLength":1,
                   "maxLength":100,
-                  "captureStages":["Screening"
-                  ]
+                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
                },
                "udf2":{  
                   "title":"udf2",
                   "type":"string",
                   "minLength":1,
                   "maxLength":100,
-                  "captureStages":["Screening"
-                  ]
+                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
                },
                "udf3":{  
                   "title":"udf3",
                   "type":"string",
                   "minLength":1,
                   "maxLength":100,
-                  "captureStages":["Screening"
-                  ]
+                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
                },
                "udf4":{  
                   "title":"udf4",
 				  "type":"string",
                   "minLength":1,
                   "maxLength":100,
-                  "captureStages":["Screening"
-                  ]
+                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
                },
                "udf5":{  
                   "title":"udf5",
                   "type":"string",
                   "minLength":1,
                   "maxLength":100,
-                  "captureStages":["Screening"
-                  ]
+                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
                },
                "udfDate1":{  
                   "title":"udfDate1",
                   "type":"date",
-                  "captureStages":["Screening"
-                  ]
+                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
                },
                "udfDate2":{  
                   "title":"udfDate2",
                   "type":"date",
-                  "captureStages":["Screening"
-                  ]
+                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
                },
                "udfDate3":{  
                   "title":"udfDate3",
                   "type":"date",
-                  "captureStages":["Screening"
-                  ]
+                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
                }
             }
          },
@@ -143,96 +157,83 @@
                   "type":"string",
                   "minLength":1,
                   "maxLength":100,
-                  "captureStages":["Screening"
-                  ]
+                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
                },
                "feeType":{  
                   "title":"feeType",
                   "type":"string",
                   "minLength":1,
                   "maxLength":100,
-                  "captureStages":["Screening"
-                  ]
+                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
                },
                "feeAmount":{  
                   "title":"feeAmount",
                   "type":"number",
                   "minimum":1,
                   "maximum":10000000,
-                  "captureStages":["Screening"
-                  ]
+                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
                },
                "frequency":{  
                   "title":"frequency",
                   "type":"string",
                   "minLength":1,
                   "maxLength":100,
-                  "captureStages":["Screening"
-                  ]
+                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
                },
                "dateOfIncorporation":{  
                   "title":"dateOfIncorporation",
                   "type":"date",
-                  "captureStages":["Screening"
-                  ]
+                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
                },
                "udf1":{  
                   "title":"udf1",
                   "type":"string",
                   "minLength":1,
                   "maxLength":100,
-                  "captureStages":["Screening"
-                  ]
+                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
                },
                "udf2":{  
                   "title":"udf2",
                  "type":"string",
                   "minLength":1,
                   "maxLength":100,
-                  "captureStages":["Screening"
-                  ]
+                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
                },
                "udf3":{  
                   "title":"udf3",
                   "type":"string",
                   "minLength":1,
                   "maxLength":100,
-                  "captureStages":["Screening"
-                  ]
+                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
                },
                "udf4":{  
                   "title":"udf4",
                   "type":"string",
                   "minLength":1,
                   "maxLength":100,
-                  "captureStages":["Screening"
-                  ]
+                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
                },
                "udf5":{  
                   "title":"udf5",
                   "type":"string",
                   "minLength":1,
                   "maxLength":100,
-                  "captureStages":["Screening"
-                  ]
+                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
                },
                "udfDate1":{  
                   "title":"udfDate1",
                   "type":"date",                  
-                  "captureStages":["Screening"
-                  ]
+                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
                },
                "udfDate2":{  
                   "title":"udfDate2",
                   "type":"date",                  
-                  "captureStages":["Screening"
-                  ]
+                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
                },
                "udfDate3":{  
                   "title":"udfDate3",
                   "type":"date",                  
-                  "captureStages":["Screening"
-                  ]
+                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
                }
             }
          }

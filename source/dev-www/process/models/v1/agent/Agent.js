@@ -8,11 +8,11 @@ irf.models.factory('Agent', function($resource, $httpParamSerializer, BASE_URL, 
             method: 'GET',
             url: 'process/schemas/agentProcess.json'
         },
-        submit: {
+        update: {
             method: 'PUT',
             url: endpoint
         },
-        update: {
+        create: {
             method: 'POST',
             url: endpoint
         },

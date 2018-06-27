@@ -63,7 +63,7 @@ define({
                 getResultsPromise: function(searchOptions, pageOpts) {
                     var promise = Agent.search({
                         'agentId': searchOptions.agentId,
-                        'currentStage': '',
+                        'currentStage': 'AgentInitiation',
                         'agentName': searchOptions.agentName,
                         'agentType': searchOptions.agentType, 
                         'customerType': searchOptions.agent,
