@@ -60,12 +60,12 @@ export class EnterpriseCustomerIDLOVConfiguration extends LOVElementConfiguratio
             })
             .subscribe(function(enrolmentProcess){
                 /* Updating the loan process */
-            
+
                 if (_.hasIn(model, 'loanProcess.removeRelatedEnrolmentProcess')){
                     model.loanProcess.removeRelatedEnrolmentProcess(model.enrolmentProcess, model.loanCustomerRelationType);
                 }
                  if (_.hasIn(model, 'loanProcess.setRelatedCustomerWithRelation')){
-                    model.loanProcess.setRelatedCustomerWithRelation(model.enrolmentProcess, model.loanCustomerRelationType);
+                    model.loanProcess.setRelatedCustomerWithRelation(enrolmentProcess, model.loanCustomerRelationType);
                 }
                 /* Setting on the current page */
                 model.enrolmentProcess = enrolmentProcess;
@@ -79,8 +79,8 @@ export class EnterpriseCustomerIDLOVConfiguration extends LOVElementConfiguratio
             })
 
 
-    };   
-     
+    };
+
     initialize: Function = function(model, form, parentModel, context) {
         // let formHelper = AngularResourceService.getInstance().getNGService("formHelper");
         // let $filter = AngularResourceService.getInstance().getNGService("$filter");
