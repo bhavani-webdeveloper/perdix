@@ -424,6 +424,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 "colClass": "col-sm-6",
                 "condition": "model.siteCode != 'IFMRCapital'",
                 "items":[
+
                     {
                             "type": "fieldset",
                             "title": "View Loan Details",
@@ -435,6 +436,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 required: true,
                                 onClick: "actions.viewLoan(model, formCtrl, form, $event)"
                             }]
+                    },
+                    {
+                        key:"loanAccount.linkedAccountNumber",
+                        title:"LINKED_ACCOUNT_NUMBER",
+                        readonly:true,
+                        required: false
                     },
                     {
                     "type":"fieldset",
