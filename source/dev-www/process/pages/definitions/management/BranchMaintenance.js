@@ -282,7 +282,7 @@ define({
                         model.branch.branchCloseTime = moment(model.branch.branchCloseTime).format("HH:mm:ss");
                     }
                     PageHelper.showLoader();
-                    PageHelper.showProgress("Journal Save", "Working...");
+                    PageHelper.showProgress("Branch Save", "Working...");
                     if (model.branch.id) {
                         BranchCreationResource.branchEdit(model.branch)
                             .$promise
