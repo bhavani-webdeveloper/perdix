@@ -33,8 +33,6 @@ define([], function() {
                     return 'Co-Applicant';
                 }
             };
-
-
             var configFile = function() {
                 return {
                     "loanProcess.loanAccount.currentStage": {
@@ -539,7 +537,8 @@ define([], function() {
                     "PreliminaryInformation.parentLoanAccount",
                     "PreliminaryInformation.frequencyRequested",
                     "PreliminaryInformation.udf5",
-                    "PreliminaryInformation.tenureRequested",    
+                    "PreliminaryInformation.tenureRequested", 
+                    "PreliminaryInformation.collectionPaymentType",   
                     "PreliminaryInformation.expectedInterestRate",
                     "PreliminaryInformation.calculateEmi",
                     "PreliminaryInformation.estimatedEmi",
@@ -1150,7 +1149,7 @@ define([], function() {
                                 PageHelper.hideLoader();
                             })
                             .subscribe(function(value) {
-
+                             //   BundleManager.pushEvent('new-loan', model._bundlePageObj, {loanAccount: value.loanAccount});
                                 PageHelper.showProgress('loan-process', 'Loan Saved.', 5000);
                             }, function(err) {
                                 PageHelper.showProgress('loan-process', 'Oops. Some error.', 5000);

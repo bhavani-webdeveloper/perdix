@@ -69,9 +69,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "Liabilities": {
                                     "readonly": true
                                 },
-                                "customerLicenceDetails": {
-                                    "readonly": true
-                                },
                                 "HouseVerification": {
                                     "readonly": true
                                 },
@@ -79,6 +76,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "IndividualInformation.customerCategory": {
+                                    "readonly": true
+                                },
+                                "KYC.identityProof": {
                                     "readonly": true
                                 },
                                 "BankAccounts": {
@@ -96,9 +96,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             "overrides": {
                                 "FamilyDetails": {
                                     "title": "HOUSEHOLD_DETAILS"
-                                },
-                                "customerLicenceDetails": {
-                                    "readonly": true
                                 },
                                 "KYC.customerId": {
                                     "readonly": true
@@ -118,9 +115,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             "overrides": {
                                 "FamilyDetails": {
                                     "title": "HOUSEHOLD_DETAILS"
-                                },
-                                "customerLicenceDetails": {
-                                    "readonly": true
                                 },
                                 "KYC.customerId": {
                                     "readonly": true
@@ -146,8 +140,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
                             },
                             "excludes": [
-                                "ContactInformation.location",
-                                "IndividualReferences"
+                                "ContactInformation.location"
                             ]
                         },
                         "FieldInvestigation2": {
@@ -160,8 +153,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
                             },
                             "excludes": [
-                                "ContactInformation.location",
-                                "IndividualReferences"
+                                "ContactInformation.location"
                             ]
                         },
                         "FieldInvestigation3": {
@@ -174,8 +166,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
                             },
                             "excludes": [
-                                "ContactInformation.location",
-                                "IndividualReferences"
+                                "ContactInformation.location"
                             ]
                         },
                         "TeleVerification": {
@@ -215,9 +206,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.customerId": {
                                     "readonly": true
                                 },
-                                "customerLicenceDetails": {
-                                    "readonly": true
-                                },
+                                
                                 "PhysicalAssets": {
                                     "readonly": true
                                 },
@@ -225,6 +214,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "ResidenceVerification": {
+                                    "readonly": true
+                                },
+                                "KYC.identityProof": {
                                     "readonly": true
                                 }
                             },
@@ -242,13 +234,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.customerId": {
                                     "readonly": true
                                 },
-                                "customerLicenceDetails": {
-                                    "readonly": true
-                                },
                                 "PhysicalAssets": {
                                     "readonly": true
                                 },
                                 "ResidenceVerification": {
+                                    "readonly": true
+                                },
+                                "KYC.identityProof": {
                                     "readonly": true
                                 },
                                 "BankAccounts": {
@@ -269,13 +261,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.customerId": {
                                     "readonly": true
                                 },
-                                "customerLicenceDetails": {
-                                    "readonly": true
-                                },
                                 "PhysicalAssets": {
                                     "readonly": true
                                 },
                                 "ResidenceVerification": {
+                                    "readonly": true
+                                },
+                                "KYC.identityProof": {
                                     "readonly": true
                                 },
                                 "BankAccounts": {
@@ -296,13 +288,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.customerId": {
                                     "readonly": true
                                 },
-                                "customerLicenceDetails": {
-                                    "readonly": true
-                                },
                                 "PhysicalAssets": {
                                     "readonly": true
                                 },
                                 "ResidenceVerification": {
+                                    "readonly": true
+                                },
+                                "KYC.identityProof": {
                                     "readonly": true
                                 },
                                 "BankAccounts": {
@@ -323,13 +315,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.customerId": {
                                     "readonly": true
                                 },
-                                "customerLicenceDetails": {
-                                    "readonly": true
-                                },
                                 "PhysicalAssets": {
                                     "readonly": true
                                 },
                                 "ResidenceVerification": {
+                                    "readonly": true
+                                },
+                                "KYC.identityProof": {
                                     "readonly": true
                                 },
                                 "BankAccounts": {
@@ -350,13 +342,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.customerId": {
                                     "readonly": true
                                 },
-                                "customerLicenceDetails": {
-                                    "readonly": true
-                                },
+                                
                                 "PhysicalAssets": {
                                     "readonly": true
                                 },
                                 "ResidenceVerification": {
+                                    "readonly": true
+                                },
+                                "KYC.identityProof": {
                                     "readonly": true
                                 },
                                 "BankAccounts": {
@@ -377,13 +370,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.customerId": {
                                     "readonly": true
                                 },
-                                "customerLicenceDetails": {
-                                    "readonly": true
-                                },
                                 "PhysicalAssets": {
                                     "readonly": true
                                 },
                                 "ResidenceVerification": {
+                                    "readonly": true
+                                },
+                                "KYC.identityProof": {
                                     "readonly": true
                                 },
                                 "BankAccounts": {
@@ -404,13 +397,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.customerId": {
                                     "readonly": true
                                 },
-                                "customerLicenceDetails": {
-                                    "readonly": true
-                                },
+                                
                                 "PhysicalAssets": {
                                     "readonly": true
                                 },
                                 "ResidenceVerification": {
+                                    "readonly": true
+                                },
+                                "KYC.identityProof": {
                                     "readonly": true
                                 },
                                 "BankAccounts": {
@@ -431,13 +425,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.customerId": {
                                     "readonly": true
                                 },
-                                "customerLicenceDetails": {
-                                    "readonly": true
-                                },
+                                
                                 "PhysicalAssets": {
                                     "readonly": true
                                 },
                                 "ResidenceVerification": {
+                                    "readonly": true
+                                },
+                                "KYC.identityProof": {
                                     "readonly": true
                                 },
                                 "BankAccounts": {
@@ -458,13 +453,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.customerId": {
                                     "readonly": true
                                 },
-                                "customerLicenceDetails": {
-                                    "readonly": true
-                                },
+                                
                                 "PhysicalAssets": {
                                     "readonly": true
                                 },
                                 "ResidenceVerification": {
+                                    "readonly": true
+                                },
+                                "KYC.identityProof": {
                                     "readonly": true
                                 },
                                 "BankAccounts": {
@@ -485,9 +481,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.customerId": {
                                     "readonly": true
                                 },
-                                "customerLicenceDetails": {
-                                    "readonly": true
-                                },
                                 "IndividualReferences": {
                                     "readonly": true
                                 },
@@ -495,6 +488,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "ResidenceVerification": {
+                                    "readonly": true
+                                },
+                                "KYC.identityProof": {
                                     "readonly": true
                                 },
                                 "BankAccounts": {
@@ -515,13 +511,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.customerId": {
                                     "readonly": true
                                 },
-                                "customerLicenceDetails": {
-                                    "readonly": true
-                                },
+                                
                                 "PhysicalAssets": {
                                     "readonly": true
                                 },
                                 "ResidenceVerification": {
+                                    "readonly": true
+                                },
+                                "KYC.identityProof": {
                                     "readonly": true
                                 },
                                 "BankAccounts": {
@@ -552,9 +549,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "Liabilities": {
                                     "readonly": true
                                 },
-                                "customerLicenceDetails": {
-                                    "readonly": true
-                                },
                                 "V": {
                                     "readonly": true
                                 },
@@ -565,6 +559,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "BankAccounts": {
+                                    "readonly": true
+                                },
+                                "KYC.identityProof": {
                                     "readonly": true
                                 }
                             },
@@ -596,9 +593,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "title": "HOUSEHOLD_DETAILS"
                                 },
                                 "Liabilities": {
-                                    "readonly": true
-                                },
-                                "customerLicenceDetails": {
                                     "readonly": true
                                 },
                                 "IndividualReferences": {
@@ -718,9 +712,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "HouseVerification": {
                         "title": "RESIDENCE"
                     },
-                    "customerLicenceDetails.customerLicenceDetails": {
-                                     startEmpty: true
-                    },
                     "Liabilities.liabilities": {
                                     startEmpty: true
                     },
@@ -789,7 +780,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "readonly": true
                     },
                     "KYC.identityProof": {
-                        "readonly": true
+                        //"readonly": true
                     },
                     "IndividualInformation.centreId": {
                         key: "customer.centreId",
@@ -974,6 +965,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     model.customer = enrolmentProcess.customer;
 
                                     BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
+                                    BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
                                 })
                         }
                     }
@@ -1547,7 +1539,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 {
                                     "type": "actionbox",
-                                    "condition": "model.customer.currentStage && (model.loanProcess.loanAccount.currentStage=='Screening' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation1' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation2' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation3' || model.loanProcess.loanAccount.currentStage=='TeleVerification' || model.loanProcess.loanAccount.currentStage=='CreditAppraisal' || model.loanProcess.loanAccount.currentStage=='Application')",
+                                    "condition": "model.customer.currentStage && (model.loanProcess.loanAccount.currentStage=='Screening' || model.loanProcess.loanAccount.currentStage=='Application')",
                                     "orderNo": 1200,
                                     "items": [
                                         {
@@ -1713,6 +1705,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             PageHelper.showProgress("enrolment", "Your form have errors. Please fix them.", 5000);
                             return false;
                         }
+                         if (model.enrolmentProcess.customer.identityProof == 'Pan Card' &&
+                            !_.isNull(model.enrolmentProcess.customer.identityProof)) {
+                            model.enrolmentProcess.customer.panNo = model.enrolmentProcess.customer.identityProof;
+                        }
 
                         // $q.all start
                         model.enrolmentProcess.save()
@@ -1723,8 +1719,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 formHelper.resetFormValidityState(formCtrl);
                                 Utils.removeNulls(value, true);
                                 PageHelper.showProgress('enrolment', 'Customer Saved.', 5000);
+                               // BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: value.customer});
                                 PageHelper.clearErrors();
-                                BundleManager.pushEvent()
+                                //BundleManager.pushEvent()
                             }, function (err) {
                                 PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                 PageHelper.showErrors(err);
@@ -1738,6 +1735,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         }
                         PageHelper.showProgress('enrolment', 'Updating Customer');
                         PageHelper.showLoader();
+                        //EnrollmentHelper.fixData(reqData);
+                        // if (model.enrolmentProcess.customer.addressProof == 'Aadhar Card' &&
+                        //     !_.isNull(model.enrolmentProcess.customer.addressProofNo)) {
+                        //     reqData.customer.aadhaarNo = reqData.customer.addressProofNo;
+                        // }
+                        if (model.enrolmentProcess.customer.identityProof == 'Pan Card' &&
+                            !_.isNull(model.enrolmentProcess.customer.identityProof)) {
+                            model.enrolmentProcess.customer.panNo = model.enrolmentProcess.customer.identityProofNo;
+                        }
                         model.enrolmentProcess.proceed()
                             .finally(function () {
                                 PageHelper.hideLoader();
@@ -1769,7 +1775,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 PageHelper.clearErrors();
                                 BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
-                                
+                                model.enrolmentProcess.proceed()
+                                .subscribe(function(enrolmentProcess) {
+                                    PageHelper.showProgress('enrolment', 'Done.', 5000);
+                                }, function(err) {
+                                    PageHelper.showErrors(err);
+                                    PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                })
                             }, function (err) {
                                 PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                 PageHelper.showErrors(err);

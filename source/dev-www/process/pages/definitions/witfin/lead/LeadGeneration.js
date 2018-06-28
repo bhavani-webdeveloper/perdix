@@ -69,6 +69,18 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                     },
                     "productDetails.screeningDate": {
                         "orderNo": 60
+                    },
+                    "productDetails.productRejectionReason":{
+                        "condition" : "model.lead.interestedInProduct == 'NO' || model.lead.eligibleForProduct == 'NO' "
+
+                    },
+                    "productDetails.productRejectionReason.productRejectReason":{
+                        "condition" : "model.lead.interestedInProduct == 'NO' || model.lead.eligibleForProduct == 'NO' "
+
+                    },
+                     "productDetails.productRejectionReason.productRejecttAdditinalRemarks":{
+                        "condition" : "model.lead.interestedInProduct == 'NO' || model.lead.eligibleForProduct == 'NO' "
+
                     }
 
                 }
@@ -122,7 +134,7 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                     "productDetails.productEligibility.eligibleForProduct",
                     "productDetails.productRejectionReason",
                     "productDetails.productRejectionReason.productRejectReason",
-                    "productDetails.productRejectionReason.additionalRemarks",
+                    "productDetails.productRejectionReason.productRejecttAdditinalRemarks",
                     "productDetails.leadStatus",
                     "productDetails.leadStatus.leadStatus",
                     "previousInteractions",
