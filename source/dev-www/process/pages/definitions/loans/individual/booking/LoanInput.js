@@ -2028,6 +2028,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 key: "loanAccount.portfolioInsuranceCustomerName",
                                 title: "NAME",
                                 readonly: true
+                            },
+                            {
+                                "key": "loanAccount.insuranceRateCode",
+                                "title": "INSURANCE_RATE_CODE",
+                                "type": "select",
+                                "condition": "model.siteCode == 'IREPDhan'"
                             }
                         ]
                     },
@@ -2986,7 +2992,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 save: function(model, formCtrl, form, $event){
                     $log.info("Inside save()");
                     PageHelper.clearErrors();
-                    if(model.loanAccount.collateral != null && model.loanAccount.collateral.length != 0 ){
+                    if(model.loanAccount.collateral != null && model.loanAccount.collateral.length != 0){
                         for(i in model.loanAccount.collateral){
                             if(model.loanAccount.collateral[i].collateralValue < model.loanAccount.collateral[i].loanToValue){
                                // PageHelper.showErrors("Purchase price cant be less than present value")

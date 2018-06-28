@@ -1222,6 +1222,11 @@
                     "type":["null", "string"]
 
                 },
+                "insuranceRateCode":{
+                    "type":["null", "string"],
+                    "enumCode": "insurance_rate_codes"
+                }, 
+
                 "portfolioInsurancePremiumCalculated":{
                     "type":["string", "null"]
                 },

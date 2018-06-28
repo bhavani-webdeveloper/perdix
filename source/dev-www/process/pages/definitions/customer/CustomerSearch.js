@@ -61,12 +61,12 @@ function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionSto
                 	},
                 	{
                 		key: "branch",
-                		condition: "model.siteCode!='sambandh'" 
+                		condition: "model.siteCode!='sambandh' && model.siteCode!='IREPDhan'" 
                 	},
                 	{
                 		key: "branch",
                 		enumCode:"userbranches",
-                		condition: "model.siteCode=='sambandh'"
+                		condition: "model.siteCode=='sambandh' || model.siteCode =='IREPDhan'"
                 	},
                 	{
                 		key: "centre", 

@@ -7,10 +7,7 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan,
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
-            model.branchName = SessionStore.getBranch();
-            model.branchId = SessionStore.getBranchId();
             model.stage = 'LoanBooking';
-            console.log(model);
         },
         offline: false,
         definition: {
@@ -30,6 +27,15 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan,
                 "title": "VIEW_LOANS",
                 "required":["branch"],
                 "properties": {
+                    'branch': {
+                        'title': "BRANCH",
+                        "type": ["string", "null"],
+                        "enumCode": "branch",
+                        "x-schema-form": {
+                            "type": "select",
+                            "screenFilter": true
+                        }
+                    },
                     "centreCode": {
                         "title": "CENTER_NAME",
                         "type": ["number", "null"],
@@ -113,7 +119,7 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan,
                 }
                 return IndividualLoan.search({
                     'stage': 'LoanBooking',
-                    'branchName': searchOptions.branchName,
+                    'branchName': searchOptions.branch,
                     'centreCode': searchOptions.centreCodeForSearch,
                     'customerId': null,
                     'accountNumber':null,
