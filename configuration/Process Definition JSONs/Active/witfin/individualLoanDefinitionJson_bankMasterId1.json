@@ -73,7 +73,7 @@
       "isAccountOpening": false
     },
     {
-      "order": 6,
+      "order": 7,
       "code": "FieldInvestigation2",
       "name": "Field Investigation",
       "stageType": "CAPTURE",
@@ -82,7 +82,7 @@
       "isAccountOpening": false
     },
     {
-      "order": 6,
+      "order": 8,
       "code": "FieldInvestigation3",
       "name": "Field Investigation",
       "stageType": "CAPTURE",
@@ -91,7 +91,7 @@
       "isAccountOpening": false
     },
     {
-      "order": 7,
+      "order": 9,
       "code": "TeleVerification",
       "name": "Tele Verification",
       "stageType": "CAPTURE",
@@ -100,7 +100,7 @@
       "isAccountOpening": false
     },
     {
-      "order": 8,
+      "order": 10,
       "code": "CreditAppraisal",
       "name": "Credit Appraisal",
       "stageType": "CAPTURE",
@@ -109,7 +109,7 @@
       "isAccountOpening": false
     },
     {
-      "order": 9,
+      "order": 11,
       "code": "DeviationApproval1",
       "name": "Deviation Appraisal 1",
       "stageType": "CAPTURE",
@@ -118,7 +118,7 @@
       "isAccountOpening": false
     },
     {
-      "order": 10,
+      "order": 12,
       "code": "DeviationApproval2",
       "name": "Deviation Approval 2",
       "stageType": "CAPTURE",
@@ -127,7 +127,7 @@
       "isAccountOpening": false
     },
     {
-      "order": 12,
+      "order": 13,
       "code": "BusinessApproval1",
       "name": "Business Approval 1",
       "stageType": "CAPTURE",
@@ -139,7 +139,7 @@
       ]
     },
     {
-      "order": 12,
+      "order": 14,
       "code": "BusinessApproval2",
       "name": "Business Approval 2",
       "stageType": "CAPTURE",
@@ -151,7 +151,7 @@
       ]
     },
     {
-      "order": 12,
+      "order": 15,
       "code": "BusinessApproval3",
       "name": "Business Approval 3",
       "stageType": "CAPTURE",
@@ -163,7 +163,7 @@
       ]
     },
     {
-      "order": 12,
+      "order": 16,
       "code": "BusinessApproval4",
       "name": "Business Approval 4",
       "stageType": "CAPTURE",
@@ -175,7 +175,7 @@
       ]
     },
     {
-      "order": 12,
+      "order": 17,
       "code": "BusinessApproval5",
       "name": "Business Approval 5",
       "stageType": "CAPTURE",
@@ -187,7 +187,7 @@
       ]
     },
     {
-      "order": 13,
+      "order": 18,
       "code": "CreditApproval1",
       "name": "Credit Approval 1",
       "stageType": "CAPTURE",
@@ -199,7 +199,7 @@
       ]
     },
     {
-      "order": 14,
+      "order": 19,
       "code": "CreditApproval2",
       "name": "Credit Approval 2",
       "stageType": "CAPTURE",
@@ -211,7 +211,7 @@
       ]
     },
     {
-      "order": 15,
+      "order": 20,
       "code": "CreditApproval3",
       "name": "Credit Approval 3",
       "stageType": "CAPTURE",
@@ -223,7 +223,7 @@
       ]
     },
     {
-      "order": 15,
+      "order": 21,
       "code": "CreditApproval4",
       "name": "Credit Approval 4",
       "stageType": "CAPTURE",
@@ -235,7 +235,7 @@
       ]
     },
     {
-      "order": 15,
+      "order": 22,
       "code": "CreditApproval5",
       "name": "Credit Approval 5",
       "stageType": "CAPTURE",
@@ -246,20 +246,9 @@
         "WM"
       ]
     },
+    
     {
-      "order": 16,
-      "code": "Rejected",
-      "name": "Rejected",
-      "stageType": "CAPTURE",
-      "sendSms": "Yes",
-      "smsCategory": "UponRejection",
-      "isAccountOpening": false,
-      "allowedRoles": [
-        "WM"
-      ]
-    },
-    {
-      "order": 17,
+      "order": 23,
       "code": "LoanInitiation",
       "name": "Loan Input",
       "stageType": "CAPTURE",
@@ -271,7 +260,7 @@
       ]
     },
     {
-      "order": 18,
+      "order": 24,
       "code": "PendingForPartner",
       "name": "Pending for Partner",
       "stageType": "CAPTURE",
@@ -283,7 +272,7 @@
       ]
     },
     {
-      "order": 19,
+      "order": 25,
       "code": "LoanBooking",
       "name": "Loan Booking",
       "stageType": "CAPTURE",
@@ -295,7 +284,7 @@
       ]
     },
     {
-      "order": 20,
+      "order": 26,
       "code": "DocumentUpload",
       "name": "Document Download and Upload",
       "stageType": "CAPTURE",
@@ -307,7 +296,7 @@
       ]
     },
     {
-      "order": 21,
+      "order": 27,
       "code": "DocumentVerification",
       "name": "Document Verification",
       "stageType": "CAPTURE",
@@ -317,7 +306,19 @@
       "allowedRoles": [
         "WM"
       ]
-    }
+    },
+	{
+      "order": 28,
+      "code": "Rejected",
+      "name": "Rejected",
+      "stageType": "CAPTURE",
+      "sendSms": "Yes",
+      "smsCategory": "UponRejection",
+      "isAccountOpening": false,
+      "allowedRoles": [
+        "WM"
+      ]
+    },
   ],
   "schema": {
     "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
