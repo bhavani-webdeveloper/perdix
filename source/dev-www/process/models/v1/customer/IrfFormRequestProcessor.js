@@ -2966,8 +2966,9 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 condition: "model.lead.eligibleForProduct ==='NO'",
                                 enumCode:"lead_reject_reason"
                             },
-                            "additionalRemarks": {
-                                key: "lead.additionalRemarks",
+                            "productRejecttAdditinalRemarks": {
+                                key: "lead.productRejecttAdditinalRemarks",
+                                title:"REMARKS"
                             },
                         }
                     },
