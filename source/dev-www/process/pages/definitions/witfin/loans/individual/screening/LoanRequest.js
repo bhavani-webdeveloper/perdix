@@ -614,6 +614,9 @@ define([], function() {
                     self = this;
                     var formRequest = {
                         "overrides": {
+                            "TeleVerification.verifications.personContacted": {
+                                "required": true
+                            },
                             "LoanRecommendation.udf6": {
                                 "title": "NOMINAL_RATE",
                                 "readonly": true

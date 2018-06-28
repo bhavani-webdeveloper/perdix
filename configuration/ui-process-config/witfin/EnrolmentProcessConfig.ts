@@ -19,7 +19,7 @@ let config = {
                 "overrides": [
                     {
                          "type": "expr",
-                         "expr": "this.currentStage == 'Applciation'",
+                         "expr": "this.currentStage == 'FieldInvestigation1' || this.currentStage == 'FieldInvestigation2' || this.currentStage == 'FieldInvestigation3'",
                          "add": [
                              {
                                  "name": "VerifyIndividualReferencePolicy",
@@ -43,7 +43,7 @@ let config = {
                 "overrides": [
                     {
                          "type": "expr",
-                         "expr": "this.currentStage == 'Applciation'",
+                         "expr": "this.currentStage == 'FieldInvestigation1' || this.currentStage == 'FieldInvestigation2' || this.currentStage == 'FieldInvestigation3'",
                          "add": [
                              {
                                  "name": "VerifyIndividualReferencePolicy",
@@ -67,7 +67,7 @@ let config = {
                 "overrides": [
                     {
                          "type": "expr",
-                         "expr": "this.currentStage == 'Applciation'",
+                         "expr": "this.currentStage == 'FieldInvestigation1' || this.currentStage == 'FieldInvestigation2' || this.currentStage == 'FieldInvestigation3'",
                          "add": [
                              {
                                  "name": "VerifyIndividualReferencePolicy",

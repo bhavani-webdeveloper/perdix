@@ -183,7 +183,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "BankAccounts.customerBankAccounts.bankStatements.noOfChequeBounced",
                     "BankAccounts.customerBankAccounts.bankStatements.noOfEmiChequeBounced",
                     "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto",
-                    "BankAccounts.customerBankAccounts.isDisbersementAccount"
+                    "BankAccounts.customerBankAccounts.isDisbersementAccount",
+                    "CommercialCBCheck",
+                    "CommercialCBCheck.enterpriseBureauDetails",
+                    "CommercialCBCheck.enterpriseBureauDetails.bureau",
+                    "CommercialCBCheck.enterpriseBureauDetails.fileId",
+                    "CommercialCBCheck.enterpriseBureauDetails.doubtful",
+                    "CommercialCBCheck.enterpriseBureauDetails.loss",
+                    "CommercialCBCheck.enterpriseBureauDetails.specialMentionAccount",
+                    "CommercialCBCheck.enterpriseRegistrations.standard",
+                    "CommercialCBCheck.enterpriseRegistrations.subStandard"
                 ];
             }
 
@@ -869,6 +878,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     p1.then(function(repo){
                         var formRequest = {
                             "overrides": {
+                                "CommercialCBCheck": {
+                                    "condition": "model.customer.enterprise.enterpriseType=='Enterprise'"
+                                },
                                 "Liabilities": {
                                     "condition": "model.customer.enterprise.enterpriseType=='Enterprise'"
                                 },
@@ -1102,6 +1114,67 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                             }
                                         }
 
+                                    },
+                                    "CommercialCBCheck": {
+                                        "type": "box",
+                                        "title": "COMMERCIAL_CB_CHECK",
+                                        "orderNo": 25,
+                                        "items": {
+                                        "enterpriseBureauDetails" : {
+                                            "key": "customer.enterpriseBureauDetails",
+                                            "title":"CB Check",
+                                            "type": "array",
+                                            "add": null,
+                                            "remove": null,
+                                            "view": "fixed",
+                                            "items": {
+                                                "bureau" : {
+                                                    "key":"customer.enterpriseBureauDetails[].bureau",
+                                                    "title":"BUREAU",
+                                                    "type":"select",
+                                                    "titleMap": {
+                                                          "CIBIL": "CIBIL",
+                                                          "Highmark": "Highmark"
+                                                    },
+                                                    "required": true   
+                                                },
+                                                "fileId": {
+                                                      key:"customer.enterpriseBureauDetails[].fileId",
+                                                      title:"FILE",
+                                                      type:"file",
+                                                      fileType:"application/pdf",
+                                                      using: "scanner",
+                                                      offline:true,
+                                                      "required": true
+                                                },
+                                                "doubtful": {
+                                                    key:"customer.enterpriseBureauDetails[].doubtful",
+                                                    title:"DOUBTFUL_ACS",
+                                                    type:"number"
+                                                },
+                                                "loss": {
+                                                    key:"customer.enterpriseBureauDetails[].loss",
+                                                    title:"LOSS_ACS",
+                                                    type:"number"
+                                                },
+                                                "specialMentionAccount": {
+                                                    key:"customer.enterpriseBureauDetails[].specialMentionAccount",
+                                                    title:"SPECIAL_MENTION_ACS",
+                                                    type:"number"
+                                                },
+                                                "standard": {
+                                                    key:"customer.enterpriseBureauDetails[].standard",
+                                                    title:"STANDARD_ACS",
+                                                    type:"number"
+                                                },
+                                                "subStandard": {
+                                                    key:"customer.enterpriseBureauDetails[].subStandard",
+                                                    title:"SUB_STANDARD_ACS",
+                                                    type:"number"
+                                                }
+                                                }
+                                            }
+                                        }
                                     }
                                 },
                                 "additions": [
@@ -1191,6 +1264,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
 
                     },
                     submit: function(model, form, formName){
+                        
                         PageHelper.clearErrors();
                         if(PageHelper.isFormInvalid(form)) {
                             return false;
@@ -1220,15 +1294,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
 
                     },
                     proceed: function(model, form){
-                        
-                        if(model.customer.customerBankAccounts[0].accountNumber != model.customer.customerBankAccounts[0].confirmedAccountNumber){
-                            PageHelper.showErrors({
-                                data: {
-                                    error: "Account Number and Confirmed Account Number should match."
-                                }
-                            });
-                            return false;
-                        }
 
                         PageHelper.clearErrors();
                         if(PageHelper.isFormInvalid(form)) {
