@@ -17,7 +17,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                     "type": "page-bundle",
                     "title": "FIELD_INVESTIGATION",
                     "subTitle": "FIELD_INVESTIGATION_SUB_TITLE",
-                    "readonly": true,
+                   // "readonly": true,
                     "bundleDefinitionPromise": function() {
                         return $q.resolve([
                             {
@@ -33,7 +33,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 title: 'CO_APPLICANT',
                                 pageClass: 'co-applicant',
                                 minimum: 0,
-                                maximum: 4,
+                                maximum: 1,
                                 order:20
                             },
                             {
@@ -41,7 +41,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 title: 'GUARANTOR',
                                 pageClass: 'guarantor',
                                 minimum: 0,
-                                maximum: 3,
+                                maximum: 1,
                                 order:30
                             },
                             {
@@ -163,6 +163,7 @@ define(["perdix/domain/model/loan/LoanProcess",
 
                             LoanProcessts.get(bundleModel.loanId)
                             .subscribe(function(loanProcess){
+                                bundleModel.loanProcess=loanProcess;
                                 var loanAccount = loanProcess;
                                 loanAccount.applicantEnrolmentProcess.customer.customerId = loanAccount.customerId;
 

@@ -740,7 +740,7 @@ define(
                                 "required": true
                             },
                             "VehicleRouteDetails": {
-                                "condition": "model.loanAccount.loanPurpose1 == 'Purchase - New Vehicle' || model.loanAccount.loanPurpose1 == 'Purchase - Used Vehicle' || model.loanAccount.loanPurpose1 == 'Refinance'"
+                                "condition": "(model.loanAccount.loanPurpose1 == 'Purchase - New Vehicle' || model.loanAccount.loanPurpose1 == 'Purchase - Used Vehicle' || model.loanAccount.loanPurpose1 == 'Refinance')&&(model.loanAccount.vehicleLoanDetails.segment.toLowerCase() == 'goods')"
                             },
                             "VehicleRouteDetails.vehicleRouteDetails.routeFrom": {
                                 "required": true
@@ -980,30 +980,35 @@ define(
                                            "key": "loanAccount.vehicleLoanDetails.grossVehicleWeight",
                                            "title": "GROSS_VEHICLE_WEIGHT",
                                            "type": "number",
-                                           "readonly": "true"
+                                           "readonly": "true",
+                                           "condition": "model.loanAccount.vehicleLoanDetails.segment.toLowerCase() == 'goods'"
                                         },
                                         "payLoad": {
                                            "key": "loanAccount.vehicleLoanDetails.payLoad",
                                            "title": "PAYLOAD",
                                            "type": "number",
-                                           "readonly": "true"
+                                           "readonly": "true",
+                                           "condition": "model.loanAccount.vehicleLoanDetails.segment.toLowerCase() == 'goods'"
                                         },
                                         "typeofLoad": {
                                            "key": "loanAccount.vehicleLoanDetails.typeofLoad",
                                            "title": "TYPE_OF_LOAD",
-                                           "readonly": "true"
+                                           "readonly": "true",
+                                           "condition": "model.loanAccount.vehicleLoanDetails.segment.toLowerCase() == 'goods'"
                                         },
                                         "ratePerTrip": {
                                            "key": "loanAccount.vehicleLoanDetails.ratePerTrip",
                                            "title": "RATE_PER_TRIP",
                                            "type": "number",
-                                           "readonly": "true"
+                                           "readonly": "true",
+                                           "condition": "model.loanAccount.vehicleLoanDetails.segment.toLowerCase() == 'goods'"
                                         },
                                         "mileage": {
                                            "key": "loanAccount.vehicleLoanDetails.mileage",
                                            "title": "MILEAGE",
                                            "type": "number",
-                                           "readonly": "true"
+                                           "readonly": "true",
+                                           "condition": "model.loanAccount.vehicleLoanDetails.segment.toLowerCase() == 'goods'"
                                         },
                                         "noOfTyres": {
                                            "key": "loanAccount.vehicleLoanDetails.noOfTyres",
@@ -1027,13 +1032,15 @@ define(
                                             "key": "loanAccount.vehicleLoanDetails.fuelConsumptionPerHour",
                                             "title": "FUEL_CONSUMPTION_PER_HOUR",
                                             "type": "number",
-                                            "readonly": "true"
+                                            "readonly": "true",
+                                            "condition": "model.loanAccount.vehicleLoanDetails.segment.toLowerCase() == 'construction equipment'"
                                         },
                                         "validation": {
                                             "key": "loanAccount.vehicleLoanDetails.validation",
                                             "title": "VALIDATION",
                                             "type": "string",
-                                            "readonly": "true"
+                                            "readonly": "true",
+                                            "condition": "model.loanAccount.vehicleLoanDetails.segment.toLowerCase() == 'goods'"
                                         },
                                         "totalMonthlyExpense": {
                                             "key": "loanAccount.vehicleLoanDetails.totalMonthlyExpense",
@@ -1285,30 +1292,30 @@ define(
                                            "key": "loanAccount.vehicleLoanDetails.grossVehicleWeight",
                                            "title": "GROSS_VEHICLE_WEIGHT",
                                            "type": "number",
-                                           "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'YES'"
+                                           "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'YES' && model.loanAccount.vehicleLoanDetails.segment.toLowerCase() == 'goods'"
                                         },
                                         "payLoad1": {
                                            "key": "loanAccount.vehicleLoanDetails.payLoad",
                                            "title": "PAYLOAD",
                                            "type": "number",
-                                           "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'YES'"
+                                           "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'YES' && model.loanAccount.vehicleLoanDetails.segment.toLowerCase() == 'goods'"
                                         },
                                         "typeofLoad1": {
                                            "key": "loanAccount.vehicleLoanDetails.typeofLoad",
                                            "title": "TYPE_OF_LOAD",
-                                           "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'YES'",
+                                           "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'YES' && model.loanAccount.vehicleLoanDetails.segment.toLowerCase() == 'goods'",
                                         },
                                         "ratePerTrip1": {
                                            "key": "loanAccount.vehicleLoanDetails.ratePerTrip",
                                            "title": "RATE_PER_TRIP",
                                            "type": "number",
-                                           "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'YES'"
+                                           "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'YES' && model.loanAccount.vehicleLoanDetails.segment.toLowerCase() == 'goods'"
                                         },
                                         "mileage1": {
                                            "key": "loanAccount.vehicleLoanDetails.mileage",
                                            "title": "MILEAGE",
                                            "type": "number",
-                                           "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'YES'"
+                                           "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'YES' && model.loanAccount.vehicleLoanDetails.segment.toLowerCase() == 'goods'"
                                         },
                                         "noOfTyres1": {
                                            "key": "loanAccount.vehicleLoanDetails.noOfTyres",
@@ -1332,13 +1339,13 @@ define(
                                             "key": "loanAccount.vehicleLoanDetails.fuelConsumptionPerHour",
                                             "title": "FUEL_CONSUMPTION_PER_HOUR",
                                             "type": "number",
-                                            "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'YES'"
+                                            "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'YES' && model.loanAccount.vehicleLoanDetails.segment.toLowerCase() == 'construction equipment'"
                                         },
                                         "validation1": {
                                             "key": "loanAccount.vehicleLoanDetails.validation",
                                             "title": "VALIDATION",
                                             "type": "string",
-                                            "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'YES'"
+                                            "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'YES' && model.loanAccount.vehicleLoanDetails.segment.toLowerCase() == 'goods'"
                                         },
                                         "totalMonthlyExpense1": {
                                             "key": "loanAccount.vehicleLoanDetails.totalMonthlyExpense",
@@ -1586,17 +1593,20 @@ define(
                                         "dailyWorkingHours": {
                                             "key":  "loanAccount.vehicleLoanDetails.dailyWorkingHours",
                                             "title": "NO_OF_HOURS_RUNNING_PER_DAY",
-                                            "type": "number"
+                                            "type": "number",
+                                            "condition": "model.loanAccount.vehicleLoanDetails.segment.toLowerCase() == 'construction equipment'"
                                         },
                                         "monthlyWorkingDays": {
                                             "key": "loanAccount.vehicleLoanDetails.monthlyWorkingDays",
                                             "title": "NO_OF_DAYS_WORKING_PER_MONTH",
-                                            "type": "number"
+                                            "type": "number",
+                                            "condition": "model.loanAccount.vehicleLoanDetails.segment.toLowerCase() == 'construction equipment'"
                                         },
                                         "hourlyRate": {
                                             "key": "loanAccount.vehicleLoanDetails.hourlyRate",
                                             "title": "HIRING_RATE_PER_HOUR",
-                                            "type": "number"
+                                            "type": "number",
+                                            "condition": "model.loanAccount.vehicleLoanDetails.segment.toLowerCase() == 'construction equipment'"
                                         }
                                     }
                                 },

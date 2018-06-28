@@ -226,6 +226,15 @@
                 "Completed"
               ]
             },
+            "dateOfBirth": {
+            "title": "Date Of Birth",
+            "type": "string",
+            "format": "date",
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
             "udfId1": {
               "title": "udf1",
               "type": "string",

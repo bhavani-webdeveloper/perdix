@@ -722,7 +722,7 @@ define([], function() {
                                                         case 'Yearly':
                                                             frequencyRequested1 = 1;
                                                     }
-                                                    model.loanAccount.expectedInterestRate = ((Math.pow((((parseFloat((model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5)/100)*2*parseFloat(model.loanAccount.tenureRequested))/(parseFloat(model.loanAccount.tenureRequested)+1))+1),(1/frequencyRequested1))-1)*frequencyRequested1)*100;
+                                                    model.loanAccount.expectedInterestRate = Math.round((((Math.pow((((parseFloat((model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5)/100)*2*parseFloat(model.loanAccount.tenureRequested))/(parseFloat(model.loanAccount.tenureRequested)+1))+1),(1/frequencyRequested1))-1)*frequencyRequested1)*100)*100)/100;
                                                 } else {
                                                     PageHelper.showErrors({
                                                         data: {
@@ -913,7 +913,7 @@ define([], function() {
                                                         case 'Yearly':
                                                             frequencyRequested = 1;
                                                     }
-                                                    model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = ((Math.pow((((2 * parseFloat((model.loanAccount.interestRate)/100) * parseFloat(model.loanAccount.tenure)) / (parseFloat(model.loanAccount.tenure) + 1)) + 1), 1 / frequencyRequested) - 1) * frequencyRequested)*100;
+                                                    model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = Math.round((((Math.pow((((2 * parseFloat((model.loanAccount.interestRate)/100) * parseFloat(model.loanAccount.tenure)) / (parseFloat(model.loanAccount.tenure) + 1)) + 1), 1 / frequencyRequested) - 1) * frequencyRequested)*100)*100)/100;
                                                 }
                                             }
                                         }
@@ -925,7 +925,7 @@ define([], function() {
                                     "title": "FIELD_INVESTIGATION_DETAILS",
                                     "items": {
                                         "fieldInvestigationDecision": {
-                                            "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6",
+                                            "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf2",
                                             "type": "select",
                                             "title": "FI_DECISION",
                                             "enumCode": "fi_decision"
@@ -934,10 +934,10 @@ define([], function() {
                                             "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf7",
                                             "type": "select",
                                             "title": "FI_REASON",
-                                            "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 == 'Negative' || model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 == 'Refer to Credit'",
+                                            "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf2 == 'Negative' || model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf2 == 'Refer to Credit'",
                                             "enumCode": "fi_reason",
                                             "parentEnumCode": "fi_decision",
-                                            "parentValueExpr": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6"
+                                            "parentValueExpr": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf2"
                                         }
                                     }
                                 }

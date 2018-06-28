@@ -17,7 +17,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                     "type": "page-bundle",
                     "title": "FIELD_INVESTIGATION",
                     "subTitle": "FIELD_INVESTIGATION_SUB_TITLE",
-                    "readonly": true,
+                 //   "readonly": true,
                     "bundleDefinitionPromise": function() {
                         return $q.resolve([
                             {
@@ -33,7 +33,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 title: 'CO_APPLICANT',
                                 pageClass: 'co-applicant',
                                 minimum: 0,
-                                maximum: 4,
+                                maximum: 1,
                                 order:20
                             },
                             {
@@ -41,7 +41,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 title: 'GUARANTOR',
                                 pageClass: 'guarantor',
                                 minimum: 0,
-                                maximum: 3,
+                                maximum: 1,
                                 order:30
                             },
                             {
@@ -116,41 +116,41 @@ define(["perdix/domain/model/loan/LoanProcess",
                         }
                         return out;
                     },
-
-
                     "onAddNewTab": function(definition, bundleModel){ /* returns model on promise resolution. */
-                        var deferred = $q.defer();
-                        var model = null;
-                        var loanProcess = bundleModel.loanProcess;
+                    var deferred = $q.defer();
+                    var model = null;
+                    var loanProcess = bundleModel.loanProcess;
 
-                        switch (definition.pageClass){
-                            case 'co-applicant':
-                                /* TODO Add new coApplicant to loan process and return the model accordingly */
-                                EnrolmentProcess.createNewProcess()
-                                    .subscribe(function(enrolmentProcess) {
-                                        loanProcess.setRelatedCustomerWithRelation(enrolmentProcess, LoanCustomerRelationTypes.CO_APPLICANT);
-                                        deferred.resolve({
-                                            enrolmentProcess: enrolmentProcess,
-                                            loanProcess: loanProcess
-                                        })
-                                    });
-                                break;
-                            case 'guarantor':
-                                /* TODO Add new guarantor to loan process and return model accordingly */
-                                EnrolmentProcess.createNewProcess()
-                                    .subscribe(function(enrolmentProcess) {
-                                        loanProcess.setRelatedCustomerWithRelation(enrolmentProcess, LoanCustomerRelationTypes.GUARANTOR);
-                                        deferred.resolve({
-                                            enrolmentProcess: enrolmentProcess,
-                                            loanProcess: loanProcess
-                                        })
-                                    });
-                                break;
-                        }
-                        deferred.resolve(model);
-                        return deferred.promise;
-                    },
+                    switch (definition.pageClass){
+                        case 'co-applicant':
+                            /* TODO Add new coApplicant to loan process and return the model accordingly */
+                            EnrolmentProcess.createNewProcess()
+                                .subscribe(function(enrolmentProcess) {
+                                    loanProcess.setRelatedCustomerWithRelation(enrolmentProcess, LoanCustomerRelationTypes.CO_APPLICANT);
+                                    deferred.resolve({
+                                        enrolmentProcess: enrolmentProcess,
+                                        loanProcess: loanProcess
+                                    })
+                                });
+                            break;
+                        case 'guarantor':
+                            /* TODO Add new guarantor to loan process and return model accordingly */
+                            EnrolmentProcess.createNewProcess()
+                                .subscribe(function(enrolmentProcess) {
+                                    loanProcess.setRelatedCustomerWithRelation(enrolmentProcess, LoanCustomerRelationTypes.GUARANTOR);
+                                    deferred.resolve({
+                                        enrolmentProcess: enrolmentProcess,
+                                        loanProcess: loanProcess
+                                    })
+                                });
+                            break;
+                    }
+                    deferred.resolve(model);
+                    return deferred.promise;
+                },
 
+
+                    
                     "pre_pages_initialize": function(bundleModel){
                         $log.info("Inside pre_page_initialize");
                         bundleModel.currentStage = "FieldInvestigation1";
@@ -160,9 +160,11 @@ define(["perdix/domain/model/loan/LoanProcess",
                         if (_.hasIn($stateParams, 'pageId') && !_.isNull($stateParams.pageId)){
                             PageHelper.showLoader();
                             bundleModel.loanId = $stateParams.pageId;
-
+                            
+                            
                             LoanProcessts.get(bundleModel.loanId)
                             .subscribe(function(loanProcess){
+                                bundleModel.loanProcess=loanProcess;
                                 var loanAccount = loanProcess;
                                 loanAccount.applicantEnrolmentProcess.customer.customerId = loanAccount.customerId;
 
