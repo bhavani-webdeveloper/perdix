@@ -931,7 +931,7 @@ define([], function() {
                                             "enumCode": "fi_decision"
                                         },
                                         "fieldInvestigationReason": {
-                                            "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf7",
+                                            "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf3",
                                             "type": "select",
                                             "title": "FI_REASON",
                                             "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf2 == 'Negative' || model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf2 == 'Refer to Credit'",

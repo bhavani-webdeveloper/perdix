@@ -386,7 +386,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             model.additional.portfolioUrnSelector = "coapplicant";
                         }
                         
-                        if (model.loanAccount.disbursementSchedules.length >= 0 && _.isNumber(model.loanAccount.disbursementSchedules[0].moratoriumPeriodInDays)) {
+                        if (model.loanAccount.disbursementSchedules.length >= 0 && _.isNumber(model.loanAccount.disbursementSchedules[0].moratoriumPeriodInDays) && model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate) {
                             model._currentDisbursement = model.loanAccount.disbursementSchedules[0];
                             model.loanAccount.scheduleStartDate = moment(model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate, "YYYY-MM-DD").add(model.loanAccount.disbursementSchedules[0].moratoriumPeriodInDays, 'days').format("YYYY-MM-DD");
                         }
@@ -3299,9 +3299,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 //model.loanAccount.id = resp.loanAccount.id;
                                 $log.info("Loan ID Returned on Save:" + model.loanAccount.id);
                                 resp.loanProcessAction="PROCEED";
-                                if(resp.loanAccount.currentStage == 'LoanInitiation' && resp.loanAccount.partnerCode == model.mainPartner)
-                                    resp.stage = 'LoanBooking';
-
+                                if(model.loanAccount.currentStage == 'LoanInitiation' && model.loanAccount.partnerCode.toLowerCase() != 'witfin')
+                                    reqData.stage = 'PendingForPartner';
+                                if(model.loanAccount.currentStage == 'LoanInitiation' && model.loanAccount.partnerCode.toLowerCase() == 'witfin')
+                                    reqData.stage = 'LoanBooking';
                                 if(resp.loanAccount.currentStage == 'PendingForPartner' && resp.loanAccount.partnerCode !== 'DO Partner1-IC')
                                 {
                                     resp.stage = 'LoanBooking';
@@ -3336,7 +3337,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         }else{
                             reqData.loanProcessAction="PROCEED";
                             reqData.remarks = model.review.remarks;
-                            if(model.loanAccount.currentStage == 'LoanInitiation' && model.loanAccount.partnerCode == model.mainPartner)
+                            if(model.loanAccount.currentStage == 'LoanInitiation' && model.loanAccount.partnerCode.toLowerCase() != 'witfin')
+                                reqData.stage = 'PendingForPartner';
+                            if(model.loanAccount.currentStage == 'LoanInitiation' && model.loanAccount.partnerCode.toLowerCase() == 'witfin')
                                 reqData.stage = 'LoanBooking';
 
                             if(model.loanAccount.currentStage == 'PendingForPartner' && model.loanAccount.partnerCode !=='DO Partner1-IC')

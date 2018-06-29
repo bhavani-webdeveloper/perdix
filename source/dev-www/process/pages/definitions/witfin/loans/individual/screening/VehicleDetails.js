@@ -1230,7 +1230,7 @@ define(
                                                          // Calculation for validation
                                                          if (vehicleDetail.calculation_method == "DISTANCE") {
                                                             if (model.loanAccount.vehicleLoanDetails.ratePerTrip && _.isArray(model.loanAccount.vehicleLoanDetails.vehicleRouteDetails) && model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].trips) {
-                                                                if (parseFloat(model.loanAccount.vehicleLoanDetails.ratePerTrip) * parseFloat(model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].trips) > model.loanAccount.vehicleLoanDetails.payload) {
+                                                                if (parseFloat(model.loanAccount.vehicleLoanDetails.ratePerTrip) * parseFloat(model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].trips) > parseFloat(model.loanAccount.vehicleLoanDetails.payLoad)*parseFloat(model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].kmPerMonth)*2.4) {
                                                                     model.loanAccount.vehicleLoanDetails.validation = "ERROR";
                                                                 } else {
                                                                     model.loanAccount.vehicleLoanDetails.validation = "OK";
@@ -1249,7 +1249,7 @@ define(
                                                                 var vehicleLoanExpense = model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[i];
                                                                 sum = sum + vehicleLoanExpense.expenseAmount;
                                                              }
-                                                             model.loanAccount.vehicleLoanDetails.totalMonthlyExpense = parseFloat(sum);
+                                                             model.loanAccount.vehicleLoanDetails.totalMonthlyExpense = Math.round((parseFloat(sum))*100)/100;
                                                          } else {
                                                             PageHelper.setError({message: "Please fill the fields required for ratePerTrip"});
                                                             return false;                                                            
@@ -1258,7 +1258,7 @@ define(
 
                                                          // Calculation for free cash flow
                                                          if (_.isArray(model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes) && model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes[0].incomeAmount && model.loanAccount.vehicleLoanDetails.totalMonthlyExpense)
-                                                            model.loanAccount.vehicleLoanDetails.freeCashFlow = parseFloat(model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes[0].incomeAmount - model.loanAccount.vehicleLoanDetails.totalMonthlyExpense);
+                                                            model.loanAccount.vehicleLoanDetails.freeCashFlow = Math.round((parseFloat(model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes[0].incomeAmount - model.loanAccount.vehicleLoanDetails.totalMonthlyExpense))*100)/100;
                                                          else {
                                                             PageHelper.setError({message: "Please fill the fields required for freeCashFlow"});
                                                             return false;                                                              
@@ -1267,7 +1267,7 @@ define(
 
                                                          // Calculation for fcfToEmi
                                                          if (model.loanAccount.vehicleLoanDetails.freeCashFlow && model.loanAccount.estimatedEmi)
-                                                             model.loanAccount.vehicleLoanDetails.fcfToEmi = parseFloat(model.loanAccount.vehicleLoanDetails.freeCashFlow / parseFloat(model.loanAccount.estimatedEmi));
+                                                             model.loanAccount.vehicleLoanDetails.fcfToEmi = Math.round((parseFloat(model.loanAccount.vehicleLoanDetails.freeCashFlow / parseFloat(model.loanAccount.estimatedEmi)))*100)/100;
                                                          else {
                                                             PageHelper.setError({message: "Please fill the fields required for fcfToEmi"});
                                                             return false;                                                                                                                          
@@ -1536,7 +1536,7 @@ define(
                                                          // Calculation for validation
                                                          if (vehicleDetail.calculation_method == "DISTANCE") {
                                                             if (model.loanAccount.vehicleLoanDetails.ratePerTrip && _.isArray(model.loanAccount.vehicleLoanDetails.vehicleRouteDetails) && model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].trips) {
-                                                                if (parseFloat(model.loanAccount.vehicleLoanDetails.ratePerTrip) * parseFloat(model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].trips) > model.loanAccount.vehicleLoanDetails.payload) {
+                                                                if (parseFloat(model.loanAccount.vehicleLoanDetails.ratePerTrip) * parseFloat(model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].trips) > parseFloat(model.loanAccount.vehicleLoanDetails.payLoad)*parseFloat(model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].kmPerMonth)*2.4 ) {
                                                                     model.loanAccount.vehicleLoanDetails.validation = "ERROR";
                                                                 } else {
                                                                     model.loanAccount.vehicleLoanDetails.validation = "OK";
@@ -1555,7 +1555,7 @@ define(
                                                                 var vehicleLoanExpense = model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[i];
                                                                 sum = sum + vehicleLoanExpense.expenseAmount;
                                                              }
-                                                             model.loanAccount.vehicleLoanDetails.totalMonthlyExpense = parseFloat(sum);
+                                                             model.loanAccount.vehicleLoanDetails.totalMonthlyExpense = Math.round((parseFloat(sum))*100)/100;
                                                          } else {
                                                             PageHelper.setError({message: "Please fill the fields required for ratePerTrip"});
                                                             return false;                                                            
@@ -1564,7 +1564,7 @@ define(
 
                                                          // Calculation for free cash flow
                                                          if (_.isArray(model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes) && model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes[0].incomeAmount && model.loanAccount.vehicleLoanDetails.totalMonthlyExpense)
-                                                            model.loanAccount.vehicleLoanDetails.freeCashFlow = parseFloat(model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes[0].incomeAmount - model.loanAccount.vehicleLoanDetails.totalMonthlyExpense);
+                                                            model.loanAccount.vehicleLoanDetails.freeCashFlow = Math.round((parseFloat(model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes[0].incomeAmount - model.loanAccount.vehicleLoanDetails.totalMonthlyExpense))*100)/100;
                                                          else {
                                                             PageHelper.setError({message: "Please fill the fields required for freeCashFlow"});
                                                             return false;                                                              
@@ -1573,7 +1573,7 @@ define(
 
                                                          // Calculation for fcfToEmi
                                                          if (model.loanAccount.vehicleLoanDetails.freeCashFlow && model.loanAccount.estimatedEmi)
-                                                             model.loanAccount.vehicleLoanDetails.fcfToEmi = parseFloat(model.loanAccount.vehicleLoanDetails.freeCashFlow / parseFloat(model.loanAccount.estimatedEmi));
+                                                             model.loanAccount.vehicleLoanDetails.fcfToEmi = Math.round((parseFloat(model.loanAccount.vehicleLoanDetails.freeCashFlow / parseFloat(model.loanAccount.estimatedEmi)))*100)/100;
                                                          else {
                                                             PageHelper.setError({message: "Please fill the fields required for fcfToEmi"});
                                                             return false;                                                                                                                          
