@@ -2330,6 +2330,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         key: "customer.currentAssets[].description",
                         title:"DESCRIPTION",
                         type: "string",
+                        required:true,
                     },
                     {
                         key: "customer.currentAssets[].assetType",
@@ -2338,9 +2339,11 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         enumCode:"stock_asset_type",
                         parentEnumCode:"stock_current_assets",
                         parentValueExpr:"model.customer.currentAssets[arrayIndex].assetCategory",
+                        required:true,
                     },{
                         key: "customer.currentAssets[].assetValue",
                         title:"PRESENT_VALUE",
+                        required:true,
                         type: "amount",
                     },{
                         key: "customer.currentAssets[].isHypothecated",
@@ -2448,16 +2451,19 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         key: "customer.enterpriseAssets[].valueOfAsset",
                         // condition : "model.customer.enterpriseAssets[form.arrayIndex].assetType  == 'Furniture'",
                         title: "PRESENT_VALUE",
+                        required:true,
                         type: "amount",
                     }, {
                         key: "customer.enterpriseAssets[].details",
                         title: "DESCRIPTION",
+                        required:true,
                         condition : "model.customer.enterpriseAssets[arrayIndex].assetType  == 'Furniture' || model.customer.enterpriseAssets[arrayIndex].assetType  == 'Fixtures'",
                         type: "string",
                     },{
                         key: "customer.enterpriseAssets[].assetName",
                         condition : "model.customer.enterpriseAssets[arrayIndex].assetType  == 'Furniture' || model.customer.enterpriseAssets[arrayIndex].assetType  == 'Fixtures'",
                         title: "TYPE",
+                        required:true,
                         type: "select",
                         enumCode: "enterprise_asset_name"        
                     }, {
@@ -2507,10 +2513,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         title: "ASSET_TYPE",
                         type: "select",
                         enumCode: "stock_enterprise_assets",
-                        required: true,
                     }, {
                         key: "customer.enterpriseAssets[].valueOfAsset",
-                        // condition : "model.customer.enterpriseAssets[form.arrayIndex].assetType  == 'Furniture'",
                         title: "PRESENT_VALUE",
                         type: "amount",
                     }, {
