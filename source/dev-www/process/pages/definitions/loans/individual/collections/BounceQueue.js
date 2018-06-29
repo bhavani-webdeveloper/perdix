@@ -189,6 +189,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager, 
                         "{{'PRINCIPAL_DUE'|translate}}: " + item.part1,
                         "{{'INTEREST_DUE'|translate}}: " + item.part2,
                         "{{'PENAL_INTEREST'|translate}}: " + item.part3,
+                        "{{'BOOKED_NOT_DUE_PENAL_INTEREST'|translate}}:" + item.part5,
                         "{{'FEES_DUE'|translate}}: " + item.amount2,
                         "{{'UNAPPROVED_AMOUNT'|translate}}: " + item.repaidAmountSum
                     ]
