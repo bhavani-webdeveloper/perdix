@@ -1719,7 +1719,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 formHelper.resetFormValidityState(formCtrl);
                                 Utils.removeNulls(value, true);
                                 PageHelper.showProgress('enrolment', 'Customer Saved.', 5000);
-                               // BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: value.customer});
+
+                               BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: value.customer});
                                 PageHelper.clearErrors();
                                 //BundleManager.pushEvent()
                             }, function (err) {

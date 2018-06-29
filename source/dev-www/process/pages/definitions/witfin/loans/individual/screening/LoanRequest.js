@@ -1152,7 +1152,7 @@ define([], function() {
                                 PageHelper.hideLoader();
                             })
                             .subscribe(function(value) {
-                             //   BundleManager.pushEvent('new-loan', model._bundlePageObj, {loanAccount: value.loanAccount});
+                             BundleManager.pushEvent('new-loan', model._bundlePageObj, {loanAccount: value.loanAccount});
                                 PageHelper.showProgress('loan-process', 'Loan Saved.', 5000);
                             }, function(err) {
                                 PageHelper.showProgress('loan-process', 'Oops. Some error.', 5000);

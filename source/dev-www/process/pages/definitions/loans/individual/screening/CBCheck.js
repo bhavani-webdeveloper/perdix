@@ -744,7 +744,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                         type: "string",
                                     }, {
                                         type: 'button',
-                                        "condition": "model.customer.loanSaved",
+                                       "condition": "model.customer.loanSaved",
                                         title: 'Submit for CBCheck',
                                         "onClick":"actions.save(model,'APP','CHMHUB', null)"
                                        
