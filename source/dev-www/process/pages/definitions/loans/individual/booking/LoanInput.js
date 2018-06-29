@@ -1767,7 +1767,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 key: "loanAccount.collateral[].subRegistrarPincode",
                                 type: "lov",
                                 "title":"SUB_REGISTRAR_PINCODE",
-                                "inputmode": "number",
+                                fieldType: "number",
                                 autolov: true,
                                 inputMap: {
                                     "subRegistrarPincode": {
