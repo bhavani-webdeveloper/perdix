@@ -9,7 +9,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
         var showLoanBookingDetails = false;
 
         bankId = $filter('filter')(formHelper.enum("bank").data, {name:bankName}, true)[0].code;
-
         var getSanctionedAmount = function(model){
             var fee = 0;
             if(model.loanAccount.commercialCibilCharge)
