@@ -518,6 +518,10 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                             model._transAuth.bookedNotDuePenalInterest= model.loanAccount.bookedNotDuePenalInterest ||0;
                         }
 
+                        if(model._transAuth.transactionName == 'Fee Payment'&& model._transAuth.instrumentType=='SECURITY_DEPOSIT'){
+                            model._transAuth.feeAmount= model._transAuth.repaymentAmount ||0;
+                        }
+
                         Utils.confirm("Are You Sure?")
                             .then(function () {
                                 PageHelper.showLoader();
