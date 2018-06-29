@@ -484,8 +484,8 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
             }
 
             /* Deviations and Mitigations grouping */
-            if(!_.hasIn(model.loanAccount,'transactionType')){
-                model.loanAccount.transactionType = "New";
+            if(!_.hasIn(model.loanAccount,'transactionType')|| _.isNull(model.loanAccount.transactionType)){
+                model.loanAccount.transactionType = "New Loan";
             }
             if (_.hasIn(model.loanAccount, 'loanMitigants') && _.isArray(model.loanAccount.loanMitigants)){
                 var loanMitigantsGrouped = {};
@@ -621,16 +621,16 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 model.loanAccount.leadId  = obj.id;
                 model.loanAccount.linkedAccountNumber= obj.linkedLoanAccountNo;
                 model.loanAccount.baseLoanAccount = obj.baseLoanAccount;
-                model.loanAccount.transactionType = obj.transactionType; 
+                model.loanAccount.transactionType = (obj.transactionType && obj.transactionType.toLowerCase() == 'renewal')?obj.transactionType:"New Loan";
+                /*calling individual loan api to get the current loan amount for validating that loan amount requested should be greater then current loan amount */
                 if(obj.transactionType && obj.transactionType.toLowerCase() == 'renewal'){
-                    model.transactionType='LOC Renewal';
                     var p1 = IndividualLoan.search({
                         accountNumber:obj.linkedLoanAccountNo
                     }).$promise;
                     p1.then(function(response, headerGetter){
                       model.linkedLoanAmount=response.body[0]['loanAmount'];
                     },function(err){
-                        $log.info("leadGeneration Individual/find api failure" + err);
+                        $log.info("loan request Individual/find api failure" + err);
                     });
                 }
             },
@@ -877,17 +877,31 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     },
                     {
                         key: "loanAccount.baseLoanAccount",
-                        title: "Base Loan Account",
+                        title: "BASE_LOAN_ACCOUNT",
                         readonly:true,
                         required: false,
                         condition: "model.loanAccount.transactionType.toLowerCase() == 'renewal'"
                         
                      },
                      {
-                         key: "loanAccount.transactionType",
-                         title: "Transaction Type",
-                         readonly:true,
-                         required: false
+                        key: "loanAccount.transactionType",
+                        title: "TRANSACTION_TYPE",
+                        readonly:true,
+                        required: false,
+                        condition: "model.loanAccount.transactionType.toLowerCase() == 'renewal'"
+                     },
+                     {  
+                        key: "loanAccount.transactionType",
+                        title: "TRANSACTION_TYPE",
+                        type: "select",
+                        "titleMap":{
+                            "New Loan":"New Loan",
+                            "Renewal":"Renewal",
+                            "Loan Restructure":"Loan Restructure",
+                            "Internal Foreclosure":"Internal Foreclosure"
+                        },
+                        condition: "model.loanAccount.transactionType.toLowerCase() != 'renewal'"
+
                      },
                     {
                         key: "loanAccount.npa",
@@ -1045,7 +1059,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 "items": [
                     {
                         key:"loanAccount.linkedAccountNumber",
-                        "condition": "(model.currentStage !='FieldAppraisal' && model.currentStage !='Sanction' && model.loanAccount.transactionType.toLowerCase() != 'renewal'",
+                        "condition": "model.currentStage !='FieldAppraisal' && model.currentStage !='Sanction' && model.loanAccount.transactionType.toLowerCase() != 'renewal'",
                         title:"LINKED_ACCOUNT_NUMBER",
                         type: "lov",
                         lovonly: true,
@@ -1076,7 +1090,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     {
                         key:"loanAccount.linkedAccountNumber",
                         title:"LINKED_ACCOUNT_NUMBER",
-                        "condition": "(model.currentStage =='FieldAppraisal'|| model.currentStage =='Sanction' && model.loanAccount.transactionType.toLowerCase() != 'renewal')",
+                        "condition": "(model.loanAccount.transactionType.toLowerCase() != 'renewal' && (model.currentStage =='FieldAppraisal'|| model.currentStage =='Sanction' ) )",
                         type: "lov",
                         lovonly: true,
                         autolov: true,
@@ -1133,7 +1147,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     },
                     {
                         key: "loanAccount.baseLoanAccount",
-                        title: "Base Loan Account",
+                        title: "BASE_LOAN_ACCOUNT",
                         readonly:true,
                         required: false,
                         condition: "model.loanAccount.transactionType.toLowerCase() == 'renewal'"
@@ -1141,10 +1155,25 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                      },
                      {
                          key: "loanAccount.transactionType",
-                         title: "Transaction Type",
+                         title: "TRANSACTION_TYPE",
                          readonly:true,
-                         required: false
+                         required: false,
+                         condition: "model.loanAccount.transactionType.toLowerCase() == 'renewal'"
                      },
+                     {  
+                        key: "loanAccount.transactionType",
+                        title: "TRANSACTION_TYPE",
+                        type: "select",
+                        required:false,
+                        "titleMap":{
+                            "New Loan":"New Loan",
+                            "Renewal":"Renewal",
+                            "Loan Restructure":"Loan Restructure",
+                            "Internal Foreclosure":"Internal Foreclosure"
+                        },
+                        condition: "model.loanAccount.transactionType.toLowerCase() != 'renewal'"
+
+                    },
                     {
                         key: "loanAccount.npa",
                         title: "IS_NPA",
@@ -3017,14 +3046,15 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 var dedupeCustomerIdArray = [];
                 /* TODO Call proceed servcie for the loan account */
                 // if(isEnrollmentsSubmitPending(model)){
-                //     return;
+                //     return
                 // }
-                if(!_.isNull(model.loanAccount.transactionType) && model.loanAccount.transactionType.toLowerCase == 'renewal'){
-                    if(model.linkedLoanAmount && model.loanAccount.loanAmountRequested < model.linkedLoanAmount){
+                /* 1)validating loan amount requested should be greater then current loan account */
+                if(!_.isNull(model.loanAccount.transactionType) && model.loanAccount.transactionType.toLowerCase =='renewal'){
+                    if(model.linkedLoanAmount && (model.loanAccount.loanAmountRequested < model.linkedLoanAmount || model.loanAccount.loanAmount < model.linkedLoanAmount)){
 
                         var res = {
                             data: {
-                                error: 'RequestedLoanAmount is not greater than or equal to linkedLoanAmount'
+                                error: 'RequestedLoanAmount or recommended loan amount should be greater than or equal current loan amount'
                             }
                         };
                         PageHelper.showErrors(res)

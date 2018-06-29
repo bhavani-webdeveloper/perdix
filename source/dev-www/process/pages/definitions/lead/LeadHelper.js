@@ -79,14 +79,14 @@ irf.pageCollection.factory("LeadHelper", ["$log", "Queries", "$q", "Lead", 'Page
             return deferred.promise;
         };
 
-        var AssignLead = function(res) {
+        var AssignLead = function(req) {
             var deferred = $q.defer();
             $log.info("Attempting Proceed");
-            $log.info(res);
+            $log.info(req);
                 PageHelper.clearErrors();
                 PageHelper.showLoader();
                 irfProgressMessage.pop('lead-update', 'Working...');
-                Lead.assignLead(res, function(res, headers) {
+                Lead.assignLead(req, function(res, headers) {
                     PageHelper.hideLoader();
                     irfProgressMessage.pop('lead-update', 'Done. lead updated ', 5000);
                     deferred.resolve(res);
@@ -100,14 +100,14 @@ irf.pageCollection.factory("LeadHelper", ["$log", "Queries", "$q", "Lead", 'Page
             return deferred.promise;
         };
 
-        var BulkLeadStatusUpdate = function(res) {
+        var BulkLeadStatusUpdate = function(req) {
             var deferred = $q.defer();
             $log.info("Attempting to BulkLeadStatus Reject");
-            $log.info(res);
+            $log.info(req);
             PageHelper.clearErrors();
             PageHelper.showLoader();
             irfProgressMessage.pop('LeadBulkUpdate', 'Working ... ');
-            Lead.bulkLeadStatusUpdate(res, function(res, headers) {
+            Lead.bulkLeadStatusUpdate(req, function(res, headers) {
                 PageHelper.hideLoader();
                 irfProgressMessage.pop('Bulk-lead-Reject', 'Done. lead Rejected', 5000);
                 deferred.resolve(res);

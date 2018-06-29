@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
-["$log","SessionStore","$state","LoanAccount", "$stateParams", "SchemaResource","PageHelper","Enrollment","formHelper","IndividualLoan","Utils","$filter","$q","irfProgressMessage", "Queries","LoanProducts", "LoanBookingCommons", "BundleManager", "irfNavigator","PagesDefinition","LoanAccount",
-    function($log, SessionStore,$state,LoanAccount,$stateParams, SchemaResource,PageHelper,Enrollment,formHelper,IndividualLoan,Utils,$filter,$q,irfProgressMessage, Queries,LoanProducts, LoanBookingCommons, BundleManager,irfNavigator,PagesDefinition,LoanAccount){
+["$log","SessionStore","$state","LoanAccount", "$stateParams", "SchemaResource","PageHelper","Enrollment","formHelper","IndividualLoan","Utils","$filter","$q","irfProgressMessage", "Queries","LoanProducts", "LoanBookingCommons", "BundleManager", "irfNavigator","PagesDefinition",
+    function($log, SessionStore,$state,LoanAccount,$stateParams, SchemaResource,PageHelper,Enrollment,formHelper,IndividualLoan,Utils,$filter,$q,irfProgressMessage, Queries,LoanProducts, LoanBookingCommons, BundleManager,irfNavigator,PagesDefinition){
 
         var branchId = SessionStore.getBranchId();
         var branchName = SessionStore.getBranch();
@@ -338,8 +338,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         getProductDetails(model.loanAccount.productCode,model);
 
                     LoanBookingCommons.getLoanAccountRelatedCustomersLegacy(model.loanAccount);
+                    /* 1)calling LoanAccount api to fetch the existing loan account details , 
+                          yet one field is left to be mapped
+                    */
                     if(_.hasIn(model.loanAccount, 'linkedAccountNumber') && !_.isNull(model.loanAccount.linkedAccountNumber) && _.hasIn(model.loanAccount, 'transactionType') && !_.isNull(model.loanAccount.transactionType) && model.loanAccount.transactionType.toLowerCase()=='renewal'){
-                        var p1 = ILoanAccount.get({
+                        var p1 = LoanAccount.get({
                             accountId: model.loanAccount.linkedAccountNumber
                             }).$promise;
                             p1.then(function(response, headerGetter){
@@ -347,11 +350,13 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 totalPrincipalDue: response['totalPrincipalDue'],
                                 totalNormalInterestDue: response['totalNormalInterestDue'],
                                 totalPenalInterestDue: response['totalPenalInterestDue'],
-                                totalFeeDue: response['totalFeeDue']
+                                totalFeeDue: response['totalFeeDue'],
+                                totalOutstanding: response['payOffAndDueAmount']
                             }
                             },function(err){
-                                $log.info("loanProcessApi on Loan input is failing");
-                            });  }
+                                $log.info("loanaccount api on Loan input is failing");
+                            });
+                        }
                     };
                         
                 // code for existing loan
@@ -797,7 +802,14 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                  "schema":{
                                     "enumCode":undefined
                                 },
-                                "condition": "model.siteCode == 'kinara' && model.loanAccount.linkedAccountNumber"
+                                "condition": "model.siteCode == 'kinara' && model.loanAccount.linkedAccountNumber && model.loanAccount.transactionType.toLowerCase() != 'renewal'"
+                            },
+                            {
+                                "key": "loanAccount.transactionType",
+                                "title": "TRANSACTION_TYPE",
+                                "readonly":true,
+                                condition:"model.loanAccount.transactionType && model.loanAccount.transactionType.toLowerCase() == 'renewal'"
+
                             },
                             {
                                 "key": "loanAccount.loanAmount",
@@ -1377,30 +1389,30 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 "type": "box",
                 "title": "Existing Loan Outstanding",
                 "colClass": "col-sm-6",
-                "condition": "model.loanAccount.transactionType.toLowerCase()=='renewal'",
+                "condition": "model.loanAccount.transactionType && model.loanAccount.transactionType.toLowerCase()=='renewal'",
                 "readonly": true,
                 "items": [{
                     "key": "loanAccount.linkedAccountNumber",
-                    "title": "Linked Account Number"
+                    "title": "LINKED_LOAN_ACCOUNT"
                 },
                 {
                     "key": "existingLoanDues.totalPrincipalDue",
-                    "title":"Principal Outstanding"
+                    "title":"TOTAL_PRINCIPAL_DUE_LOC"
                 },
                 {
                     "key": "existingLoanDues.totalNormalInterestDue",
-                    "title": "Interest Outstanding"
+                    "title": "TOTAL_NORMAL_INT_DUE_LOC"
                 },
                 {
                     "key": "existingLoanDues.totalPenalInterestDue",
-                    "title": "Penal Interest Outstanding"
+                    "title": "TOTAL_PENAL_INT_DUE_LOC"
                 },
                 {
                     "key": "existingLoanDues.totalFeeDue",
-                    "title":"Total Fee Due"
+                    "title":"TOTAL_FEE_DUE_LOC"
                 },
                 {
-                    "key": "",
+                    "key": "existingLoanDues.totalOutstanding",
                     "title":"Total Outstanding"
                 }
             ]

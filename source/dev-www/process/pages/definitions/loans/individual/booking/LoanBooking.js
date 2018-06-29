@@ -874,9 +874,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     var dismonth = ((new Date(scheduledDisbursementDate)).getMonth());
 
                     //$log.info(BackedDatedDiffmonth);
-
+                    /* 1) Loc-Renewal chnage includes default processing fee to 0.2 ans calculation of process amount 
+                    */
                     if(model.loanAccount.linkedAccountNumber && model.siteCode == 'kinara'){
-                        if(model.loanAccount.transactionType.toLowerCase()=='renewal'){
+                        if(model.loanAccount.transactionType && model.loanAccount.transactionType.toLowerCase()=='renewal'){
                             model.loanAccount.processingFeePercentage=0.2;
                             model.loanAccount.processingFeeInPaisa=(02*model.loanAccount.loanAmount);
                         }

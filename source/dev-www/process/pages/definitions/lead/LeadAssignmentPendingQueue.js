@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("lead.leadAssignmentPendingQueue"),
- ["$log", "formHelper","PageHelper", "Lead", "$state", "$q", "SessionStore", "Utils", "entityManager","LeadHelper","irfProgressMessage",
-	function($log, formHelper,PageHelper, Lead, $state, $q, SessionStore, Utils, entityManager, LeadHelper,irfProgressMessage) {
+ ["$log", "formHelper","PageHelper", "Lead", "$q", "SessionStore","LeadHelper","irfNavigator",
+	function($log, formHelper,PageHelper, Lead,$q, SessionStore, LeadHelper,irfNavigator) {
 		var branch = SessionStore.getBranch();
 
 		
@@ -170,14 +170,35 @@ irf.pageCollection.factory(irf.page("lead.leadAssignmentPendingQueue"),
 									PageHelper.showProgress("bulk-create", "Atleast one loan should be selected for Batch creation", 5000);
 									return false;
 								}
-								$state.go("Page.Engine", {
-									pageName: "lead.LeadReassign",
-									pageData: items
+						/* 1)conditional check that all items selected from this queue should contains same transaction type 
+						    and if no transaction type found then defaulting to new loan
+						*/
+						    let validateSameTransactionType = items[0]['transactionType']?items[0]['transactionType']:"New Loan"
+						        _.each(items, function (item) {
+						            if (_.isNull(item['transactionType']))
+						                item['transactionType'] = "New Loan";
+						            if (item['transactionType'] != validateSameTransactionType) {
+						                PageHelper.showProgress("bulk-create", "Transaction Type of selected items should be same", 5000);
+						                validateSameTransactionType=false;
+						            }
 								});
-							},
-							isApplicable: function(items) {
-								return true;
-							}
+							
+						/*  1)see irfpages for implementation : passing bacparam as second argument which is state
+						      of the page to which the next page will go back 
+						*/  
+								if (validateSameTransactionType != false) {
+									irfNavigator.go({
+										'state': 'Page.Engine',
+										'pageName': 'lead.LeadReassign',
+										'pageData': items
+									}, {
+										'state': 'Page.LeadDashboard'
+									});
+								}
+						    },
+						    isApplicable: function (items) {
+						        return true;
+						    }
 						}, {
 							name: "Reject Lead",
 							desc: "",
@@ -191,9 +212,10 @@ irf.pageCollection.factory(irf.page("lead.leadAssignmentPendingQueue"),
 									item.leadStatus="Reject";
 									item.currentStage="Inprocess";
 								  });
-								  LeadHelper.BulkLeadStatusUpdate(items).then(function(resp) {
-									
-									irfProgressMessage.pop('Bulk-lead-Reject', 'Done. lead Rejected', 5000);
+								LeadHelper.BulkLeadStatusUpdate(items).then(function(resp) {
+									PageHelper.showProgress("Bulk-lead-Reject", "Done. lead Rejected", 5000);
+								}, function(err){
+									PageHelper.showProgress("Bulk-lead-Reject", "error in rejecting lead", 5000);
 								});  
 							},
 							isApplicable: function(items) {

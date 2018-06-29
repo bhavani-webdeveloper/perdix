@@ -1,8 +1,7 @@
-irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment", "$state", "$filter", "$stateParams", "Lead", "LeadHelper", "SessionStore", "formHelper", "entityManager", "$q", "irfProgressMessage",
-    "PageHelper", "Utils", "entityManager", "BiometricService", "PagesDefinition", "Queries","IndividualLoan",
-
-    function ($log, Enrollment, $state, $filter, $stateParams, Lead, LeadHelper, SessionStore, formHelper, entityManager, $q, irfProgressMessage,
-              PageHelper, Utils, entityManager, BiometricService, PagesDefinition, Queries, IndividualLoan) {
+irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment", "$state", "$stateParams", "Lead", "LeadHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+    "PageHelper", "Utils", "Queries","IndividualLoan",
+function ($log, Enrollment, $state, $stateParams, Lead, LeadHelper, SessionStore, formHelper,$q, irfProgressMessage,
+              PageHelper, Utils, Queries, IndividualLoan) {
 
         var branch = SessionStore.getBranch();
         return {
@@ -43,9 +42,11 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                             if (model.siteCode == 'sambandh' || model.siteCode == 'saija' || model.siteCode == 'IREPDhan') {
                                 model.lead.customerTypeString = model.lead.customerType;
                             }
+                        /* 1) Defaulting interestedInProduct to 'yes' for transaction type as renewal 
+                           2) calling individualLoan search api to find the existing loan details where transaction type is renewal
+                        */
                             if(model.lead.currentStage=="Inprocess" && model.lead.transactionType && model.lead.transactionType.toLowerCase() == 'renewal'){
                                 model.lead.interestedInProduct = 'YES';
-                                model.transactionType='LOC Renewal';
                                 var p1 = IndividualLoan.search({
                                     accountNumber:model.lead.linkedLoanAccountNo
                                 }).$promise;
@@ -53,8 +54,15 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                                   model.linkedLoanAmount=response.body[0]['loanAmount'];
                                 },function(err){
                                     $log.info("leadGeneration Individual/find api failure" + err);
+                                    PageHelper.showProgress("lead-generate", "Existing loan details not loaded", 5000);
+						            
                                 });
                             }
+
+                            /*1)Defaulting the transaction type for lead generation to new if not present */
+                            if(!_.hasIn(model.lead, 'transactionType') || _.isNull(model.lead.transactionType))
+                                model.lead.transactionType = 'New Loan';
+
                             if (model.lead.currentStage == 'Incomplete') {
                                 model.lead.customerType = "Enterprise";
                                 model.lead.leadStatus = "Incomplete";
@@ -840,21 +848,46 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                     title: "PRODUCT_DETAILS",
                     condition: "model.siteCode == 'kinara'",
                     items: [{
-                            key: "transactionType",
-                            title: "Transaction Type",
-                            condition: "model.lead.currentStage=='Inprocess'",
+                            key: "lead.transactionType",
+                            title: "TRANSACTION_TYPE",
+                            type: "select",
+                            "titleMap":{
+                                "New Loan":"New Loan",
+                                "Renewal":"Renewal",
+                                "Loan Restructure":"Loan Restructure",
+                                "Internal Foreclosure":"Internal Foreclosure"
+                            },
+                            "schema":{
+                                "enumCode":undefined
+                            },
+                            condition: "model.lead.transactionType.toLowerCase()=='renewal'",
                             readonly: true
-                        }, 
+                        },
+                        {
+                            key: "lead.transactionType",
+                            title: "TRANSACTION_TYPE",
+                            type: "select",
+                            "titleMap":{
+                                "New Loan":"New Loan",
+                                "Renewal":"Renewal",
+                                "Loan Restructure":"Loan Restructure",
+                                "Internal Foreclosure":"Internal Foreclosure"
+                            },
+                            "schema":{
+                                "enumCode":undefined
+                            },
+                            condition: "model.lead.transactionType.toLowerCase()!='renewal'"
+                        },
                         {
                             key: "lead.linkedLoanAccountNo",
-                            title: "Linked Loan Account No.",
+                            title: "LINKED_LOAN_ACCOUNT",
                             condition: "model.lead.transactionType.toLowerCase() == 'renewal' && model.lead.currentStage=='Inprocess'",
                             readonly: true
 
                         },
                         {
                             key: "lead.baseLoanAccount",
-                            title: "Base Loan Account",
+                            title: "BASE_LOAN_ACCOUNT",
                             condition: "model.lead.transactionType.toLowerCase() == 'renewal' && model.lead.currentStage=='Inprocess'",
                             readonly: true
                         },
@@ -902,6 +935,13 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                          "Loan": "Loan",
                          }
                          },*/
+                        {
+                            "key": "linkedLoanAmount",
+                            "type":"amount",
+                            "title": "Current loan Amount",
+                            condition: "model.lead.interestedInProduct=='YES' && model.lead.transactionType.toLowerCase()=='renewal'"
+
+                        },
                         {
                             key: "lead.loanAmountRequested",
                             type: "amount",
@@ -1190,7 +1230,6 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                 {
                     type: "box",
                     title: "LEAD_INTERACTIONS",
-                    condition: "model.lead.transactionType!='Renewal'",
                     items: [{
                         key: "lead.leadInteractions",
                         type: "array",
@@ -1302,24 +1341,25 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                                 $state.go('Page.LeadDashboard', null);
                             });
                         } else {
-                            
-                            if (!(model.linkedLoanAmount && model.lead.transactionType && model.lead.transactionType.toLowerCase() == 'renewal' && model.lead.loanAmountRequested < model.linkedLoanAmount)) {
-                                LeadHelper.proceedData(reqData).then(function (resp) {
-                                    $state.go('Page.LeadDashboard', null);
-                                }, function (err) {
-                                    PageHelper.showErrors(err);
-                                    // Utils.removeNulls(resp.lead, true);
-                                    // model.lead = resp.lead;
-                                });
-                            }else {
+                            /* 1)validating before proceeding that loan amount requested should be greater then or equal 
+                                to existing loan amount in case of transaction renewal 
+                            */
+                            if (model.linkedLoanAmount && model.lead.transactionType && model.lead.transactionType.toLowerCase() == 'renewal' && model.lead.loanAmountRequested < model.linkedLoanAmount) {
                                 var res = {
                                     data: {
-                                        error: 'RequestedLoanAmount should be greater than or equal to linkedLoanAmount'
+                                        error: 'RequestedLoanAmount should be greater than or equal to existing loan amount'
                                     }
                                 };
                                 PageHelper.showErrors(res)
                                 return false;
                             }
+                            LeadHelper.proceedData(reqData).then(function (resp) {
+                                $state.go('Page.LeadDashboard', null);
+                            }, function (err) {
+                                PageHelper.showErrors(err);
+                                // Utils.removeNulls(resp.lead, true);
+                                // model.lead = resp.lead;
+                            });
                            
                         }
                     } else {

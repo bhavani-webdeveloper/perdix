@@ -494,20 +494,20 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                     {
                         key: "loanAccount.baseLoanAccount",
                         "readonly": true,
-                        title: "Parent Loan Account Number",
+                        title: "BASE_LOAN_ACCOUNT",
                         condition:"model.loanAccount.transactionType.toLowerCase() == 'renewal'"
                        
                     },
                     {
                         key: "loanAccount.linkedAccountNumber",
                         readonly: true,
-                        title: "Linked Loan Account",
+                        title: "LINKED_LOAN_ACCOUNT",
                         condition:"model.loanAccount.transactionType.toLowerCase() == 'renewal'"
                     },
                     {
                         key: "loanAccount.transactionType",
                         readonly: true,
-                        title: "Transaction Type",
+                        title: "TRANSACTION_TYPE",
 
                     },
                     {
