@@ -419,7 +419,7 @@
 
                               "subRegistrarPincode":{
                                  "title":"SUB_REGISTRAR_PINCODE",
-                                 "type": ["string","null"]
+                                 "type": ["string","null","integer"]
                               },
 
                               "subRegistrarVillage":{
