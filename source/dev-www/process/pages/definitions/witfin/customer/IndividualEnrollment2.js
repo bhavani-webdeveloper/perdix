@@ -1628,6 +1628,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 model.customer.landmark = obj.landmark;
                                 model.customer.postOffice = obj.postOffice;
                                 model.customer.customerCategory = obj.leadCategory;
+                                model.customer.latitude = obj.latitude;
+                                model.customer.longitude = obj.longitude;
 
                                 for (var i = 0; i < model.customer.familyMembers.length; i++) {
                                     // $log.info(model.customer.familyMembers[i].relationShip);
