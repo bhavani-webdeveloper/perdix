@@ -42,7 +42,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "loanProcess.loanAccount.currentStage": {
                         "Screening": {
                             "overrides": {
-                                
+
                             },
                             "excludes": [
                                 "EnterpriseReferences",
@@ -206,7 +206,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.customerId": {
                                     "readonly": true
                                 },
-                                
+
                                 "PhysicalAssets": {
                                     "readonly": true
                                 },
@@ -342,7 +342,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.customerId": {
                                     "readonly": true
                                 },
-                                
+
                                 "PhysicalAssets": {
                                     "readonly": true
                                 },
@@ -397,7 +397,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.customerId": {
                                     "readonly": true
                                 },
-                                
+
                                 "PhysicalAssets": {
                                     "readonly": true
                                 },
@@ -425,7 +425,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.customerId": {
                                     "readonly": true
                                 },
-                                
+
                                 "PhysicalAssets": {
                                     "readonly": true
                                 },
@@ -453,7 +453,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.customerId": {
                                     "readonly": true
                                 },
-                                
+
                                 "PhysicalAssets": {
                                     "readonly": true
                                 },
@@ -511,7 +511,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.customerId": {
                                     "readonly": true
                                 },
-                                
+
                                 "PhysicalAssets": {
                                     "readonly": true
                                 },
@@ -726,8 +726,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "Liabilities.liabilities.startDate": {
                                     "title": "LOAN_START_DATE",
                                     "required": true
-                    },        
-                    
+                    },
+
                     "FamilyDetails.familyMembers.familyMemberFirstName": {
                         "condition": "model.customer.familyMembers[arrayIndex].relationShip.toUpperCase() != 'SELF'"
                     },
@@ -1366,7 +1366,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             //             console.log(err);
                                             //         });
                                             //     }
-                                            
+
                                         },
 
                                         "remarksOnBusiness": {
@@ -1434,13 +1434,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "orderNo": 85,
                                             "required":true
                                         }
-                                        
+
                                     }
                                 },
                                 "CustomerDocumentUpload": {
                                     "type": "box",
                                     "title": "CUSTOMER_DOCUMENT_UPLOAD",
-                                    "orderNo": 80,                                    
+                                    "orderNo": 80,
                                     "items": {
                                         "customerDocuments": {
                                             "type": "array",
@@ -1520,8 +1520,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "items": [
                                         {
                                             "type": "submit",
-                                            "title": "SUBMIT",
-                                            "buttonType": "submit"
+                                            "title": "SUBMIT"
                                         }
                                     ]
                                 },
