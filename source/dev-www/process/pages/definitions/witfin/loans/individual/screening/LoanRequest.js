@@ -611,7 +611,7 @@ define([], function() {
 
                     // model.loanAccount.accountUserDefinedFields = model.loanAccount.accountUserDefinedFields || {};
 
-                    self = this;
+                    var self = this;
                     var formRequest = {
                         "overrides": {
                             "TeleVerification.verifications.personContacted": {

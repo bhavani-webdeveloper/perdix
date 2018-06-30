@@ -185,24 +185,24 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 });
 
-                                if(_.hasIn(loanAccount, 'coApplicantCustomers')) {
-                                    for (var i=0;i<loanAccount.coApplicantCustomers.length; i++){
+                                if(_.hasIn(loanAccount, 'coApplicantsEnrolmentProcesses')) {
+                                    for (var i=0;i<loanProcess.coApplicantsEnrolmentProcesses.length; i++){
                                         $this.bundlePages.push({
                                             pageClass: 'co-applicant',
                                             model: {
-                                                enrolmentProcess: loanProcess.coApplicantCustomers[i],
+                                                enrolmentProcess: loanProcess.coApplicantsEnrolmentProcesses[i],
                                                 loanProcess: loanProcess
                                             }
                                         });
                                     }
                                 }
 
-                                if(_.hasIn(loanAccount, 'guarantorCustomers')) {
-                                    for (var i=0;i<loanAccount.guarantorCustomers.length; i++){
+                                if(_.hasIn(loanAccount, 'guarantorsEnrolmentProcesses')) {
+                                    for (var i=0;i<loanProcess.guarantorsEnrolmentProcesses.length; i++){
                                         $this.bundlePages.push({
                                             pageClass: 'guarantor',
                                             model: {
-                                                enrolmentProcess: loanProcess.guarantorCustomers[i],
+                                                enrolmentProcess: loanProcess.guarantorsEnrolmentProcesses[i],
                                                 loanProcess: loanProcess
                                             }
                                         });

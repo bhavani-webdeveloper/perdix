@@ -1182,7 +1182,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     /* End of setting data for the form */
 
                     /* Form rendering starts */
-                    self = this;
+                    var self = this;
                     var formRequest = {
                         "overrides": overridesFields(model),
                         "includes": getIncludes(model),
@@ -1440,12 +1440,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "CustomerDocumentUpload": {
                                     "type": "box",
                                     "title": "CUSTOMER_DOCUMENT_UPLOAD",
-                                    "orderNo": 80,
+                                    "orderNo": 80,                                    
                                     "items": {
                                         "customerDocuments": {
                                             "type": "array",
                                             "title": "DOCUMENT_UPLOAD",
                                             "key": "customer.customerDocuments",
+                                            "view": "fixed",
                                             "items": {
                                                 "fileType": {
                                                     "type": "string",

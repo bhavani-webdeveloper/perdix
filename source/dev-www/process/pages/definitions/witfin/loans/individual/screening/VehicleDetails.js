@@ -715,7 +715,7 @@ define(
                     /* Setting data recieved from Bundle */
                     model.loanAccount = model.loanProcess.loanAccount;
 
-                    self = this;
+                    var self = this;
                     var formRequest = {
                         "overrides": {
                             "VehiclePhotoCaptures": {
@@ -1345,25 +1345,29 @@ define(
                                             "key": "loanAccount.vehicleLoanDetails.validation",
                                             "title": "VALIDATION",
                                             "type": "string",
-                                            "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'YES' && model.loanAccount.vehicleLoanDetails.segment.toLowerCase() == 'goods'"
+                                            "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'YES' && model.loanAccount.vehicleLoanDetails.segment.toLowerCase() == 'goods'",
+                                            "readonly": true
                                         },
                                         "totalMonthlyExpense1": {
                                             "key": "loanAccount.vehicleLoanDetails.totalMonthlyExpense",
                                             "title": "TOTAL_MONTHLY_EXPENSE",
                                             "type": "number",
-                                            "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'YES'"
+                                            "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'YES'",
+                                            "readonly": true
                                         },
                                         "freeCashFlow1": {
                                             "key": "loanAccount.vehicleLoanDetails.freeCashFlow",
                                             "title": "FREE_CASH_FLOW",
                                             "type": "number",
-                                            "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'YES'"
+                                            "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'YES'",
+                                            "readonly": true
                                         },
                                         "fcfToEmi1": {
                                             "key": "loanAccount.vehicleLoanDetails.fcfToEmi",
                                             "title": "FCF_TO_EMI",
                                             "type": "number",
-                                            "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'YES'"
+                                            "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'YES'",
+                                            "readonly": true
                                         },
                                         "calculateVehicleDetails1": {
                                             "type": "button",
@@ -1371,10 +1375,6 @@ define(
                                             "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'YES'",
                                             onClick: function(model, formCtrl) { 
                                             console.log(model);
-
-                                            for (var i=0;i<model.vehicleDetails.length;i++) {
-                                                var vehicleDetail = model.vehicleDetails[i];
-                                                    if (vehicleDetail.model == model.loanAccount.vehicleLoanDetails.vehicleModel) {
 
                                                            // Adding dummy fields for showing calculated values
                                                             var calculateFields = {
@@ -1392,66 +1392,52 @@ define(
                                                             };
                                                             _.assign(model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0], calculateFieldsForRoute);
 
-
-                                                            model.loanAccount.vehicleLoanDetails.vehicleModel = vehicleDetail.model;
-                                                            model.loanAccount.vehicleLoanDetails.price = null;
-                                                            model.loanAccount.vehicleLoanDetails.viabilityCategory = vehicleDetail.viability_category;
-                                                            model.loanAccount.vehicleLoanDetails.grossVehicleWeight = vehicleDetail.gvw;
-                                                            model.loanAccount.vehicleLoanDetails.payLoad = vehicleDetail.payload;
-                                                            model.loanAccount.vehicleLoanDetails.typeofLoad = vehicleDetail.type_of_load;
-                                                            model.loanAccount.vehicleLoanDetails.ratePerTrip = vehicleDetail.rate_per_trip;
-                                                            model.loanAccount.vehicleLoanDetails.mileage = vehicleDetail.mileage;
-                                                            model.loanAccount.vehicleLoanDetails.fuelConsumptionPerHour = vehicleDetail.fuel_consumption;
-                                                            model.loanAccount.vehicleLoanDetails.noOfTyres = vehicleDetail.no_of_tyres;
-                                                            model.loanAccount.vehicleLoanDetails.costOfTyre = vehicleDetail.cost_of_tyre;
-                                                            model.loanAccount.vehicleLoanDetails.lifeOfTyre = vehicleDetail.life_of_tyre;
-                                                            
                                                             // vehicle Expense Details
-                                                            if (model.loanAccount && model.loanAccount.vehicleLoanDetails && model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses && _.isArray(model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses)) {
-                                                                    model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses = [];
-                                                                    model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses.push(
-                                                                        {
-                                                                            'expenseType': "Fuel Cost per month",
-                                                                            'expenseAmount': null
-                                                                        },
-                                                                        {
-                                                                            'expenseType': "Tyre Cost per month",
-                                                                            'expenseAmount': null
-                                                                        },
-                                                                        {
-                                                                            'expenseType': "Lubricant Cost",
-                                                                            'expenseAmount': null
-                                                                        },
-                                                                        {
-                                                                            'expenseType': "Driver\'s Salary",
-                                                                            'expenseAmount': vehicleDetail.driver_salary
-                                                                        },
-                                                                        {
-                                                                            'expenseType': "Cleaner\'s Salary",
-                                                                            'expenseAmount': vehicleDetail.cleaner_salary
-                                                                        },
-                                                                        {
-                                                                            'expenseType': "Permit Cost",
-                                                                            'expenseAmount': vehicleDetail.permit_cost
-                                                                        },
-                                                                        {
-                                                                            'expenseType': "Taxes",
-                                                                            'expenseAmount': vehicleDetail.taxes
-                                                                        },
-                                                                        {
-                                                                            'expenseType': "Maintenance",
-                                                                            'expenseAmount': vehicleDetail.maintenance
-                                                                        },
-                                                                        {
-                                                                            'expenseType': "Insurance",
-                                                                            'expenseAmount': vehicleDetail.insurance
-                                                                        },
-                                                                        {
-                                                                            'expenseType': "Miscellaneous",
-                                                                            'expenseAmount': vehicleDetail.miscellaneous_expense
-                                                                        }
-                                                                    );      
-                                                                }
+                                                            // if (model.loanAccount && model.loanAccount.vehicleLoanDetails && model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses && _.isArray(model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses)) {
+                                                            //         model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses = [];
+                                                            //         model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses.push(
+                                                            //             {
+                                                            //                 'expenseType': "Fuel Cost per month",
+                                                            //                 'expenseAmount': model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[0].expenseAmount
+                                                            //             },
+                                                            //             {
+                                                            //                 'expenseType': "Tyre Cost per month",
+                                                            //                 'expenseAmount': model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[1].expenseAmount
+                                                            //             },
+                                                            //             {
+                                                            //                 'expenseType': "Lubricant Cost",
+                                                            //                 'expenseAmount': model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[2].expenseAmount
+                                                            //             },
+                                                            //             {
+                                                            //                 'expenseType': "Driver\'s Salary",
+                                                            //                 'expenseAmount': model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[3].expenseAmount
+                                                            //             },
+                                                            //             {
+                                                            //                 'expenseType': "Cleaner\'s Salary",
+                                                            //                 'expenseAmount': model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[4].expenseAmount
+                                                            //             },
+                                                            //             {
+                                                            //                 'expenseType': "Permit Cost",
+                                                            //                 'expenseAmount': model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[5].expenseAmount
+                                                            //             },
+                                                            //             {
+                                                            //                 'expenseType': "Taxes",
+                                                            //                 'expenseAmount': model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[6].expenseAmount
+                                                            //             },
+                                                            //             {
+                                                            //                 'expenseType': "Maintenance",
+                                                            //                 'expenseAmount': model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[7].expenseAmount
+                                                            //             },
+                                                            //             {
+                                                            //                 'expenseType': "Insurance",
+                                                            //                 'expenseAmount': model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[8].expenseAmount
+                                                            //             },
+                                                            //             {
+                                                            //                 'expenseType': "Miscellaneous",
+                                                            //                 'expenseAmount': model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[9].expenseAmount
+                                                            //             }
+                                                            //         );      
+                                                            //     }
 
                                                         // Calculation for Km per month
                                                         if(_.isArray(model.loanAccount.vehicleLoanDetails.vehicleRouteDetails) && model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].routesKms && model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].trips) {
@@ -1461,46 +1447,46 @@ define(
                                                             return false;
                                                         }
 
-                                                        // Calculation for Fuel_Cost_per_month
-                                                        if (vehicleDetail.calculation_method && vehicleDetail.calculation_method == "DISTANCE") {
-                                                            if (vehicleDetail.fuel_cost && model.loanAccount.vehicleLoanDetails.mileage && _.isArray(model.loanAccount.vehicleLoanDetails.vehicleRouteDetails) && model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].kmPerMonth)
-                                                                model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[0].expenseAmount = parseFloat(model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].kmPerMonth) * parseFloat(vehicleDetail.fuel_cost) / parseFloat(model.loanAccount.vehicleLoanDetails.mileage);
-                                                            else {
-                                                                PageHelper.setError({message: "Please fill all details required for fuel cost per month field"});
-                                                                return false;
-                                                            }                               
-                                                        } else if (vehicleDetail.calculation_method == "TIME") {
-                                                            if (model.loanAccount.vehicleLoanDetails.fuelConsumptionPerHour && model.loanAccount.vehicleLoanDetails.monthlyWorkingDays && vehicleDetail.fuel_cost && _.isArray(model.loanAccount.vehicleLoanDetails.vehicleRouteDetails) && model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].kmPerMonth)
-                                                                model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[0].expenseAmount = parseFloat(model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].kmPerMonth) * parseFloat(model.loanAccount.vehicleLoanDetails.fuelConsumptionPerHour) * parseFloat(model.loanAccount.vehicleLoanDetails.monthlyWorkingDays) * parseFloat(vehicleDetail.fuel_cost);
-                                                            else {
-                                                                PageHelper.setError({message: "Please fill the fields required for fuel cost per month"});
-                                                                return false;
-                                                            }
-                                                        }
+                                                        // // Calculation for Fuel_Cost_per_month
+                                                        // if (vehicleDetail.calculation_method && vehicleDetail.calculation_method == "DISTANCE") {
+                                                        //     if (vehicleDetail.fuel_cost && model.loanAccount.vehicleLoanDetails.mileage && _.isArray(model.loanAccount.vehicleLoanDetails.vehicleRouteDetails) && model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].kmPerMonth)
+                                                        //         model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[0].expenseAmount = parseFloat(model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].kmPerMonth) * parseFloat(vehicleDetail.fuel_cost) / parseFloat(model.loanAccount.vehicleLoanDetails.mileage);
+                                                        //     else {
+                                                        //         PageHelper.setError({message: "Please fill all details required for fuel cost per month field"});
+                                                        //         return false;
+                                                        //     }                               
+                                                        // } else if (vehicleDetail.calculation_method == "TIME") {
+                                                        //     if (model.loanAccount.vehicleLoanDetails.fuelConsumptionPerHour && model.loanAccount.vehicleLoanDetails.monthlyWorkingDays && vehicleDetail.fuel_cost && _.isArray(model.loanAccount.vehicleLoanDetails.vehicleRouteDetails) && model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].kmPerMonth)
+                                                        //         model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[0].expenseAmount = parseFloat(model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].kmPerMonth) * parseFloat(model.loanAccount.vehicleLoanDetails.fuelConsumptionPerHour) * parseFloat(model.loanAccount.vehicleLoanDetails.monthlyWorkingDays) * parseFloat(vehicleDetail.fuel_cost);
+                                                        //     else {
+                                                        //         PageHelper.setError({message: "Please fill the fields required for fuel cost per month"});
+                                                        //         return false;
+                                                        //     }
+                                                        // }
 
 
-                                                        // Calculation for Tyre_Cost_per_month
-                                                        if(vehicleDetail.calculation_method && vehicleDetail.calculation_method == "DISTANCE") {
-                                                            if (_.isArray(model.loanAccount.vehicleLoanDetails.vehicleRouteDetails) && model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].kmPerMonth && model.loanAccount.vehicleLoanDetails.noOfTyres && model.loanAccount.vehicleLoanDetails.costOfTyre && model.loanAccount.vehicleLoanDetails.lifeOfTyre)
-                                                                model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[1].expenseAmount = parseFloat(model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].kmPerMonth * model.loanAccount.vehicleLoanDetails.noOfTyres * model.loanAccount.vehicleLoanDetails.costOfTyre)/parseFloat(model.loanAccount.vehicleLoanDetails.lifeOfTyre);
-                                                            else{
-                                                                PageHelper.setError({message: "Please fill the fields required for fuel cost per month"});
-                                                                return false;
-                                                            }
-                                                        } else {
-                                                             model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[1].expenseAmount = 0;
-                                                        }
+                                                        // // Calculation for Tyre_Cost_per_month
+                                                        // if(vehicleDetail.calculation_method && vehicleDetail.calculation_method == "DISTANCE") {
+                                                        //     if (_.isArray(model.loanAccount.vehicleLoanDetails.vehicleRouteDetails) && model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].kmPerMonth && model.loanAccount.vehicleLoanDetails.noOfTyres && model.loanAccount.vehicleLoanDetails.costOfTyre && model.loanAccount.vehicleLoanDetails.lifeOfTyre)
+                                                        //         model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[1].expenseAmount = parseFloat(model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].kmPerMonth * model.loanAccount.vehicleLoanDetails.noOfTyres * model.loanAccount.vehicleLoanDetails.costOfTyre)/parseFloat(model.loanAccount.vehicleLoanDetails.lifeOfTyre);
+                                                        //     else{
+                                                        //         PageHelper.setError({message: "Please fill the fields required for fuel cost per month"});
+                                                        //         return false;
+                                                        //     }
+                                                        // } else {
+                                                        //      model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[1].expenseAmount = 0;
+                                                        // }
 
-                                                        // Calculation for lubricant
-                                                        if(_.isArray(model.vehicleDetails) && vehicleDetail.calculation_method && vehicleDetail.calculation_method == "TIME") {
-                                                            model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[2].expenseAmount = parseFloat(model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[0].expenseAmount * 0.1);
-                                                        } else {
-                                                            model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[2].expenseAmount = 0;
-                                                        }
+                                                        // // Calculation for lubricant
+                                                        // if(_.isArray(model.vehicleDetails) && vehicleDetail.calculation_method && vehicleDetail.calculation_method == "TIME") {
+                                                        //     model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[2].expenseAmount = parseFloat(model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[0].expenseAmount * 0.1);
+                                                        // } else {
+                                                        //     model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[2].expenseAmount = 0;
+                                                        // }
 
 
                                                         // Calculation for Monthly Working Hours
-                                                        if (vehicleDetail.calculation_method == 'TIME'){
+                                                        if (model.loanAccount.vehicleLoanDetails.segment.toUpperCase() == "CONSTRUCTION EQUIPMENT"){
                                                             if(model.loanAccount.vehicleLoanDetails.dailyWorkingHours && model.loanAccount.vehicleLoanDetails.monthlyWorkingDays) {
                                                                 model.loanAccount.vehicleLoanDetails.monthlyWorkingHours = parseFloat(model.loanAccount.vehicleLoanDetails.dailyWorkingHours * model.loanAccount.vehicleLoanDetails.monthlyWorkingDays);
                                                             } else {
@@ -1511,30 +1497,16 @@ define(
 
 
                                                         // Vehicle Income Details
-                                                         if (vehicleDetail.calculation_method == 'DISTANCE') {
-                                                            let incomeAmount = model.loanAccount.vehicleLoanDetails.ratePerTrip * model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].trips;
-                                                            if (model.loanAccount && model.loanAccount.vehicleLoanDetails && model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes && _.isArray(model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes)) {
-                                                                model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes = [];   
-                                                                model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes.push({
-                                                                    'incomeType': 'Total Monthly Revenue',
-                                                                    'incomeAmount': incomeAmount
-                                                                });
-                                                            };
-                                                         } else if (vehicleDetail.calculation_method == 'TIME'){
-                                                            let incomeAmount = model.loanAccount.vehicleLoanDetails.monthlyWorkingHours * model.loanAccount.vehicleLoanDetails.hourlyRate;
-                                                            if (model.loanAccount && model.loanAccount.vehicleLoanDetails && model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes && _.isArray(model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes)) {
-                                                                model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes = [];   
-                                                                model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes.push({
-                                                                    'incomeType': 'Total Monthly Revenue',
-                                                                    'incomeAmount': incomeAmount
-                                                                });
-                                                            };
-                                                         }
-
-
+                                                        // if (model.loanAccount && model.loanAccount.vehicleLoanDetails && model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes && _.isArray(model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes) && model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes[0]) {  
+                                                        //     model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes = [];
+                                                        //     model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes.push({
+                                                        //         'incomeType': 'Monthly Revenue',
+                                                        //         'incomeAmount': model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes[0].incomeAmount
+                                                        //     });
+                                                        // }
 
                                                          // Calculation for validation
-                                                         if (vehicleDetail.calculation_method == "DISTANCE") {
+                                                         if (model.loanAccount.vehicleLoanDetails.segment.toUpperCase() == "GOODS") {
                                                             if (model.loanAccount.vehicleLoanDetails.ratePerTrip && _.isArray(model.loanAccount.vehicleLoanDetails.vehicleRouteDetails) && model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].trips) {
                                                                 if (parseFloat(model.loanAccount.vehicleLoanDetails.ratePerTrip) * parseFloat(model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].trips) > parseFloat(model.loanAccount.vehicleLoanDetails.payLoad)*parseFloat(model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].kmPerMonth)*2.4 ) {
                                                                     model.loanAccount.vehicleLoanDetails.validation = "ERROR";
@@ -1578,15 +1550,12 @@ define(
                                                             PageHelper.setError({message: "Please fill the fields required for fcfToEmi"});
                                                             return false;                                                                                                                          
                                                          }
-                                                            
-                                                        break;
 
                                                     }
 
                                                 }
-                                            }      
+                                                  
                                         }
-                                    }
                                 },
                                 "VehicleAssetUse": {
                                     "items": {
