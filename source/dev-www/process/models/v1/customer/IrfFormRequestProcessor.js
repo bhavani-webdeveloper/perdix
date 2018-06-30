@@ -2592,8 +2592,8 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             "location": {
                                 "key": "lead.location",
                                 "type": "geotag",
-                                "latitude": "latitude",
-                                "longitude": "longitude",
+                                "latitude": "lead.latitude",
+                                "longitude": "lead.longitude",
                                 "orderNo": 30
                             },
                             "postOffice": {
