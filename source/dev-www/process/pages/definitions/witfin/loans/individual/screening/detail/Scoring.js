@@ -100,7 +100,7 @@ define({
                                     '</div>'
                             }
                         ]
-                    }, 
+                    },
                     {
                         type: "section",
                         htmlClass: "row",
@@ -118,7 +118,7 @@ define({
                                 html: '<h3>{{ model.scoreDetails[2].title }} ({{ model.totalScores.data[0][model.scoreDetails[2].title] }})</h3><table class="table"><colgroup><col width="50%"><col width="10%"><col width="40%"></colgroup><tbody><tr><th>Parameter</th><th></th><th>Actual Value</th></tr><tr ng-repeat="data in model.scoreDetails[2].data"><td>{{ data.Parameter }}</td><td> <span class="square-color-box" style="background: {{ data.color_hexadecimal }}"> </span></td><td>{{ data["Actual Value"] }}</td></tr></tbody></table>'
                             }
                         ]
-                    }, 
+                    },
                     {
                         type: "section",
                         htmlClass: "row",
@@ -196,15 +196,7 @@ define({
                             prepareDataDeferred.resolve();
                         });
 
-                        var p3 = Enrollment.getCustomerById({
-                            id: model.cbModel.customerId
-                        }).$promise.then(function(res) {
-                            model.customer = res;
-                        }, function(httpRes) {
-                            PageHelper.showErrors(httpRes);
-                        }).finally(function() {});
-
-                        $q.all([onSuccessPromise, p3]).finally(function() {
+                        $q.all([onSuccessPromise]).finally(function() {
                             deferred.resolve();
                         });
                     });
