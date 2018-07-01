@@ -1498,7 +1498,8 @@
                 "CreditApproval2",
                 "CreditApproval3",
                 "CreditApproval4",
-                "CreditApproval5"
+                "CreditApproval5",
+                "LoanInitiation"
             ]
           },
           "processingFeeInPaisa": {
