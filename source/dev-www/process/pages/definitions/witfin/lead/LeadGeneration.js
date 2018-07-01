@@ -35,6 +35,7 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                         "condition": "(model.lead.interestedInProduct==='YES' && model.lead.leadStatus ==='FollowUp')",
                     },
                     "leadInteractions.leadInteractions.typeOfInteraction": {
+                        "required" : true,
                         onChange: function (value, form, model) {
                             model.lead.leadInteractions[form.arrayIndex].customerResponse = '';
                             model.lead.leadInteractions[form.arrayIndex].additionalRemarks = '';
@@ -43,6 +44,9 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                                 model.lead.leadInteractions[form.arrayIndex].picture = '';
                             }
                         }
+                    },
+                    "leadInteractions.leadInteractions.customerResponse":{
+                        "required": true
                     },
                     "sourceDetails.agentName": {
                         "condition": "model.lead.leadSource.toUpperCase() == 'BUYING/SELLING AGENT(BROKER)'",

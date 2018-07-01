@@ -638,6 +638,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "EnterpriseReferences.verifications.opinion": {
                         "title":"COMMENTS_OF_NEIGHBOUR"
                     },
+                    "IndividualInformation.spouseFirstName":{
+                        "condition": "model.customer.maritalStatus.toLowerCase() == 'married'"
+                    },
+                    "IndividualInformation.spouseDateOfBirth":{
+                        "condition": "model.customer.spouseDateOfBirth.toLowerCase() == 'married'"
+                    },
                     "BankAccounts.customerBankAccounts": {
                         startEmpty: true
                     },
@@ -1449,7 +1455,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "view": "fixed",
                                             "items": {
                                                 "fileType": {
-                                                    "type": "string",
+                                                    "type": "select",
+                                                    "enumCode": "document_file_type",
                                                     "key": "customer.customerDocuments[].fileType",
                                                     "title": "DOCUMENT_NAME",
                                                     "required": true

@@ -3208,8 +3208,6 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     "leadInteractions": {
                         key: "lead.leadInteractions",
                         type: "array",
-                        add: null,
-                        remove: null,
                         startEmpty: true,
                         view: "fixed",
                         title: "LEAD_INTERACTIONS",

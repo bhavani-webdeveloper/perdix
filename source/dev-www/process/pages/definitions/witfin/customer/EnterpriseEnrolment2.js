@@ -23,7 +23,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
             // }
 
             var calculateVehiclesFree = function(modelValue, form, model) {
-                if( model.customer.vehiclesOwned > model.customer.vehiclesFinanced){
+                if( model.customer.vehiclesOwned >= model.customer.vehiclesFinanced){
                     model.customer.vehiclesFree = model.customer.vehiclesOwned - model.customer.vehiclesFinanced;
                 }
                 else {
