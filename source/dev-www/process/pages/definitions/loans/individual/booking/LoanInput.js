@@ -40,6 +40,19 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 }
             }
 
+            if (_.hasIn(loanAccount, 'collateral') && _.isArray(loanAccount.collateral)) {
+                var result = _.every(loanAccount.collateral, function(collateral){
+                    if (collateral.collateralValue < collateral.loanToValue) {
+                        PageHelper.showProgress("pre-save-validation", "Purchase price cant be lesser than Present Value. Please check the collaterals section.",5000);
+                        return false;
+                    }
+                    return true;
+                })
+                if (result === false){
+                    return false;
+                }
+            }
+
             if (_.hasIn(loanAccount, 'collateral') && _.isArray(loanAccount.collateral)){
                 _.forEach(loanAccount.collateral, function(collateral){
                     if (!_.hasIn(collateral, "id") || _.isNull(collateral.id)){
@@ -230,11 +243,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     model.loanAccount.loanCentre = model.loanAccount.loanCentre || {};
                     model.loanAccount.disbursementSchedules=model.loanAccount.disbursementSchedules || [];
                     model.loanAccount.collateral=model.loanAccount.collateral || [{quantity:1}];
-                    if(model.loanAccount.collateral!= null){
-                        for(i in model.loanAccount.collateral){
-                            model.loanAccount.collateral[i].quantity = 1
-                        };
-                    }
                     PageHelper.showLoader();
                     Queries.getGlobalSettings("mainPartner").then(function(value) {
                         model.loanAccount.partnerCode = model.loanAccount.partnerCode||value;
@@ -337,7 +345,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         getProductDetails(model.loanAccount.productCode,model);
 
                     LoanBookingCommons.getLoanAccountRelatedCustomersLegacy(model.loanAccount);
-                    /* 1)calling LoanAccount api to fetch the existing loan account details , 
+                    /* 1)calling LoanAccount api to fetch the existing loan account details ,
                           yet one field is left to be mapped
                     */
                     if(_.hasIn(model.loanAccount, 'linkedAccountNumber') && !_.isNull(model.loanAccount.linkedAccountNumber) && _.hasIn(model.loanAccount, 'transactionType') && !_.isNull(model.loanAccount.transactionType) && model.loanAccount.transactionType.toLowerCase()=='renewal'){
@@ -357,7 +365,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             });
                         }
                     };
-                        
+
                 // code for existing loan
                 $log.info("Loan Number:::" + $stateParams.pageId);
                 if ($stateParams.pageId) {
@@ -385,7 +393,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         if (model.loanAccount.coBorrowers && model.loanAccount.coBorrowers.length > 0 && model.loanAccount.coBorrowers[0].coBorrowerUrnNo == model.loanAccount.portfolioInsuranceUrn){
                             model.additional.portfolioUrnSelector = "coapplicant";
                         }
-                        
+
                         if (model.loanAccount.disbursementSchedules.length >= 0 && _.isNumber(model.loanAccount.disbursementSchedules[0].moratoriumPeriodInDays) && model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate) {
                             model._currentDisbursement = model.loanAccount.disbursementSchedules[0];
                             model.loanAccount.scheduleStartDate = moment(model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate, "YYYY-MM-DD").add(model.loanAccount.disbursementSchedules[0].moratoriumPeriodInDays, 'days').format("YYYY-MM-DD");
@@ -1451,12 +1459,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                     model._currentDisbursement.scheduledDisbursementDate = null;
                                     PageHelper.showProgress("loan-create","Disbursement date should be lesser than Schedule Start Date date",5000);
                                 }
-                            } 
+                            }
                             if(repaymentDate < disbursementSchedules){
                                 model._currentDisbursement.scheduledDisbursementDate = null;
                                 PageHelper.showProgress("loan-create","Disbursement date should be lesser than Repayment date",5000);
                             }
-                           
+
                         }
                     },
                     {
@@ -1500,8 +1508,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         "title":"HYPOTHECATION",
                         "type":"array",
                         onArrayAdd: function(modelValue, form, model, formCtrl, $event) {
-                                    model.loanAccount.collateral[model.loanAccount.collateral.length-1].quantity = 1;
-                                },
+                            model.loanAccount.collateral[model.loanAccount.collateral.length-1].quantity = 1;
+                        },
                         "items":[
                             {
                                 "key":"loanAccount.collateral[].collateralCategory",
@@ -1526,8 +1534,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             },
                             {
                                 "key":"loanAccount.collateral[].quantity",
-                                "readonly" : true,
-                                
+                                "onChange": function(value ,form ,model, event){
+                                    calculateTotalValue(value, form, model);
+                                }
                             },
                             {
                                 "key":"loanAccount.collateral[].modelNo"
@@ -1619,7 +1628,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "key":"loanAccount.collateral[].machineOld",
                                 "type": "checkbox",
                                 "title": "USED_ASSET"
-                            },  
+                            },
                             {
                                 "key": "loanAccount.collateral[].electricityAvailable",
                                 "title": "SEGMENT",
@@ -2180,7 +2189,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                     },
                                     {
                                         "key": "loanAccount.disbursementSchedules[].moratoriumPeriodInDays",
-                                        "condition": "!model.allowPreEmiInterest", 
+                                        "condition": "!model.allowPreEmiInterest",
                                         "title": "MORATORIUM_PERIOD",
                                         "type": "string"
                                     },
@@ -3003,92 +3012,81 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 save: function(model, formCtrl, form, $event){
                     $log.info("Inside save()");
                     PageHelper.clearErrors();
-                    if(model.loanAccount.collateral != null && model.loanAccount.collateral.length != 0){
-                        for(i in model.loanAccount.collateral){
-                            if(model.loanAccount.collateral[i].collateralValue < model.loanAccount.collateral[i].loanToValue){
-                               // PageHelper.showErrors("Purchase price cant be less than present value")
-                                PageHelper.showErrors({data:{error:"Purchase price cant be less than present price"}})
-                            }
+
+                    if (!_.hasIn(model.loanAccount, 'loanAmountRequested') || _.isNull(model.loanAccount.loanAmountRequested)){
+                        model.loanAccount.loanAmountRequested = model.loanAccount.loanAmount;
+                    }
+                    if (!preLoanSaveOrProceed(model)){
+                        return;
+                    }
+                    if(model.loanAccount.linkedAccountNumber && model.siteCode == 'kinara' && model.linkedAccount){
+                        if(parseInt(model.loanAccount.disbursementSchedules[0].disbursementAmount) < parseInt(model.linkedAccount.accountBalance)){
+                            PageHelper.setError({
+                                message: "first Schedule disbursementAmount" + " " +model.loanAccount.disbursementSchedules[0].disbursementAmount+ " "+ "should  be greater then Linked Account Balence" +"  " + model.linkedAccount.accountBalance
+                            });
+                           return;
                         }
                     }
-                    else{
-                        if (!_.hasIn(model.loanAccount, 'loanAmountRequested') || _.isNull(model.loanAccount.loanAmountRequested)){
-                            model.loanAccount.loanAmountRequested = model.loanAccount.loanAmount;
-                        }
-                        if (!preLoanSaveOrProceed(model)){
-                            return;
-                        }
-                        if(model.loanAccount.linkedAccountNumber && model.siteCode == 'kinara' && model.linkedAccount){
-                            if(parseInt(model.loanAccount.disbursementSchedules[0].disbursementAmount) < parseInt(model.linkedAccount.accountBalance)){
-                                PageHelper.setError({
-                                    message: "first Schedule disbursementAmount" + " " +model.loanAccount.disbursementSchedules[0].disbursementAmount+ " "+ "should  be greater then Linked Account Balence" +"  " + model.linkedAccount.accountBalance
-                                });
-                               return; 
+                    populateLoanCustomerRelations(model);
+                    Utils.confirm("Are You Sure?")
+                    .then(function(){
+                        var diffDays = 0;
+                        var scheduleStartDate;
+                        if (model.allowPreEmiInterest) {
+                            model.loanAccount.disbursementSchedules[0].customerSignatureDate = model._currentDisbursement.customerSignatureDate;
+                            model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate = model._currentDisbursement.scheduledDisbursementDate;
+                            if(model.loanAccount.scheduleStartDate)
+                                scheduleStartDate = moment(model.loanAccount.scheduleStartDate,SessionStore.getSystemDateFormat());
+                            if(model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate)
+                                var DisbursementDate = moment(model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate,SessionStore.getSystemDateFormat());
+                            if(model.loanAccount.scheduleStartDate && model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate)
+                                diffDays = scheduleStartDate.diff(moment(DisbursementDate.format(SessionStore.getSystemDateFormat())), "days");
+
+                            if (diffDays > 0) {
+                                model.loanAccount.firstRepaymentDate = scheduleStartDate.format("YYYY-MM-DD");
+                            }
+
+                            for (var i = 0; i < model.loanAccount.disbursementSchedules.length; i++) {
+                                model.loanAccount.disbursementSchedules[i].moratoriumPeriodInDays = diffDays;
                             }
                         }
-                        populateLoanCustomerRelations(model);
-                        Utils.confirm("Are You Sure?")
-                            .then(
-                                function(){
 
-                                    var diffDays = 0;
-                                    var scheduleStartDate;
-                                    if (model.allowPreEmiInterest) {
-                                        model.loanAccount.disbursementSchedules[0].customerSignatureDate = model._currentDisbursement.customerSignatureDate;
-                                        model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate = model._currentDisbursement.scheduledDisbursementDate;
-                                        if(model.loanAccount.scheduleStartDate)
-                                            scheduleStartDate = moment(model.loanAccount.scheduleStartDate,SessionStore.getSystemDateFormat());
-                                        if(model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate)
-                                            var DisbursementDate = moment(model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate,SessionStore.getSystemDateFormat());
-                                        if(model.loanAccount.scheduleStartDate && model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate)
-                                            diffDays = scheduleStartDate.diff(moment(DisbursementDate.format(SessionStore.getSystemDateFormat())), "days");
+                        var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
+                         if(!$stateParams.pageId)
+                        {
+                            $log.info("hi i am in the if and else no bad");
+                            reqData.loanAccount.currentStage ='LoanInitiation';
+                            reqData.loanAccount.loanAmountRequested =reqData.loanAccount.loanAmount;
+                            $log.info(reqData.loanAccount.currentStage);
+                        }
+                        reqData.loanAccount.status = '';
+                        reqData.loanProcessAction = "SAVE";
+                        //reqData.loanAccount.portfolioInsurancePremiumCalculated = 'Yes';
+                        // reqData.remarks = model.review.remarks;
+                        reqData.loanAccount.screeningDate = reqData.loanAccount.screeningDate || Utils.getCurrentDate();
+                        reqData.loanAccount.psychometricCompleted = reqData.loanAccount.psychometricCompleted || "N";
 
-                                        if (diffDays > 0) {
-                                            model.loanAccount.firstRepaymentDate = scheduleStartDate.format("YYYY-MM-DD");
-                                        }
+                        PageHelper.showLoader();
 
-                                        for (var i = 0; i < model.loanAccount.disbursementSchedules.length; i++) {
-                                            model.loanAccount.disbursementSchedules[i].moratoriumPeriodInDays = diffDays;
-                                        }
-                                    }
-                                    
-                                    var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
-                                     if(!$stateParams.pageId)
-                                    {
-                                        $log.info("hi i am in the if and else no bad");
-                                        reqData.loanAccount.currentStage ='LoanInitiation';
-                                        reqData.loanAccount.loanAmountRequested =reqData.loanAccount.loanAmount;
-                                        $log.info(reqData.loanAccount.currentStage);
-                                    }
-                                    reqData.loanAccount.status = '';
-                                    reqData.loanProcessAction = "SAVE";
-                                    //reqData.loanAccount.portfolioInsurancePremiumCalculated = 'Yes';
-                                    // reqData.remarks = model.review.remarks;
-                                    reqData.loanAccount.screeningDate = reqData.loanAccount.screeningDate || Utils.getCurrentDate();
-                                    reqData.loanAccount.psychometricCompleted = reqData.loanAccount.psychometricCompleted || "N";
+                        var completeLead = false;
 
-                                    PageHelper.showLoader();
+                        if (!_.hasIn(reqData.loanAccount, "id")){
+                            completeLead = true;
+                        }
 
-                                    var completeLead = false;
-
-                                    if (!_.hasIn(reqData.loanAccount, "id")){
-                                        completeLead = true;
-                                    }
-
-                                    IndividualLoan.create(reqData)
-                                        .$promise
-                                        .then(function(res){
-                                            model.loanAccount = res.loanAccount;
-                                            $state.go("Page.Engine",{pageName:"loans.individual.booking.LoanInput", pageId: model.loanAccount.id}, {reload:true});
-                                        }, function(httpRes){
-                                            PageHelper.showErrors(httpRes);
-                                        })
-                                        .finally(function(httpRes){
-                                            PageHelper.hideLoader();
-                                        })
-                                }
-                            );
-                    }
+                        IndividualLoan.create(reqData)
+                            .$promise
+                            .then(function(res){
+                                model.loanAccount = res.loanAccount;
+                                $state.go("Page.Engine",{pageName:"loans.individual.booking.LoanInput", pageId: model.loanAccount.id}, {reload:true});
+                            }, function(httpRes){
+                                PageHelper.showErrors(httpRes);
+                            })
+                            .finally(function(httpRes){
+                                PageHelper.hideLoader();
+                            })
+                        }
+                    );
                 },
                 proceed: function(model, form, formName) {
                     $log.info(model);
@@ -3097,13 +3095,13 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     if (!validateForm(form)){
                         return;
                     }
-                    
+
                     if(model.loanAccount.linkedAccountNumber && model.siteCode == 'kinara' && model.linkedAccount){
                         if(parseInt(model.loanAccount.disbursementSchedules[0].disbursementAmount) < parseInt(model.linkedAccount.accountBalance)){
                             PageHelper.setError({
                                 message: "first Schedule disbursementAmount" + " " +model.loanAccount.disbursementSchedules[0].disbursementAmount+ " "+ "should  be greater then Linked Account Balence" +"  " + model.linkedAccount.accountBalance
                             });
-                           return; 
+                           return;
                         }
                     }
 

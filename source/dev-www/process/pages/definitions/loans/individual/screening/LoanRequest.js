@@ -519,7 +519,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     {
                         for(i=0;i<model.loanSummary.length;i++)
                         {
-                            if(model.loanSummary[i].postStage=="Rejected" && 
+                            if(model.loanSummary[i].postStage=="Rejected" &&
                                 model.loanSummary[i].preStage != "Rejected")
                             {
                                 if(model.currentStage=='Rejected')
@@ -823,7 +823,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         lovonly: true,
                         autolov: true,
                         condition: "model.loanAccount.transactionType.toLowerCase() != 'renewal'",
-                        
+
                         searchHelper: formHelper,
                         search: function(inputModel, form, model, context) {
                             var out=[];
@@ -881,7 +881,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         readonly:true,
                         required: false,
                         condition: "model.loanAccount.transactionType.toLowerCase() == 'renewal'"
-                        
+
                      },
                      {
                         key: "loanAccount.transactionType",
@@ -890,7 +890,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         required: false,
                         condition: "model.loanAccount.transactionType.toLowerCase() == 'renewal'"
                      },
-                     {  
+                     {
                         key: "loanAccount.transactionType",
                         title: "TRANSACTION_TYPE",
                         type: "select",
@@ -1151,7 +1151,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         readonly:true,
                         required: false,
                         condition: "model.loanAccount.transactionType.toLowerCase() == 'renewal'"
-                        
+
                      },
                      {
                          key: "loanAccount.transactionType",
@@ -1160,7 +1160,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                          required: false,
                          condition: "model.loanAccount.transactionType.toLowerCase() == 'renewal'"
                      },
-                     {  
+                     {
                         key: "loanAccount.transactionType",
                         title: "TRANSACTION_TYPE",
                         type: "select",
@@ -3229,9 +3229,9 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                             PageHelper.showProgress("dedupe-status", "Dedupe has failed. Please Contact IT", 5000);
                                         else if (item.status.toLowerCase() == 'pending')
                                             PageHelper.showProgress("dedupe-status", "Dedupe is in Pending Stage. Please Wait", 5000);
-                                        else  
+                                        else
                                             PageHelper.showProgress("dedupe-status", "Dedupe process is not completed for all the customers. Please save & try after some time", 5000);
-                                        
+
                                         mandatoryToProceedLoan['Dedupe'] = false;
                                         break;
                                     }
@@ -3309,7 +3309,8 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                                 collateralCategory:enterpriseAsset.assetType,
                                                 loanToValue: enterpriseAsset.valueOfAsset,
                                                 photoFilePath: enterpriseAsset.assetImageId,
-                                                 udf1 : "Adhoc"
+                                                udf1 : "Adhoc",
+                                                quantity: enterpriseAsset.quantity || 1
                                             };
                                             c.totalValue = c.quantity * c.loanToValue;
                                             reqData.loanAccount.collateral.push(c)
