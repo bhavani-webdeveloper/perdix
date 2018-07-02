@@ -14,7 +14,7 @@
         "order":2,
         "code":"BranchDeposit",
         "name":"BranchDeposit",
-        "stageType":"DEPOSIT",
+        "stageType":"CAPTURE",
         "isBankAccountReversal":true,
         "allowedRoles":[
            "APPROVER"
@@ -24,7 +24,7 @@
         "order":3,
         "code":"PreDeposit",
         "name":"PreDeposit",
-        "stageType":"DEPOSIT",
+        "stageType":"CAPTURE",
         "isBankAccountReversal":true,
         "allowedRoles":[
            "APPROVER"
