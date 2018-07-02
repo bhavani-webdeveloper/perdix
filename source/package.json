@@ -29,6 +29,7 @@
     "gulp-json-modify": "^1.0.2",
     "irf-bluetooth-plugin": "^1.2.0",
     "js-logger": "^1.4.1",
+    "mysql": "^2.15.0",
     "npm-git-install": "^0.2.0",
     "phonegap-plugin-barcodescanner": "~4.1.0",
     "reflect-metadata": "^0.1.10",
