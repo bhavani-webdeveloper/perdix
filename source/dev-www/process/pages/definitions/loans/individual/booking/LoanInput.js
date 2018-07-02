@@ -1506,6 +1506,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     {
                         "key":"loanAccount.collateral",
                         "title":"HYPOTHECATION",
+                        "titleExpr": "('HYPOTHECATION'| translate) + ': ' + model.loanAccount.collateral[arrayIndex].collateralCategory + ' - ' + model.loanAccount.collateral[arrayIndex].collateralType",
                         "type":"array",
                         onArrayAdd: function(modelValue, form, model, formCtrl, $event) {
                             model.loanAccount.collateral[model.loanAccount.collateral.length-1].quantity = 1;

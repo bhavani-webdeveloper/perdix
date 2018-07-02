@@ -3289,6 +3289,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                                 collateralType: currentAsset.assetType,
                                                 collateralCategory:currentAsset.assetCategory,
                                                 loanToValue: currentAsset.assetValue,
+                                                collateralValue: currentAsset.assetValue,
                                                 photoFilePath: currentAsset.assetImageId,
                                                 udf1 : "Adhoc",
                                                 quantity: currentAsset.quantity || 1
@@ -3308,6 +3309,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                                 collateralType: enterpriseAsset.assetName,
                                                 collateralCategory:enterpriseAsset.assetType,
                                                 loanToValue: enterpriseAsset.valueOfAsset,
+                                                collateralValue: enterpriseAsset.valueOfAsset,
                                                 photoFilePath: enterpriseAsset.assetImageId,
                                                 udf1 : "Adhoc",
                                                 quantity: enterpriseAsset.quantity || 1
