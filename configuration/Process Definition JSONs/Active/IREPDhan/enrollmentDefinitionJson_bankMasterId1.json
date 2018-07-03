@@ -3301,6 +3301,14 @@
               "Completed"
             ]
           },
+          "linkedToCustomerName": {
+            "title": "linkedToCustomerName",
+            "type": "string",
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
           "linkedToCompleted": {
             "title": "linkedToCompleted",
             "type": "number",
