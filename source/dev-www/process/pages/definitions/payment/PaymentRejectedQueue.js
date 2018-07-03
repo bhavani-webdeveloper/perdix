@@ -26,73 +26,99 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
 
                     "DebitAccountDetails":{
                         "orderNo": 30,
+                    }, "PaymentDetails.modeOfPayment":{
+                        "readonly":true,
+                        "orderNo": 1,
                     },
-                    "PaymentDetails.loanAccount":{
-                       // "required": true,
-                       "orderNo": 20,
-                        "type": "lov",
-                        lovonly: true,
-                        searchHelper: formHelper,
-                        search: function(inputModel, form, model) {
-                            return $q.resolve({
-                                headers: {
-                                    "x-total-count": [].length
-                                },
-                                body: []
-                            });
-                        },
-                        getListDisplayItem: function(item, index) {
-                            return [];
-                        },
-                        onSelect: function(result, model, context) {
-                            
-                        }
+                    "PaymentDetails.amount":{
+                        "readonly":true,
+                        "orderNo": 2,
                     },
-                    "DebitAccountDetails.debitAccountName":{
-                        //"required": true,
-                        "orderNo": 30,
-                        "type": "lov",
-                        lovonly: true,
-                        searchHelper: formHelper,
-                        search: function(inputModel, form, model) {
-                            return $q.resolve({
-                                headers: {
-                                    "x-total-count": [].length
-                                },
-                                body: []
-                            });
-                        },
-                        getListDisplayItem: function(item, index) {
-                            return [];
-                        },
-                        onSelect: function(result, model, context) {
-                            
-                        }
+                    "PaymentDetails.fileId":{
+                        "readonly":true,
+                        "orderNo": 3,
                     },
-                    "BeneficiaryDetails.bankIFSC":{
-                        "resolver": "BankIFSCLOVConfiguration",
-                        "required": true
+                    "PaymentDetails.paymentPurpose":{
+                        "readonly":true,
+                        "orderNo": 4,
+                    },
+                    "PaymentDetails.transactionType":{
+                        "readonly":true,
+                        "orderNo": 5,
+                    },
+                    "PaymentDetails.paymentDate":{
+                        "readonly":true,
+                        "orderNo": 6,
                     },
                     "BeneficiaryDetails.beneficiaryName":{
-                        //"required": true,
-                        //"orderNo": 10,
                         "type": "lov",
-                        lovonly: true,
-                        searchHelper: formHelper,
-                        search: function(inputModel, form, model) {
-                            return $q.resolve({
-                                headers: {
-                                    "x-total-count": [].length
-                                },
-                                body: []
-                            });
-                        },
-                        getListDisplayItem: function(item, index) {
-                            return [];
-                        },
-                        onSelect: function(result, model, context) {
-                            
-                        }
+                        "resolver": "CustomerBankAccountsLOVConfiguration" ,
+                        "readonly":true,
+                        "orderNo": 1,
+                    },
+                    "BeneficiaryDetails.beneficiaryAccountName":{
+                        "readonly":true,
+                        "orderNo": 2,
+                    },
+                    "BeneficiaryDetails.beneficiaryEmailId":{
+                        "readonly":true,
+                        "orderNo": 3,
+                    },                  
+                    "BeneficiaryDetails.beneficiaryMobileNumber":{
+                        "readonly":true,
+                        "orderNo": 4,
+                    },
+                    "BeneficiaryDetails.creditAccountNo":{
+                        "readonly":true,
+                        "orderNo": 5,
+                    },
+                    "BeneficiaryDetails.confirmAccountNo":{
+                        "readonly":true,
+                         "orderNo": 6,
+                    },
+                    "BeneficiaryDetails.beneficiaryIfsc":{
+                        "resolver": "PaymentBankIFSCLOVConfiguration",  
+                        "readonly":true,
+                        "orderNo": 7,
+                    },
+                    "BeneficiaryDetails.beneficiaryBankName":{
+                        "readonly":true,
+                        "orderNo": 8,
+                    },
+                    "BeneficiaryDetails.beneficiaryBankBranch":{
+                        "readonly":true,
+                        "orderNo": 9,
+                    },
+                    "BeneficiaryDetails.beneficiaryTransactionParticulars":{
+                        
+                        "orderNo": 10,
+                    },
+                    "BeneficiaryDetails.beneficiaryTransactionRemarks":{
+                       
+                        "orderNo": 11,
+                    },
+                    "DebitAccountDetails.debitAccountName":{
+
+                        "resolver": "PaymentBankAccountsLOVConfiguration",
+                        "readonly":true,
+                        "orderNo": 1,
+                    },
+                    "DebitAccountDetails.debitAccountNumber":{
+                        "readonly":true,
+                        "orderNo": 2,
+                    },
+                    "DebitAccountDetails.debitMobileNumber":{
+                        "readonly":true,
+                        "orderNo": 3,
+                    },  
+                    "DebitAccountDetails.debitTransactionParticulars":{                       
+                        "orderNo": 4,
+                    },
+                    "DebitAccountDetails.debitTransactionRemarks":{                       
+                        "orderNo": 5,
+                    },                 
+                    "PaymentDetails.accountNumber":{
+                        "resolver": "LoanAccountsLOVConfiguration"                      
                     }
                     
                 };

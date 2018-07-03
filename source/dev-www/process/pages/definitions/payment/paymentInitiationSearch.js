@@ -1,8 +1,8 @@
 define({
     pageUID: "payment.paymentInitiationSearch",
     pageType: "Engine",
-    dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager", "PaymentInitiationSearch", "LoanBookingCommons"],
-    $pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, PaymentInitiationSearch, LoanBookingCommons) {
+    dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager", "Payment", "LoanBookingCommons", "Queries"],
+    $pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, Payment, LoanBookingCommons, Queries) {
         var branch = SessionStore.getBranch();
         var centres = SessionStore.getCentres();
         var centreId = [];
@@ -26,12 +26,120 @@ define({
             },
             definition: {
                 title: "PAYMENT_INITIATION_SEARCH",
+                searchForm: [
+                    {
+                        "type": "section",
+                        items: [
+                            { 
+                            key: "paymentDate", 
+                            title: "PAYMENT_DATE",
+                            type:"date"
+                            },
+                            { 
+                            key: "paymentId", 
+                            title: "PAYMENT_ID",
+                            },
+                            { 
+                            key: "debitAccountName", 
+                            title: "DEBIT_ACCOUNT_NAME",
+                            type:"lov",
+                            lovonly:true,
+                            searchHelper: formHelper,
+                                search: function(inputModel, form, model) {
+									return Queries.getBankAccounts();
+                                },
+                                getListDisplayItem: function(item, index) {
+                                    return [
+					item.bank_name,
+					item.branch_name,
+					item.account_number
+                                    ];
+                                },
+                                onSelect: function(result, model, context) {									
+                                    model.debitAccountName = result.bank_name
+                                }							
+                            },
+                            { 
+                            key: "transactionType", 
+                            title: "PAYMENT_TYPE",
+                            type:"select",
+                            enumCode:"payment_type"
+                            },
+                            { 
+                            key: "modeOfPayment", 
+                            title: "PAYMENT_MODE",
+                            type:"select",
+                            enumCode:"mode_of_payment"
+                            }, 
+                            { 
+                            key: "paymentPurpose", 
+                            title: "PAYMENT_PURPOSE",
+                            type:"select",
+                            enumCode:"payment_purpose"
+                            },
+                            { 
+                            key: "beneficiaryName", 
+                            title: "BENEFICIARY_NAME",
+                            },
+
+                        ]
+                    }
+				],
+				autoSearch: true,
+				searchSchema: {
+					"type": 'object',
+					"title": 'SearchOptions',
+					"properties": {
+						"paymentDate": {
+							"title": "PAYMENT_DATE",
+							"type": "string",
+						},
+						"paymentId": {
+							"title": "PAYMENT_ID",
+							"type": "string"
+						},
+						"debitAccountName": {
+							"title": "DEBIT_ACCOUNT_NAME",							
+                            "type": "string"							
+						},
+						"modeOfPayment": {
+							"title": "PAYMENT_TYPE",
+							"type": ["string", "null"]
+						},
+						"transactionType": {
+							"title": "PAYMENT_MODE",
+							"type": ["string", "null"]
+						},
+						"paymentPurpose": {
+							"title": "PAYMENT_PURPOSE",
+							"type": ["string", "null"]
+						},
+						"beneficiaryName": {
+							"title": "BENEFICIARY_NAME",
+							"type": "string"
+						}
+					}
+				},
 
                 getSearchFormHelper: function() {
                     return formHelper;
                 },
                 getResultsPromise: function(searchOptions, pageOpts) {
-                    return PaymentInitiationSearch.getSchema().$promise;
+                   
+                    var promise = Payment.search({
+                        'paymentDate': searchOptions.paymentDate,
+                        'paymentId': searchOptions.paymentId,
+			'debitAccountName': searchOptions.debitAccountName,
+			'paymentMode': searchOptions.transactionType,
+                        'paymentType': searchOptions.modeOfPayment,						
+			'paymentPurpose': searchOptions.paymentPurpose,
+			'beneficiaryName': searchOptions.beneficiaryName,
+                        'currentStage':"PaymentInitiation",
+                    }).$promise;
+
+                   
+                    return promise;
+                        
                 },
                 paginationOptions: {
                     "getItemsPerPage": function(response, headers) {
@@ -53,7 +161,7 @@ define({
                         return [];
                     },
                     getListItem: function(item) {
-                        return [item.payment_id, item.account_name, item.type];
+                        return [item.id, item.debitAccountName, item.transactionType, item.paymentDate, item.modeOfPayment, item.paymentPurpose, item.beneficiaryName];
                     },
                     getTableConfig: function() {
                         return {
@@ -63,16 +171,28 @@ define({
                         };
                     },
                     getColumns: function() {
-                        return [{
+                        return [{   
                             title: 'PAYMENT_ID',
-                            data: 'payment_id'
+                            data: 'id'
                         }, {
                             title: 'DEBIT_ACCOUNT_NAME',
-                            data: 'account_name'
+                            data: 'debitAccountName'
                         },{
                             title: 'PAYMENT_TYPE',
-                            data: 'type'
-                        }];
+                            data: 'modeOfPayment'
+                        }, {
+                            title: 'PAYMENT_MODE',
+                            data: 'transactionType'
+                        }, {
+                            title: 'PAYMENT_DATE',
+                            data: 'paymentDate'
+                        }, {
+                            title: 'BENEFICIARY_NAME',
+                            data: 'beneficiaryName'
+                        }, {
+                            title: 'PAYMENT_PURPOSE',
+                            data: 'paymentPurpose'
+                        },];
                     },
                     getActions: function() {
                         return [{
@@ -80,10 +200,9 @@ define({
                             desc: "",
                             icon: "fa fa-user",
                             fn: function(item, index){
-                                console.log(item);
                                 $state.go("Page.Engine", {
                                     pageName: "payment.PaymentInitiation",
-                                    pageId: item.payment_id,
+                                    pageId: item.id,
                                     pageData: item
                                 });
                             },

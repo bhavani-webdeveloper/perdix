@@ -192,7 +192,7 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                                             "orderNo": 140
                                         },
                                         "print": {                                         
-                                        "condition": 'model.journal.journalEntryDto.currentStage == "Completed" && (model.journal.journalEntryDto.transactionType == "Payment" || model.journal.journalEntryDto.transactionType == "Payment - Account")',
+                                        "condition": 'model.journal.journalEntryDto.currentStage == ("Completed") && model.journal.journalEntryDto.transactionType == ("Expenses")',
                                         "type": "button",
                                         "title": "PRINT VOUCHER",
                                         "onClick": "actions.printPDF(model, formCtrl, form, $event)"

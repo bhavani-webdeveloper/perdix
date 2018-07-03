@@ -25,6 +25,19 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                     "DebitAccountDetails":{
                         "orderNo":30
                     },
+
+                    "PaymentDetails.fileId":{
+
+                        "condition":"model.payment.modeOfPayment == 'CHEQUE'"  
+                    },
+                    "PaymentDetails.transactionType":{
+
+                        "readonly":true
+                    },
+                    "PaymentDetails.paymentDate":{
+
+                        "readonly":true
+                    },
                     "BeneficiaryDetails.beneficiaryName": {
                         "orderNo":1
                     },
@@ -44,10 +57,12 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                         "orderNo":60
                     },
                     "BeneficiaryDetails.beneficiaryBankName":{
-                        "orderNo":80
+                        "orderNo":80,
+                        "readonly":true
                     },
                     "BeneficiaryDetails.beneficiaryBankBranch":{
-                        "orderNo":90
+                        "orderNo":90,
+                        "readonly":true
                     },
                     "BeneficiaryDetails.beneficiaryTransactionParticulars":{
                         "orderNo":100
@@ -55,8 +70,17 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                     "BeneficiaryDetails.beneficiaryTransactionRemarks":{
                         "orderNo":110
                     },
+
+                    "DebitAccountDetails.debitMobileNumber":{
+                        "readonly":true
+                    },
+
+                    "DebitAccountDetails.debitAccountNumber":{
+                        "readonly":true
+                    },
                     "PaymentDetails.accountNumber":{
-                        "resolver": "LoanAccountsLOVConfiguration"                      
+                        "resolver": "LoanAccountsLOVConfiguration" ,
+                        "condition":"model.payment.paymentPurpose == 'Loan Disbursement'"                    
                     },
                     "DebitAccountDetails.debitAccountName":{
                         "resolver": "PaymentBankAccountsLOVConfiguration"
@@ -68,6 +92,7 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                     "BeneficiaryDetails.beneficiaryName":{
                         "type": "lov",
                         "resolver": "CustomerBankAccountsLOVConfiguration"                       
+                       
                        
                     }
                     
@@ -111,7 +136,8 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                 
                     var self = this;
 
-                    PageHelper.showLoader();                  
+                    PageHelper.showLoader();   
+                                   
                     var pLoadInit;
                     if (!_.hasIn($stateParams, 'pageId') || _.isNull($stateParams.pageId)) {
                         var obs = PaymentProcess.create();
@@ -119,6 +145,10 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                         obs.subscribe(function(res) {                            
                             model.PaymentProcess = res;
                             model.payment = res.payment;
+
+                    model.payment.paymentDate = new Date();
+                    model.payment.transactionType = "Manual";
+
                         })
                     } else {
                         var obs = PaymentProcess.get($stateParams.pageId);
@@ -138,6 +168,7 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                             "additions": [
                             {
                                 "type": "actionbox",
+                                "condition": "model.payment.id",
                                 "orderNo": 1000,
                                 "items": [
                                     {
@@ -242,6 +273,15 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                 actions: {
                     save: function(model, formCtrl, form, $event) {
                         PageHelper.clearErrors();
+                        if(PageHelper.isFormInvalid(formCtrl)) {
+                            return false;
+                        }
+                        formCtrl.scope.$broadcast('schemaFormValidate');
+
+                        if (formCtrl && formCtrl.$invalid) {
+                            PageHelper.showProgress("payment", "Your form have errors. Please fix them.", 5000);
+                            return false;
+                        }
                         PageHelper.showLoader();
                         model.PaymentProcess.save()
                             .finally(function () {
@@ -260,8 +300,16 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                     },
                     submit: function(model, formCtrl, form, $event) {
                         PageHelper.clearErrors();
-                        PageHelper.showLoader();
+                        if(PageHelper.isFormInvalid(formCtrl)) {
+                            return false;
+                        }
+                        formCtrl.scope.$broadcast('schemaFormValidate');
 
+                        if (formCtrl && formCtrl.$invalid) {
+                            PageHelper.showProgress("payment", "Your form have errors. Please fix them.", 5000);
+                            return false;
+                        }
+                        PageHelper.showLoader();
                         model.PaymentProcess.submit()
                             .finally(function () {
                                 PageHelper.hideLoader();
@@ -301,7 +349,7 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                                 .subscribe(function(value) {
                                     PageHelper.showProgress('payment', 'payment Proceed.', 5000);
                                     PageHelper.clearErrors();
-                                    irfNavigator.goBack();
+                                    $state.go("Page.PaymentDashboard");
                                 }, function(err) {
                                     PageHelper.showProgress('payment', 'Oops. Some error.', 5000);
                                     PageHelper.showErrors(err);

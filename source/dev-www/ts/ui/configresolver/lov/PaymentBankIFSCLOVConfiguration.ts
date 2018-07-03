@@ -5,8 +5,8 @@ import {EnrolmentProcess} from '../../../domain/model/customer/EnrolmentProcess'
 import * as _ from 'lodash';
 export class PaymentBankIFSCLOVConfiguration extends LOVElementConfiguration {
     outputMap: Object = {
-        "bankName": "payment.beneficiaryBankBranch",
-        "branchName": "payment.beneficiaryBankName",
+        "branchName": "payment.beneficiaryBankBranch",
+        "bankName": "payment.beneficiaryBankName",
         "ifscCode": "payment.beneficiaryIfsc"
     };
 
@@ -45,10 +45,10 @@ export class PaymentBankIFSCLOVConfiguration extends LOVElementConfiguration {
        "ifscCode": {
             "key": "payment.beneficiaryIfsc"
         },
-        "branchName": {
+        "bankName": {
             "key": "payment.beneficiaryBankName"
         },
-        "bankName": {
+        "branchName": {
             "key": "payment.beneficiaryBankBranch"
         }
     };

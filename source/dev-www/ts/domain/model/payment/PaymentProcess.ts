@@ -55,8 +55,8 @@ export class PaymentProcess {
         return Observable.concat(obs1, obs2, obs3).last();
     }
 
-    sendBack(stage: string): any {    	
-        this.stage = stage;
+    sendBack(): any {    	
+        this.stage = "PaymentInitiation";
         this.paymentsAction = "PROCEED";
         let pmBeforeUpdate: PolicyManager<PaymentProcess> = new PolicyManager(this, PaymentPolicyFactory.getInstance(), 'beforeSendBack', PaymentProcess.getProcessConfig());
         let obs1 = pmBeforeUpdate.applyPolicies();

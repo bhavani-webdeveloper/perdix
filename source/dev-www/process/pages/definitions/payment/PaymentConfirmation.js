@@ -20,24 +20,7 @@ define([], function() {
                         "orderNo": 10,
                     },
                     "UploadPaymentConfirmation.debitAccount":{
-                        "required": true,
-                        "type": "lov",
-                        lovonly: true,
-                        searchHelper: formHelper,
-                        search: function(inputModel, form, model) {
-                            return $q.resolve({
-                                headers: {
-                                    "x-total-count": [].length
-                                },
-                                body: []
-                            });
-                        },
-                        getListDisplayItem: function(item, index) {
-                            return [];
-                        },
-                        onSelect: function(result, model, context) {
-                            
-                        }
+                        "resolver": "PaymentBankAccountsLOVConfiguration"
                     },
                 }
             } 
@@ -90,8 +73,25 @@ define([], function() {
                 offline: false,
                 getOfflineDisplayItem: function(item, index) {},
                 form: [],
-                schema: function() {
-                    return Enrollment.getSchema().$promise;
+                schema: {
+                    "$schema": "http://json-schema.org/draft-04/schema#",
+                    "type": "object",
+                    "properties": {
+                        "payment": {
+                            "type": "object",
+                            "required": [],
+                            "properties": {
+                                "debitAccountName": {
+                                    "title": "DEBIT_ACCOUNT_NAME",
+                                    "type": "string"
+                                },
+                                "debitAccountNumber": {
+                                    "title": "DEBIT_ACCOUNT_NO",
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
                 },
                 actions: {
                     save: function(model, formCtrl, form, $event) {

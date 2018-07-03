@@ -23,24 +23,7 @@ define([], function() {
                             "condition": "model.dispatch",
                     },
                     "CreateBatch.debitAccountName":{
-                        "required": true,
-                        "type": "lov",
-                        lovonly: true,
-                        searchHelper: formHelper,
-                        search: function(inputModel, form, model) {
-                            return $q.resolve({
-                                headers: {
-                                    "x-total-count": [].length
-                                },
-                                body: []
-                            });
-                        },
-                        getListDisplayItem: function(item, index) {
-                            return [];
-                        },
-                        onSelect: function(result, model, context) {
-                            
-                        }
+                        "resolver": "PaymentBankAccountsLOVConfiguration"
                     },
                 }
             } 
@@ -48,12 +31,12 @@ define([], function() {
                 return [                  
                     "CreateBatch",
                     "CreateBatch.paymentDate",
-                    "CreateBatch.branchName",
+                    "CreateBatch.beneficiaryBankBranch",
                     "CreateBatch.spokeName",
                     "CreateBatch.debitAccountName",
                     "CreateBatch.beneficiaryName",
                     "CreateBatch.paymentType",
-                    "CreateBatch.modeOfPayment",
+                    "CreateBatch.paymentMode",
                     "CreateBatch.paymentPurpose",
                     "CreateBatch.beneficiaryAccountName",
                     "CreateBatch.submit",
@@ -110,8 +93,25 @@ define([], function() {
                 offline: false,
                 getOfflineDisplayItem: function(item, index) {},
                 form: [],
-                schema: function() {
-                    return Enrollment.getSchema().$promise;
+                schema: {
+                    "$schema": "http://json-schema.org/draft-04/schema#",
+                    "type": "object",
+                    "properties": {
+                        "payment": {
+                            "type": "object",
+                            "required": [],
+                            "properties": {
+                                "debitAccountName": {
+                                    "title": "DEBIT_ACCOUNT_NAME",
+                                    "type": "string"
+                                },
+                                "debitAccountNumber": {
+                                    "title": "DEBIT_ACCOUNT_NO",
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
                 },
                 actions: {
                     submit: function(model, formCtrl, form, $event) {
