@@ -13,12 +13,27 @@ irf.pageCollection.controller(irf.controller("MutualFund.MutualFundEKYC"), ["$lo
 
             if (!data.aadhaarNo) {
                 PageHelper.setError({
-                    "error": "Customer does not have aadhar number. eKYC is not possible"
+                    "message": "Customer does not have aadhar number. eKYC is not possible"
                 });
                 return;
             }
+            var kyc_data = [
+                data.panNo || "PANEXEMPT",
+                data.email || '',
+                data.mobilePhone || '',
+                'KGFS', // APP_ID
+                'UECH_IFMR', // USER_ID
+                'IF@mr123', // PASSWORD
+                'P', // INTERMEDIARY_ID
+                'MFKYC3', // RETURN_DATA_STRU
+                '', // Sess_id
+                '' // Devicetype (Mandatory for Biometric)
+            ];
+            
             document.getElementById("Aadhar").value = data.aadhaarNo;
-            document.getElementById("kyc_data").value = (data.panNo ? data.panNo : "PANEXEMPT") + "|" + data.mobilePhone + "|" + (data.email || '');
+            document.getElementById("ekyctype").value = 'I';
+            document.getElementById("kyc_data").value = kyc_data.join('|');
+            document.getElementById("url").value = irf.MANAGEMENT_BASE_URL + '/camsResponse.php';
 
             document.getElementById('ekycForm').action = irf.CAMS_EKYC_INTEG_URL;
             document.getElementById('ekycForm').submit();
