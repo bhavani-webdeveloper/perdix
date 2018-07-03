@@ -6,12 +6,14 @@
             "modeOfPayment": {
                 "key": "payment.modeOfPayment",
                 "type": "select",
+                "required":true,
                 "title": "PAYMENT_TYPE",
                 "enumCode": "payment_type"
             },
             "amount": {
                 "key": "payment.amount",
                 "type": "number",
+                "required":true,
                 "title": "PAYMENT_AMOUNT"
             },
             "fileId": {
@@ -25,24 +27,28 @@
             "paymentPurpose": {
                 "key": "payment.paymentPurpose",
                 "type": "select",
+                "required":true,
                 "title": "PAYMENT_PURPOSE",
                 "enumCode": "payment_purpose"
             },
             "accountNumber": {
                 "key": "payment.accountNumber",
                 "type": "lov",
+                "required":true,
                 "lovonly": true,
                 "title": "LOAN_ACCOUNT"
             },
             "transactionType": {
                 "key": "payment.transactionType",
                 "type": "select",
+                "required":true,
                 "title": "PAYMENT_MODE",
                 "enumCode": "mode_of_payment"
             },
             "paymentDate": {
                 "key": "payment.paymentDate",
                 "type": "date",
+                "required":true,
                 "title": "PAYMENT_DATE"
             }
         }
@@ -60,6 +66,7 @@
             "beneficiaryAccountName": {
                 "key": "payment.beneficiaryAccountName",
                 "type": "string",
+                "required":true,
                 "title": "BENEFICIARY_ACCOUNT_NAME"
             },
             "beneficiaryEmailId": {
@@ -74,27 +81,31 @@
             },
             "creditAccountNo": {
                 "key": "payment.beneficiaryAccountNumber",
-                "type": "number",
+                "type": "string",
+                "required":true,
                 "title": "CREDIT_ACCOUNT_NO"
             },
             "confirmAccountNo": {
-                "key": "payment.beneficiaryAccountNumber",
-                "type": "number",
+                "key": "payment.beneficiaryConfirmAccountNumber",
+                "type": "string",
                 "title": "CONFIRM_ACCOUNT_NO"
             },
             "beneficiaryIfsc": {
                 "key": "payment.beneficiaryIfsc",
                 "type": "lov",
+                "required":true,
                 "title": "BANK_IFSC"
             },
             "beneficiaryBankName": {
                 "key": "payment.beneficiaryBankName",
                 "type": "string",
+                "required":true,
                 "title": "BANK_NAME"
             },
             "beneficiaryBankBranch": {
                 "key": "payment.beneficiaryBankBranch",
                 "type": "string",
+                "required":true,
                 "title": "BRANCH_NAME"
             },
             "beneficiaryTransactionParticulars": {
@@ -155,22 +166,30 @@
                 "type": "string",
                 "title": "BRANCH_NAME"
             },
-            "centreId": {
-                "key": "payment.centreId",
+            "spokeName": {
+                "key": "payment.spokeName",
                 "type": "string",
                 "title": "SPOKE_NAME"
             },
             "debitAccountName": {
                 "key": "payment.debitAccountName",
                 "type": "lov",
+                "required":true,
                 "lovonly": true,
                 "title": "DEBIT_ACCOUNT_NAME"
             },
-            "modeOfPayment": {
-                "key": "payment.modeOfPayment",
+            "paymentMode": {
+                "key": "payment.paymentMode",
                 "type": "select",
                 "title": "PAYMENT_TYPE",
                 "enumCode": "payment_type"
+            },
+            "paymentType": {
+                "key": "payment.paymentType",
+                "type": "select",
+                "required":true,
+                "title": "PAYMENT_MODE",
+                "enumCode": "mode_of_payment"
             },
             "paymentPurpose": {
                 "key": "payment.paymentPurpose",
@@ -185,7 +204,7 @@
             }
 
         }
-    },                
+    },
     "BatchSummary": {
         "type": "box",
         "title": "BATCH_SUMMARY",
@@ -227,23 +246,63 @@
         "title": "POST_REVIEW_DECISION",
         "orderNo": 40,
         "items": {
-            "status": {
+            "status":{
                 "key": "payment.status",
                 "type": "radios",
                 "titleMap": {
-                    "1": "Proceed",
-                    "Reject": "Reject",
-                    "Send Back": "Send Back"
+                    "PROCEED": "PROCEED",
+                    "REJECT": "REJECT",
+                    "SEND_BACK": "SEND_BACK"
                     }
+                },
+            "rejectsectionremarks":{
+                    "title": "REMARKS",
+                    "key": "review.remarks",
+                    "type": "textarea",
+                    "required": true
+                },
+            "rejectsectionbutton":{
+                    "key": "review.rejectButton",
+                    "type": "button",
+                    "title": "REJECT",
+                    "required": true,
+                    "onClick": "actions.reject(model, formCtrl, form, $event)"
+                },
+            "sendbacksectionremarks":
+                {
+                "title": "REMARKS",
+                "key": "review.remarks",
+                "type": "textarea",
+                "required": true
+                },
+            "sendbacksectionbutton": {
+                "key": "review.sendBackButton",
+                "type": "button",
+                "title": "SEND_BACK",
+                "onClick": "actions.sendBack(model, formCtrl, form, $event)"
+                 },
+        "proceedsectionremarks": {
+
+                "title": "REMARKS",
+                "key": "review.remarks",
+                "type": "textarea",
+                "required": true
+            },
+            "proceedsectionbutton": {
+                "key": "review.proceedButton",
+                "type": "button",
+                "title": "PROCEED",
+                "onClick": "actions.proceed(model, formCtrl, form, $event)"
             }
         }
+
     },
     "UploadPaymentConfirmation": {
         "type": "box",
         "title": "UPLOAD_PAYMENT_CONFIRMATION",
         "items": {
             "debitAccount": {
-                "key": "payment.debitAccount",
+                "key": "payment.debitAccountName",
                 "type": "lov",
                 "lovonly": true,
                 "title": "DEBIT_ACCOUNT"
@@ -257,5 +316,5 @@
                 "fileType": "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
             }
         }
-    }    
+    }
 }
