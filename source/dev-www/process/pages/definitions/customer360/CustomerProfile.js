@@ -316,7 +316,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                     title: "PREFERRED_LANGUAGE",
                                     type: "select",
                                     enumCode: "language"
-                                },
+                                },                                
                                 {
                                     key: "customer.fatherFirstName",
                                     title: "FATHER_FULL_NAME"
@@ -357,6 +357,16 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                             model.customer.spouseAge = moment().diff(moment(model.customer.spouseDateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                                         }
                                     }
+                                },
+                                {
+                                    key:"customer.organisation",
+                                    type:"string",
+                                    condition:"model.siteCode == 'IFMRCapital'"                                  
+                                },
+                                {
+                                    key:"customer.designation",
+                                    type:"string",
+                                    condition:"model.siteCode == 'IFMRCapital'"                                  
                                 },
                             ]
             },

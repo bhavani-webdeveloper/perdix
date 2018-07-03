@@ -387,6 +387,18 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         required: true
                     },*/
                     {
+                        key: "customer.enterprise.creditRating",
+                        title: "CREDIT_RATING",
+                        type: "number",
+                        condition:"model.siteCode == 'IFMRCapital'"                         
+                    }, 
+                    {
+                        key: "customer.enterprise.ratingAgency",
+                        title: "RATING_AGENCY",
+                        type: "number",
+                        condition:"model.siteCode == 'IFMRCapital'"                         
+                    },  
+                    {
                         key: "customer.enterpriseCustomerRelations",
                         type: "array",
                         startEmpty: true,
@@ -449,6 +461,12 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                 title: "CUSTOMER_NAME"
                             },
                             {
+                                key: "customer.enterpriseCustomerRelations[].shareHoldingPercentage",
+                                title: "SHARE_HOLDING_PERCENTAGE",
+                                type: "number",
+                                condition:"model.siteCode == 'IFMRCapital'"                         
+                            },
+                            {
                                 key: "customer.enterpriseCustomerRelations[].experienceInBusiness",
                                 title: "EXPERIENCE_IN_BUSINESS",
                                 type:"select",
@@ -499,6 +517,10 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         "key": "customer.landLineNo",
                         "inputmode": "number",
                         "numberType": "tel"
+                    },
+                    {
+                         "key": "customer.email",
+                         condition:"model.siteCode == 'IFMRCapital'" 
                     },
                     "customer.doorNo",
                     "customer.street",

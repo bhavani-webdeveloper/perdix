@@ -148,10 +148,25 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                 {
                     key:"customer.religion",
                     type:"select"
+                },               
+                {
+                    key:"customer.organisation",
+                    type:"string",
+                    condition:"model.siteCode == 'IFMRCapital'"                                  
+                },
+                {
+                    key:"customer.designation",
+                    type:"string",
+                    condition:"model.siteCode == 'IFMRCapital'"                                  
                 },
                 {
                     key: "customer.fatherFirstName",
                     title: "FATHER_FULL_NAME"
+                },
+                {
+                    key: "customer.motherName",
+                    title: "MOTHER_NAME",
+                    condition:"model.siteCode == 'IFMRCapital'"
                 },
                 {
                     key:"customer.maritalStatus",
@@ -212,6 +227,10 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
             "items": [
                 "customer.mobilePhone",
                 "customer.landLineNo",
+                {                   
+                    "key": "customer.email",
+                    condition:"model.siteCode == 'IFMRCapital'" 
+                },
                 {
                     type: "fieldset",
                     title: "CUSTOMER_RESIDENTIAL_ADDRESS",
