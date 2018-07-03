@@ -249,6 +249,10 @@ define(["perdix/domain/model/loan/LoanProcess",
 
                             }
                         },
+                        "applicant-updated": function(pageObj, bundlePageObj, obj){
+                            /* Update other pages */
+                            BundleManager.broadcastEvent("applicant-updated", obj);
+                        },
                         "enrolment-removed": function(pageObj, bundlePageObj, enrolmentDetails){
                             if (enrolmentDetails.customerId){
                                 BundleManager.broadcastEvent('remove-customer-relation', enrolmentDetails);
