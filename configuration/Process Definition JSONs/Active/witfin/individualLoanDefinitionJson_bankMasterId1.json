@@ -3718,6 +3718,38 @@
               "LoanInitiation"
             ]
           },
+          "assetDetails":{
+              "title":"assetDetails",
+              "type":"string",
+              "minLength":1,
+              "maxLength":100,
+              "captureStages":[
+                "Screening",
+                "VehicleValuation",
+                "FieldInvestigation1",
+                "FieldInvestigation2",
+                "FieldInvestigation3",
+                "TeleVerification",
+                "CreditAppraisal",
+                "LoanInitiation"
+              ]
+           },
+        "assetSubDetails":{
+              "title":"assetSubDetails",
+              "type":"string",
+              "minLength":1,
+              "maxLength":100,
+              "captureStages":[
+                "Screening",
+                "VehicleValuation",
+                "FieldInvestigation1",
+                "FieldInvestigation2",
+                "FieldInvestigation3",
+                "TeleVerification",
+                "CreditAppraisal",
+                "LoanInitiation"
+              ]
+           },
           "odometerReading": {
             "title": "odometerReading",
             "type": "number",
