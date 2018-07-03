@@ -50,18 +50,23 @@ try {
     connection.query("INSERT INTO all_labels_for_translations VALUES ?", [labelCodes], e => {if (e) throw e});
     connection.query("SELECT label_code, path FROM all_labels_for_translations where label_code NOT IN (SELECT label_code FROM translations)", (e, results) => {
         if (e) throw e;
+        var missingLabelsFilename = "missing_labels_" + connectionUrl.match(/@(.+)\//)[1] + ".txt";
+        var missingLabelsTitle = "Missing labels for " + connectionUrl.match(/@(.+)\//)[1];
         if (skipFilenames) {
-            fs.writeFileSync("MissingLabels.txt", results.map(i => i.label_code).join("\n"));
+            var missingLabels = missingLabelsTitle + "\n==========================================\n\n";
+            missingLabels += results.map(i => i.label_code).join("\n");
+            fs.writeFileSync(missingLabelsFilename, missingLabels);
         } else {
             var pageWise = results.reduce((map, i) => {map[i.path] = map[i.path] || []; map[i.path].push(i.label_code); return map}, {});
-            var missingLabels = "MISsing LABels\n==============";
+            var missingLabels = missingLabelsTitle + "\n==========================================";
             for (i in pageWise) {
                 if (pageWise.hasOwnProperty(i)) {
                     missingLabels += "\n\n" + i + "\n\t" + pageWise[i].join("\n\t");
                 }
             }
-            fs.writeFileSync("MissingLabels.txt", missingLabels);
+            fs.writeFileSync(missingLabelsFilename, missingLabels);
         }
+        console.log(missingLabelsFilename);
     });
 } finally {
     connection.end();
