@@ -109,15 +109,15 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                                                 model._transAuth.penalInterestWaiverAmount = 0;
                                             }
                                         }
+                                        
+                                        if(amountAvailable > 0 && model.EMIAllocation){
+                                            model._transAuth.bookedNotDuePenalInterest = Utils.roundToDecimal(Math.min(amountAvailable, model.loanCollection.bookedNotDuePenalInterest));
+                                            amountAvailable = Utils.roundToDecimal(amountAvailable - model._transAuth.bookedNotDuePenalInterest);
+                                        }
                                         /* Allocating Fee */
                                         if (amountAvailable > 0) {
                                             model._transAuth.feeAmount = Utils.roundToDecimal(Math.min(amountAvailable, model._transAuth.feeDue));
                                             amountAvailable = Utils.roundToDecimal(amountAvailable - model._transAuth.feeAmount);
-                                        }
-
-                                        if(amountAvailable > 0 && model.EMIAllocation){
-                                            model._transAuth.bookedNotDuePenalInterest = Utils.roundToDecimal(Math.min(amountAvailable, model.loanCollection.bookedNotDuePenalInterest));
-                                            amountAvailable = Utils.roundToDecimal(amountAvailable - model._transAuth.bookedNotDuePenalInterest);
                                         }
                                         /* Allocating Future Principal */
                                         if (amountAvailable > 0) {
