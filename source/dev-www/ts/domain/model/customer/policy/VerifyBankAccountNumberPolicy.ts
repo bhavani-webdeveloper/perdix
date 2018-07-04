@@ -31,16 +31,29 @@ export class VerifyBankAccountNumberPolicy extends IPolicy<EnrolmentProcess> {
     }
 
     run(enrolmentProcess: EnrolmentProcess): Observable<EnrolmentProcess> {
-
-        if(_.hasIn(enrolmentProcess.customer,"enterprise") && enrolmentProcess.customer.enterprise.enterpriseType.toUpperCase() == 'ENTERPRISE' && _.hasIn(enrolmentProcess.customer, "customerBankAccounts") && _.isArray(enrolmentProcess.customer.customerBankAccounts) && enrolmentProcess.customer.customerBankAccounts.length > 0) {
-            for (let i=0;i<enrolmentProcess.customer.customerBankAccounts.length;i++) {
-                 var banckAccount = enrolmentProcess.customer.customerBankAccounts[i];
-                 if (banckAccount.accountNumber != banckAccount.confirmedAccountNumber) {
-                     console.log("Account Number and Confirmed Account Number must be same");
-                    return Observable.throw(new ValidationError("Account Number and Confirmed Account Number must be same"));
+        if (_.hasIn(enrolmentProcess.customer, "customerType") && enrolmentProcess.customer.customerType.toLowerCase() == 'enterprise') {
+             if(_.hasIn(enrolmentProcess.customer, "customerBankAccounts") && _.isArray(enrolmentProcess.customer.customerBankAccounts) && enrolmentProcess.customer.customerBankAccounts.length > 0 && _.hasIn(enrolmentProcess.customer, "enterprise") && _.hasIn(enrolmentProcess.customer.enterprise, "enterpriseType") && enrolmentProcess.customer.enterprise.enterpriseType.toUpperCase() == "ENTERPRISE") {
+                for (let i=0;i<enrolmentProcess.customer.customerBankAccounts.length;i++) {
+                     var banckAccount = enrolmentProcess.customer.customerBankAccounts[i];
+                     if (banckAccount.accountNumber != banckAccount.confirmedAccountNumber) {
+                        console.log("Account Number and Confirmed Account Number must be same");
+                        return Observable.throw(new ValidationError("Account Number and Confirmed Account Number must be same"));
+                    }
                 }
             }
         }
+        else if (_.hasIn(enrolmentProcess.customer, "customerType") && enrolmentProcess.customer.customerType.toLowerCase() == 'individual') {
+           if(_.hasIn(enrolmentProcess.customer, "customerBankAccounts") && _.isArray(enrolmentProcess.customer.customerBankAccounts) && enrolmentProcess.customer.customerBankAccounts.length > 0) {
+                for (let i=0;i<enrolmentProcess.customer.customerBankAccounts.length;i++) {
+                     var banckAccount = enrolmentProcess.customer.customerBankAccounts[i];
+                     if (banckAccount.accountNumber != banckAccount.confirmedAccountNumber) {
+                         console.log("Account Number and Confirmed Account Number must be same");
+                         return Observable.throw(new ValidationError("Account Number and Confirmed Account Number must be same"));
+                    }
+                }
+            } 
+        }
+
         return Observable.of(enrolmentProcess);
     }
 }

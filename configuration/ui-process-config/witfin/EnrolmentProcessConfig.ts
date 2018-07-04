@@ -15,20 +15,9 @@ let config = {
                         "name":"EnrolmentDerivedPolicy",
                         "arguments": {}
                     }
-                ],
-                "overrides": [
-                    {
-                         "type": "expr",
-                         "expr": "this.currentStage == 'FieldInvestigation1' || this.currentStage == 'FieldInvestigation2' || this.currentStage == 'FieldInvestigation3'",
-                         "add": [
-                             {
-                                 "name": "VerifyIndividualReferencePolicy",
-                                 "arguments": {}
-                             }
-                        ]   
-                    }
                 ]
             },
+
             beforeProceed: {
                 "defaults": [
                     {
@@ -38,21 +27,14 @@ let config = {
                     {
                         "name": "VerifyBankAccountNumberPolicy",
                         "arguments": null
-                    }
-                ],
-                "overrides": [
+                    },
                     {
-                         "type": "expr",
-                         "expr": "this.currentStage == 'FieldInvestigation1' || this.currentStage == 'FieldInvestigation2' || this.currentStage == 'FieldInvestigation3'",
-                         "add": [
-                             {
-                                 "name": "VerifyIndividualReferencePolicy",
-                                 "arguments": {}
-                             }
-                        ]   
+                        "name": "VerifyTrackDetailsPolicy",
+                        "arguments": null
                     }
                 ]
             },
+
             beforeSave: {
                 "defaults": [
                     {
@@ -62,21 +44,14 @@ let config = {
                     {
                         "name": "VerifyBankAccountNumberPolicy",
                         "arguments": null
-                    }
-                ],
-                "overrides": [
+                    },
                     {
-                         "type": "expr",
-                         "expr": "this.currentStage == 'FieldInvestigation1' || this.currentStage == 'FieldInvestigation2' || this.currentStage == 'FieldInvestigation3'",
-                         "add": [
-                             {
-                                 "name": "VerifyIndividualReferencePolicy",
-                                 "arguments": {}
-                             }
-                        ]   
+                        "name": "VerifyTrackDetailsPolicy",
+                        "arguments": null
                     }
                 ]
-            },
+            }
+
         },
 
         'command': {
