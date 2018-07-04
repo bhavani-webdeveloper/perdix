@@ -323,12 +323,12 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "tr
                 "key": "issueGroupType",
                 "type": "radios",
                 "titleMap": [{
-                    "name": "File View",
-                    "value": "SAMPLE",
-                }, {
                     "name": "Process View",
                     "value": "PROCESS"
-                }, {
+                },{
+                    "name": "File View",
+                    "value": "SAMPLE",
+                },{
                     "name": "Risk Classification View",
                     "value": "RISK"
                 }],

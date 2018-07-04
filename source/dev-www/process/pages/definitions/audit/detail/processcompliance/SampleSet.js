@@ -81,18 +81,6 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleSet"),
                             },
                             getActions: function() {
                                 return [{
-                                    name: "SKIP_SAMPLE",
-                                    fn: function(item, index) {
-                                        item.status = "2";
-                                        delete item.issue_details;
-                                        if (model.$isOffline) {
-                                            Audit.offline.setProcessCompliance(auditId, model.processCompliance);
-                                        }
-                                    },
-                                    isApplicable: function(item, index) {
-                                        return !$stateParams.pageData.readonly && item.status != "2";
-                                    }
-                                },{
                                     name: "NO_ISSUES",
                                     fn: function(item, index) {
                                         item.status = "1";
@@ -118,6 +106,20 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleSet"),
                                         return !$stateParams.pageData.readonly;
                                     }
                                 }, {
+                                    name: "SKIP_SAMPLE",
+                                    fn: function(item, index) {
+                                        Utils.confirm("Are you sure to delete the sample and issues captured?").then(function() {
+                                            item.status = "2";
+                                            delete item.issue_details;
+                                            if (model.$isOffline) {
+                                                Audit.offline.setProcessCompliance(auditId, model.processCompliance);
+                                            }
+                                        });                                        
+                                    },
+                                    isApplicable: function(item, index) {
+                                        return !$stateParams.pageData.readonly && item.status != "2";
+                                    }
+                                },{
                                     name: "DELETE_SAMPLE",
                                     fn: function(item, index) {
                                         Utils.confirm("Are you sure to delete the sample and issues captured?").then(function() {
