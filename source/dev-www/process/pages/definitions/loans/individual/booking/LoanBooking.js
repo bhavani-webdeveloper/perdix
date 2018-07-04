@@ -894,7 +894,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         }
                     }
 
-                    if (model.allowPreEmiInterest && model.siteCode == 'IREPDhan') {
+                    if (model.allowPreEmiInterest && model.siteCode == 'IREPDhan' ) {
                         var diffDay = 0;
                         var scheduleStartDate;
                         if(model.loanAccount.scheduleStartDate){
