@@ -1776,7 +1776,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 key: "loanAccount.collateral[].subRegistrarPincode",
                                 type: "lov",
                                 "title":"SUB_REGISTRAR_PINCODE",
-                                fieldType: "number",
                                 autolov: true,
                                 inputMap: {
                                     "subRegistrarPincode": {
@@ -1827,6 +1826,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                     ];
                                 },
                                 onSelect: function (result, model, context) {
+                                    model.loanAccount.collateral[context.arrayIndex].subRegistrarPincode = (new Number(result.pincode)).toString();                                
                                     $log.info(result);
                                 }
                             },
