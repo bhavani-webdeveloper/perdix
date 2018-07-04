@@ -60,9 +60,9 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 order:50
                             },
                             {
-                                pageName: 'witfin.customer.VehicleValuation',
-                                title: 'VEHICLE_VALUATION',
-                                pageClass: 'vehicle-valuation',
+                                pageName: 'witfin.loans.individual.screening.VehicleDetails',
+                                title: 'VEHICLE_DETAILS',
+                                pageClass: 'vehicle-details',
                                 minimum: 1,
                                 maximum: 1,
                                 order:55
@@ -71,6 +71,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 pageName: 'witfin.customer.VehicleValuation',
                                 title: 'VEHICLE_VALUATION',
                                 pageClass: 'vehicle-valuation',
+                                minimum: 1,
+                                maximum: 1,
+                                order:57
+                            },
+                            {
+                                pageName: 'loans.individual.screening.CBCheck',
+                                title: 'CB_CHECK',
+                                pageClass: 'cb-check',
                                 minimum: 1,
                                 maximum: 1,
                                 order:60
@@ -196,12 +204,19 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 });
 
                                 $this.bundlePages.push({
-                                    pageClass: 'business',
+                                    pageClass: 'vehicle-valuation',
                                     model: {
-                                        enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
                                         loanProcess: loanProcess
                                     }
                                 });
+                                
+                                $this.bundlePages.push({
+                                    pageClass: 'vehicle-details',
+                                    model: {
+                                        loanProcess: loanProcess
+                                    }
+                                });
+
 
                                 $this.bundlePages.push({
                                     pageClass: 'loan-request',
