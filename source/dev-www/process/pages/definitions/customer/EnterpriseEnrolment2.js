@@ -3862,9 +3862,10 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 });
             },
             submit: function(model, form, formName){
-                $log.info("Inside submit()");
+                $log.info("Inside submit()");                
                 $log.warn(model);
 
+                var DedupeEnabled = SessionStore.getGlobalSetting("DedupeEnabled") || 'N';
                 var sortFn = function(unordered){
                     var out = {};
                     Object.keys(unordered).sort().forEach(function(key) {
@@ -3956,10 +3957,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     model.customer = resp.customer;
                     if (model._bundlePageObj){
                         BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer});
-                        Dedupe.create({
-                            "customerId": model.customer.id,
-                            "status": "pending"
-                            }).$promise;
+                        if (DedupeEnabled == 'Y' && model.currentStage == "Screening") {
+                            Dedupe.create({
+                                "customerId": model.customer.id,
+                                "status": "pending"
+                            }).$promise;    
+                        }
                     }
                 }, function(httpRes){
                     PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);

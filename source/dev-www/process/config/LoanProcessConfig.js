@@ -32,11 +32,11 @@ define(["require", "exports"], function (require, exports) {
                             "arguments": {}
                         },
                         {
-                            "name": "DefaultCalculatedVehicleDetailsPolicy",
+                            "name": "DefaultVehicleDocumentsPolicy",
                             "arguments": {}
                         },
                         {
-                            "name": "DefaultVehicleDocumentsPolicy",
+                            "name": "DefaultCalculatedVehicleDetailsPolicy",
                             "arguments": {}
                         }
                     ],
@@ -54,20 +54,6 @@ define(["require", "exports"], function (require, exports) {
                                     "arguments": {}
                                 },
                             ]
-                        },
-                        {
-                            "type": "expr",
-                            "expr": "this.loanAccount.currentStage == 'Application'",
-                            "add": [
-                                {
-                                    "name": "DefaultIncomeTypePolicy",
-                                    "arguments": {}
-                                },
-                                {
-                                    "name": "DefaultExpensePolicy",
-                                    "arguments": {}
-                                }
-                            ]
                         }
                     ]
                 },
@@ -84,6 +70,16 @@ define(["require", "exports"], function (require, exports) {
                     ]
                 },
                 afterSave: {
+                    "defaults": [
+                        {
+                            "name": "DefaultCalculatedVehicleDetailsPolicy",
+                            "arguments": {}
+                        },
+                        {
+                            "name": "DefaultVehicleDocumentsPolicy",
+                            "arguments": {}
+                        }
+                    ],
                     "overrides": [
                         {
                             "type": "expr",
@@ -132,6 +128,18 @@ define(["require", "exports"], function (require, exports) {
                                         "postStage": "LoanInitiation"
                                     }
                                 }]
+                        }
+                    ]
+                },
+                afterProceed: {
+                    "defaults": [
+                        {
+                            "name": "DefaultCalculatedVehicleDetailsPolicy",
+                            "arguments": {}
+                        },
+                        {
+                            "name": "DefaultVehicleDocumentsPolicy",
+                            "arguments": {}
                         }
                     ]
                 }

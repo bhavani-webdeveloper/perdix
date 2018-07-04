@@ -3065,6 +3065,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),["$log", "$
             },
             save: function(model, formCtrl, form, $event){
 
+                var DedupeEnabled = SessionStore.getGlobalSetting("DedupeEnabled") || 'N';
                 formCtrl.scope.$broadcast('schemaFormValidate');
 
                 if (formCtrl && formCtrl.$invalid) {
@@ -3178,10 +3179,12 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),["$log", "$
                                 model.customer = res.customer;
                                 if (model._bundlePageObj){
                                     BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer});
-                                    Dedupe.create({
-                                        "customerId": model.customer.id,
-                                        "status": "pending"
-                                    }).$promise;
+                                    if (DedupeEnabled == 'Y' && model.currentStage == "Screening") {
+                                        Dedupe.create({
+                                            "customerId": model.customer.id,
+                                            "status": "pending"
+                                        }).$promise;    
+                                    }
                                 }
                             },
                             function(httpRes){

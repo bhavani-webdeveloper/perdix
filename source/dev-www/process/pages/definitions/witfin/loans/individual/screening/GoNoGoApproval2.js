@@ -61,6 +61,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 order:50
                             },
                             {
+                                pageName: 'witfin.loans.individual.screening.VehicleDetails',
+                                title: 'VEHICLE_DETAILS',
+                                pageClass: 'vehicle-details',
+                                minimum: 1,
+                                maximum: 1,
+                                order:55
+                            },
+                            {
                                 pageName: 'loans.individual.screening.CBCheck',
                                 title: 'CB_CHECK',
                                 pageClass: 'cb-check',

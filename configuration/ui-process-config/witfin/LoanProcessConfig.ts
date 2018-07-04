@@ -30,11 +30,11 @@ let config = {
                         "arguments": {}
                     },
                     {
-                        "name": "DefaultCalculatedVehicleDetailsPolicy",
+                        "name": "DefaultVehicleDocumentsPolicy",
                         "arguments": {}
                     },
                     {
-                        "name": "DefaultVehicleDocumentsPolicy",
+                        "name": "DefaultCalculatedVehicleDetailsPolicy",
                         "arguments": {}
                     }
                 ],
@@ -53,20 +53,6 @@ let config = {
                             },
 
                         ]
-                    },
-                    {
-                        "type": "expr",
-                        "expr": "this.loanAccount.currentStage == 'Application'",
-                        "add": [
-                            {
-                                "name": "DefaultIncomeTypePolicy",
-                                "arguments": {}
-                            },
-                            {
-                                "name": "DefaultExpensePolicy",
-                                "arguments": {}
-                            }
-                        ]
                     }
                 ]
             },
@@ -83,6 +69,16 @@ let config = {
                 ]
             },
             afterSave: {
+                "defaults": [
+                    {
+                        "name": "DefaultCalculatedVehicleDetailsPolicy",
+                        "arguments": {}
+                    },
+                    {
+                        "name": "DefaultVehicleDocumentsPolicy",
+                        "arguments": {}
+                    }
+                ],
                 "overrides": [
                     {
                         "type": "expr",
@@ -131,6 +127,18 @@ let config = {
                                 "postStage": "LoanInitiation"
                             }
                         }]
+                    }
+                ]
+            },
+            afterProceed: {
+                "defaults": [
+                    {
+                        "name": "DefaultCalculatedVehicleDetailsPolicy",
+                        "arguments": {}
+                    },
+                    {
+                        "name": "DefaultVehicleDocumentsPolicy",
+                        "arguments": {}
                     }
                 ]
             }
