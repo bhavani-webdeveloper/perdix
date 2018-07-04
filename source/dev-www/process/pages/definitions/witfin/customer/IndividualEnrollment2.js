@@ -46,6 +46,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             },
                             "excludes": [
                                 "EnterpriseReferences",
+                                "IndividualReferences",
                                 "PhysicalAssets",
                                 "ResidenceVerification"
                             ]
@@ -86,6 +87,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             },
                             "excludes": [
                                 "EnterpriseReferences",
+                                "IndividualReferences",
                                 "PhysicalAssets",
                                 "ResidenceVerification"
                             ]
@@ -123,6 +125,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             },
                             "excludes": [
                                 "EnterpriseReferences",
+                                "IndividualReferences",
                                 "PhysicalAssets",
                                 "ResidenceVerification"
                             ]
@@ -160,6 +163,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             },
                             "excludes": [
                                 "EnterpriseReferences",
+                                "IndividualReferences",
                                 "PhysicalAssets",
                                 "ResidenceVerification"
                             ]
@@ -213,7 +217,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
                             },
                             "excludes": [
-                                "ContactInformation.location"
+                                "ContactInformation.location",
                             ]
                         },
                         "CreditAppraisal": {
@@ -226,7 +230,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
                             },
                             "excludes": [
-                                "ContactInformation.location"
+                                "ContactInformation.location",
                             ]
                         },
                         "DeviationApproval1": {
@@ -270,7 +274,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
                             },
                             "excludes": [
-                                "ContactInformation.location"
+                                "ContactInformation.location",
                             ]
                         },
                         "DeviationApproval2": {
@@ -314,7 +318,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
                             },
                             "excludes": [
-                                "ContactInformation.location"
+                                "ContactInformation.location",
                             ]
                         },
                         "BusinessApproval1": {
@@ -402,7 +406,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
                             },
                             "excludes": [
-                                "ContactInformation.location"
+                                "ContactInformation.location",
+                                "IndividualReferences"
+                                // "IndividualReferences.verifications.ReferenceCheck"
                             ]
                         },
                         "BusinessApproval3": {
