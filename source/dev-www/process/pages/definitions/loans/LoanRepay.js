@@ -117,13 +117,13 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                         model.repayment.totalPayoffAmountToBePaid = Utils.roundToDecimal(data.payOffAndDueAmount + data.preclosureFee - data.securityDeposit);
                         model.repayment.totalSecurityDepositDue = Utils.roundToDecimal(data.totalSecurityDepositDue);
                         if (!_.isNull(pageData) && pageData.onlyDemandAllowed == true) {
-                            if(model.repayment.totalPenalInterestDue){
-                              model.repayment.amount = Utils.roundToDecimal(model.repayment.totalDemandDue) + Utils.roundToDecimal(model.repayment.totalPenalInterestDue);  
-                          }else{
-                             model.repayment.amount = Utils.roundToDecimal(model.repayment.totalDemandDue) + Utils.roundToDecimal(model.repayment.bookedNotDuePenalInterest); 
-                          }    
+                            
+                            if (model.repayment.totalPenalInterestDue) {
+                                model.repayment.totalDueWithPenal = Utils.roundToDecimal(model.repayment.totalDue) + Utils.roundToDecimal(model.repayment.totalPenalInterestDue);
+                            } else {
+                                model.repayment.totalDueWithPenal = Utils.roundToDecimal(model.repayment.totalDue) + Utils.roundToDecimal(model.repayment.bookedNotDuePenalInterest);
+                            }
                         }
-
                         //_pageGlobals.totalDemandDue = data.totalDemandDue;
 
                         irfProgressMessage.pop('loading-loan-details', 'Loaded.', 2000);
@@ -408,6 +408,13 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 readonly: true,
                                 title: "TOTAL_DUE",
                                 condition: "model.repayment.transactionName=='Scheduled Demand' || model.repayment.transactionName == 'Advance Repayment'",
+                                type: "amount"
+                            },
+                            {
+                                key: "repayment.totalDueWithPenal",
+                                readonly: true,
+                                title: "Total Due with Penal Interest",
+                                condition: "(model.repayment.transactionName=='Scheduled Demand' || model.repayment.transactionName == 'Advance Repayment') && model.repayment.totalDueWithPenal",
                                 type: "amount"
                             },
                             {
