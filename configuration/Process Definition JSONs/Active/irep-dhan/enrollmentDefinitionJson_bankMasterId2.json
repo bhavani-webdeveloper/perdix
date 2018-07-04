@@ -825,7 +825,7 @@
           "inCurrentAddressSince": {
             "title": "In Correct Address Since",
             "type": "string",
-            
+            "format": "date",
             "captureStages": [
               "BasicEnrolment",
               "Completed"
@@ -834,7 +834,7 @@
           "inCurrentAreaSince": {
             "title": "In Correct Area Since",
             "type": "string",
-            
+            "format": "date",
             "captureStages": [
               "BasicEnrolment",
               "Completed"
@@ -2530,16 +2530,6 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 1000,
-            "captureStages": [
-              "BasicEnrolment",
-              "Completed"
-            ]
-          },
-          "businessSignboardImage": {
-            "title": "businessSignboardImage",
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
               "Completed"

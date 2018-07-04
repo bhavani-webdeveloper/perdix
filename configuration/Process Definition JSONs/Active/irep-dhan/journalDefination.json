@@ -19,16 +19,6 @@
          "allowedRoles":[
             "WM"
          ]
-      },
-       {
-         "order": 3,
-         "code": "Rejected",
-         "name": "Rejected",
-         "stageType": "ACCOUNTINGPOSTING",
-         "journalPostingStage": "No",
-         "allowedRoles": [
-            "WM"
-         ]
       }
    ]
 }

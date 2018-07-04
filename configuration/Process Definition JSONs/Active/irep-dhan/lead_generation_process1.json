@@ -1,5 +1,4 @@
 {
-   "customerAppRequestStage": "Assignment Pending",
    "stages": [{
       "order": 1,
       "code": "Assignment Pending",
@@ -571,91 +570,7 @@
                      "ReadyForScreening"
                   ]
                },
-   			   "postOffice": {
-                     "title": "postOffice",
-                     "type": "String",
-                     "minLength": 1,
-                     "maxLength": 100,
-                     "captureStages": [
-                        "Assignment Pending",
-                        "Incomplete",
-                        "Inprocess",
-                        "ReadyForScreening"
-                     ]
-                  },
-   			   "landmark": {
-                     "title": "landmark",
-                     "type": "String",
-                     "minLength": 1,
-                     "maxLength": 100,
-                     "captureStages": [
-                        "Assignment Pending",
-                        "Incomplete",
-                        "Inprocess",
-                        "ReadyForScreening"
-                     ]
-                  },
-               "parentLoanAccount": {
-                  "title": "parent Account Number",
-                  "type": "String",
-                  "minLength": 1,
-                  "maxLength": 100,
-                  "captureStages": [
-                     "Assignment Pending",
-                     "Incomplete",
-                     "Inprocess",
-                     "ReadyForScreening"
-                  ]
-               },
-               "vehicleRegistrationNumber": {
-                  "title": "Vehicle Registration Number",
-                  "type": "String",
-                  "minLength": 1,
-                  "maxLength": 100,
-                  "captureStages": [
-                     "Assignment Pending",
-                     "Incomplete",
-                     "Inprocess",
-                     "ReadyForScreening"
-                  ]
-               },
-               "transactionType": {
-                "title": "Transaction Type",
-                "type": "String",
-                "minLength": 1,
-                "maxLength": 100,
-                "captureStages": [
-                   "Assignment Pending",
-                   "Incomplete",
-                   "Inprocess",
-                   "ReadyForScreening"
-                    ]
-                }, 
-                "linkedLoanAccountNo": {
-                  "title": "Linked Loan Account Number",
-                  "type": "String",
-                  "minLength": 1,
-                  "maxLength": 100,
-                  "captureStages": [
-                    "Assignment Pending",
-                    "Incomplete",
-                    "Inprocess",
-                    "ReadyForScreening"
-                  ]
-              }, 
-              "baseLoanAccount": {
-                "title": "Base Loan Account",
-                "type": "String",
-                "minLength": 1,
-                "maxLength": 100,
-                "captureStages": [
-                  "Assignment Pending",
-                  "Incomplete",
-                  "Inprocess",
-                  "ReadyForScreening"
-                ]
-            },
-           "applicantCustomerId": {
+               "applicantCustomerId": {
                   "title": "applicantCustomerId",
                   "type": "number",
                    "minimum": 0,

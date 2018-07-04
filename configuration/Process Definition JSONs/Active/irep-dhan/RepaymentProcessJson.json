@@ -11,27 +11,7 @@
          ]
       },
       {
-        "order":2,
-        "code":"BranchDeposit",
-        "name":"BranchDeposit",
-        "stageType":"CAPTURE",
-        "isBankAccountReversal":true,
-        "allowedRoles":[
-           "APPROVER"
-        ]
-      },
-      {
-        "order":3,
-        "code":"PreDeposit",
-        "name":"PreDeposit",
-        "stageType":"CAPTURE",
-        "isBankAccountReversal":true,
-        "allowedRoles":[
-           "APPROVER"
-        ]
-      },
-      {
-         "order":4,
+         "order":2,
          "code":"Deposit",
          "name":"Deposit",
          "stageType":"DEPOSIT",
@@ -43,7 +23,7 @@
          ]
       },
       {
-         "order":5,
+         "order":3,
          "code":"BRSValidation",
          "name":"BRSValidation",
          "stageType":"CAPTURE",
@@ -53,7 +33,7 @@
          ]
       },
       {
-         "order":6,
+         "order":4,
          "code":"CreditValidation",
          "name":"Credit Validation",
          "stageType":"CAPTURE",
@@ -63,7 +43,7 @@
          ]
       },
       {
-         "order":7,
+         "order":5,
          "code":"PartialPayment",
          "name":"PartialPayment",
          "stageType":"CAPTURE",

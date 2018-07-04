@@ -438,7 +438,6 @@
                      "minimum":1,
                      "maximum":10000000,
                      "captureStages":[
-                        "ReadyForDisbursement"
                      ]
                   },
                   "principalDuePayment":{

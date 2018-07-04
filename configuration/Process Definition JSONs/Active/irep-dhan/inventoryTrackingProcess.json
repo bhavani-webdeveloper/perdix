@@ -206,16 +206,14 @@
 							"minLength":1,
 							"maxLength":100,
 							"captureStages": [
-								"CreateBatch",
-								"Courier"
+								"CreateBatch"
 							]
 						},
 						"numberOfInventories": {
 							"title": "Number Of Inventories",
 							"type": "number",
 							"captureStages": [
-								"CreateBatch",
-								"Courier"
+								"CreateBatch"
 							]
 						}
 					}

@@ -873,38 +873,11 @@
                         "DSC"
                      ]
                   },
-
-		"loanAmountRequested": {
-                     "title": "loanAmountRequested",
-                     "type": "number",
- 			"minimum": 0,
-                     "maximum": 10000000,
-                     "captureStages": [
-                        "DSC"
-                     ]
-                  },                  "dscOverrideRequestFileId": {
+                  "dscOverrideRequestFileId": {
                      "title": "dscOverrideRequestFileId",
                      "type": "string",
                      "captureStages": [
                         "DSC"
-                     ]
-                  },
-                  "loanAmountSanctionedInPaisa": {
-                     "title": "loanAmountSanctionedInPaisa",
-                     "type": "number",
-                     "minLength": 1,
-                     "maxLength": 100,
-                     "captureStages": [
-                        "GroupCreation"
-                     ]
-                  },
-                  "loanAmountRequested": {
-                     "title": "loanAmountRequested",
-                     "type": "number",
-                     "minLength": 1,
-                     "maxLength": 100,
-                     "captureStages": [
-                        "GroupCreation"
                      ]
                   }
                }
