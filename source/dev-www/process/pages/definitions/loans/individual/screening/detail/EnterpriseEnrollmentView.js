@@ -838,7 +838,7 @@ define({
                 "colClass": "col-sm-12",
                 "overrideType": "default-view",
                 "readonly": true,
-                "title": "OVER_ALL_HYPHOTHECATION_VALUE",
+                "title": "OVER_ALL_HYPOTHECATION_VALUE",
                 "items": [{
                     "type": "grid",
                     "orientation": "horizontal",
