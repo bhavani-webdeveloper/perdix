@@ -554,7 +554,6 @@
                 "add": null,
                 "remove": null,
                 "view": "fixed",
-                "titleExpr": "model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes[arrayIndexes[0]].incomeType",
                 "items": {
                     "incomeType":{
                         "key": "loanAccount.vehicleLoanDetails.vehicleLoanIncomes[].incomeType",
