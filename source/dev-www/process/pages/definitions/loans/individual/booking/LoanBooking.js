@@ -26,7 +26,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                             validUrns.push(urns[customerIdList.indexOf(resp[i].customer_id)]);
                         }
                     }
-
                     if(validUrns.length === urns.length) {
                         deferred.resolve();
                     } else {
@@ -91,6 +90,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     if (data.showLoanBookingDetails != undefined && data.showLoanBookingDetails !== null && data.showLoanBookingDetails != "") {
                         model.showLoanBookingDetails = data.showLoanBookingDetails;
                         model.BackedDatedDisbursement = data.BackedDatedDisbursement;
+                        model.allowPreEmiInterest = data.allowPreEmiInterest;
                     }
                     //stateParams
                     console.log(model.BackedDatedDisbursement);
@@ -133,6 +133,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
 
                             model.loanAccount = res;
 
+                            if (model.loanAccount.disbursementSchedules.length >= 0 && _.isNumber(model.loanAccount.disbursementSchedules[0].moratoriumPeriodInDays) && !model.loanAccount.scheduleStartDate) {
+                                model.loanAccount.scheduleStartDate = moment(model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate, "YYYY-MM-DD").add(model.loanAccount.disbursementSchedules[0].moratoriumPeriodInDays, 'days').format("YYYY-MM-DD");
+                            }
                             var ids = [];
                             var urns = [];
                             if (model.loanAccount.customerId){
@@ -184,7 +187,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                                         model.loanAccount.applicantName = resQuery.urns[model.loanAccount.applicant].first_name;
                                     
                                     if (_.hasIn(resQuery.urns, model.loanAccount.portfolioInsuranceUrn))
-                                        model.loanAccount.portfolioInsuranceCustomerName = resQuery.urns[model.loanAccount.portfolioInsuranceUrn].first_name;
+                                        model.loanAccount.portfolioInsuranceCustomerName = resQuery.urns[model.loanAccount.portfolioInsuranceUrn].first_name;   
                                     for (var i=0;i<model.loanAccount.loan_coBorrowers.length; i++){
                                         if (_.hasIn(resQuery.ids, model.loanAccount.loan_coBorrowers[i].customerId))
                                              model.loanAccount.loan_coBorrowers[i].coBorrowerName = resQuery.ids[model.loanAccount.loan_coBorrowers[i].customerId].first_name;
@@ -262,7 +265,27 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         "title": "REPAYMENT_DATE",
                         "type": "date",
                         "required": true
-                    }
+                    },
+                    {
+                        "key": "loanAccount.scheduleStartDate",
+                        "title": "SCHEDULE_START_DATE",
+                        "condition": "model.siteCode == 'IREPDhan'&& model.allowPreEmiInterest",
+                        "type": "date",
+                        "required": true,
+                        "onChange": function(value ,form ,model, event){
+                            var repaymentDate = moment(model.loanAccount.firstRepaymentDate,SessionStore.getSystemDateFormat());
+                            var disbursementSchedules = moment(model._currentDisbursement.scheduledDisbursementDate,SessionStore.getSystemDateFormat());
+                            var scheduleStartDate = moment(model.loanAccount.scheduleStartDate,SessionStore.getSystemDateFormat());
+                            if(scheduleStartDate < disbursementSchedules){
+                                model._currentDisbursement.scheduledDisbursementDate = null;
+                                PageHelper.showProgress("loan-create","Disbursement date should be lesser than Schedule Start Date date",5000);
+                            }
+                            if(repaymentDate < disbursementSchedules){
+                                model._currentDisbursement.scheduledDisbursementDate = null;
+                                PageHelper.showProgress("loan-create","Disbursement date should be lesser than Repayment date",5000);
+                            }  
+                        } 
+                    },
                 ]
             }, {
                 "type": "box",
@@ -399,8 +422,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
                         title: "NAME",
                         readonly: true
-                    },
-                    {
+                                    },
+                                    {
                         "type": "fieldset",
                         "condition": "model.siteCode != 'sambandh' && model.siteCode != 'saija' && model.siteCode != 'IREPDhan'",
                         "notitle": true,
@@ -725,7 +748,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                                     title:"NAME",
                                     "readonly": true
                                 }
-                            ]
+            ]
                         }
                     ]
                 }, {
@@ -742,8 +765,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                                 "key": "loanAccount.loan_guarantors[].guaUrnNo",
                                 "title": "URN_NO",
                                 "type":"text"                              
-                            },
-                            {
+            },
+            {
                                 key:"loanAccount.loan_guarantors[].guaFirstName",
                                 title:"NAME",
                                 "readonly": true
@@ -868,6 +891,23 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         if(model.siteCode == 'witfin' && date != 6 && date!= 16) {
                             PageHelper.showProgress("loan-create","First repayment date should be 6 or 16",5000);
                             return false;
+                        }
+                    }
+
+                    if (model.allowPreEmiInterest && model.siteCode == 'IREPDhan') {
+                        var diffDay = 0;
+                        var scheduleStartDate;
+                        if(model.loanAccount.scheduleStartDate){
+                            scheduleStartDate = moment(model.loanAccount.scheduleStartDate,SessionStore.getSystemDateFormat());
+                        }
+                        if(model.loanAccount.scheduleStartDate && scheduledDisbursementDate){
+                            diffday = scheduleStartDate.diff(moment(scheduledDisbursementDate.format(SessionStore.getSystemDateFormat())), "days");
+                        }
+                        if (diffday > 0) {
+                            model.loanAccount.firstRepaymentDate = scheduleStartDate.format("YYYY-MM-DD");
+                        }
+                        for (var i = 0; i < model.loanAccount.disbursementSchedules.length; i++) {
+                            model.loanAccount.disbursementSchedules[i].moratoriumPeriodInDays = diffDays;
                         }
                     }
 
