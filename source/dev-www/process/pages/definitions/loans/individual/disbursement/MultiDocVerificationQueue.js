@@ -6,7 +6,7 @@ function($log, formHelper, IndividualLoan, $state, SessionStore,$q,entityManager
         "title": "LOAN_PENDING_VERIFICATION_QUEUE",
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
-            model.branch = SessionStore.getBranch();
+            model.branch = SessionStore.getCurrentBranch().branchId;
             model.stage = 'DocumentVerification';
             model.branchId = SessionStore.getCurrentBranch().branchId;
         },
@@ -48,19 +48,23 @@ function($log, formHelper, IndividualLoan, $state, SessionStore,$q,entityManager
                             "type": "date"
                         }
                     },
-                    "branchId": {
-                        "title": "BRANCH",
-                        "type": "integer",
-                        "enumCode": "branch_id",
+                    'branch': {
+                        'title': "BRANCH",
+                        "type": ["string", "null"],
                         "x-schema-form": {
-                            "type": "select"
+                            "type": "userbranch",
+                            "screenFilter": true
                         }
                     },
-                    "centre_name": {
-                        "title": "Centre Name",
-                        "type": "string",
+                    "centre": {
+                        "title": "CENTRE",
+                        "type": ["integer", "null"],
                         "x-schema-form": {
-                            "type": "select"
+                            "type": "select",
+                            "enumCode": "centre",
+                            "parentEnumCode": "branch",
+                            "parentValueExpr": "model.branch",
+                            "screenFilter": true
                         }
                     }
                 }
@@ -76,7 +80,8 @@ function($log, formHelper, IndividualLoan, $state, SessionStore,$q,entityManager
                     'page': 1,
                     'per_page': 100,
                     'sortBy':null,
-                    'branchId': searchOptions.branchId
+                    'branchId':searchOptions.branch,
+                    'centreId': searchOptions.centre
                 }).$promise;
 
                 return promise;

@@ -7,7 +7,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.FieldAppraisalRe
 			"title": "REGIONAL_RISK_REVIEW_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
-				model.branch = SessionStore.getCurrentBranch().branchName;
+				model.branch = SessionStore.getCurrentBranch().branchId;
 				model.branchId = SessionStore.getCurrentBranch().branchId;
 				$log.info("search-list sample got initialized"); 
 			},
@@ -21,6 +21,25 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.FieldAppraisalRe
 					"type": 'object',
 					"title": 'SEARCH_OPTIONS',
 					"properties": {
+						'branch': {
+	                    	'title': "BRANCH",
+	                    	"type": ["string", "null"],
+							"x-schema-form": {
+								"type":"userbranch",
+								"screenFilter": true
+							}
+	                    },
+                        "centre": {
+							"title": "CENTRE",
+							"type": ["integer", "null"],
+							"x-schema-form": {
+								"type": "select",
+								"enumCode": "centre",
+								"parentEnumCode": "branch",
+								"parentValueExpr": "model.branch",
+								"screenFilter": true
+							}
+						},
 						"applicantName": {
 	                        "title": "APPLICANT_NAME",
 	                        "type": "string"
@@ -53,20 +72,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.FieldAppraisalRe
                             "x-schema-form": {
                             	"type": "select"
                             }
-                        },
-                        "centre": {
-							"title": "CENTRE",
-							"type": ["integer", "null"],
-							"x-schema-form": {
-								"type": "select",
-								"enumCode": "centre",
-								"parentEnumCode": "branch",
-								"parentValueExpr": "model.branchId",
-								"screenFilter": true
-							}
-						}
-
-
+                        }
 					},
 					"required": []
 				},
@@ -88,7 +94,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.FieldAppraisalRe
 					return IndividualLoan.search({
 	                    'stage': 'FieldAppraisalReview',
 	                    'centreCode':  searchOptions.centre,
-	                    'branchName':searchOptions.branch,
+	                    'branchId':searchOptions.branch,
 	                    'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,

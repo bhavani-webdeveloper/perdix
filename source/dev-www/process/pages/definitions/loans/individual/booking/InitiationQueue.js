@@ -12,6 +12,7 @@ function($log, irfNavigator, formHelper,EntityManager, IndividualLoan,$state, Se
 		initialize: function (model, form, formCtrl) {
 			// model.branch = branch;
 			model.siteCode = SessionStore.getGlobalSetting("siteCode");
+			model.branch = SessionStore.getCurrentBranch().branchId;
 		},
 
 		definition: {
@@ -25,14 +26,13 @@ function($log, irfNavigator, formHelper,EntityManager, IndividualLoan,$state, Se
 				"title": 'SearchOptions',
 				"properties": {
 					'branch': {
-                    	'title': "BRANCH",
-                    	"type": ["string", "null"],
-                    	"enumCode": "branch",
+						'title': "BRANCH",
+						"type": ["string", "null"],
 						"x-schema-form": {
-							"type": "select",
+							"type": "userbranch",
 							"screenFilter": true
 						}
-                    },
+					},
 					"centre": {
 						"title": "CENTRE",
 						"type": ["integer", "null"],
@@ -40,6 +40,7 @@ function($log, irfNavigator, formHelper,EntityManager, IndividualLoan,$state, Se
 							"type": "select",
 							"enumCode": "centre",
 							"parentEnumCode": "branch",
+							"parentValueExpr": "model.branch",
 							"screenFilter": true
 						}
 					},
@@ -62,7 +63,7 @@ function($log, irfNavigator, formHelper,EntityManager, IndividualLoan,$state, Se
 			getResultsPromise: function(searchOptions, pageOpts){     
 				var promise = IndividualLoan.search({
 					'stage': 'LoanInitiation',
-					'branchName': searchOptions.branch,
+					'branchId':searchOptions.branch,
 					'centreCode': searchOptions.centre,
 					'customerId': searchOptions.customerId,
 					'accountNumber': searchOptions.accountNumber,

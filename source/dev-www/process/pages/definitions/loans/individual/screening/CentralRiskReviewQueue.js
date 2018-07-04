@@ -8,6 +8,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.CentralRiskRevie
 			initialize: function(model, form, formCtrl) {
 				// var currBranch = SessionStore.getCurrentBranch();
 				// model.branch = currBranch.branchName;
+				model.branch = SessionStore.getCurrentBranch().branchId;
 
 				$log.info("search-list sample got initialized");
 			},
@@ -24,19 +25,19 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.CentralRiskRevie
 						'branch': {
 	                    	'title': "BRANCH",
 	                    	"type": ["string", "null"],
-	                    	"enumCode": "branch",
 							"x-schema-form": {
-								"type": "select",
+								"type":"userbranch",
 								"screenFilter": true
 							}
 	                    },
-						"centre": {
+                        "centre": {
 							"title": "CENTRE",
 							"type": ["integer", "null"],
 							"x-schema-form": {
 								"type": "select",
 								"enumCode": "centre",
 								"parentEnumCode": "branch",
+								"parentValueExpr": "model.branch",
 								"screenFilter": true
 							}
 						},
@@ -90,7 +91,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.CentralRiskRevie
 	                    'area':searchOptions.area,
 	                    'status':searchOptions.status,
 	                    'villageName':searchOptions.villageName,
-	                    'branchName': searchOptions.branch,
+	                    'branchId':searchOptions.branch,
 	                    'centreCode': searchOptions.centre,
 	                    'customerName': searchOptions.businessName,
 	                    'page': pageOpts.pageNo,

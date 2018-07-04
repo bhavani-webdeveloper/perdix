@@ -9,6 +9,7 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan,
             $log.info("search-list sample got initialized");
         
             model.stage = 'DocumentVerification';
+            model.branch = SessionStore.getCurrentBranch().branchId;
             console.log(model);
         },
 
@@ -30,22 +31,23 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan,
                 "title": "VIEW_LOANS",
                 "required":["branch"],
                 "properties": {
-                    "branchName": {
-                        "title": "BRANCH_NAME",
+                    'branch': {
+                        'title': "BRANCH",
                         "type": ["string", "null"],
-                        "enumCode": "branch",
                         "x-schema-form": {
-                            "type": "select"
+                            "type": "userbranch",
+                            "screenFilter": true
                         }
-
                     },
-                    "centreCode": {
-                        "title": "CENTER_NAME",
-                        "type": ["number", "null"],
-                        "enumCode": "centre",
+                    "centre": {
+                        "title": "CENTRE",
+                        "type": ["integer", "null"],
                         "x-schema-form": {
                             "type": "select",
-                            "parentEnumCode":"branch"
+                            "enumCode": "centre",
+                            "parentEnumCode": "branch",
+                            "parentValueExpr": "model.branch",
+                            "screenFilter": true
                         }
                     },
                     "partner_code": {
@@ -97,13 +99,11 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan,
                 return formHelper;
             },
             getResultsPromise: function(searchOptions, pageOpts){
-                if (_.hasIn(searchOptions, 'centreCode')){
-                    searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
-                }
+                
                 return IndividualLoan.search({
                     'stage': 'DocumentVerification',
-                    'branchName': searchOptions.branchName,
-                    'centreCode': searchOptions.centreCodeForSearch,
+                    'branchId':searchOptions.branch,
+                    'centreCode': searchOptions.centre,
                     'customerId': searchOptions.customerId,
                     'page': pageOpts.pageNo,
                     'per_page': pageOpts.itemsPerPage,

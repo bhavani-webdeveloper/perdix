@@ -9,7 +9,6 @@ function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionSto
 		initialize: function (model, form, formCtrl) {
 			model.branch = SessionStore.getCurrentBranch().branchId;
 			model.centres = formHelper.enum('centre').data;
-			//"irf-elements": "svn+http://svn.perdix.co/svn/perdix/irf-common-elements#trunk",
 			var bankName = SessionStore.getBankName();
 			var banks = formHelper.enum('bank').data;
 			for (var i = 0; i < banks.length; i++){
@@ -107,11 +106,11 @@ function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionSto
 					"branch": {
 						"title": "BRANCH_NAME",
 						"type": ["integer", "null"],
-						"enumCode": "branch_id",
-						"parentEnumCode": "bank",
-						"parentValueExpr": "model.bankId",
+						//"enumCode": "branch_id",
+						//"parentEnumCode": "bank",
+						//"parentValueExpr": "model.bankId",
 						"x-schema-form": {
-							"type": "select",
+							"type":"userbranch",
 							"screenFilter": true,
 						}
 					},

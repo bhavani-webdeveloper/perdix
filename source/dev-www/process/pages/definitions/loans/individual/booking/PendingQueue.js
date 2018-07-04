@@ -8,6 +8,7 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan,
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
             model.stage = 'LoanBooking';
+            model.branch = SessionStore.getCurrentBranch().branchId;
         },
         offline: false,
         definition: {
@@ -30,21 +31,21 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan,
                     'branch': {
                         'title': "BRANCH",
                         "type": ["string", "null"],
-                        "enumCode": "branch",
                         "x-schema-form": {
-                            "type": "select",
+                            "type": "userbranch",
                             "screenFilter": true
                         }
                     },
-                    "centreCode": {
-                        "title": "CENTER_NAME",
-                        "type": ["number", "null"],
-                        "enumCode": "centre",
+                    "centre": {
+                        "title": "CENTRE",
+                        "type": ["integer", "null"],
                         "x-schema-form": {
                             "type": "select",
-                            "parentValueExpr": "model.branchId"
-                        },
-                        
+                            "enumCode": "centre",
+                            "parentEnumCode": "branch",
+                            "parentValueExpr": "model.branch",
+                            "screenFilter": true
+                        }
                     },
                     "sanction_date": {
                         "title": "SANCTION_DATE",
@@ -119,8 +120,8 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan,
                 }
                 return IndividualLoan.search({
                     'stage': 'LoanBooking',
-                    'branchName': searchOptions.branch,
-                    'centreCode': searchOptions.centreCodeForSearch,
+                    'branchId':searchOptions.branch,
+                    'centreCode': searchOptions.centre,
                     'customerId': null,
                     'accountNumber':null,
                     'page': pageOpts.pageNo,

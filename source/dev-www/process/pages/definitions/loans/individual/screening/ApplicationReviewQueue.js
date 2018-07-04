@@ -14,8 +14,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ApplicationRevie
 			"title": "APPLICATION_REVIEW_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
-				model.branch = SessionStore.getCurrentBranch().branchName;
-				model.branchId = SessionStore.getCurrentBranch().branchId;
+				model.branch = SessionStore.getCurrentBranch().branchId;
 				$log.info("search-list sample got initialized");
 			},
 			definition: {
@@ -28,14 +27,22 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ApplicationRevie
 					"type": 'object',
 					"title": 'SEARCH_OPTIONS',
 					"properties": {
+						'branch': {
+	                    	'title': "BRANCH",
+	                    	"type": ["string", "null"],
+							"x-schema-form": {
+								"type":"userbranch",
+								"screenFilter": true
+							}
+	                    },
 						"centre": {
 							"title": "CENTRE",
 							"type": ["integer", "null"],
 							"x-schema-form": {
 								"type": "select",
 								"enumCode": "centre",
-								"parentEnumCode": "branch",
-								"parentValueExpr": "model.branchId",
+								"parentEnumCode": "branch_id",
+								"parentValueExpr": "model.branch",
 								"screenFilter": true
 							}
 						},
@@ -84,7 +91,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ApplicationRevie
 	                }
 					return IndividualLoan.search({
 	                    'stage': 'ApplicationReview',
-	                    'branchName':searchOptions.branch,
+	                    'branchId':searchOptions.branch,
 	                    'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,

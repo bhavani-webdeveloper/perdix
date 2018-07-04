@@ -7,7 +7,7 @@ function($log, formHelper, IndividualLoan, $state, SessionStore,$q,entityManager
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
-            model.branch = SessionStore.getBranch();
+            model.branch = SessionStore.getCurrentBranch().branchId;
             model.stage = 'CROApproval';
             
         },
@@ -48,6 +48,26 @@ function($log, formHelper, IndividualLoan, $state, SessionStore,$q,entityManager
                         "x-schema-form": {
                             "type": "date"
                         }
+                    },
+                    'branch': {
+                        'title': "BRANCH",
+                        "type": ["string", "null"],
+                        "x-schema-form": {
+                            "type": "userbranch",
+                            "screenFilter": true,
+                            "readonly":true
+                        }
+                    },
+                    "centre": {
+                        "title": "CENTRE",
+                        "type": ["integer", "null"],
+                        "x-schema-form": {
+                            "type": "select",
+                            "enumCode": "centre",
+                            "parentEnumCode": "branch",
+                            "parentValueExpr": "model.branch",
+                            "screenFilter": true
+                        }
                     }
                 }
             },
@@ -61,7 +81,9 @@ function($log, formHelper, IndividualLoan, $state, SessionStore,$q,entityManager
                     'scheduledDisbursementDate': null,
                     'page': 1,
                     'per_page': 100,
-                    'sortBy':null
+                    'sortBy':null,
+                    'branchId':searchOptions.branch,
+                    'centreId': searchOptions.centre
                 }).$promise;
 
                 return promise;

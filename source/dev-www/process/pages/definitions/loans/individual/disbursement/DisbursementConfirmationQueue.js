@@ -9,6 +9,8 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
                 initialize: function (model, form, formCtrl) {
 
                     model.branchName = SessionStore.getBranch();
+                    model.branch = SessionStore.getCurrentBranch().branchId;
+
                     model.stage = 'DisbursementConfirmation';
                     console.log(model);
                 },
@@ -39,6 +41,25 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
 
                             //     }
                             // },
+                            'branch': {
+                                'title': "BRANCH",
+                                "type": ["string", "null"],
+                                "x-schema-form": {
+                                    "type": "userbranch",
+                                    "screenFilter": true
+                                }
+                            },
+                            "centre": {
+                                "title": "CENTRE",
+                                "type": ["integer", "null"],
+                                "x-schema-form": {
+                                    "type": "select",
+                                    "enumCode": "centre",
+                                    "parentEnumCode": "branch",
+                                    "parentValueExpr": "model.branch",
+                                    "screenFilter": true
+                                }
+                            },
 
                             "scheduledDisbursementDate": {
                                 "title": "SCHEDULED_DISBURSEMENT_DATE",
@@ -47,7 +68,6 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
                                     "type": "date"
                                 }
                             }
-
                         }
                     },
                     getSearchFormHelper: function() {
@@ -56,6 +76,8 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
                     getResultsPromise: function(searchOptions, pageOpts){
                         return IndividualLoan.searchDisbursement({
                             'currentStage': 'DisbursementConfirmation',
+                            'branchId':searchOptions.branch,
+                            'centreId': searchOptions.centre,
                             'customerSignatureDate': searchOptions.customerSignatureDate,
                             'scheduledDisbursementDate': searchOptions.scheduledDisbursementDate,
                             'page': pageOpts.pageNo,

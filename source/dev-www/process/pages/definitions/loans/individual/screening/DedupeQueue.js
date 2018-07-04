@@ -39,9 +39,8 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.DedupeQueue"),
 	                    'branch': {
 	                    	'title': "BRANCH",
 	                    	"type": ["string", "null"],
-	                    	"enumCode": "branch",
 							"x-schema-form": {
-								"type": "select",
+								"type":"userbranch",
 								"screenFilter": true
 							}
 	                    },
@@ -51,7 +50,8 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.DedupeQueue"),
 							"x-schema-form": {
 								"type": "select",
 								"enumCode": "centre",
-								"parentEnumCode": "branch",
+								"parentEnumCode": "branch_id",
+								"parentValueExpr": "model.branch",
 								"screenFilter": true
 							}
 						},
@@ -91,7 +91,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.DedupeQueue"),
 	                    searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
 	                }
 					return IndividualLoan.search({
-	                    'branchName':searchOptions.branch,
+	                    'branchId':searchOptions.branch,
 	                    'stage': 'Dedupe',
 	                    'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,

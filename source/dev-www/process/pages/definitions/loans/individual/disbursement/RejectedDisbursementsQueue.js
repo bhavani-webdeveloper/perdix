@@ -7,7 +7,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.RejectedDisbu
                 "subTitle": "",
                 initialize: function (model, form, formCtrl) {
 
-                    model.branchId = SessionStore.getCurrentBranch().branchId;
+                    model.branch = SessionStore.getCurrentBranch().branchId;
                     model.stage = 'RejectedDisbursement';
                     console.log(model);
                 },
@@ -46,13 +46,24 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.RejectedDisbu
                                     "type": "date"
                                 }
                             },
-                            "branchId": {
-                                "title": "BRANCH",
-                                "type": "integer",
-                                "readonly": true,
-                                "enumCode": "branch_id",
+                            'branch': {
+                                'title': "BRANCH",
+                                "type": ["string", "null"],
                                 "x-schema-form": {
-                                    "type": "select"
+                                    "type": "userbranch",
+                                    "readonly":true,
+                                    "screenFilter": true
+                                }
+                            },
+                            "centre": {
+                                "title": "CENTRE",
+                                "type": ["integer", "null"],
+                                "x-schema-form": {
+                                    "type": "select",
+                                    "enumCode": "centre",
+                                    "parentEnumCode": "branch",
+                                    "parentValueExpr": "model.branch",
+                                    "screenFilter": true
                                 }
                             }
 
@@ -66,7 +77,8 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.RejectedDisbu
                             'currentStage': 'RejectedDisbursement',
                             'customerSignatureDate': searchOptions.customerSignatureDate,
                             'scheduledDisbursementDate': searchOptions.scheduledDisbursementDate,
-                            'branchId': searchOptions.branchId
+                            'branchId':searchOptions.branch,
+                            'centreId': searchOptions.centre
                         }).$promise;
 
                     },

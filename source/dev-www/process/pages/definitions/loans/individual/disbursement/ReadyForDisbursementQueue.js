@@ -9,6 +9,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
 
                     model.branchName = SessionStore.getBranch();
                     model.stage = 'ReadyForDisbursement';
+                    model.branch = SessionStore.getCurrentBranch().branchId;
                     //model.branchId = SessionStore.getCurrentBranch().branchId;
                     console.log(model);
                 },
@@ -39,7 +40,25 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
 
                             //     }
                             // },
-
+                            'branch': {
+                                'title': "BRANCH",
+                                "type": ["string", "null"],
+                                "x-schema-form": {
+                                    "type": "userbranch",
+                                    "screenFilter": true
+                                }
+                            },
+                            "centre": {
+                                "title": "CENTRE",
+                                "type": ["integer", "null"],
+                                "x-schema-form": {
+                                    "type": "select",
+                                    "enumCode": "centre",
+                                    "parentEnumCode": "branch",
+                                    "parentValueExpr": "model.branch",
+                                    "screenFilter": true
+                                }
+                            },
                             "scheduledDisbursementDate": {
                                 "title": "SCHEDULED_DISBURSEMENT_DATE",
                                 "type": "string",
@@ -56,6 +75,8 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
                     getResultsPromise: function(searchOptions, pageOpts){
                         return IndividualLoan.searchDisbursement({
                             'currentStage': 'ReadyForDisbursement',
+                            'branchId':searchOptions.branch,
+                            'centreId': searchOptions.centre,
                             'customerSignatureDate': searchOptions.customerSignatureDate,
                             'scheduledDisbursementDate': searchOptions.scheduledDisbursementDate,
                             'page': pageOpts.pageNo,

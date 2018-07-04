@@ -16,7 +16,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.BranchNewConvers
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				// model.branch = branch;
-				model.branch = SessionStore.getCurrentBranch().branchName;
+				model.branch = SessionStore.getCurrentBranch().branchId;
 				model.branchId = SessionStore.getCurrentBranch().branchId;
 				$log.info("search-list sample got initialized");
 
@@ -31,7 +31,27 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.BranchNewConvers
 					"type": 'object',
 					"title": 'SEARCH_OPTIONS',
 					"properties": {
-	                    "applicantName": {
+	                    
+	                    'branch': {
+	                    	'title': "BRANCH",
+	                    	"type": ["string", "null"],
+							"x-schema-form": {
+								"type":"userbranch",
+								"screenFilter": true
+							}
+	                    },
+                        "centre": {
+							"title": "CENTRE",
+							"type": ["integer", "null"],
+							"x-schema-form": {
+								"type": "select",
+								"enumCode": "centre",
+								"parentEnumCode": "branch",
+								"parentValueExpr": "model.branch",
+								"screenFilter": true
+							}
+						},
+						"applicantName": {
 	                        "title": "APPLICANT_NAME",
 	                        "type": "string"
 	                    },
@@ -39,17 +59,6 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.BranchNewConvers
 	                        "title": "BUSINESS_NAME",
 	                        "type": "string"
 	                    },
-	                    "centre": {
-							"title": "CENTRE",
-							"type": ["integer", "null"],
-							"x-schema-form": {
-								"type": "select",
-								"enumCode": "centre",
-								"parentEnumCode": "branch",
-								"parentValueExpr": "model.branchId",
-								"screenFilter": true
-							}
-						},
 	                    "customerId": {
 	                        "title": "CUSTOMER_ID",
 	                        "type": "string"
@@ -87,7 +96,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.BranchNewConvers
 					return Messaging.findProcess({
 	                    'replied': 'false',
 	                    'stage': searchOptions.stage,
-	                    'branchName':currentBranch.branchName,
+	                    'branchId':searchOptions.branch,
 	                    'applicantName':searchOptions.applicantName,
 	                    'status':searchOptions.status,                   
 	                    'customerName': searchOptions.businessName,

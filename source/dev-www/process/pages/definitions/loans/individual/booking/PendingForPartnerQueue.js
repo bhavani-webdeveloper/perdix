@@ -10,7 +10,7 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 		"subTitle": "",
 
 		initialize: function (model, form, formCtrl) {
-			model.branch = branch;
+			model.branch = SessionStore.getCurrentBranch().branchId;
 		},
 
 		definition: {
@@ -23,18 +23,24 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 				"type": 'object',
 				"title": 'SearchOptions',
 				"properties": {
-					"branchName": {
-						"title": "BRANCH_ID",
-						"type": "string",
-						"enumCode": "branch",
+					'branch': {
+						'title': "BRANCH",
+						"type": ["string", "null"],
 						"x-schema-form": {
-							"type": "select",
+							"type": "userbranch",
 							"screenFilter": true
 						}
 					},
-					"centreCode": {
-						"title": "CENTRE_CODE",
-						"type": "string"
+					"centre": {
+						"title": "CENTRE",
+						"type": ["integer", "null"],
+						"x-schema-form": {
+							"type": "select",
+							"enumCode": "centre",
+							"parentEnumCode": "branch",
+							"parentValueExpr": "model.branch",
+							"screenFilter": true
+						}
 					},
 					"customerId": {
 						"title": "CUSTOMER_ID",
@@ -55,8 +61,8 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 			getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
 				var promise = IndividualLoan.search({
 					'stage': 'PendingForPartner',
-					'branchName': searchOptions.branchName,
-					'centreCode': searchOptions.centreCode,
+					'branchId':searchOptions.branch,
+					'centreCode': searchOptions.centre,
 					'customerId': searchOptions.customerId,
 					'accountNumber': searchOptions.accountNumber,
                     'page': pageOpts.pageNo
