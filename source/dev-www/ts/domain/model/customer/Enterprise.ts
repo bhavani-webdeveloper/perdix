@@ -74,6 +74,7 @@ class Enterprise {
     vatNumber: string;
     version: number;
     workInProgress: number;
+    enterpriseType: string;
 }
 
 export = Enterprise;

@@ -860,6 +860,19 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                 "subTitle": "BUSINESS",
                 initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
                     // $log.info("Inside initialize of IndividualEnrolment2 -SPK " + formCtrl.$name);
+                 //   model.customer.customerBankAccounts[0].confirmedAccountNumber = Number(model.customer.customerBankAccounts[0].confirmedAccountNumber);
+                 //   var customerBankAccountsLength;
+                    // if(_.isArray(model.customer.customerBankAccounts[]){
+                    //     var customerBankAccountsLength = model.customer.customerBankAccounts.length;
+                    //     for(var i=0; i< customerBankAccountsLength; i++)
+                    //     {
+                    //         if(model.customer.customerBankAccounts[i].confirmedAccountNumber){
+                    //             model.customer.customerBankAccounts[i].confirmedAccountNumber = Number(model.customer.customerBankAccounts[i].confirmedAccountNumber);
+                    //         }
+                    //     }
+                    // }
+
+
                     if (bundlePageObj) {
                         model._bundlePageObj = _.cloneDeep(bundlePageObj);
                     }
@@ -872,6 +885,17 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
 
                     /* Setting data for the form */
                     model.customer = model.enrolmentProcess.customer;
+
+                    if(model.customer.customerBankAccounts && _.isArray(model.customer.customerBankAccounts)){
+                        var customerBankAccountsLength = model.customer.customerBankAccounts.length;
+                        for(var i=0; i< customerBankAccountsLength; i++)
+                        {
+                            if(model.customer.customerBankAccounts[i].confirmedAccountNumber){
+                                model.customer.customerBankAccounts[i].confirmedAccountNumber = Number(model.customer.customerBankAccounts[i].confirmedAccountNumber);
+                            }
+                        }
+                    }
+
                     /* End of setting data for the form */
                     var p1 = UIRepository.getEnrolmentProcessUIRepository().$promise;
                     var self = this;
@@ -990,14 +1014,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "onChange": calculateVehiclesFree
                                 },
                                 "TrackDetails.vehiclesFinanced": {
-
                                     "onChange": calculateVehiclesFree
                                 },
                                 "IndividualReferences.verifications": {
                                     "view":"fixed",
-                                    "titleExpr": "model.customer.verifications[arrayIndexes[0]].relationship",
-                                    "add": null,
-                                    "remove": null
+                                    "titleExpr": "model.customer.verifications[arrayIndexes[0]].relationship"
                                 },
                                 "IndividualReferences.verifications.relationship": {
                                     "type": "select",
@@ -1017,7 +1038,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "required": true
                                 },
                                 "IndividualReferences.verifications.knownSince": {
-                                    "title": "KNOWN_SINCE_(_IN_YEARS_)",
                                     "orderNo": 40
                                 },
                                 "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerName" :{

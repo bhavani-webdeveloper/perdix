@@ -65,6 +65,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 pageClass: 'vehicle-valuation',
                                 minimum: 1,
                                 maximum: 1,
+                                order:55
+                            },
+                            {
+                                pageName: 'witfin.customer.VehicleValuation',
+                                title: 'VEHICLE_VALUATION',
+                                pageClass: 'vehicle-valuation',
+                                minimum: 1,
+                                maximum: 1,
                                 order:60
                             },
                             {
@@ -178,6 +186,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 }
 
+
+                                $this.bundlePages.push({
+                                    pageClass: 'business',
+                                    model: {
+                                        enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
+                                        loanProcess: loanProcess
+                                    }
+                                });
 
                                 $this.bundlePages.push({
                                     pageClass: 'business',

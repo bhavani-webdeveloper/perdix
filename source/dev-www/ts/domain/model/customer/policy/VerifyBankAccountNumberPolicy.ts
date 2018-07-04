@@ -32,7 +32,7 @@ export class VerifyBankAccountNumberPolicy extends IPolicy<EnrolmentProcess> {
 
     run(enrolmentProcess: EnrolmentProcess): Observable<EnrolmentProcess> {
 
-        if(_.hasIn(enrolmentProcess.customer, "customerBankAccounts") && _.isArray(enrolmentProcess.customer.customerBankAccounts) && enrolmentProcess.customer.customerBankAccounts.length > 0) {
+        if(_.hasIn(enrolmentProcess.customer,"enterprise") && enrolmentProcess.customer.enterprise.enterpriseType.toUpperCase() == 'ENTERPRISE' && _.hasIn(enrolmentProcess.customer, "customerBankAccounts") && _.isArray(enrolmentProcess.customer.customerBankAccounts) && enrolmentProcess.customer.customerBankAccounts.length > 0) {
             for (let i=0;i<enrolmentProcess.customer.customerBankAccounts.length;i++) {
                  var banckAccount = enrolmentProcess.customer.customerBankAccounts[i];
                  if (banckAccount.accountNumber != banckAccount.confirmedAccountNumber) {

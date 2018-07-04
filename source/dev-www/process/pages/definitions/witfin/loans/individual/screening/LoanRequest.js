@@ -151,8 +151,7 @@ define([], function() {
                                 "LoanRecommendation",
                                 "VehicleRouteDetails",
                                 "VehicleAssetViability",
-                                "VehiclePhotoCaptures",
-                                "TeleVerification"
+                                "VehiclePhotoCaptures"
                             ],
                             "overrides": {
                                 "FieldInvestigationDetails": {
@@ -616,6 +615,10 @@ define([], function() {
                         "overrides": {
                             "TeleVerification.verifications.personContacted": {
                                 "required": true
+                            },
+                            "TeleVerification.verifications.customerResponse":{
+                                "type": "select",
+                                "enumCode": "customer_response"
                             },
                             "LoanRecommendation.udf6": {
                                 "title": "NOMINAL_RATE",
