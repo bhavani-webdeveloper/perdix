@@ -30,7 +30,6 @@ irf.pageCollection.controller(irf.controller("MutualFund.MutualFundEKYC"), ["$lo
                 '' // Devicetype (Mandatory for Biometric)
             ];
             
-            document.getElementById("Aadhar").value = data.aadhaarNo;
             document.getElementById("ekyctype").value = 'I';
             document.getElementById("kyc_data").value = kyc_data.join('|');
             document.getElementById("url").value = irf.MANAGEMENT_BASE_URL + '/camsResponse.php';
