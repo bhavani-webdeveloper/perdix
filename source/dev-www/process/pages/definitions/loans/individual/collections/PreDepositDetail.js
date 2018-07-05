@@ -154,8 +154,8 @@ define({
                             4) branch to be updated the pre-deposit ,
                         
                     */
-                    utils.confirm("Are You sure ? ")
-                        .then(function(){
+                    Utils.confirm("Are you sure ? ")
+                        .then(function () {
                             $log.info("Inside proceed()");
                             PageHelper.showBlockingLoader("Processing...");
                             if (model.collectionDetails && model.collectionDetails[0]['instrumentType'] == 'CASH') {
@@ -213,7 +213,7 @@ define({
                             1) sending to reject stage , calling loancollection/batchRepay 
                             2) cheque have validation that it will always come in this branch as single unit
                     */
-                   Utils.confirm("Are you sure ? ")
+                    Utils.confirm("Are you sure ? ")
                         .then(function () {
                             $log.info("Inside reject()");
                             PageHelper.showBlockingLoader("Processing...");
