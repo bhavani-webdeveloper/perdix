@@ -15,6 +15,9 @@ function($log, $scope, PagesDefinition,formHelper, SessionStore, LoanProcess,Rep
             "Page/Engine/loans.individual.collections.BounceQueue",
             "Page/Engine/loans.individual.collections.BouncePromiseQueue",
             "Page/Engine/loans.individual.collections.BounceRecoveryQueue",
+            "Page/Engine/loans.individual.collections.BranchDepositQueue",
+            "Page/Engine/loans.individual.collections.PreDepositQueue",
+            "Page/Engine/loans.individual.collections.CollectionDepositQueue",
             "Page/Engine/loans.individual.collections.BRSMultiApproval",
             "Page/Engine/loans.individual.collections.CreditValidationQueue",
             "Page/Engine/loans.individual.collections.TransactionAuthorizationQueue",
@@ -101,6 +104,33 @@ function($log, $scope, PagesDefinition,formHelper, SessionStore, LoanProcess,Rep
                 }).$promise.then(function(response, headerGetter){
                     cvqMenu.data = response.headers['x-total-count'];
                 })
+        }
+
+        var brdep=$scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.collections.BranchDepositQueue"];
+        if(brdep) {
+            LoanCollection.query({
+                'currentStage': "BranchDeposit"
+            }).$promise.then(function(response, headerGetter){
+                brdep.data = response.headers['x-total-count'];
+            })
+        }
+
+        var predep=$scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.collections.PreDepositQueue"];
+        if(predep) {
+            LoanCollection.query({
+                'currentStage': "PreDeposit"
+            }).$promise.then(function(response, headerGetter){
+                brdep.data = response.headers['x-total-count'];
+            })
+        }
+
+        var dep=$scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.collections.CollectionDepositQueue"];
+        if(dep) {
+            LoanCollection.query({
+                'currentStage': "Deposit"
+            }).$promise.then(function(response, headerGetter){
+                dep.data = response.headers['x-total-count'];
+            })
         }
 
         var brsMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.collections.BRSApprovalQueue"];

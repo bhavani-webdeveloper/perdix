@@ -901,8 +901,9 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
 
                                     if (model.repayment.id) {
                                         postData.loanCollection.feeAmount = 0;
-                                        if (postData.loanCollection.instrumentType == 'CASH') {
-                                            postData.stage = "Deposit";
+                                        //According to new change , if instrument type is cash or cheque , they will go to BranchDeposit stage
+                                        if (postData.loanCollection.instrumentType == 'CASH' || postData.loanCollection.instrumentType=='CHQ') {
+                                            postData.stage = "BranchDeposit";
                                         } else if (postData.loanCollection.instrumentType == 'ACH') {
                                             //postData.loanCollection.instrumentType = "NEFT";
                                             postData.loanCollection.scheduleDemandAmount = model.repayment.amount;
@@ -940,8 +941,9 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                         LoanCollection.save(postData, function(resp, header) {
                                             $log.info(resp);
                                             try {
-                                                if (postData.loanCollection.instrumentType == 'CASH') {
-                                                    resp.stage = "Deposit";
+                                                 //According to new change , if instrument type is cash or cheque , they will go to BranchDeposit stage
+                                                if (postData.loanCollection.instrumentType == 'CASH' || postData.loanCollection.instrumentType=='CHQ') {
+                                                    resp.stage = "BranchDeposit";
                                                 } else if (postData.loanCollection.instrumentType == 'ACH') {
                                                     // resp.loanCollection.instrumentType = "NEFT";
                                                     resp.loanCollection.scheduleDemandAmount = resp.loanCollection.repaymentAmount;

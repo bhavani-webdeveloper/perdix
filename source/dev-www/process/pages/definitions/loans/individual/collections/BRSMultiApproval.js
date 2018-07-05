@@ -1,8 +1,8 @@
 define({
     pageUID: "loans.individual.collections.BRSMultiApproval",
     pageType: "Engine",
-    dependencies: ["$log", "LoanCollection", "SessionStore", "PageHelper", "formHelper", "RolesPages", "Utils", "translateFilter", "$state", "Queries"],
-    $pageFn: function ($log, LoanCollection, SessionStore, PageHelper, formHelper, RolesPages, Utils, translateFilter, $state, Queries) {
+    dependencies: ["$log", "LoanCollection", "SessionStore", "PageHelper", "formHelper", "RolesPages", "Utils", "translateFilter", "$state", "Queries", "Files", "AuthTokenHelper"],
+    $pageFn: function ($log, LoanCollection, SessionStore, PageHelper, formHelper, RolesPages, Utils, translateFilter, $state, Queries, Files, AuthTokenHelper) {
         var branch = SessionStore.getBranch();
         var localFormCtrl;
         return {
@@ -142,7 +142,25 @@ define({
                         ]
                     },
                     getActions: function() {
-                        return [];
+                        /* 1)Action to download the bank challan  */
+                        return [{
+                            name: "Download Challan",
+                            desc: "",
+                            icon: "fa fa-download",
+                            fn: function(item, model) {
+                              /*  var requestParams = {
+                                    auth_token: AuthTokenHelper.getAuthData().access_token,
+                                    fileId : item['challanFileId']
+                                };
+                                //$httpParamSerializer(requestParams);
+                                /* var auth_token = AuthTokenHelper.getAuthData().access_token;*/
+                                var fileId = item['challanFileId']; 
+                                Utils.downloadFile(Files.getFileDownloadURL(fileId)); 
+                            },
+                            isApplicable: function(item, model) {
+                                return true;
+                            }
+                        }];
                     },
                     getBulkActions: function() {
                         return [{

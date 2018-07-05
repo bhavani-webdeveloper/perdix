@@ -59,6 +59,11 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource, Upload, $q, Pag
                 return response;
             }
         }),
+        fetchDepositSummary: {
+            method: "GET",
+            url: endpoint + '/fetchBankDepositSummaries',
+            isArray: true
+        },
         getDepositSummary:{
             method:'GET',
             url:endpoint+'/depositSummary'
@@ -78,8 +83,7 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource, Upload, $q, Pag
         },
         processCashDeposite:{
             method:'POST',
-            url:endpoint+'/processCashDeposite',
-            isArray: true
+            url:endpoint+'/processCashDeposite'
         },
         findDepositSummaries: {
             method: "GET",

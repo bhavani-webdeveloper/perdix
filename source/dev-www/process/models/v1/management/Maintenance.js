@@ -24,6 +24,12 @@ irf.models.factory('Maintenance', ["$resource", "$httpParamSerializer", "BASE_UR
                 url: biEndPoint + '/upload_list.php'
             }),
 
+            getSequenceNumber: {
+                method: 'GET',
+                url: endpoint + '/getSequenceNumber?sequenceName=' + ':sequenceName',
+                isNumber:  true
+            }
+
         });
 
         res.masterDataUpload = function(file, progress, opts) {
