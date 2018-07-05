@@ -2,16 +2,20 @@ irf.commons.value('RefCodeCache',{
 	refCodes: null
 });
 
+function localStorageAsJSON(key) {
+	return JSON.parse(LZString.decompress(localStorage.getItem(key)))
+};
+
 irf.commons.factory("irfStorageService",
 ["$log","$q","ReferenceCodeResource","RefCodeCache", "SessionStore", "$filter", "Utils",
 function($log,$q,rcResource,RefCodeCache, SessionStore, $filter, Utils){
 	var masterUpdateRegistry = {};
 
 	var retrieveItem = function(key) {
-		return localStorage.getItem(key);
+		return LZString.decompress(localStorage.getItem(key));
 	};
 	var storeItem = function(key, value) {
-		localStorage.setItem(key, value);
+		localStorage.setItem(key, LZString.compress(value));
 	};
 	var removeItem = function(key) {
 		localStorage.removeItem(key);
