@@ -53,6 +53,7 @@ define({
                 },
                 getResultsPromise: function(searchOptions, pageOpts) {
                     var deferred = $q.defer();
+                    var branchName=SessionStore.getCurrentBranch().branchName;
                     var out=[];
                     if(searchOptions.instrument && searchOptions.instrument.toLowerCase() == 'cash'){
                         LoanCollection.fetchDepositSummary({
@@ -66,7 +67,7 @@ define({
                                     repaymentAmount : data.totalAmount,
                                     depositId : data.depositId,
                                     repaymentDate : data.createdDate,
-                                    branchName : searchOptions.branchName,
+                                    branchName : branchName,
                                     instrumentType : "CASH"
                                 })
                             })
@@ -79,12 +80,12 @@ define({
                             });
                         }, function(res, headers){
                             PageHelper.hideLoader();
-                            irfProgressMessage.pop('loan-Collection', 'Error in getting Data', 2000);
+                            PageHelper.showProgress("deposit-queue", "Error in getting data", 5000);
                             PageHelper.showErrors(res);
                             deferred.reject(res);
                         });
 
-                    }else if(searchOptions.instrument && searchOptions.instrument.toLowerCase() == 'cheque'){
+                    }else if(searchOptions.instrument && (searchOptions.instrument.toLowerCase() == 'cheque' || searchOptions.instrument.toLowerCase() == 'chq')){
                         LoanCollection.query({
                             'currentStage':"Deposit",
                             'accountBranchId': searchOptions.branchName,
@@ -96,7 +97,7 @@ define({
                                     repaymentAmount : data.repaymentAmount,
                                     depositId : data.chequeDepositId,
                                     repaymentDate : data.repaymentDate,
-                                    branchName : data.branchName,
+                                    branchName : branchName,
                                     instrumentType : "CHQ"
                                 })
                             })
@@ -109,13 +110,11 @@ define({
                             });
                         }, function(res, headers){
                             PageHelper.hideLoader();
-                            irfProgressMessage.pop('loan-Collection', 'Oops. Some error.', 2000);
+                            PageHelper.showProgress("Deposit-queue", "Error in getting data", 5000);		
                             PageHelper.showErrors(res);
                             deferred.reject(res);
                         });
 
-                    }else if(!searchOptions.instrument){
-                        
                     }
                     
 
