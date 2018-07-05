@@ -200,7 +200,14 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                 "customer.landLineNo",
                                 {
                                     key:"customer.mobilePhone",
+                                    condition:"model.customer.mobilePhone",
+                                    "required":false,
                                     "readonly":true
+                                },
+                                {
+                                    key:"customer.mobilePhone",
+                                    condition:"!model.customer.mobilePhone",
+                                    "required":true
                                 },
                                 //"customer.mobilePhone",
                                 "customer.mailSameAsResidence"
@@ -236,6 +243,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                 onChange: "actions.setProofs(model)",
                                 "condition":"model.customer.urnNo",
                                 "readonly":true,
+                                "required":false,
                                 onCapture: function(result, model, form) {
                                     PageHelper.showLoader();
                                     var aadhaarData = EnrollmentHelper.customerAadhaarOnCapture(result, model, form);
@@ -253,6 +261,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                 //onCapture: EnrollmentHelper.customerAadhaarOnCapture
                             },{
                                 "key": "customer.aadhaarNo",
+                                "required":false,
                                 type: "qrcode",
                                 "condition":"!model.customer.urnNo",
                                 onChange: "actions.setProofs(model)",
@@ -276,15 +285,18 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                 title: "IDENTITY_PROOF",
                                 items: [{
                                     key: "customer.identityProof",
+                                    "required":false,
                                     "condition":"model.customer.urnNo",
                                     "readonly":true,
                                     type: "select"
                                 }, {
                                     key: "customer.identityProof",
+                                    "required":false,
                                     "condition":"!model.customer.urnNo",
                                     type: "select"
                                 },{
                                     key: "customer.identityProofImageId",
+                                    "required":false,
                                     type: "file",
                                     "readonly":true,
                                     fileType: "image/*",
@@ -296,6 +308,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                     //"offline": true
                                 }, {
                                     key: "customer.identityProofReverseImageId",
+                                    "required":false,
                                     type: "file",
                                     "readonly":true,
                                     fileType: "image/*",
@@ -307,6 +320,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                     //"offline": true
                                 }, {
                                     key: "customer.identityProofNo",
+                                    "required":false,
                                     type: "barcode",
                                     "condition":"model.customer.urnNo",
                                     "readonly":true,
@@ -316,6 +330,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                     }
                                 },{
                                     key: "customer.identityProofNo",
+                                    "required":false,
                                     type: "barcode",
                                     "condition":"!model.customer.urnNo",
                                     onCapture: function(result, model, form) {
@@ -390,6 +405,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                 condition: "!model.customer.addressProofSameAsIdProof",
                                 items: [{
                                     key: "customer.addressProof",
+                                    "required":false,
                                     type: "select",
                                     "condition":"model.customer.urnNo",
                                     "readonly":true,
@@ -399,6 +415,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                     "condition":"!model.customer.urnNo",
                                 }, {
                                     key: "customer.addressProofImageId",
+                                    "required":false,
                                     "readonly":true,
                                     type: "file",
                                     fileType: "image/*",
@@ -411,6 +428,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                 }, {
                                     key: "customer.addressProofReverseImageId",
                                     "readonly":true,
+                                    "required":false,
                                     type: "file",
                                     fileType: "image/*",
                                     "viewParams": function(modelValue, form, model) {
@@ -424,6 +442,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                     type: "barcode",
                                     "condition":"model.customer.urnNo",
                                     "readonly":true,
+                                    "required":false,
                                     onCapture: function(result, model, form) {
                                         $log.info(result);
                                         model.customer.addressProofNo = result.text;
@@ -700,7 +719,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                         {
                             key:"customer.familyMembers[].maritalStatus",
                             type:"select",
-                            readonly:true,
+                            //readonly:true,
                             condition:"(model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() === 'self'",
                             title: "T_MARITAL_STATUS"
                         },
@@ -1063,6 +1082,14 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                                     }
                                                 }
                                             }
+                                            if (model.customer.ownedAssetDetails.length && model.customer.ownedAssetDetails.length > 0) {
+                                                model.customer.physicalAssets[context.arrayIndex].ownedAssetallowed = true;
+                                                model.customer.physicalAssets[context.arrayIndex].assetunitallowed = false;
+                                            }
+                                            if (model.customer.assetunit.length && model.customer.assetunit.length > 0) {
+                                                model.customer.physicalAssets[context.arrayIndex].assetunitallowed = true;
+                                                model.customer.physicalAssets[context.arrayIndex].ownedAssetallowed = false;
+                                            }
                                         }
                                     },
                                    getListDisplayItem: function(item, index) {
@@ -1072,7 +1099,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                    }
                                }, {
                                    key: "customer.physicalAssets[].ownedAssetDetails",
-                                   condition:"model.customer.ownedAssetDetails && (model.customer.ownedAssetDetails.length>0)",
+                                   condition: "model.customer.physicalAssets[arrayIndex].ownedAssetallowed",
                                    "required":true,
                                    type: "lov",
                                    autolov: true,
@@ -1109,7 +1136,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                }, {
                                    key: "customer.physicalAssets[].unit",
                                    "title": "UNIT",
-                                   condition:"model.customer.assetunit && (model.customer.assetunit.length>0)",
+                                   condition: "model.customer.physicalAssets[arrayIndex].assetunitallowed",
                                    "required":true,
                                    type: "lov",
                                    autolov: true,
@@ -1459,6 +1486,15 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                     }
                                 }
                             }
+
+                            if(model.customer.latitude=="0"){
+                               model.customer.latitude=""; 
+                            }
+                           
+                            if(model.customer.longitude="0"){
+                                model.customer.longitude="";
+                            }
+                            
                             var reqData = _.cloneDeep(model);
                             EnrollmentHelper.fixData(reqData);
                             if (reqData.customer.currentStage == 'Completed'){ 

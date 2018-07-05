@@ -1083,6 +1083,14 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                                     }
                                 }
                             }
+                            if (model.customer.ownedAssetDetails.length && model.customer.ownedAssetDetails.length > 0) {
+                                model.customer.physicalAssets[context.arrayIndex].ownedAssetallowed = true;
+                                model.customer.physicalAssets[context.arrayIndex].assetunitallowed = false;
+                            }
+                            if (model.customer.assetunit.length && model.customer.assetunit.length > 0) {
+                                model.customer.physicalAssets[context.arrayIndex].assetunitallowed = true;
+                                model.customer.physicalAssets[context.arrayIndex].ownedAssetallowed = false;
+                            }
                         }
                     },
                     getListDisplayItem: function(item, index) {
@@ -1092,7 +1100,7 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                     }
                 }, {
                     key: "customer.physicalAssets[].ownedAssetDetails",
-                    condition: "model.customer.ownedAssetDetails && (model.customer.ownedAssetDetails.length>0)",
+                    condition: "model.customer.physicalAssets[arrayIndex].ownedAssetallowed",
                     "required": true,
                     type: "lov",
                     autolov: true,
@@ -1127,7 +1135,7 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                 }, {
                     key: "customer.physicalAssets[].unit",
                     "title": "UNIT",
-                    condition: "model.customer.assetunit && (model.customer.assetunit.length>0)",
+                    condition: "model.customer.physicalAssets[arrayIndex].assetunitallowed",
                     "required": true,
                     type: "lov",
                     autolov: true,

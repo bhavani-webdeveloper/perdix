@@ -206,8 +206,8 @@ irf.models.factory('Enrollment',function($resource,$q,Upload,$httpParamSerialize
 
 
 irf.pageCollection.factory("EnrollmentHelper",
-["$log", "$q","Enrollment", 'PageHelper', 'irfProgressMessage', 'Utils', 'SessionStore',
-function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionStore){
+["$log", "$q","Enrollment",'formHelper', 'PageHelper', 'irfProgressMessage', 'Utils', 'SessionStore',
+function($log, $q, Enrollment,formHelper, PageHelper, irfProgressMessage, Utils, SessionStore){
 
     var validatePanCard = function(str, form){
         const panRegex = /^[A-Za-z]{5}[0-9]{4}[A-Za-z]$/g;
@@ -335,6 +335,45 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
                 if(model.customer.physicalAssets[i].nameOfOwnedAsset && (model.customer.physicalAssets[i].assetType == null)){
                      model.customer.physicalAssets[i].assetType=model.customer.physicalAssets[i].nameOfOwnedAsset;
                 }
+            }
+        }
+
+        if (model.customer.physicalAssets && model.customer.physicalAssets.length && model.customer.physicalAssets.length > 0) {
+            for (i = 0; i < model.customer.physicalAssets.length; i++) {
+                    var ownedAssetDetails1 = formHelper.enum('asset_Details').data;
+                    var assetunit1 = formHelper.enum('asset_unit').data;
+                    var ownedAssetDetails=[];
+                    var assetunit=[];
+                    if (ownedAssetDetails1 && ownedAssetDetails1.length) {
+                        for (j in ownedAssetDetails1) {
+                            if (ownedAssetDetails1[j] && ownedAssetDetails1[j].parentCode &&  ((ownedAssetDetails1[j].parentCode).toUpperCase() == (model.customer.physicalAssets[i].assetType).toUpperCase())) {
+                                ownedAssetDetails.push({
+                                    name: ownedAssetDetails1[j].name,
+                                    id: ownedAssetDetails1[j].value
+                                })
+                                break;
+                            }
+                        }
+                    }
+                    if (ownedAssetDetails.length && ownedAssetDetails.length > 0) {
+                        model.customer.physicalAssets[i].ownedAssetallowed = true;
+                        continue;
+                    }
+
+                    if (assetunit1 && assetunit1.length) {
+                        for (k in assetunit1) {
+                            if ( assetunit1[k] && assetunit1[k].parentCode && ((assetunit1[k].parentCode).toUpperCase() == (model.customer.physicalAssets[i].assetType).toUpperCase())) {
+                                assetunit.push({
+                                    name: assetunit1[k].name,
+                                })
+                                break;
+                            }
+                        }
+                    }
+                    if (assetunit.length && assetunit.length > 0) {
+                        model.customer.physicalAssets[i].assetunitallowed = true;
+                    }
+                
             }
         }
 
