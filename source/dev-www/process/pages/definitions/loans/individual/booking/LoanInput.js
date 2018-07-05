@@ -225,6 +225,23 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
             model.loanAccount.productCode = '';
         }
 
+        var populateDisbursementScheduledDate = function(model) {
+            var now= moment(new Date()).format('HH:MM');
+            var today=new Date();
+            var tomorrow=new Date();
+            model.scheduledDisbursementAllowedDate=new Date();
+            var tomorrow= new Date(tomorrow.setDate(today.getDate()+1));
+            if(now < model.disbursementCutOffTime){
+               model._currentDisbursement.customerSignatureDate = today;
+               model._currentDisbursement.scheduledDisbursementDate = today;
+               model.scheduledDisbursementAllowedDate= new Date(model.scheduledDisbursementAllowedDate.setDate(today.getDate()+5));
+            }else{
+               model._currentDisbursement.customerSignatureDate = today;
+               model._currentDisbursement.scheduledDisbursementDate = tomorrow;
+               model.scheduledDisbursementAllowedDate= new Date(model.scheduledDisbursementAllowedDate.setDate(tomorrow.getDate()+5));
+            }
+        };
+
         return {
             "type": "schema-form",
             "title": "LOAN_INPUT",
@@ -233,6 +250,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 // TODO default values needs more cleanup
                 model.currentStage = 'LoanInitiation';
                 model.siteCode = SessionStore.getGlobalSetting("siteCode");
+                model.disbursementCutOffTime=SessionStore.getGlobalSetting("disbursementCutOffTime");
                 model.loanView = SessionStore.getGlobalSetting("LoanViewPageName");
                 model.loanHoldRequired = SessionStore.getGlobalSetting("loanHoldRequired");
                 var init = function(model, form, formCtrl) {
@@ -242,7 +260,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     model.loanAccount.bankId = bankId;
                     model.loanAccount.loanCentre = model.loanAccount.loanCentre || {};
                     model.loanAccount.disbursementSchedules=model.loanAccount.disbursementSchedules || [];
+                    model._currentDisbursement=model._currentDisbursement||{};
                     model.loanAccount.collateral=model.loanAccount.collateral || [{quantity:1}];
+                    if(model.siteCode == 'kinara'){
+                       populateDisbursementScheduledDate(model); 
+                    }
                     PageHelper.showLoader();
                     Queries.getGlobalSettings("mainPartner").then(function(value) {
                         model.loanAccount.partnerCode = model.loanAccount.partnerCode||value;
@@ -266,6 +288,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             model.BackedDatedDisbursement=data.BackedDatedDisbursement;
                             model.allowPreEmiInterest = data.allowPreEmiInterest;
                         }
+                        model.showLoanBookingDetails = true;
+                        model.allowPreEmiInterest = true;
                         //stateParams
                         console.log(model.BackedDatedDisbursement);
                         console.log(model.showLoanBookingDetails);
@@ -398,6 +422,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             model._currentDisbursement = model.loanAccount.disbursementSchedules[0];
                             model.loanAccount.scheduleStartDate = moment(model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate, "YYYY-MM-DD").add(model.loanAccount.disbursementSchedules[0].moratoriumPeriodInDays, 'days').format("YYYY-MM-DD");
                         }
+                        
                         model.linkedAccount={};
 
                         if(model.loanAccount.linkedAccountNumber && model.siteCode == 'kinara'){
@@ -1435,7 +1460,19 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         "key": "_currentDisbursement.customerSignatureDate",
                         "title": "CUSTOMER_SIGNATURE_DATE",
                         "type": "date",
+                        "required": false,
+                        "readonly":true,
+                        "condition":"model.siteCode == 'kinara'",
+                        "onChange":function(modelValue,form,model){
+                            populateDisbursementDate(modelValue,form,model);
+                        }
+                    },
+                    {
+                        "key": "_currentDisbursement.customerSignatureDate",
+                        "title": "CUSTOMER_SIGNATURE_DATE",
+                        "type": "date",
                         "required": true,
+                        "condition":"model.siteCode != 'kinara'",
                         "onChange":function(modelValue,form,model){
                             populateDisbursementDate(modelValue,form,model);
                         }
@@ -1446,8 +1483,19 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         "type": "date",
                         "required": true,
                         "onChange": function(value ,form ,model, event){
-                            if(!model.allowPreEmiInterest)
+                            var repaymentDate = moment(model.loanAccount.firstRepaymentDate,SessionStore.getSystemDateFormat());
+                            var disbursementSchedules = moment(model._currentDisbursement.scheduledDisbursementDate,SessionStore.getSystemDateFormat());
+                            if(model.siteCode == 'kinara' && (disbursementSchedules>model.scheduledDisbursementAllowedDate)){
+                                var scheduledDisbursementAllowedDate= moment(model.scheduledDisbursementAllowedDate).format('DD-MM-YYYY');
+                                PageHelper.setError({
+                                    message: "Scheduled Disbursement Date should not be greater then" + " " + scheduledDisbursementAllowedDate 
+                                });
                                 return;
+                            }
+
+                            if(!model.allowPreEmiInterest){
+                                return;
+                            }
                             var repaymentDate = moment(model.loanAccount.firstRepaymentDate,SessionStore.getSystemDateFormat());
                             var disbursementSchedules = moment(model._currentDisbursement.scheduledDisbursementDate,SessionStore.getSystemDateFormat());
                             if(model.loanAccount.scheduleStartDate == undefined || model.loanAccount.scheduleStartDate == null || model.loanAccount.scheduleStartDate == ""){
@@ -1479,8 +1527,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         "type": "date",
                         "required": true,
                         "onChange": function(value ,form ,model, event){
-                            if(!model.allowPreEmiInterest)
+                            if(!model.allowPreEmiInterest){
                                 return;
+                            }
                             var repaymentDate = moment(model.loanAccount.firstRepaymentDate,SessionStore.getSystemDateFormat());
                             var applicationDate = moment(model.loanAccount.loanApplicationDate,SessionStore.getSystemDateFormat());
                             if(repaymentDate < applicationDate){
@@ -3020,6 +3069,14 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     if (!preLoanSaveOrProceed(model)){
                         return;
                     }
+                    var disbursementSchedules = moment(model._currentDisbursement.scheduledDisbursementDate,SessionStore.getSystemDateFormat());
+                    if (model.siteCode == 'kinara' && (disbursementSchedules > model.scheduledDisbursementAllowedDate)) {
+                        var scheduledDisbursementAllowedDate = moment(model.scheduledDisbursementAllowedDate).format('DD-MM-YYYY');
+                        PageHelper.setError({
+                            message: "Scheduled Disbursement Date should not be greater then" + " " + scheduledDisbursementAllowedDate
+                        });
+                        return;
+                    }
                     if(model.loanAccount.linkedAccountNumber && model.siteCode == 'kinara' && model.linkedAccount){
                         if(parseInt(model.loanAccount.disbursementSchedules[0].disbursementAmount) < parseInt(model.linkedAccount.accountBalance)){
                             PageHelper.setError({
@@ -3094,6 +3151,15 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     PageHelper.clearErrors();
 
                     if (!validateForm(form)){
+                        return;
+                    }
+
+                    var disbursementSchedules = moment(model._currentDisbursement.scheduledDisbursementDate,SessionStore.getSystemDateFormat());
+                    if (model.siteCode == 'kinara' && (disbursementSchedules > model.scheduledDisbursementAllowedDate)) {
+                        var scheduledDisbursementAllowedDate = moment(model.scheduledDisbursementAllowedDate).format('DD-MM-YYYY');
+                        PageHelper.setError({
+                            message: "Scheduled Disbursement Date should not be greater then" + " " + scheduledDisbursementAllowedDate
+                        });
                         return;
                     }
 

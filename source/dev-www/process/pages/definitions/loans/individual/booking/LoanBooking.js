@@ -78,12 +78,32 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
             }
         };
 
+
+        var populateDisbursementScheduledDate = function(model) {
+            var now= moment(new Date()).format('HH:MM');
+            var today=new Date();
+            var tomorrow=new Date();
+            model.scheduledDisbursementAllowedDate=new Date();
+            var tomorrow= new Date(tomorrow.setDate(today.getDate()+1));
+            if(now < model.disbursementCutOffTime){
+               model._currentDisbursement.customerSignatureDate = today;
+               model._currentDisbursement.scheduledDisbursementDate = today;
+               model.scheduledDisbursementAllowedDate= new Date(model.scheduledDisbursementAllowedDate.setDate(today.getDate()+5));
+            }else{
+               model._currentDisbursement.customerSignatureDate = today;
+               model._currentDisbursement.scheduledDisbursementDate = tomorrow;
+               model.scheduledDisbursementAllowedDate= new Date(model.scheduledDisbursementAllowedDate.setDate(tomorrow.getDate()+5));
+            }
+        };
+
         return {
             "type": "schema-form",
             "title": "CAPTURE_DATES",
             initialize: function (model, form, formCtrl) {
                 $log.info("Individual Loan Booking Page got initialized");
                 model.siteCode = SessionStore.getGlobalSetting("siteCode");
+                model.disbursementCutOffTime=SessionStore.getGlobalSetting("disbursementCutOffTime");
+                model._currentDisbursement=model._currentDisbursement||{};
                 PageHelper.showProgress('load-loan', 'Loading loan account...');
                 PagesDefinition.getPageConfig("Page/Engine/loans.individual.booking.LoanInput").then(function(data) {
                     $log.info(data);
@@ -129,6 +149,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                                 PageHelper.showProgress('load-loan', 'No disbursement schedules found for the loan', 2000);
                                 $state.go('Page.Engine', {pageName: 'loans.individual.booking.PendingQueue'});
                                 return;
+                            }
+
+                            if (model.siteCode == 'kinara') {
+                                populateDisbursementScheduledDate(model);
                             }
 
                             model.loanAccount = res;
@@ -241,8 +265,20 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     {
                         "key": "_currentDisbursement.customerSignatureDate",
                         "title": "CUSTOMER_SIGNATURE_DATE",
+                        "condition":"model.siteCode != 'kinara'",
                         "type": "date",
                         "required": true,
+                        "onChange":function(modelValue,form,model){
+                            populateDisbursementDate(modelValue,form,model);
+                        }
+                    },
+                    {
+                        "key": "_currentDisbursement.customerSignatureDate",
+                        "title": "CUSTOMER_SIGNATURE_DATE",
+                        "condition":"model.siteCode == 'kinara'",
+                        "type": "date",
+                        "required": false,
+                        "readonly":true,
                         "onChange":function(modelValue,form,model){
                             populateDisbursementDate(modelValue,form,model);
                         }
@@ -251,7 +287,17 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         "key": "_currentDisbursement.scheduledDisbursementDate",
                         "title": "SCHEDULED_DISBURSEMENT_DATE",
                         "type": "date",
-                        "required": true
+                        "required": true,
+                        "onChange": function(value ,form ,model, event){
+                            var disbursementSchedules = moment(model._currentDisbursement.scheduledDisbursementDate,SessionStore.getSystemDateFormat());
+                            if(model.siteCode == 'kinara' && (disbursementSchedules>model.scheduledDisbursementAllowedDate)){
+                                var scheduledDisbursementAllowedDate= moment(model.scheduledDisbursementAllowedDate).format('DD-MM-YYYY');
+                                PageHelper.setError({
+                                    message: "Scheduled Disbursement Date should not be greater then" + " " + scheduledDisbursementAllowedDate 
+                                });
+                                return;
+                            }
+                        }
                     },
                     {
                         key: "loanAccount.emiPaymentDateRequested",
@@ -917,6 +963,15 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     //$log.info(BackedDatedDiffmonth);
                     /* 1) Loc-Renewal chnage includes default processing fee to 0.2 ans calculation of process amount 
                     */
+                    var disbursementSchedules = moment(model._currentDisbursement.scheduledDisbursementDate,SessionStore.getSystemDateFormat());
+                    if (model.siteCode == 'kinara' && (disbursementSchedules > model.scheduledDisbursementAllowedDate)) {
+                        var scheduledDisbursementAllowedDate = moment(model.scheduledDisbursementAllowedDate).format('DD-MM-YYYY');
+                        PageHelper.setError({
+                            message: "Scheduled Disbursement Date should not be greater then" + " " + scheduledDisbursementAllowedDate
+                        });
+                        return;
+                    }
+
                     if(model.loanAccount.linkedAccountNumber && model.siteCode == 'kinara'){
                         if(model.loanAccount.transactionType && model.loanAccount.transactionType.toLowerCase()=='renewal'){
                             model.loanAccount.processingFeePercentage=0.2;
