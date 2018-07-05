@@ -390,14 +390,14 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         key: "customer.enterprise.creditRating",
                         title: "CREDIT_RATING",
                         type: "number",
-                        condition:"model.siteCode == 'IFMRCapital'"                         
-                    }, 
+                        condition:"model.siteCode == 'IFMRCapital'"
+                    },
                     {
                         key: "customer.enterprise.ratingAgency",
                         title: "RATING_AGENCY",
                         type: "number",
-                        condition:"model.siteCode == 'IFMRCapital'"                         
-                    },  
+                        condition:"model.siteCode == 'IFMRCapital'"
+                    },
                     {
                         key: "customer.enterpriseCustomerRelations",
                         type: "array",
@@ -464,7 +464,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                 key: "customer.enterpriseCustomerRelations[].shareHoldingPercentage",
                                 title: "SHARE_HOLDING_PERCENTAGE",
                                 type: "number",
-                                condition:"model.siteCode == 'IFMRCapital'"                         
+                                condition:"model.siteCode == 'IFMRCapital'"
                             },
                             {
                                 key: "customer.enterpriseCustomerRelations[].experienceInBusiness",
@@ -520,7 +520,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     },
                     {
                          "key": "customer.email",
-                         condition:"model.siteCode == 'IFMRCapital'" 
+                         condition:"model.siteCode == 'IFMRCapital'"
                     },
                     "customer.doorNo",
                     "customer.street",
@@ -678,7 +678,8 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                 type: "password"
                             },
                             {
-                                key: "customer.customerBankAccounts[].confirmedAccountNumber"
+                                key: "customer.customerBankAccounts[].confirmedAccountNumber",
+                                "title": "CONFIRMED_ACCOUNT_NUMBER"
                             },
                             {
                                 key: "customer.customerBankAccounts[].accountType",

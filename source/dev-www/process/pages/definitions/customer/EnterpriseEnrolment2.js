@@ -1362,6 +1362,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             },
                             {
                                 key: "customer.customerBankAccounts[].confirmedAccountNumber",
+                                "title": "CONFIRMED_ACCOUNT_NUMBER",
                                 inputmode: "number",
                                 numberType: "tel"
                             },
@@ -1490,7 +1491,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 key: "customer.customerBankAccounts[].accountNumber"
                             },
                             {
-                                key: "customer.customerBankAccounts[].confirmedAccountNumber"
+                                key: "customer.customerBankAccounts[].confirmedAccountNumber",
+                                "title": "CONFIRMED_ACCOUNT_NUMBER"
                             },
                             {
                                 key: "customer.customerBankAccounts[].accountType",
@@ -2313,7 +2315,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
 
                 ]
             },
-            {       
+            {
                 type: "box",
                 condition: "model.currentStage == 'Application' || model.currentStage=='FieldAppraisal'",
                 title: "STOCKS",
@@ -2372,7 +2374,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     }]
 
                 }]
-            },   {       
+            },   {
                 type: "box",
                 condition: "model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
                 readonly:true,
@@ -2465,11 +2467,11 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         title: "TYPE",
                         required:true,
                         type: "select",
-                        enumCode: "enterprise_asset_name"        
+                        enumCode: "enterprise_asset_name"
                     }, {
                         key: "customer.enterpriseAssets[].isHypothecated",
                         condition : "model.customer.enterpriseAssets[arrayIndex].assetType  == 'Furniture' || model.customer.enterpriseAssets[arrayIndex].assetType  == 'Fixtures'",
-                        title: "IS_THE_MACHINE_HYPOTHECATED" ,       
+                        title: "IS_THE_MACHINE_HYPOTHECATED" ,
                         type: "radios",
                         titleMap: {
                             "No": "No",
@@ -2527,11 +2529,11 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         condition : "model.customer.enterpriseAssets[arrayIndex].assetType  == 'Furniture' || model.customer.enterpriseAssets[arrayIndex].assetType  == 'Fixtures'",
                         title: "TYPE",
                         type: "select",
-                        enumCode: "enterprise_asset_name"        
+                        enumCode: "enterprise_asset_name"
                     }, {
                         key: "customer.enterpriseAssets[].isHypothecated",
                         condition : "model.customer.enterpriseAssets[arrayIndex].assetType  == 'Furniture' || model.customer.enterpriseAssets[arrayIndex].assetType  == 'Fixtures'",
-                        title: "IS_THE_MACHINE_HYPOTHECATED" ,       
+                        title: "IS_THE_MACHINE_HYPOTHECATED" ,
                         type: "radios",
                         titleMap: {
                             "No": "No",
@@ -2935,7 +2937,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 type: "number",
                                 "schema":{
                                     "minimum":1000,
-                                    "maximum":9999 
+                                    "maximum":9999
                                 }
                             },
                             {
@@ -3004,7 +3006,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 "fileType": "image/*",
                                 "category": "Loan",
                                 "subCategory": "COLLATERALPHOTO",
-                               
+
                                 offline:true
                             },
                          ]
@@ -3862,7 +3864,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 });
             },
             submit: function(model, form, formName){
-                $log.info("Inside submit()");                
+                $log.info("Inside submit()");
                 $log.warn(model);
 
                 var DedupeEnabled = SessionStore.getGlobalSetting("DedupeEnabled") || 'N';
@@ -3961,7 +3963,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             Dedupe.create({
                                 "customerId": model.customer.id,
                                 "status": "pending"
-                            }).$promise;    
+                            }).$promise;
                         }
                     }
                 }, function(httpRes){
