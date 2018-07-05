@@ -520,7 +520,8 @@ self.renderForm = function() {
 				'<tr ><td >{{"FIXED_ASSETS" | translate}}</td><td></td><td >{{"LONG_TERM_LIABILITIES" | translate}}</td><td></td></tr><tr><td>{{"MACHINERY" | translate}}</td><td>{{model.assetsAndLiabilities.machinery | irfCurrency}}</td><td>{{"LONGTERMDEBT" | translate}}</td><td>{{model.assetsAndLiabilities.longTermDebt | irfCurrency}}</td></tr>' +
 				'<tr><td>{{"LAND" | translate}}</td><td>{{model.assetsAndLiabilities.land | irfCurrency}}</td><td>{{"OWN_CAPITAL" | translate}}</td><td>{{model.assetsAndLiabilities.ownCapital | irfCurrency}}</td></tr><tr><td>{{"BUILDING" | translate}}</td><td>{{model.assetsAndLiabilities.building | irfCurrency}}</td><td></td><td></td></tr>' +
 				'<tr><td>{{"VEHICLE" | translate}}</td><td>{{model.assetsAndLiabilities.vehicle | irfCurrency}}</td><td></td><td></td></tr>' +
-				'<tr><td>{{"FURNITURE_AND_FIXING" | translate}}</td><td>{{model.assetsAndLiabilities.furnitureAndFixtures | irfCurrency}}</td><td></td><td></td></tr>' +
+				'<tr><td>{{"FURNITURE" | translate}}</td><td>{{model.assetsAndLiabilities.furniture | irfCurrency}}</td><td></td><td></td></tr>'+
+				'<tr><td>{{"FIXTURES" | translate}}</td><td>{{model.assetsAndLiabilities.fixture | irfCurrency}}</td><td></td><td></td></tr>'+
 				'<tr><td>{{"TOTAL_FIXED_ASSETS" | translate}}</td><td>{{model.assetsAndLiabilities.totalFixedAssets | irfCurrency}}</td><td>{{"TOTAL_LONG_TERM_LIABILITIES" | translate}}</td><td>{{model.assetsAndLiabilities.totalLengTermLiabilities | irfCurrency}}</td></tr><tr></tr>' +
 				'<tr class="table-bottom-summary"><th>{{"TOTAL_ASSETS" | translate}}</th><th>{{model.assetsAndLiabilities.totalAssets | irfCurrency}}</th><th>{{"TOTAL_LIABILITIES" | translate}}</th><th>{{model.assetsAndLiabilities.totalLiabilities | irfCurrency}}</th></tr>' +
 				'</tbody>' +
@@ -1104,7 +1105,8 @@ self.renderReady = function(eventName) {
 						"ownCapital": bs['Own capital'],
 						"building": bs['Building'],
 						"vehicle": bs['Vehicle'],
-						"furnitureAndFixtures": bs['Furniture & Fixtures'],
+						"furniture": bs['Furniture'],
+						"fixture": bs['Fixtures'],
 						"totalFixedAssets": bs['Total fixed assets'],
 						"totalLengTermLiabilities": bs['Total long-term liabilities'],
 						"totalAssets": bs['Total Assets'],
