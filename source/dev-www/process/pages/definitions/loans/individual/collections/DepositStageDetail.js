@@ -1,378 +1,293 @@
-irf.pageCollection.factory(irf.page("loans.individual.collections.DepositStageDetail"),
-["$log", "SessionStore","$state", "$stateParams", "irfElementsConfig","Queries","formHelper","CustomerBankBranch","LoanCollection","PageHelper", "$filter", "$q", "Utils",
-function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHelper,CustomerBankBranch,LoanCollection,PageHelper,$filter, $q, Utils){
+define({
+    pageUID: "loans.individual.collections.DepositStageDetail",
+    pageType: "Engine",
+    dependencies: ["$log","SessionStore", "formHelper", "$stateParams", "PageHelper", "Utils", "LoanCollection", "irfNavigator","Queries","Files"],
+    $pageFn: function ($log,SessionStore, formHelper, $stateParams, PageHelper, Utils, LoanCollection, irfNavigator, Queries, Files) {
+        return {
+            "type": "schema-form",
+            "title": "DEPOSIT_STAGE_DETAIL",
+            "subTitle": "",
+            initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
 
-    // var branch = SessionStore.getBranch();
-    var branch = SessionStore.getCurrentBranch().branchName;
-
-    var computeTotal = function(model){
-        var totalAmount=0;
-        for (var i = model.pendingCashDeposits.length - 1; i >= 0; i--) {
-            if(model.pendingCashDeposits[i].check)
-                totalAmount+=model.pendingCashDeposits[i].amount_collected;
-        }
-        model.bankDepositSummary.totalAmount = totalAmount;
-    }
-
-    return {
-        "type": "schema-form",
-        "title": "DEPOSIT_STAGE_DETAIL",
-        "subTitle": "",
-        initialize: function (model, form, formCtrl) {
-            $log.info("Individual Loan Booking Page got initialized");
-            model.loggedInUser = SessionStore.getLoginname();
-            PageHelper.showLoader();
-            model.bankDepositSummary = {};
-
-            var depositListPromise = Queries.getDepositList(SessionStore.getLoginname())
-            .then(function (res){
-                $log.info(res);
-                model.pendingCashDeposits = [];
-                model.loanAccounts = [];
-                for (var i=0; i< res.body.length;i++){
-                    var cashDeposit = res.body[i];
-                    model.pendingCashDeposits.push(
-                        {
-                            loan_ac_no: cashDeposit.account_number,
-                            repaymentId: cashDeposit.id,
-                            customer_name: cashDeposit.customer_name,
-                            amount_collected: cashDeposit.repayment_amount
-                        }
-                    );
-                    model.loanAccounts.push(cashDeposit.id);
-                }
-                model.additional={};
-                model.additional.selectAll = true;
-                for ( i = 0; i < model.pendingCashDeposits.length; i++)
-                            model.pendingCashDeposits[i].check = true;
-                computeTotal(model);
-            });
-            var accountDetailPromise = Queries.getBankAccountsByPartnerForLoanRepay(
-                SessionStore.getGlobalSetting("mainPartner") || "Kinara").then(function(res){
-
-                var records = res.body;
-
-                if(records && _.isArray(records) && records.length > 0){
-                    var defaultBank = $filter('filter')( records, {default_collection_account : true}, true);
-                    if(defaultBank && _.isArray(defaultBank) && defaultBank.length > 0)
-                        model.bankDepositSummary.bankAccountNumber = defaultBank[0].account_number;
-                }
-
-            });
-
-            var promiseArray = [depositListPromise, accountDetailPromise];
-
-            $q.all(promiseArray).then(
-                function(){
-                    PageHelper.hideLoader();
-                },
-
-                function(httpRes){
-                PageHelper.showProgress('deposit-stage', 'Failed to load the deposit details. Try again.', 4000);
-                PageHelper.showErrors(httpRes);
-                PageHelper.hideLoader();
-            });
-
-        },
-        offline: false,
-        getOfflineDisplayItem: function(item, index){
-
-        },
-        form: [{
-            "type": "box",
-            "titleExpr": "'Cash to be deposited by '+ model.loggedInUser", // sample label code
-            "colClass": "col-sm-12", // col-sm-6 is default, optional
-            //"readonly": false, // default-false, optional, this & everything under items becomes readonly
-            "items": [
-            {
-                "key": "additional.selectAll",
-                "type": "checkbox",
-                "title": "SELECT_ALL",
-                "schema":{
-                        "default": false
-                    },
-                "onChange": function(modelValue, form, model){
-
-                    if (modelValue)
-                    {
-                        for ( i = 0; i < model.pendingCashDeposits.length; i++)
-                        model.pendingCashDeposits[i].check = true;
-                    }
-                    else
-                    {
-                        for ( i = 0; i < model.pendingCashDeposits.length; i++)
-                        model.pendingCashDeposits[i].check = false;
-                    }
-                    computeTotal(model);
-                }
+                /* 1)getting pagedata from predeposit detail page ,
+                   2) loading total deposit amount and refrence from that data ,
+                   3)fetching loan account number with ifsc code and branch to which deosit will be done
+                   4) on proceed update in bank deposit summmary for cash and loan collection for cheque
+                   5) reject will send back to pre deposit queue 
+                 */
+                model.branchname = SessionStore.getCurrentBranch().branchId;
+                model.depositDetails = $stateParams.pageData;
             },
-            {
-                "type":"array",
-                "key":"pendingCashDeposits",
-                "add":null,
-                "remove":null,
-                "view": "fixed",
-                //"readonly":true,
-                "notitle":true,
-                "items":[{
-                    "type":"section",
-                    "htmlClass": "row",
-                    "items": [{
-                        "type": "section",
-                        "htmlClass": "col-xs-1 col-md-1",
-                        "items": [{
-                            "key":"pendingCashDeposits[].check",
-                            "title":" ",
-                            "readonly":false,
-                            "type": "checkbox",
-                            "schema":{
-                                "default": false
-                            },
-                            "onChange": function(modelValue, form, model){
-                                model.additional.selectAll=false;
-                                computeTotal(model);
-                            }
-                        }]
-                    },
-                    {
-                        "type": "section",
-                        "htmlClass": "col-xs-5 col-md-5",
-                        "items": [{
-                            "key":"pendingCashDeposits[].customer_name",
-                            "readonly":true,
-                            "titleExpr":"model.pendingCashDeposits[arrayIndex].loan_ac_no",
-                            "title":" "
-                        }]
-                    },
-                    {
-                        "type": "section",
-                        "htmlClass": "col-xs-4 col-md-4",
-                        "items": [{
-                            "key": "pendingCashDeposits[].amount_collected",
-                            "readonly":true,
-                            "type":"amount",
-                            "title": " "
-                        }]
-                    },
-                    {
-                        "type": "section",
-                        "htmlClass": "col-xs-2 col-md-2",
-                        "items": [{
-                            "key": "pendingCashDeposits[].button",
-                            "type":"button",
-                            "title": "Reject",
-                            onClick:"actions.reject(model, form, formName)"
-                        }]
-                    }]
-                }]
-            },
-            {
-                "type":"section",
-                "html":"<hr>"
-            },
-            {
-                "type":"section",
-                "htmlClass": "row",
+            form: [{
+                "type": "box",
+                "title": "CASH_TO_BE_DEPOSITED",
+                "condition":"model.depositDetails && model.depositDetails.instrumentType.toLowerCase()=='cash'",
                 "items": [{
-                    "type": "section",
-                    "htmlClass": "col-sm-12",
-                    "items": [{
-                        "type": "amount",
-                        "key": "totalAmount",
-                        "title":"TOTAL_TO_BE_DEPOSITED",
-                        "readonly":true
-                    }]
+                        "key":"",
+                        "title": "TOTAL_TO_BE_DEPOSITED"
+                    },
+                    {
+                        "key": "depositDetails.collectionDetail.totalAmount",
+                        "title": "AMOUNT_DEPOSITED"
+                    },
+                    {
+                        "key":"depositDetails.collectionDetail.depositId",
+                        "title": "Refrence"
+                    },
+                    {
+                        key: "depositDetails.collectionDetail.bankAccountNumber",
+                        type: "lov",
+                        autolov: true,
+                        title: "DEPOSITED_IN_ACCOUNT",
+                        required: true,
+                        bindMap: {},
+                        outputMap: {
+                            "account_number": "depositDetails.collectionDetail.bankAccountNumber"
+                        },
+                        searchHelper: formHelper,
+                        search: function (inputModel, form, model) {
+                            return Queries.getBankAccountsByPartnerForLoanRepay();
+                        },
+                        getListDisplayItem: function (item, index) {
+                            return [
+                                item.account_number,
+                                item.ifsc_code,
+                                item.branch_name
+                            ];
+                        },
+                        onSelect: function (valueObj, model, context) {
+                            model.depositDetails.collectionDetail.bankAccountNumber = valueObj.account_number;
+                            model.depositDetails.collectionDetail.ifscCode = valueObj.ifsc_code;
+                            model.depositDetails.collectionDetail.bankBranchDetails = valueObj.branch_name; 
+                        }
+                    },
+                    {
+                        "key":"depositDetails.collectionDetail.ifscCode",
+                        "title": "CASH_DEPOSIT_IFSC_CODE"
+                    },
+                    {
+                        "key": "depositDetails.collectionDetail.bankBranchDetails",
+                        "title": "CASH_DEPOSIT_BRANCH",
+                    },
+                    {
+                        title: "BANK_CHALLAN1",
+                        key: "depositDetails.collectionDetail.challanFileId",
+                        type: "file",
+                        fileType: "application/pdf",
+                        category: "Loan",
+                        subCategory: "DOC1",
+                        using: "scanner"
+                    }
+                ]
+            },
+            {
+                "type": "box",
+                "title": "CHEQUE_TO_BE_DEPOSITED",
+                "condition":"model.depositDetails && model.depositDetails.instrumentType.toLowerCase()=='chq'",
+                items: [{
+                    "key":"depositDetails.collectionDetail.demandAmount",
+                    "title": "TOTAL_TO_BE_DEPOSITED"
+                },
+                {
+                    "key": "depositDetails.collectionDetail.repaymentAmount",
+                    "title": "AMOUNT_DEPOSITED"
+                },
+                {
+                    "key":"depositDetails.collectionDetail.chequeDepositId",
+                    "title": "Refrence"
+                },{
+                    key: "depositDetails.collectionDetail.bankAccountNumber",
+                    condition: "model.depositDetails && model.depositDetails.instrumentType.toLowerCase()=='chq'",
+                    title: "DEPOSITED_IN_ACCOUNT",
+                    readonly: true
+                },
+                {
+                    "key":"depositDetails.collectionDetail.chequeDepositedBankIfscCode",
+                    "title": "CASH_DEPOSIT_IFSC_CODE",
+                    "readonly": true,
+                    "condition": "model.depositDetails && model.depositDetails.instrumentType.toLowerCase()=='chq'"
+                },
+                {
+                    "key": "depositDetails.collectionDetail.accountBranchId",
+                    "title": "CASH_DEPOSIT_BRANCH",
+                    "readonly": true,
+                    "condition":"model.depositDetails && model.depositDetails.instrumentType.toLowerCase()=='chq'"
+                },
+                {
+                    title: "BANK_CHALLAN",
+                    key: "depositDetails.collectionDetail.challanFileId",
+                    type: "file",
+                    fileType: "application/pdf",
+                    category: "Loan",
+                    subCategory: "DOC1",
+                    using: "scanner"
                 }]
             },
             {
-                "key":"bankDepositSummary.totalAmount",
-                "type":"amount",
-                "title":"AMOUNT_DEPOSITED",
-                "readonly": true
-            },
-            {
-                "key":"bankDepositSummary.reference",
-                "type":"text",
-                "title":"REFERENCE"
-            },
-            {
-                key: "bankDepositSummary.bankAccountNumber",
-                type: "lov",
-                lovonly: true,
-                title:"DEPOSITED_TO_ACCOUNT",
-                required: true,
-                bindMap: {
-                },
-                outputMap: {
-                    "account_number": "bankDepositSummary.bankAccountNumber"
-                },
-                searchHelper: formHelper,
-                search: function(inputModel, form, model) {
-                    return Queries.getBankAccountsByPartnerForLoanRepay();
-                },
-                getListDisplayItem: function(item, index) {
-                    return [
-                        item.account_number,
-                        item.ifsc_code + ', ' + item.bank_name,
-                        item.branch_name
-                    ];
-                }
-            },
-            {
-                key: "bankDepositSummary.ifscCode",
-                type: "lov",
-                "title":"CASH_DEPOSIT_BRANCH_IFSC_CODE",
-                lovonly: true,
-                inputMap: {
-                    "ifscCode": {
-                        "key": "bankDepositSummary.ifscCode"
+                "type": "box",
+                "title": "PROCEED_SECTION",
+                "colClass": "col-sm-12",
+                "items": [{
+                        key: "review.action",
+                        type: "radios",
+                        titleMap: {
+                            "REJECT": "REJECT",
+                            "PROCEED": "PROCEED"
+                        }
                     },
-                    "bankName": {
-                        "key": "bankDepositSummary.depositBank"
+                    {
+                        type: "section",
+                        condition: "model.review.action=='PROCEED'",
+                        items: [{
+                            title: "REMARKS",
+                            key: "review.remarks",
+                            type: "textarea",
+                            required: true
+                        }, {
+                            key: "review.proceedButton",
+                            type: "button",
+                            title: "PROCEED",
+                            onClick: "actions.proceed(model, formCtrl, form, $event)"
+                        }]
                     },
-                    "branchName": {
-                        "key": "bankDepositSummary.depositBranch"
+                    {
+                        type: "section",
+                        condition: "model.review.action == 'REJECT'",
+                        items: [{
+                            title: "REMARKS",
+                            key: "review.remarks",
+                            type: "textarea",
+                            required: true
+                        }, {
+                            key: "review.proceedButton",
+                            type: "button",
+                            title: "REJECT",
+                            onClick: "actions.reject(model, formCtrl, form, $event)"
+                        }]
                     }
-                },
-                onSelect:function(results,model,context) {
-                    model.bankDepositSummary.ifscCode = results.ifscCode;
-                    model.bankDepositSummary.bankBranchDetails = results.bankName + ' ' + results.branchName;
-                },
-                searchHelper: formHelper,
-                search: function(inputModel, form) {
-                    $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
-                    var promise = CustomerBankBranch.search({
-                        'bankName': inputModel.depositBank,
-                        'ifscCode': inputModel.ifscCode,
-                        'branchName': inputModel.depositBranch
-                    }).$promise;
-                    return promise;
-                },
-                getListDisplayItem: function(data, index) {
-                    return [
-                        data.ifscCode,
-                        data.branchName,
-                        data.bankName
-                    ];
-                },
-            },
-            {
-                "key":"bankDepositSummary.bankBranchDetails",
-                "title":"DEPOSITED_BANK_BRANCH"
+                ]
             }
-            ]
-        },{
-            "type": "actionbox",
-            "items": [{
-                "type": "submit",
-                "title": "SUBMIT"
-            }]
-        }],
-        schema: {
-            "$schema": "http://json-schema.org/draft-04/schema#",
-            "type": "object",
-            "properties": {
-                "repayments": [{
-                    "type": "string"
-                }],
-                "bankDepositSummary": {
-                    "type": "object",
-                    "properties": {
-                        "bankAccountNumber": {
-                            "type": "string"
+        ],
+            schema: {
+                "$schema": "http://json-schema.org/draft-04/schema#",
+                "type": "object",
+                "properties": {
+                    "collectionDetails1": {
+                        "type": "object",
+                        "properties": {
+                            "customerName": {
+                                "type": ["string", null],
+                                "title": "BUSINESS_NAME"
+                            },
+                            "accountNumber": {
+                                "type": ["string", null],
+                                "title": "LOAN_ACCOUNT_NO"
 
-                        },
-                        "bankBranchDetails": {
-                            "type": "string"
-                        },
-                        "ifscCode": {
-                            "type": "string",
-                            "title":"IFSC_CODE"
-                        },
-                        "depositBank": {
-                            "type": "string",
-                            "title":"DEPOSITED_BANK"
-                        },
-                        "depositBranch": {
-                            "type": "string",
-                            "title":"DEPOSITED_BRANCH"
-                        },
+                            },
+                            "repaymentAmount": {
+                                "type": ["string", null],
+                                "title": "Collected Amount"
+                            }
+                        }
                     }
-                }
+                },
+                "required": []
             },
-            "required": [
-                "repaymentId",
-                "amount",
-                "authorizationRemark",
-                "authorizationUsing",
-                "cashCollectionRemark",
-                "groupCode",
-                "productCode",
-                "remarks",
-                "repaymentDate",
-                "transactionId",
-                "transactionName",
-                "urnNo"
-            ]
-        },
-        actions: {
-            submit: function(model, form, formName){
-                if (!model.bankDepositSummary.totalAmount || model.bankDepositSummary.totalAmount <=0){
-                    PageHelper.showProgress("deposit-cash","Amount deposited cannot be zero",5000);
-                    return false;
-                }
-                var loanCollectionIds = [];
-                for (var i = model.pendingCashDeposits.length - 1; i >= 0; i--) {
-                    if(model.pendingCashDeposits[i].check){
-                        loanCollectionIds.push(model.pendingCashDeposits[i].repaymentId);
-                    }
-                }
-                var reqData = {
-                    'bankDepositSummary': _.cloneDeep(model.bankDepositSummary),
-                    'loanCollectionIds':_.cloneDeep(loanCollectionIds)
-                };
+            eventListeners: {},
+            actions: {
+                proceed: function (model, formCtrl, form, $event) {
+                    /* 1)for cash using updateBankDepositSummaries and finnaly using batchRepay api to move to next branch
+                       2)for cheque using loancollection api to update and move forward to next branch
+                     */
+                  
+                    Utils.confirm("Are you sure ? ")
+		            .then(function(){
+                    // 1)cash collection details to be deposited
+                        if(model.depositDetails && model.depositDetails.instrumentType.toLowerCase()=='cash'){
+                    //UPDATE API to update deposit summary details
+                            LoanCollection.updateDeposiSummary(model.depositDetails.collectionDetail).$promise
+                                .then(function (res, head) {
+                                    PageHelper.showProgress('Deposit-Stage', 'Successfully Updated', 5000);
+                                    let cashProceedData = {
+                                        "loanCollectionSummaryDTOs": [{
+                                            "depositId_loanAccountNumber": model.depositDetails.id
+                                        }],
+                                        "remarks": model.review.remarks,
+                                        "repaymentProcessAction": "PROCEED"
+                                    }
+                    //batchRepay to proceed loancollection account associated with bankSummaryID
+                                    LoanCollection.batchUpdate(cashProceedData).$promise
+                                        .then(function (res, head) {
+                                            PageHelper.showProgress('Deposit-Stage', 'Successfully proceeded to BRSValidation', 5000);
+                                            irfNavigator.goBack();
+                                        }, function (httpres) {
+                                            PageHelper.showProgress("Deposit-Stage", "Error in Proceeding to next stage", 5000);
+                                        })
+                                }, function (httpres) {
+                                    PageHelper.showProgress("Deposit-Stage", "Error in updating the deposit data", 5000);
 
-                PageHelper.showProgress('deposit-cash', 'Working...');
-                PageHelper.showLoader();
-                $log.info(reqData);
-                LoanCollection.processCashDeposite(reqData, function(response){
-                    PageHelper.hideLoader();
-                    $state.go('Page.Engine', {pageName: 'loans.individual.collections.BounceQueue', pageId: null});
+                                })
+                                .finally(function () {
+                                    PageHelper.hideBlockingLoader();
+                                })
+                        }else if(model.depositDetails && (model.depositDetails.instrumentType.toLowerCase()=='chq' || model.depositDetails.instrumentType.toLowerCase() == 'cheque')){
+                            var chequeDepositData = {
+                                "loanCollection": model.depositDetails.collectionDetail,
+                                "repaymentProcessAction": "PROCEED"
+                            }
+                            LoanCollection.update(chequeDepositData).$promise
+                                .then(function(res, head){
+                                    PageHelper.showProgress('Deposit-Stage', 'Successfully proceeded to BRSValidation', 5000);
+                                    irfNavigator.goBack();
 
-                }, function(errorResponse){
-                    PageHelper.hideLoader();
-                    PageHelper.showErrors(errorResponse);
-                });
-            },
-            reject: function(model, form, formName) {
-                $log.info(model.pendingCashDeposits[form.arrayIndex]);
-                $log.info("Inside reject()");
-                Utils.confirm("Are You Sure?")
-                    .then(function() {
-                        PageHelper.showLoader();
-                        LoanCollection.get({
-                            id: model.pendingCashDeposits[form.arrayIndex].repaymentId
-                        }).$promise.then(
-                            function(resp) {
+                                }, function(httpres){
+                                    PageHelper.showProgress("Deposit-Stage", "Error in Proceeding to next stage", 5000);
 
-                                var loanCollection = _.cloneDeep(resp);
-                                var reqParams = {};
-                                reqParams.loanCollection = loanCollection;
-                                reqParams.stage = "Rejected";
-                                reqParams.repaymentProcessAction = "PROCEED";
-                                LoanCollection.update(reqParams, function(resp, header) {
-                                    PageHelper.showProgress('loan collection with id' +resp.id + 'is rejected', 'Working...');
-                                    PageHelper.hideLoader();
-                                    $state.reload();
-
-                                }, function(resp) {
-                                    PageHelper.showErrors(resp);
-                                }).$promise.finally(function() {
-                                    PageHelper.hideLoader();
-                                });
-                            })
+                                })
+                        }
                     })
+                   
+                },
+                reject: function (model, formCtrl, form, $event) {
+                /* 1)rejection from this stage will go to preDeposit stage */
+                $log.info("Inside reject()");
+                Utils.confirm("Are you sure ? ")
+                    .then(function () {
+                        PageHelper.showBlockingLoader("Processing...");
+                        var collectionData = {
+                            "loanCollectionSummaryDTOs": [],
+                            "remarks": model.review.remarks,
+                            "repaymentProcessAction": "PROCEED",
+                            "stage": "PreDeposit"
+                        }
+                        if (model.depositDetails && model.depositDetails.instrumentType.toLowerCase()=='cash') {
+                                collectionData['loanCollectionSummaryDTOs'].push({
+                                    depositId_loanAccountNumber: model.depositDetails.id
+                                });
+
+                        } else if (model.depositDetails && (model.depositDetails.instrumentType.toLowerCase()=='chq' || model.depositDetails.instrumentType.toLowerCase() == 'cheque')) {
+                            collectionData['loanCollectionSummaryDTOs'].push({
+                                depositId_loanAccountNumber: model.depositDetails.id
+                            });
+
+                        }
+                        LoanCollection.batchUpdate(collectionData).$promise
+                            .then(function (res, head) {
+                                PageHelper.showProgress('Deposit-Reject', 'successfully Rejected', 5000);
+                                irfNavigator.goBack();
+                            }, function (httpres) {
+                                PageHelper.showProgress("Deposit-Reject", "Error in in Reject", 5000);
+
+                            })
+                            .finally(function () {
+                                PageHelper.hideBlockingLoader();
+                            })
+
+                    })
+                    
+                   
+                }
             }
         }
-    };
-}]);
+    }
+})

@@ -85,6 +85,10 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource, Upload, $q, Pag
             method:'POST',
             url:endpoint+'/processCashDeposite'
         },
+        updateDeposiSummary:{
+            method: 'PUT',
+            url:endpoint + '/updateDeposiSummary'
+        },
         findDepositSummaries: {
             method: "GET",
             url: endpoint + "/findDepositSummaries",

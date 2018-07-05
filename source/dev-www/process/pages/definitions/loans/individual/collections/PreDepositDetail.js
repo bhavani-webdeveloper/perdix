@@ -5,7 +5,7 @@ define({
     $pageFn: function ($log, $state, SessionStore, formHelper, $q, $stateParams, PageHelper, Utils, LoanCollection, irfNavigator, Maintenance) {
         return {
             "type": "schema-form",
-            "title": "PREDEPOSIT_CONSOLIDATED",
+            "title": "CONSOLIDATION",
             "subTitle": "",
             initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
                 model.branchname = SessionStore.getCurrentBranch().branchId;
@@ -45,7 +45,7 @@ define({
                             "data" :"customerName"
                         },
                         {
-                            "title":"LOAN_ACCOUNT_NO",
+                            "title":"LOAN_ACCOUNT_NO1",
                             "data":"accountNumber"
                         },
                         {
@@ -61,7 +61,7 @@ define({
                             "data":"instrumentType"
                         },
                         {
-                            "title":"TOTAL_DEMANDED",
+                            "title":"TOTAL_DEMANDED3",
                             "data": "demandAmount"
 
                         },
@@ -154,94 +154,102 @@ define({
                             4) branch to be updated the pre-deposit ,
                         
                     */
-                    $log.info("Inside proceed()");
-                    PageHelper.showBlockingLoader("Processing...");
-                    if (model.collectionDetails && model.collectionDetails[0]['instrumentType'] == 'CASH') {
-                        var cashDepositSummary = {
-                                bankDepositSummary : {
-                                    depositId:model.depositID,
-                                    totalAmount:  model.totalCashCollected,
-                                    loanCollections: model.collectionDetails
-                                },
-                                loanCollectionIds : [],
-                                loanColleactions: model.collectionDetails,
-                                depositId : model.depositID
+                    utils.confirm("Are You sure ? ")
+                        .then(function(){
+                            $log.info("Inside proceed()");
+                            PageHelper.showBlockingLoader("Processing...");
+                            if (model.collectionDetails && model.collectionDetails[0]['instrumentType'] == 'CASH') {
+                                var cashDepositSummary = {
+                                        bankDepositSummary : {
+                                            depositId:model.depositID,
+                                            totalAmount:  model.totalCashCollected,
+                                            loanCollections: model.collectionDetails
+                                        },
+                                        loanCollectionIds : [],
+                                        loanColleactions: model.collectionDetails,
+                                        depositId : model.depositID
+                                    }
+                                _.each(model.collectionDetails, function (cashCollectionDetail) {
+                                    cashDepositSummary['loanCollectionIds'].push(cashCollectionDetail.id);
+                                })
+
+                                LoanCollection.processCashDeposite(cashDepositSummary).$promise
+                                    .then(function (res, head) {
+                                        PageHelper.showProgress('PreDeposit', 'successfully moved to Deposit', 5000);
+                                        irfNavigator.goBack();
+                                    }, function (httpres) {
+                                        PageHelper.showProgress("PreDeposit", "Error in proceeding to Deposit", 5000);
+
+                                    })
+                                    .finally(function () {
+                                        PageHelper.hideBlockingLoader();
+                                    })
+
+
+                            } else if (model.collectionDetails && model.collectionDetails[0]['instrumentType'] == 'CHQ') {
+                                var chequeCollectionData = {
+                                    "loanCollection": model.collectionDetails[0],
+                                    "repaymentProcessAction": "PROCEED",
+                                    "stage": "Deposit"
+                                };
+                                chequeCollectionData['loanCollection']['chequeDepositId']= model.depositID;
+                                LoanCollection.update(chequeCollectionData).$promise
+                                    .then(function (res, head) {
+                                        PageHelper.showProgress('PreDeposit', 'successfully moved to Deposit', 5000);
+                                        irfNavigator.goBack();
+                                    }, function (httpres) {
+                                        PageHelper.showProgress("PreDeposit", "Error in proceeding to Deposit", 5000);
+
+                                    })
+                                    .finally(function () {
+                                        PageHelper.hideBlockingLoader();
+                                    })
+
                             }
-                        _.each(model.collectionDetails, function (cashCollectionDetail) {
-                            cashDepositSummary['loanCollectionIds'].push(cashCollectionDetail.id);
                         })
-
-                        LoanCollection.processCashDeposite(cashDepositSummary).$promise
-                            .then(function (res, head) {
-                                PageHelper.showProgress('PreDeposit', 'successfully moved to Deposit', 5000);
-                                irfNavigator.goBack();
-                            }, function (httpres) {
-                                PageHelper.showProgress("PreDeposit", "Error in proceeding to Deposit", 5000);
-
-                            })
-                            .finally(function () {
-                                PageHelper.hideBlockingLoader();
-                            })
-
-
-                    } else if (model.collectionDetails && model.collectionDetails[0]['instrumentType'] == 'CHQ') {
-                        var chequeCollectionData = {
-                            "loanCollection": model.collectionDetails[0],
-                            "repaymentProcessAction": "PROCEED",
-                            "stage": "Deposit"
-                        };
-                        chequeCollectionData['loanCollection']['chequeDepositId']= model.depositID;
-                        LoanCollection.update(chequeCollectionData).$promise
-                            .then(function (res, head) {
-                                PageHelper.showProgress('PreDeposit', 'successfully moved to Deposit', 5000);
-                                irfNavigator.goBack();
-                            }, function (httpres) {
-                                PageHelper.showProgress("PreDeposit", "Error in proceeding to Deposit", 5000);
-
-                            })
-                            .finally(function () {
-                                PageHelper.hideBlockingLoader();
-                            })
-
-                    }
                 },
                 reject: function (model, formCtrl, form, $event) {
                     /*a) if action is reject
                             1) sending to reject stage , calling loancollection/batchRepay 
                             2) cheque have validation that it will always come in this branch as single unit
                     */
-                    $log.info("Inside reject()");
-                    PageHelper.showBlockingLoader("Processing...");
-                    var collectionData = {
-                        "loanCollectionSummaryDTOs": [],
-                        "remarks": model.review.remarks,
-                        "repaymentProcessAction": "PROCEED",
-                        "stage": "Rejected"
-                    }
-                    if (model.collectionDetails && model.collectionDetails[0]['instrumentType'] == 'CASH') {
-                        _.each(model.collectionDetails, function (collectionDetail) {
-                            collectionData.loanCollectionSummaryDTOs.push({
-                                loanCollectionId: collectionDetail.id
-                            });
-                        })
+                   Utils.confirm("Are you sure ? ")
+                        .then(function () {
+                            $log.info("Inside reject()");
+                            PageHelper.showBlockingLoader("Processing...");
+                            var collectionData = {
+                                "loanCollectionSummaryDTOs": [],
+                                "remarks": model.review.remarks,
+                                "repaymentProcessAction": "PROCEED",
+                                "stage": "Rejected"
+                            }
+                            if (model.collectionDetails && model.collectionDetails[0]['instrumentType'] == 'CASH') {
+                                _.each(model.collectionDetails, function (collectionDetail) {
+                                    collectionData.loanCollectionSummaryDTOs.push({
+                                        loanCollectionId: collectionDetail.id
+                                    });
+                                })
 
-                    } else if (model.collectionDetails && model.collectionDetails[0]['instrumentType'] == 'CHQ') {
-                        collectionData['loanCollectionSummaryDTOs'].push({
-                            loanCollectionId: model.collectionDetails[0]['id']
-                        });
+                            } else if (model.collectionDetails && model.collectionDetails[0]['instrumentType'] == 'CHQ') {
+                                collectionData['loanCollectionSummaryDTOs'].push({
+                                    loanCollectionId: model.collectionDetails[0]['id']
+                                });
 
-                    }
-                    LoanCollection.batchUpdate(collectionData).$promise
-                        .then(function (res, head) {
-                            PageHelper.showProgress('BranchDepositReject', 'successfully Rejected', 5000);
-                            irfNavigator.goBack();
-                        }, function (httpres) {
-                            PageHelper.showProgress("BranchDepositReject", "Error in in Reject", 5000);
+                            }
+                            LoanCollection.batchUpdate(collectionData).$promise
+                                .then(function (res, head) {
+                                    PageHelper.showProgress('BranchDepositReject', 'successfully Rejected', 5000);
+                                    irfNavigator.goBack();
+                                }, function (httpres) {
+                                    PageHelper.showProgress("BranchDepositReject", "Error in in Reject", 5000);
 
-                        })
-                        .finally(function () {
-                            PageHelper.hideBlockingLoader();
-                        })
+                                })
+                                .finally(function () {
+                                    PageHelper.hideBlockingLoader();
+                                })
+
+                   })
+                    
                 }
             }
         }

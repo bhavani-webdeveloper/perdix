@@ -127,7 +127,7 @@ define({
                             data: "accountNumber"
                         },
                         {
-                            title: "Collected Amount",
+                            title: "COLLECTED_AMOUNT",
                             data: "repaymentAmount"
                         }
                         ]

@@ -68,7 +68,10 @@ define({
                                     depositId : data.depositId,
                                     repaymentDate : data.createdDate,
                                     branchName : branchName,
-                                    instrumentType : "CASH"
+                                    instrumentType : "CASH",
+                                    id : data.id,
+                                    challanFileId: data.challanFileId,
+                                    collectionDetail: data
                                 })
                             })
                             PageHelper.hideLoader();
@@ -98,7 +101,10 @@ define({
                                     depositId : data.chequeDepositId,
                                     repaymentDate : data.repaymentDate,
                                     branchName : branchName,
-                                    instrumentType : "CHQ"
+                                    instrumentType : "CHQ",
+                                    id : data.id,
+                                    challanFileId: data.challanFileId,
+                                    collectionDetail: data
                                 })
                             })
                             PageHelper.hideLoader();
@@ -171,54 +177,30 @@ define({
                                 data: "depositId"
                             },
                             {
-                                title: "Collected Amount",
+                                title: "COLLECTED_AMOUNT",
                                 data: "repaymentAmount"
                             }
                         ]
                     },
                     getActions: function() {
-                        return [];
-                    },
-                    getBulkActions: function() {
-						return [{
-							name: "Submit",
-							desc: "",
-							icon: "fa fa-pencil-square-o",
-							fn: function(items) {
-                        /* Validation for cheque and cash instrument types :
-                            1) At a time only one cheque should be selected , 
-                            2) cash and cheque can not be selected together
-                        */
-								if (items.length == 0) {
-									PageHelper.showProgress("bulk-selected", "Atleast one Branch Deposit detail should be selected", 5000);
-									return false;
-                                }
-                                var countCHQ=0;
-                                _.each(items, function(loanCollection){
-                                        if(loanCollection.instrumentType=='CHQ'){
-                                            countCHQ ++;
-                                        }
-                                        if(countCHQ >1)
-                                            return countCHQ;
-                                });
-                                if(countCHQ>1) {
-                                    PageHelper.showProgress("bulk-selected", "Only one Cheque Details can be selected at a time ", 5000);
-                                    return false;
-                                }
-                                if(countCHQ==1 && items.length>1){
-                                    PageHelper.showProgress("bulk-selected", "Cheque and Cash can not be selected together", 5000);
-									return false;
-                                };
+                        return [{
+                            name: "Submit",
+                            desc: "",
+                            icon: "fa fa-check-square-o",
+                            fn: function(item, model) {
                                 irfNavigator.go({
                                     'state': 'Page.Engine',
                                     'pageName': 'loans.individual.collections.DepositStageDetail',
-                                    'pageData': items
+                                    'pageData': item
                                 });
-							},
-							isApplicable: function(items) {
-								return true;
-							}
-						}];
+                            },
+                            isApplicable: function(item, model) {
+                                return true;
+                            }
+                        }];
+                    },
+                    getBulkActions: function() {
+						return [];
 					}
                 }
             }
