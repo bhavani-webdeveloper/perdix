@@ -36,6 +36,7 @@ define({
                         },
                         "instrument": {
                             "title": "Instrument Type",
+                            "required": true,
                             "type": ["string", "null"],
                             "enumCode": "instrument_type3",
                             "x-schema-form": {

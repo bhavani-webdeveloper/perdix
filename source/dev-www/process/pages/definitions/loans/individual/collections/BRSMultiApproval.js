@@ -1,8 +1,8 @@
 define({
     pageUID: "loans.individual.collections.BRSMultiApproval",
     pageType: "Engine",
-    dependencies: ["$log", "LoanCollection", "SessionStore", "PageHelper", "formHelper", "RolesPages", "Utils", "translateFilter", "$state", "Queries", "Files", "AuthTokenHelper"],
-    $pageFn: function ($log, LoanCollection, SessionStore, PageHelper, formHelper, RolesPages, Utils, translateFilter, $state, Queries, Files, AuthTokenHelper) {
+    dependencies: ["$log", "LoanCollection", "SessionStore", "PageHelper", "formHelper", "RolesPages", "Utils", "translateFilter", "$state", "Queries", "Files"],
+    $pageFn: function ($log, LoanCollection, SessionStore, PageHelper, formHelper, RolesPages, Utils, translateFilter, $state, Queries, Files) {
         var branch = SessionStore.getBranch();
         var localFormCtrl;
         return {
@@ -148,17 +148,11 @@ define({
                             desc: "",
                             icon: "fa fa-download",
                             fn: function(item, model) {
-                              /*  var requestParams = {
-                                    auth_token: AuthTokenHelper.getAuthData().access_token,
-                                    fileId : item['challanFileId']
-                                };
-                                //$httpParamSerializer(requestParams);
-                                /* var auth_token = AuthTokenHelper.getAuthData().access_token;*/
                                 var fileId = item['challanFileId']; 
                                 Utils.downloadFile(Files.getFileDownloadURL(fileId)); 
                             },
                             isApplicable: function(item, model) {
-                                return true;
+                                return !_.isNull(item['challanFileId'])?true:false;
                             }
                         }];
                     },
