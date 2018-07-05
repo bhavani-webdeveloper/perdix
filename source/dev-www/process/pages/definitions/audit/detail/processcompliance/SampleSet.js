@@ -108,7 +108,7 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleSet"),
                                 }, {
                                     name: "SKIP_SAMPLE",
                                     fn: function(item, index) {
-                                        Utils.confirm("Are you sure to delete the sample and issues captured?").then(function() {
+                                        Utils.confirm("Are you sure to skip the sample and issues captured?").then(function() {
                                             item.status = "2";
                                             delete item.issue_details;
                                             if (model.$isOffline) {
