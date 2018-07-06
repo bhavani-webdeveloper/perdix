@@ -57,7 +57,7 @@
                   "minLength": 1,
                   "maxLength": 100,
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess"
                   ]
@@ -68,7 +68,7 @@
                   "minLength": 1,
                   "maxLength": 100,
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess"
                   ]
@@ -79,7 +79,7 @@
                   "minLength": 1,
                   "maxLength": 100,
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess"
                   ]
@@ -90,7 +90,7 @@
                   "minLength": 1,
                   "maxLength": 100,
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess"
                   ]
@@ -101,7 +101,7 @@
                   "minLength": 1,
                   "maxLength": 100,
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess"
                   ]
@@ -112,7 +112,7 @@
                   "minLength": 1,
                   "maxLength": 100,
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess"
                   ]
@@ -123,7 +123,7 @@
                   "minLength": 6,
                   "maxLength": 6,
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess"
                   ]
@@ -134,7 +134,7 @@
                   "minLength": 1,
                   "maxLength": 100,
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess"
                   ]
@@ -145,7 +145,7 @@
                   "minLength": 1,
                   "maxLength": 100,
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess"
                   ]
@@ -156,7 +156,7 @@
                   "minLength": 1,
                   "maxLength": 100,
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess"
                   ]
@@ -167,7 +167,7 @@
                   "minimum": 0,
                   "maximum": 1000000,
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess"
                   ]
@@ -177,7 +177,7 @@
                   "type": "string",
                   "refCodeCategory": "gender",
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess"
                   ]
@@ -188,7 +188,7 @@
                   "minLength": 10,
                   "maxLength": 10,
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess"
                   ]
@@ -199,7 +199,7 @@
                   "minLength": 10,
                   "maxLength": 10,
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess"
                   ]
@@ -209,7 +209,7 @@
                   "type": "String",
                   "format": "date",
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess"
                   ]
@@ -219,7 +219,7 @@
                   "type": "string",
                   "refCodeCategory": "marital_status",
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess"
                   ]
@@ -229,7 +229,7 @@
                   "type": "string",
                   "refCodeCategory": "education",
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess"
                   ]
@@ -240,7 +240,7 @@
                   "minLength": 1,
                   "maxLength": 100,
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess"
                   ]
@@ -251,7 +251,7 @@
                   "minLength": 1,
                   "maxLength": 100,
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess"
                   ]
@@ -262,7 +262,7 @@
                   "minLength": 1,
                   "maxLength": 100,
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess"
                   ]
@@ -272,7 +272,7 @@
                   "type": "string",
                   "format": "date",
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess"
                   ]
@@ -283,7 +283,7 @@
                   "minLength": 1,
                   "maxLength": 100,
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess"
                   ]
@@ -293,7 +293,7 @@
                   "type": "string",
                   "refCodeCategory": "decisionmaker",
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess"
                   ]
@@ -304,7 +304,7 @@
                   "minLength": 1,
                   "maxLength": 100,
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess"
                   ]
@@ -315,7 +315,7 @@
                   "minLength": 1,
                   "maxLength": 100,
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess"
                   ]
@@ -325,7 +325,7 @@
                   "type": "string",
                   "refCodeCategory": "decisionmaker",
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess"
                   ]
@@ -336,7 +336,7 @@
                   "minLength": 1,
                   "maxLength": 100,
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess"
                   ]
@@ -346,7 +346,7 @@
                   "type": "string",
                   "format": "date",
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess"
                   ]
@@ -357,7 +357,7 @@
                   "minLength": 1,
                   "maxLength": 100,
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess"
                   ]
@@ -368,7 +368,7 @@
                   "minimum": 1,
                   "maximum": 10000000,
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess"
                   ]
@@ -378,7 +378,7 @@
                   "type": "String",
                   "refCodeCategory": "decisionmaker",
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess"
                   ]
@@ -388,7 +388,7 @@
                   "type": "string",
                   "format": "date",
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess"
                   ]
@@ -399,7 +399,7 @@
                   "minLength": 1,
                   "maxLength": 100,
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess",
                      "ReadyForScreening"
@@ -411,7 +411,7 @@
                   "minLength": 1,
                   "maxLength": 100,
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess",
                      "ReadyForScreening"
@@ -423,7 +423,7 @@
                   "minLength": 1,
                   "maxLength": 100,
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess",
                      "ReadyForScreening"
@@ -446,7 +446,7 @@
                   "type": "string",
                   "format": "date",
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess"
                   ]
@@ -457,7 +457,7 @@
                   "minLength": 1,
                   "maxLength": 100,
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess",
                      "ReadyForScreening"
@@ -469,7 +469,7 @@
                   "minLength": 1,
                   "maxLength": 100,
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess",
                      "ReadyForScreening"
@@ -481,7 +481,7 @@
                   "minLength": 1,
                   "maxLength": 100,
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess",
                      "ReadyForScreening"
@@ -493,7 +493,7 @@
                   "minLength": 1,
                   "maxLength": 100,
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess",
                      "ReadyForScreening"
@@ -505,7 +505,7 @@
                   "minLength": 1,
                   "maxLength": 100,
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess",
                      "ReadyForScreening"
@@ -517,7 +517,7 @@
                   "minLength": 1,
                   "maxLength": 100,
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess",
                      "ReadyForScreening"
@@ -529,7 +529,7 @@
                   "minLength": 1,
                   "maxLength": 100,
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess",
                      "ReadyForScreening"
@@ -541,7 +541,7 @@
                   "minLength": 1,
                   "maxLength": 100,
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess",
                      "ReadyForScreening"
@@ -553,7 +553,7 @@
                   "minLength": 1,
                   "maxLength": 100,
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess",
                      "ReadyForScreening"
@@ -565,7 +565,7 @@
                   "minLength": 1,
                   "maxLength": 100,
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess",
                      "ReadyForScreening"
@@ -577,7 +577,7 @@
                      "minLength": 1,
                      "maxLength": 100,
                      "captureStages": [
-                        "Assignment Pending",
+                        
                         "Incomplete",
                         "Inprocess",
                         "ReadyForScreening"
@@ -589,7 +589,7 @@
                      "minLength": 1,
                      "maxLength": 100,
                      "captureStages": [
-                        "Assignment Pending",
+                        
                         "Incomplete",
                         "Inprocess",
                         "ReadyForScreening"
@@ -601,7 +601,7 @@
                   "minLength": 1,
                   "maxLength": 100,
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess",
                      "ReadyForScreening"
@@ -613,7 +613,7 @@
                   "minLength": 1,
                   "maxLength": 100,
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess",
                      "ReadyForScreening"
@@ -625,7 +625,7 @@
                 "minLength": 1,
                 "maxLength": 100,
                 "captureStages": [
-                   "Assignment Pending",
+                   
                    "Incomplete",
                    "Inprocess",
                    "ReadyForScreening"
@@ -637,7 +637,7 @@
                   "minLength": 1,
                   "maxLength": 100,
                   "captureStages": [
-                    "Assignment Pending",
+                    
                     "Incomplete",
                     "Inprocess",
                     "ReadyForScreening"
@@ -649,7 +649,7 @@
                 "minLength": 1,
                 "maxLength": 100,
                 "captureStages": [
-                  "Assignment Pending",
+                  
                   "Incomplete",
                   "Inprocess",
                   "ReadyForScreening"
@@ -661,7 +661,7 @@
                    "minimum": 0,
                   "maximum": 1000000000,
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess",
                      "ReadyForScreening"
@@ -682,7 +682,7 @@
                      "type": "string",
                      "format": "date",
                      "captureStages": [
-                        "Assignment Pending",
+                        
                         "Incomplete",
                         "Inprocess",
                         "ReadyForScreening"
@@ -694,7 +694,7 @@
                      "minLength": 1,
                      "maxLength": 100,
                      "captureStages": [
-                        "Assignment Pending",
+                        
                         "Incomplete",
                         "Inprocess",
                         "ReadyForScreening"
@@ -706,7 +706,7 @@
                      "minLength": 1,
                      "maxLength": 100,
                      "captureStages": [
-                        "Assignment Pending",
+                        
                         "Incomplete",
                         "Inprocess",
                         "ReadyForScreening"
@@ -718,7 +718,7 @@
                      "minLength": 1,
                      "maxLength": 100,
                      "captureStages": [
-                        "Assignment Pending",
+                        
                         "Incomplete",
                         "Inprocess",
                         "ReadyForScreening"
@@ -730,7 +730,7 @@
                      "minLength": 1,
                      "maxLength": 100,
                      "captureStages": [
-                        "Assignment Pending",
+                        
                         "Incomplete",
                         "Inprocess",
                         "ReadyForScreening"
@@ -742,7 +742,7 @@
                      "minLength": 1,
                      "maxLength": 100,
                      "captureStages": [
-                        "Assignment Pending",
+                        
                         "Incomplete",
                         "Inprocess",
                         "ReadyForScreening"
@@ -754,7 +754,7 @@
                      "minLength": 1,
                      "maxLength": 100,
                      "captureStages": [
-                        "Assignment Pending",
+                        
                         "Incomplete",
                         "Inprocess",
                         "ReadyForScreening"
@@ -767,7 +767,7 @@
                      "minLength": 1,
                      "maxLength": 100,
                      "captureStages": [
-                        "Assignment Pending",
+                        
                         "Incomplete",
                         "Inprocess",
                         "ReadyForScreening"
@@ -780,7 +780,7 @@
                      "minLength": 1,
                      "maxLength": 100,
                      "captureStages": [
-                        "Assignment Pending",
+                        
                         "Incomplete",
                         "Inprocess",
                         "ReadyForScreening"
@@ -793,7 +793,7 @@
                      "minLength": 1,
                      "maxLength": 100,
                      "captureStages": [
-                        "Assignment Pending",
+                        
                         "Incomplete",
                         "Inprocess",
                         "ReadyForScreening"
@@ -806,7 +806,7 @@
                      "minLength": 1,
                      "maxLength": 100,
                      "captureStages": [
-                        "Assignment Pending",
+                        
                         "Incomplete",
                         "Inprocess",
                         "ReadyForScreening"
@@ -829,7 +829,7 @@
                   "minLength": 1,
                   "maxLength": 500,
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess"
                   ]
@@ -838,7 +838,7 @@
                   "title": "Availed Any MFI service?",
                   "type": "boolean",
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess"
                   ]
@@ -857,7 +857,7 @@
                   "title": "date1",
                   "type": "string",
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess"
                   ]
@@ -866,7 +866,7 @@
                   "title": "date2",
                   "type": "string",
                   "captureStages": [
-                     "Assignment Pending",
+                     
                      "Incomplete",
                      "Inprocess"
                   ]
