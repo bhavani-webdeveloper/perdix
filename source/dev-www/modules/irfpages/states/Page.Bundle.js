@@ -425,7 +425,7 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
         .then(
             function(success){
                 $scope.bundleModel.$$STORAGE_KEY$$ = success;
-                PageHelper.showProgress("offline-save", "IRFSqlite save/updated", 5000);
+                PageHelper.showProgress("offline-save", "Data Saved Successfully", 5000);
                 deferred.resolve($scope.bundleModel.$$STORAGE_KEY$$);
             }, function(err){
                 $log.info(err);

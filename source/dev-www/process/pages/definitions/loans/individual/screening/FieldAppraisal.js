@@ -78,7 +78,6 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisal')
                 ],
                 "bundlePages": [],
                 "offline": true,
-                "offlineStrategy": 'SQLITE',
                 "getOfflineDisplayItem": function(value, index){
                     var out = new Array(2);
                     for (var i=0; i<value.bundlePages.length; i++){
