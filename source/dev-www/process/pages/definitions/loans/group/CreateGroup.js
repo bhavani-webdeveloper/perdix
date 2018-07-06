@@ -190,24 +190,25 @@ define({
             form: [{
                 "type": "box",
                 "title": "GROUP_DETAILS",
-                "items": [{
-                    "key": "group.groupName",
-                    "required": true,
-                    "title": "GROUP_NAME",
-                }, {
-                    "key": "group.partnerCode",
-                    "title": "PARTNER",
-                    "required": true,
-                    "type": "select",
-                    "enumCode": "partner"
-                }, {
+                "items": [
+                 {
                     "key": "group.branchId",
                     "title": "BRANCH_NAME",
                     "required": true,
                     readonly: true,
                     "parentEnumCode": "bank",
                     "parentValueExpr": "model.group.bankId",
-                }, {
+                },{
+                    "key": "group.partnerCode",
+                    "title": "PARTNER",
+                    "required": true,
+                    "type": "select",
+                    "enumCode": "partner"
+                },{
+                    "key": "group.groupName",
+                    "required": true,
+                    "title": "GROUP_NAME",
+                },{
                     "key": "group.centreCode",
                     "title": "CENTRE_CODE",
                     "required": true,
