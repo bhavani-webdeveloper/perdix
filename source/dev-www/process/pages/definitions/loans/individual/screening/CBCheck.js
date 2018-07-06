@@ -86,6 +86,33 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                         model.customer.guarantors[index].applicantHighmarkFailed = false;
                 }
             }
+             if(CBType == 'INDIVIDUAL'){
+                if (customerType == 'APP'){
+                    model.customer.inqUnqRefNo = response.inqUnqRefNo;
+                    model.customer.indvHighmarkStatus = response.status;
+                    if(response.status != 'SUCCESS' && response.status != 'PROCESSED')
+                        model.customer.applicantIndvHighmarkFailed = true;
+                    else
+                        model.customer.applicantIndvHighmarkFailed = false;
+
+                }
+                else if(customerType == 'CO-APP'){
+                    model.customer.coapplicants[index].inqUnqRefNo = response.inqUnqRefNo;
+                    model.customer.coapplicants[index].indvHighmarkStatus = response.status;
+                    if(response.status != 'SUCCESS' && response.status != 'PROCESSED')
+                        model.customer.coapplicants[index].applicantIndvHighmarkFailed = true;
+                    else
+                        model.customer.coapplicants[index].applicantIndvHighmarkFailed = false;
+                }
+                else if(customerType == 'GUARANTOR'){
+                    model.customer.guarantors[index].inqUnqRefNo = response.inqUnqRefNo;
+                    model.customer.guarantors[index].highmarkStatus = response.status;
+                    if(response.status != 'SUCCESS' && response.status != 'PROCESSED')
+                        model.customer.guarantors[index].applicantIndvHighmarkFailed = true;
+                    else
+                        model.customer.guarantors[index].applicantIndvHighmarkFailed = false;
+                }
+            }
             if(CBType == 'EQUIFAX'){
                 if (customerType == 'APP'){
                     model.customer.inqUnqRefNo = response.inqUnqRefNo;
@@ -252,7 +279,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             //model.CBType = JSON.parse(SessionStore.getGlobalSetting("CBCheckType").replace(/'/g, '"'));
             if (model.CBType && model.CBType.length) {
                 for (i in model.CBType) {
-                    (model.CBType[i] == "CIBIL")?model.CIBIL = true:(model.CBType[i] == "BASE"?model.BASE = true:(model.CBType[i] == "EQUIFAX"?model.EQUIFAX = true:(model.CBType[i] == "CHMHUB"?model.CHMHUB=true:false)));
+                    (model.CBType[i] == "CIBIL")?model.CIBIL = true:(model.CBType[i] == "BASE"?model.BASE = true:(model.CBType[i] == "EQUIFAX"?model.EQUIFAX = true:(model.CBType[i] == "CHMHUB"?model.CHMHUB=true:(model.CBType[i] == "INDIVIDUAL"?model.INDIVIDUAL=true:false))));
                 }
             } else {
                 model.CIBIL = true;
@@ -623,6 +650,108 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                         key: "customer.guarantors[].retrybutton",
                                         title: 'Retry',
                                         "condition": "model.customer.guarantors[arrayIndex].applicantHighmarkFailed",
+                                        "onClick": function(model, schemaForm, form, event) {
+                                            retry(model, 'GUARANTOR', event.arrayIndex);
+                                        }
+                                    }]
+                                }
+                                ]
+                            },
+                            {
+                                type: "fieldset",
+                                condition:"model.INDIVIDUAL",
+                                title: "INDIVIDUAL",
+                                items: [{
+                                    key: "customer.applicantname",
+                                    title: "ApplicantName",
+                                    readonly: true,
+                                    type: "string",
+
+                                }, {
+                                    type: 'button',
+                                    "condition": "model.customer.loanSaved",
+                                    title: 'Submit for CBCheck',
+                                    "onClick": "actions.save(model,'APP', 'INDIVIDUAL',null)"
+                                }, {
+                                    "key": "customer.indvHighmarkStatus",
+                                    "condition": "model.customer.indvHighmarkStatus",
+                                    readonly: true,
+                                    title: "Status"
+                                }, {
+                                    type: 'button',
+                                    title: 'Retry',
+                                    "condition": "model.customer.applicantIndvHighmarkFailed",
+                                    "onClick": function(model, schemaForm, form, event) {
+                                        retry(model, 'APP', null);
+                                    }
+                                }, {
+                                    key: "customer.coapplicants",
+                                    type: "array",
+                                    title: ".",
+                                    view: "fixed",
+                                    notitle: true,
+                                    "startEmpty": true,
+                                    "add": null,
+                                    "remove": null,
+                                    items: [{
+                                        key: "customer.coapplicants[].coapplicantname",
+                                        title: "Co ApplicantName",
+                                        readonly: true,
+                                        type: "string"
+                                    }, {
+                                        type: 'button',
+                                        key: "customer.coapplicants[].highmarkbutton",
+                                        title: 'Submit for CBCheck',
+                                        "condition": "model.customer.loanSaved && model.customer.coapplicants.length",
+                                        "onClick": function(model, schemaForm, form, event) {
+                                            fnPost(model, 'CO-APP', 'INDIVIDUAL', event.arrayIndex);
+                                        }
+                                    }, {
+                                        "key": "customer.coapplicants[].indvHighmarkStatus",
+                                        "condition": "model.customer.coapplicants[arrayIndex].indvHighmarkStatus",
+                                        readonly: true,
+                                        title: "Status"
+                                    }, {
+                                        type: 'button',
+                                        key: "customer.coapplicants[].retrybutton",
+                                        title: 'Retry',
+                                        "condition": "model.customer.coapplicants[arrayIndex].applicantIndvHighmarkFailed",
+                                        "onClick": function(model, schemaForm, form, event) {
+                                            retry(model, 'CO-APP', event.arrayIndex);
+                                        }
+                                    }]
+                                }, {
+                                    key: "customer.guarantors",
+                                    type: "array",
+                                    title: ".",
+                                    view: "fixed",
+                                    notitle: true,
+                                    "startEmpty": true,
+                                    "add": null,
+                                    "remove": null,
+                                    items: [{
+                                        key: "customer.guarantors[].guarantorname",
+                                        title: "Guarantor Name",
+                                        readonly: true,
+                                        type: "string"
+                                    }, {
+                                        type: 'button',
+                                        key: "customer.guarantors[].highmarkbutton",
+                                        title: 'Submit for CBCheck',
+                                        "condition": "model.customer.loanSaved && model.customer.guarantors.length",
+                                        "onClick": function(model, schemaForm, form, event) {
+                                            fnPost(model, 'GUARANTOR', 'INDIVIDUAL', event.arrayIndex);
+                                        }
+                                    }, {
+                                        "key": "customer.guarantors[].indvHighmarkStatus",
+                                        "condition": "model.customer.guarantors[arrayIndex].indvHighmarkStatus",
+                                        readonly: true,
+                                        title: "Status"
+                                    }, {
+                                        type: 'button',
+                                        key: "customer.guarantors[].retrybutton",
+                                        title: 'Retry',
+                                        "condition": "model.customer.guarantors[arrayIndex].applicantIndvHighmarkFailed",
                                         "onClick": function(model, schemaForm, form, event) {
                                             retry(model, 'GUARANTOR', event.arrayIndex);
                                         }
