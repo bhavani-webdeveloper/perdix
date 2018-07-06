@@ -3778,9 +3778,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 "items": [
                     {
                         "type": "submit",
-                        "title": "COMPLETE_ENROLMENT",
-                        "buttonType": "submit"
-
+                        "title": "COMPLETE_ENROLMENT"
                     }
                 ]
             }
@@ -3802,6 +3800,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             save: function(model, formCtrl, formName){
                 $log.info("Inside save()");
                 formCtrl.scope.$broadcast('schemaFormValidate');
+
+                var DedupeEnabled = SessionStore.getGlobalSetting("DedupeEnabled") || 'N';
 
                 if (formCtrl && formCtrl.$invalid) {
                     PageHelper.showProgress("enrolment","Your form have errors. Please fix them.", 5000);
@@ -3857,6 +3857,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     model.customer = resp.customer;
                     if (model._bundlePageObj){
                         BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
+                    }
+                    if (DedupeEnabled == 'Y' && model.currentStage == "Screening") {
+                        Dedupe.create({
+                            "customerId": model.customer.id,
+                            "status": "pending"
+                        }).$promise;
                     }
                 }, function(httpRes){
                     PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);

@@ -3023,8 +3023,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),["$log", "$
                     },
                     {
                         "type": "submit",
-                        "title": "FINISH_ENROLMENT",
-                        "buttonType": "submit"
+                        "title": "FINISH_ENROLMENT"
                     }
                 ]
             }
@@ -3072,6 +3071,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),["$log", "$
                     PageHelper.showProgress("enrolment","Your form have errors. Please fix them.", 5000);
                     return false;
                 }
+                var DedupeEnabled = SessionStore.getGlobalSetting("DedupeEnabled") || 'N';
 
                 if (!EnrollmentHelper.validateData(model)) {
                     $log.warn("Invalid Data, returning false");
@@ -3183,7 +3183,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),["$log", "$
                                         Dedupe.create({
                                             "customerId": model.customer.id,
                                             "status": "pending"
-                                        }).$promise;    
+                                        }).$promise;
                                     }
                                 }
                             },
@@ -3204,6 +3204,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),["$log", "$
                 }
                 var reqData = _.cloneDeep(model);
                 EnrollmentHelper.fixData(reqData);
+                var DedupeEnabled = SessionStore.getGlobalSetting("DedupeEnabled") || 'N';
 
                 var out = reqData.customer.$fingerprint;
                 var fpPromisesArr = [];
@@ -3294,6 +3295,12 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),["$log", "$
                         PageHelper.showProgress('enrolment', 'Done.', 5000);
                         Utils.removeNulls(resp.customer,true);
                         model.customer = resp.customer;
+                        if (DedupeEnabled == 'Y' && model.currentStage == "Screening") {
+                            Dedupe.create({
+                                "customerId": model.customer.id,
+                                "status": "pending"
+                            }).$promise;
+                        }
                     }, function(err) {
                         PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                     });
