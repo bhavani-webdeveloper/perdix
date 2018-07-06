@@ -326,85 +326,6 @@ define({
 
                         }]
                     }]
-                }, {
-                    "type": "box",
-                    "readonly": true,
-                    "colClass": "col-sm-12",
-                    "overrideType": "default-view",
-                    "title": "RELATIONSHIP_TO_BUSINESS",
-                    "condition": "model.enterpriseRelationship",
-                    "items": [{
-                        "type": "grid",
-                        "orientation": "horizontal",
-                        "items": [{
-                            "type": "grid",
-                            "orientation": "vertical",
-                            "items": [{
-                                "title": "RELATIONSHIP_TO_BUSINESS",
-                                "key": "enterpriseRelationship.relationshipType"
-                            }, {
-                                "title": "EXPERIENCE_IN_BUSINESS",
-                                "key": "enterpriseRelationship.experienceInBusiness"
-                            }, {
-                                "title": "BUSINESS_INVOLVEMENT",
-                                "key": "enterpriseRelationship.businessInvolvement"
-                            }, {
-                                "title": "PARTNER_OF_ANY_OTHER_COMPANY",
-                                "key": "enterpriseRelationship.partnerOfAnyOtherCompany"
-                            }]
-                        }]
-                    }]
-                }, 
-
-                {
-                    "type": "box",
-                    "readonly": true,
-                    "colClass": "col-sm-12",
-                    "overrideType": "default-view",
-                    "title": "HOUSEHOLD_LIABILITIES",
-                    "condition": "model.customer.liabilities.length !=0",
-                    "items": [{
-                        "type": "grid",
-                        "orientation": "horizontal",
-                        "items": [{
-                            "type": "grid",
-                            "orientation": "vertical",
-                            "items": [{
-                                "key": "active_accounts",
-                                "title": "No of Active Loans",
-                                "type": "number"
-                            }, {
-                                "key": "monthly_installment",
-                                "title": "Total Monthly Instalments",
-                                "type": "amount"
-                            }, {
-                                "key": "outstanding_bal",
-                                "title": "OUTSTANDING_AMOUNT",
-                                "type": "amount"
-                            }]
-
-                        }, {
-                            "type": "grid",
-                            "orientation": "vertical",
-                            "items": [{
-                                "key": "",
-                                "title": "Total loan amount from Banks",
-                                "type": "amount"
-
-                            }, {
-                                "key": "",
-                                "title": "Total loan amount from MFI/NBFC",
-                                "type": "amount"
-
-                            }, {
-                                "key": "",
-                                "title": "Total loan amount from others",
-                                "type": "amount"
-
-                            }]
-
-                        }]
-                    }]
                 },
                 {
                     "type": "box",
@@ -450,7 +371,40 @@ define({
                             }]
                         }]
                     }]
-                }, {
+                }, 
+
+                {
+                    "type": "box",
+                    "readonly": true,
+                    "colClass": "col-sm-12",
+                    "overrideType": "default-view",
+                    "title": "RELATIONSHIP_TO_BUSINESS",
+                    "condition": "model.enterpriseRelationship",
+                    "items": [{
+                        "type": "grid",
+                        "orientation": "horizontal",
+                        "items": [{
+                            "type": "grid",
+                            "orientation": "vertical",
+                            "items": [{
+                                "title": "RELATIONSHIP_TO_BUSINESS",
+                                "key": "enterpriseRelationship.relationshipType"
+                            }, {
+                                "title": "EXPERIENCE_IN_BUSINESS",
+                                "key": "enterpriseRelationship.experienceInBusiness"
+                            }, {
+                                "title": "BUSINESS_INVOLVEMENT",
+                                "key": "enterpriseRelationship.businessInvolvement"
+                            }, {
+                                "title": "PARTNER_OF_ANY_OTHER_COMPANY",
+                                "key": "enterpriseRelationship.partnerOfAnyOtherCompany"
+                            }]
+                        }]
+                    }]
+                }, 
+
+               
+                 {
                     "type": "box",
                     "readonly": true,
                     "colClass": "col-sm-12",
@@ -800,9 +754,6 @@ define({
                     })
 
                 }
-
-
-
                 },
                 "business-customer": function(bundleModel, model, params) {
                     model.business = params;

@@ -631,22 +631,69 @@ define({
                         "type": "grid",
                         "orientation": "vertical",
                         "items": [{
-                            key: "customer.enterprise.monthlyTurnover",
+                            key: "enterpriseDetailsData.Monthly Turnover",
                             title: "MONTHLY_TURNOVER",
                             required: true,
                             type: "amount"
                         }, {
-                            key: "customer.enterprise.monthlyBusinessExpenses",
+                            key: "enterpriseDetailsData.Existing Loan Repayments",
                             title: "Existing Loan Repayments",
                             type: "amount"
                         }, {
-                            key: "customer.enterprise.avgMonthlyNetIncome",
+                            key: "enterpriseDetailsData.Avg Monthly Net Income",
                             title: "Net Income",
                             type: "amount"
                         }]
                     }]
                 }]
             });
+
+            form.push({
+                    "type": "box",
+                    "readonly": true,
+                    "colClass": "col-sm-12",
+                    "overrideType": "default-view",
+                    "title": "Bank Account Detail",
+                    "condition": "model.customer.customerBankAccounts.length != 0",
+                    "items": [{
+                        "type": "grid",
+                        "orientation": "horizontal",
+                        "items": [{
+                            "type": "grid",
+                            "orientation": "vertical",
+                            "items": [{
+                                "key": "BankAvgDep",
+                                "title": "Average Monthly Deposit",
+                                "type": "amount"
+                            }, {
+                                "key": "BankAvgWithdrawl",
+                                "title": "Average Monthly Withdrawls",
+                                "type": "amount"
+                            }, {
+                                "key": "BankAvgBal",
+                                "title": "Average Monthly Balances",
+                                "type": "amount"
+                            }]
+                        }, {
+                            "type": "grid",
+                            "orientation": "vertical",
+                            "items": [{
+                                "key": "totalAccount",
+                                "title": "Total no of Account",
+                                "type": "number"
+                            }, {
+                                "key": "checkBounced",
+                                "title": "Total no of Cheque Bounce",
+                                "type": "number"
+                            }, {
+                                "key": "emiBounce",
+                                "title": "Total no EMI Bounce",
+                                "type": "number"
+                            }]
+                        }]
+                    }]
+                },
+            );
 
             var businessBankStmtSummaryTable = "<irf-simple-summary-table irf-table-def = 'model.businessBankStmtSummary'></irf-simple-summary-table>";
 
@@ -670,17 +717,6 @@ define({
                     type: "section",
                     colClass: "col-sm-12",
                     html: personalBankStmtSummaryTable
-                }]
-            });
-
-            form.push({
-                type: "box",
-                colClass: "col-sm-12 table-box",
-                title: "BANK_ACCOUNTS",
-                items: [{
-                    type: "section",
-                    colClass: "col-sm-12",
-                    html: '<div ng-repeat="bankAccount in model.bankAccountDetails.BankAccounts"><table class="table table-condensed" style="width:50%"><colgroup><col width="40%"><col width="60%"></colgroup><tbody><tr class="table-sub-header"><td>{{ "ACCOUNT_NAME" | translate }}</td><td>{{ bankAccount["Account Holder Name"] }}</td></tr><tr><td> {{ "LOAN_RELATION" | translate }}</td><td>{{ bankAccount["Customer Relation"] }}</td></tr><tr><td>{{ "ACCOUNT_TYPE" | translate }}</td><td>{{ bankAccount["Account Type"] }}</td></tr><tr><td>{{ "BANK_NAME" | translate }}</td><td>{{ bankAccount["Bank Name"] }}</td></tr><tr><td>{{ "ACCOUNT_NUMBER" | translate }}</td><td>{{ bankAccount["Account Number"] }}</td></tr><tr><td>{{ "IFS_CODE" | translate }}</td><td>{{ bankAccount["IFS Code"] }}</td></tr><tr><td>{{ "LIMIT" | translate }}</td><td>{{ bankAccount["Limit"] }}</td></tr></tbody></table><div class="clearfix"></div><table class="table table-condensed"><colgroup><col width="20%"><col width="20%"><col width="20%"><col width="20%"><col width="20%"></colgroup><thead><tr><th> {{ "MONTH" | translate }}</th><th> {{ "BANK_BALANCE" | translate }}</th><th> {{ "DEPOSITS" | translate }}</th><th> {{ "EMI_BOUNCED" | translate }}</th><th> {{ "NO_OF_CHEQUE_BOUNCED_SP" | translate }}</th></tr></thead><tbody><tr ng-repeat="bankStatement in bankAccount.BankStatements"><td>{{ bankStatement["Month"] }}</td><td>{{ bankStatement["Balance"] | irfCurrency}}</td><td>{{ bankStatement["Deposits"] | irfCurrency}}</td><td>{{ bankStatement["EMI Bounced"] }}</td><td>{{ bankStatement["Non-EMI Cheque Bounced"] }}</td></tr><tr class="top-bar with-bold"><td></td><td>{{ "AVERAGE_BANK_BALANCE" | translate }} <br /> {{ bankAccount["Average Bank Balance"] | irfCurrency}}</td><td>{{ "AVERAGE_BANK_DEPOSIT" | translate }} <br /> {{ bankAccount["Average Bank Deposit"] | irfCurrency}}</td><td>{{ "TOTAL_EMI_BOUNCED" | translate }} <br /> {{ bankAccount["Total EMI Bounced"] }}</td><td>{{ "TOTAL_CHEQUEU_BOUNCED_NON_EMI" | translate }} <br /> {{ bankAccount["Total Cheque Bounced (Non EMI)"] }}</td></tr></tbody></table> <br/><hr class="dotted"> <br/></div>'
                 }]
             });
 
@@ -1087,6 +1123,33 @@ define({
                 },
                 "loan-account-loaded": function(bundleModel, pageModel, eventModel) {
                     pageModel.loanAccount = eventModel.loanAccount;
+                },
+                "financial-summary": function(bundleModel, model, params) {
+                    model.bankDetails = params[10].BankAccounts;
+                    /*Bank fields*/
+                    var count = 0;
+                    var BankAvgBal = 0;
+                    var BankAvgDep = 0;
+                    var BankAvgWithdrawl = 0;
+                    var checkBounced = 0;
+                    var emiBounce = 0;
+                    _.each(model.bankDetails, function(bankDetail) {
+                        if (model.customer.id == bankDetail['Customer ID']) {
+                            count++;
+                            BankAvgBal += parseInt(bankDetail['Average Bank Balance']);
+                            BankAvgDep += parseInt(bankDetail['Average Bank Deposit']);
+                            checkBounced += bankDetail['Total Cheque Bounced (Non EMI)'];
+                            emiBounce += bankDetail['Total EMI Bounced'];
+                        }
+                    })
+
+                    BankAvgWithdrawl = BankAvgDep - BankAvgBal;
+                    model.totalAccount = count;
+                    model.BankAvgBal = BankAvgBal;
+                    model.BankAvgDep = BankAvgDep;
+                    model.BankAvgWithdrawl = BankAvgWithdrawl;
+                    model.checkBounced = checkBounced;
+                    model.emiBounce = emiBounce;
                 }
             },
             actions: {
