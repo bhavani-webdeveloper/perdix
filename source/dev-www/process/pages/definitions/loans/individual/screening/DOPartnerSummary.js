@@ -695,30 +695,7 @@ define({
                 },
             );
 
-            var businessBankStmtSummaryTable = "<irf-simple-summary-table irf-table-def = 'model.businessBankStmtSummary'></irf-simple-summary-table>";
-
-            form.push({
-                type: "box",
-                colClass: "col-sm-12 table-box",
-                title: model.businessBankStmtSummary.title,
-                items: [{
-                    type: "section",
-                    colClass: "col-sm-12",
-                    html: businessBankStmtSummaryTable
-                }]
-            });
-
-            var personalBankStmtSummaryTable = "<irf-simple-summary-table irf-table-def = 'model.personalBankStmtSummary'></irf-simple-summary-table>";
-            form.push({
-                type: "box",
-                colClass: "col-sm-12 table-box",
-                title: model.personalBankStmtSummary.title,
-                items: [{
-                    type: "section",
-                    colClass: "col-sm-12",
-                    html: personalBankStmtSummaryTable
-                }]
-            });
+            
 
             var items = [];
             if (_.isArray(model.liabilitiesSummary.subgroups) && model.liabilitiesSummary.subgroups.length > 0) {
