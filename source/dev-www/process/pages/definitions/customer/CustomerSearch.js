@@ -32,47 +32,57 @@ function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionSto
 		},
 		definition: {
 			title: "Search Customers",
-			searchForm: [
-				{
-                	"type": "section",
-                	items: [
-                	{
-                		key: "first_name", 
-                	},
-                	{
-                		key: "lastName",
-                		condition: "model.siteCode != 'saija'"
-                	},
-                	{
-                		key: "kyc_no", 
-                	},
-                	{
-                		key: "urnNo"
-                	},
-                	{
-                		key: "bankId",
-                		readonly: true, 
-                		condition: "model.showBankFilter && !model.fullAccess && model.siteCode.toLowerCase()=='kgfs'"
-                	},
-                	{
-                		key: "bankId",
-                		condition: "model.showBankFilter && model.fullAccess"
-                	},
-                	{
-                		key: "branch",
-                		condition: "model.siteCode!='sambandh' && model.siteCode!='IREPDhan'" 
-                	},
-                	{
-                		key: "branch",
-                		enumCode:"userbranches",
-                		condition: "model.siteCode=='sambandh' || model.siteCode =='IREPDhan'"
-                	},
-                	{
-                		key: "centre", 
-                	}
-                	]
-                }
-			],
+	            searchForm: [{
+	                "type": "section",
+	                condition: "model.siteCode != 'sambandh'",
+	                items: [{
+	                    key: "first_name",
+	                }, {
+	                    key: "lastName",
+	                    condition: "model.siteCode != 'saija'"
+	                }, {
+	                    key: "kyc_no",
+	                }, {
+	                    key: "urnNo"
+	                }, {
+	                    key: "bankId",
+	                    readonly: true,
+	                    condition: "model.showBankFilter && !model.fullAccess && model.siteCode.toLowerCase()=='kgfs'"
+	                }, {
+	                    key: "bankId",
+	                    condition: "model.showBankFilter && model.fullAccess"
+	                }, {
+	                    key: "branch",
+	                    condition: "model.siteCode!='sambandh' && model.siteCode!='IREPDhan'"
+	                }, {
+	                    key: "branch",
+	                    enumCode: "userbranches",
+	                    condition: "model.siteCode=='sambandh' || model.siteCode =='IREPDhan'"
+	                }, {
+	                    key: "centre",
+	                }]
+	            }, {
+	                "type": "section",
+	                condition: "model.siteCode == 'sambandh'",
+	                items: [{
+	                        key: "branch",
+	                        enumCode: "userbranches",
+	                        condition: "model.siteCode=='sambandh' || model.siteCode =='IREPDhan'"
+	                    }, {
+	                        key: "centre",
+	                    }, {
+	                        key: "first_name",
+	                    }, {
+	                        key: "lastName",
+	                        condition: "model.siteCode != 'saija'"
+	                    }, {
+	                        key: "urnNo"
+	                    }, {
+	                        key: "kyc_no",
+	                    },
+
+	                ]
+	            }],
 			searchSchema: {
 				"type": 'object',
 				"title": 'SearchOptions',
