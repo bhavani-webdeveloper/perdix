@@ -1376,13 +1376,13 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                         model.customer.udf.userDefinedFieldValues.udf37 && SessionStore.getGlobalSetting('siteCode') == 'saija') {
                         model.customer.udf.userDefinedFieldValues.udf37 = model.customer.udf.userDefinedFieldValues.udf37 == 'true' ? true : false;
                     }
-                    if (model.siteCode == "sambandh" && model.customer.udf && model.customer.udf.userDefinedFieldValues && model.customer.currentStage = "Stage02") {
+                    if (SessionStore.getGlobalSetting('siteCode') == "sambandh" && model.customer.udf && model.customer.udf.userDefinedFieldValues && model.customer.currentStage == "Stage02") {
                             model.customer.udf.userDefinedFieldValues.udf38 = "No";
                             model.customer.udf.userDefinedFieldValues.udf39 = "No";
                             model.customer.udf.userDefinedFieldValues.udf40 = "No";
                             model.customer.udf.userDefinedFieldValues.udf5 = "Good";
                     }
-                    else if(model.siteCode == "sambandh"){
+                    else if(SessionStore.getGlobalSetting('siteCode') == "sambandh"){
                        // model.customer.udf = {};
                         model.customer.udf={
                             "userDefinedFieldValues":{

@@ -22,6 +22,7 @@ irf.pageCollection.factory(irf.page("bank.Survey"),
             "title": "SURVEY",
             initialize: function(model, form, formCtrl) {
                 model.bank_survey = model.bank_survey || {};
+                model.siteCode = SessionStore.getGlobalSetting('siteCode');
 
                 if (!(model && model.bank_survey && model.bank_survey.id && model.$$STORAGE_KEY$$)) {
                     PageHelper.showLoader();
@@ -192,11 +193,22 @@ irf.pageCollection.factory(irf.page("bank.Survey"),
                     "bank_survey.motivationRequired",
                     "bank_survey.udf2"
                 ]
-            }, {
+            }, {            
                 "type": "box",
                 "title": "MAP_INCLUDE",
-                "items": [
-                    "bank_survey.latitude"  
+                "condition":"model.siteCode!= 'sambandh'",
+                "items": [{
+                        "key": "bank_survey.latitude",
+                        "required": true
+                    }
+                ]
+            },{            
+                "type": "box",
+                "condition":"model.siteCode == 'sambandh'",
+                "title": "MAP_INCLUDE",
+                "items": [{
+                        "key": "bank_survey.latitude",
+                    }
                 ]
             },
             {
