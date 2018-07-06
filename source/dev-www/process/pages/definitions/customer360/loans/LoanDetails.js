@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
- ["$log","GroupProcess", "SessionStore", "LoanAccount", "$state", "$stateParams", "SchemaResource", "PageHelper", "Enrollment", "formHelper", "IndividualLoan", "Utils", "$filter", "$q", "irfProgressMessage", "Queries", "Files", "LoanBookingCommons", "irfSimpleModal", "irfNavigator", "RepaymentReminder", "$httpParamSerializer",
-    function($log,GroupProcess, SessionStore, LoanAccount, $state, $stateParams, SchemaResource, PageHelper, Enrollment, formHelper, IndividualLoan, Utils, $filter, $q, irfProgressMessage, Queries, Files, LoanBookingCommons, irfSimpleModal, irfNavigator, RepaymentReminder, $httpParamSerializer) {
+ ["PagesDefinition","$log","GroupProcess", "SessionStore", "LoanAccount", "$state", "$stateParams", "SchemaResource", "PageHelper", "Enrollment", "formHelper", "IndividualLoan", "Utils", "$filter", "$q", "irfProgressMessage", "Queries", "Files", "LoanBookingCommons", "irfSimpleModal", "irfNavigator", "RepaymentReminder", "$httpParamSerializer",
+    function(PagesDefinition,$log,GroupProcess, SessionStore, LoanAccount, $state, $stateParams, SchemaResource, PageHelper, Enrollment, formHelper, IndividualLoan, Utils, $filter, $q, irfProgressMessage, Queries, Files, LoanBookingCommons, irfSimpleModal, irfNavigator, RepaymentReminder, $httpParamSerializer) {
 
         var transactionDetailHtml = "\
         <irf-simple-summary-table irf-table-def='model.orgTransactionDetails' />\
@@ -33,6 +33,13 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                 model.reqData.loanAccount = model.reqData.loanAccount || {};
                 model.reqData.loanAccount.loanDocuments = model.reqData.loanAccount.loanDocuments || [];
                 PageHelper.showLoader();
+
+                PagesDefinition.getRolePageConfig("Page/Engine/customer360.loans.LoanDetails")
+                    .then(function(data){
+                        model.pageConfig = data;
+                    },function(error){
+                        PageHelper.showErrors(error)
+                    });
 
                 var promise = Queries.feesFormMapping().then(function(response) {
                                     var test = response;
@@ -1947,7 +1954,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                     },{
                         "type": "fieldset",
                         "title": "NOC_LETTER_DOWNLOAD",
-                        "condition": "model.cbsLoan.operationalStatus=='Closed'",
+                        "condition": "model.cbsLoan.operationalStatus=='Closed' && model.pageConfig.showNocLetter == true ",
                         "items": [{
                             "type": "button",
                             "title": "DOWNLOAD_NOC_FORM",
