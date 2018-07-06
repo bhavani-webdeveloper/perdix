@@ -785,7 +785,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                         }
                     },
                     "HouseVerification.houseVerificationPhoto": {
-                        required: true,
+                       
                     },
                     "Expenditures1.expenditures": {
                         startEmpty: true
@@ -1271,6 +1271,10 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                 model.customer.customerBranchId = model.customer.customerBranchId || SessionStore.getCurrentBranch().branchId;
                 model.customer.date = model.customer.date || Utils.getCurrentDate();
                 model.customer.nameOfRo = model.customer.nameOfRo || SessionStore.getLoginname();
+                // model.familyDetails.additionalDetails.medicalCondition = 'No';
+                // model.familyDetails.additionalDetails.privateHospitalTreatment = 'No';
+                // model.familyDetails.additionalDetails.householdFinanceRelatedDecision = 'No';
+               
                 model = Utils.removeNulls(model, true);
                 model.customer.kgfsName = model.customer.kgfsName || SessionStore.getCurrentBranch().branchName;
                 model.customer.customerType = model.customer.customerType || 'Individual';
@@ -1371,6 +1375,24 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                     if (model.customer.udf && model.customer.udf.userDefinedFieldValues &&
                         model.customer.udf.userDefinedFieldValues.udf37 && SessionStore.getGlobalSetting('siteCode') == 'saija') {
                         model.customer.udf.userDefinedFieldValues.udf37 = model.customer.udf.userDefinedFieldValues.udf37 == 'true' ? true : false;
+                    }
+                    if (model.siteCode == "sambandh" && model.customer.udf && model.customer.udf.userDefinedFieldValues && model.customer.currentStage = "Stage02") {
+                            model.customer.udf.userDefinedFieldValues.udf38 = "No";
+                            model.customer.udf.userDefinedFieldValues.udf39 = "No";
+                            model.customer.udf.userDefinedFieldValues.udf40 = "No";
+                            model.customer.udf.userDefinedFieldValues.udf5 = "Good";
+                    }
+                    else if(model.siteCode == "sambandh"){
+                       // model.customer.udf = {};
+                        model.customer.udf={
+                            "userDefinedFieldValues":{
+
+                            }};
+                       // model.customer.udf.put("userDefinedFieldValues":userDefinedFieldValues);
+                        model.customer.udf.userDefinedFieldValues.udf38 = "No";
+                        model.customer.udf.userDefinedFieldValues.udf39 = "No";
+                        model.customer.udf.userDefinedFieldValues.udf40 = "No";
+                        model.customer.udf.userDefinedFieldValues.udf5 = "Good";
                     }
                     deferred.resolve(model);
                     PageHelper.hideLoader();
