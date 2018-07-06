@@ -300,6 +300,9 @@ define({
                             }, {
                                 "key": "customer.spouseDateOfBirth",
                                 "condition": "model.customer.maritalStatus && model.customer.maritalStatus.toUpperCase() == 'MARRIED' "
+                            },{
+                                "key": "customer.ownership",
+                                "title":"Housing Status"
                             }]
                         }, {
                             "type": "grid",
@@ -749,9 +752,14 @@ define({
                         }
                     }
                     if (model.business.centreId) {
-                        model.business.centreName = filterFilter(formHelper.enum('centre').data, {
+                        var centreName = 
+                        filterFilter(formHelper.enum('centre').data, {
                             value: model.business.centreId
-                        })[0].name;
+                        });
+                        if(centreName && centreName.length){
+                           model.business.centreId=centreName[0].name;  
+                        }
+                          
                     }
                 }
             },

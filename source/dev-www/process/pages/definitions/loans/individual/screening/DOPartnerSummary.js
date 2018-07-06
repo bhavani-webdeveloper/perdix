@@ -561,7 +561,7 @@ define({
                         "orientation": "vertical",
                         "items": [ {
                             "key": "customer.firstName",
-                            "title": "Enterprise Name"
+                            "title": "Business Name"
                         },{
                             "key": "customer_detail.applicant.name",
                             "title": "Applicant Name"
@@ -637,18 +637,18 @@ define({
                             type: "amount"
                         }, {
                             key: "customer.enterprise.monthlyBusinessExpenses",
-                            title: "MONTHLY_BUSINESS_EXPENSES",
+                            title: "Existing Loan Repayments",
                             type: "amount"
                         }, {
                             key: "customer.enterprise.avgMonthlyNetIncome",
-                            title: "AVERAGE_MONTHLY_NET_INCOME",
+                            title: "Net Income",
                             type: "amount"
-                        }, ]
+                        }]
                     }]
                 }]
             });
 
-                        var businessBankStmtSummaryTable = "<irf-simple-summary-table irf-table-def = 'model.businessBankStmtSummary'></irf-simple-summary-table>";
+            var businessBankStmtSummaryTable = "<irf-simple-summary-table irf-table-def = 'model.businessBankStmtSummary'></irf-simple-summary-table>";
 
             form.push({
                 type: "box",
@@ -727,7 +727,7 @@ define({
                         "items": [ {
                             "key": "loanAccount.loanAmount",
                             "title": "Loan Amount Recommended",
-                            "type": "amount",
+                            //"type": "amount",
                             onChange: function(value, form, model) {
                                 computeEMI(model);
                             }
@@ -750,7 +750,7 @@ define({
                         }, {
                             "key": "loanAccount.estimatedEmi",
                             "title": "ESTIMATED_KINARA_EMI",
-                            "type": "amount"
+                            //"type": "amount"
                         },{
                             "key": "loanAccount.estimatedEmi",
                             "title": "Expected Security EMI"
@@ -768,6 +768,9 @@ define({
                         }, {
                             "key": "loanAccount.loanPurpose2",
                             "title": "Loan SubPurpose"
+                        },{
+                            "key": "DSCR",
+                            "title": "DSCR(Debt Service Coverage Ratio)"
                         }]
                     }]
                 }]
@@ -1032,6 +1035,7 @@ define({
                             prepareData(res, model);
                             model.$prepared = true;
                             BundleManager.pushEvent('financialSummary', model._bundlePageObj, res);
+                            model.DSCR=res[3].data[3]["Actual Value"];
                             prepareDataDeferred.resolve();
                         });
 
@@ -1083,7 +1087,7 @@ define({
                 },
                 "loan-account-loaded": function(bundleModel, pageModel, eventModel) {
                     pageModel.loanAccount = eventModel.loanAccount;
-                },
+                }
             },
             actions: {
                 preSave: function(model, form, formName) {
