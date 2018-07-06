@@ -97,6 +97,16 @@ define({
                     })
                     model.decHouseExpanse = decExpanse;
 
+                    if(model.customer.liabilities && model.customer.liabilities.length){
+                        model.active_accounts = model.customer.liabilities.length;
+                        model.monthly_installment=0;
+                        model.outstanding_bal=0;
+                        for(i in model.customer.liabilities){
+                            model.monthly_installment += model.customer.liabilities[i].installmentAmountInPaisa;
+                            model.outstanding_bal += model.customer.liabilities[i].outstandingAmountInPaisa;
+                        }
+                    }
+
                     /*Family Section*/
                     self.form = self.formSource;
                     var family = {
@@ -344,7 +354,59 @@ define({
                             }]
                         }]
                     }]
-                }, {
+                }, 
+
+                {
+                    "type": "box",
+                    "readonly": true,
+                    "colClass": "col-sm-12",
+                    "overrideType": "default-view",
+                    "title": "HOUSEHOLD_LIABILITIES",
+                    "condition": "model.customer.liabilities.length !=0",
+                    "items": [{
+                        "type": "grid",
+                        "orientation": "horizontal",
+                        "items": [{
+                            "type": "grid",
+                            "orientation": "vertical",
+                            "items": [{
+                                "key": "active_accounts",
+                                "title": "No of Active Loans",
+                                "type": "number"
+                            }, {
+                                "key": "monthly_installment",
+                                "title": "Total Monthly Instalments",
+                                "type": "amount"
+                            }, {
+                                "key": "outstanding_bal",
+                                "title": "OUTSTANDING_AMOUNT",
+                                "type": "amount"
+                            }]
+
+                        }, {
+                            "type": "grid",
+                            "orientation": "vertical",
+                            "items": [{
+                                "key": "",
+                                "title": "Total loan amount from Banks",
+                                "type": "amount"
+
+                            }, {
+                                "key": "",
+                                "title": "Total loan amount from MFI/NBFC",
+                                "type": "amount"
+
+                            }, {
+                                "key": "",
+                                "title": "Total loan amount from others",
+                                "type": "amount"
+
+                            }]
+
+                        }]
+                    }]
+                },
+                {
                     "type": "box",
                     "readonly": true,
                     "colClass": "col-sm-12",
