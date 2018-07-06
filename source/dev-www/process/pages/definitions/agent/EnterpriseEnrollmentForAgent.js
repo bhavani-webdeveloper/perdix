@@ -99,17 +99,17 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                     "agentProcess.agent.currentStage": {
                         "PendingForApproval": {
                             "excludes": [
-                               "actionbox" 
+                                "actionbox"
                             ],
                             "overrides": {
-                                "EnterpriseInformation":{
-                                    "readonly":true
+                                "EnterpriseInformation": {
+                                    "readonly": true
                                 },
-                                "ContactInformation":{
-                                    "readonly":true
+                                "ContactInformation": {
+                                    "readonly": true
                                 },
-                                "BankAccounts":{
-                                    "readonly":true
+                                "BankAccounts": {
+                                    "readonly": true
                                 }
                             }
                         },
@@ -118,14 +118,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                 "actionbox"
                             ],
                             "overrides": {
-                                "EnterpriseInformation":{
-                                    "readonly":true
+                                "EnterpriseInformation": {
+                                    "readonly": true
                                 },
-                                "ContactInformation":{
-                                    "readonly":true
+                                "ContactInformation": {
+                                    "readonly": true
                                 },
-                                "BankAccounts":{
-                                    "readonly":true
+                                "BankAccounts": {
+                                    "readonly": true
                                 }
                             }
                         },
@@ -134,14 +134,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                 "actionbox"
                             ],
                             "overrides": {
-                                "EnterpriseInformation":{
-                                    "readonly":true
+                                "EnterpriseInformation": {
+                                    "readonly": true
                                 },
-                                "ContactInformation":{
-                                    "readonly":true
+                                "ContactInformation": {
+                                    "readonly": true
                                 },
-                                "BankAccounts":{
-                                    "readonly":true
+                                "BankAccounts": {
+                                    "readonly": true
                                 }
                             }
                         }
@@ -159,7 +159,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                         model._bundlePageObj = _.cloneDeep(bundlePageObj);
                     }
 
-                    model.pageClass=bundlePageObj.pageClass;
+                    model.pageClass = bundlePageObj.pageClass;
 
                     /* Setting data recieved from Bundle */
 
@@ -218,6 +218,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                 },
                                 "BankAccounts.customerBankAccounts": {
                                     startEmpty: true
+                                },
+                                "EnterpriseInformation.companyOperatingSince": {
+                                    "onChange": function(value, form, model, event) {
+                                        var date = SessionStore.getCBSDate();
+                                        if (model.customer.enterprise.companyOperatingSince > date) {
+                                            PageHelper.setError({
+                                                message: "Operating Since Date Date can not be future date"
+                                            });
+                                        }
+                                    }
                                 },
                                 "EnterpriseInformation.customerId": {
                                     type: "lov",
@@ -375,7 +385,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                         };
 
 
-                        IrfFormRequestProcessor.buildFormDefinition(repo, formRequest,configFile(), model)
+                        IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model)
                             .then(function(form) {
                                 self.form = form;
                             });
@@ -433,7 +443,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                         if (!(validateRequest(reqData))) {
                             return;
                         }
-                        model.enrolmentProcess.processType = 'AGENT'; 
+                        model.enrolmentProcess.processType = 'AGENT';
                         model.enrolmentProcess.save()
                             .finally(function() {
                                 PageHelper.hideLoader();

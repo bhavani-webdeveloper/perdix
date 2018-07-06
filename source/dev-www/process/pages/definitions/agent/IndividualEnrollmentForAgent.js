@@ -50,8 +50,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                         fieldType: "number",
                         resolver: "PincodeLOVConfiguration"
                     },
-                    "ContactInformation.whatsAppMobileNo":{
-                        "condition":"model.customer.whatsAppMobileNoOption =='3'"
+                    "ContactInformation.whatsAppMobileNo": {
+                        "condition": "model.customer.whatsAppMobileNoOption =='3'"
                     },
                     "IndividualInformation.dateOfBirth": {
                         onChange: function(valueObj, model, context) {
@@ -60,12 +60,22 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                     },
                     "BankAccounts.customerBankAccounts.accountNumber": {
                         "type": "password",
+                        "pattern": "^[0-9a-zA-Z]+$",
                         "required": true
+                    },
+                    "BankAccounts.customerBankAccounts.customerBankName": {
+                        "type": "string",
+                        "readonly": true
+                    },
+                    "BankAccounts.customerBankAccounts.customerBankBranchName": {
+                        "type": "string",
+                        "readonly": true
                     },
                     "BankAccounts.customerBankAccounts.confirmedAccountNumber": {
                         "type": "string",
                         "title": "CONFIRMED_ACCOUNT_NUMBER",
-                        "required": true
+                        "required": true,
+                        "pattern": "^[0-9a-zA-Z]+$",
                     },
                     "IndividualInformation.customerId": {
                         type: "lov",
@@ -247,17 +257,17 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                     "agentProcess.agent.currentStage": {
                         "PendingForApproval": {
                             "excludes": [
-                               "actionbox" 
+                                "actionbox"
                             ],
                             "overrides": {
-                                "IndividualInformation":{
-                                    "readonly":true
+                                "IndividualInformation": {
+                                    "readonly": true
                                 },
-                                "ContactInformation":{
-                                    "readonly":true
+                                "ContactInformation": {
+                                    "readonly": true
                                 },
-                                "BankAccounts":{
-                                    "readonly":true
+                                "BankAccounts": {
+                                    "readonly": true
                                 }
                             }
                         },
@@ -266,14 +276,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                 "actionbox"
                             ],
                             "overrides": {
-                                "IndividualInformation":{
-                                    "readonly":true
+                                "IndividualInformation": {
+                                    "readonly": true
                                 },
-                                "ContactInformation":{
-                                    "readonly":true
+                                "ContactInformation": {
+                                    "readonly": true
                                 },
-                                "BankAccounts":{
-                                    "readonly":true
+                                "BankAccounts": {
+                                    "readonly": true
                                 }
                             }
                         },
@@ -282,14 +292,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                 "actionbox"
                             ],
                             "overrides": {
-                                "IndividualInformation":{
-                                    "readonly":true
+                                "IndividualInformation": {
+                                    "readonly": true
                                 },
-                                "ContactInformation":{
-                                    "readonly":true
+                                "ContactInformation": {
+                                    "readonly": true
                                 },
-                                "BankAccounts":{
-                                    "readonly":true
+                                "BankAccounts": {
+                                    "readonly": true
                                 }
                             }
                         }
@@ -531,7 +541,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                         }
                         PageHelper.showProgress('enrolment', 'Updating Customer');
                         // PageHelper.showLoader();
-                        model.enrolmentProcess.processType = 'AGENT'; 
+                        model.enrolmentProcess.processType = 'AGENT';
                         model.enrolmentProcess.proceed()
                             .finally(function() {
                                 PageHelper.hideLoader();
@@ -559,7 +569,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                         }
                         PageHelper.showProgress('enrolment', 'Updating Customer');
                         PageHelper.showLoader();
-                        model.enrolmentProcess.processType = 'AGENT'; 
+                        model.enrolmentProcess.processType = 'AGENT';
                         model.enrolmentProcess.save()
                             .finally(function() {
                                 PageHelper.hideLoader();

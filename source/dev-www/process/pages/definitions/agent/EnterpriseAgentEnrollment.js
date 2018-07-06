@@ -38,12 +38,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                 "actionbox"
                             ],
                             "overrides": {
-                                "AgentInformation":{
-                                    "readonly":true
-                                },
-                                "AgentFeeDetails":{
-                                    "readonly":true
-                                }
+                                // "AgentInformation":{
+                                //     "readonly":true
+                                // },
+                                // "AgentFeeDetails":{
+                                //     "readonly":true
+                                // }
                             }
                         },
                         "Rejected": {
