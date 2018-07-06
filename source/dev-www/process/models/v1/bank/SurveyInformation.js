@@ -1014,7 +1014,7 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                     "noOfPotentialMember",
                     "motivationRequired",
                     "udf2",
-                    "latitude",
+                   // "latitude",
                 ]
             }
         },
@@ -1033,7 +1033,6 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
             "political_climate",
             "microfinance_village",
             "potential_village",
-            "geo_tag",
             "name",
             "contact"
         ]
