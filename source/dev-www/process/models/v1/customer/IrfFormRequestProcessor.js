@@ -2837,10 +2837,6 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         "key": "lead.agentName",
                         "type":"select"
 
-                    },
-                    "dealerName": {
-                        "key": "lead.dealerName",
-                        "type":"select"
                     }
 
                 }
@@ -2966,8 +2962,8 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 condition: "model.lead.eligibleForProduct ==='NO'",
                                 enumCode:"lead_reject_reason"
                             },
-                            "productRejecttAdditinalRemarks": {
-                                key: "lead.productRejecttAdditinalRemarks",
+                            "productRejectAdditinalRemarks": {
+                                key: "lead.productRejectAdditinalRemarks",
                                 title:"REMARKS"
                             },
                         }

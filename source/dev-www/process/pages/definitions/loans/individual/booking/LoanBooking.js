@@ -116,6 +116,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     console.log(model.BackedDatedDisbursement);
                     console.log(model.showLoanBookingDetails);
                     console.log(model.basicLoanDedupe);
+                }, function(err) {
+                    console.log(err);
                 });
                
                 PagesDefinition.getPageConfig("Page/Engine/loans.individual.booking.LoanBooking").then(function(data){
@@ -125,7 +127,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     if(data.basicLoanDedupe) {
                         model.basicLoanDedupe = data.basicLoanDedupe;
                     }
+                }, function(err) {
+                    console.log(err);
                 });
+
                 IndividualLoan.get({id: $stateParams.pageId})
                     .$promise
                     .then(
@@ -157,7 +162,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
 
                             model.loanAccount = res;
 
-                            if (model.loanAccount.disbursementSchedules.length >= 0 && _.isNumber(model.loanAccount.disbursementSchedules[0].moratoriumPeriodInDays) && !model.loanAccount.scheduleStartDate) {
+                            if (model.loanAccount.disbursementSchedules.length >= 0 && _.isNumber(model.loanAccount.disbursementSchedules[0].moratoriumPeriodInDays) && !model.loanAccount.scheduleStartDate && _.isNumber(model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate)) {
                                 model.loanAccount.scheduleStartDate = moment(model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate, "YYYY-MM-DD").add(model.loanAccount.disbursementSchedules[0].moratoriumPeriodInDays, 'days').format("YYYY-MM-DD");
                             }
                             var ids = [];

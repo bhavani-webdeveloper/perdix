@@ -52,7 +52,7 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                         "condition": "model.lead.leadSource.toUpperCase() == 'BUYING/SELLING AGENT(BROKER)'",
                         "enumCode": "agent"
                     },
-                    "sourceDetails.dealerName": {
+                    "sourceDetails.referredBy2": {
                         "condition": "model.lead.leadSource.toUpperCase() == 'DEALER(NEW VEHICLE)'",
                         "enumCode": "dealer"
                     },
@@ -82,7 +82,7 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                         "condition" : "model.lead.interestedInProduct == 'NO' || model.lead.eligibleForProduct == 'NO' "
 
                     },
-                     "productDetails.productRejectionReason.productRejecttAdditinalRemarks":{
+                     "productDetails.productRejectionReason.productRejectAdditinalRemarks":{
                         "condition" : "model.lead.interestedInProduct == 'NO' || model.lead.eligibleForProduct == 'NO' "
 
                     }
@@ -99,7 +99,7 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                     "sourceDetails.referredBy",
                     "sourceDetails.referredBy1",
                     "sourceDetails.agentName",
-                    "sourceDetails.dealerName",
+                    "sourceDetails.referredBy2",
                     "leadProfile.individualDetails",
                     "leadProfile.individualDetails.leadName",
                     "leadProfile.individualDetails.existingApplicant",
@@ -138,7 +138,7 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                     "productDetails.productEligibility.eligibleForProduct",
                     "productDetails.productRejectionReason",
                     "productDetails.productRejectionReason.productRejectReason",
-                    "productDetails.productRejectionReason.productRejecttAdditinalRemarks",
+                    "productDetails.productRejectionReason.productRejectAdditinalRemarks",
                     "productDetails.leadStatus",
                     "productDetails.leadStatus.leadStatus",
                     "previousInteractions",
@@ -194,6 +194,15 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                                             "title": "REGN_NO",
                                             "condition": "model.lead.interestedInProduct==='YES' && (model.lead.loanPurpose1 == 'Purchase - Used Vehicle' || model.lead.loanPurpose1 == 'Refinance')",
                                             "orderNo": 45
+                                        }
+                                    }
+                                },
+                                "sourceDetails":{
+                                    "items":{
+                                        "referredBy2":{
+                                            "key": "lead.referredBy",
+                                            "type": "select",
+                                            "enumCode": "dealer"
                                         }
                                     }
                                 }

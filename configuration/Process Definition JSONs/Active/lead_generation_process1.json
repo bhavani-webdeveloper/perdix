@@ -499,18 +499,6 @@
                      "ReadyForScreening"
                   ]
                },
-               "dealerName": {
-                  "title": "dealerName",
-                  "type": "String",
-                  "minLength": 1,
-                  "maxLength": 100,
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess",
-                     "ReadyForScreening"
-                  ]
-               },
                "occupation1": {
                   "title": "occupation1",
                   "type": "String",

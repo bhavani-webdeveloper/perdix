@@ -286,7 +286,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                     "post_pages_initialize": function(bundleModel){
                         $log.info("Inside post_page_initialize");
                         BundleManager.broadcastEvent('origination-stage', 'FieldInvestigation1');
-
+                        Queries.getVehicleDetails()
+                        .then(function (response) {
+                            BundleManager.broadcastEvent("get-vehicle-details", response);
+                        })
+                        Queries.getCibilHighmarkMandatorySettings()
+                        .then(function(settings){
+                            BundleManager.broadcastEvent("cibil-highmark-mandatory-settings", settings);
+                        })
                     },
                     eventListeners: {
                         "on-customer-load": function(pageObj, bundleModel, params){

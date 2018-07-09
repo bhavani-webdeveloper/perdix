@@ -54,6 +54,16 @@ define(["require", "exports"], function (require, exports) {
                                     "arguments": {}
                                 },
                             ]
+                        },
+                        {
+                            "type": "expr",
+                            "expr": "this.loanAccount.currentStage=='FieldInvestigation1' || this.loanAccount.currentStage=='FieldInvestigation2' || this.loanAccount.currentStage=='FieldInvestigation3'",
+                            "add": [
+                                {
+                                    "name": "DefaultIndividualReferencePolicy",
+                                    "arguments": {}
+                                }
+                            ]
                         }
                     ]
                 },
@@ -91,6 +101,16 @@ define(["require", "exports"], function (require, exports) {
                                         "stage": "Completed",
                                         "fromStage": "ReadyForScreening"
                                     }
+                                }
+                            ]
+                        },
+                        {
+                            "type": "expr",
+                            "expr": "this.loanAccount.currentStage=='FieldInvestigation1' || this.loanAccount.currentStage=='FieldInvestigation2' || this.loanAccount.currentStage=='FieldInvestigation3'",
+                            "add": [
+                                {
+                                    "name": "DefaultIndividualReferencePolicy",
+                                    "arguments": {}
                                 }
                             ]
                         }
@@ -140,6 +160,18 @@ define(["require", "exports"], function (require, exports) {
                         {
                             "name": "DefaultVehicleDocumentsPolicy",
                             "arguments": {}
+                        }
+                    ],
+                    "overrides": [
+                        {
+                            "type": "expr",
+                            "expr": "this.loanAccount.currentStage=='FieldInvestigation1' || this.loanAccount.currentStage=='FieldInvestigation2' || this.loanAccount.currentStage=='FieldInvestigation3'",
+                            "add": [
+                                {
+                                    "name": "DefaultIndividualReferencePolicy",
+                                    "arguments": {}
+                                }
+                            ]
                         }
                     ]
                 }

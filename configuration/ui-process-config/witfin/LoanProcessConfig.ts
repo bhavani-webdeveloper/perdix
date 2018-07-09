@@ -53,6 +53,17 @@ let config = {
                             },
 
                         ]
+                    },
+                    {
+                        "type": "expr",
+                        "expr": "this.loanAccount.currentStage=='FieldInvestigation1' || this.loanAccount.currentStage=='FieldInvestigation2' || this.loanAccount.currentStage=='FieldInvestigation3'",
+                        "add": [
+                            {
+                                "name": "DefaultIndividualReferencePolicy",
+                                "arguments": {}
+                            }
+
+                        ]
                     }
                 ]
             },
@@ -91,6 +102,17 @@ let config = {
                                     "fromStage":"ReadyForScreening"
                                 }
                             }
+                        ]
+                    },
+                    {
+                        "type": "expr",
+                        "expr": "this.loanAccount.currentStage=='FieldInvestigation1' || this.loanAccount.currentStage=='FieldInvestigation2' || this.loanAccount.currentStage=='FieldInvestigation3'",
+                        "add": [
+                            {
+                                "name": "DefaultIndividualReferencePolicy",
+                                "arguments": {}
+                            }
+
                         ]
                     }
                 ]
@@ -139,6 +161,19 @@ let config = {
                     {
                         "name": "DefaultVehicleDocumentsPolicy",
                         "arguments": {}
+                    }
+                ],
+                "overrides": [
+                    {
+                        "type": "expr",
+                        "expr": "this.loanAccount.currentStage=='FieldInvestigation1' || this.loanAccount.currentStage=='FieldInvestigation2' || this.loanAccount.currentStage=='FieldInvestigation3'",
+                        "add": [
+                            {
+                                "name": "DefaultIndividualReferencePolicy",
+                                "arguments": {}
+                            }
+
+                        ]
                     }
                 ]
             }

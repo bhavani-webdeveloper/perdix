@@ -230,7 +230,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "ContactInformation": {
                                         "readonly": true
                                     },
-                                    "tangibleNetworth": {
+                                    "TangibleNetWorth": {
                                       "readonly": true
                                     }
                                 },
@@ -261,7 +261,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "ContactInformation": {
                                         "readonly": true
                                     },
-                                    "tangibleNetworth": {
+                                    "TangibleNetWorth": {
                                       "readonly": true
                                     }
                                 },
@@ -292,7 +292,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "ContactInformation": {
                                         "readonly": true
                                     },
-                                    "tangibleNetworth": {
+                                    "TangibleNetWorth": {
                                       "readonly": true
                                     }
                                 },
@@ -323,7 +323,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "ContactInformation": {
                                         "readonly": true
                                     },
-                                    "tangibleNetworth": {
+                                    "TangibleNetWorth": {
                                       "readonly": true
                                     }
                                 },
@@ -354,7 +354,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "ContactInformation": {
                                         "readonly": true
                                     },
-                                    "tangibleNetworth": {
+                                    "TangibleNetWorth": {
                                       "readonly": true
                                     }
                                 },
@@ -385,7 +385,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "ContactInformation": {
                                         "readonly": true
                                     },
-                                    "tangibleNetworth": {
+                                    "TangibleNetWorth": {
                                       "readonly": true
                                     }
                                 },
@@ -416,7 +416,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "ContactInformation": {
                                         "readonly": true
                                     },
-                                    "tangibleNetworth": {
+                                    "TangibleNetWorth": {
                                       "readonly": true
                                     }
                                 },
@@ -447,7 +447,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "ContactInformation": {
                                         "readonly": true
                                     },
-                                    "tangibleNetworth": {
+                                    "TangibleNetWorth": {
                                       "readonly": true
                                     }
                                 },
@@ -478,7 +478,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "ContactInformation": {
                                         "readonly": true
                                     },
-                                    "tangibleNetworth": {
+                                    "TangibleNetWorth": {
                                       "readonly": true
                                     }
                                 },
@@ -509,7 +509,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "ContactInformation": {
                                         "readonly": true
                                     },
-                                    "tangibleNetworth": {
+                                    "TangibleNetWorth": {
                                       "readonly": true
                                     }
                                 },
@@ -540,7 +540,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "ContactInformation": {
                                         "readonly": true
                                     },
-                                    "tangibleNetworth": {
+                                    "TangibleNetWorth": {
                                       "readonly": true
                                     }
                                 },
@@ -571,7 +571,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "ContactInformation": {
                                         "readonly": true
                                     },
-                                    "tangibleNetworth": {
+                                    "TangibleNetWorth": {
                                       "readonly": true
                                     }
                                 },
@@ -602,7 +602,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "ContactInformation": {
                                         "readonly": true
                                     },
-                                    "tangibleNetworth": {
+                                    "TangibleNetWorth": {
                                       "readonly": true
                                     }
                                 },
@@ -633,7 +633,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "ContactInformation": {
                                         "readonly": true
                                     },
-                                    "tangibleNetworth": {
+                                    "TangibleNetWorth": {
                                       "readonly": true
                                     }
                                 },
@@ -664,7 +664,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "ContactInformation": {
                                         "readonly": true
                                     },
-                                    "tangibleNetworth": {
+                                    "TangibleNetWorth": {
                                       "readonly": true
                                     }
                                 },
@@ -989,6 +989,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 "IndividualReferences.verifications": {
                                     "view":"fixed",
                                     "titleExpr": "model.customer.verifications[arrayIndexes[0]].relationship",
+                                    "add": null,
+                                    "remove": null
                                 },
                                 "IndividualReferences.verifications.relationship": {
                                     "type": "select",

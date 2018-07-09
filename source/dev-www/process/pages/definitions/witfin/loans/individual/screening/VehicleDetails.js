@@ -661,7 +661,7 @@ define(
                     "VehicleAssetUse.segment",
                     "VehicleAssetUse.subSegnment",
                     "VehicleAssetUse.entityType",
-                    "VehicleAssetUse.attachedwith",
+                    "VehicleAssetUse.attachedWith",
                     "VehicleAssetUse.attachedAddress",
                     "VehicleAssetUse.attachedContactNumber",
                     "VehicleAssetUse.locationAddress",
@@ -1589,7 +1589,7 @@ define(
                                 // Calculation for Monthly Working Hours
                                 if (vehicleDetail.calculation_method == 'TIME'){
                                     if(model.loanAccount.vehicleLoanDetails.dailyWorkingHours && model.loanAccount.vehicleLoanDetails.monthlyWorkingDays) {
-                                        model.loanAccount.vehicleLoanDetails.monthlyWorkingHours = parseFloat(model.loanAccount.vehicleLoanDetails.dailyWorkingHours * model.loanAccount.vehicleLoanDetails.monthlyWorkingDays);
+                                        model.loanAccount.vehicleLoanDetails.monthlyWorkingHours = parseFloat(model.loanAccount.vehicleLoanDetails.dailyWorkingHours) * parseFloat(model.loanAccount.vehicleLoanDetails.monthlyWorkingDays);
                                     }
                                 }
 
@@ -1615,7 +1615,7 @@ define(
                                 // Calculation for Tyre_Cost_per_month
                                 if(vehicleDetail.calculation_method && vehicleDetail.calculation_method == "DISTANCE") {
                                     if (_.isArray(model.loanAccount.vehicleLoanDetails.vehicleRouteDetails) && model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0] && model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].kmPerMonth && model.loanAccount.vehicleLoanDetails.noOfTyres && model.loanAccount.vehicleLoanDetails.costOfTyre && model.loanAccount.vehicleLoanDetails.lifeOfTyre)
-                                        model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[1].expenseAmount = parseFloat(model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].kmPerMonth * model.loanAccount.vehicleLoanDetails.noOfTyres * model.loanAccount.vehicleLoanDetails.costOfTyre)/parseFloat(model.loanAccount.vehicleLoanDetails.lifeOfTyre);
+                                        model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[1].expenseAmount = parseFloat(model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].kmPerMonth) * parseFloat(model.loanAccount.vehicleLoanDetails.noOfTyres) * parseFloat(model.loanAccount.vehicleLoanDetails.costOfTyre)/parseFloat(model.loanAccount.vehicleLoanDetails.lifeOfTyre);
                                 } else {
                                      model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[1].expenseAmount = 0;
                                 }
@@ -1676,7 +1676,7 @@ define(
 
                                  // Calculation for free cash flow
                                  if (_.isArray(model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes) && model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes[0] && model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes[0].incomeAmount && model.loanAccount.vehicleLoanDetails.totalMonthlyExpense)
-                                    model.loanAccount.vehicleLoanDetails.freeCashFlow = Math.round((parseFloat(model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes[0].incomeAmount - model.loanAccount.vehicleLoanDetails.totalMonthlyExpense))*100)/100;
+                                    model.loanAccount.vehicleLoanDetails.freeCashFlow = Math.round((parseFloat(model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes[0].incomeAmount) - parseFloat(model.loanAccount.vehicleLoanDetails.totalMonthlyExpense))*100)/100;
 
 
                                  // Calculation for fcfToEmi
@@ -1758,12 +1758,12 @@ define(
 
                          // Calculation for free cash flow
                          if (_.isArray(model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes) && model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes[0] && model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes[0].incomeAmount && model.loanAccount.vehicleLoanDetails.totalMonthlyExpense)
-                            model.loanAccount.vehicleLoanDetails.freeCashFlow = Math.round((parseFloat(model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes[0].incomeAmount - model.loanAccount.vehicleLoanDetails.totalMonthlyExpense))*100)/100;
+                            model.loanAccount.vehicleLoanDetails.freeCashFlow = Math.round((parseFloat(model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes[0].incomeAmount) - parseFloat(model.loanAccount.vehicleLoanDetails.totalMonthlyExpense))*100)/100;
 
 
                          // Calculation for fcfToEmi
                          if (model.loanAccount.vehicleLoanDetails.freeCashFlow && model.loanAccount.estimatedEmi)
-                             model.loanAccount.vehicleLoanDetails.fcfToEmi = Math.round((parseFloat(model.loanAccount.vehicleLoanDetails.freeCashFlow / parseFloat(model.loanAccount.estimatedEmi)))*100)/100;
+                             model.loanAccount.vehicleLoanDetails.fcfToEmi = Math.round((parseFloat(model.loanAccount.vehicleLoanDetails.freeCashFlow) / parseFloat(model.loanAccount.estimatedEmi))*100)/100;
 
                     },
 

@@ -126,10 +126,6 @@
             "type":["string", "null"],
             "title":"AGENT_NAME"
          },
-         "dealerName": {
-            "type":["string", "null"],
-            "title":"DEALER_NAME"
-         },
          "loanPurpose2": {
             "type":["string", "null"],
             "title":"LOAN_SUB_PURPOSE"
