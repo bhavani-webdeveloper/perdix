@@ -5,11 +5,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
     return {
         pageUID: "agent.IndividualAgentEnrollment",
         pageType: "Engine",
-        dependencies: ["$log", "$state","irfNavigator", "$stateParams", "Enrollment", "Agent", "EnrollmentHelper", "SessionStore", "formHelper", "$q",
+        dependencies: ["$log", "$state", "irfNavigator", "$stateParams", "Enrollment", "Agent", "EnrollmentHelper", "SessionStore", "formHelper", "$q",
             "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository"
         ],
 
-        $pageFn: function($log, $state,irfNavigator, $stateParams, Enrollment, Agent, EnrollmentHelper, SessionStore, formHelper, $q,
+        $pageFn: function($log, $state, irfNavigator, $stateParams, Enrollment, Agent, EnrollmentHelper, SessionStore, formHelper, $q,
             PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository) {
 
             var self;
@@ -23,14 +23,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                     "agentProcess.agent.currentStage": {
                         "PendingForApproval": {
                             "excludes": [
-                               "actionbox" 
+                                "actionbox"
                             ],
                             "overrides": {
-                                "AgentInformation":{
-                                    "readonly":true
+                                "AgentInformation": {
+                                    "readonly": true
                                 },
-                                "AgentFeeDetails":{
-                                    "readonly":true
+                                "AgentFeeDetails": {
+                                    "readonly": true
                                 }
                             }
                         },
@@ -52,11 +52,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                 "actionbox"
                             ],
                             "overrides": {
-                                "AgentInformation":{
-                                    "readonly":true
+                                "AgentInformation": {
+                                    "readonly": true
                                 },
-                                "AgentFeeDetails":{
-                                    "readonly":true
+                                "AgentFeeDetails": {
+                                    "readonly": true
                                 }
                             }
                         }
@@ -80,7 +80,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                     "AgentInformation.agentCompanyId": {
                         "key": "agent.agentCompanyId",
                         "title": "AGENT_ENTERPRISE_ID"
-                    }
+                    },
+                    "AgentInformation.agentType": {
+                        "title": "AGENT_TYPE",
+                        "type": "select",
+                        "enumCode": "agent_type",
+                        "required": true
+                    },
                 }
             }
 
@@ -168,7 +174,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                 "PostReview": {
                                     "type": "box",
                                     "title": "POST_REVIEW",
-                                    "condition": "model.agentProcess.agent.id",
+                                    "condition": "model.agentProcess.agent.id && !(model.agentProcess.agent.currentStage == 'AgentInitiation')",
                                     "orderNo": 600,
                                     "items": {
                                         "action": {
@@ -281,6 +287,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                     "type": "button",
                                     "title": "SAVE",
                                     "onClick": "actions.save(model, formCtrl, form, $event)"
+                                }, {
+                                    "type": "button",
+                                    "title": "PROCEED",
+                                    "condition": "model.agentProcess.agent.id",
+                                    "onClick": "actions.proceed(model, formCtrl, form, $event)"
                                 }]
                             }]
                         }
@@ -339,8 +350,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                 model.agent.agentId1 = obj.id;
                             })
                     },
-                    "agent-updated":function(bundleModel, model, obj) {
-                    },
+                    "agent-updated": function(bundleModel, model, obj) {},
                     "origination-stage": function(bundleModel, model, obj) {
                         model.currentStage = obj
                     }
@@ -375,7 +385,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                 formHelper.resetFormValidityState(form);
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 PageHelper.clearErrors();
-                                model.agentProcess=agentProcess;
+                                model.agentProcess = agentProcess;
                                 BundleManager.pushEvent(model.pageClass + "-updated", model._bundlePageObj, agentProcess);
                             }, function(err) {
                                 PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
@@ -441,7 +451,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                 formHelper.resetFormValidityState(form);
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 PageHelper.clearErrors();
-                                model.agentProcess=agentProcess;
+                                model.agentProcess = agentProcess;
                                 BundleManager.pushEvent(model.pageClass + "-updated", model._bundlePageObj, agentProcess);
                             }, function(err) {
                                 PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
