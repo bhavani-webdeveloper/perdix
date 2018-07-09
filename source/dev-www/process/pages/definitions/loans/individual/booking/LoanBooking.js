@@ -81,9 +81,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
 
         var populateDisbursementScheduledDate = function(model) {
             var now= moment(new Date()).format('HH:MM');
-            var today=new Date();
-            var tomorrow=new Date();
-            model.scheduledDisbursementAllowedDate=new Date();
+            var today=new Date(SessionStore.getCBSDate());
+            var tomorrow=new Date(SessionStore.getCBSDate());
+            model.scheduledDisbursementAllowedDate=new Date(SessionStore.getCBSDate());
             var tomorrow= new Date(tomorrow.setDate(today.getDate()+1));
             if(now < model.disbursementCutOffTime){
                model._currentDisbursement.customerSignatureDate = today;
