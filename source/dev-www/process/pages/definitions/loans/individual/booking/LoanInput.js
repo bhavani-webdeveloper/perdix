@@ -263,7 +263,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     model._currentDisbursement=model._currentDisbursement||{};
                     model.loanAccount.collateral=model.loanAccount.collateral || [{quantity:1}];
                     if(model.siteCode == 'kinara'){
-                       populateDisbursementScheduledDate(model); 
+                       populateDisbursementScheduledDate(model);
                     }
                     PageHelper.showLoader();
                     Queries.getGlobalSettings("mainPartner").then(function(value) {
@@ -418,7 +418,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             model._currentDisbursement = model.loanAccount.disbursementSchedules[0];
                             model.loanAccount.scheduleStartDate = moment(model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate, "YYYY-MM-DD").add(model.loanAccount.disbursementSchedules[0].moratoriumPeriodInDays, 'days').format("YYYY-MM-DD");
                         }
-                        
+
                         model.linkedAccount={};
 
                         if(model.loanAccount.linkedAccountNumber && model.siteCode == 'kinara'){
@@ -1484,7 +1484,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             if(model.siteCode == 'kinara' && (disbursementSchedules>model.scheduledDisbursementAllowedDate)){
                                 var scheduledDisbursementAllowedDate= moment(model.scheduledDisbursementAllowedDate).format('DD-MM-YYYY');
                                 PageHelper.setError({
-                                    message: "Scheduled Disbursement Date should not be greater then" + " " + scheduledDisbursementAllowedDate 
+                                    message: "Scheduled Disbursement Date should not be greater then" + " " + scheduledDisbursementAllowedDate
                                 });
                                 return;
                             }
@@ -1871,7 +1871,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                     ];
                                 },
                                 onSelect: function (result, model, context) {
-                                    model.loanAccount.collateral[context.arrayIndex].subRegistrarPincode = (new Number(result.pincode)).toString();                                
+                                    model.loanAccount.collateral[context.arrayIndex].subRegistrarPincode = (new Number(result.pincode)).toString();
                                     $log.info(result);
                                 }
                             },
@@ -3360,14 +3360,13 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 //model.loanAccount.id = resp.loanAccount.id;
                                 $log.info("Loan ID Returned on Save:" + model.loanAccount.id);
                                 resp.loanProcessAction="PROCEED";
-                                if(model.loanAccount.currentStage == 'LoanInitiation' && model.loanAccount.partnerCode.toLowerCase() != 'witfin')
-                                    reqData.stage = 'PendingForPartner';
-                                if(model.loanAccount.currentStage == 'LoanInitiation' && model.loanAccount.partnerCode.toLowerCase() == 'witfin')
-                                    reqData.stage = 'LoanBooking';
+                                if(resp.loanAccount.currentStage == 'LoanInitiation' && resp.loanAccount.partnerCode == model.mainPartner)
+                                    resp.stage = 'LoanBooking';
+
                                 if(resp.loanAccount.currentStage == 'PendingForPartner' && resp.loanAccount.partnerCode !== 'DO Partner1-IC')
                                 {
                                     resp.stage = 'LoanBooking';
-                                     $log.info("printing in if ");
+                                    $log.info("printing in if ");
                                     $log.info(model.loanAccount.partnerCode);
                                 }
                                 //reqData.loanProcessAction="PROCEED";
@@ -3398,10 +3397,15 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         }else{
                             reqData.loanProcessAction="PROCEED";
                             reqData.remarks = model.review.remarks;
-                            if(model.loanAccount.currentStage == 'LoanInitiation' && model.loanAccount.partnerCode.toLowerCase() != 'witfin')
-                                reqData.stage = 'PendingForPartner';
-                            if(model.loanAccount.currentStage == 'LoanInitiation' && model.loanAccount.partnerCode.toLowerCase() == 'witfin')
+                            if(model.loanAccount.currentStage == 'LoanInitiation' && model.loanAccount.partnerCode == model.mainPartner)
                                 reqData.stage = 'LoanBooking';
+
+                            if(model.loanAccount.currentStage == 'PendingForPartner' && (model.siteCode == 'kinara' && model.loanAccount.partnerCode !=='DO Partner1-IC') )
+                            {
+                                $log.info("printing in else ");
+                                $log.info(model.loanAccount.partnerCode);
+                                reqData.stage = 'LoanBooking';
+                            }
 
                             if(model.loanAccount.currentStage == 'PendingForPartner' && model.loanAccount.partnerCode !=='DO Partner1-IC')
                                 {
