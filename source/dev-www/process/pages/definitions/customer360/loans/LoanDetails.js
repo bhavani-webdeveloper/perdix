@@ -112,6 +112,9 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                                 model.transactions.transactionId = model.cbsLoan.transactions[i].transactionId;
                                                 model.transactions.transactionType = model.cbsLoan.transactions[i].instrument;
                                             }
+                                            if (t.description && t.description == "ADJUST_PENAL_INTEREST" && t.transactionName == "Prepayment") {
+                                                t.transactionName ='Penal Interest Payment';
+                                            }
                                         }
                                         for (var i = 0; i < model.cbsLoan.repaymentSchedule.length; i++) {
                                             model.cbsLoan.repaymentSchedule[i].valueDate = moment.utc(model.cbsLoan.repaymentSchedule[i].valueDate).utcOffset(localUtcOffset).format("D-MMM-YYYY");

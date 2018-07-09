@@ -846,11 +846,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     "type":"fieldset",
                     "condition":"model.loanAccount.precloseuredetails",
                     "items":[
-                    {
+                    /*{
                         "key": "loanAccount.precloseurePayOffAmount",
                         "title": "PAYOFF_AMOUNT",
                         "readonly": true
-                    }, {
+                    },*/ {
                         "key": "loanAccount.precloseurePayOffAmountWithDue",
                         "title": "PAYOFF_AMOUNT_WITH_DUE",
                         "readonly": true,
