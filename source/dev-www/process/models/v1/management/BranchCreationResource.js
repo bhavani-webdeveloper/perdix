@@ -23,6 +23,10 @@
             deleteBranch:{
                         method:'DELETE',
                         url: endpoint + '/:id'
+            },
+            refreshBranchset:{
+                        method:'GET',
+                        url: endpoint + '/refreshBranchsetAccess'
             }
         });
     });

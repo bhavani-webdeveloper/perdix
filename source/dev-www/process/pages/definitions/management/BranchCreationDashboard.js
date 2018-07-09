@@ -9,7 +9,8 @@ irf.pageCollection.controller(irf.controller("management.BranchCreationDashboard
             "title": "BRANCH_CREATION_DASHBOARD",
             "items": [
                 "Page/Engine/management.BranchMaintenance",
-                "Page/Engine/management.BranchCreationSearch"
+                "Page/Engine/management.BranchCreationSearch",
+                "Page/Engine/management.RefreshBranchSetAccess"
             ]
         };
         PagesDefinition.getUserAllowedDefinition(fullDefinition).then(function(resp) {

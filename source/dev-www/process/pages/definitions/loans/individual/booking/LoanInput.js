@@ -288,11 +288,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             model.BackedDatedDisbursement=data.BackedDatedDisbursement;
                             model.allowPreEmiInterest = data.allowPreEmiInterest;
                         }
-                        model.showLoanBookingDetails = true;
-                        model.allowPreEmiInterest = true;
                         //stateParams
-                        console.log(model.BackedDatedDisbursement);
-                        console.log(model.showLoanBookingDetails);
                     });
                     //model.loanAccount.guarantors = [];
                     for (var i = 0; i < model.loanAccount.loanCustomerRelations.length; i++) {

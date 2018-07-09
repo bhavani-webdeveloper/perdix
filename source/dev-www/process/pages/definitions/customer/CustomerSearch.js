@@ -53,6 +53,7 @@ function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionSto
 	                    condition: "model.showBankFilter && model.fullAccess"
 	                }, {
 	                    key: "branch",
+	                    "type":"userbranch",
 	                    condition: "model.siteCode!='sambandh' && model.siteCode!='IREPDhan'"
 	                }, {
 	                    key: "branch",
@@ -116,11 +117,10 @@ function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionSto
 					"branch": {
 						"title": "BRANCH_NAME",
 						"type": ["integer", "null"],
-						//"enumCode": "branch_id",
-						//"parentEnumCode": "bank",
-						//"parentValueExpr": "model.bankId",
+						"enumCode": "branch_id",
+						"parentEnumCode": "bank",
+						"parentValueExpr": "model.bankId",
 						"x-schema-form": {
-							"type":"userbranch",
 							"screenFilter": true,
 						}
 					},
@@ -145,18 +145,18 @@ function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionSto
 			getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
 
 				/* GET BRANCH NAME */
-				var branches = formHelper.enum('branch').data;
+				/*var branches = formHelper.enum('branch').data;
 				var branchName = null;
 				for (var i=0;i<branches.length; i++){
 					var branch = branches[i];
 					 if (branch.code == searchOptions.branch){
 					 	branchName = branch.name;
 					 }
-				}
+				}*/
 
 				var promise = Enrollment.search({
 					'bankId': searchOptions.bankId,
-					'branchName': branchName,
+					'branchId': searchOptions.branch,
 					'firstName': searchOptions.first_name,
 					'centreId': searchOptions.centre,
 					'page': pageOpts.pageNo,
