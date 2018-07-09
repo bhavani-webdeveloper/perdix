@@ -88,11 +88,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
             if(now < model.disbursementCutOffTime){
                model._currentDisbursement.customerSignatureDate = today;
                model._currentDisbursement.scheduledDisbursementDate = today;
-               model.scheduledDisbursementAllowedDate= new Date(model.scheduledDisbursementAllowedDate.setDate(today.getDate()+5));
+               model.scheduledDisbursementAllowedDate= new Date(model.scheduledDisbursementAllowedDate.setDate(today.getDate()+4));
             }else{
                model._currentDisbursement.customerSignatureDate = today;
                model._currentDisbursement.scheduledDisbursementDate = tomorrow;
-               model.scheduledDisbursementAllowedDate= new Date(model.scheduledDisbursementAllowedDate.setDate(tomorrow.getDate()+5));
+               model.scheduledDisbursementAllowedDate= new Date(model.scheduledDisbursementAllowedDate.setDate(tomorrow.getDate()+4));
             }
         };
 
