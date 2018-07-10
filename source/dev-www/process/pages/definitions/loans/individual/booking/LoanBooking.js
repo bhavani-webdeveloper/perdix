@@ -1033,7 +1033,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         }
                     }
                     
-                    if(model.siteCode == 'sambandh' || model.siteCode == 'saija') {
+                    if(model.siteCode == 'sambandh' || model.siteCode == 'saija'||model.siteCode == 'kinara' ) {
                         if (scheduledDisbursementDate.diff(customerSignatureDate,"days") < 0){
                             PageHelper.showProgress("loan-create","Scheduled disbursement date should be greater than or equal to Customer sign date",5000);
                             return false;
