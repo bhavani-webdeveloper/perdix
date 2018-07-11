@@ -11,12 +11,13 @@ irf.pageCollection.controller(irf.controller("MutualFund.MutualFundEKYC"), ["$lo
         }).$promise.then(function(data) {
             $scope.customer = data;
 
-            if (!data.aadhaarNo) {
+            /* if (!data.aadhaarNo) {
                 PageHelper.setError({
                     "message": "Customer does not have aadhar number. eKYC is not possible"
                 });
+                irfNavigator.goBack();
                 return;
-            }
+            } */
             var kyc_data = [
                 data.panNo || "PANEXEMPT",
                 data.email || '',

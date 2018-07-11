@@ -12,7 +12,6 @@ define({
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				model.branch = SessionStore.getCurrentBranch().branchId;
-				//"irf-elements": "svn+http://svn.perdix.co/svn/perdix/irf-common-elements#trunk",
 				var bankName = SessionStore.getBankName();
 				var banks = formHelper.enum('bank').data;
 				for (var i = 0; i < banks.length; i++) {
@@ -23,17 +22,12 @@ define({
 					}
 				}
 				model.siteCode = SessionStore.getGlobalSetting("siteCode");
-				$log.info("siteCode:" + model.siteCode);
 				var userRole = SessionStore.getUserRole();
 				if (userRole && userRole.accessLevel && userRole.accessLevel === 5) {
 					model.fullAccess = true;
 				}
 				PagesDefinition.getPageConfig('Page/Engine/CustomerSearch').then(function(data) {
 					model.showBankFilter = data.showBankFilter ? data.showBankFilter : false;
-					setTimeout(function() {
-						formCtrl.submit();
-					}, 0);
-					$log.info("search-list sample got initialized");
 				});
 			},
 			definition: {
@@ -143,7 +137,8 @@ define({
 						'kycNumber': searchOptions.kyc_no,
 						'lastName': searchOptions.lastName,
 						'urnNo': searchOptions.urnNo,
-						'stage': "Completed"
+						'stage': "Completed",
+						'customerType': "Individual"
 					}).$promise;
 
 					return promise;
@@ -188,10 +183,7 @@ define({
 					getColumns: function() {
 						return [{
 							title: 'NAME',
-							data: 'firstName',
-							render: function(data, type, full, meta) {
-								return (full.customerType === 'Individual'  ? '<i class="fa fa-user">&nbsp;</i> ' : '<i class="fa fa-industry"></i> ') + data;
-							}
+							data: 'firstName'
 						}, {
 							title: 'URN_NO',
 							data: 'urnNo'
