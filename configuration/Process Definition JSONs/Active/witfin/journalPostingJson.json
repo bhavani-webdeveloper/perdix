@@ -130,6 +130,16 @@
                      "Rejected"
                   ]
                },
+               "entryType":{
+                  "title": "PRODUCT_TYPE",
+                  "type": "string",
+                  "captureStages":[
+                     "branchPostingEntry",
+                     "branchPostingReview",
+                     "Completed",
+                     "Rejected"
+                  ]
+               },
                "valueDate": {
                   "title": "Value Date",
                   "type": "string",
