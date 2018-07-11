@@ -5,6 +5,7 @@
          "code":"PaymentInitiation",
          "name":"PaymentInitiation",
          "stageType":"CAPTURE",
+		 "status":"Initiation",
          "allowedRoles":[  
             "WM"
          ]
@@ -14,6 +15,7 @@
          "code":"PaymentApproval",
          "name":"PaymentApproval",
          "stageType":"CAPTURE",
+		 "status":"Initiation",
          "allowedRoles":[  
             "WM"
          ]
@@ -22,15 +24,17 @@
          "order":3,
          "code":"ReadyForManualDispatch",
          "name":"ReadyForManualDispatch",
+		 "status":"Initiation",
          "stageType":"CAPTURE",
          "allowedRoles":[  
             "WM"
          ]
       },
-     {  
+	  {  
          "order":4,
-         "code":"Dispatched",
-         "name":"Dispatched",
+         "code":"ReadyForAutoDispatch",
+         "name":"ReadyForAutoDispatch",
+		 "status":"Payment",
          "stageType":"CAPTURE",
          "allowedRoles":[  
             "WM"
@@ -38,8 +42,9 @@
       },
      {  
          "order":5,
-         "code":"PaymentCompleted",
-         "name":"PaymentCompleted",
+         "code":"Dispatched",
+         "name":"Dispatched",
+		 "status":"Payment",
          "stageType":"CAPTURE",
          "allowedRoles":[  
             "WM"
@@ -47,8 +52,9 @@
       },
      {  
          "order":6,
-         "code":"PaymentRejected",
-         "name":"PaymentRejected",
+         "code":"PaymentCompleted",
+         "name":"PaymentCompleted",
+		 "status":"Success",
          "stageType":"CAPTURE",
          "allowedRoles":[  
             "WM"
@@ -56,8 +62,19 @@
       },
      {  
          "order":7,
+         "code":"PaymentRejected",
+         "name":"PaymentRejected",
+		 "status":"Failure",
+         "stageType":"CAPTURE",
+         "allowedRoles":[  
+            "WM"
+         ]
+      },
+     {  
+         "order":8,
          "code":"RejectedPaymentProcessed",
          "name":"RejectedPaymentProcessed",
+		 "status":"Failure",
          "stageType":"CAPTURE",
          "allowedRoles":[  
             "WM"
