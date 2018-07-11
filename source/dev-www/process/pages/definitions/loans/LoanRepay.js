@@ -65,6 +65,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                         unapprovedAmount: 0,
                         unapprovedTransactionsCount: 0
                     };
+                    model.siteCode = SessionStore.getGlobalSetting("siteCode");
 
                     model.additional.suspenseCode = SessionStore.getGlobalSetting("loan.individual.collection.suspenseCollectionAccount");
 
@@ -117,7 +118,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                         model.repayment.totalPayoffAmountToBePaid = Utils.roundToDecimal(data.payOffAndDueAmount + data.preclosureFee - data.securityDeposit);
                         model.repayment.totalSecurityDepositDue = Utils.roundToDecimal(data.totalSecurityDepositDue);
                         if (!_.isNull(pageData) && pageData.onlyDemandAllowed == true) {
-                            
+
                             if (model.repayment.totalPenalInterestDue) {
                                 model.repayment.totalDueWithPenal = Utils.roundToDecimal(model.repayment.totalDue) + Utils.roundToDecimal(model.repayment.totalPenalInterestDue);
                             } else {
@@ -228,7 +229,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
 
                 },
                 offline: false,
-                form: [ 
+                form: [
                     {
                         "type": "box",
                         "title": "REPAY",
@@ -678,7 +679,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 type:"date"
                             }
                         ]
-                
+
                     },
                     {
                         "type":"actionbox",
@@ -902,8 +903,10 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                     if (model.repayment.id) {
                                         postData.loanCollection.feeAmount = 0;
                                         //According to new change , if instrument type is cash or cheque , they will go to BranchDeposit stage
-                                        if (postData.loanCollection.instrumentType == 'CASH' || postData.loanCollection.instrumentType=='CHQ') {
+                                        if ( model.siteCode == 'kinara' && (postData.loanCollection.instrumentType == 'CASH' || postData.loanCollection.instrumentType=='CHQ')) {
                                             postData.stage = "BranchDeposit";
+                                        } else if (model.siteCode != 'kinara' && postData.loanCollection.instrumentType == 'CASH') {
+                                            postData.stage = "Deposit";
                                         } else if (postData.loanCollection.instrumentType == 'ACH') {
                                             //postData.loanCollection.instrumentType = "NEFT";
                                             postData.loanCollection.scheduleDemandAmount = model.repayment.amount;
