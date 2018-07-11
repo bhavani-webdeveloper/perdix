@@ -908,7 +908,7 @@
                   "title":"REPAYMENT_DATE",
                   "type":"date",
                   "captureStages":[
-                     "LoanBooking"
+                     "LoanBooking","LoanInitiation"
                   ]
                },
                "frequency":{
