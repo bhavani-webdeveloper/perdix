@@ -88,10 +88,14 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
             if(now < model.disbursementCutOffTime){
                model._currentDisbursement.customerSignatureDate = today;
                model._currentDisbursement.scheduledDisbursementDate = today;
+               model.CutOffdate=today;
+               model.CutOffTime=false;
                model.scheduledDisbursementAllowedDate= new Date(model.scheduledDisbursementAllowedDate.setDate(today.getDate()+ disbursementRestrictionDays));
             }else{
                model._currentDisbursement.customerSignatureDate = today;
                model._currentDisbursement.scheduledDisbursementDate = tomorrow;
+               model.CutOffdate=tomorrow;
+               model.CutOffTime=true;
                model.scheduledDisbursementAllowedDate= new Date(model.scheduledDisbursementAllowedDate.setDate(tomorrow.getDate()+ disbursementRestrictionDays));
             }
         };
@@ -153,7 +157,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                                 return;
                             }
 
-                            if (model.siteCode == 'kinara' && model.disbursementRestriction) {
+                            if (model.disbursementRestriction) {
                                 populateDisbursementScheduledDate(model);
                             }
 
@@ -291,11 +295,18 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         "type": "date",
                         "required": true,
                         "onChange": function(value ,form ,model, event){
-                            var disbursementSchedules = moment(model._currentDisbursement.scheduledDisbursementDate,SessionStore.getSystemDateFormat());
-                            if(model.siteCode == 'kinara' && (disbursementSchedules>model.scheduledDisbursementAllowedDate)){
-                                var scheduledDisbursementAllowedDate= moment(model.scheduledDisbursementAllowedDate).format('DD-MM-YYYY');
+                            var CutOffdate= moment(model.CutOffdate).format('DD-MM-YYYY');
+                            var scheduledDisbursementAllowedDate = moment(model.scheduledDisbursementAllowedDate).format('DD-MM-YYYY');
+                            var disbursementdate=moment(model._currentDisbursement.scheduledDisbursementDate).format('DD-MM-YYYY');
+                            if (model.disbursementRestriction && model.CutOffTime &&(disbursementdate < CutOffdate)) {
                                 PageHelper.setError({
-                                    message: "Scheduled Disbursement Date should not be greater then" + " " + scheduledDisbursementAllowedDate 
+                                    message: "Scheduled Disbursement Date should be greater then or equal" + " " + CutOffdate
+                                });
+                                return;
+                            }
+                            if (model.disbursementRestriction && (disbursementdate > scheduledDisbursementAllowedDate)) {
+                                PageHelper.setError({
+                                    message: "Scheduled Disbursement Date should not be greater then" + " " + scheduledDisbursementAllowedDate
                                 });
                                 return;
                             }
@@ -965,9 +976,17 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     //$log.info(BackedDatedDiffmonth);
                     /* 1) Loc-Renewal chnage includes default processing fee to 0.2 ans calculation of process amount 
                     */
-                    var disbursementSchedules = moment(model._currentDisbursement.scheduledDisbursementDate,SessionStore.getSystemDateFormat());
-                    if (model.disbursementRestriction && (disbursementSchedules > model.scheduledDisbursementAllowedDate)) {
-                        var scheduledDisbursementAllowedDate = moment(model.scheduledDisbursementAllowedDate).format('DD-MM-YYYY');
+
+                    var CutOffdate=moment(model.CutOffdate).format('DD-MM-YYYY');
+                    var scheduledDisbursementAllowedDate = moment(model.scheduledDisbursementAllowedDate).format('DD-MM-YYYY');
+                    var disbursementdate=moment(model._currentDisbursement.scheduledDisbursementDate).format('DD-MM-YYYY');
+                    if (model.disbursementRestriction && model.CutOffTime &&(disbursementdate < CutOffdate)) {
+                        PageHelper.setError({
+                            message: "Scheduled Disbursement Date should be greater then or equal" + " " + CutOffdate
+                        });
+                        return;
+                    }
+                    if (model.disbursementRestriction && (disbursementdate > scheduledDisbursementAllowedDate)) {
                         PageHelper.setError({
                             message: "Scheduled Disbursement Date should not be greater then" + " " + scheduledDisbursementAllowedDate
                         });
