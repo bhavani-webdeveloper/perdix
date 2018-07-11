@@ -6,6 +6,7 @@
         "enrollmentAction": {
             "type": "string",
             "title": "EnrollmentAction"
+            
         },
         "group": {
             "type": "object",
@@ -14,380 +15,386 @@
                 "bankId": {
                     "type": "integer",
                     "title": "BankId"
+                    
                 },
                 "cgt1DoneBy": {
                     "type": "string",
                     "title": "CGT_1_DONE_BY"
+                    
                 },
                 "cgt1Latitude": {
                     "type": "string",
                     "title": "CGT_1_LATITUDE"
+                    
                 },
                 "cgt1Longitude": {
                     "type": "string",
                     "title": "CGT_1_LONGITUDE"
+                    
                 },
                 "cgt1Photo": {
                     "type": "string",
                     "title": "CGT_1_PHOTO",
-                    "category": "Group",
-                    "subCategory": "CGT1PHOTO"
-
+                    "category":"Group",
+                    "subCategory":"CGT1PHOTO"
+                    
                 },
                 "cgt1Remarks": {
                     "type": "string",
                     "title": "CGT_1_REMARKS"
-
+                    
                 },
                 "cgt2DoneBy": {
                     "type": "string",
                     "title": "CGT_2_DONE_BY"
-
+                    
                 },
                 "cgt2Latitude": {
                     "type": "string",
                     "title": "CGT_2_LATITUDE"
-
+                    
                 },
                 "cgt2Longitude": {
                     "type": "string",
                     "title": "CGT_2_LONGITUDE"
-
+                    
                 },
                 "cgt2Photo": {
                     "type": "string",
                     "title": "CGT_2_PHOTO",
-                    "category": "Group",
-                    "subCategory": "CGT2PHOTO"
-
+                    "category":"Group",
+                    "subCategory":"CGT2PHOTO"
+                    
                 },
                 "cgt2Remarks": {
                     "type": "string",
                     "title": "CGT_2_REMARKS"
-
+                    
                 },
                 "cgt3DoneBy": {
                     "type": "string",
                     "title": "CGT_3_DONE_BY"
-
+                    
                 },
                 "cgt3Latitude": {
                     "type": "string",
                     "title": "CGT_3_LATITUDE"
-
+                    
                 },
                 "cgt3Longitude": {
                     "type": "string",
                     "title": "CGT_3_LONGITUDE"
-
+                    
                 },
                 "cgt3Photo": {
                     "type": "string",
                     "title": "CGT_3_PHOTO",
-                    "category": "Group",
-                    "subCategory": "CGT3PHOTO"
-
+                    "category":"Group",
+                    "subCategory":"CGT3PHOTO"
+                    
                 },
                 "cgt3Remarks": {
                     "type": "string",
                     "title": "CGT_3_REMARKS"
-
+                    
                 },
                 "cgtDate1": {
                     "type": "string",
                     "title": "CGT_1_DATE",
-                    "format": "date"
-
+                    "format":"date"
+                    
                 },
                 "cgtDate2": {
                     "type": "string",
                     "title": "CGT_2_DATE",
-                    "format": "date"
+                    "format":"date"
                 },
                 "cgtDate3": {
                     "type": "string",
                     "title": "CGT_3_DATE",
-                    "format": "date"
-
+                    "format":"date"
+                    
                 },
                 "currentStage": {
                     "type": "string",
                     "title": "CurrentStage"
-
+                    
                 },
                 "endTime": {
                     "type": "string",
                     "title": "EndTime"
-
+                    
                 },
                 "frequency": {
                     "type": "string",
                     "title": "FREQUENCY",
-                    "enumCode": "loan_product_frequency"
-
+                    "enumCode":"loan_product_frequency"
+                    
                 },
                 "groupCode": {
                     "type": "string",
                     "title": "GROUP_CODE"
-
+                    
                 },
                 "centreCode": {
                     "type": "string",
                     "title": "CENTER",
-                    "enumCode": "centre"
+                    "enumCode":"centre"
                 },
-                "groupName": {
-                    "type": "string",
-                    "title": "GROUP_NAME"
+                "groupName":{
+                    "type":"string",
+                    "title":"GROUP_NAME"
                 },
                 "groupFormationDate": {
                     "type": "string",
                     "title": "GroupFormationDate"
-
+                    
                 },
                 "groupStatus": {
                     "type": "boolean",
                     "title": "GroupStatus"
-
+                    
                 },
                 "grtDoneBy": {
                     "type": "string",
-                    "title": "GRT_DONE_BY"
+                    "title": "GRT_DONE_BY"   
                 },
                 "grtLatitude": {
                     "type": "string",
                     "title": "GRT_LATITUDE"
-
+                    
                 },
                 "grtLongitude": {
                     "type": "string",
                     "title": "GRT_LONGITUDE"
-
+                    
                 },
                 "grtPhoto": {
                     "type": "string",
                     "title": "GRT_PHOTO",
-                    "category": "Group",
-                    "subCategory": "GRTPHOTO"
-
+                    "category":"Group",
+                    "subCategory":"GRTPHOTO"
+                    
                 },
                 "grtRemarks": {
                     "type": "string",
                     "title": "GRT_REMARKS"
-
+                    
                 },
                 "id": {
                     "type": "integer",
                     "title": "Id"
-
+                    
                 },
                 "jlgGroupMembers": {
                     "type": "array",
-                    "title": "JLG_GROUP_MEMBERS",
+                    "title": "JLG_GROUP_MEMBERS"
+                    ,
                     "items": {
                         "type": "object",
-                        "title": "0",
+                        "title": "0"
+                        ,
                         "properties": {
-                            "getDSCData": {
-                                "type": "string",
-                                "title": "GET_DSC_DATA"
+                            "getDSCData":{
+                                "type":"string",
+                                "title":"GET_DSC_DATA"
 
                             },
-                            "requestDSCOverride": {
-                                "type": "string",
-                                "title": "REQUEST_DSC_OVERRIDE"
+                            "requestDSCOverride":{
+                                "type":"string",
+                                "title":"REQUEST_DSC_OVERRIDE"
                             },
-                            "removeMember": {
-                                "type": "string",
-                                "title": "REMOVE_MEMBER"
+                            "removeMember":{
+                                "type":"string",
+                                "title":"REMOVE_MEMBER"
                             },
                             "borrowerIlliterate": {
                                 "type": "boolean",
                                 "title": "BORROWER_ILLITERATE"
-
+                                
                             },
                             "centreCode": {
                                 "type": "string",
                                 "title": "CENTER"
-
+                                
                             },
                             "customerId": {
                                 "type": "integer",
                                 "title": "Customer Id"
-
+                                
                             },
                             "dscId": {
                                 "type": "integer",
                                 "title": "Dsc Id"
-
+                                
                             },
                             "dscLimitInPaisa": {
                                 "type": "integer",
                                 "title": "DscLimitInPaisa"
-
+                                
                             },
                             "dscOverrideRemarks": {
                                 "type": "string",
                                 "title": "DSC_OVERRIDE_REMARKS"
-
+                                
                             },
                             "dscStatus": {
                                 "type": "string",
                                 "title": "DSC_STATUS"
-
+                                
                             },
                             "groupId": {
                                 "type": "integer",
                                 "title": "Group Id"
-
+                                
                             },
                             "husbandOrFatherFirstName": {
                                 "type": ["string", "null"],
                                 "title": "HUSBAND_OR_FATHER_NAME"
-
+                                
                             },
                             "husbandOrFatherLastName": {
                                 "type": "string",
                                 "title": "HusbandOrFatherLastName"
-
+                                
                             },
                             "husbandOrFatherMiddleName": {
                                 "type": "string",
                                 "title": "HusbandOrFatherMiddleName"
-
+                                
                             },
                             "id": {
                                 "type": "integer",
                                 "title": "Id"
-
+                                
                             },
                             "literateWitnessFirstName": {
                                 "type": "string",
                                 "title": "LITERATE_WITNESS_NAME"
-
+                                
                             },
                             "literateWitnessLastName": {
                                 "type": "string",
                                 "title": "LiterateWitnessLastName"
-
+                                
                             },
                             "literateWitnessMiddleName": {
                                 "type": "string",
                                 "title": "LiterateWitnessMiddleName"
-
+                                
                             },
                             "loanAmount": {
                                 "type": "integer",
                                 "title": "LOAN_AMOUNT",
-                                "minimum": 0
-
+                                "minimum":0
+                                
                             },
                             "loanAmountSanctionedInPaisa": {
                                 "type": "integer",
                                 "title": "LoanAmountSanctionedInPaisa"
-
+                                
                             },
                             "loanPurpose1": {
                                 "type": "string",
                                 "title": "LOAN_PURPOSE_1",
-                                "enumCode": "loan_purpose_1"
+                                "enumCode":"loan_purpose_1"
                             },
                             "loanPurpose2": {
                                 "type": "string",
                                 "title": "LOAN_PURPOSE_2",
-                                "enumCode": "loan_purpose_2"
+                                "enumCode":"loan_purpose_2"
                             },
                             "loanPurpose3": {
                                 "type": "string",
                                 "title": "LOAN_PURPOSE_3",
-                                "enumCode": "loan_purpose_3"
+                                "enumCode":"loan_purpose_3"
                             },
                             "relation": {
                                 "type": "string",
                                 "title": "RELATION",
-                                "enumCode": "relation"
-
+                                "enumCode":"relation"
+                                
                             },
                             "udf1": {
                                 "type": "string",
                                 "title": "Udf1"
-
+                                
                             },
                             "udf2": {
                                 "type": "string",
                                 "title": "Udf2"
-
+                                
                             },
                             "udf3": {
                                 "type": "string",
                                 "title": "Udf3"
-
+                                
                             },
                             "udf4": {
                                 "type": "string",
                                 "title": "Udf4"
-
+                                
                             },
                             "udf5": {
                                 "type": "string",
                                 "title": "Udf5"
-
+                                
                             },
                             "udf6": {
                                 "type": "string",
                                 "title": "Udf6"
-
+                                
                             },
                             "udf7": {
                                 "type": "string",
                                 "title": "Udf7"
-
+                                
                             },
                             "udf8": {
                                 "type": "string",
                                 "title": "Udf8"
-
+                                
                             },
                             "udfDate1": {
                                 "type": "string",
                                 "title": "UdfDate1"
-
+                                
                             },
                             "udfDate2": {
                                 "type": "string",
                                 "title": "UdfDate2"
-
+                                
                             },
                             "urnNo": {
                                 "type": "string",
                                 "title": "URN_NO"
-
+                                
                             },
                             "version": {
                                 "type": "integer",
                                 "title": "Version"
-
+                                
                             },
                             "witnessFirstName": {
                                 "type": "string",
                                 "title": "WITNESS_NAME"
-
+                                
                             },
                             "witnessLastName": {
                                 "type": "string",
                                 "title": "WitnessLastName"
-
+                                
                             },
                             "witnessMiddleName": {
                                 "type": "string",
                                 "title": "WitnessMiddleName"
-
+                                
                             },
                             "witnessRelationship": {
                                 "type": "string",
                                 "title": "RELATION",
-                                "enumCode": "relation"
-
+                                "enumCode":"relation"
+                                
                             }
                         },
                         "required": [
@@ -429,295 +436,297 @@
                 },
                 "loanAccounts": {
                     "type": "array",
-                    "title": "LoanAccounts",
+                    "title": "LoanAccounts"
+                    ,
                     "items": {
                         "type": "object",
-                        "title": "0",
+                        "title": "0"
+                        ,
                         "properties": {
                             "accountNumber": {
                                 "type": "string",
                                 "title": "AccountNumber"
-
+                                
                             },
                             "applicationFileName": {
                                 "type": "string",
                                 "title": "ApplicationFileName"
-
+                                
                             },
                             "applicationStatus": {
                                 "type": "string",
                                 "title": "ApplicationStatus"
-
+                                
                             },
                             "applicationStatusUpdatedBy": {
                                 "type": "string",
                                 "title": "ApplicationStatusUpdatedBy"
-
+                                
                             },
                             "applicationStatusUpdatedOn": {
                                 "type": "string",
                                 "title": "ApplicationStatusUpdatedOn"
-
+                                
                             },
                             "bankId": {
                                 "type": "integer",
                                 "title": "BankId"
-
+                                
                             },
                             "borrowerIlliterate": {
                                 "type": "boolean",
                                 "title": "BorrowerIlliterate"
-
+                                
                             },
                             "branchId": {
                                 "type": "integer",
                                 "title": "BranchId"
-
+                                
                             },
                             "chk1UploadFilePath": {
                                 "type": "string",
                                 "title": "Chk1UploadFilePath"
-
+                                
                             },
                             "closed": {
                                 "type": "boolean",
                                 "title": "Closed"
-
+                                
                             },
                             "coBorrowerUrnNo": {
                                 "type": "string",
                                 "title": "CoBorrowerUrnNo"
-
+                                
                             },
                             "createdAt": {
                                 "type": "string",
                                 "title": "CreatedAt"
-
+                                
                             },
                             "createdBy": {
                                 "type": "string",
                                 "title": "CreatedBy"
-
+                                
                             },
                             "customerId": {
                                 "type": "integer",
                                 "title": "CustomerId"
-
+                                
                             },
                             "disbursedAmount": {
                                 "type": "integer",
                                 "title": "DisbursedAmount"
-
+                                
                             },
                             "dob": {
                                 "type": "string",
                                 "title": "Dob"
-
+                                
                             },
                             "dscIntegrationId": {
                                 "type": "integer",
                                 "title": "DscIntegrationId"
-
+                                
                             },
                             "dscLoanAmount": {
                                 "type": "integer",
                                 "title": "DscLoanAmount"
-
+                                
                             },
                             "dscOverride": {
                                 "type": "boolean",
                                 "title": "DscOverride"
-
+                                
                             },
                             "dscOverrideRemarks": {
                                 "type": "string",
                                 "title": "DscOverrideRemarks"
-
+                                
                             },
                             "endTime": {
                                 "type": "string",
                                 "title": "EndTime"
-
+                                
                             },
                             "frequency": {
                                 "type": "string",
                                 "title": "Frequency"
-
+                                
                             },
                             "husbandOrFatherFirstName": {
                                 "type": "string",
                                 "title": "HusbandOrFatherFirstName"
-
+                                
                             },
                             "husbandOrFatherLastName": {
                                 "type": "string",
                                 "title": "HusbandOrFatherLastName"
-
+                                
                             },
                             "husbandOrFatherMiddleName": {
                                 "type": "string",
                                 "title": "HusbandOrFatherMiddleName"
-
+                                
                             },
                             "id": {
                                 "type": "integer",
                                 "title": "Id"
-
+                                
                             },
                             "interestRate": {
                                 "type": "integer",
                                 "title": "InterestRate"
-
+                                
                             },
                             "lastEditedAt": {
                                 "type": "string",
                                 "title": "LastEditedAt"
-
+                                
                             },
                             "lastEditedBy": {
                                 "type": "string",
                                 "title": "LastEditedBy"
-
+                                
                             },
                             "literateWitnessFirstName": {
                                 "type": "string",
                                 "title": "LiterateWitnessFirstName"
-
+                                
                             },
                             "literateWitnessLastName": {
                                 "type": "string",
                                 "title": "LiterateWitnessLastName"
-
+                                
                             },
                             "literateWitnessMiddleName": {
                                 "type": "string",
                                 "title": "LiterateWitnessMiddleName"
-
+                                
                             },
                             "loanAmount": {
                                 "type": "integer",
                                 "title": "LoanAmount"
-
+                                
                             },
                             "loanAmountRequested": {
                                 "type": "integer",
                                 "title": "LoanAmountRequested"
-
+                                
                             },
                             "loanApplicationDate": {
                                 "type": "string",
                                 "title": "LoanApplicationDate"
-
+                                
                             },
                             "loanDisbursementDate": {
                                 "type": "string",
                                 "title": "LoanDisbursementDate"
-
+                                
                             },
                             "loanPurpose1": {
                                 "type": "string",
                                 "title": "LoanPurpose1"
-
+                                
                             },
                             "loanPurpose2": {
                                 "type": "string",
                                 "title": "LoanPurpose2"
-
+                                
                             },
                             "loanPurpose3": {
                                 "type": "string",
                                 "title": "LoanPurpose3"
-
+                                
                             },
                             "loanType": {
                                 "type": "string",
                                 "title": "LoanType"
-
+                                
                             },
                             "partnerCode": {
                                 "type": "string",
                                 "title": "PartnerCode"
-
+                                
                             },
                             "processType": {
                                 "type": "string",
                                 "title": "ProcessType"
-
+                                
                             },
                             "productCode": {
                                 "type": "string",
                                 "title": "ProductCode"
-
+                                
                             },
                             "productType": {
                                 "type": "string",
                                 "title": "ProductType"
-
+                                
                             },
                             "relation": {
                                 "type": "string",
                                 "title": "Relation"
-
+                                
                             },
                             "sbAccountNo": {
                                 "type": "string",
                                 "title": "SbAccountNo"
-
+                                
                             },
                             "startTime": {
                                 "type": "string",
                                 "title": "StartTime"
-
+                                
                             },
                             "tenure": {
                                 "type": "string",
                                 "title": "Tenure"
-
+                                
                             },
                             "tenureInYears": {
                                 "type": "integer",
                                 "title": "TenureInYears"
-
+                                
                             },
                             "urnNo": {
                                 "type": "string",
                                 "title": "UrnNo"
-
+                                
                             },
                             "version": {
                                 "type": "integer",
                                 "title": "Version"
-
+                                
                             },
                             "witness": {
                                 "type": "string",
                                 "title": "Witness"
-
+                                
                             },
                             "witnessFirstName": {
                                 "type": "string",
                                 "title": "WitnessFirstName"
-
+                                
                             },
                             "witnessLastName": {
                                 "type": "string",
                                 "title": "WitnessLastName"
-
+                                
                             },
                             "witnessMiddleName": {
                                 "type": "string",
                                 "title": "WitnessMiddleName"
-
+                                
                             },
                             "witnessRelationship": {
                                 "type": "string",
                                 "title": "WitnessRelationship"
-
+                                
                             },
                             "wmName": {
                                 "type": "string",
                                 "title": "WmName"
-
+                                
                             }
                         },
                         "required": [
@@ -784,45 +793,45 @@
                 "partnerCode": {
                     "type": "string",
                     "title": "PARTNER",
-                    "enumCode": "partner"
-
+                    "enumCode":"partner"
+                    
                 },
                 "pendingApproval": {
                     "type": "string",
                     "title": "PendingApproval"
-
+                    
                 },
                 "productCode": {
                     "type": "string",
                     "title": "PRODUCT",
-                    "enumCode": "loan_product"
-
+                    "enumCode":"loan_product"
+                    
                 },
                 "startTime": {
                     "type": "string",
                     "title": "StartTime"
-
+                    
                 },
                 "tenure": {
                     "type": "integer",
                     "title": "TENURE"
-
+                    
                 },
                 "tenureInYear": {
                     "type": "integer",
                     "title": "TenureInYear"
-
+                    
                 },
-
+                
                 "udf7": {
                     "type": "boolean",
                     "title": "QUESTION_7"
-
+                    
                 },
                 "udf8": {
                     "type": "boolean",
                     "title": "QUESTION_8"
-
+                    
                 },
                 "udf9": {
                     "type": "boolean",
@@ -872,202 +881,17 @@
                 "udfDate1": {
                     "type": "string",
                     "title": "DISBURSEMENT_DATE"
-
+                    
                 },
                 "udfDate2": {
                     "type": "string",
                     "title": "UdfDate2"
-
+                    
                 },
                 "version": {
                     "type": "integer",
                     "title": "Version"
-                },
-                "advanceRepayment": {
-                    "title": "ADVANCE_REPAYMENT",
-                    "type": "boolean"
-                },
-                "loanDemandScheduleDto": {
-                    "type": "array",
-                    "items": {
-                        "type": "object",
-                        "properties": {
-                            "id": {
-                                "type": "integer"
-                            },
-                            "accountNumber": {
-                                "title": "ACCOUNT_ID",
-                                "type": "string"
-                            },
-                            "firstName": {
-                                "title": "NAME",
-                                "type": "string"
-                            },
-                            "middleName": {
-                                "type": "string"
-                            },
-                            "lastName": {
-                                "type": "string"
-                            },
-                            "urnNo": {
-                                "type": "string",
-                                "title": "URN_NO"
-                            },
-                            "product": {
-                                "type": "string",
-                                "title": "PRODUCT_CODE"
-                            },
-                            "groupCode": {
-                                "type": "string",
-                                "title": "GROUP_CODE"
-                            },
-                            "bcCustId": {
-                                "type": "string"
-                            },
-                            "tenure": {
-                                "type": "string",
-                                "title": "TENURE"
-                            },
-                            "frequency": {
-                                "type": "string",
-                                "title": "FREQUENCY"
-                            },
-                            "loanAmount": {
-                                "type": "integer",
-                                "title": "LOAN_AMOUNT"
-                            },
-                            "repaid": {
-                                "type": "boolean"
-                            },
-                            "installmentAmountInPaisa": {
-                                "type": "integer",
-                                "title": "INSTALLMENT_AMOUNT_IN_PAISA"
-                            },
-                            "scheduleDate": {
-                                "type": "string"
-                            },
-                            "enrollmentId": {
-                                "type": "string"
-                            },
-                            "branchId": {
-                                "type": "integer"
-                            },
-                            "bankId": {
-                                "type": "null"
-                            },
-                            "pendingAmountInPaisa": {
-                                "type": "integer"
-                            },
-                            "encoreAccountNo": {
-                                "type": "string"
-                            },
-                            "lastRepaymentFlag": {
-                                "type": "boolean"
-                            },
-                            "amount": {
-                                "type": "integer",
-                                "title": "AMOUNT",
-                                "default": 0,
-                                "minimum": 0
-                            },
-                            "transactionId": {
-                                "type": "null"
-                            },
-                            "repaymentAmountInPaisa": {
-                                "type": "integer"
-                            },
-                            "authorizationRemark": {
-                                "type": "string"
-                            },
-                            "authorizationUsing": {
-                                "type": "string"
-                            },
-                            "isAdvanceDemand": {
-                                "title": "IS_ADVANCE_DEMAND",
-                                "type": "boolean",
-                                "default": false
-                            }
-
-                        },
-                        "required": [
-                            "amount",
-                            "groupCode",
-                            "accountNumber"
-                        ]
-                    }
-                },
-                "repayments": {
-                    "type": "array",
-                    "items": {
-                        "type": "object",
-                        "properties": {
-
-                            "accountId": {
-                                "type": "string",
-                                "title": "ACCOUNT_ID"
-                            },
-                            "customerName": {
-                                "type": "string",
-                                "title": "NAME"
-                            },
-                            "amount": {
-                                "type": "integer",
-                                "title": "AMOUNT"
-                            },
-                            "authorizationRemark": {
-                                "type": "string",
-                                "title": "AUTHORIZATION_REMARK"
-                            },
-                            "authorizationUsing": {
-                                "type": "string",
-                                "title": "AUTHORIZATION_USING"
-                            },
-                            "cashCollectionRemark": {
-                                "type": "string",
-                                "title": "CASH_COLLECTION_REMARK"
-                            },
-                            "groupCode": {
-                                "type": "string",
-                                "title": "GROUP_CODE"
-                            },
-                            "productCode": {
-                                "type": "string",
-                                "title": "PRODUCT_CODE"
-                            },
-                            "remarks": {
-                                "type": "string",
-                                "title": "REMARKS"
-                            },
-                            "repaymentDate": {
-                                "type": "string",
-                                "title": "REPAYMENT_DATE"
-                            },
-                            "transactionId": {
-                                "type": "string",
-                                "title": "TRANSACTION_ID"
-                            },
-                            "transactionName": {
-                                "type": "string",
-                                "title": "TRANSACTION_NAME"
-
-
-                            },
-                            "urnNo": {
-                                "type": "string",
-                                "title": "URN_NO"
-                            }
-                        },
-                        "required": [
-                            "accountId",
-                            "amount",
-                            "cashCollectionRemark",
-                            "groupCode",
-                            "productCode",
-                            "repaymentDate",
-                            "transactionName",
-                            "urnNo"
-                        ]
-                    }
+                    
                 }
             },
             "required": [
