@@ -277,8 +277,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     });
                     //model.loanAccount.partnerCode = model.loanAccount.partnerCode || "Kinara";
                     model.loanAccount.loanCustomerRelations = model.loanAccount.loanCustomerRelations || [];
-                    model.loanAccount.coBorrowers = model.loanAccount.coBorrowers ||[];
-                    model.loanAccount.guarantors = model.loanAccount.guarantors ||[];
+                    model.loanAccount.coBorrowers = [];
+                    model.loanAccount.guarantors = [];
                     model.showLoanBookingDetails = showLoanBookingDetails;
 
                     PagesDefinition.getPageConfig("Page/Engine/loans.individual.booking.LoanInput").then(function(data){
@@ -298,22 +298,17 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         }
                         else if (model.loanAccount.loanCustomerRelations[i].relation === 'COAPPLICANT' ||
                             model.loanAccount.loanCustomerRelations[i].relation === 'Co-Applicant') {
-                            if(!model.loanAccount.coBorrowers.length){
-                                model.loanAccount.coBorrowers.push({
+                            model.loanAccount.coBorrowers.push({
                                 coBorrowerUrnNo:model.loanAccount.loanCustomerRelations[i].urn,
                                 customerId:model.loanAccount.loanCustomerRelations[i].customerId
                             });
-                            }  
                         }
                         else if(model.loanAccount.loanCustomerRelations[i].relation === 'GUARANTOR' ||
                                 model.loanAccount.loanCustomerRelations[i].relation === 'Guarantor'){
-                                if(!model.loanAccount.guarantors.length){
-                                model.loanAccount.guarantors.push({
+                            model.loanAccount.guarantors.push({
                                 guaUrnNo:model.loanAccount.loanCustomerRelations[i].urn,
                                 customerId:model.loanAccount.loanCustomerRelations[i].customerId
-                                });
-                                }
-                            
+                            });
                         }
                     }
                     /*for (var i in model.loanAccount.loanCustomerRelations) {
@@ -2035,7 +2030,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                     {
                                         key:"loanAccount.guarantors[].guaFirstName",
                                         title:"NAME",
-                                        type:"string",
                                         "readonly": true
                                     }
                                 ]
@@ -3071,14 +3065,17 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     if (!preLoanSaveOrProceed(model)){
                         return;
                     }
-                    var disbursementSchedules = moment(model._currentDisbursement.scheduledDisbursementDate,SessionStore.getSystemDateFormat());
-                    if (model.siteCode == 'kinara' && (disbursementSchedules > model.scheduledDisbursementAllowedDate)) {
-                        var scheduledDisbursementAllowedDate = moment(model.scheduledDisbursementAllowedDate).format('DD-MM-YYYY');
-                        PageHelper.setError({
-                            message: "Scheduled Disbursement Date should not be greater then" + " " + scheduledDisbursementAllowedDate
-                        });
-                        return;
+                    if (model._currentDisbursement && model._currentDisbursement.scheduledDisbursementDate) {
+                        var disbursementSchedules = moment(model._currentDisbursement.scheduledDisbursementDate,SessionStore.getSystemDateFormat());
+                        if (model.siteCode == 'kinara' && (disbursementSchedules > model.scheduledDisbursementAllowedDate)) {
+                            var scheduledDisbursementAllowedDate = moment(model.scheduledDisbursementAllowedDate).format('DD-MM-YYYY');
+                            PageHelper.setError({
+                                message: "Scheduled Disbursement Date should not be greater then" + " " + scheduledDisbursementAllowedDate
+                            });
+                            return;
+                        }
                     }
+                    
                     if(model.loanAccount.linkedAccountNumber && model.siteCode == 'kinara' && model.linkedAccount){
                         if(parseInt(model.loanAccount.disbursementSchedules[0].disbursementAmount) < parseInt(model.linkedAccount.accountBalance)){
                             PageHelper.setError({
