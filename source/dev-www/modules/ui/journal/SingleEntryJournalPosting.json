@@ -28,6 +28,12 @@
                 "readonly": true,
                 "orderNo": 30
             },
+            "entryType":{
+                "key": "journal.journalEntryDto.entryType",
+                "type": ["string","null"],
+                "readonly": true,
+                "orderNo": 30
+            },
             "creditGLNo": {
                 "key": "journal.journalEntryDto.creditGLNo",
                 "readonly": true,

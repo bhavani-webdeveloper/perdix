@@ -508,8 +508,8 @@
                 "type": "select",
                 "enumCode": "vehicle_entity_type"
             },
-            "attachedwith": {
-                "key": "loanAccount.vehicleLoanDetails.attachedwith",
+            "attachedWith": {
+                "key": "loanAccount.vehicleLoanDetails.attachedWith",
                 "title": "VEHICLE_ATTACHED_WITH",
                 "type": "string"
             },
