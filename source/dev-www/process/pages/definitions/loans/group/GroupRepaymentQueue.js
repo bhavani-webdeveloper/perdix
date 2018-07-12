@@ -78,7 +78,7 @@ irf.pageCollection.factory(irf.page('loans.group.GroupLoanRepaymentQueue'), ["$l
                 submit:function(model, formCtrl, formName){
                     console.log(model);
                     $state.go("Page.Engine",{
-                        pageName:'loans.group.GroupLoanRepayment',
+                        pageName:'loans.groups.GroupLoanRepay',
                         pageId:[model.partner,model.groupCode,model.isLegacy].join(".")
                     });
                 }
