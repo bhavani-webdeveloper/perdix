@@ -18,15 +18,9 @@ $mail_body="";
 $start_time=date("Y-m-d h:i:s A");
 $mail_body.="\nStarting Time: ".$start_time."\n";
 
-
 $bi_db = $settings['bi_db']['database'];
 $encore_db = $settings['encore_db']['database'];
 $perdix_db = $settings['db']['database'];
-
-$currentDate = DB::connection("default")->table("cbs_banks")->select("current_working_date")->get();
-$currentDate = $currentDate->toArray();
-
-$cbsTableName = "cbs__".strtoupper(date("dMY", strtotime("{$currentDate[0]->current_working_date} -1 days")));
 
 $customers = DB::connection("default")->select("
 SELECT 
@@ -80,12 +74,11 @@ COUNT(d.account_id) AS EMICount,
 COUNT(r.account_id) AS paidEMI,
 gl.value
 FROM $perdix_db.loan_accounts l
-INNER JOIN $perdix_db.customer c ON c.id = l.customer_id 
-INNER JOIN $bi_db.$cbsTableName cb ON cb.AccountNumber = l.account_number
-INNER JOIN $perdix_db.bank_master bm ON l.bank_id = bm.id 
-INNER JOIN $perdix_db.branch_master brm ON l.branch_id = brm.id 
-INNER JOIN $perdix_db.loan_centre lc ON l.id = lc.loan_id 
-INNER JOIN $perdix_db.centre_master cem ON lc.centre_id = cem.id 
+LEFT JOIN $perdix_db.customer c ON c.id = l.customer_id
+LEFT JOIN $perdix_db.bank_master bm ON l.bank_id = bm.id 
+LEFT JOIN $perdix_db.branch_master brm ON l.branch_id = brm.id 
+LEFT JOIN $perdix_db.loan_centre lc ON l.id = lc.loan_id 
+LEFT JOIN $perdix_db.centre_master cem ON lc.centre_id = cem.id 
 LEFT JOIN $perdix_db.customer applicant ON applicant.urn_no = l.applicant 
 LEFT JOIN $perdix_db.family_details cfm ON cfm.customer_id = applicant.id AND cfm.relationship = 'self'
 LEFT JOIN $perdix_db.enterprise enp ON c.enterprise_id = enp.id 
@@ -100,7 +93,7 @@ WHERE
 l.loan_purpose_1 = 'Line of credit' AND 
 l.account_number IS NOT NULL
 AND l.account_number NOT IN (select linked_account_number  FROM $perdix_db.leads WHERE linked_account_number IS NOT NULL) GROUP BY l.account_number
-HAVING (EMICount >= gl.value AND gl.value-3 <= paidEMI)");
+HAVING (EMICount = gl.value AND gl.value-3 <= paidEMI)");
 
 foreach($customers as $customer){
 	unset($customer->EMICount);
