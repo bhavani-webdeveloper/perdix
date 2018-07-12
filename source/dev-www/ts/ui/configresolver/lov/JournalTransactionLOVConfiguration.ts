@@ -9,7 +9,7 @@ export class JournalTransactionLOVConfiguration extends LOVElementConfiguration 
         "id": "journal.journalEntryDto.journalMasterId",
         "transactionName": "journal.journalEntryDto.transactionName",
         "transactionType": "journal.journalEntryDto.transactionType",
-        "productType": "journal.journalEntryDto.productType",
+        "productType": "journal.journalEntryDto.entryType",
         "transactionDescription": "journal.journalEntryDto.transactionDescription",
         "debitGLNo": "journal.journalEntryDto.debitGLNo",
         "creditGLNo": "journal.journalEntryDto.creditGLNo",

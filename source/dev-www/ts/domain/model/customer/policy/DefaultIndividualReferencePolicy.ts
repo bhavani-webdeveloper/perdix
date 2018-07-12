@@ -5,7 +5,7 @@ import RepositoryFactory = require("../../../shared/RepositoryFactory");
 import {RepositoryIdentifiers} from "../../../shared/RepositoryIdentifiers";
 import {UserSession, ISession} from "../../../shared/Session";
 import {ObjectFactory} from "../../../shared/ObjectFactory";
-import Customer = require("../../customer/Customer");
+import {Customer} from  "../../customer/Customer";
 import * as _ from 'lodash';
 import {EnrolmentProcess} from "../../customer/EnrolmentProcess";
 import Verification = require('../Verification');

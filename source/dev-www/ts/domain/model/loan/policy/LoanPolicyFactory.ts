@@ -16,10 +16,11 @@ import {LoanDerivedFieldsUpdate} from "./LoanDerivedFieldsUpdate";
 import {CustomerEnrolmentCompletedPolicy} from './CustomerEnrolmentCompletedPolicy';
 import {CustomerReferencePolicy} from './CustomerReferencePolicy';
 import {CollateralFieldPolicy} from './CollateralFieldPolicy';
-import {DefaultExpensePolicy} from './DefaultExpensePolicy'
-import {DefaultIncomeTypePolicy} from './DefaultIncomeTypePolicy'
-import {DefaultVehicleDocumentsPolicy} from './DefaultVehicleDocumentsPolicy'
-import {DefaultCalculatedVehicleDetailsPolicy} from './DefaultCalculatedVehicleDetailsPolicy'
+import {DefaultExpensePolicy} from './DefaultExpensePolicy';
+import {DefaultIncomeTypePolicy} from './DefaultIncomeTypePolicy';
+import {DefaultVehicleDocumentsPolicy} from './DefaultVehicleDocumentsPolicy';
+import {DefaultCalculatedVehicleDetailsPolicy} from './DefaultCalculatedVehicleDetailsPolicy';
+import {DefaultIndividualReferencePolicy} from './DefaultIndividualReferencePolicy';
 
 export class LoanPolicyFactory implements IPolicyFactory{
 
@@ -76,6 +77,8 @@ export class LoanPolicyFactory implements IPolicyFactory{
                 return new DefaultVehicleDocumentsPolicy();
             case 'DefaultCalculatedVehicleDetailsPolicy':
                 return new DefaultCalculatedVehicleDetailsPolicy();
+            case 'DefaultIndividualReferencePolicy':
+                return new DefaultIndividualReferencePolicy();
             default:
                 return null;
         }

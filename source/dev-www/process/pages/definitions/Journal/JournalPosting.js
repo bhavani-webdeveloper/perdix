@@ -39,7 +39,7 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                                 "BranchPostingEntry.transactionDescription": {
                                     "readonly": true
                                 },
-                                "BranchPostingEntry.productType": {
+                                "BranchPostingEntry.entryType": {
                                     "readonly": true
                                 },
                                 "BranchPostingEntry.creditGLNo": {
@@ -100,7 +100,7 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                 "BranchPostingEntry",
                 "BranchPostingEntry.transactionName",
                 "BranchPostingEntry.transactionDescription",
-                "BranchPostingEntry.productType",
+                "BranchPostingEntry.entryType",
                 "BranchPostingEntry.creditGLNo",
                 "BranchPostingEntry.debitGLNo",
                 "BranchPostingEntry.transactionAmount",
@@ -132,33 +132,33 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                     var formRequest = {
                         "overrides": {
                             "BranchPostingEntry.billNo": {
-                                "condition": 'model.journal.journalEntryDto.productType == ("Payment - Account") || model.journal.journalEntryDto.productType == ("Payment") || model.journal.journalEntryDto.productType == ("Journal - Account") || model.journal.journalEntryDto.productType == ("Journal")',
+                                "condition": 'model.journal.journalEntryDto.entryType == ("Payment - Account") || model.journal.journalEntryDto.entryType == ("Payment") || model.journal.journalEntryDto.entryType == ("Journal - Account") || model.journal.journalEntryDto.entryType == ("Journal")',
                                 "type": "text"
                             },
                             "BranchPostingEntry.billDate": {
-                                "condition": 'model.journal.journalEntryDto.productType == ("Payment - Account") || model.journal.journalEntryDto.productType == ("Payment") || model.journal.journalEntryDto.productType == ("Journal - Account") || model.journal.journalEntryDto.productType == ("Journal")'
+                                "condition": 'model.journal.journalEntryDto.entryType == ("Payment - Account") || model.journal.journalEntryDto.entryType == ("Payment") || model.journal.journalEntryDto.entryType == ("Journal - Account") || model.journal.journalEntryDto.entryType == ("Journal")'
                             },
                             "BranchPostingEntry.billUpload": {
-                                "condition": 'model.journal.journalEntryDto.productType == ("Payment - Account") || model.journal.journalEntryDto.productType == ("Payment") || model.journal.journalEntryDto.productType == ("Journal - Account") || model.journal.journalEntryDto.productType == ("Journal")'
+                                "condition": 'model.journal.journalEntryDto.entryType == ("Payment - Account") || model.journal.journalEntryDto.entryType == ("Payment") || model.journal.journalEntryDto.entryType == ("Journal - Account") || model.journal.journalEntryDto.entryType == ("Journal")'
                             },
                             "BranchPostingEntry.instrumentType": {
-                                "condition": 'model.journal.journalEntryDto.productType == ("Payment - Account") || model.journal.journalEntryDto.productType == ("Payment") || model.journal.journalEntryDto.productType == ("Receipt - Account") || model.journal.journalEntryDto.productType == ("Receipt")',
+                                "condition": 'model.journal.journalEntryDto.entryType == ("Payment - Account") || model.journal.journalEntryDto.entryType == ("Payment") || model.journal.journalEntryDto.entryType == ("Receipt - Account") || model.journal.journalEntryDto.entryType == ("Receipt")',
                                 "orderNo": 65
                             },
                             "BranchPostingEntry.instrumentNumber": {
-                                "condition": '(model.journal.journalEntryDto.productType == ("Payment - Account") || model.journal.journalEntryDto.productType == ("Payment") || model.journal.journalEntryDto.productType == ("Receipt - Account") || model.journal.journalEntryDto.productType == ("Receipt")) && model.journal.journalEntryDto.instrumentType.toLowerCase() == "cheque" || model.journal.journalEntryDto.instrumentType.toLowerCase() == "neft" || model.journal.journalEntryDto.instrumentType.toLowerCase() == "rtgs"'
+                                "condition": '(model.journal.journalEntryDto.entryType == ("Payment - Account") || model.journal.journalEntryDto.entryType == ("Payment") || model.journal.journalEntryDto.entryType == ("Receipt - Account") || model.journal.journalEntryDto.entryType == ("Receipt")) && model.journal.journalEntryDto.instrumentType.toLowerCase() == "cheque" || model.journal.journalEntryDto.instrumentType.toLowerCase() == "neft" || model.journal.journalEntryDto.instrumentType.toLowerCase() == "rtgs"'
                             },
                             "BranchPostingEntry.instrumentDate": {
-                                "condition": 'model.journal.journalEntryDto.productType == ("Payment - Account") || model.journal.journalEntryDto.productType == ("Payment") || model.journal.journalEntryDto.productType == ("Receipt - Account") || model.journal.journalEntryDto.productType == ("Receipt")'
+                                "condition": 'model.journal.journalEntryDto.entryType == ("Payment - Account") || model.journal.journalEntryDto.entryType == ("Payment") || model.journal.journalEntryDto.entryType == ("Receipt - Account") || model.journal.journalEntryDto.entryType == ("Receipt")'
                             },
                             "BranchPostingEntry.instrumentBankName": {
-                                "condition": '(model.journal.journalEntryDto.productType == ("Payment - Account") || model.journal.journalEntryDto.productType == ("Payment") || model.journal.journalEntryDto.productType == ("Receipt - Account") || model.journal.journalEntryDto.productType == ("Receipt")) && model.journal.journalEntryDto.instrumentType.toLowerCase() == "cheque" || model.journal.journalEntryDto.instrumentType.toLowerCase() == "neft" || model.journal.journalEntryDto.instrumentType.toLowerCase() == "rtgs"'
+                                "condition": '(model.journal.journalEntryDto.entryType == ("Payment - Account") || model.journal.journalEntryDto.entryType == ("Payment") || model.journal.journalEntryDto.entryType == ("Receipt - Account") || model.journal.journalEntryDto.entryType == ("Receipt")) && model.journal.journalEntryDto.instrumentType.toLowerCase() == "cheque" || model.journal.journalEntryDto.instrumentType.toLowerCase() == "neft" || model.journal.journalEntryDto.instrumentType.toLowerCase() == "rtgs"'
                             },
                             "BranchPostingEntry.instrumentBranchName": {
-                                "condition": '(model.journal.journalEntryDto.productType == ("Payment - Account") || model.journal.journalEntryDto.productType == ("Payment") || model.journal.journalEntryDto.productType == ("Receipt - Account") || model.journal.journalEntryDto.productType == ("Receipt")) && model.journal.journalEntryDto.instrumentType.toLowerCase() == "cheque" || model.journal.journalEntryDto.instrumentType.toLowerCase() == "neft" || model.journal.journalEntryDto.instrumentType.toLowerCase() == "rtgs"'
+                                "condition": '(model.journal.journalEntryDto.entryType == ("Payment - Account") || model.journal.journalEntryDto.entryType == ("Payment") || model.journal.journalEntryDto.entryType == ("Receipt - Account") || model.journal.journalEntryDto.entryType == ("Receipt")) && model.journal.journalEntryDto.instrumentType.toLowerCase() == "cheque" || model.journal.journalEntryDto.instrumentType.toLowerCase() == "neft" || model.journal.journalEntryDto.instrumentType.toLowerCase() == "rtgs"'
                             },
                             "BranchPostingEntry.ifscCode": {
-                                "condition": 'model.journal.journalEntryDto.productType == ("Payment - Account") || model.journal.journalEntryDto.productType == ("Payment") || model.journal.journalEntryDto.productType == ("Receipt - Account") || model.journal.journalEntryDto.productType == ("Receipt")',
+                                "condition": 'model.journal.journalEntryDto.entryType == ("Payment - Account") || model.journal.journalEntryDto.entryType == ("Payment") || model.journal.journalEntryDto.entryType == ("Receipt - Account") || model.journal.journalEntryDto.entryType == ("Receipt")',
                                 "resolver": "JournalIFSCLOVConfiguration",
                                 "type": "lov",
                                 "lovonly": true
@@ -167,13 +167,13 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                                 "resolver": "JournalIFSCAccountNoConfiguration",
                                 "type": "lov",
                                 "lovonly": true,
-                                "condition": 'model.journal.journalEntryDto.productType == ("Payment")|| model.journal.journalEntryDto.productType == ("Receipt") || model.journal.journalEntryDto.productType == ("Journal") || model.journal.journalEntryDto.productType == ("Contra")'
+                                "condition": 'model.journal.journalEntryDto.entryType == ("Payment")|| model.journal.journalEntryDto.entryType == ("Receipt") || model.journal.journalEntryDto.entryType == ("Journal") || model.journal.journalEntryDto.entryType == ("Contra")'
                             },
                             "BranchPostingEntry.relatedAccountNo": {
                                 "resolver": "JournalIFSCAccountNoConfiguration",
                                 "type": "lov",
                                 "lovonly": true,
-                                "condition": 'model.journal.journalEntryDto.productType == ("Payment - Account")|| model.journal.journalEntryDto.productType == ("Receipt - Account") || model.journal.journalEntryDto.productType == ("Journal - Account") || model.journal.journalEntryDto.productType == ("Contra - Account")',
+                                "condition": 'model.journal.journalEntryDto.entryType == ("Payment - Account")|| model.journal.journalEntryDto.entryType == ("Receipt - Account") || model.journal.journalEntryDto.entryType == ("Journal - Account") || model.journal.journalEntryDto.entryType == ("Contra - Account")',
                                 "required" : true
                             }
                             
@@ -642,9 +642,9 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                                             "title": "TRANSACTION_STATUS",
                                             "type": "string"
                                         },
-                                        "productType": {
+                                        "entryType": {
                                             "title": "PRODUCT_TYPE",
-                                            "type": "string"
+                                            "type": ["string", "null"]
                                         },
                                         "valueDate": {
                                             "title": "VALUE_DATE",

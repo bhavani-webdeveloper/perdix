@@ -195,6 +195,7 @@ define(
                         "VehicleRecommendation.recommendationStatus",
                         "VehicleRecommendation.recommendationRemarks",
                         "actionbox",
+                        "actionbox.submit",
                         "actionbox.save"
                     ];
                 }
@@ -1290,18 +1291,136 @@ define(
                                     }
                                 }
                             },
-                                "additions": [
-                                    {
-                                        "targetID": "actionbox",
-                                        "items": [
-                                            {
-                                                "type": "button",
-                                                "title": "PROCEED",
-                                                "onClick": "actions.proceed(model, formCtrl, form, $event)"
-                                            }
-                                        ]
+                                "additions": [{
+                                "type": "box",
+                                "orderNo": 999,
+                                "title": "POST_REVIEW",
+                                "condition": "model.loanAccount.id && model.loanAccount.isReadOnly!='Yes'",
+                                "items": [{
+                                    key: "review.action",
+                                    type: "radios",
+                                    titleMap: {
+                                        "REJECT": "REJECT",
+                                        "SEND_BACK": "SEND_BACK",
+                                        "PROCEED": "PROCEED"
                                     }
-                                ]
+                                }, {
+                                    type: "section",
+                                    condition: "model.review.action=='PROCEED'",
+                                    items: [{
+                                        "title": "VALUATOR",
+                                        "key": "loanAccount.valuator",
+                                        "type": "select",
+                                        "condition": "model.loanProcess.loanAccount.currentStage == 'ScreeningReview' && (model.loanAccount.loanPurpose1 == 'Purchase – Used Vehicle' || model.loanAccount.loanPurpose1 == 'Refinance')",
+                                        "titleMap": {
+                                            "test": "test"
+                                        }
+                                    }, {
+                                        key: "review.proceedButton",
+                                        type: "button",
+                                        title: "PROCEED",
+                                        onClick: "actions.proceed(model, formCtrl, form, $event)"
+                                    }]
+
+                                }, {
+                                    type: "section",
+                                    condition: "model.review.action=='SEND_BACK'",
+                                    items: [{
+                                        key: "loanProcess.stage",
+                                        "required": true,
+                                        type: "lov",
+                                        autolov: true,
+                                        lovonly: true,
+                                        title: "SEND_BACK_TO_STAGE",
+                                        bindMap: {},
+                                        searchHelper: formHelper,
+                                        search: function(inputModel, form, model, context) {
+                                            var stage1 = model.loanProcess.loanAccount.currentStage;
+                                            var targetstage = formHelper.enum('targetstage').data;
+                                            var out = [];
+                                            for (var i = 0; i < targetstage.length; i++) {
+                                                var t = targetstage[i];
+                                                if (t.field1 == stage1) {
+                                                    out.push({
+                                                        name: t.name,
+                                                        value: t.code
+                                                    })
+                                                }
+                                            }
+                                            return $q.resolve({
+                                                headers: {
+                                                    "x-total-count": out.length
+                                                },
+                                                body: out
+                                            });
+                                        },
+                                        onSelect: function(valueObj, model, context) {
+                                            model.review.targetStage1 = valueObj.name;
+                                            model.loanProcess.stage = valueObj.value;
+
+                                        },
+                                        getListDisplayItem: function(item, index) {
+                                            return [
+                                                item.name
+                                            ];
+                                        }
+                                    }, {
+                                        key: "review.sendBackButton",
+                                        type: "button",
+                                        title: "SEND_BACK",
+                                        onClick: "actions.sendBack(model, formCtrl, form, $event)"
+                                    }]
+
+                                }, {
+                                    type: "section",
+                                    condition: "model.review.action=='REJECT'",
+                                    items: [{
+                                            key: "loanAccount.rejectReason",
+                                            type: "lov",
+                                            autolov: true,
+                                            required: true,
+                                            title: "REJECT_REASON",
+                                            bindMap: {},
+                                            searchHelper: formHelper,
+                                            search: function(inputModel, form, model, context) {
+                                                var stage1 = model.loanProcess.loanAccount.currentStage;
+
+                                                var rejectReason = formHelper.enum('application_reject_reason').data;
+                                                var out = [];
+                                                for (var i = 0; i < rejectReason.length; i++) {
+                                                    var t = rejectReason[i];
+                                                    if (t.field1 == stage1) {
+                                                        out.push({
+                                                            name: t.name,
+                                                        })
+                                                    }
+                                                }
+                                                return $q.resolve({
+                                                    headers: {
+                                                        "x-total-count": out.length
+                                                    },
+                                                    body: out
+                                                });
+                                            },
+                                            onSelect: function(valueObj, model, context) {
+                                                model.loanAccount.rejectReason = valueObj.name;
+                                            },
+                                            getListDisplayItem: function(item, index) {
+                                                return [
+                                                    item.name
+                                                ];
+                                            }
+                                        },
+                                        {
+                                            key: "review.rejectButton",
+                                            type: "button",
+                                            title: "REJECT",
+                                            required: true,
+                                            onClick: "actions.reject(model, formCtrl, form, $event)"
+                                        }
+                                    ]
+                                }]
+                            }]
                             }
                         };
 
@@ -1404,6 +1523,37 @@ define(
                                     PageHelper.hideLoader();
                                 });
                         },
+                        sendBack: function(model, formCtrl, form, $event) {
+                            PageHelper.showLoader();
+
+                            if (_.isArray(model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses) && !model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[0])
+                                delete model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses
+                            if (_.isArray(model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes) && !model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes[0])
+                                delete model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes
+
+                            if (model.review.action==null || model.review.action =="" || model.review.targetStage1 ==null || model.review.targetStage1 ==""){
+                                   PageHelper.showProgress("update-loan", "Send to Stage / Remarks is mandatory", 3000);
+                                   PageHelper.hideLoader();
+                                   return false;
+                            }
+
+                            Utils.confirm("Are You Sure?")
+                                .then(
+                                    function(){
+                                        model.loanProcess.sendBack()
+                                            .finally(function() {
+                                                PageHelper.hideLoader();
+                                            })
+                                            .subscribe(function(value) {
+                                                PageHelper.showProgress('enrolment', 'Done.', 5000);
+                                                irfNavigator.goBack();
+                                            }, function(err) {
+                                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                                PageHelper.showErrors(err);
+                                                PageHelper.hideLoader();
+                                            });
+                                    })
+                        },
                         proceed: function(model, formCtrl, form, $event){
                             if(PageHelper.isFormInvalid(formCtrl)) {
                                 return false;
@@ -1424,6 +1574,22 @@ define(
                                     PageHelper.hideLoader();
                                 });
 
+                        },
+                        reject: function(model, formCtrl, form, $event) {
+                            PageHelper.showLoader();
+                            model.loanProcess.reject()
+                                .finally(function() {
+                                    PageHelper.hideLoader();
+                                })
+                                .subscribe(function(value) {
+                                    Utils.removeNulls(value, true);
+                                    PageHelper.showProgress('enrolment', 'Done.', 5000);
+                                    irfNavigator.goBack();
+                                }, function(err) {
+                                    PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                    PageHelper.showErrors(err);
+                                    PageHelper.hideLoader();
+                                });
                         }
                     }
                 };

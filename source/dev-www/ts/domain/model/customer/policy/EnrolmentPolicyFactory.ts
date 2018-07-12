@@ -10,7 +10,6 @@ import {CommercialCBCheckPolicy} from "./CommercialCBCheckPolicy";
 import {MinimumReferencesPolicy} from "./MinimumReferencesPolicy";
 import {GSTApplicablePolicy} from "./GSTApplicablePolicy";
 import {VerifyBankAccountNumberPolicy} from "./VerifyBankAccountNumberPolicy";
-import {DefaultIndividualReferencePolicy} from "./DefaultIndividualReferencePolicy";
 import {VerifyIndividualReferencePolicy} from "./VerifyIndividualReferencePolicy";
 import {VerifyTrackDetailsPolicy} from "./VerifyTrackDetailsPolicy"; 
 import {MandatoryTangibleWorthPolicy} from "./MandatoryTangibleWorthPolicy";
@@ -50,16 +49,14 @@ export class EnrolmentPolicyFactory implements IPolicyFactory{
                 return new GSTApplicablePolicy();
             case 'VerifyBankAccountNumberPolicy':
                 return new VerifyBankAccountNumberPolicy();
-            case 'DefaultIndividualReferencePolicy':
-                return new DefaultIndividualReferencePolicy();
-            case 'VerifyIndividualReferencePolicy':
-                return new VerifyIndividualReferencePolicy();
             case 'MandatoryTangibleWorthPolicy':
                 return new MandatoryTangibleWorthPolicy();
             case 'EnrolmentDerivedPolicyforAge':
                 return new EnrolmentDerivedPolicyforAge();
             case 'VerifyTrackDetailsPolicy':
                 return new VerifyTrackDetailsPolicy();
+            case 'VerifyIndividualReferencePolicy':
+                return new VerifyIndividualReferencePolicy();
             default:
                 return null;
 

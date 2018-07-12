@@ -6,12 +6,14 @@ import {RepositoryIdentifiers} from "../../../shared/RepositoryIdentifiers";
 import {UserSession, ISession} from "../../../shared/Session";
 import {FormHelper, IFormHelper} from "../../../shared/FormHelper";
 import {ObjectFactory} from "../../../shared/ObjectFactory";
-import Customer = require("../Customer");
+import {Customer} from  "../../customer/Customer";
 import {ValidationError} from "../../../../ui/errors/ValidationError";
 import FamilyMember = require("../FamilyMember");
 import Expenditure = require("../Expenditure");
 import {EnrolmentProcess} from "../EnrolmentProcess";
 import AngularResourceService = require("../../../../infra/api/AngularResourceService");
+import Verification = require("../Verification");
+
 import * as _ from 'lodash';
 
 
@@ -31,22 +33,34 @@ export class VerifyIndividualReferencePolicy extends IPolicy<EnrolmentProcess> {
     }
 
     run(enrolmentProcess: EnrolmentProcess): Observable<EnrolmentProcess> {
-
-        if(_.hasIn(enrolmentProcess.customer, "verifications") && _.isArray(enrolmentProcess.customer.verifications) && enrolmentProcess.customer.verifications.length > 0) {
-            this.flag = 0;
-            for (let i=0;i<enrolmentProcess.customer.verifications.length;i++) {
-                var verification = enrolmentProcess.customer.verifications[i];
-                if (verification.referenceFirstName && verification.relationship && verification.mobileNo) {
-                    this.flag++;
+        let activeSession:ISession = ObjectFactory.getInstance("Session");
+        let formHelper:IFormHelper = ObjectFactory.getInstance("FormHelper");
+        let data = formHelper.getReferencetype();
+        
+        if(_.isArray(data) && data.length > 0) {
+            try {
+                
+                if(_.isArray(enrolmentProcess.customer.verifications) && enrolmentProcess.customer.verifications.length > 0 && enrolmentProcess.customer.customerType.toLowerCase() == 'enterprise') {
+                    enrolmentProcess.customer.verifications = enrolmentProcess.customer.verifications;
+                    return Observable.of(enrolmentProcess);
                 } else {
-                    console.log("Please Fill Reference Details");
-                    return Observable.throw(new ValidationError("Please Fill Reference Details"));
+                    enrolmentProcess.customer.verifications = [];
+                }
+                if(enrolmentProcess.customer.customerType.toLowerCase() == 'enterprise'){
+
+                    for(let component of data) {
+                        let verification = new Verification();
+                        verification.relationship = component.name;
+                        enrolmentProcess.customer.verifications.push(verification);
+                    }
+                    return Observable.of(enrolmentProcess);
                 }
             }
-            if (this.flag == enrolmentProcess.customer.verifications.length) {
-                console.log("Individual Reference Verified");
+            catch(err) {
+                console.log(err);
                 return Observable.of(enrolmentProcess);
             }
+
         }
         return Observable.of(enrolmentProcess);
     }
