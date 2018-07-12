@@ -58,6 +58,7 @@ function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionSto
 	                }, {
 	                    key: "branch",
 	                    enumCode: "userbranches",
+	                    "type":"select",
 	                    condition: "model.siteCode=='sambandh' || model.siteCode =='IREPDhan'"
 	                }, {
 	                    key: "centre",
