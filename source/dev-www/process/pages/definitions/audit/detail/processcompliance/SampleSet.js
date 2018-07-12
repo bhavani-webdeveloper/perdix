@@ -19,6 +19,7 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleSet"),
                     "readonly": $stateParams.pageData.readonly
                 };
 
+                model.siteCode = SessionStore.getGlobalSetting('siteCode');
                 self.form = [];
                 var auditId = $stateParams.pageId.split(':')[0];
                 var sampleTypeId = $stateParams.pageId.split(':')[1];
@@ -34,7 +35,7 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleSet"),
                     "title": "STATUS",
                     "data": "status",
                     render: function(data, type, full, meta) {
-                        return full.status == "0" ? "Audited" : (full.status == "2" ? "Not Audited" : "");
+                        return full.status == "0" ? "Audited" : (full.status == "1" ? "No Issues" : (full.status == "2" ? "Not Audited" : ""));
                     }
                 }];
                 for (i in master.sampling_columns_config) {
@@ -91,6 +92,18 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleSet"),
                                     },
                                     isApplicable: function(item, index) {
                                         return !$stateParams.pageData.readonly && item.status != "2";
+                                    }
+                                },{
+                                    name: "NO_ISSUES",
+                                    fn: function(item, index) {
+                                        item.status = "1";
+                                        delete item.issue_details;
+                                        if (model.$isOffline) {
+                                            Audit.offline.setProcessCompliance(auditId, model.processCompliance);
+                                        }
+                                    },
+                                     isApplicable: function(item, index) {
+                                         return model.siteCode == 'KGFS' && !$stateParams.pageData.readonly && item.status != "1";                                       
                                     }
                                 }, {
                                     name: "DO_AUDIT",

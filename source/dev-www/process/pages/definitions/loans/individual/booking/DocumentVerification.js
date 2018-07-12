@@ -12,11 +12,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
             "subTitle": " ",
             initialize: function(model, form, formCtrl) {
                 $log.info("Demo Customer Page got initialized");
+
                 var loanId = $stateParams['pageId'];
-                if($stateParams.pageData){
-                   model._queue = model._queue|| $stateParams.pageData;
-                }
-                model._queue=model._queue||
                 PageHelper.showProgress('loan-load', 'Loading loan details...');
                 PageHelper.showLoader();
                 IndividualLoan.get({ id: $stateParams.pageId }).$promise.then(function(res) {
@@ -531,13 +528,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                         irfNavigator.go({
                             state: "Page.Bundle",
                             pageName: "loans.individual.screening.LoanView",
-                            pageData:model._queue,
                             pageId: model.loanAccount.id
                         }, {
                             state: "Page.Engine",
                             pageName: "loans.individual.booking.DocumentVerification",
-                            pageId: model.loanAccount.id,
-                            pageData: model._queue
+                            pageId: model.loanAccount.id
                         });
                     });
                 },

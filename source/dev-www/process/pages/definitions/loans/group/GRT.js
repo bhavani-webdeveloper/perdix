@@ -755,7 +755,7 @@ define({
                         "onClick": function(model, form, schemaForm, event) {
                             Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=app_Loan&record_id=" + model.group.jlgGroupMembers[event.arrayIndex].loanAccount.id);
                         }
-                    }, {
+                    },{
                         "type": "button",
                         "key": "group.jlgGroupMembers[]",
                         condition: "model.group.partnerCode === 'AXIS'",

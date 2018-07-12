@@ -1,5 +1,5 @@
-irf.pageCollection.factory(irf.page("audit.OpenRegularAuditsQueue"), ["$log","Utils", "PageHelper", "irfNavigator", "$stateParams", "formHelper", "Audit", "$state", "$q", "SessionStore",
-    function($log,Utils, PageHelper, irfNavigator, $stateParams, formHelper, Audit, $state, $q, SessionStore) {
+irf.pageCollection.factory(irf.page("audit.OpenRegularAuditsQueue"), ["$log", "Utils", "PageHelper", "irfNavigator", "$stateParams", "formHelper", "Audit", "$state", "$q", "SessionStore",
+    function($log, Utils, PageHelper, irfNavigator, $stateParams, formHelper, Audit, $state, $q, SessionStore) {
         var localFormController;
         var returnObj = {
             "type": "search-list",
@@ -70,7 +70,8 @@ irf.pageCollection.factory(irf.page("audit.OpenRegularAuditsQueue"), ["$log","Ut
                         'start_date': searchOptions.start_date ? searchOptions.start_date + " 00:00:00" : "",
                         'end_date': searchOptions.end_date ? searchOptions.end_date + " 23:59:59" : "",
                         'report_date': searchOptions.report_date ? searchOptions.report_date + " 00:00:00" : "",
-                        'current_stage': 'start',
+                        'audit_type': 1,
+                        'status': 'O',
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage
                     }).$promise.then(function(res) {
@@ -158,7 +159,7 @@ irf.pageCollection.factory(irf.page("audit.OpenRegularAuditsQueue"), ["$log","Ut
                                     'pageName': 'audit.AuditDetails',
                                     'pageId': item.audit_id,
                                     'pageData': {
-                                        "readonly": item.current_stage !== 'start'
+                                        "readonly": !(item.current_stage == 'start' || item.current_stage == 'create')
                                     }
                                 }, {
                                     'state': 'Page.Engine',

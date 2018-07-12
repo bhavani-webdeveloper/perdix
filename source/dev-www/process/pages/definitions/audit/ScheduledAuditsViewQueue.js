@@ -122,16 +122,16 @@ irf.pageCollection.factory(irf.page("audit.ScheduledAuditsViewQueue"), ["$log","
                             'page': pageOpts.pageNo,
                             'per_page': pageOpts.itemsPerPage
                         }).$promise,
-                        Audit.online.getAuditList({
-                            'auditor_id': searchOptions.auditor_id,
-                            'branch_id': searchOptions.branch_id,
-                            'start_date': searchOptions.start_date ? searchOptions.start_date + " 00:00:00" : "",
-                            'end_date': searchOptions.end_date ? searchOptions.end_date + " 23:59:59" : "",
-                            'report_date': searchOptions.report_date ? searchOptions.report_date + " 00:00:00" : "",
-                            'current_stage': 'reassign',
-                            'page': pageOpts.pageNo,
-                            'per_page': pageOpts.itemsPerPage
-                        }).$promise
+                        // Audit.online.getAuditList({
+                        //     'auditor_id': searchOptions.auditor_id,
+                        //     'branch_id': searchOptions.branch_id,
+                        //     'start_date': searchOptions.start_date ? searchOptions.start_date + " 00:00:00" : "",
+                        //     'end_date': searchOptions.end_date ? searchOptions.end_date + " 23:59:59" : "",
+                        //     'report_date': searchOptions.report_date ? searchOptions.report_date + " 00:00:00" : "",
+                        //     'current_stage': 'reassign',
+                        //     'page': pageOpts.pageNo,
+                        //     'per_page': pageOpts.itemsPerPage
+                        // }).$promise
                     ]).then(function(data) {
                         var returnObj = {
                             headers: {
@@ -139,8 +139,8 @@ irf.pageCollection.factory(irf.page("audit.ScheduledAuditsViewQueue"), ["$log","
                             },
                             body: data[0].body
                         };
-                        returnObj.headers['x-total-count'] += data[1].headers['x-total-count'];
-                        returnObj.body.push.apply(returnObj.body, data[1].body);
+                        // returnObj.headers['x-total-count'] += data[1].headers['x-total-count'];
+                        // returnObj.body.push.apply(returnObj.body, data[1].body);
                         deferred.resolve(returnObj);
                     }, function(data) {
                         deferred.reject(data[0]);

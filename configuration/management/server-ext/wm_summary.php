@@ -54,14 +54,14 @@ try{
 	when oc_cat.occupation_category='Business' and ifnull(ifnull(ti.household_income,0)/nullif(sz.cnt,0),0)>=121573 and ifnull(ifnull(ai.household_income,0)/nullif(ti.household_income,0),0)>=0  and ifnull(ifnull(ai.household_income,0)/nullif(ti.household_income,0),0)<=100 then 'business high income'
 
 
-	when oc_cat.occupation_category='Salary' and ifnull(ifnull(ti.household_income,0)/nullif(sz.cnt,0),0)>=0 and ifnull(ifnull(ti.household_income,0)/nullif(sz.cnt,0),0)<73623 and ifnull(ifnull(ai.household_income,0)/nullif(ti.household_income,0),0)>=0  and ifnull(ifnull(ai.household_income,0)/nullif(ti.household_income,0),0)<=25 then 'labour low income'
+	when oc_cat.occupation_category='Salary' and ifnull(ifnull(ti.household_income,0)/nullif(sz.cnt,0),0)>=0 and ifnull(ifnull(ti.household_income,0)/nullif(sz.cnt,0),0)<73623 and ifnull(ifnull(ai.household_income,0)/nullif(ti.household_income,0),0)>=0  and ifnull(ifnull(ai.household_income,0)/nullif(ti.household_income,0),0)<=25 then 'salary low income'
 
-	when oc_cat.occupation_category='Salary' and ifnull(ifnull(ti.household_income,0)/nullif(sz.cnt,0),0)>=73623 and ifnull(ifnull(ti.household_income,0)/nullif(sz.cnt,0),0)<140605 and ifnull(ifnull(ai.household_income,0)/nullif(ti.household_income,0),0)>=0  and ifnull(ifnull(ai.household_income,0)/nullif(ti.household_income,0),0)<=25 then 'labour mid income'
+	when oc_cat.occupation_category='Salary' and ifnull(ifnull(ti.household_income,0)/nullif(sz.cnt,0),0)>=73623 and ifnull(ifnull(ti.household_income,0)/nullif(sz.cnt,0),0)<140605 and ifnull(ifnull(ai.household_income,0)/nullif(ti.household_income,0),0)>=0  and ifnull(ifnull(ai.household_income,0)/nullif(ti.household_income,0),0)<=25 then 'salary mid income'
 
 
-	when oc_cat.occupation_category='Salary' and ifnull(ifnull(ti.household_income,0)/nullif(sz.cnt,0),0)>=140605 and ifnull(ifnull(ai.household_income,0)/nullif(ti.household_income,0),0)>=0  and ifnull(ifnull(ai.household_income,0)/nullif(ti.household_income,0),0)<=25 then 'labour high income'
+	when oc_cat.occupation_category='Salary' and ifnull(ifnull(ti.household_income,0)/nullif(sz.cnt,0),0)>=140605 and ifnull(ifnull(ai.household_income,0)/nullif(ti.household_income,0),0)>=0  and ifnull(ifnull(ai.household_income,0)/nullif(ti.household_income,0),0)<=25 then 'salary high income'
 
-	when oc_cat.occupation_category='Salary' and ifnull(ifnull(ti.household_income,0)/nullif(sz.cnt,0),0)>=0  and ifnull(ifnull(ai.household_income,0)/nullif(ti.household_income,0),0)>25  and ifnull(ifnull(ai.household_income,0)/nullif(ti.household_income,0),0)<=100 then 'labour agri income'
+	when oc_cat.occupation_category='Salary' and ifnull(ifnull(ti.household_income,0)/nullif(sz.cnt,0),0)>=0  and ifnull(ifnull(ai.household_income,0)/nullif(ti.household_income,0),0)>25  and ifnull(ifnull(ai.household_income,0)/nullif(ti.household_income,0),0)<=100 then 'salary agri income'
 
 	when oc_cat.occupation_category='Labour' and ifnull(ifnull(ti.household_income,0)/nullif(sz.cnt,0),0)>=0 and ifnull(ifnull(ti.household_income,0)/nullif(sz.cnt,0),0)<56816 and ifnull(ifnull(ai.household_income,0)/nullif(ti.household_income,0),0)>=0  and ifnull(ifnull(ai.household_income,0)/nullif(ti.household_income,0),0)<=25 then 'labour low income'
 
@@ -113,7 +113,7 @@ try{
 	 (case 
 	 when oc.income_source='Working Abroad' then 'Working Abroad' 
 	 when oc.income_source in ('Goat rearing','Agriculture','Dairy','Fishing') then 'Agriculture'
-	 when oc.income_source in ('Salaried - Govt','	Salaried - Others','Retired / Pensioner') then 'Salary'
+	 when oc.income_source in ('Salaried - Govt','Salaried - Others','Retired / Pensioner') then 'Salary'
 	 when oc.income_source in ('Agri Trading','Rental Income','Shop Owner','Business - Others','Driver','Small Industry','Professional') then 'Business'
 	 when oc.income_source in ('Performing Arts','Labour','Migrant Labour','Unemployed','House-wife','Student') then 'Labour'
 	 when oc.income_source is NULL then 'missing data'
@@ -209,17 +209,17 @@ SELECT 'Female' as Dependants,
 	
 	
 	$result_loan_count =DB::connection("bietl_db")->select("select 'Active' As Status , 
-	sum(case when apd.product like '%jlg%' and apd.product_close_date>curdate() and apd.household_id=? then 1 else 0 end) as JLG,
-	sum(case when apd.product like 'MEL|Retail' and apd.product_close_date>curdate() and apd.household_id=? then 1 else 0 end) as MEL,
-	sum(case when apd.product like '%personal%' and apd.product_close_date>curdate() and apd.household_id=? then 1 else 0 end)as PERSONAL,
-	sum(case when apd.product  not rlike 'JLG|MEL|Retail|Personal' and apd.product_close_date>curdate() and apd.household_id=? then 1 else 0 end) as OTHERS
+	sum(case when apd.product like '%jlg%' and apd.principal_outstanding>0 and apd.household_id=? then 1 else 0 end) as JLG,
+	sum(case when apd.product like 'MEL|Retail' and apd.principal_outstanding>0 and apd.household_id=? then 1 else 0 end) as MEL,
+	sum(case when apd.product like '%Personal Loan%' and apd.principal_outstanding>0 and apd.household_id=? then 1 else 0 end)as PERSONAL,
+	sum(case when apd.product  not rlike 'JLG|MEL|Retail|Personal' and apd.principal_outstanding>0 and apd.household_id=? then 1 else 0 end) as OTHERS
 from bietl.`all_products_dump` apd where  apd.household_id=?
 UNION ALL
 	SELECT 'Closed' As Status,
-	sum(case when apd.product like '%jlg%' and apd.product_close_date<curdate() and apd.household_id=? then 1 else 0 end) as JLG,
-	sum(case when apd.product like 'MEL|Retail' and apd.product_close_date<curdate() and apd.household_id=? then 1 else 0 end) as MEL,
-	sum(case when apd.product like '%personal%' and apd.product_close_date<curdate() and apd.household_id=? then 1 else 0 end) as PERSONAL,
-	sum(case when apd.product not rlike 'JLG|MEL|Retail|Personal' and apd.product_close_date<curdate() and apd.household_id=? then 1 else 0 end) as OTHERS
+	sum(case when apd.product like '%jlg%' and apd.principal_outstanding<=0 and apd.household_id=? then 1 else 0 end) as JLG,
+	sum(case when apd.product like 'MEL|Retail' and apd.principal_outstanding<=0 and apd.household_id=? then 1 else 0 end) as MEL,
+	sum(case when apd.product like '%Personal Loan%' and apd.principal_outstanding<=0 and apd.household_id=? then 1 else 0 end) as PERSONAL,
+	sum(case when apd.product not rlike 'JLG|MEL|Retail|Personal' and apd.principal_outstanding<=0 and apd.household_id=? then 1 else 0 end) as OTHERS
 
 	from bietl.`all_products_dump` apd where  apd.household_id=?",array($id[0]->id,$id[0]->id,$id[0]->id,$id[0]->id,$id[0]->id,$id[0]->id,$id[0]->id,$id[0]->id,$id[0]->id,$id[0]->id));
 	

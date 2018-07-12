@@ -580,14 +580,14 @@ irf.pageCollection.factory(irf.page('loans.DirectLoanRepay'),
 
                             var r = model.repay;
                             var s=model.loanAccount;
-                            var totalSatisfiedDemands = 0;
-                            var pendingInstallment= 0;
                             //r.accountId
 
                             LoanAccount.get({
                                 accountId: r.accountNumber
                             }).$promise.then(function(resp) {
                                 $log.info(resp);
+                                var totalSatisfiedDemands = 0;
+                                var pendingInstallment= 0;
                                 if (resp.repaymentSchedule && resp.repaymentSchedule.length) {
                                     for (i = 0; i < resp.repaymentSchedule.length; i++) {
                                         if(resp.repaymentSchedule[i].status == 'true') {
@@ -603,8 +603,8 @@ irf.pageCollection.factory(irf.page('loans.DirectLoanRepay'),
                                 }
                                 $log.info(totalSatisfiedDemands);
                                 $log.info(pendingInstallment);
-                                r.totalSatisfiedDemands = totalSatisfiedDemands;
-                                r.pendingInstallment = pendingInstallment;
+                                r.totalSatisfiedDemands = totalSatisfiedDemands ||0;
+                                r.pendingInstallment = pendingInstallment ||0;
                                 r.accountName = resp.accountName;
                                 r.payOffAndDueAmount = resp.payOffAndDueAmount;
                                 r.totalDemandDue = resp.equatedInstallment;
@@ -755,14 +755,13 @@ irf.pageCollection.factory(irf.page('loans.DirectLoanRepay'),
 
                     if (window.confirm("Are you Sure?")) {
                         PageHelper.showLoader();
-                        model.repayment.cashCollectionRemark= model.repayment.cashCollectionRemark + model.repayment.receiptNumber;
+                        var postData = _.cloneDeep(model.repayment);
+
+                        postData.cashCollectionRemark= model.repayment.cashCollectionRemark + model.repayment.receiptNumber;
                         model.repayment.tempaccountId=model.repayment.accountId;
                         model.repayment.tempencoreId=model.repayment.accountNumber;
-                        model.repayment.accountId=model.repayment.accountNumber;
-                        model.repayment.accountNumber=model.repayment.tempaccountId;
-
-                        
-                        var postData = _.cloneDeep(model.repayment);
+                        postData.accountId=model.repayment.accountNumber;
+                        postData.accountNumber=model.repayment.tempaccountId;
                         postData.amount = parseInt(Number(postData.amount)) + "";
                         LoanAccount.repay(postData, function(resp, header) {
                             $log.info(resp);

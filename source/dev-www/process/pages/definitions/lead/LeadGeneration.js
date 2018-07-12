@@ -150,7 +150,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                             title: "LEAD_DETAILS",
                             items: [{
                                     key: "lead.leadName",
-                                    title: "APPLICANT_NAME"
+                                    title: "APPLICANT_NAME", 
                                 }, {
                                     key: "lead.customerType",
                                     type: "select",
@@ -158,7 +158,6 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                                         "Individual": "Individual",
                                         "Enterprise": "Individual and Enterprise"
                                     }
-
                                 }, {
                                     type: "fieldset",
                                     title: "ENTERPRISE_DETAILS",
@@ -967,7 +966,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                         "title": "Offline Save"
                     }, {
                         "type": "submit",
-                        "title": "Submit"
+                        "title": "Submit",
                     }]
                 },
             ],

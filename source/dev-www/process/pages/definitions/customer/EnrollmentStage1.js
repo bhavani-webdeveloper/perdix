@@ -362,7 +362,7 @@ irf.pageCollection.factory("Pages__ProfileInformation", ["$log","Lead","LeadHelp
                         "customer.landLineNo",
                         {
                             key: "customer.mobilePhone",
-                            required: true
+                            required: true,
                         },
                         "customer.mailSameAsResidence"
                     ]

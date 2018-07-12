@@ -1024,43 +1024,100 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                 key: "customer.physicalAssets",
                 titleExpr: "model.customer.physicalAssets[arrayIndex].assetType",
                 type: "array",
-                items: [{
+                items: [
+                {
                     key: "customer.physicalAssets[].assetType",
                     "title": "ASSET_TYPE",
-                    "enumCode": "asset_type",
-                    type: "select"
-                }, {
-                    key: "customer.physicalAssets[].ownedAssetDetails",
                     type: "lov",
                     autolov: true,
                     lovonly: true,
                     bindMap: {},
                     searchHelper: formHelper,
                     search: function(inputModel, form, model, context) {
-                        var assetType = model.customer.physicalAssets[context.arrayIndex].assetType;
-                        var ownedAssetDetails = formHelper.enum('asset_Details').data;
-                        var out = [];
-                        if (ownedAssetDetails && ownedAssetDetails.length) {
-                            for (var i = 0; i < ownedAssetDetails.length; i++) {
-
-                                if ((ownedAssetDetails[i].parentCode).toUpperCase() == (assetType).toUpperCase()) {
-                                    out.push({
-                                        name: ownedAssetDetails[i].name,
-                                        id: ownedAssetDetails[i].value
-                                    })
-                                }
-                            }
-                        }
-                        if (!out.length) {
-                            out.push({
+                        var assetDetails = [];
+                        assetDetails = formHelper.enum('asset_type').data;
+                        if (!assetDetails.length) {
+                            assetDetails.push({
                                 name: "No Records",
                             })
                         }
                         return $q.resolve({
                             headers: {
-                                "x-total-count": out.length
+                                "x-total-count": assetDetails.length
                             },
-                            body: out
+                            body: assetDetails
+                        });
+                    },
+                    onSelect: function(valueObj, model, context) {
+                        if (valueObj.name == "No Records") {
+                            model.customer.physicalAssets[context.arrayIndex].assetType = '';
+                            model.customer.physicalAssets[context.arrayIndex].ownedAssetDetails = '';
+                            model.customer.physicalAssets[context.arrayIndex].unit = '';
+                            model.customer.ownedAssetDetails = [];
+                            model.customer.assetunit = [];
+                        } else {
+                            var assetType = model.customer.physicalAssets[context.arrayIndex].assetType = valueObj.name;
+                            model.customer.physicalAssets[context.arrayIndex].ownedAssetDetails = '';
+                            model.customer.physicalAssets[context.arrayIndex].unit = '';
+                            var ownedAssetDetails = formHelper.enum('asset_Details').data;
+                            var assetunit = formHelper.enum('asset_unit').data;
+                            model.customer.ownedAssetDetails = [];
+                            model.customer.assetunit = [];
+                            if (ownedAssetDetails && ownedAssetDetails.length) {
+                                for (var i = 0; i < ownedAssetDetails.length; i++) {
+
+                                    if ((ownedAssetDetails[i].parentCode).toUpperCase() == (assetType).toUpperCase()) {
+                                        model.customer.ownedAssetDetails.push({
+                                            name: ownedAssetDetails[i].name,
+                                            id: ownedAssetDetails[i].value
+                                        })
+                                    }
+                                }
+                            }
+                            if (assetunit && assetunit.length) {
+                                for (var i = 0; i < assetunit.length; i++) {
+                                    if ((assetunit[i].parentCode).toUpperCase() == (assetType).toUpperCase()) {
+                                        model.customer.assetunit.push({
+                                            name: assetunit[i].name,
+                                        })
+                                    }
+                                }
+                            }
+                            if (model.customer.ownedAssetDetails.length && model.customer.ownedAssetDetails.length > 0) {
+                                model.customer.physicalAssets[context.arrayIndex].ownedAssetallowed = true;
+                                model.customer.physicalAssets[context.arrayIndex].assetunitallowed = false;
+                            }
+                            if (model.customer.assetunit.length && model.customer.assetunit.length > 0) {
+                                model.customer.physicalAssets[context.arrayIndex].assetunitallowed = true;
+                                model.customer.physicalAssets[context.arrayIndex].ownedAssetallowed = false;
+                            }
+                        }
+                    },
+                    getListDisplayItem: function(item, index) {
+                        return [
+                            item.name
+                        ];
+                    }
+                }, {
+                    key: "customer.physicalAssets[].ownedAssetDetails",
+                    condition: "model.customer.physicalAssets[arrayIndex].ownedAssetallowed",
+                    "required": true,
+                    type: "lov",
+                    autolov: true,
+                    lovonly: true,
+                    bindMap: {},
+                    searchHelper: formHelper,
+                    search: function(inputModel, form, model, context) {
+                        if (!model.customer.ownedAssetDetails.length) {
+                            model.customer.ownedAssetDetails.push({
+                                name: "No Records",
+                            })
+                        }
+                        return $q.resolve({
+                            headers: {
+                                "x-total-count": model.customer.ownedAssetDetails.length
+                            },
+                            body: model.customer.ownedAssetDetails
                         });
                     },
                     onSelect: function(valueObj, model, context) {
@@ -1078,35 +1135,24 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                 }, {
                     key: "customer.physicalAssets[].unit",
                     "title": "UNIT",
+                    condition: "model.customer.physicalAssets[arrayIndex].assetunitallowed",
+                    "required": true,
                     type: "lov",
                     autolov: true,
                     lovonly: true,
                     bindMap: {},
                     searchHelper: formHelper,
                     search: function(inputModel, form, model, context) {
-                        var assetType = model.customer.physicalAssets[context.arrayIndex].assetType;
-                        var assetunit = formHelper.enum('asset_unit').data;
-                        var out = [];
-                        if (assetunit && assetunit.length) {
-                            for (var i = 0; i < assetunit.length; i++) {
-
-                                if ((assetunit[i].parentCode).toUpperCase() == (assetType).toUpperCase()) {
-                                    out.push({
-                                        name: assetunit[i].name,
-                                    })
-                                }
-                            }
-                        }
-                        if (!out.length) {
-                            out.push({
+                        if (!model.customer.assetunit.length) {
+                            model.customer.assetunit.push({
                                 name: "No Records",
                             })
                         }
                         return $q.resolve({
                             headers: {
-                                "x-total-count": out.length
+                                "x-total-count": model.customer.assetunit.length
                             },
-                            body: out
+                            body: model.customer.assetunit
                         });
                     },
                     onSelect: function(valueObj, model, context) {
@@ -1121,7 +1167,8 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                             item.name
                         ];
                     }
-                }, {
+                },
+                {
                     key: "customer.physicalAssets[].numberOfOwnedAsset",
                     "title": "NUMBER_OF_OWNED_ASSET",
                 }, {
@@ -1344,7 +1391,6 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                             key:"customer.verifications[].relationship",
                             type:"select"
                         }
-
                     ]
                 },
                 {
@@ -1365,8 +1411,6 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                 "title": "SUBMIT"
             }]
         }];
-
-
         },
         modelPromise: function(pageId, _model) {
             if (!_model || !_model.customer || _model.customer.id != pageId) {

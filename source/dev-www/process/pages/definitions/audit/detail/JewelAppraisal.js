@@ -1,21 +1,29 @@
-irf.pageCollection.factory(irf.page("audit.detail.JewelAppraisal"), ["$log", "formHelper", "PageHelper", "irfNavigator", "$stateParams", "Audit", "SessionStore",
-    function($log, formHelper, PageHelper, irfNavigator, $stateParams, Audit, SessionStore) {
+irf.pageCollection.factory(irf.page("audit.detail.JewelAppraisal"),
+["$log", "formHelper", "PageHelper", "irfNavigator", "$stateParams", "Audit", "SessionStore", "translateFilter",
+    function($log, formHelper, PageHelper, irfNavigator, $stateParams, Audit, SessionStore, translateFilter) {
         var branch = SessionStore.getBranch();
-            var validateFields = function(model) {
-               for(i in model.jewel_appraisal.jewel_details){
-                var net = model.jewel_appraisal.jewel_details[i].net;
-                var gross = model.jewel_appraisal.jewel_details[i].gross;
-                 if (net > gross) {
-                 PageHelper.setError({message: "Net weight should be less than Gross weight"});
-                 return false;
+        var validateFields = function(model) {
+            for (i in model.jewel_appraisal.jewel_details) {
+                var jd = model.jewel_appraisal.jewel_details[i];
+                if (jd.net > jd.gross) {
+                    PageHelper.setError({
+                        message: "Net weight should be less than Gross weight"
+                    });
+                    return false;
+                }
+                if (jd.reapp_net > jd.reapp_gross) {
+                    PageHelper.setError({
+                        message: translateFilter("RE_APP/NET(IN_GRAMS)") + " should be less than " + translateFilter("RE_APP/GROSS(IN_GRAMS)")
+                    });
+                    return false;
+                }
             }
             return true;
-           }
         };
 
         return {
             "type": "schema-form",
-            "title": "JEWEL_APPRAISALS",
+            "title": "JEWEL_APPRAISAL",
             initialize: function(model, form, formCtrl) {
                 if (!$stateParams.pageId) {
                     irfNavigator.goBack();
@@ -25,26 +33,98 @@ irf.pageCollection.factory(irf.page("audit.detail.JewelAppraisal"), ["$log", "fo
                 if (typeof($stateParams.pageData.readonly) == 'undefined') {
                     $stateParams.pageData.readonly = true;
                 }
-                var pageData = {
-                    "readonly": $stateParams.pageData.readonly
-                };
+                model.readonly = $stateParams.pageData.readonly;
                 model.audit_id = Number($stateParams.pageId);
                 model.jewel_appraisal = model.jewel_appraisal || {};
-                var master = Audit.offline.getAuditMaster() || {};
+                // var master = Audit.offline.getAuditMaster() || {};
                 var self = this;
-                form = [];
+                self.form = [];
                 var init = function(response) {
-                    $log.info(response)
-                    model.master = master;
-                    model.jewel_appraisal.jewel_details = response.jewel_details;
-                    model.jewel_appraisal.jewel_assets = response.jewel_assets;
-                    var tableDetails = [];
+                    model.jewel_appraisal = response;
+                    
+                    if (_.isObject(model.jewel_appraisal.jewel_assets)) {
+                        var addedVal = model.jewel_appraisal.jewel_assets.number_of_pouches_in_hand + model.jewel_appraisal.jewel_assets.number_of_pouches_in_hq - model.jewel_appraisal.jewel_assets.total_on_hand;
+                        model.jewel_appraisal.jewel_assets.CMS_difference = String(addedVal);
+                    }
+
+                    self.form = [{
+                        type: "box",
+                        readonly: model.readonly,
+                        title: "JEWEL_APPRAISALS",
+                        items: [{
+                            key: "jewel_appraisal.jewel_details",
+                            type: "array",
+                            title: "ADD_DETAILS",
+                            startEmpty: true,
+                            items: [{
+                                key: "jewel_appraisal.jewel_details[].account_number",
+                                required: true
+                            }, {
+                                key: "jewel_appraisal.jewel_details[].loan_amount",
+                                required: true
+                            }, {
+                                key: "jewel_appraisal.jewel_details[].description_of_jewel",
+                                required: true
+                            }, {
+                                key: "jewel_appraisal.jewel_details[].gross",
+                                required: true
+                            }, {
+                                key: "jewel_appraisal.jewel_details[].net",
+                                required: true
+                            }, {
+                                key: "jewel_appraisal.jewel_details[].reapp_gross",
+                                required: true
+                            }, {
+                                key: "jewel_appraisal.jewel_details[].reapp_net",
+                                required: true
+                            }, {
+                                key: "jewel_appraisal.jewel_details[].sticker_number",
+                                required: true
+                            }, {
+                                key: "jewel_appraisal.jewel_details[].reapp_sticker_number",
+                                required: true
+                            }, {
+                                key: "jewel_appraisal.jewel_details[].comments",
+                                required: true
+                            }]
+
+                        }]
+
+                    }, {
+                        type: "box",
+                        readonly: model.readonly,
+                        title: "JEWEL_ASSETS",
+                        items: [{
+                            key: "jewel_appraisal.jewel_assets.number_of_pouches_in_hand",
+                            type: "number"
+                        }, {
+                            key: "jewel_appraisal.jewel_assets.number_of_pouches_in_hq",
+                            type: "number",
+                        }, {
+                            key: "jewel_appraisal.jewel_assets.total_on_hand",
+                            type: "number",
+                            "onChange": function(modelValue, form, model) {
+                                var addedVal = model.jewel_appraisal.jewel_assets.number_of_pouches_in_hand + model.jewel_appraisal.jewel_assets.number_of_pouches_in_hq - model.jewel_appraisal.jewel_assets.total_on_hand;
+                                model.jewel_appraisal.jewel_assets.CMS_difference = String(addedVal);
+                            }
+                        }, {
+                            key: "jewel_appraisal.jewel_assets.CMS_difference",
+                            readonly:true
+                        }]
+                    }, {
+                        type: "actionbox",
+                        condition: "!model.readonly",
+                        items: [{
+                            type: "submit",
+                            title: "UPDATE"
+                        }]
+                    }];
                 };
                 model.$isOffline = false;
                 if ($stateParams.pageData && $stateParams.pageData.auditData && $stateParams.pageData.auditData.jewel_appraisal) {
                     init($stateParams.pageData.auditData.jewel_appraisal);
                 } else {
-                    Audit.offline.getJewelAppraisal($stateParams.pageId).then(function(res) {
+                    Audit.offline.getJewelAppraisal(model.audit_id).then(function(res) {
                         init(res);
                         model.$isOffline = true;
                     }, function(errRes) {
@@ -54,92 +134,14 @@ irf.pageCollection.factory(irf.page("audit.detail.JewelAppraisal"), ["$log", "fo
                     });
                 }
             },
-            form: [{
-                type: "box",
-                title: "JEWEL_APPRAISALS",
-                items: [{
-                    key: "jewel_appraisal.jewel_details",
-                    type: "array",
-                    title: "ADD_DETAILS",
-                    items: [{
-                        key: "jewel_appraisal.jewel_details[].account_number",
-                        required: true
-                    }, {
-                        key: "jewel_appraisal.jewel_details[].loan_amount",
-                        required: true
-                    }, {
-                        key: "jewel_appraisal.jewel_details[].description_of_jewel",
-                        required: true
-                    }, {
-                        key: "jewel_appraisal.jewel_details[].gross",
-                        required: true
-                    }, {
-                        key: "jewel_appraisal.jewel_details[].net",
-                        required: true
-                    }, {
-                        key: "jewel_appraisal.jewel_details[].reapp_gross",
-                        required: true
-                    }, {
-                        key: "jewel_appraisal.jewel_details[].reapp_net",
-                        required: true
-                    }, {
-                        key: "jewel_appraisal.jewel_details[].sticker_number",
-                        required: true
-                    }, {
-                        key: "jewel_appraisal.jewel_details[].reapp_sticker_number",
-                        required: true
-                    }, {
-                        key: "jewel_appraisal.jewel_details[].comments",
-                        required: true
-                    }, {
-                        key: "jewel_appraisal.jewel_details[].button1",
-                        type: "button",
-                        title: "ADD_DETAILS",
-                        "onClick": "actions.add(model, formCtrl, form, $event)"
-                    }]
-
-                }]
-
-            }, {
-                type: "box",
-                title: "JEWEL_ASSETS",
-                items: [{
-                    key: "jewel_appraisal.jewel_assets.number_of_pouches_in_hand",
-                    type: "string"
-                }, {
-                    key: "jewel_appraisal.jewel_assets.number_of_pouches_in_hq",
-                    type: "string",
-                }, {
-                    key: "jewel_appraisal.jewel_assets.total_on_hand",
-                    type: "string",
-                }, {
-                    key: "jewel_appraisal.jewel_assets.comments"
-                }, {
-                    type: "fieldset",
-                    title: "COMMENTS",
-                    items: [{
-                        key: "jewel_appraisal.comments"
-                    }]
-                }]
-            }, {
-                "type": "actionbox",
-                "items": [{
-                    title: "SAVE",
-                    type: "button",
-                    "onClick": "actions.save(model, form, formCtrl)"
-                }]
-            }],
+            form: [],
             schema: {
                 "$schema": "http://json-schema.org/draft-04/schema#",
                 "type": "object",
                 "properties": {
                     "jewel_appraisal": {
                         "type": "object",
-                        "properties": {
-                            "comments": {
-                                "type": ["string", "null"],
-                                "title": "COMMENTS"
-                            },
+                        "properties": {                           
                             "jewel_details": {
                                 "type": "array",
                                 "title": "CUSTOMER_BANK_ACCOUNT",
@@ -148,7 +150,9 @@ irf.pageCollection.factory(irf.page("audit.detail.JewelAppraisal"), ["$log", "fo
                                     "properties": {
                                         "account_number": {
                                             "type": ["string", "null"],
-                                            "title": "ACCOUNT_NUMBER"
+                                            "title": "ACCOUNT_NUMBER",
+                                            "maxLength": 14,
+                                            "minLength": 14,
                                         },
                                         "loan_amount": {
                                             "type": ["number", "null"],
@@ -193,21 +197,22 @@ irf.pageCollection.factory(irf.page("audit.detail.JewelAppraisal"), ["$log", "fo
                                 "type": "object",
                                 "properties": {
                                     "number_of_pouches_in_hand": {
-                                        "type": ["string", "null"],
+                                        "type": ["integer", "null"],
                                         "title": "POUNCHES_IN_THE_BRANCH"
                                     },
                                     "number_of_pouches_in_hq": {
-                                        "type": ["string", "null"],
+                                        "type": ["integer", "null"],
                                         "title": "POUNCHES_IN_THE_HUB"
                                     },
                                     "total_on_hand": {
-                                        "type": ["string", "null"],
+                                        "type": ["integer", "null"],
                                         "title": "TOTAL_BY_CMS"
                                     },
-                                    "comments": {
-                                        "type": ["string", "null"],
-                                        "title": "COMMENTS"
-                                    }
+                                    "CMS_difference": {
+                                        "type": "string",
+                                        "title": "DIFFERENCE"
+                                    },
+                                    
                                 }
                             },
                         },
@@ -216,27 +221,22 @@ irf.pageCollection.factory(irf.page("audit.detail.JewelAppraisal"), ["$log", "fo
                 },
             },
             actions: {
-                add: function(model, formCtrl, form, $event) {
+                submit: function(model, formCtrl, form, $event) {
                     PageHelper.clearErrors();
                     formHelper.validate(formCtrl).then(function() {
                         if (!validateFields(model)) return;
                         if (model.$isOffline) {
-                            Audit.offline.setJewelAppraisal(model.audit_id, model.jewel_appraisal).then(function(res) {
-                                model.jewel_appraisal.jewel_details = res;
-                                PageHelper.showProgress("auditId", "Audit Updated Successfully.", 3000);
+                            Audit.offline.setJewelAppraisal(model.audit_id, model.jewel_appraisal).then(function() {
+                                PageHelper.showProgress("auditId", "Jewel Appraisal updated successfully.", 3000);
                                 irfNavigator.goBack();
-                            }, function(errRes) {
-                                PageHelper.showErrors(errRes);
-                            }).finally(function() {
-                                PageHelper.hideLoader();
-                            })
+                            }, PageHelper.showErrors).finally(PageHelper.hideLoader);
                         } else {
                             $stateParams.pageData.auditData.jewel_appraisal = model.jewel_appraisal;
                             irfNavigator.goBack();
                         }
                     })
                 },
-                // save: function(model, formCtrl, form, $event) {
+                // submit: function(model, formCtrl, form, $event) {
                 //     PageHelper.clearErrors();
                 //     formHelper.validate(formCtrl).then(function() {
                 //         if (model.$isOffline) {

@@ -59,6 +59,7 @@ irf.pageCollection.factory(irf.page("audit.RejectedAuditsQueue"), ["$log", "Quer
                         }
                     },
                     "branch_id",
+                    "audit_type",
                     "report_date",
                     "start_date",
                     "end_date"
@@ -76,6 +77,14 @@ irf.pageCollection.factory(irf.page("audit.RejectedAuditsQueue"), ["$log", "Quer
                             "title": "BRANCH_ID",
                             "type": "number",
                             "enumCode": "branch_id",
+                            "x-schema-form": {
+                                "type": "select"
+                            }
+                        },
+                        "audit_type": {
+                            "title": "AUDIT_TYPE",
+                            "type": "number",
+                            "enumCode": "audit_type",
                             "x-schema-form": {
                                 "type": "select"
                             }
@@ -123,6 +132,7 @@ irf.pageCollection.factory(irf.page("audit.RejectedAuditsQueue"), ["$log", "Quer
                         'audit_id': searchOptions.audit_id,
                         'auditor_id': SessionStore.getLoginname(),
                         'branch_id': searchOptions.branch_id,
+                        'audit_type': searchOptions.audit_type,
                         'start_date': searchOptions.start_date ? searchOptions.start_date + " 00:00:00" : "",
                         'end_date': searchOptions.end_date ? searchOptions.end_date + " 23:59:59" : "",
                         'report_date': searchOptions.report_date ? searchOptions.report_date + " 00:00:00" : "",
@@ -225,20 +235,38 @@ irf.pageCollection.factory(irf.page("audit.RejectedAuditsQueue"), ["$log", "Quer
                             name: "DO_AUDIT",
                             icon: "fa fa-pencil-square-o",
                             fn: function(item, index) {
-                                irfNavigator.go({
-                                    'state': 'Page.Adhoc',
-                                    'pageName': 'audit.AuditDetails',
-                                    'pageId': item.audit_id,
-                                    'pageData': {
-                                        "readonly": item.current_stage !== 'start'
-                                    }
-                                }, {
-                                    'state': 'Page.Engine',
-                                    'pageName': 'audit.RejectedAuditsQueue',
-                                    'pageData': {
-                                        "page": returnObj.definition.listOptions.tableConfig.page
-                                    }
-                                });
+                                if (item.audit_type = 1) {
+                                    irfNavigator.go({
+                                        'state': 'Page.Adhoc',
+                                        'pageName': 'audit.AuditDetails',
+                                        'pageId': item.audit_id,
+                                        'pageData': {
+                                            "readonly": item.current_stage !== 'start'
+                                        }
+                                    }, {
+                                        'state': 'Page.Engine',
+                                        'pageName': 'audit.RejectedAuditsQueue',
+                                        'pageData': {
+                                            "page": returnObj.definition.listOptions.tableConfig.page
+                                        }
+                                    });
+                                } else if (item.audit_type = 0) {
+                                    irfNavigator.go({
+                                        'state': 'Page.Engine',
+                                        'pageName': 'audit.detail.SnapAuditDetails',
+                                        'pageId': item.audit_id,
+                                        // 'pageData': {
+                                        //     "readonly": item.current_stage !== 'start'
+                                        // }
+                                    }, {
+                                        'state': 'Page.Engine',
+                                        'pageName': 'audit.RejectedAuditsQueue',
+                                        'pageData': {
+                                            "page": returnObj.definition.listOptions.tableConfig.page
+                                        }
+                                    });
+                                }
+
                             },
                             isApplicable: function(item, index) {
                                 return true;

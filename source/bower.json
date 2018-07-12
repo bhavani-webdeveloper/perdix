@@ -48,7 +48,8 @@
     "datatables.net-bs": "^1.10.12",
     "irf-elements": "svn+http://svn.perdix.co/svn/perdix/irf-common-elements#8.6.2",
     "mathjs": "^3.8.1",
-    "angular-sanitize": "1.6.1"
+    "angular-sanitize": "1.6.1",
+    "lz-string": "^1.4.4"
   },
   "overrides": {
     "admin-lte": {

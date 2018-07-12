@@ -1600,14 +1600,14 @@ return {
                 }
         ]
     },
-    {
+    /*{
         "type": "actionbox",
         "items": [{
             "type": "button",
             "title": "SAVE",
             "onClick": "actions.saveGroup(model,formCtrl, form)"
         },]
-    }],
+    }*/],
     schema: {
         "$schema": "http://json-schema.org/draft-04/schema#",
         "type": "object",

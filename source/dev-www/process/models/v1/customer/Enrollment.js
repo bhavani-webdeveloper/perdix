@@ -1,4 +1,4 @@
-irf.models.factory('Enrollment',function($resource,$httpParamSerializer,BASE_URL, searchResource){
+irf.models.factory('Enrollment',function($resource,$q,Upload,$httpParamSerializer,BASE_URL, searchResource){
     var endpoint = BASE_URL + '/api/enrollments';
     var managementEndPoint= irf.MANAGEMENT_BASE_URL;
 
@@ -26,7 +26,7 @@ irf.models.factory('Enrollment',function($resource,$httpParamSerializer,BASE_URL
      *      /enrollments/1           -> $get({id:1})
      * $post will send data as form data, save will send it as request payload
      */
-    return $resource(endpoint, null, {
+    var resource = $resource(endpoint, null, {
 
         get:{
             method:'GET',
@@ -180,12 +180,34 @@ irf.models.factory('Enrollment',function($resource,$httpParamSerializer,BASE_URL
             url: endpoint+'/withhistory/:id'
         }
     });
+
+    resource.insuranceUpload = function(file, progress) {
+        var deferred = $q.defer();
+        Upload.upload({
+            url: BASE_URL + "/api/feed/insuranceupload",
+
+            data: {
+                file: file,
+                feedCategory: 'PortfolioInsuranceDetails'
+            }
+        }).then(function(resp) {
+            PageHelper.showProgress("page-init", "successfully uploaded.", 2000);
+            deferred.resolve(resp);
+        }, function(errResp) {
+            PageHelper.showErrors(errResp);
+            deferred.reject(errResp);
+        }, progress);
+        return deferred.promise;
+    };
+
+    return resource;
 });
 
 
+
 irf.pageCollection.factory("EnrollmentHelper",
-["$log", "$q","Enrollment", 'PageHelper', 'irfProgressMessage', 'Utils', 'SessionStore',
-function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionStore){
+["$log", "$q","Enrollment",'formHelper', 'PageHelper', 'irfProgressMessage', 'Utils', 'SessionStore',
+function($log, $q, Enrollment,formHelper, PageHelper, irfProgressMessage, Utils, SessionStore){
 
     var validatePanCard = function(str, form){
         const panRegex = /^[A-Za-z]{5}[0-9]{4}[A-Za-z]$/g;
@@ -313,6 +335,45 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
                 if(model.customer.physicalAssets[i].nameOfOwnedAsset && (model.customer.physicalAssets[i].assetType == null)){
                      model.customer.physicalAssets[i].assetType=model.customer.physicalAssets[i].nameOfOwnedAsset;
                 }
+            }
+        }
+
+        if (model.customer.physicalAssets && model.customer.physicalAssets.length && model.customer.physicalAssets.length > 0) {
+            for (i = 0; i < model.customer.physicalAssets.length; i++) {
+                    var ownedAssetDetails1 = formHelper.enum('asset_Details').data;
+                    var assetunit1 = formHelper.enum('asset_unit').data;
+                    var ownedAssetDetails=[];
+                    var assetunit=[];
+                    if (ownedAssetDetails1 && ownedAssetDetails1.length) {
+                        for (j in ownedAssetDetails1) {
+                            if (ownedAssetDetails1[j] && ownedAssetDetails1[j].parentCode &&  ((ownedAssetDetails1[j].parentCode).toUpperCase() == (model.customer.physicalAssets[i].assetType).toUpperCase())) {
+                                ownedAssetDetails.push({
+                                    name: ownedAssetDetails1[j].name,
+                                    id: ownedAssetDetails1[j].value
+                                })
+                                break;
+                            }
+                        }
+                    }
+                    if (ownedAssetDetails.length && ownedAssetDetails.length > 0) {
+                        model.customer.physicalAssets[i].ownedAssetallowed = true;
+                        continue;
+                    }
+
+                    if (assetunit1 && assetunit1.length) {
+                        for (k in assetunit1) {
+                            if ( assetunit1[k] && assetunit1[k].parentCode && ((assetunit1[k].parentCode).toUpperCase() == (model.customer.physicalAssets[i].assetType).toUpperCase())) {
+                                assetunit.push({
+                                    name: assetunit1[k].name,
+                                })
+                                break;
+                            }
+                        }
+                    }
+                    if (assetunit.length && assetunit.length > 0) {
+                        model.customer.physicalAssets[i].assetunitallowed = true;
+                    }
+                
             }
         }
 
@@ -550,6 +611,7 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
         validateDate:validateDate,
         parseAadhaar: parseAadhaar,
         customerAadhaarOnCapture: customerAadhaarOnCapture,
-        validatePanCard: validatePanCard
+        validatePanCard: validatePanCard,
+        checkBiometricQuality:checkBiometricQuality
     };
 }]);
