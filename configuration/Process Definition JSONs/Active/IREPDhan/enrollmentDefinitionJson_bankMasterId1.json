@@ -4539,7 +4539,8 @@
               "maxLength": 100,
               "enum": [
                 "CIBIL",
-                "Highmark"
+                "Highmark",
+                "Equifax"
               ],
               "captureStages": [
                 "BasicEnrolment",

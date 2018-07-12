@@ -1,9 +1,9 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
     var config = {
-        'policies': {
-            'default': {
-                onNew: {
+        "policies": {
+            "default": {
+                "onNew": {
                     "defaults": [
                         {
                             "name": "DefaultRelatedCustomersPolicy",
@@ -14,86 +14,30 @@ define(["require", "exports"], function (require, exports) {
                                 "loanCustomer": true,
                                 "loanCustomerType": "Enterprise"
                             }
-                        },
-                        {
-                            "name": "DefaultVehicleDocumentsPolicy",
-                            "arguments": {}
                         }
                     ]
                 },
-                onLoad: {
+                "onLoad": {
                     "defaults": [
                         {
                             "name": "LoadRelatedCustomersPolicy",
                             "arguments": {}
-                        },
-                        {
-                            "name": "CustomerReferencePolicy",
-                            "arguments": {}
-                        },
-                        {
-                            "name": "DefaultVehicleDocumentsPolicy",
-                            "arguments": {}
-                        },
-                        {
-                            "name": "DefaultCalculatedVehicleDetailsPolicy",
-                            "arguments": {}
-                        }
-                    ],
-                    "overrides": [
-                        {
-                            "type": "expr",
-                            "expr": "this.loanAccount.currentStage=='VehicleValuation'",
-                            "add": [
-                                {
-                                    "name": "DefaultVehicleComponentsPolicy",
-                                    "arguments": {}
-                                },
-                                {
-                                    "name": "DefaultVehicleAccessoriesPolicy",
-                                    "arguments": {}
-                                },
-                            ]
-                        },
-                        {
-                            "type": "expr",
-                            "expr": "this.loanAccount.currentStage=='FieldInvestigation1' || this.loanAccount.currentStage=='FieldInvestigation2' || this.loanAccount.currentStage=='FieldInvestigation3'",
-                            "add": [
-                                {
-                                    "name": "DefaultIndividualReferencePolicy",
-                                    "arguments": {}
-                                }
-                            ]
                         }
                     ]
                 },
-                beforeSave: {
+                "beforeSave": {
                     "defaults": [
                         {
                             "name": "MandatoryFieldsPolicy",
                             "arguments": null
-                        },
-                        {
-                            "name": "LoanDerivedFieldsUpdate",
-                            "arguments": null
                         }
                     ]
                 },
-                afterSave: {
-                    "defaults": [
-                        {
-                            "name": "DefaultCalculatedVehicleDetailsPolicy",
-                            "arguments": {}
-                        },
-                        {
-                            "name": "DefaultVehicleDocumentsPolicy",
-                            "arguments": {}
-                        }
-                    ],
+                "afterSave": {
                     "overrides": [
                         {
                             "type": "expr",
-                            "expr": "this.loanAccount.currentStage=='Screening'",
+                            "expr": "this.loanAccount.currentStage=='KYC'",
                             "add": [
                                 {
                                     "name": "CloseLeadonLoanSave",
@@ -103,33 +47,14 @@ define(["require", "exports"], function (require, exports) {
                                     }
                                 }
                             ]
-                        },
-                        {
-                            "type": "expr",
-                            "expr": "this.loanAccount.currentStage=='FieldInvestigation1' || this.loanAccount.currentStage=='FieldInvestigation2' || this.loanAccount.currentStage=='FieldInvestigation3'",
-                            "add": [
-                                {
-                                    "name": "DefaultIndividualReferencePolicy",
-                                    "arguments": {}
-                                }
-                            ]
                         }
                     ]
                 },
-                beforeProceed: {
-                    "defaults": [
-                        {
-                            "name": "LoanDerivedFieldsUpdation",
-                            "arguments": null
-                        }, {
-                            "name": "CustomerEnrolmentCompletedPolicy",
-                            "arguments": {}
-                        }
-                    ],
+                "beforeProceed": {
                     "overrides": [
                         {
                             "type": "expr",
-                            "expr": "this.loanAccount.currentStage=='CreditApproval5'",
+                            "expr": "this.loanAccount.currentStage=='Sanction'",
                             "add": [
                                 {
                                     "name": "OriginationToBookingPolicy",
@@ -138,46 +63,12 @@ define(["require", "exports"], function (require, exports) {
                                     }
                                 }
                             ]
-                        },
-                        {
-                            "type": "expr",
-                            "expr": "this.loanAccount.currentStage=='CreditApproval5' || this.loanAccount.currentStage=='CreditApproval4' || this.loanAccount.currentStage=='CreditApproval3' || this.loanAccount.currentStage=='CreditApproval2' || this.loanAccount.currentStage=='CreditApproval1' ",
-                            "add": [{
-                                    "name": "CollateralFieldPolicy",
-                                    "arguments": {
-                                        "postStage": "LoanInitiation"
-                                    }
-                                }]
-                        }
-                    ]
-                },
-                afterProceed: {
-                    "defaults": [
-                        {
-                            "name": "DefaultCalculatedVehicleDetailsPolicy",
-                            "arguments": {}
-                        },
-                        {
-                            "name": "DefaultVehicleDocumentsPolicy",
-                            "arguments": {}
-                        }
-                    ],
-                    "overrides": [
-                        {
-                            "type": "expr",
-                            "expr": "this.loanAccount.currentStage=='FieldInvestigation1' || this.loanAccount.currentStage=='FieldInvestigation2' || this.loanAccount.currentStage=='FieldInvestigation3'",
-                            "add": [
-                                {
-                                    "name": "DefaultIndividualReferencePolicy",
-                                    "arguments": {}
-                                }
-                            ]
                         }
                     ]
                 }
             },
-            'command': {
-                'OverlayLeadData': {}
+            "command": {
+                "OverlayLeadData": {}
             }
         }
     };

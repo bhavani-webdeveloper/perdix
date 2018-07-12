@@ -158,6 +158,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     },
                     "BankAccounts.customerBankAccounts.confirmedAccountNumber": {
                          "type": "string",
+                         "title": "CONFIRMED_ACCOUNT_NUMBER",
                          "required": true
                     }                         
                }
