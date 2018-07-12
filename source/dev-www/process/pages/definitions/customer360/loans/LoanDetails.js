@@ -517,6 +517,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                     {
                         key: "loanAccount.transactionType",
                         readonly: true,
+                        "required":false,
                         title: "TRANSACTION_TYPE",
 
                     },
@@ -1993,6 +1994,14 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                             "enumCode": "payerRelation"
                         }
                     ]
+                },
+                {
+                    "type": "actionbox",
+                    "condition": "model.siteCode == 'IREPDhan'",
+                    "items": [{
+                        "type": "submit",
+                        "title":"SUBMIT"
+                    }]
                 },
                 {
                     "type": "actionbox",
