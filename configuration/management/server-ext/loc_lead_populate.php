@@ -100,7 +100,7 @@ WHERE
 l.loan_purpose_1 = 'Line of credit' AND 
 l.account_number IS NOT NULL
 AND l.account_number NOT IN (select linked_account_number  FROM $perdix_db.leads WHERE linked_account_number IS NOT NULL) GROUP BY l.account_number
-HAVING (EMICount = gl.value AND gl.value-3 <= paidEMI)");
+HAVING (EMICount >= gl.value AND gl.value-3 <= paidEMI)");
 
 foreach($customers as $customer){
 	unset($customer->EMICount);
