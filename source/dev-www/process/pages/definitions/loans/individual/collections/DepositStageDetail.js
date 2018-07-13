@@ -24,10 +24,12 @@ define({
                 "condition":"model.depositDetails && model.depositDetails.instrumentType.toLowerCase()=='cash'",
                 "items": [{
                         "key":"depositDetails.collectionDetail.depositId",
-                        "title": "DEPOSIT_ID"
+                        "title": "DEPOSIT_ID",
+                        "readonly":true
                     },{
                         "key":"depositDetails.collectionDetail.totalAmount",
-                        "title": "TOTAL_TO_BE_DEPOSITED"
+                        "title": "TOTAL_TO_BE_DEPOSITED",
+                        "readonly":true
                     },
                     {
                         "key": "depositDetails.collectionDetail.totalAmount",

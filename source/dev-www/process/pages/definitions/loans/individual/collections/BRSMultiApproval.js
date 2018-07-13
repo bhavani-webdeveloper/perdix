@@ -124,6 +124,10 @@ define({
                                 "data": "reference"
                             },
                             {
+                                "title": "HubName",
+                                "data": "loanBranchName"
+                            },
+                            {
                                 "title": "Amount",
                                 "data": "amount"
                             },
