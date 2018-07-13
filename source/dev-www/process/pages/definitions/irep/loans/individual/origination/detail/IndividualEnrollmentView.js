@@ -40,12 +40,13 @@ define({
                             break;
                     };
 
+
                     model.customer.presetAddress = [
-                        model.customer.doorNo,
-                        model.customer.street,
-                        model.customer.district,
-                        model.customer.state
-                    ].filter(a => a).join(', ') + ' - ' + model.customer.pincode;
+                        res.doorNo,
+                        res.street,
+                        res.district,
+                        res.state
+                    ].join(', ') + ' - ' + res.pincode;
 
                     /*Family fields*/
                     model.UIUDF.family_fields.family_member_count = model.customer.familyMembers.length;

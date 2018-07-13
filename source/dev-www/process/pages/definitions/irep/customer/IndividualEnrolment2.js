@@ -172,11 +172,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto": {
                                     "required": true
-                                },
-                                "FamilyDetails.familyMembers": {
-                                    "add": null,
-                                    "remove": null,
-                                    "view": "fixed"
                                 }
                             }
                         },
