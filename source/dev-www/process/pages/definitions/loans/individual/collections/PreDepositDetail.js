@@ -137,12 +137,15 @@ define({
                         }
                     }
                 },
-                "required": []
+                "required": [
+                "review.remarks"
+                ]
             },
             eventListeners: {},
             actions: {
                 proceed: function (model, formCtrl, form, $event) {
                     /*
+
                         a) if action is proceed 
                             1)For cheque, calling LoanCollection update method ,
                             2) for cash , calling loancollection batch repay method ,
@@ -150,6 +153,15 @@ define({
                             4) branch to be updated the pre-deposit ,
                         
                     */
+                    if (PageHelper.isFormInvalid(formCtrl)) {
+                            return false;
+                        }
+                        formCtrl.scope.$broadcast('schemaFormValidate');
+
+                        if (formCtrl && formCtrl.$invalid) {
+                            PageHelper.showProgress("loan", "Your form have errors. Please fix them.", 5000);
+                            return false;
+                    }
                     Utils.confirm("Are you sure ? ")
                         .then(function () {
                             $log.info("Inside proceed()");
@@ -209,6 +221,15 @@ define({
                             1) sending to reject stage , calling loancollection/batchRepay 
                             2) cheque have validation that it will always come in this branch as single unit
                     */
+                    if (PageHelper.isFormInvalid(formCtrl)) {
+                            return false;
+                        }
+                        formCtrl.scope.$broadcast('schemaFormValidate');
+
+                        if (formCtrl && formCtrl.$invalid) {
+                            PageHelper.showProgress("loan", "Your form have errors. Please fix them.", 5000);
+                            return false;
+                    }
                     Utils.confirm("Are you sure ? ")
                         .then(function () {
                             $log.info("Inside reject()");

@@ -206,7 +206,15 @@ define({
                     /* 1)for cash using updateBankDepositSummaries and finnaly using batchRepay api to move to next branch
                        2)for cheque using loancollection api to update and move forward to next branch
                      */
-                  
+                    if (PageHelper.isFormInvalid(formCtrl)) {
+                            return false;
+                        }
+                        formCtrl.scope.$broadcast('schemaFormValidate');
+
+                        if (formCtrl && formCtrl.$invalid) {
+                            PageHelper.showProgress("loan", "Your form have errors. Please fix them.", 5000);
+                            return false;
+                    }
                     Utils.confirm("Are you sure ? ")
 		            .then(function(){
                     // 1)cash collection details to be deposited
@@ -257,6 +265,15 @@ define({
                 },
                 reject: function (model, formCtrl, form, $event) {
                 /* 1)rejection from this stage will go to preDeposit stage */
+                if (PageHelper.isFormInvalid(formCtrl)) {
+                            return false;
+                        }
+                        formCtrl.scope.$broadcast('schemaFormValidate');
+
+                        if (formCtrl && formCtrl.$invalid) {
+                            PageHelper.showProgress("loan", "Your form have errors. Please fix them.", 5000);
+                            return false;
+                }
                 $log.info("Inside reject()");
                 Utils.confirm("Are you sure ? ")
                     .then(function () {

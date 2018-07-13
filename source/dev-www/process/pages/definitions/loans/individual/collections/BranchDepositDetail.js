@@ -156,6 +156,15 @@
                                 4) branch to be updated the pre-deposit ,
                             
                         */
+                        if (PageHelper.isFormInvalid(formCtrl)) {
+                            return false;
+                        }
+                        formCtrl.scope.$broadcast('schemaFormValidate');
+
+                        if (formCtrl && formCtrl.$invalid) {
+                            PageHelper.showProgress("loan", "Your form have errors. Please fix them.", 5000);
+                            return false;
+                        }
                         Utils.confirm("Are you sure ? ")
                             .then(function () {
                                 $log.info("Inside proceed()");
