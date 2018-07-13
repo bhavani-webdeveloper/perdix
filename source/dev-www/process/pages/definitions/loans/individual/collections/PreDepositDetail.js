@@ -49,10 +49,6 @@ define({
                             "data":"accountNumber"
                         },
                         {
-                            "title":"BRANCH_NAME",
-                            "data":"branchName"
-                        },
-                        {
                             "title":"SPOKE_NAME",
                             "data":"centreName"
                         },

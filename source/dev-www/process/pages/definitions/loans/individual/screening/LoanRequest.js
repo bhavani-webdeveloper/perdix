@@ -3305,7 +3305,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                         var enterpriseAsset = enterpriseCustomer.enterpriseAssets[i];
                                         if (enterpriseAsset.hypothecatedToUs == "YES" || enterpriseAsset.hypothecatedToUs == "Yes"){
                                             var c = {
-                                                collateralDescription: enterpriseAsset.description,
+                                                collateralDescription: enterpriseAsset.details,
                                                 collateralType: enterpriseAsset.assetName,
                                                 collateralCategory:enterpriseAsset.assetType,
                                                 loanToValue: enterpriseAsset.valueOfAsset,

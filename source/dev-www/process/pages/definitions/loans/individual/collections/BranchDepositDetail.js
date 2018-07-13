@@ -8,7 +8,7 @@
                     "title": "DEPOSITED_BRANCH_DETAILS",
                     "subTitle": "",
                     initialize: function(model, form, formCtrl, bundlePageObj, bundleModel) {  
-                        model.branchname = SessionStore.getCurrentBranch().branchId;
+                        model.branchname = SessionStore.getCurrentBranch().branchName;
                         model.branchCollectionDetail= $stateParams.pageData;
                         if(model.branchCollectionDetail && model.branchCollectionDetail[0]['instrumentType']=='CASH'){
                             model.loanCollectionDetail={
@@ -43,9 +43,7 @@
                     { 
                         "key": "",
                         "title": "SPOKE_NAME"
-
-                    },
-                    {
+                    }{
                         "key":"loanCollectionDetail.totalCashCollected",
                         "title":"TOTAL_AMOUNT_COLLECTED"
                     }]

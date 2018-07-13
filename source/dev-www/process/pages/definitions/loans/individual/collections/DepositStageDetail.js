@@ -23,15 +23,19 @@ define({
                 "title": "CASH_TO_BE_DEPOSITED",
                 "condition":"model.depositDetails && model.depositDetails.instrumentType.toLowerCase()=='cash'",
                 "items": [{
-                        "key":"",
+                        "key":"depositDetails.collectionDetail.depositId",
+                        "title": "DEPOSIT_ID"
+                    },{
+                        "key":"depositDetails.collectionDetail.totalAmount",
                         "title": "TOTAL_TO_BE_DEPOSITED"
                     },
                     {
                         "key": "depositDetails.collectionDetail.totalAmount",
-                        "title": "AMOUNT_DEPOSITED"
+                        "title": "AMOUNT_DEPOSITED",
+                        "readonly":true
                     },
                     {
-                        "key":"depositDetails.collectionDetail.depositId",
+                        "key":"",
                         "title": "Refrence"
                     },
                     {
@@ -76,7 +80,8 @@ define({
                         fileType: "application/pdf",
                         category: "Loan",
                         subCategory: "DOC1",
-                        using: "scanner"
+                        using: "scanner",
+                        required:true
                     }
                 ]
             },
