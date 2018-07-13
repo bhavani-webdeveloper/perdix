@@ -3145,12 +3145,13 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         }
                     );
                 },
-                proceed: function(model, form, formName) {
+                proceed: function(model, formCtrl,form, formName) {
                     $log.info(model);
                     PageHelper.clearErrors();
 
-                    if (!validateForm(form)){
-                        return;
+                    if (formCtrl && formCtrl.$invalid) {
+                        PageHelper.showProgress("enrolment","Your form have errors. Please fix them.", 5000);
+                        return false;
                     }
 
                     var disbursementSchedules = moment(model._currentDisbursement.scheduledDisbursementDate,SessionStore.getSystemDateFormat());
