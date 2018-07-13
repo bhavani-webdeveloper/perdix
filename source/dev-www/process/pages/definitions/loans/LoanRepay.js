@@ -118,10 +118,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                         model.repayment.totalPayoffAmountToBePaid = Utils.roundToDecimal(data.payOffAndDueAmount + data.preclosureFee - data.securityDeposit);
                         model.repayment.totalSecurityDepositDue = Utils.roundToDecimal(data.totalSecurityDepositDue);
                         if (!_.isNull(pageData) && pageData.onlyDemandAllowed == true) {
-
-                            if (model.repayment.totalPenalInterestDue) {
-                                model.repayment.totalDueWithPenal = Utils.roundToDecimal(model.repayment.totalDue) + Utils.roundToDecimal(model.repayment.totalPenalInterestDue);
-                            } else {
+                            if (model.repayment.bookedNotDuePenalInterest) {
                                 model.repayment.totalDueWithPenal = Utils.roundToDecimal(model.repayment.totalDue) + Utils.roundToDecimal(model.repayment.bookedNotDuePenalInterest);
                             }
                         }
