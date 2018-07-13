@@ -3840,13 +3840,14 @@
         "required": [
         ],
         "properties": {
-          "customerId": {
+          "Completed": {
             "title": "Customer Id",
             "type": "number",
             "minimum": 0,
             "maximum": 1000000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3857,16 +3858,18 @@
             "maximum": 1000000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
-       "confirmedAccountNumber": {
+          "confirmedAccountNumber": {
             "title": "Confirmed Account Number",
             "type": "string",
             "minimum": 0,
             "maximum": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3874,9 +3877,10 @@
             "title": "limit",
             "type": "number",
             "minimum": 0,
-            "maximum": 100000000,
+            "maximum": 10000000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3885,6 +3889,16 @@
             "type": "string",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
+              "Completed"
+            ]
+          },
+          "defaultCollectionAccount": {
+            "title": "Bank Statement Doc Id",
+            "type": "string",
+            "captureStages": [
+              "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3895,6 +3909,7 @@
             "maximum": 1000000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3905,6 +3920,7 @@
             "maximum": 1000000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3915,6 +3931,7 @@
             "maximum": 1000000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3925,6 +3942,7 @@
             "maximum": 1000000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3933,6 +3951,7 @@
             "type": "boolean",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3941,6 +3960,7 @@
             "type": "string",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3949,6 +3969,7 @@
             "type": "string",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3959,14 +3980,171 @@
             "maximum": 10000000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
+          "totalTaxPaid": {
+            "title": "Total Tac Paid",
+            "type": "number",
+            "minimum": 0,
+            "maximum": 10000000,
+            "captureStages": [
+              "BasicEnrolment",
+              "Stage02",
+              "Completed"
+            ]
+          },
+          "totalTurnover": {
+            "title": "Total Turn over",
+            "type": "number",
+            "minimum": 0,
+            "maximum": 10000000,
+            "captureStages": [
+              "BasicEnrolment",
+              "Stage02",
+              "Completed"
+            ]
+          },
+          "month": {
+            "title": "month",
+            "type": "number",
+            "minimum": 0,
+            "maximum": 10000000,
+            "captureStages": [
+              "BasicEnrolment",
+              "Stage02",
+              "Completed"
+            ]
+          },
+          "emiDate": {
+            "title": "emiDate",
+            "type": "number",
+            "minimum": 0,
+            "maximum": 10000000,
+            "captureStages": [
+              "BasicEnrolment",
+              "Stage02",
+              "Completed"
+            ]
+          }
+        },
+        "securityCover": {
+          "title": "securityCover",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10000000,
+          "captureStages": [
+            "BasicEnrolment",
+            "Stage02",
+            "Completed"
+          ]
+        }, 
+        "tenure": {
+          "title": "tenure",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10000000,
+          "captureStages": [
+            "BasicEnrolment",
+            "Stage02",
+            "Completed"
+          ]
+        },
+        "sanctionDate": {
+          "title": " sanctionDate",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10000000,
+          "captureStages": [
+            "BasicEnrolment",
+            "Stage02",
+            "Completed"
+          ]
+        },  
+         "outwardChequeReturns": {
+          "title": "outwardChequeReturns",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10000000,
+          "captureStages": [
+            "BasicEnrolment",
+            "Stage02",
+            "Completed"
+          ]
+        }, 
+        "chequesDeposited": {
+          "title": "chequesDeposited",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10000000,
+          "captureStages": [
+            "BasicEnrolment",
+            "Stage02",
+            "Completed"
+          ]
+        }, 
+        "chequeIssued": {
+          "title": "chequeIssued",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10000000,
+          "captureStages": [
+            "BasicEnrolment",
+            "Stage02",
+            "Completed"
+          ]
+        }, 
+        "InwardChequeBounce": {
+          "title": "InwardChequeBounce",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10000000,
+          "captureStages": [
+            "BasicEnrolment",
+            "Stage02",
+            "Completed"
+          ]
+        },
+        "averageBankBalance": {
+          "title": "averageBankBalance",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10000000,
+          "captureStages": [
+            "BasicEnrolment",
+            "Stage02",
+            "Completed"
+          ]
+        },
+        "percentageThroughput": {
+          "title": "Percentage Throughput",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10000000,
+          "captureStages": [
+            "BasicEnrolment",
+            "Stage02",
+            "Completed"
+          ]
+        },
+        "accountName": {
+          "title": "accountName",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10000000,
+          "captureStages": [
+            "BasicEnrolment",
+            "Stage02",
+            "Completed"
+          ]
+        },
           "customerNameAsInBank": {
             "title": "customerNameAsInBank",
             "type": "string",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           }
