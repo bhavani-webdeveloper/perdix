@@ -66,7 +66,7 @@ function($resource,$httpParamSerializer,BASE_URL, $q, SessionStore, formHelper, 
     resource.getCentresForUser = function(branchId, userId) {
         var deferred = $q.defer();
         resource.getCentresForBranch({"branchId":branchId}).$promise.then(function(response) {
-            if (response && response.length) {
+            if (response && response.length>=0) {
                 var centres = [];
                 for (var i = 0; i < response.length; i++) {
                     if (response[i].employee == userId) {
