@@ -310,7 +310,14 @@ var EQUIFAX_HTML =
         '<center><b style="color:tomato">{{CBDATA.customer.first_name||CBDATA.customerId}} - Equifax Scores NOT available</b></center>'+
     '</div>'+
 '</div>';
-
+var INDIVIDUAL_HTML =
+'<div>'+
+    '<h3 ng-show="CBDATA.individual.reportHtml" style="font-weight:bold;color:#ccc;">INDV REPORT</h3>'+
+    '<iframe ng-show="CBDATA.individual.reportHtml" id="{{CBDATA._individualId}}" style="border:0;width:100%;height:500px;"></iframe>'+
+    '<div ng-hide="CBDATA.individual.reportHtml">'+
+        '<center><b style="color:tomato">{{CBDATA.customer.first_name||CBDATA.customerId}} - INDV Scores NOT available</b></center>'+
+    '</div>'+
+'</div>';
     var CIBIL_HTML =
 '<div>'+
     '<h3 ng-show="CBDATA.cibil.cibilScore.length" style="font-weight:bold;color:#ccc;">CIBIL REPORT</h3>'+
@@ -661,6 +668,7 @@ var EQUIFAX_HTML =
                 for (i in customerIds) {
                     objectifiedBureaus[customerIds[i]]._highmarkId = 'highmark_' + customerIds[i];
                     objectifiedBureaus[customerIds[i]]._equifaxId = 'equifax_' + customerIds[i];
+                    objectifiedBureaus[customerIds[i]]._individualId = 'individual_' + customerIds[i];
                 }
                 deferred.resolve();
             });
@@ -679,6 +687,9 @@ var EQUIFAX_HTML =
             if (v.equifax && v.equifax.reportHtml) {
                 $('#equifax_'+k)[0].contentWindow.document.write(v.equifax.reportHtml);
             }
+            if (v.individual && v.individual.reportHtml) {
+                $('#individual_'+k)[0].contentWindow.document.write(v.individual.reportHtml);
+            }
         });
     };
 
@@ -695,7 +706,7 @@ var EQUIFAX_HTML =
             //model.CBType = JSON.parse(SessionStore.getGlobalSetting("CBCheckType").replace(/'/g, '"'));
             if (model.CBType && model.CBType.length) {
                 for (i in model.CBType) {
-                    (model.CBType[i] == "CIBIL")?model.CIBIL = true:(model.CBType[i] == "BASE"?model.BASE = true:(model.CBType[i] == "EQUIFAX"?model.EQUIFAX = true:(model.CBType[i] == "CHMHUB"?model.CHMHUB=true:false)));
+                    (model.CBType[i] == "CIBIL")?model.CIBIL = true:(model.CBType[i] == "BASE"?model.BASE = true:(model.CBType[i] == "EQUIFAX"?model.EQUIFAX = true:(model.CBType[i] == "CHMHUB"?model.CHMHUB=true:(model.CBType[i] == "INDIVIDUAL"?model.INDIVIDUAL=true:false))));
                 }
             } else {
                 model.CIBIL = true;
@@ -741,7 +752,7 @@ var EQUIFAX_HTML =
                 "items": [
                     {
                         type: "section",
-                        html: '<div ng-init="CBDATA=model.applicant">' + '<div ng-show="model.BASE">'+HIGHMARK_HTML+'</div>'+'<div ng-show="model.CIBIL">'+ CIBIL_HTML +'</div>'+ '<div ng-show="model.EQUIFAX">'+EQUIFAX_HTML+'</div>'+'<div ng-show="model.CHMHUB">'+IDENCHECK_HTML+'</div>'+ '</div>'
+                        html: '<div ng-init="CBDATA=model.applicant">' + '<div ng-show="model.BASE">'+HIGHMARK_HTML+'</div>'+'<div ng-show="model.CIBIL">'+ CIBIL_HTML +'</div>'+ '<div ng-show="model.EQUIFAX">'+EQUIFAX_HTML+'</div>'+'<div ng-show="model.CHMHUB">'+IDENCHECK_HTML+'</div>'+'<div ng-show="model.INDIVIDUAL">'+INDIVIDUAL_HTML+'</div>'+'</div>'
                     }
                 ]
             },
@@ -754,7 +765,7 @@ var EQUIFAX_HTML =
                 "items": [
                     {
                         type: "section",
-                        html: '<div ng-repeat="CBDATA in model.coapplicants">' + '<div ng-show="model.BASE">'+HIGHMARK_HTML+'</div>'+'<div ng-show="model.CIBIL">'+ CIBIL_HTML +'</div>'+ '<div ng-show="model.EQUIFAX">'+EQUIFAX_HTML+'</div>' +'<div ng-show="model.CHMHUB">'+IDENCHECK_HTML+'</div>'+ '<hr><hr></div>'
+                        html: '<div ng-repeat="CBDATA in model.coapplicants">' + '<div ng-show="model.BASE">'+HIGHMARK_HTML+'</div>'+'<div ng-show="model.CIBIL">'+ CIBIL_HTML +'</div>'+ '<div ng-show="model.EQUIFAX">'+EQUIFAX_HTML+'</div>' +'<div ng-show="model.CHMHUB">'+IDENCHECK_HTML+'</div>'+'<div ng-show="model.INDIVIDUAL">'+INDIVIDUAL_HTML+'</div>'+'<hr><hr></div>'
                     }
                 ]
             },
@@ -767,7 +778,7 @@ var EQUIFAX_HTML =
                 "items": [
                     {
                         type: "section",
-                        html: '<div ng-repeat="CBDATA in model.guarantors">' + '<div ng-show="model.BASE">'+HIGHMARK_HTML+'</div>'+'<div ng-show="model.CIBIL">'+ CIBIL_HTML +'</div>'+ '<div ng-show="model.EQUIFAX">'+EQUIFAX_HTML+'</div>'+'<div ng-show="model.CHMHUB">'+IDENCHECK_HTML+'</div>'+ '<hr><hr></div>'
+                        html: '<div ng-repeat="CBDATA in model.guarantors">' + '<div ng-show="model.BASE">'+HIGHMARK_HTML+'</div>'+'<div ng-show="model.CIBIL">'+ CIBIL_HTML +'</div>'+ '<div ng-show="model.EQUIFAX">'+EQUIFAX_HTML+'</div>'+'<div ng-show="model.CHMHUB">'+IDENCHECK_HTML+'</div>'+'<div ng-show="model.INDIVIDUAL">'+INDIVIDUAL_HTML+'</div>'+'<hr><hr></div>'
                     }
                 ]
             }
