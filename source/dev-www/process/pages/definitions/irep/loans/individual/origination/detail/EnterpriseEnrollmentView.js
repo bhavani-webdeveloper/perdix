@@ -264,8 +264,69 @@ define({
                         }, {
                             "key": "customer.udf.userDefinedFieldValues.udf2",
                             "title": "WHETHER_AUDITED"
-                        }]
-                    }, {
+                        },
+                        {
+                            "type": "expandablesection",
+                            "items": [{
+                                "type": "tableview",
+                                "key": "enterpriseCustomerRelations",
+                                "notitle": true,
+                                "transpose": true,
+                                "selectable": false,
+                                "editable": false,
+                                "tableConfig": {
+                                    "searching": false,
+                                    "paginate": false,
+                                    "pageLength": 10,
+                                },
+                                getColumns: function() {
+                                    return [ {
+                                        "title": "Relationship Type",
+                                        "data": "relationshipType",
+                                        render: function(data, type, full, meta) {
+                                            return full['Relationship Type']
+                                        }
+                                    }, {
+                                        "title": "Customer ID",
+                                        "data": "linkedToCustomerId",
+                                        render: function(data, type, full, meta) {
+                                            return irfCurrencyFilter(full['Customer ID'])
+                                        }
+                                    }, {
+                                        "title": "Customer Name",
+                                        "data": "linkedToCustomerName",
+                                        render: function(data, type, full, meta) {
+                                            return irfCurrencyFilter(full['Customer Name'])
+                                        }
+                                    }, {
+                                        "data": "experienceInBusiness",
+                                        "title": "Experience in Business",
+                                        render: function(data, type, full, meta) {
+                                            return irfCurrencyFilter(full['Experience in Business'])
+                                        }
+                                    }, {
+                                        "title": "Business Involvement",
+                                        "data": "businessInvolvement",
+                                        render: function(data, type, full, meta) {
+                                            return full['Business Involvement']
+                                        }
+
+                                    }, {
+                                        "title": "Partner of Any Other Company",
+                                        "data": "partnerOfAnyOtherCompany",
+                                        render: function(data, type, full, meta) {
+                                            return full['Partner of Any Other Company']
+                                        }
+                                    }];
+                                },
+                                getActions: function() {
+                                    return [];
+                                }
+                            }]
+                        }
+                        ]
+                    },
+                    {
                         "type": "grid",
                         "orientation": "vertical",
                         "items": [{
@@ -421,7 +482,8 @@ define({
                         }]
 
                     }]
-                }, {
+                },
+                {
                     "type": "expandablesection",
                     "items": [{
                         "type": "tableview",
@@ -750,3 +812,4 @@ define({
         };
     }
 })
+
