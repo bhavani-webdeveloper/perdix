@@ -89,6 +89,7 @@
                             key: "review.action",
                             type: "radios",
                             titleMap: {
+                                "REJECT": "REJECT",
                                 "PROCEED": "PROCEED"
                             }
                         },
@@ -105,6 +106,20 @@
                                 type: "button",
                                 title: "PROCEED",
                                 onClick: "actions.proceed(model, formCtrl, form, $event)"
+                            }]
+                        },{
+                            type: "section",
+                            condition: "model.review.action == 'REJECT'",
+                            items: [{
+                                title: "REMARKS",
+                                key: "review.remarks",
+                                type: "textarea",
+                                required: true
+                            }, {
+                                key: "review.proceedButton",
+                                type: "button",
+                                title: "REJECT",
+                                onClick: "actions.reject(model, formCtrl, form, $event)"
                             }]
                         }]
                 }],
@@ -219,48 +234,48 @@
                             })
            
                     },
-                    // reject: function(model, formCtrl, form, $event){
-                    //     /*a) if action is reject
-                    //             1) sending to reject stage , calling loancollection/batchRepay 
-                    //             2) cheque have validation that it will always come in this branch as single unit
-                    //     */
-                    //     Utils.confirm("Are you sure ? ")
-                    //         .then(function () {
-                    //             $log.info("Inside reject()");
-                    //             PageHelper.showBlockingLoader("Processing...");
-                    //             var collectionData = {
-                    //                 "loanCollectionSummaryDTOs": [],
-                    //                 "remarks": model.review.remarks,
-                    //                 "repaymentProcessAction": "PROCEED",
-                    //                 "stage": "Rejected"
-                    //             }
-                    //             if (model.branchCollectionDetail && model.branchCollectionDetail[0]['instrumentType'] == 'CASH') {
-                    //                 _.each(model.branchCollectionDetail, function (collectionDetail) {
-                    //                     collectionData.loanCollectionSummaryDTOs.push({
-                    //                         loanCollectionId: collectionDetail.id
-                    //                     });
-                    //                 })
+                    reject: function(model, formCtrl, form, $event){
+                        /*a) if action is reject
+                                1) sending to reject stage , calling loancollection/batchRepay 
+                                2) cheque have validation that it will always come in this branch as single unit
+                        */
+                        Utils.confirm("Are you sure ? ")
+                            .then(function () {
+                                $log.info("Inside reject()");
+                                PageHelper.showBlockingLoader("Processing...");
+                                var collectionData = {
+                                    "loanCollectionSummaryDTOs": [],
+                                    "remarks": model.review.remarks,
+                                    "repaymentProcessAction": "PROCEED",
+                                    "stage": "Rejected"
+                                }
+                                if (model.branchCollectionDetail && model.branchCollectionDetail[0]['instrumentType'] == 'CASH') {
+                                    _.each(model.branchCollectionDetail, function (collectionDetail) {
+                                        collectionData.loanCollectionSummaryDTOs.push({
+                                            loanCollectionId: collectionDetail.id
+                                        });
+                                    })
         
-                    //             } else if (model.branchCollectionDetail && model.branchCollectionDetail[0]['instrumentType'] == 'CHQ') {
-                    //                 collectionData['loanCollectionSummaryDTOs'].push({loanCollectionId:model.branchCollectionDetail[0]['id']});
+                                } else if (model.branchCollectionDetail && model.branchCollectionDetail[0]['instrumentType'] == 'CHQ') {
+                                    collectionData['loanCollectionSummaryDTOs'].push({loanCollectionId:model.branchCollectionDetail[0]['id']});
         
-                    //             }
-                    //             //After getting collectionData either for cash or for chq , hit the batch update api
-                    //             LoanCollection.batchUpdate(collectionData).$promise
-                    //                     .then(function (res, head) {
-                    //                         PageHelper.showProgress('BranchDepositReject', 'successfully Rejected', 5000);
-                    //                         irfNavigator.goBack();
-                    //                     }, function (httpres) {
-                    //                         PageHelper.showProgress("BranchDepositReject", "Error in in Reject", 5000);
+                                }
+                                //After getting collectionData either for cash or for chq , hit the batch update api
+                                LoanCollection.batchUpdate(collectionData).$promise
+                                        .then(function (res, head) {
+                                            PageHelper.showProgress('BranchDepositReject', 'successfully Rejected', 5000);
+                                            irfNavigator.goBack();
+                                        }, function (httpres) {
+                                            PageHelper.showProgress("BranchDepositReject", "Error in in Reject", 5000);
         
-                    //                     })
-                    //                     .finally(function () {
-                    //                         PageHelper.hideBlockingLoader();
-                    //                     })
+                                        })
+                                        .finally(function () {
+                                            PageHelper.hideBlockingLoader();
+                                        })
 
-                    //         })
+                            })
                        
-                    // }
+                    }
                 }
             }
         }

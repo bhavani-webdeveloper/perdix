@@ -238,7 +238,7 @@ define({
                                 "loanCollectionSummaryDTOs": [],
                                 "remarks": model.review.remarks,
                                 "repaymentProcessAction": "PROCEED",
-                                "stage": "Rejected"
+                                "stage": "BranchDeposit"
                             }
                             if (model.collectionDetails && model.collectionDetails[0]['instrumentType'] == 'CASH') {
                                 _.each(model.collectionDetails, function (collectionDetail) {

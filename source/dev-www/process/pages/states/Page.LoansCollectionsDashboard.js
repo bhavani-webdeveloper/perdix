@@ -109,7 +109,8 @@ function($log, $scope, PagesDefinition,formHelper, SessionStore, LoanProcess,Rep
         var brdep=$scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.collections.BranchDepositQueue"];
         if(brdep) {
             LoanCollection.query({
-                'currentStage': "BranchDeposit"
+                'currentStage': "BranchDeposit",
+                //'accountBranchId': currentBranchId,
             }).$promise.then(function(response, headerGetter){
                 brdep.data = response.headers['x-total-count'];
             })
@@ -120,7 +121,7 @@ function($log, $scope, PagesDefinition,formHelper, SessionStore, LoanProcess,Rep
             LoanCollection.query({
                 'currentStage': "PreDeposit"
             }).$promise.then(function(response, headerGetter){
-                brdep.data = response.headers['x-total-count'];
+                predep.data = response.headers['x-total-count'];
             })
         }
 
