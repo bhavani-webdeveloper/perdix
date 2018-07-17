@@ -254,13 +254,23 @@ irf.commons.provider("formHelper", function() {
 		},
 		userbranch: function() {
 			var branches = $this.factory.enum("branch_id").data;
+			var chooseBranch = {
+			    code: "-",
+			    field1: null,
+			    id: null,
+			    name: "Choose Branch",
+			    parentCode: 1,
+			    value: null
+			};
 			var userbranches = context.SessionStore.getItem("UserAllowedBranches").map(x => ''+x.branchId);
 			userbranches.unshift(''+context.SessionStore.session.branchId);
 			var branchTree = _.cloneDeep(branches);
 			var id = "code", parentId = "field2";
 			var roots = listToTree(branchTree, id, parentId);
 			var userBranchTree = branchTree.filter(branch => userbranches.indexOf(branch[id]) >= 0);
+			userBranchTree.unshift(chooseBranch);
 			userBranchTree.branchMap = branches.reduce((map, current) => {map[current[id]] = current; return map}, {});
+			userBranchTree.branchMap[chooseBranch[id]] = chooseBranch;
 			return userBranchTree;
 		},
 		save: function(model, formCtrl, formName, actions) {
