@@ -194,6 +194,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         customerId: loanAccount.applicantId,
                                         enrolmentProcess: loanProcess.applicantEnrolmentProcess,
                                         loanProcess: loanProcess
+                                        
                                     }
                                 });
 
