@@ -218,7 +218,7 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                     },
                     "udf18": {
                         "type": ["number", "null"],
-                        "title": "OTHER_PERCENTAGE",
+                        "title": "OBC_PERCENTAGE",
                         readonly: true,
                         min: 0,
                         max: 100,
