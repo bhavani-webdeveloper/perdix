@@ -167,7 +167,7 @@ define({
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
 								$state.go("Page.Engine", {
-									pageName: "payment.PaymentApproval",
+									pageName: "payment.PaymentInitiation",
 
 									pageId: item.id
 								});

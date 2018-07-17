@@ -26,7 +26,7 @@ export class PaymentProcess {
 	}
 
     submit(): any {
-        this.paymentsAction = 'SAVE'; 
+        this.paymentsAction = 'PROCEED'; 
         let pmBeforeUpdate:PolicyManager<PaymentProcess>  = new PolicyManager(this, PaymentPolicyFactory.getInstance(), 'beforeSave', PaymentProcess.getProcessConfig());
         let obs1 = pmBeforeUpdate.applyPolicies();
         let obs2 = this.paymentRepo.create(this)
@@ -79,8 +79,7 @@ export class PaymentProcess {
 
     static create(): Observable<PaymentProcess> {
         let pp = new PaymentProcess();  
-        pp.payment = new Payment();              
-        pp.stage = 'PaymentInitiation';
+        pp.payment = new Payment();   
         let pm: PolicyManager<PaymentProcess> = new PolicyManager<PaymentProcess>(pp, PaymentPolicyFactory.getInstance(), 'onNew', PaymentProcess.getProcessConfig());
         return pm.applyPolicies();
     }

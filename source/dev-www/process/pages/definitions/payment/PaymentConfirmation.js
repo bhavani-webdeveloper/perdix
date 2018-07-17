@@ -4,11 +4,11 @@ define([], function() {
         pageUID: "payment.PaymentConfirmation",
         pageType: "Engine",
         dependencies: ["$log", "irfElementsConfig", "Enrollment", "SessionStore", "formHelper", "$q",
-            "PageHelper", "PagesDefinition", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository", "irfNavigator"
+            "PageHelper", "PagesDefinition", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository", "irfNavigator", "Payment"
         ],
 
         $pageFn: function($log, elementsConfig, Enrollment, SessionStore, formHelper, $q,
-            PageHelper, PagesDefinition, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository, irfNavigator) {
+            PageHelper, PagesDefinition, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository, irfNavigator, Payment) {
 
             var configFile = function() {
                 return {}
@@ -27,13 +27,12 @@ define([], function() {
             var getIncludes = function(model) {
                 return [
                     "UploadPaymentConfirmation",
-                    "UploadPaymentConfirmation.debitAccount",
                     "UploadPaymentConfirmation.uploadPaymentConfirmation"
                 ]
             }
             return {
                 "type": "schema-form",
-                "title": "PAYMENT_CONFORMATION",
+                "title": "PAYMENT_CONFIRMATION",
                 "subTitle": "",
                 initialize: function(model, form, formCtrl) {
                     var self = this;
@@ -42,15 +41,34 @@ define([], function() {
                         "includes": getIncludes(model),
                         "excludes": [],
                         "options": {
-                            "additions": [{
-                                "type": "actionbox",
-                                "orderNo": 1000,
-                                "items": [
-                                    {
-                                    "type": "submit",
-                                    "title": "UPDATE"
-                                }]
-                            }]
+                            "repositoryAdditions": {                             
+                                "UploadPaymentConfirmation": {
+                                    "type": "box",
+                                    "title": "UPLOAD_PAYMENT_CONFIRMATION",
+                                    "colClass": "col-sm-6",
+                                    "items": {
+                                        "uploadPaymentConfirmation": {
+                                            "key": "payment.uploadPaymentConfirmation",                                            
+                                            "title": "UPLOAD_PAYMENT_CONFIRMATION",
+                                            "category": "ACH",
+                                            "subCategory": "cat2",
+                                            "type": "file",
+                                            "fileType": "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                                            customHandle: function(file, progress, modelValue, form, model) {
+                                                Payment.paymentConformation(file, progress).then(function(res) {
+                                                    PageHelper.showProgress('payment', 'payment confirm.', 5000);                                   
+                                                }, function(err) {
+                                                    if(err.data.errorMessage){
+                                                        err.data.error = err.data.errorMessage;
+                                                    }
+                                                    
+                                                   PageHelper.showErrors(err)
+                                                });
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
                     };
 
@@ -73,36 +91,8 @@ define([], function() {
                 offline: false,
                 getOfflineDisplayItem: function(item, index) {},
                 form: [],
-                schema: {
-                    "$schema": "http://json-schema.org/draft-04/schema#",
-                    "type": "object",
-                    "properties": {
-                        "payment": {
-                            "type": "object",
-                            "required": [],
-                            "properties": {
-                                "debitAccountName": {
-                                    "title": "DEBIT_ACCOUNT_NAME",
-                                    "type": "string"
-                                },
-                                "debitAccountNumber": {
-                                    "title": "DEBIT_ACCOUNT_NO",
-                                    "type": "string"
-                                }
-                            }
-                        }
-                    }
-                },
-                actions: {
-                    save: function(model, formCtrl, form, $event) {
-
-                    },
-                    proceed: function(model, formCtrl, form, $event) {
-                        
-                    },
-                    update: function(model, formCtrl, form, $event) {
-                    
-                    }
+                schema: function () {
+                    return Enrollment.getSchema().$promise;
                 }
             };
         }

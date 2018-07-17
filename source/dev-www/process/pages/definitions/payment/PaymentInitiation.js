@@ -11,9 +11,262 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
         $pageFn: function($http,$log, elementsConfig,$state, $stateParams, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q,
             PageHelper, Utils, PagesDefinition, $filter, IrfFormRequestProcessor, $injector, UIRepository, irfNavigator, Files, Payment) {
 
-            var configFile = function() {
-                return {}
-            }         
+                var configFile = function() {                
+                    return {
+                        "payment.currentStage": {
+                            "PaymentRejected": {
+                                "overrides": {
+                                    "PaymentDetails":{
+                                        "orderNo": 20
+                                    },
+                
+                                    "BeneficiaryDetails":{
+                                        "orderNo": 10
+                                    },
+                
+                                    "DebitAccountDetails":{
+                                        "orderNo": 30
+                                    },
+                                     "PaymentDetails.modeOfPayment":{
+                                        "readonly":true,
+                                        "orderNo": 1
+                                    },
+                                    "PaymentDetails.amount":{
+                                        "readonly":true,
+                                        "orderNo": 2
+                                    },
+                                    "PaymentDetails.fileId":{
+                                        "readonly":true,
+                                        "orderNo": 3
+                                    },
+                                    "PaymentDetails.paymentPurpose":{
+                                        "readonly":true,
+                                        "orderNo": 4
+                                    },
+                                    "PaymentDetails.transactionType":{
+                                        "readonly":true,
+                                        "orderNo": 6
+                                    },
+                                    "PaymentDetails.paymentDate":{
+                                        "readonly":true,
+                                        "orderNo": 7
+                                    },
+                                    "BeneficiaryDetails.beneficiaryName":{
+                                        "type": "lov",
+                                        "resolver": "CustomerBankAccountsLOVConfiguration" ,
+                                        "readonly":true,
+                                        "orderNo": 1
+                                    },
+                                    "BeneficiaryDetails.beneficiaryAccountName":{
+                                        "readonly":true,
+                                        "orderNo": 2
+                                    },
+                                    "BeneficiaryDetails.beneficiaryEmailId":{
+                                        "readonly":true,
+                                        "orderNo": 3
+                                    },                  
+                                    "BeneficiaryDetails.beneficiaryMobileNumber":{
+                                        "readonly":true,
+                                        "orderNo": 4
+                                    },
+                                    "BeneficiaryDetails.creditAccountNo":{
+                                        "readonly":true,
+                                        "orderNo": 5
+                                    },
+                                    "BeneficiaryDetails.confirmAccountNo":{
+                                        "readonly":true,
+                                         "orderNo": 6
+                                    },
+                                    "BeneficiaryDetails.beneficiaryIfsc":{
+                                        "resolver": "PaymentBankIFSCLOVConfiguration",  
+                                        "readonly":true,
+                                        "orderNo": 7
+                                    },
+                                    "BeneficiaryDetails.beneficiaryBankName":{
+                                        "readonly":true,
+                                        "orderNo": 8
+                                    },
+                                    "BeneficiaryDetails.beneficiaryBankBranch":{
+                                        "readonly":true,
+                                        "orderNo": 9
+                                    },
+                                    "BeneficiaryDetails.beneficiaryTransactionParticulars":{                                        
+                                        "orderNo": 10,
+                                        "readonly":true,
+                                    },
+                                    "BeneficiaryDetails.beneficiaryTransactionRemarks":{                                       
+                                        "orderNo": 11,
+                                        "readonly":true,
+                                    },
+                                    "DebitAccountDetails.debitAccountName":{
+                
+                                        "resolver": "PaymentBankAccountsLOVConfiguration",
+                                        "readonly":true,
+                                        "orderNo": 1
+                                    },
+                                    "DebitAccountDetails.debitAccountNumber":{
+                                        "readonly":true,
+                                        "orderNo": 2
+                                    },
+                                    "DebitAccountDetails.debitMobileNumber":{
+                                        "readonly":true,
+                                        "orderNo": 3
+                                    },  
+                                    "DebitAccountDetails.debitTransactionParticulars":{                       
+                                        "orderNo": 4,
+                                        "readonly":true,
+                                    },
+                                    "DebitAccountDetails.debitTransactionRemarks":{                       
+                                        "orderNo": 5,
+                                        "readonly":true,
+                                    },                 
+                                    "PaymentDetails.accountNumber":{
+                                        "resolver": "LoanAccountsLOVConfiguration",
+                                        "readonly":true,
+                                        "orderNo": 5                      
+                                    }
+                                    
+    
+                                },
+                                "excludes": [                              
+                                ]
+                            },
+                            "PaymentApproval": {
+                                "overrides": {
+                                    "PaymentDetails":{
+                                        "orderNo": 20
+                                    },
+                
+                                    "PostReviewDecision.rejectsectionremarks":{
+                
+                                        "condition": "model.payment.status=='REJECT'"
+                                    },
+                                    "PostReviewDecision.rejectsectionbutton":{
+                
+                                        "condition": "model.payment.status=='REJECT'"
+                                    },
+                                    "PostReviewDecision.sendbacksectionremarks":{
+                
+                                        "condition": "model.payment.status=='SEND_BACK'"
+                                    },
+                                    "PostReviewDecision.sendbacksectionbutton":{
+                
+                                        "condition": "model.payment.status=='SEND_BACK'"
+                                    },
+                                    "PostReviewDecision.proceedsectionremarks":{
+                
+                                        "condition": "model.payment.status=='PROCEED'"
+                                    },
+                                    "PostReviewDecision.proceedsectionbutton":{
+                
+                                        "condition": "model.payment.status=='PROCEED'"
+                                    },                   
+                
+                                    "BeneficiaryDetails":{
+                                        "orderNo": 10
+                                    },
+                
+                                    "DebitAccountDetails":{
+                                        "orderNo": 30
+                                    },
+                                    "PaymentDetails.modeOfPayment":{
+                                        "readonly":true,
+                                        "orderNo": 1
+                                    },
+                                    "PaymentDetails.amount":{
+                                        "readonly":true,
+                                        "orderNo": 2
+                                    },
+                                    "PaymentDetails.fileId":{
+                                        "readonly":true,
+                                        "orderNo": 3
+                                    },
+                                    "PaymentDetails.paymentPurpose":{
+                                        "readonly":true,
+                                        "orderNo": 4
+                                    },
+                                    "PaymentDetails.transactionType":{
+                                        "readonly":true,
+                                        "orderNo": 6
+                                    },
+                                    "PaymentDetails.paymentDate":{
+                                        "readonly":true,
+                                        "orderNo": 7
+                                    },
+                                    "BeneficiaryDetails.beneficiaryName":{
+                                        "readonly":true,
+                                        "orderNo": 1
+                                    },
+                                    "BeneficiaryDetails.beneficiaryAccountName":{
+                                        "readonly":true,
+                                        "orderNo": 2
+                                    },
+                                    "BeneficiaryDetails.beneficiaryEmailId":{
+                                        "readonly":true,
+                                        "orderNo": 3
+                                    },                  
+                                    "BeneficiaryDetails.beneficiaryMobileNumber":{
+                                        "readonly":true,
+                                        "orderNo": 4
+                                    },
+                                    "BeneficiaryDetails.creditAccountNo":{
+                                        "readonly":true,
+                                        "orderNo": 5
+                                    },
+                                    "BeneficiaryDetails.confirmAccountNo":{
+                                        "readonly":true,
+                                         "orderNo": 6
+                                    },
+                                    "BeneficiaryDetails.beneficiaryIfsc":{
+                                        "readonly":true,
+                                        "orderNo": 7
+                                    },
+                                    "BeneficiaryDetails.beneficiaryBankName":{
+                                        "readonly":true,
+                                        "orderNo": 8
+                                    },
+                                    "BeneficiaryDetails.beneficiaryBankBranch":{
+                                        "readonly":true,
+                                        "orderNo": 9
+                                    },
+                               "BeneficiaryDetails.beneficiaryTransactionParticulars":{
+                                        
+                                        "orderNo": 10
+                                    },
+                                    "BeneficiaryDetails.beneficiaryTransactionRemarks":{
+                                       
+                                        "orderNo": 11
+                                    },
+                                    "DebitAccountDetails.debitAccountName":{
+                                        "readonly":true,
+                                        "orderNo": 1
+                                    },
+                                    "DebitAccountDetails.debitAccountNumber":{
+                                        "readonly":true,
+                                        "orderNo": 2
+                                    },
+                                    "DebitAccountDetails.debitMobileNumber":{
+                                        "readonly":true,
+                                        "orderNo": 3
+                                    },  
+                                    "DebitAccountDetails.debitTransactionParticulars":{                                   "orderNo": 4
+                                    },
+                                    "DebitAccountDetails.debitTransactionRemarks":{                                       "orderNo": 5
+                                    },
+                                    "PaymentDetails.accountNumber":{
+                                        "resolver": "LoanAccountsLOVConfiguration",
+                                        "readonly":true,
+                                        "orderNo": 5                      
+                                    }
+    
+                                },
+                                "excludes": [
+                                ]
+                            }
+                        }
+    
+                    };
+                }        
             var overridesFields = function(bundlePageObj) {
                 return { 
                     "PaymentDetails":{
@@ -25,17 +278,10 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                     "DebitAccountDetails":{
                         "orderNo":30
                     },
-
-                    "PaymentDetails.fileId":{
-
-                        "condition":"model.payment.modeOfPayment == 'CHEQUE'"  
-                    },
                     "PaymentDetails.transactionType":{
-
                         "readonly":true
                     },
                     "PaymentDetails.paymentDate":{
-
                         "readonly":true
                     },
                     "BeneficiaryDetails.beneficiaryName": {
@@ -48,12 +294,16 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                         "orderNo":30
                     },         
                     "BeneficiaryDetails.beneficiaryMobileNumber":{
-                        "orderNo":40
+                        "orderNo":40, 
+                        "schema":{
+                            "maxLength": 10,
+                            "minLength": 10,
+                        }
                     },
                     "BeneficiaryDetails.creditAccountNo":{
                         "orderNo":50
                     },
-                    "BeneficiaryDetails.confirmAccountNo":{
+                    "BeneficiaryDetails.confirmAccountNo":{                       
                         "orderNo":60
                     },
                     "BeneficiaryDetails.beneficiaryBankName":{
@@ -72,7 +322,10 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                     },
 
                     "DebitAccountDetails.debitMobileNumber":{
-                        "readonly":true
+                        "schema":{
+                            "maxLength": 10,
+                            "minLength": 10,
+                        }
                     },
 
                     "DebitAccountDetails.debitAccountNumber":{
@@ -91,10 +344,11 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                     },
                     "BeneficiaryDetails.beneficiaryName":{
                         "type": "lov",
-                        "resolver": "CustomerBankAccountsLOVConfiguration"                       
-                       
-                       
-                    }
+                        "resolver": "CustomerBankAccountsLOVConfiguration"                                            
+                    },
+                    "PostReviewDecision":{
+                        "condition":"model.payment.currentStage == 'PaymentApproval'"  
+                    },
                     
                 };
             }
@@ -126,6 +380,14 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                     "DebitAccountDetails.debitMobileNumber",
                     "DebitAccountDetails.debitTransactionParticulars",
                     "DebitAccountDetails.debitTransactionRemarks",
+                    "PostReviewDecision",
+                    "PostReviewDecision.status",
+                    "PostReviewDecision.rejectsectionremarks",
+                    "PostReviewDecision.rejectsectionbutton",
+                    "PostReviewDecision.sendbacksectionremarks",
+                    "PostReviewDecision.sendbacksectionbutton",
+                    "PostReviewDecision.proceedsectionremarks",
+                    "PostReviewDecision.proceedsectionbutton",
                 ];
             }
             return {
@@ -147,9 +409,18 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                             model.payment = res.payment;
 
                     model.payment.paymentDate = new Date();
-                    model.payment.transactionType = "Manual";
+                    model.payment.transactionType = "Manual";  
+                    UIRepository.getPaymentDetails().$promise
+                    .then(function(repo) {
+                        return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model)
+                    })
+                    .then(function(form) {
+                        self.form = form;
+                        PageHelper.hideLoader();
+                    });               
 
-                        })
+                        });
+                       
                     } else {
                         var obs = PaymentProcess.get($stateParams.pageId);
                         pLoadInit = obs.toPromise();
@@ -157,18 +428,29 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                             PageHelper.hideLoader();
                             model.PaymentProcess = res;
                             model.payment = res.payment;
-                        })
+                            UIRepository.getPaymentDetails().$promise
+                            .then(function(repo) {
+                                return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model)
+                            })
+                            .then(function(form) {
+                                self.form = form;
+                                PageHelper.hideLoader();
+                            });
+  
+                        });
+                       
                     }
 
                     var formRequest = {
                         "overrides": overridesFields(model),
                         "includes": getIncludes(model),
-                        "excludes": [],
+                        "excludes": [                           
+                        ],
                         "options": {
                             "additions": [
                             {
                                 "type": "actionbox",
-                                "condition": "model.payment.id",
+                                "condition": "model.payment.id && model.payment.currentStage == 'PaymentInitiation'",
                                 "orderNo": 1000,
                                 "items": [
                                     {
@@ -195,20 +477,44 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                                         "onClick": "actions.submit(model, formCtrl, form, $event)"
                                     }
                                 ]
+                            },
+                            {
+                                "type": "actionbox",
+                                "condition": "model.payment.currentStage == 'PaymentRejected'",
+                                "orderNo": 1000,
+                                "items": [
+                                    {
+                                        "type": "button",
+                                        "title": "REJECT_CONFIRMED",
+                                        "onClick": "actions.proceed(model, formCtrl, form, $event)"
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "actionbox",
+                                "condition": "model.payment.currentStage == 'PaymentApproval'",
+                                "orderNo": 1000,
+                                "items": [
+                                    {
+                                        "type": "button",
+                                        "title": "Save",
+                                        "onClick": "actions.save(model, formCtrl, form, $event)"
+                                    }
+                                ]
                             }
                         ]
                     }
                     };
 
 
-                    UIRepository.getPaymentDetails().$promise
-                        .then(function(repo) {
-                            return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model)
-                        })
-                        .then(function(form) {
-                            self.form = form;
-                            PageHelper.hideLoader();
-                        });
+                    // UIRepository.getPaymentDetails().$promise
+                    //     .then(function(repo) {
+                    //         return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), $stateParams)
+                    //     })
+                    //     .then(function(form) {
+                    //         self.form = form;
+                    //         PageHelper.hideLoader();
+                    //     });
                 },
 
                 preDestroy: function(model, form, formCtrl, bundlePageObj, bundleModel) {
@@ -317,11 +623,7 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                             .subscribe(function (value) {
                                 PageHelper.showProgress('payment', 'payment Submited.', 5000);
                                 PageHelper.clearErrors(); 
-                                $state.go("Page.Engine", {
-                                    pageName: "payment.paymentInitiationSearch",
-                                    pageId: null
-                                }); 
-                               
+                                irfNavigator.goBack();                           
                                                             
                             }, function (err) {
                                 PageHelper.showProgress('payment', 'Oops. Some error.', 5000);
@@ -349,7 +651,7 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                                 .subscribe(function(value) {
                                     PageHelper.showProgress('payment', 'payment Proceed.', 5000);
                                     PageHelper.clearErrors();
-                                    $state.go("Page.PaymentDashboard");
+                                    irfNavigator.goBack();
                                 }, function(err) {
                                     PageHelper.showProgress('payment', 'Oops. Some error.', 5000);
                                     PageHelper.showErrors(err);

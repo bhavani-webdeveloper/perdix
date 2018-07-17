@@ -192,20 +192,6 @@ define({
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
 								$state.go("Page.Engine", {
-									pageName: "payment.PaymentRejectedQueue",
-									pageId: item.id
-								});
-							},
-							isApplicable: function(item, index) {
-
-								return true;
-							}
-						},{
-							name: "PAYMENT_REINITIATION",
-							desc: "",
-							icon: "fa fa-pencil-square-o",
-							fn: function(item, index) {
-								$state.go("Page.Engine", {
 									pageName: "payment.PaymentInitiation",
 									pageId: item.id
 								});
@@ -214,7 +200,23 @@ define({
 
 								return true;
 							}
-						}];
+                        }
+                        // ,{
+						// 	name: "PAYMENT_REINITIATION",
+						// 	desc: "",
+						// 	icon: "fa fa-pencil-square-o",
+						// 	fn: function(item, index) {
+						// 		$state.go("Page.Engine", {
+						// 			pageName: "payment.PaymentInitiation",
+						// 			pageId: item.id
+						// 		});
+						// 	},
+						// 	isApplicable: function(item, index) {
+
+						// 		return true;
+						// 	}
+                        // }
+                    ];
 					}
                 }
             }
