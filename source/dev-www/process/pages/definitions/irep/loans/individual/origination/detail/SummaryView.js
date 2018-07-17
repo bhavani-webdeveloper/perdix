@@ -255,7 +255,7 @@ define({
                             "title": "Guarantor ID",
                             "condition": "model.customer_detail.guarantors.id[3]"
                         }, {
-                            "key": "customer.firstName",
+                            "key": "business.firstName",
                             "title": "Enterprise Name"
                         }, {
                             "key": "loanAccount.productCategory",

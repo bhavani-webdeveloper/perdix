@@ -970,7 +970,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                    "CommercialCBCheck.enterpriseBureauDetails.bureau":{
                                          "schema": {                                             
-                                             "enumCode": "bureau_type"
+                                             "enumCode": "commercial_CBCheck_bureau_type"
                                         },
                                    }
                                 }
