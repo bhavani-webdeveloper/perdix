@@ -408,7 +408,8 @@
                 "CreditApproval2",
                 "CreditApproval3",
                 "CreditApproval4",
-                "CreditApproval5"
+                "CreditApproval5",
+                "LoanInitiation"
             ]
           },
           "productType": {
@@ -479,7 +480,8 @@
                 "CreditApproval2",
                 "CreditApproval3",
                 "CreditApproval4",
-                "CreditApproval5"
+                "CreditApproval5",
+                "LoanInitiation"
             ]
           },
           "doCustomerLoanAmount": {
