@@ -171,6 +171,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     var cust = loanAccount.loanCustomerRelations[i];
                                     if (cust.relation == 'APPLICANT' || cust.relation == 'Applicant' || cust.relation == 'Sole Proprieter') {
                                         bundleModel.urnNos.push(cust.urn);
+                                        loanAccount.applicantId = cust.customerId;
                                         customerIds.applicant = cust.customerId;
                                         bundleModel.customer_detail.applicant.id = cust.customerId;
                                         bundleModel.customer_detail.applicant.urn = cust.urn;
@@ -190,7 +191,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                  $this.bundlePages.push({
                                     pageClass: 'applicant',
                                     model: {
-                                        customerId: loanAccount.customerId,
+                                        customerId: loanAccount.applicantId,
                                         enrolmentProcess: loanProcess.applicantEnrolmentProcess,
                                         loanProcess: loanProcess
                                     }

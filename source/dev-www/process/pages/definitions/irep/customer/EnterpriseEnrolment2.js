@@ -967,7 +967,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "Machinery.fixedAssetsMachinaries.hypothecatedToUs": {
                                         "condition":"model.customer.fixedAssetsMachinaries[arrayIndex].isTheMachineHypothecated=='NO'"
-                                    }
+                                    },
+                                   "CommercialCBCheck.enterpriseBureauDetails.bureau":{
+                                         "schema": {
+                                             "enumCode": "bureau_type"
+                                        },
+                                   }
                                 }
                             },
                             "AppraisalReview": {
