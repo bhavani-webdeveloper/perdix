@@ -36,7 +36,6 @@ define([], function() {
                     "CreateBatch.debitAccountName",
                     "CreateBatch.beneficiaryName",
                     "CreateBatch.paymentType",
-                    "CreateBatch.paymentMode",
                     "CreateBatch.paymentPurpose",
                     "CreateBatch.beneficiaryAccountName",
                     "CreateBatch.submit",

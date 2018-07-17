@@ -658,6 +658,60 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                                     PageHelper.hideLoader();
                                 });
                         
+                    },
+                    reject: function(model, formCtrl, form, $event) {
+                        PageHelper.clearErrors();
+                        if(PageHelper.isFormInvalid(formCtrl)) {
+                            return false;
+                        }
+                        formCtrl.scope.$broadcast('schemaFormValidate');
+
+                        if (formCtrl && formCtrl.$invalid) {
+                            PageHelper.showProgress("payment", "Your form have errors. Please fix them.", 5000);
+                            return false;
+                        }
+                            PageHelper.showLoader();
+                            model.PaymentProcess.reject()
+                                .finally(function() {
+                                    PageHelper.hideLoader();
+                                })
+                                .subscribe(function(value) {
+                                    PageHelper.showProgress('payment', 'payment Reject.', 5000);
+                                    PageHelper.clearErrors();
+                                    irfNavigator.goBack();
+                                }, function(err) {
+                                    PageHelper.showProgress('payment', 'Oops. Some error.', 5000);
+                                    PageHelper.showErrors(err);
+                                    PageHelper.hideLoader();
+                                });
+                        
+                    },
+                    sendBack: function(model, formCtrl, form, $event) {
+                        PageHelper.clearErrors();
+                        if(PageHelper.isFormInvalid(formCtrl)) {
+                            return false;
+                        }
+                        formCtrl.scope.$broadcast('schemaFormValidate');
+
+                        if (formCtrl && formCtrl.$invalid) {
+                            PageHelper.showProgress("payment", "Your form have errors. Please fix them.", 5000);
+                            return false;
+                        }
+                            PageHelper.showLoader();
+                            model.PaymentProcess.sendBack()
+                                .finally(function() {
+                                    PageHelper.hideLoader();
+                                })
+                                .subscribe(function(value) {
+                                    PageHelper.showProgress('payment', 'payment Send Back.', 5000);
+                                    PageHelper.clearErrors();
+                                    irfNavigator.goBack();
+                                }, function(err) {
+                                    PageHelper.showProgress('payment', 'Oops. Some error.', 5000);
+                                    PageHelper.showErrors(err);
+                                    PageHelper.hideLoader();
+                                });
+                        
                     }
                 }
             };
