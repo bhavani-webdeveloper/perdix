@@ -19,10 +19,11 @@
             "fileId": {
                 "title": "UPLOAD_OF_CHEQUE",
                 "key": "payment.fileId",
-                "category": "CustomerEnrollment",
-                "subCategory": "IDENTITYPROOF",
+                "category": "Collection",
+                "subCategory": "Cheque",
                 "type": "file",
-                "fileType": "application/pdf"
+                "required":true,
+                "fileType": "*/*"
             },
             "paymentPurpose": {
                 "key": "payment.paymentPurpose",
@@ -60,6 +61,7 @@
             "beneficiaryName": {
                 "key": "payment.beneficiaryName",
                 "orderNo":1,
+                "required":true,
                 "type": "string",
                 "title": "BENEFICIARY_NAME"
             },
@@ -71,7 +73,8 @@
             },
             "beneficiaryEmailId": {
                 "key": "payment.beneficiaryEmailId",
-                "type": "string",
+                "type": "email",
+                "pattern": "^\\S+@\\S+$",
                 "title": "BENEFICIARY_EMAIL_ID"
             },
             "beneficiaryMobileNumber": {
@@ -93,6 +96,7 @@
             "beneficiaryIfsc": {
                 "key": "payment.beneficiaryIfsc",
                 "type": "lov",
+                "lovonly": true,
                 "required":true,
                 "title": "BANK_IFSC"
             },
@@ -128,6 +132,7 @@
                 "key": "payment.debitAccountName",
                 "type": "lov",
                 "lovonly": true,
+                "required":true,
                 "title": "DEBIT_ACCOUNT_NAME"
             },
             "debitAccountNumber": {
@@ -204,7 +209,7 @@
             }
 
         }
-    },
+    },                
     "BatchSummary": {
         "type": "box",
         "title": "BATCH_SUMMARY",
@@ -267,7 +272,7 @@
                     "title": "REJECT",
                     "required": true,
                     "onClick": "actions.reject(model, formCtrl, form, $event)"
-                },
+                },        
             "sendbacksectionremarks":
                 {
                 "title": "REMARKS",
@@ -282,7 +287,7 @@
                 "onClick": "actions.sendBack(model, formCtrl, form, $event)"
                  },
         "proceedsectionremarks": {
-
+            
                 "title": "REMARKS",
                 "key": "review.remarks",
                 "type": "textarea",
@@ -295,7 +300,7 @@
                 "onClick": "actions.proceed(model, formCtrl, form, $event)"
             }
         }
-
+    
     },
     "UploadPaymentConfirmation": {
         "type": "box",
@@ -310,11 +315,11 @@
             "uploadPaymentConfirmation": {
                 "key": "payment.uploadPaymentConfirmation",
                 "type": "file",
+                "category": "ACH",
+                "subCategory": "cat2",
                 "title": "UPLOAD_PAYMENT_CONFIRMATION",
-                "category": "CustomerEnrollment",
-                "subCategory": "IDENTITYPROOF",
                 "fileType": "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
             }
         }
-    }
+    }    
 }
