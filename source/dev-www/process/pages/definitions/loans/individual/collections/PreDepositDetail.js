@@ -27,6 +27,10 @@ define({
                         model.totalCashCollected += cashItems.repaymentAmount;
                     })
                 }
+                if(model.totalCashCollected){
+                    var roundingPrecision = SessionStore.getGlobalSetting("currencyPrecision");
+                    model.totalCashCollected = _.round(model.totalCashCollected, roundingPrecision),
+                }
             },
             form: [{
                 "type": "box",
