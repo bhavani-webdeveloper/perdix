@@ -330,55 +330,60 @@ function($log, $q, Enrollment,formHelper, PageHelper, irfProgressMessage, Utils,
             }
         }
 
-        if(model.customer.physicalAssets && model.customer.physicalAssets.length){
-            for(i in model.customer.physicalAssets){
-                if(model.customer.physicalAssets[i].nameOfOwnedAsset && (model.customer.physicalAssets[i].assetType == null)){
-                     model.customer.physicalAssets[i].assetType=model.customer.physicalAssets[i].nameOfOwnedAsset;
-                }
-            }
-        }
+      
 
         if (model.customer.physicalAssets && model.customer.physicalAssets.length && model.customer.physicalAssets.length > 0) {
             for (i = 0; i < model.customer.physicalAssets.length; i++) {
-                    var ownedAssetDetails1 = formHelper.enum('asset_Details').data;
-                    var assetunit1 = formHelper.enum('asset_unit').data;
-                    var ownedAssetDetails=[];
-                    var assetunit=[];
-                    if (ownedAssetDetails1 && ownedAssetDetails1.length) {
-                        for (j in ownedAssetDetails1) {
-                            if (ownedAssetDetails1[j] && ownedAssetDetails1[j].parentCode &&  ((ownedAssetDetails1[j].parentCode).toUpperCase() == (model.customer.physicalAssets[i].assetType).toUpperCase())) {
-                                ownedAssetDetails.push({
-                                    name: ownedAssetDetails1[j].name,
-                                    id: ownedAssetDetails1[j].value
-                                })
-                                break;
-                            }
-                        }
-                    }
-                    if (ownedAssetDetails.length && ownedAssetDetails.length > 0) {
-                        model.customer.physicalAssets[i].ownedAssetallowed = true;
-                        continue;
+                    if(model.customer.physicalAssets[i].nameOfOwnedAsset && (model.customer.physicalAssets[i].assetType == null)){
+                        model.customer.physicalAssets[i].assetType=model.customer.physicalAssets[i].nameOfOwnedAsset;
                     }
 
-                    if (assetunit1 && assetunit1.length) {
-                        for (k in assetunit1) {
-                            if ( assetunit1[k] && assetunit1[k].parentCode && ((assetunit1[k].parentCode).toUpperCase() == (model.customer.physicalAssets[i].assetType).toUpperCase())) {
-                                assetunit.push({
-                                    name: assetunit1[k].name,
-                                })
-                                break;
+                    if (model.customer.physicalAssets[i].assetType) {
+                        var ownedAssetDetails1 = formHelper.enum('asset_Details').data;
+                        var assetunit1 = formHelper.enum('asset_unit').data;
+                        var ownedAssetDetails = [];
+                        var assetunit = [];
+                        if (ownedAssetDetails1 && ownedAssetDetails1.length) {
+                            for (j in ownedAssetDetails1) {
+                                if (ownedAssetDetails1[j] && ownedAssetDetails1[j].parentCode && ((ownedAssetDetails1[j].parentCode).toUpperCase() == (model.customer.physicalAssets[i].assetType).toUpperCase())) {
+                                    ownedAssetDetails.push({
+                                        name: ownedAssetDetails1[j].name,
+                                        id: ownedAssetDetails1[j].value
+                                    })
+                                    break;
+                                }
                             }
                         }
-                    }
-                    if (assetunit.length && assetunit.length > 0) {
-                        model.customer.physicalAssets[i].assetunitallowed = true;
-                    }
-                
+                        if (ownedAssetDetails.length && ownedAssetDetails.length > 0) {
+                            model.customer.physicalAssets[i].ownedAssetallowed = true;
+                            continue;
+                        }
+                        if (assetunit1 && assetunit1.length) {
+                            for (k in assetunit1) {
+                                if (assetunit1[k] && assetunit1[k].parentCode && ((assetunit1[k].parentCode).toUpperCase() == (model.customer.physicalAssets[i].assetType).toUpperCase())) {
+                                    assetunit.push({
+                                        name: assetunit1[k].name,
+                                    })
+                                    break;
+                                }
+                            }
+                        }
+                        if (assetunit.length && assetunit.length > 0) {
+                            model.customer.physicalAssets[i].assetunitallowed = true;
+                        }
+                    }   
             }
         }
 
+        
+
         if(model.customer.familyMembers && model.customer.familyMembers.length){
             for(i in model.customer.familyMembers){
+                if(model.customer.maritalStatus && ((model.customer.familyMembers[i].relationShip).toLowerCase() === 'self')){
+                    if(!model.customer.familyMembers[i].maritalStatus){
+                       model.customer.familyMembers[i].maritalStatus= model.customer.maritalStatus;
+                    }
+                }
                 if(model.customer.familyMembers[i].dateOfBirth){
                     model.customer.familyMembers[i].age = moment().diff(moment(model.customer.familyMembers[i].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                 }
@@ -401,6 +406,8 @@ function($log, $q, Enrollment,formHelper, PageHelper, irfProgressMessage, Utils,
         
 
         Utils.removeNulls(model,true);
+        model.customer.ownedAssetDetails = [];
+        model.customer.assetunit = [];
         return model;
     };
 

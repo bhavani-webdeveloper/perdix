@@ -166,7 +166,7 @@ define({
                 }, {
                     "key": "group.grtPhoto",
                     "title": "GRT_PHOTO",
-                    required: true,
+                    //required: true,
                     "category": "Group",
                     "subCategory": "GRTPHOTO",
                     "type": "file",
@@ -201,7 +201,7 @@ define({
                     "key": "group.grtEndPhoto",
                     "type": "file",
                     "offline": true,
-                    required: true,
+                    //required: true,
                     "title": "GRT_PHOTO",
                     "category": "Group",
                     "subCategory": "GRTPHOTO",

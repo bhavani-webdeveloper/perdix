@@ -621,7 +621,6 @@
                         "required": [
                             "dateOfBirth",
                             "educationStatus",
-                            "maritalStatus",
                             "familyMemberFirstName",
                             "gender",
                             "relationShip"
