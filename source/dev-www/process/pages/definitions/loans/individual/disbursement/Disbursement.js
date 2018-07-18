@@ -420,7 +420,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
             },
             {
                 "type": "box",
-                "title": "Internal ForeClosure Details",
+                "title": "Linked Account No",
                 "condition": "model.siteCode == 'kinara' && model.loanAccountDisbursementSchedule.linkedAccountNumber",
                 "items": [{
                         "type": "fieldset",

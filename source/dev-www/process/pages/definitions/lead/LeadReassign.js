@@ -24,6 +24,7 @@ irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$stateParams
                             model.customer.branchId = branches[i].value;
                         }
                     }
+                   
                 }
 
                 /*if ($stateParams.pageId) {
@@ -316,7 +317,8 @@ irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$stateParams
                         reqData.leads[i].branchId = model.customer.branchId;
                         if(reqData.leads[i].transactionType && reqData.leads[i].transactionType.toLowerCase() == 'renewal'){
                             reqData.stage = 'Inprocess';
-                            reqData.centreId = reqData.leads[i].centreId;
+                            //reqData.centreId = reqData.leads[i].centreId;
+                            reqData.centreId = model.lead.centreId;
                             reqData.leads[i].leadStatus = 'FollowUp'
                         }
                         $log.info(model.customer.branchId);
