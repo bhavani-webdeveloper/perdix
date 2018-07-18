@@ -179,7 +179,7 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                     for (j in sampleColumnsConfig.columns) {
                         var columnForm = {
                             "title": sampleColumnsConfig.columns[j].user_friendly_name,
-                            "readonly": $stateParams.pageData.readonly || sampleType == "E",
+                            "readonly": $stateParams.pageData.readonly || (sampleType == "E" && model.sample.manual_sample !='1'),
                             "key": "sample.column_values[" + j + "]",
                             type: "text"
                         }
@@ -241,7 +241,8 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                                 // "sample_id": 0,
                                 // "status": "2",
                                 "sample_newgen_uid": sampleSubId,
-                                "column_values": []
+                                "column_values": [],
+                                "manual_sample":"1"
                             };
                             for (j in sampleColumnsConfig.columns) {
                                 model.sample.column_values[j] = "";
@@ -251,6 +252,9 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                                 if (sampleType == "E") {
                                     if (sampleSubId == sampleSet[i].sub_id) {
                                         model.sample = sampleSet[i];
+                                        if(model.sample.manual_sample == '1'){
+                                            sampleType = "M";
+                                        }
                                         break;
                                     }
                                 } else if (sampleSubId == sampleSet[i].sample_newgen_uid) { // sampleType == "M"
