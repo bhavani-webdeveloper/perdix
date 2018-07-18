@@ -75,7 +75,7 @@ define([],function(){
 						var promise = Worklist.findWorklists({
 							'customerId': searchOptions.customerId,
 							'bracnhId': searchOptions.branchId,
-							'requestType': 'next-tranche',
+							'requestType': 'tranche',
 							'accountNumber': searchOptions.accountNumber,
 							'customerURN': searchOptions.customerUrn,
 							'requestDate': searchOptions.requestDate,
