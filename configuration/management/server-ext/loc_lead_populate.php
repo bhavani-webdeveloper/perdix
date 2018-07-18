@@ -56,7 +56,7 @@ cfm.education_status,
 l.loan_purpose_1 AS loan_purpose1, 
 l.loan_purpose_2 AS loan_purpose2, 
 l.loan_purpose_3 AS loan_purpose3,
-l.loan_amount_requested_in_paisa AS loan_amount_requested,
+l.loan_amount_requested_in_paisa/100 AS loan_amount_requested,
 l.account_number AS linked_account_number,
 IFNULL(l.base_loan_account, l.account_number) AS base_loan_account,
 'Enterprise' AS 'customer_type',
@@ -98,7 +98,7 @@ HAVING (EMICount = gl.value AND gl.value-3 <= paidEMI)");
 foreach($customers as $customer){
 	unset($customer->EMICount);
 	unset($customer->paidEMI);
-	unset($customer->value);
+	unset($customer->value);
 	$customer = (array)$customer;
 	$leadinsert = Leads::create($customer);
 	
