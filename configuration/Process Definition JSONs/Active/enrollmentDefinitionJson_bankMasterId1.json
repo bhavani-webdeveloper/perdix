@@ -2612,17 +2612,7 @@
               "Completed"
             ]
           },
-        "photoImageId": {
-            "title": "photoImageId",
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 100,
-            "captureStages": [
-              "BasicEnrolment",
-              "Completed"
-            ]
-          }
-      ,"vehiclesOwned": {
+         "vehiclesOwned": {
             "title": "vehiclesOwned",
             "type": "number",
             "minimum": 0,
@@ -3840,7 +3830,7 @@
         "required": [
         ],
         "properties": {
-          "Completed": {
+          "customerId": {
             "title": "Customer Id",
             "type": "number",
             "minimum": 0,
@@ -4212,7 +4202,7 @@
             }
           }
         }
-      },
+      }, 
       "bankStatements": {
         "title": "Bank Statement",
         "type": "array",
@@ -4236,7 +4226,7 @@
                 "Completed"
               ]
             },
-      "endMonth": {
+           "endMonth": {
               "title": "End Month",
               "type": "string",
               "format": "date",
