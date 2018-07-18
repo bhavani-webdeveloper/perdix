@@ -1,0 +1,289 @@
+{
+   "stages": [{
+         "order": 1,
+         "code": "branchPostingEntry",
+         "name": "branchPostingEntry",
+         "stageType": "CAPTURE",
+         "isAccountPosting": false,
+         "allowedRoles": [
+            "WM"
+         ]
+      },{
+         "order": 2,
+         "code": "branchPostingReview",
+         "name": "branchPostingReview",
+         "stageType": "ACCOUNTINGPOSTING",
+         "isAccountPosting": true,
+         "allowedRoles": [
+            "WM"
+         ]
+      },{
+         "order": 3,
+         "code": "Rejected",
+         "name": "Rejected",
+         "stageType": "CAPTURE",
+         "isAccountPosting": false,
+         "allowedRoles": [
+            "WM"
+         ]
+      },{
+         "order": 4,
+         "code": "Completed",
+         "name": "Completed",
+         "stageType": "CAPTURE",
+         "isAccountPosting": false,
+         "allowedRoles": [
+            "WM"
+         ]
+      }
+   ],
+   "schema": {
+      "$schema": "http://json-schema.org/draft-04/schema#",
+      "type": "object",
+      "title": "Comment",
+      "required": [
+         "journalEntry"
+      ],
+      "properties": {
+         "journalEntry": {
+            "title": "journal Entry",
+            "type": "object",
+            "required": [
+               "transactionName",
+               "transactionType",
+               "transactionAmount",
+               "transactionDate",
+               "valueDate",
+               
+			   "branchId"
+            ],
+            "properties": {
+               "transactionName": {
+                  "title": "Transaction Name",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 50,
+                  "captureStages": [
+                     "branchPostingEntry",
+                     "branchPostingReview",
+                     "Completed",
+                     "Rejected"
+                  ]
+               },
+               "relatedAccountNo": {
+                  "title": "Related Account No",
+                  "type": "String",
+                  "minLength": 1,
+                  "maxLength": 30,
+                  "captureStages": [
+                     "branchPostingEntry",
+                     "branchPostingReview",
+                     "Completed",
+                     "Rejected"
+                  ]
+               },
+
+               "transactionType": {
+                  "title": "Transaction Type",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 20,
+                  "captureStages": [
+                     "branchPostingEntry",
+                     "branchPostingReview",
+                     "Completed",
+                     "Rejected"
+                  ]
+               },
+
+               "transactionAmount": {
+                  "title": "Transaction Amount",
+                  "type": "Integer",
+                  "minimum": 1,
+                  "maximum": 99999999,
+                  "captureStages": [
+                     "branchPostingEntry",
+                     "branchPostingReview",
+                     "Completed",
+                     "Rejected"
+                  ]
+               },
+               "transactionDate": {
+                  "title": "Transaction Date",
+                  "type": "string",
+                  "format": "date",
+                  "captureStages": [
+                     "branchPostingEntry",
+                     "branchPostingReview",
+                     "Completed",
+                     "Rejected"
+                  ]
+               },
+               "productType": {
+                  "title": "productType",
+                  "type": "string",
+                 
+                  "captureStages": [
+                     "branchPostingEntry",
+                     "branchPostingReview",
+                     "Completed",
+                     "Rejected"
+                  ]
+               },
+               "entryType":{
+                  "title": "PRODUCT_TYPE",
+                  "type": "string",
+                  "captureStages":[
+                     "branchPostingEntry",
+                     "branchPostingReview",
+                     "Completed",
+                     "Rejected"
+                  ]
+               },
+               "valueDate": {
+                  "title": "Value Date",
+                  "type": "string",
+                  "format": "date",
+                  "captureStages": [
+                     "branchPostingEntry",
+                     "branchPostingReview",
+                     "Completed",
+                     "Rejected"
+                  ]
+               },
+               "remarks": {
+                  "title": "Remarks",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200,
+                  "captureStages": [
+                     "branchPostingEntry",
+                     "branchPostingReview",
+                     "Completed",
+                     "Rejected"
+                  ]
+               },
+               "instrumentType": {
+                  "title": "InstrumentType",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 20,
+                  "captureStages": [
+                     "branchPostingEntry",
+                     "branchPostingReview",
+                     "Completed",
+                     "Rejected"
+                  ]
+               },
+               "instrumentNumber": {
+                  "title": "InstrumentNumber",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 45,
+                  "captureStages": [
+                     "branchPostingEntry",
+                     "branchPostingReview",
+                     "Completed",
+                     "Rejected"
+                  ]
+               },
+               "instrumentDate": {
+                  "title": "InstrumentDate",
+                  "type": "string",
+                  "format": "date",
+                  "captureStages": [
+                     "branchPostingEntry",
+                     "branchPostingReview",
+                     "Completed",
+                     "Rejected"
+                  ]
+               },
+               "ifscCode": {
+                  "title": "IfscCode",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 45,
+                  "captureStages": [
+                     "branchPostingEntry",
+                     "branchPostingReview",
+                     "Completed",
+                     "Rejected"
+                  ]
+               },
+               "instrumentBankName": {
+                  "title": "instrumentBankName",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 300,
+                  "captureStages": [
+                     "branchPostingEntry",
+                     "branchPostingReview",
+                     "Completed",
+                     "Rejected"
+                  ]
+               },
+               "instrumentBranchName": {
+                  "title": "instrumentBranchName",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200,
+                  "captureStages": [
+                     "branchPostingEntry",
+                     "branchPostingReview",
+                     "Completed",
+                     "Rejected"
+                  ]
+               },
+               "billNumber": {
+                  "title": "bil Number",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200,
+                  "captureStages": [
+                     "branchPostingEntry",
+                     "branchPostingReview",
+                     "Completed",
+                     "Rejected"
+                  ]
+               },
+               "billDate": {
+                  "title": "Bill Date",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200,
+                  "captureStages": [
+                     "branchPostingEntry",
+                     "branchPostingReview",
+                     "Completed",
+                     "Rejected"
+                  ]
+               },
+               "fileId": {
+                  "title": "fileId",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200,
+                  "captureStages": [
+                     "branchPostingEntry",
+                     "branchPostingReview",
+                     "Completed",
+                     "Rejected"
+                  ]
+               },
+               "branchId": {
+                  "title": "branchId",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200,
+                  "captureStages": [
+                     "branchPostingEntry",
+                     "branchPostingReview",
+                     "Completed",
+                     "Rejected"
+                  ]
+               }
+            }
+         }
+      }
+   }
+}
