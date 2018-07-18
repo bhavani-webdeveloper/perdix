@@ -41,15 +41,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "loanProcess.loanAccount.currentStage": {
                         "KYC": {
                             "excludes": [
-                                "IndividualFinancials",
-                                "FamilyDetails.familyMembers.noOfDependents",
-                                "FamilyDetails.familyMembers.familyMemberFirstName",
-                                "FamilyDetails.familyMembers.anualEducationFee",
-                                "FamilyDetails.familyMembers.salary",
-                                "FamilyDetails.familyMembers.incomes",
-                                "FamilyDetails.familyMembers.incomes.incomeSource",
-                                "FamilyDetails.familyMembers.incomes.incomeEarned",
-                                "FamilyDetails.familyMembers.incomes.frequency",
+                                "IndividualFinancials",                               
                                 "HouseVerification.latitude",
                                 "HouseVerification.houseVerificationPhoto",
                                 "HouseVerification.date",
