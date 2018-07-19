@@ -375,7 +375,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         "enumCode":"loan_product_frequency"
                     },
                     {
-                        "key": "loanAccount.customer.firstName",
+                        "key": "loanAccount.applicantName",
                         "title": "CUSTOMER_NAME",
                         "readonly": true
                     },
@@ -764,7 +764,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
             },
             {
             "type": "box",
-            "title": "ENTITY_DETAILS",
+            "title": "APPLICANT_CO_APPLICANT_DETAILS",
             "readonly": true,
             "items": [{
                     "key": "loanAccount.applicant",
