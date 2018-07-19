@@ -1,0 +1,7 @@
+version: '3'
+
+services:
+  perdix-client:
+    build: .
+    ports:
+      - 80:80
