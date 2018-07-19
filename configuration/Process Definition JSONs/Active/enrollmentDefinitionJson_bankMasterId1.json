@@ -635,7 +635,7 @@
               "title": "Loan Amount In Paisa",
               "type": "number",
               "minimum": 0,
-              "maximum": 10000000,
+              "maximum": 1000000000,
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"
@@ -665,7 +665,7 @@
               "title": "outstandingAmountInPaisa",
               "type": "number",
               "minimum": 0,
-              "maximum": 10000000,
+              "maximum": 1000000000,
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"
