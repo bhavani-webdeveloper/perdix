@@ -162,7 +162,11 @@ define({
                         return [
                             {
                                 title: 'Date',
-                                data: 'repaymentDate'
+                                data: 'repaymentDate',
+                                render: function(data, type, full, meta) {
+                                    var yourDate = new Date(data);
+                                    return yourDate.toISOString().slice(0, 10)
+                                }
                             },
                             {
                                 title: 'BRANCH_NAME',
