@@ -117,7 +117,7 @@ define({
                 }, {
                     "key": "group.cgt3Photo",
                     "title": "CGT_3_PHOTO",
-                    required: true,
+                    //required: true,
                     "category": "Group",
                     "subCategory": "CGT3PHOTO",
                     "type": "file",
@@ -159,7 +159,7 @@ define({
                 }, {
                     "key": "group.cgt3EndPhoto",
                     "title": "CGT_3_PHOTO",
-                    required: true,
+                    //required: true,
                     "category": "Group",
                     "subCategory": "CGT3PHOTO",
                     "type": "file",

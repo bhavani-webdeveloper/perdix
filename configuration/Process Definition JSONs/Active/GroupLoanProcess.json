@@ -1007,19 +1007,13 @@
                "type": "object",
                "required": [
                   "cgt1DoneBy",
-                  "cgt1Photo",
-                  "cgt1EndPhoto",
                   "cgt1Remarks",
                   "cgtDate1",
                   "cgtEndDate1",
                   "cgt2DoneBy",
-                  "cgt2Photo",
-                  "cgt2EndPhoto",
                   "cgtDate2",
                   "cgt2Remarks",
                   "cgtEndDate2",
-                  "cgt3Photo",
-                  "cgt3EndPhoto",
                   "cgtDate3",
                   "cgtEndDate3",
                   "cgt3Remarks"
@@ -1240,8 +1234,6 @@
                "type": "object",
                "required": [
                   "grtDoneBy",
-                  "grtPhoto",
-                  "grtEndPhoto",
                   "grtRemarks",
                   "grtDate",
                   "grtEndDate"

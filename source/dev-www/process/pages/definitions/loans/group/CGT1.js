@@ -141,7 +141,7 @@ define({
                     "enumCode": "partner"
                 }, {
                     "key": "group.cgt1Photo",
-                    required: true,
+                    //required: true,
                     "title": "CGT_1_PHOTO",
                     "category": "Group",
                     "subCategory": "CGT1PHOTO",
@@ -184,7 +184,7 @@ define({
                     "longitude": "group.cgt1Longitude"
                 }, {
                     "key": "group.cgt1EndPhoto",
-                    required: true,
+                    //required: true,
                     "title": "CGT_1_PHOTO",
                     "category": "Group",
                     "subCategory": "CGT1PHOTO",

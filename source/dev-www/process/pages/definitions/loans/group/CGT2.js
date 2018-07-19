@@ -117,7 +117,7 @@ define({
                     "parentValueExpr": "model.group.branchId",
                 }, {
                     "key": "group.cgt2Photo",
-                    required: true,
+                    //required: true,
                     "title": "CGT_2_PHOTO",
                     "category": "Group",
                     "subCategory": "CGT1PHOTO",
@@ -160,7 +160,7 @@ define({
                     "longitude": "group.cgt2Longitude"
                 }, {
                     "key": "group.cgt2EndPhoto",
-                    required: true,
+                    //required: true,
                     "title": "CGT_2_PHOTO",
                     "category": "Group",
                     "subCategory": "CGT2PHOTO",
