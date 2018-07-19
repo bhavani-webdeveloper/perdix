@@ -176,6 +176,6 @@ irf.pages.run(["Model_ELEM_FC", "MODEL_ELEM_COMMONS", "$rootScope", "SessionStor
         Model_ELEM_FC.authToken = AuthTokenHelper.getAuthData().access_token;
 		Model_ELEM_FC.imageCompressionRatio = SessionStore.getGlobalSetting("imageCompressionRatio");
 		Model_ELEM_FC.compressionRatio = SessionStore.getGlobalSetting("compressionRatio");
-		MODEL_ELEM_COMMONS.defaultGeoLocationPLugin = SessionStore.getGlobalSetting("cordova.defaultGeoLocationPLugin");
+		MODEL_ELEM_COMMONS.defaultGeoLocationPLugin = SessionStore.getGlobalSetting("cordova.defaultGeoLocationPlugin");
 	})
 }]);
