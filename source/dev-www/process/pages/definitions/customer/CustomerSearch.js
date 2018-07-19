@@ -34,7 +34,6 @@ function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionSto
 			title: "Search Customers",
 	            searchForm: [{
 	                "type": "section",
-	                condition: "model.siteCode != 'sambandh'",
 	                items: [{
 	                    key: "first_name",
 	                }, {
@@ -63,27 +62,6 @@ function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionSto
 	                }, {
 	                    key: "centre",
 	                }]
-	            }, {
-	                "type": "section",
-	                condition: "model.siteCode == 'sambandh'",
-	                items: [{
-	                        key: "branch",
-	                        enumCode: "userbranches",
-	                        condition: "model.siteCode=='sambandh' || model.siteCode =='IREPDhan'"
-	                    }, {
-	                        key: "centre",
-	                    }, {
-	                        key: "first_name",
-	                    }, {
-	                        key: "lastName",
-	                        condition: "model.siteCode != 'saija'"
-	                    }, {
-	                        key: "urnNo"
-	                    }, {
-	                        key: "kyc_no",
-	                    },
-
-	                ]
 	            }],
 			searchSchema: {
 				"type": 'object',
