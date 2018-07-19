@@ -138,3 +138,11 @@ irf.pages.config([
 
 	elemConfig.configNavigator(irfNavigatorProvider.factory);
 }]);
+
+irf.pages.run(["Model_ELEM_FC", "$rootScope", "SessionStore", "AuthTokenHelper", function(Model_ELEM_FC, $rootScope, SessionStore, AuthTokenHelper) {
+	$rootScope.$on("irf-login-success", function() {
+        Model_ELEM_FC.authToken = AuthTokenHelper.getAuthData().access_token;
+		Model_ELEM_FC.imageCompressionRatio = SessionStore.getGlobalSetting("imageCompressionRatio");
+		Model_ELEM_FC.compressionRatio = SessionStore.getGlobalSetting("compressionRatio");
+	})
+}]);

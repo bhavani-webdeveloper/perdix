@@ -592,7 +592,15 @@ function($log, $q, Enrollment,formHelper, PageHelper, irfProgressMessage, Utils,
             model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
         } else if (aadhaarData.yob) {
             $log.debug('aadhaarData yob: ' + aadhaarData.yob);
-            model.customer.dateOfBirth = aadhaarData.yob + '-01-01';
+            if (model.customer.dateOfBirth) {
+                var dateOfBirth = moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat());
+                var month = dateOfBirth.format('M');
+                var day = dateOfBirth.format('D');
+                var year = dateOfBirth.format('YYYY');
+                model.customer.dateOfBirth = aadhaarData.yob + '-' + month + '-' + day;
+            } else {
+                model.customer.dateOfBirth = aadhaarData.yob + '-01-01';
+            }
             model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
         }
         if (!model.customer.identityProof && !model.customer.identityProofNo
