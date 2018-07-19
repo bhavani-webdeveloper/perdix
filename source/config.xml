@@ -40,4 +40,5 @@
     <engine name="android" spec="~6.3.0" />
     <plugin name="irf-bluetooth-plugin" spec="^1.2.0" />
     <plugin name="irf-sqlite-cordova" spec="^1.0.0" />
+    <plugin name="location" spec="https://github.com/snokleby/cordova-fusedlocation.git" />
 </widget>

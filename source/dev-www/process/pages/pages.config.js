@@ -1,6 +1,6 @@
 irf.pages.config([
-	"$stateProvider", "irfElementsConfigProvider", "Model_ELEM_FC", "irfNavigatorProvider", "formHelperProvider",
-	function($stateProvider, elemConfig, Model_ELEM_FC, irfNavigatorProvider, formHelperProvider) {
+	"$stateProvider", "irfElementsConfigProvider", "Model_ELEM_FC", "MODEL_ELEM_COMMONS", "irfNavigatorProvider", "formHelperProvider",
+	function($stateProvider, elemConfig, Model_ELEM_FC, MODEL_ELEM_COMMONS, irfNavigatorProvider, formHelperProvider) {
 	var statesDefinition = [{
 		name: "Page.LeadDashboard",
 		url: "/LeadDashboard",
@@ -158,7 +158,8 @@ irf.pages.config([
 	});
 
 	elemConfig.configFileUpload(Model_ELEM_FC);
-
+	elemConfig.configCommons(MODEL_ELEM_COMMONS);
+	
 	elemConfig.configPikaday({
 		minDate: new Date(1800, 0, 1),
 		maxDate: new Date(2050, 12, 31),
@@ -170,10 +171,11 @@ irf.pages.config([
 
 	elemConfig.configFormHelper(formHelperProvider.factory);
 }]);
-irf.pages.run(["Model_ELEM_FC", "$rootScope", "SessionStore", "AuthTokenHelper", function(Model_ELEM_FC, $rootScope, SessionStore, AuthTokenHelper) {
+irf.pages.run(["Model_ELEM_FC", "MODEL_ELEM_COMMONS", "$rootScope", "SessionStore", "AuthTokenHelper", function(Model_ELEM_FC, MODEL_ELEM_COMMONS, $rootScope, SessionStore, AuthTokenHelper) {
 	$rootScope.$on("irf-login-success", function() {
         Model_ELEM_FC.authToken = AuthTokenHelper.getAuthData().access_token;
 		Model_ELEM_FC.imageCompressionRatio = SessionStore.getGlobalSetting("imageCompressionRatio");
 		Model_ELEM_FC.compressionRatio = SessionStore.getGlobalSetting("compressionRatio");
+		MODEL_ELEM_COMMONS.defaultGeoLocationPLugin = SessionStore.getGlobalSetting("cordova.defaultGeoLocationPLugin");
 	})
 }]);

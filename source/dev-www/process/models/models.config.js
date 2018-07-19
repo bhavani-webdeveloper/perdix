@@ -9,4 +9,7 @@ irf.models
 		'compressionRatio': 80,
 		'imageCompressionRatio': 75
 	})
+	.constant('MODEL_ELEM_COMMONS',{
+		'defaultGeoLocationPLugin': 'cordovaFusedLocation'
+	})
 ;
