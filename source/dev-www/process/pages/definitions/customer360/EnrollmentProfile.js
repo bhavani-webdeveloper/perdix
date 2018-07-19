@@ -1024,6 +1024,7 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                 key: "customer.physicalAssets",
                 titleExpr: "model.customer.physicalAssets[arrayIndex].assetType",
                 type: "array",
+                startEmpty: true,
                 items: [
                 {
                     key: "customer.physicalAssets[].assetType",
@@ -1475,6 +1476,12 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                     $log.info(model);
                     if (!( EnrollmentHelper.validateDate(model))) {
                         return false;
+                    }
+                    if (model.customer.latitude == "0") {
+                            delete model.customer.latitude;
+                    }
+                    if (model.customer.longitude == "0") {
+                        delete model.customer.longitude;
                     }
                     var reqData = _.cloneDeep(model);
                     EnrollmentHelper.fixData(reqData);
