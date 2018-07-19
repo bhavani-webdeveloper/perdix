@@ -1022,6 +1022,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                             key: "customer.physicalAssets",
                             titleExpr: "model.customer.physicalAssets[arrayIndex].assetType",
                             type: "array",
+                            startEmpty: true,
                             items: [
                                {
                                    key: "customer.physicalAssets[].assetType",
@@ -1488,11 +1489,11 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                             }
 
                             if(model.customer.latitude=="0"){
-                               model.customer.latitude=""; 
+                               delete model.customer.latitude; 
                             }
                            
-                            if(model.customer.longitude="0"){
-                                model.customer.longitude="";
+                            if(model.customer.longitude=="0"){
+                                delete model.customer.longitude;
                             }
                             
                             var reqData = _.cloneDeep(model);
