@@ -29,7 +29,7 @@ define({
                 }
                 if(model.totalCashCollected){
                     var roundingPrecision = SessionStore.getGlobalSetting("currencyPrecision");
-                    model.totalCashCollected = _.round(model.totalCashCollected, roundingPrecision),
+                    model.totalCashCollected = _.round(model.totalCashCollected, roundingPrecision)
                 }
             },
             form: [{
