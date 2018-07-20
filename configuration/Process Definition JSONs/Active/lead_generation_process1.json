@@ -1,866 +1,898 @@
-{
-   "customerAppRequestStage": "Assignment Pending",
-   "stages": [{
-      "order": 1,
-      "code": "Assignment Pending",
-      "name": "Assignment Pending",
-      "stageType": "ASSIGNCENTRE",
-      "allowedRoles": [
-         "WM"
-      ]
-   }, {
-      "order": 2,
-      "code": "Incomplete",
-      "name": "Incomplete",
-      "stageType": "CAPTURE",
-      "allowedRoles": [
-         "WM"
-      ]
-   }, {
-      "order": 3,
-      "code": "Inprocess",
-      "name": "Inprogress",
-      "stageType": "CAPTURE",
-      "allowedRoles": [
-         "WM"
-      ]
-   }, {
-      "order": 4,
-      "code": "ReadyForScreening",
-      "name": "ReadyForScreening",
-      "stageType": "CAPTURE",
-      "allowedRoles": [
-         "WM"
-      ]
-   }],
-   "schema": {
-      "$schema": "http://json-schema.org/draft-04/schema#",
-      "type": "object",
-      "title": "Comment",
-      "required": [
-         "lead",
-         "leadInteractions"
-      ],
-      "properties": {
-         "lead": {
-            "title": "Lead Generations",
-            "type": "object",
-            "required": [
-               "leadName",
-               "pincode",
-               "mobileNo"
-            ],
-            "properties": {
-               "leadName": {
-                  "title": "Lead Name",
-                  "type": "String",
-                  "minLength": 1,
-                  "maxLength": 100,
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess"
-                  ]
-               },
-               "spokeName": {
-                  "title": "Spoke Name",
-                  "type": "String",
-                  "minLength": 1,
-                  "maxLength": 100,
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess"
-                  ]
-               },
-               "area": {
-                  "title": "Area",
-                  "type": "String",
-                  "minLength": 1,
-                  "maxLength": 100,
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess"
-                  ]
-               },
-               "addressLine1": {
-                  "title": "Address Line 1",
-                  "type": "String",
-                  "minLength": 1,
-                  "maxLength": 100,
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess"
-                  ]
-               },
-               "addressLine2": {
-                  "title": "Address Line 2",
-                  "type": "String",
-                  "minLength": 1,
-                  "maxLength": 100,
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess"
-                  ]
-               },
-               "cityTownVillage": {
-                  "title": "City Town Village",
-                  "type": "String",
-                  "minLength": 1,
-                  "maxLength": 100,
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess"
-                  ]
-               },
-               "pincode": {
-                  "title": "Pincode",
-                  "type": "string",
-                  "minLength": 6,
-                  "maxLength": 6,
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess"
-                  ]
-               },
-               "state": {
-                  "title": "State",
-                  "type": "String",
-                  "minLength": 1,
-                  "maxLength": 100,
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess"
-                  ]
-               },
-               "district": {
-                  "title": "District",
-                  "type": "String",
-                  "minLength": 1,
-                  "maxLength": 100,
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess"
-                  ]
-               },
-               "location": {
-                  "title": "Location",
-                  "type": "String",
-                  "minLength": 1,
-                  "maxLength": 100,
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess"
-                  ]
-               },
-               "centreId": {
-                  "title": "Centre Id",
-                  "type": "number",
-                  "minimum": 0,
-                  "maximum": 1000000,
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess"
-                  ]
-               },
-               "gender": {
-                  "title": "Gender",
-                  "type": "string",
-                  "refCodeCategory": "gender",
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess"
-                  ]
-               },
-               "mobileNo": {
-                  "title": "Mobile No",
-                  "type": "string",
-                  "minLength": 10,
-                  "maxLength": 10,
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess"
-                  ]
-               },
-               "alternateMobileNo": {
-                  "title": "Alternate Mobile No",
-                  "type": "String",
-                  "minLength": 10,
-                  "maxLength": 10,
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess"
-                  ]
-               },
-               "dob": {
-                  "title": "Date Of Birth",
-                  "type": "String",
-                  "format": "date",
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess"
-                  ]
-               },
-               "maritalStatus": {
-                  "title": "Marital Status",
-                  "type": "string",
-                  "refCodeCategory": "marital_status",
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess"
-                  ]
-               },
-               "educationStatus": {
-                  "title": "Education Status",
-                  "type": "string",
-                  "refCodeCategory": "education",
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess"
-                  ]
-               },
-               "businessName": {
-                  "title": "Business Name",
-                  "type": "String",
-                  "minLength": 1,
-                  "maxLength": 100,
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess"
-                  ]
-               },
-               "businessType": {
-                  "title": "Business Type",
-                  "type": "String",
-                  "minLength": 1,
-                  "maxLength": 100,
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess"
-                  ]
-               },
-               "businessActivity": {
-                  "title": "Business Activity",
-                  "type": "String",
-                  "minLength": 1,
-                  "maxLength": 100,
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess"
-                  ]
-               },
-               "companyOperatingSince": {
-                  "title": "Company Operating Since",
-                  "type": "string",
-                  "format": "date",
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess"
-                  ]
-               },
-               "ownership": {
-                  "title": "Ownership",
-                  "type": "String",
-                  "minLength": 1,
-                  "maxLength": 100,
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess"
-                  ]
-               },
-               "companyRegistered": {
-                  "title": "Company Registered",
-                  "type": "string",
-                  "refCodeCategory": "decisionmaker",
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess"
-                  ]
-               },
-               "productCategory": {
-                  "title": "Product Category",
-                  "type": "String",
-                  "minLength": 1,
-                  "maxLength": 100,
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess"
-                  ]
-               },
-               "productSubCategory": {
-                  "title": "productSubCategory",
-                  "type": "String",
-                  "minLength": 1,
-                  "maxLength": 100,
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess"
-                  ]
-               },
-               "interestedInProduct": {
-                  "title": "Interested In Product",
-                  "type": "string",
-                  "refCodeCategory": "decisionmaker",
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess"
-                  ]
-               },
-               "productRequiredBy": {
-                  "title": "Product Required By",
-                  "type": "string",
-                  "minLength": 1,
-                  "maxLength": 100,
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess"
-                  ]
-               },
-               "screeningDate": {
-                  "title": "Screening Date",
-                  "type": "string",
-                  "format": "date",
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess"
-                  ]
-               },
-               "loanPurpose": {
-                  "title": "Loan Purpose",
-                  "type": "String",
-                  "minLength": 1,
-                  "maxLength": 100,
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess"
-                  ]
-               },
-               "loanAmountRequested": {
-                  "title": "Loan Amount Requested",
-                  "type": "number",
-                  "minimum": 1,
-                  "maximum": 10000000,
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess"
-                  ]
-               },
-               "eligibleForProduct": {
-                  "title": "Eligible For Product",
-                  "type": "String",
-                  "refCodeCategory": "decisionmaker",
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess"
-                  ]
-               },
-               "productAcceptReason": {
-                  "title": "Product Accept Reason",
-                  "type": "string",
-                  "format": "date",
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess"
-                  ]
-               },
-               "productAcceptAdditinalRemarks": {
-                  "title": "Product Accept Additinal Remarks",
-                  "type": "String",
-                  "minLength": 1,
-                  "maxLength": 100,
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess",
-                     "ReadyForScreening"
-                  ]
-               },
-               "productRejectReason": {
-                  "title": "Product Reject Reason",
-                  "type": "String",
-                  "minLength": 1,
-                  "maxLength": 100,
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess",
-                     "ReadyForScreening"
-                  ]
-               },
-               "productRejectAdditinalRemarks": {
-                  "title": "Product Reject Additinal Remarks",
-                  "type": "String",
-                  "minLength": 1,
-                  "maxLength": 100,
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess",
-                     "ReadyForScreening"
-                  ]
-               },
-               "leadStatus": {
-                  "title": "Lead Status",
-                  "type": "String",
-                  "minLength": 1,
-                  "maxLength": 100,
-                  "captureStages": [
-                     "Assignment Pending",
-                     "Incomplete",
-                     "Inprocess",
-                     "ReadyForScreening"
-                  ]
-               },
-               "followUpDate": {
-                  "title": "Follow Up Date",
-                  "type": "string",
-                  "format": "date",
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess"
-                  ]
-               },
-               "leadCategory": {
-                  "title": "leadCategory",
-                  "type": "String",
-                  "minLength": 1,
-                  "maxLength": 100,
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess",
-                     "ReadyForScreening"
-                  ]
-               },
-               "leadSource": {
-                  "title": "leadSource",
-                  "type": "String",
-                  "minLength": 1,
-                  "maxLength": 100,
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess",
-                     "ReadyForScreening"
-                  ]
-               },
-               "referredBy": {
-                  "title": "referredBy",
-                  "type": "String",
-                  "minLength": 1,
-                  "maxLength": 100,
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess",
-                     "ReadyForScreening"
-                  ]
-               },
-               "agentName": {
-                  "title": "agentName",
-                  "type": "String",
-                  "minLength": 1,
-                  "maxLength": 100,
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess",
-                     "ReadyForScreening"
-                  ]
-               },
-               "occupation1": {
-                  "title": "occupation1",
-                  "type": "String",
-                  "minLength": 1,
-                  "maxLength": 100,
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess",
-                     "ReadyForScreening"
-                  ]
-               },
-               "licenseType": {
-                  "title": "licenseType",
-                  "type": "String",
-                  "minLength": 1,
-                  "maxLength": 100,
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess",
-                     "ReadyForScreening"
-                  ]
-               },
-               "latitude": {
-                  "title": "latitude",
-                  "type": "String",
-                  "minLength": 1,
-                  "maxLength": 100,
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess",
-                     "ReadyForScreening"
-                  ]
-               },
-               "longitude": {
-                  "title": "longitude",
-                  "type": "String",
-                  "minLength": 1,
-                  "maxLength": 100,
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess",
-                     "ReadyForScreening"
-                  ]
-               },
-               "altitude": {
-                  "title": "altitude",
-                  "type": "String",
-                  "minLength": 1,
-                  "maxLength": 100,
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess",
-                     "ReadyForScreening"
-                  ]
-               },
-   			   "postOffice": {
-                     "title": "postOffice",
-                     "type": "String",
-                     "minLength": 1,
-                     "maxLength": 100,
-                     "captureStages": [
-                        
-                        "Incomplete",
-                        "Inprocess",
-                        "ReadyForScreening"
-                     ]
-                  },
-   			   "landmark": {
-                     "title": "landmark",
-                     "type": "String",
-                     "minLength": 1,
-                     "maxLength": 100,
-                     "captureStages": [
-                        
-                        "Incomplete",
-                        "Inprocess",
-                        "ReadyForScreening"
-                     ]
-                  },
-               "parentLoanAccount": {
-                  "title": "parent Account Number",
-                  "type": "String",
-                  "minLength": 1,
-                  "maxLength": 100,
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess",
-                     "ReadyForScreening"
-                  ]
-               },
-               "vehicleRegistrationNumber": {
-                  "title": "Vehicle Registration Number",
-                  "type": "String",
-                  "minLength": 1,
-                  "maxLength": 100,
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess",
-                     "ReadyForScreening"
-                  ]
-               },
-               "transactionType": {
-                "title": "Transaction Type",
-                "type": "String",
-                "minLength": 1,
-                "maxLength": 100,
-                "captureStages": [
-                   
-                   "Incomplete",
-                   "Inprocess",
-                   "ReadyForScreening"
-                    ]
-                }, 
-                "linkedLoanAccountNo": {
-                  "title": "Linked Loan Account Number",
-                  "type": "String",
-                  "minLength": 1,
-                  "maxLength": 100,
-                  "captureStages": [
-                    
+{  
+  "customerAppRequestStage":"Assignment Pending",
+  "stages":[  
+     {  
+        "order":1,
+        "code":"Assignment Pending",
+        "name":"Assignment Pending",
+        "stageType":"ASSIGNCENTRE",
+        "allowedRoles":[  
+           "WM"
+        ]
+     },
+     {  
+        "order":2,
+        "code":"Incomplete",
+        "name":"Incomplete",
+        "stageType":"CAPTURE",
+        "allowedRoles":[  
+           "WM"
+        ]
+     },
+     {  
+        "order":3,
+        "code":"Inprocess",
+        "name":"Inprogress",
+        "stageType":"CAPTURE",
+        "allowedRoles":[  
+           "WM"
+        ]
+     },
+     {  
+        "order":4,
+        "code":"ReadyForScreening",
+        "name":"ReadyForScreening",
+        "stageType":"CAPTURE",
+        "allowedRoles":[  
+           "WM"
+        ]
+     }
+  ],
+  "schema":{  
+     "$schema":"http://json-schema.org/draft-04/schema#",
+     "type":"object",
+     "title":"Comment",
+     "required":[  
+        "lead",
+        "leadInteractions"
+     ],
+     "properties":{  
+        "lead":{  
+           "title":"Lead Generations",
+           "type":"object",
+           "required":[  
+              "leadName",
+              "pincode",
+              "mobileNo"
+           ],
+           "properties":{  
+              "leadName":{  
+                 "title":"Lead Name",
+                 "type":"String",
+                 "minLength":1,
+                 "maxLength":100,
+                 "captureStages":[  
+                    "Assignment Pending",
                     "Incomplete",
                     "Inprocess",
                     "ReadyForScreening"
-                  ]
-              }, 
-              "baseLoanAccount": {
-                "title": "Base Loan Account",
-                "type": "String",
-                "minLength": 1,
-                "maxLength": 100,
-                "captureStages": [
-                  
-                  "Incomplete",
-                  "Inprocess",
-                  "ReadyForScreening"
-                ]
-            },
-           "applicantCustomerId": {
-                  "title": "applicantCustomerId",
-                  "type": "number",
-                   "minimum": 0,
-                  "maximum": 1000000000,
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess",
-                     "ReadyForScreening"
-                  ]
-               }
-            }
-         },
-         "leadInteractions": {
-            "title": "Lead Interactions",
-            "type": "array",
-            "items": {
-               "type": "object",
-               "required": [
-                 ],
-               "properties": {
-                  "interactionDate": {
-                     "title": "Interaction Date",
-                     "type": "string",
-                     "format": "date",
-                     "captureStages": [
-                        
-                        "Incomplete",
-                        "Inprocess",
-                        "ReadyForScreening"
-                     ]
-                  },
-                  "loanOfficerId": {
-                     "title": "Loan Officer Id",
-                     "type": "string",
-                     "minLength": 1,
-                     "maxLength": 100,
-                     "captureStages": [
-                        
-                        "Incomplete",
-                        "Inprocess",
-                        "ReadyForScreening"
-                     ]
-                  },
-                  "typeOfInteraction": {
-                     "title": "Type Of Interaction",
-                     "type": "string",
-                     "minLength": 1,
-                     "maxLength": 100,
-                     "captureStages": [
-                        
-                        "Incomplete",
-                        "Inprocess",
-                        "ReadyForScreening"
-                     ]
-                  },
-                  "customerResponse": {
-                     "title": "Customer Response",
-                     "type": "string",
-                     "minLength": 1,
-                     "maxLength": 100,
-                     "captureStages": [
-                        
-                        "Incomplete",
-                        "Inprocess",
-                        "ReadyForScreening"
-                     ]
-                  },
-                  "additionalRemarks": {
-                     "title": "Additional Remarks",
-                     "type": "string",
-                     "minLength": 1,
-                     "maxLength": 100,
-                     "captureStages": [
-                        
-                        "Incomplete",
-                        "Inprocess",
-                        "ReadyForScreening"
-                     ]
-                  },
-                  "location": {
-                     "title": "Location",
-                     "type": "string",
-                     "minLength": 1,
-                     "maxLength": 100,
-                     "captureStages": [
-                        
-                        "Incomplete",
-                        "Inprocess",
-                        "ReadyForScreening"
-                     ]
-                  },
-                  "picture": {
-                     "title": "Picture",
-                     "type": "string",
-                     "minLength": 1,
-                     "maxLength": 100,
-                     "captureStages": [
-                        
-                        "Incomplete",
-                        "Inprocess",
-                        "ReadyForScreening"
-                     ]
-                  }
-				  ,
-                  "latitude": {
-                     "title": "latitude",
-                     "type": "string",
-                     "minLength": 1,
-                     "maxLength": 100,
-                     "captureStages": [
-                        
-                        "Incomplete",
-                        "Inprocess",
-                        "ReadyForScreening"
-                     ]
-                  }
-				  ,
-                  "longitude": {
-                     "title": "longitude",
-                     "type": "string",
-                     "minLength": 1,
-                     "maxLength": 100,
-                     "captureStages": [
-                        
-                        "Incomplete",
-                        "Inprocess",
-                        "ReadyForScreening"
-                     ]
-                  }
-				  ,
-                  "altitude": {
-                     "title": "altitude",
-                     "type": "string",
-                     "minLength": 1,
-                     "maxLength": 100,
-                     "captureStages": [
-                        
-                        "Incomplete",
-                        "Inprocess",
-                        "ReadyForScreening"
-                     ]
-                  }
-				  ,
-                  "photo1Id": {
-                     "title": "photo1Id",
-                     "type": "string",
-                     "minLength": 1,
-                     "maxLength": 100,
-                     "captureStages": [
-                        
-                        "Incomplete",
-                        "Inprocess",
-                        "ReadyForScreening"
-                     ]
-                  }
-               }
-            }
-         },
-         "lead_user_defined_fields": {
-            "title": "User Defined Details",
-            "type": "object",
-            "required": [
-               "udf1",
-               "udf2"
-            ],
-            "properties": {
-               "udf1": {
-                  "title": "Distance From Highway (in KM)",
-                  "type": "number",
-                  "minLength": 1,
-                  "maxLength": 500,
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess"
-                  ]
-               },
-               "udf2": {
-                  "title": "Availed Any MFI service?",
-                  "type": "boolean",
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess"
-                  ]
-               }
-            }
-         },
-         "lead_user_defined_date_fields": {
-            "title": "User Defined Date Details",
-            "type": "object",
-            "required": [
-               "udfDate1",
-               "udfDate2"
-            ],
-            "properties": {
-               "udfDate1": {
-                  "title": "date1",
-                  "type": "string",
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess"
-                  ]
-               },
-               "udfDate2": {
-                  "title": "date2",
-                  "type": "string",
-                  "captureStages": [
-                     
-                     "Incomplete",
-                     "Inprocess"
-                  ]
-               }
-            }
-         }
-      }
-   }
+                 ]
+              },
+              "spokeName":{  
+                 "title":"Spoke Name",
+                 "type":"String",
+                 "minLength":1,
+                 "maxLength":100,
+                 "captureStages":[  
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "area":{  
+                 "title":"Area",
+                 "type":"String",
+                 "minLength":1,
+                 "maxLength":100,
+                 "captureStages":[  
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "addressLine1":{  
+                 "title":"Address Line 1",
+                 "type":"String",
+                 "minLength":1,
+                 "maxLength":100,
+                 "captureStages":[  
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "addressLine2":{  
+                 "title":"Address Line 2",
+                 "type":"String",
+                 "minLength":1,
+                 "maxLength":100,
+                 "captureStages":[  
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "cityTownVillage":{  
+                 "title":"City Town Village",
+                 "type":"String",
+                 "minLength":1,
+                 "maxLength":100,
+                 "captureStages":[  
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "pincode":{  
+                 "title":"Pincode",
+                 "type":"string",
+                 "minLength":6,
+                 "maxLength":6,
+                 "captureStages":[  
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "state":{  
+                 "title":"State",
+                 "type":"String",
+                 "minLength":1,
+                 "maxLength":100,
+                 "captureStages":[  
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "district":{  
+                 "title":"District",
+                 "type":"String",
+                 "minLength":1,
+                 "maxLength":100,
+                 "captureStages":[  
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "location":{  
+                 "title":"Location",
+                 "type":"String",
+                 "minLength":1,
+                 "maxLength":100,
+                 "captureStages":[  
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "centreId":{  
+                 "title":"Centre Id",
+                 "type":"number",
+                 "minimum":0,
+                 "maximum":1000000,
+                 "captureStages":[  
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "gender":{  
+                 "title":"Gender",
+                 "type":"string",
+                 "refCodeCategory":"gender",
+                 "captureStages":[  
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "mobileNo":{  
+                 "title":"Mobile No",
+                 "type":"string",
+                 "minLength":10,
+                 "maxLength":10,
+                 "captureStages":[  
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "alternateMobileNo":{  
+                 "title":"Alternate Mobile No",
+                 "type":"String",
+                 "minLength":10,
+                 "maxLength":10,
+                 "captureStages":[  
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "dob":{  
+                 "title":"Date Of Birth",
+                 "type":"String",
+                 "format":"date",
+                 "captureStages":[  
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "maritalStatus":{  
+                 "title":"Marital Status",
+                 "type":"string",
+                 "refCodeCategory":"marital_status",
+                 "captureStages":[  
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "educationStatus":{  
+                 "title":"Education Status",
+                 "type":"string",
+                 "refCodeCategory":"education",
+                 "captureStages":[  
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "businessName":{  
+                 "title":"Business Name",
+                 "type":"String",
+                 "minLength":1,
+                 "maxLength":100,
+                 "captureStages":[  
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "businessType":{  
+                 "title":"Business Type",
+                 "type":"String",
+                 "minLength":1,
+                 "maxLength":100,
+                 "captureStages":[  
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "businessActivity":{  
+                 "title":"Business Activity",
+                 "type":"String",
+                 "minLength":1,
+                 "maxLength":100,
+                 "captureStages":[  
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "companyOperatingSince":{  
+                 "title":"Company Operating Since",
+                 "type":"string",
+                 "format":"date",
+                 "captureStages":[  
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "ownership":{  
+                 "title":"Ownership",
+                 "type":"String",
+                 "minLength":1,
+                 "maxLength":100,
+                 "captureStages":[  
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "companyRegistered":{  
+                 "title":"Company Registered",
+                 "type":"string",
+                 "refCodeCategory":"decisionmaker",
+                 "captureStages":[  
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "productCategory":{  
+                 "title":"Product Category",
+                 "type":"String",
+                 "minLength":1,
+                 "maxLength":100,
+                 "captureStages":[  
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "productSubCategory":{  
+                 "title":"productSubCategory",
+                 "type":"String",
+                 "minLength":1,
+                 "maxLength":100,
+                 "captureStages":[  
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "interestedInProduct":{  
+                 "title":"Interested In Product",
+                 "type":"string",
+                 "refCodeCategory":"decisionmaker",
+                 "captureStages":[  
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "productRequiredBy":{  
+                 "title":"Product Required By",
+                 "type":"string",
+                 "minLength":1,
+                 "maxLength":100,
+                 "captureStages":[  
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "screeningDate":{  
+                 "title":"Screening Date",
+                 "type":"string",
+                 "format":"date",
+                 "captureStages":[  
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "loanPurpose":{  
+                 "title":"Loan Purpose",
+                 "type":"String",
+                 "minLength":1,
+                 "maxLength":100,
+                 "captureStages":[  
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "loanAmountRequested":{  
+                 "title":"Loan Amount Requested",
+                 "type":"number",
+                 "minimum":1,
+                 "maximum":10000000,
+                 "captureStages":[  
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "eligibleForProduct":{  
+                 "title":"Eligible For Product",
+                 "type":"String",
+                 "refCodeCategory":"decisionmaker",
+                 "captureStages":[  
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "productAcceptReason":{  
+                 "title":"Product Accept Reason",
+                 "type":"string",
+                 "format":"date",
+                 "captureStages":[  
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "productAcceptAdditinalRemarks":{  
+                 "title":"Product Accept Additinal Remarks",
+                 "type":"String",
+                 "minLength":1,
+                 "maxLength":100,
+                 "captureStages":[  
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "productRejectReason":{  
+                 "title":"Product Reject Reason",
+                 "type":"String",
+                 "minLength":1,
+                 "maxLength":100,
+                 "captureStages":[  
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "productRejectAdditinalRemarks":{  
+                 "title":"Product Reject Additinal Remarks",
+                 "type":"String",
+                 "minLength":1,
+                 "maxLength":100,
+                 "captureStages":[  
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "leadStatus":{  
+                 "title":"Lead Status",
+                 "type":"String",
+                 "minLength":1,
+                 "maxLength":100,
+                 "captureStages":[  
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "followUpDate":{  
+                 "title":"Follow Up Date",
+                 "type":"string",
+                 "format":"date",
+                 "captureStages":[  
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "leadCategory":{  
+                 "title":"leadCategory",
+                 "type":"String",
+                 "minLength":1,
+                 "maxLength":100,
+                 "captureStages":[  
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "leadSource":{  
+                 "title":"leadSource",
+                 "type":"String",
+                 "minLength":1,
+                 "maxLength":100,
+                 "captureStages":[  
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "referredBy":{  
+                 "title":"referredBy",
+                 "type":"String",
+                 "minLength":1,
+                 "maxLength":100,
+                 "captureStages":[  
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "agentName":{  
+                 "title":"agentName",
+                 "type":"String",
+                 "minLength":1,
+                 "maxLength":100,
+                 "captureStages":[  
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "occupation1":{  
+                 "title":"occupation1",
+                 "type":"String",
+                 "minLength":1,
+                 "maxLength":100,
+                 "captureStages":[  
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "licenseType":{  
+                 "title":"licenseType",
+                 "type":"String",
+                 "minLength":1,
+                 "maxLength":100,
+                 "captureStages":[  
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "latitude":{  
+                 "title":"latitude",
+                 "type":"String",
+                 "minLength":1,
+                 "maxLength":100,
+                 "captureStages":[  
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "longitude":{  
+                 "title":"longitude",
+                 "type":"String",
+                 "minLength":1,
+                 "maxLength":100,
+                 "captureStages":[  
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "altitude":{  
+                 "title":"altitude",
+                 "type":"String",
+                 "minLength":1,
+                 "maxLength":100,
+                 "captureStages":[  
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "postOffice":{  
+                 "title":"postOffice",
+                 "type":"String",
+                 "minLength":1,
+                 "maxLength":100,
+                 "captureStages":[  
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "landmark":{  
+                 "title":"landmark",
+                 "type":"String",
+                 "minLength":1,
+                 "maxLength":100,
+                 "captureStages":[  
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "parentLoanAccount":{  
+                 "title":"parent Account Number",
+                 "type":"String",
+                 "minLength":1,
+                 "maxLength":100,
+                 "captureStages":[  
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "vehicleRegistrationNumber":{  
+                 "title":"Vehicle Registration Number",
+                 "type":"String",
+                 "minLength":1,
+                 "maxLength":100,
+                 "captureStages":[  
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "transactionType":{  
+                 "title":"Transaction Type",
+                 "type":"String",
+                 "minLength":1,
+                 "maxLength":100,
+                 "captureStages":[  
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "linkedLoanAccountNo":{  
+                 "title":"Linked Loan Account Number",
+                 "type":"String",
+                 "minLength":1,
+                 "maxLength":100,
+                 "captureStages":[  
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "baseLoanAccount":{  
+                 "title":"Base Loan Account",
+                 "type":"String",
+                 "minLength":1,
+                 "maxLength":100,
+                 "captureStages":[  
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "applicantCustomerId":{  
+                 "title":"applicantCustomerId",
+                 "type":"number",
+                 "minimum":0,
+                 "maximum":1000000000,
+                 "captureStages":[  
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              }
+           }
+        },
+        "leadInteractions":{  
+           "title":"Lead Interactions",
+           "type":"array",
+           "items":{  
+              "type":"object",
+              "required":[  
+
+              ],
+              "properties":{  
+                 "interactionDate":{  
+                    "title":"Interaction Date",
+                    "type":"string",
+                    "format":"date",
+                    "captureStages":[  
+                       "Assignment Pending",
+                       "Incomplete",
+                       "Inprocess",
+                       "ReadyForScreening"
+                    ]
+                 },
+                 "loanOfficerId":{  
+                    "title":"Loan Officer Id",
+                    "type":"string",
+                    "minLength":1,
+                    "maxLength":100,
+                    "captureStages":[  
+                       "Assignment Pending",
+                       "Incomplete",
+                       "Inprocess",
+                       "ReadyForScreening"
+                    ]
+                 },
+                 "typeOfInteraction":{  
+                    "title":"Type Of Interaction",
+                    "type":"string",
+                    "minLength":1,
+                    "maxLength":100,
+                    "captureStages":[  
+                       "Assignment Pending",
+                       "Incomplete",
+                       "Inprocess",
+                       "ReadyForScreening"
+                    ]
+                 },
+                 "customerResponse":{  
+                    "title":"Customer Response",
+                    "type":"string",
+                    "minLength":1,
+                    "maxLength":100,
+                    "captureStages":[  
+                       "Assignment Pending",
+                       "Incomplete",
+                       "Inprocess",
+                       "ReadyForScreening"
+                    ]
+                 },
+                 "additionalRemarks":{  
+                    "title":"Additional Remarks",
+                    "type":"string",
+                    "minLength":1,
+                    "maxLength":100,
+                    "captureStages":[  
+                       "Assignment Pending",
+                       "Incomplete",
+                       "Inprocess",
+                       "ReadyForScreening"
+                    ]
+                 },
+                 "location":{  
+                    "title":"Location",
+                    "type":"string",
+                    "minLength":1,
+                    "maxLength":100,
+                    "captureStages":[  
+                       "Assignment Pending",
+                       "Incomplete",
+                       "Inprocess",
+                       "ReadyForScreening"
+                    ]
+                 },
+                 "picture":{  
+                    "title":"Picture",
+                    "type":"string",
+                    "minLength":1,
+                    "maxLength":100,
+                    "captureStages":[  
+                       "Assignment Pending",
+                       "Incomplete",
+                       "Inprocess",
+                       "ReadyForScreening"
+                    ]
+                 },
+                 "latitude":{  
+                    "title":"latitude",
+                    "type":"string",
+                    "minLength":1,
+                    "maxLength":100,
+                    "captureStages":[  
+                       "Assignment Pending",
+                       "Incomplete",
+                       "Inprocess",
+                       "ReadyForScreening"
+                    ]
+                 },
+                 "longitude":{  
+                    "title":"longitude",
+                    "type":"string",
+                    "minLength":1,
+                    "maxLength":100,
+                    "captureStages":[  
+                       "Assignment Pending",
+                       "Incomplete",
+                       "Inprocess",
+                       "ReadyForScreening"
+                    ]
+                 },
+                 "altitude":{  
+                    "title":"altitude",
+                    "type":"string",
+                    "minLength":1,
+                    "maxLength":100,
+                    "captureStages":[  
+                       "Assignment Pending",
+                       "Incomplete",
+                       "Inprocess",
+                       "ReadyForScreening"
+                    ]
+                 },
+                 "photo1Id":{  
+                    "title":"photo1Id",
+                    "type":"string",
+                    "minLength":1,
+                    "maxLength":100,
+                    "captureStages":[  
+                       "Assignment Pending",
+                       "Incomplete",
+                       "Inprocess",
+                       "ReadyForScreening"
+                    ]
+                 }
+              }
+           }
+        },
+        "lead_user_defined_fields":{  
+           "title":"User Defined Details",
+           "type":"object",
+           "required":[  
+              "udf1",
+              "udf2"
+           ],
+           "properties":{  
+              "udf1":{  
+                 "title":"Distance From Highway (in KM)",
+                 "type":"number",
+                 "minLength":1,
+                 "maxLength":500,
+                 "captureStages":[  
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "udf2":{  
+                 "title":"Availed Any MFI service?",
+                 "type":"boolean",
+                 "captureStages":[  
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              }
+           }
+        },
+        "lead_user_defined_date_fields":{  
+           "title":"User Defined Date Details",
+           "type":"object",
+           "required":[  
+              "udfDate1",
+              "udfDate2"
+           ],
+           "properties":{  
+              "udfDate1":{  
+                 "title":"date1",
+                 "type":"string",
+                 "captureStages":[  
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              },
+              "udfDate2":{  
+                 "title":"date2",
+                 "type":"string",
+                 "captureStages":[  
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess",
+                    "ReadyForScreening"
+                 ]
+              }
+           }
+        }
+     }
+  }
 }
