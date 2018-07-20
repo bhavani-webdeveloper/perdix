@@ -1594,7 +1594,7 @@
                     }
                 }
             },
-            "lenderContatctDetails":
+            "lenderContactDetails":
             {
                 "title": "Lender Contact Details",
                 "type": "array",
