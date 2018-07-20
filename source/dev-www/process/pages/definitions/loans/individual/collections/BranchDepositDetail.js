@@ -44,10 +44,7 @@
                         "key":"branchname",
                         "title":"BRANCH_NAME"
                     },
-                    { 
-                        "key": "",
-                        "title": "SPOKE_NAME"
-                    },{
+                    {
                         "key":"loanCollectionDetail.totalCashCollected",
                         "title":"TOTAL_AMOUNT_COLLECTED"
                     }]
@@ -60,10 +57,6 @@
                     "items":[{
                         "key":"branchname",
                         "title":"BRANCH_NAME"
-                    },
-                    {
-                        "key":"",
-                        "title":"SPOKE_NAME"
                     },
                     {
                         "key":"loanCollectionDetail.customerName",
