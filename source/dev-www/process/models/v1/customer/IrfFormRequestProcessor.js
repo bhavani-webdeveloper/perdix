@@ -622,8 +622,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             "udf34": {
                                 key: "customer.udf.userDefinedFieldValues.udf34",
                                 type: "file",
-                                fileType: "application/pdf",
-                                using: "scanner",
+                                fileType: "image/*",
                                 offline: true,
                             },
                             "udf35": {
@@ -4503,8 +4502,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             "udf34": {
                                 key: "customer.udf.userDefinedFieldValues.udf34",
                                 type: "file",
-                                fileType: "application/pdf",
-                                using: "scanner",
+                                fileType: "image/*",
                             },
                             "udf35": {
                                 key: "customer.udf.userDefinedFieldValues.udf35",
