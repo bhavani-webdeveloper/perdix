@@ -1874,7 +1874,7 @@
             "title": "outstandingPayable",
             "type":"number",
             "minimum":1,
-            "maximum":10000000,
+            "maximum":1000000000,
             "captureStages": [
               "BasicEnrolment",
               "Completed"
@@ -1884,7 +1884,7 @@
             "title": "outstandingReceivable",
             "type":"number",
             "minimum":1,
-            "maximum":10000000,
+            "maximum":1000000000,
             "captureStages": [
               "BasicEnrolment",
               "Completed"
@@ -5836,7 +5836,7 @@
               "title": "Receivables Outstanding",
               "type": "number",
               "minimum": 0,
-              "maximum": 10000000,
+              "maximum": 1000000000,
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"
