@@ -55,7 +55,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
 
         var cashCollectionRemarks = {
             "Cash received at the branch": "Cash received at the branch",
-            "Cash collected at field by WM": "Cash collected at field by WM",
+            "Cash collected at field by FSO": "Cash collected at field by FSO",
             "Cash collected at field through CSP": "Cash collected at field through CSP",
             "Receipt Number": "Receipt Number"
         };
@@ -232,7 +232,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                         "title": "CASH_COLLECTION_REMARK",
                         "condition": "model._partnerCode!='AXIS' && (model.siteCode == 'sambandh' || model.siteCode == 'saija')",
                         "type": "select",
-                        "titleMap": {"Cash collected at field by WM": "Cash collected at field by WM"},
+                        "titleMap": {"Cash collected at field by FSO": "Cash collected at field by FSO"},
                         "onChange": function(value, form, model) {
                             for (var i = 0; i < model.repayments.length; i++) {
                                 var repayment = model.repayments[i];
@@ -337,7 +337,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                 key: "repayments[].cashCollectionRemark",
                                 "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
                                 "type": "select",
-                                "titleMap": {"Cash collected at field by WM": "Cash collected at field by WM"},
+                                "titleMap": {"Cash collected at field by FSO": "Cash collected at field by FSO"},
                             },
                             {
                             key: "repayments[].receiptNumber",
