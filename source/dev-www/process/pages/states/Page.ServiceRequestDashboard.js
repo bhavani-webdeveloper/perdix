@@ -9,6 +9,7 @@ irf.pages.controller("ServiceRequestDashboardCtrl", [ '$log', '$scope', 'PagesDe
                 "Page/Engine/request.LocRenewalQueue",
                 "Page/Engine/request.NextTrancheQueue",
                 "Page/Engine/request.PreClosureQueue",
+                "Page/Engine/request.RescheduleQueue",
                 "Page/Engine/request.CloseRequest",
                 "Page/Engine/request.ProfileSummaryQueue"
             ]
@@ -28,7 +29,7 @@ irf.pages.controller("ServiceRequestDashboardCtrl", [ '$log', '$scope', 'PagesDe
 
             var locMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/request.NextTrancheQueue"];
             if (locMenu) {
-                Worklist.findWorklists({requestType:'next-tranche'}).$promise.then(function(response, headerGetter) {
+                Worklist.findWorklists({requestType:'tranche'}).$promise.then(function(response, headerGetter) {
                     locMenu.data = response.headers['x-total-count']; 
                 }, function() {
                     locMenu.data = '';
@@ -52,6 +53,16 @@ irf.pages.controller("ServiceRequestDashboardCtrl", [ '$log', '$scope', 'PagesDe
                     preMenu.data = '';
                 });
             }
+
+            var rescMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/request.RescheduleQueue"];
+            if (rescMenu) {
+                Worklist.findWorklists({requestType:'reschedule'}).$promise.then(function(response, headerGetter) {
+                    rescMenu.data = response.headers['x-total-count']; 
+                }, function() {
+                    rescMenu.data = '';
+                });
+            }
+
             var profileMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/request.ProfileSummaryQueue"];
             if (profileMenu) {
                 Queries.getProfileSummary().then(function(response, headerGetter) {
