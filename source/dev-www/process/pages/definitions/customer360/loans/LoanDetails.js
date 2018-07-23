@@ -1183,6 +1183,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                 },
                 {
                     type: "box",
+                    condition:"model.siteCode != 'sambandh'",
                     title: "REMINDER_/_REPAYMEMT_HISTORY",
                     "readonly": true,
                     items: [{
