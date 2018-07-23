@@ -442,7 +442,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                 );
                             promiseArray.push(enrollmentpromise);
                             model.loanAccount.coBorrowers = [];
-                            model.loanAccount.guarantors = [];
+                            model.loanAccount.guarantors1 = [];
                             if(model.loanAccount.loanCustomerRelations) {
                                 for (var i = 0; i < model.loanAccount.loanCustomerRelations.length; i++) {
                                     if (model.loanAccount.loanCustomerRelations[i].relation === 'APPLICANT' ||
@@ -458,7 +458,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                     }
                                     else if(model.loanAccount.loanCustomerRelations[i].relation === 'GUARANTOR' ||
                                             model.loanAccount.loanCustomerRelations[i].relation === 'Guarantor'){
-                                        model.loanAccount.guarantors.push({
+                                        model.loanAccount.guarantors1.push({
                                             guaUrnNo:model.loanAccount.loanCustomerRelations[i].urn,
                                             customerId:model.loanAccount.loanCustomerRelations[i].customerId
                                         });
@@ -1656,22 +1656,22 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                 }, {
                     "type": "box",
                     "title": "GUARANTOR_NOMINEE_DETAILS",
-                    "condition": "model.loanAccount.guarantors.length>0",
+                    "condition": "model.loanAccount.guarantors1.length>0",
                     readonly: true,
                     "items": [{
                         "type": "fieldset",
                         "title": "GUARANTOR",
                         "items": [{
-                            key: "loanAccount.guarantors",
+                            key: "loanAccount.guarantors1",
                             "required":false,
                             notitle: "true",
                             view: "fixed",
-                            "condition": "model.loanAccount.guarantors.length>0",
+                            "condition": "model.loanAccount.guarantors1.length>0",
                             type: "array",
                             add: null,
                             remove: null,
                             items: [{
-                                "key": "loanAccount.guarantors[].guaUrnNo",
+                                "key": "loanAccount.guarantors1[].guaUrnNo",
                                 "title": "URN_NO",
                                 "type": "lov",
                                 "lovonly": true,
@@ -1696,8 +1696,8 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                     }
                                 },
                                 "outputMap": {
-                                    "urnNo": "loanAccount.guarantors[arrayIndex].guaUrnNo",
-                                    "firstName": "loanAccount.guarantors[arrayIndex].guaFirstName"
+                                    "urnNo": "loanAccount.guarantors1[arrayIndex].guaUrnNo",
+                                    "firstName": "loanAccount.guarantors1[arrayIndex].guaFirstName"
                                 },
                                 "searchHelper": formHelper,
                                 "search": function(inputModel, form) {
@@ -1720,7 +1720,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                     ];
                                 }
                             }, {
-                                key: "loanAccount.guarantors[].guaFirstName",
+                                key: "loanAccount.guarantors1[].guaFirstName",
                                 title: "NAME",
                                 "readonly": true
                             }]
@@ -1756,12 +1756,12 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                         model.loanAccount.portfolioInsuranceUrn = model.loanAccount.coBorrowerUrnNo;
                                         break;
                                     case "guarantor":
-                                        if (_.isEmpty(model.loanAccount.guarantors[0].guaUrnNo)) {
+                                        if (_.isEmpty(model.loanAccount.guarantors1[0].guaUrnNo)) {
                                             Utils.alert("Please Select a Guarantor");
                                             model.additional.portfolioUrnSelector = "";
                                             break;
                                         }
-                                        model.loanAccount.portfolioInsuranceUrn = model.loanAccount.guarantors[0].guaUrnNo;
+                                        model.loanAccount.portfolioInsuranceUrn = model.loanAccount.guarantors1[0].guaUrnNo;
                                         break;
                                 }
                             }
@@ -2115,6 +2115,9 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                 submit: function(model, form, formName) {
                     $log.info(model);
                     PageHelper.clearErrors();
+                    // if(model.loanAccount.guarantors){
+                    //    delete model.loanAccount.guarantors; 
+                    // }
                     model.reqData.loanAccount = _.cloneDeep(model.loanAccount);
                     //alert(model.reqData.loanAccount.loanDocuments.length);
                     model.reqData.loanAccount.loanDocuments = model.reqData.loanAccount.loanDocuments || [];

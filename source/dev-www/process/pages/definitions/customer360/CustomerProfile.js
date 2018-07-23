@@ -616,6 +616,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
             {
                             "type": "box",
                             "title": "FAMILY_DETAILS",
+                            "condition":"model.siteCode != 'IREPDhan'", 
                             "items": [
                                 {
                                     "key": "customer.familyMembers",
@@ -838,6 +839,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
             {
                             "type": "box",
                             "title": "T_HOUSE_VERIFICATION",
+                            "condition":"model.siteCode != 'IREPDhan'", 
                             "items": [
                                 {
                                     type:"fieldset",
@@ -1102,6 +1104,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
             {
                 "type": "box",
                 "title": "REFERENCES",
+                "condition":"model.siteCode != 'IREPDhan'", 
                 "items": [
                     {
                         key:"customer.verifications",
