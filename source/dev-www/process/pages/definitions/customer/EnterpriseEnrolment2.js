@@ -2841,13 +2841,13 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                "condition":"model.currentStage=='Screening' || model.currentStage=='Application'|| model.currentStage=='FieldAppraisal'",
                 items:[
                     {
-                        key: "customer.enterprise.noOfFemaleEmployees",
+                        key: "customer.enterprise.noOfMaleEmployees",
                         title: "NO_OF_MALE_EMPLOYEES",
                         //required:true,
                         type: "number"
                     },
                     {
-                        key: "customer.enterprise.noOfMaleEmployees",
+                        key: "customer.enterprise.noOfFemaleEmployees",
                         //required:true,
                         title: "NO_OF_FEMALE_EMPLOYEES",
                         type: "number"
