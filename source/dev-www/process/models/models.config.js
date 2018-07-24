@@ -7,4 +7,7 @@ irf.models
 		'fileStreamUrl': irf.BASE_URL + '/api/stream',
 		'responseSelector': 'fileId'
 	})
+	.constant('MODEL_ELEM_COMMONS',{
+		'defaultGeoLocationPlugin': 'cordovaFusedLocation'
+	})
 ;
