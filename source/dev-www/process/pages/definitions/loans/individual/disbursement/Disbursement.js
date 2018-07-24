@@ -3,6 +3,10 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
         function($log, Enrollment,BiometricService,elementsUtils, SessionStore,$state,$stateParams, PageHelper, IndividualLoan, SchemaResource, Utils,LoanAccount,formHelper,Queries,LoanAccount){
 
         var branch = SessionStore.getBranch();
+        var siteCode = SessionStore.getGlobalSetting("siteCode");
+        var requires = {
+            "modeOfDisbursement": siteCode == 'kinara' || siteCode =='sambandh' || siteCode =='saija'
+        }
         var backToQueue = function(){
             $state.go("Page.Engine",{
                 pageName:"loans.individual.disbursement.ReadyForDisbursementQueue",
@@ -60,8 +64,14 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         model.loanAccountDisbursementSchedule.linkedAccountNormalInterestDue= resp[0].linkedAccountNormalInterestDue;
                         model.loanAccountDisbursementSchedule.linkedAccountTotalPrincipalDue= resp[0].linkedAccountTotalPrincipalDue;
 
-
-
+                        Queries.getBankAccountsByProduct(model.additional.productCode,true,false).then(function(res){
+                            for(var i=0;i<res.body.length;i++) {
+                                if(res.body[i].default_disbursement_account){
+                                    model.loanAccountDisbursementSchedule.disbursementFromBankAccountNumber = res.body[i].account_number;
+                                    break;
+                                }
+                            }
+                        });
 
                         /*if(model.siteCode == 'KGFS' && resp[0].fees) {
                             model.additional.feeamount = [];
@@ -194,39 +204,10 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                     },
                     {
                         "key": "loanAccountDisbursementSchedule.modeOfDisbursement",
-                        "condition":"!model.siteCode || model.siteCode == 'kinara'",
                         "title": "MODE_OF_DISBURSEMENT",
-                        "required": true,
-                        "type": "select",
-                        "titleMap": [{
-                            value: "NEFT",
-                            name: "NEFT"
-                        },{
-                            value: "RTGS",
-                            name: "RTGS"
-                        }]
-                    },
-                    {
-                        "key": "loanAccountDisbursementSchedule.modeOfDisbursement",
-						"condition":"model.siteCode =='KGFS'",
-                        "title": "MODE_OF_DISBURSEMENT",
+                        "required": requires['modeOfDisbursement'],
                         "type": "select",
                         "enumCode": "mode_of_disbursement"
-                    },
-                    {
-                        "key": "loanAccountDisbursementSchedule.modeOfDisbursement",
-                        "condition":"model.siteCode == 'witfin'",
-                        "title": "MODE_OF_DISBURSEMENT",
-                        "type": "select",
-                        "enumCode": "disbursement_mode"
-                    },
-                    {
-                        "key": "loanAccountDisbursementSchedule.modeOfDisbursement",
-                        "condition":"model.siteCode =='sambandh' || model.siteCode =='saija'",
-                        "required": true,
-                        "title": "MODE_OF_DISBURSEMENT",
-                        "type": "select",
-                        "enumCode": "mode_of_disbursement",
                     },
                     {
                         "key": "loanAccountDisbursementSchedule.referenceNumber",
@@ -261,6 +242,12 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                 item.branch_name
                             ];
                         }
+                    },
+                    {
+                        "key": "loanAccountDisbursementSchedule.scheduledDisbursementDate",
+                        "title": "SCHEDULED_DISBURSEMENT_DATE",
+                        "type": "date",
+                        "required": true
                     },
                     {
                         "key":"customer.firstName",
