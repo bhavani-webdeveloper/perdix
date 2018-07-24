@@ -171,7 +171,7 @@
                      "title":"Scheduled Disbursement Date",
                      "type":"string",
                      "captureStages":[
-                        "MTBooking","LOCDisbursement"
+                        "MTBooking","LOCDisbursement", "ReadyForDisbursement"
                      ]
                   },
                   "actualDisbursementDate":{
