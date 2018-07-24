@@ -68,14 +68,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 maximum: 1,
                                 order:70
                             },
-                            {
-                                pageName: 'irep.loans.individual.origination.Summary',
-                                title: 'SUMMARY',
-                                pageClass: 'summary',
-                                minimum: 1,
-                                maximum: 1,
-                                order: 5
-                            },
+                            // {
+                            //     pageName: 'irep.loans.individual.origination.Summary',
+                            //     title: 'SUMMARY',
+                            //     pageClass: 'summary',
+                            //     minimum: 1,
+                            //     maximum: 1,
+                            //     order: 5
+                            // },
                             {
                                 pageName: 'loans.individual.misc.BalanceSheetHistory',
                                 title: 'BALANCE_SHEET_HISTORY',
@@ -176,16 +176,16 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 });
 
-                                $this.bundlePages.push({
-                                    pageClass: 'summary',
-                                    model: {
-                                        cbModel: {
-                                            customerId:loanAccount.applicantEnrolmentProcess.customer.customerId,
-                                            loanId:bundleModel.loanId, 
-                                            scoreName:'RiskScore1'
-                                        }
-                                    }
-                                });
+                                // $this.bundlePages.push({
+                                //     pageClass: 'summary',
+                                //     model: {
+                                //         cbModel: {
+                                //             customerId:loanAccount.applicantEnrolmentProcess.customer.customerId,
+                                //             loanId:bundleModel.loanId, 
+                                //             scoreName:'RiskScore1'
+                                //         }
+                                //     }
+                                // });
 
                                 $this.bundlePages.push({
                                     pageClass: 'balance-sheet-history',
