@@ -5,6 +5,14 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment"),
 function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage,
     PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, irfNavigator){
 
+    var siteCode = getGlobalSetting.sitecode();
+    var requires ={
+        "customer.spouseDateOfBirth": siteCode != 'IREPDhan' && model.customer.maritalStatus === 'MARRIED',
+        "customer.spouseFirstName": siteCode != 'IREPDhan' && model.customer.maritalStatus === 'MARRIED',
+        "customer.spouseAge": siteCode != 'IREPDhan' && model.customer.maritalStatus === 'MARRIED',
+
+    }
+
     return {
         "type": "schema-form",
         "title": "INDIVIDUAL_ENROLLMENT", 
@@ -175,8 +183,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                 {
                     key: "customer.spouseFirstName",
                     title: "SPOUSE_FULL_NAME",
-                    required: true,
-                    condition:"model.customer.maritalStatus==='MARRIED'",
+                    required: requires['fielddname'],
                     type:"qrcode",
                     onCapture: function(result, model, form) {
                         $log.info(result); // spouse id proof
@@ -194,8 +201,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                 {
                     key:"customer.spouseDateOfBirth",
                     type:"date",
-                    required: true,
-                    condition:"model.customer.maritalStatus==='MARRIED'",
+                    required: requires['fielddname'],
                     "onChange": function(modelValue, form, model) {
                         if (model.customer.spouseDateOfBirth) {
                             model.customer.spouseAge = moment().diff(moment(model.customer.spouseDateOfBirth, SessionStore.getSystemDateFormat()), 'years');
@@ -205,9 +211,8 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                 {
                     key:"customer.spouseAge",
                     title: "SPOUSE_AGE",
-                    required: true,
+                    required: requires['fielddname'],,
                     type:"number",
-                    condition:"model.customer.maritalStatus==='MARRIED'",
                     "onChange": function(modelValue, form, model) {
                         if (model.customer.spouseAge > 0) {
                             if (model.customer.spouseDateOfBirth) {
@@ -217,7 +222,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                             }
                         }
                     }
-                },
+                }
                 
             ]
         },
