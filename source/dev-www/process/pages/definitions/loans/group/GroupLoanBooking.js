@@ -54,15 +54,14 @@ define({
             "title": "Group Loan Booking",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
-                $log.info(model);
                 model.group = model.group || {};
                 model.review = model.review || {};
                 model.siteCode = SessionStore.getGlobalSetting('siteCode');
                 var centres = SessionStore.getCentres();
                 model.group.branchId = model.group.branchId || SessionStore.getCurrentBranch().branchId;
                 model.group.centreId = model.group.centreId || ((_.isArray(centres) && centres.length > 0) ? centres[0].value : model.group.centreId);
-                var date = SessionStore.getFormatedCBSDate();
-                model.group.scheduledDisbursementDate=date.split("-").reverse().join("-");
+                var date = SessionStore.getCBSDate().format(SessionStore.getSystemDateFormat());
+                model.group.scheduledDisbursementDate=date;
 
                 if ($stateParams.pageId) {
                     var groupId = $stateParams.pageId;
@@ -94,8 +93,7 @@ define({
                                 irfProgressMessage.pop("group-init", "Oops. An error occurred", 2000);
                             });
                         }
-                        var date = SessionStore.getFormatedCBSDate();
-                        model.group.scheduledDisbursementDate=model.group.scheduledDisbursementDate||date.split("-").reverse().join("-");
+                        model.group.scheduledDisbursementDate=model.group.scheduledDisbursementDate||date;
 
                     }, function(resp) {
                         PageHelper.hideLoader();
