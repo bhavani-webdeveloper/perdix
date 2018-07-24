@@ -266,9 +266,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             model.idenCheck = {};
             if(model.idenCheckParam != null){
                 var idencheckArray =  model.idenCheckParam.split('~');
-                model.idenCheck.reqServiceType = idencheckArray[0];
-                model.idenCheck.dobSegmentRequired = Boolean(idencheckArray[1]);
-                model.idenCheck.addressSegmentReqired = Boolean(idencheckArray[2]);   
+                model.idenCheck.reqServiceType = idencheckArray[0]; 
             }
             
 
