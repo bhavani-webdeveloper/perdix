@@ -48,6 +48,7 @@ irf.pageCollection.directive("irfSimpleSummaryTable", function(){
 
 }]);
 
+
 define({
     "pageUID": "irep.loans.individual.origination.Summary",
     "pageType": "Engine",
@@ -382,7 +383,8 @@ define({
 
         form.push({
             type: "box",
-            colClass: "col-sm-12 table-box",            
+            colClass: "col-sm-12 table-box",
+            condition: "model.siteCode != IREPDhan",
             title: "SCORES",
             items: [
                 {
@@ -533,7 +535,7 @@ define({
                 type: "box",
                 colClass: "col-sm-12 table-box",
                 title: "Psychometric Scores",
-                condition: "model.currentStage != 'ScreeningReview'",
+                condition: "model.currentStage != 'ScreeningReview' && model.siteCode == 'kinara'",
                 items: [
                     {
                         type: "section",
