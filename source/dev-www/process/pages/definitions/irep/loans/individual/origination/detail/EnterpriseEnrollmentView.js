@@ -342,13 +342,7 @@ define({
                             "key": "customer.enterprise.ownership",
                             "title": "Premises Ownership"
                         }, {
-                            "key": "customer.udf.userDefinedDateFieldValues.udfDate1",
-                            "title": "RENT_LEASE_AGREEMENT_VALID_TILL"
-                        }, {
-                            "key": "customer.udf.userDefinedDateFieldValues.udf1",
-                            "title": "RENT_LEASE_STATUS"
-                        }, {
-                            "key": "customer.enterprise.businessInPresentAreaSince",
+                            "key": "customer.enterprise.companyOperatingSince",
                             "title": "Operating Since"
                         }, {
                             "key": "customer.enterprise.anyPartnerOfPresentBusiness",
@@ -392,7 +386,8 @@ define({
                             "title": "Email ID"
                         }, {
                             "title": "Present Address",
-                            "key": "customer.presetAddress"
+                            "key": "customer.presetAddress",                            
+                            "type": "html"
 
                         }]
                     }, {

@@ -382,8 +382,7 @@ define({
 
         form.push({
             type: "box",
-            colClass: "col-sm-12 table-box",
-            condition: "model.siteCode != IREPDhan",
+            colClass: "col-sm-12 table-box",            
             title: "SCORES",
             items: [
                 {
@@ -534,7 +533,7 @@ define({
                 type: "box",
                 colClass: "col-sm-12 table-box",
                 title: "Psychometric Scores",
-                condition: "model.currentStage != 'ScreeningReview' && model.siteCode !=IREPDhan",
+                condition: "model.currentStage != 'ScreeningReview'",
                 items: [
                     {
                         type: "section",
