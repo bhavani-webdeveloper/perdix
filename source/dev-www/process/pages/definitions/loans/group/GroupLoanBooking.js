@@ -60,7 +60,7 @@ define({
                 var centres = SessionStore.getCentres();
                 model.group.branchId = model.group.branchId || SessionStore.getCurrentBranch().branchId;
                 model.group.centreId = model.group.centreId || ((_.isArray(centres) && centres.length > 0) ? centres[0].value : model.group.centreId);
-                var date = SessionStore.getCBSDate().format(SessionStore.getSystemDateFormat());
+                var date = SessionStore.getCBSDate();
                 model.group.scheduledDisbursementDate=date;
 
                 if ($stateParams.pageId) {
