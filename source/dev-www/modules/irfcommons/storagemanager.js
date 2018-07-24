@@ -38,7 +38,8 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter, Utils){
 				code: d['code'],
 				name: d['name'],
 				value: d['name'],
-				id: d['id']
+				id: d['id'],
+				active:d['isActive']
 			};
 			if (d['parentClassifier'] && d['parentReferenceCode'])
 				_data.parentCode = d['parentReferenceCode'].trim();
