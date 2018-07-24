@@ -13,7 +13,7 @@
       "sendSms": "No",
       "smsCategory": "LoanBooking",
       "isAccountOpening": false,
-      "riskScoreName": "RiskScore1",
+      "riskScoreName": "ScreeningScore",
       "allowedRoles": [
         "WM"
       ]
@@ -26,6 +26,7 @@
       "sendSms": "No",
       "smsCategory": "LoanBooking",
       "isAccountOpening": false,
+      "riskScoreName": "ScreeningScore",
       "allowedRoles": [
         "WM"
       ]
