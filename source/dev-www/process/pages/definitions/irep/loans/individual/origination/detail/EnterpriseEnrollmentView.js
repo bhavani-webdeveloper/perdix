@@ -345,7 +345,7 @@ define({
                             "key": "customer.udf.userDefinedDateFieldValues.udfDate1",
                             "title": "RENT_LEASE_AGREEMENT_VALID_TILL"
                         }, {
-                            "key": "customer.udf.userDefinedDateFieldValues.udf1",
+                            "key": "customer.udf.userDefinedFieldValues.udf1",
                             "title": "RENT_LEASE_STATUS"
                         },{
                             "key": "customer.enterprise.companyOperatingSince",
