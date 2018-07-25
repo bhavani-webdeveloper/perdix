@@ -77,9 +77,10 @@ irf.models.factory('PDC', ["$resource", "$httpParamSerializer", "BASE_URL", "sea
         resource.pdcReverseFeedListUpload = function(file, progress) {
             var deferred = $q.defer();
             Upload.upload({
-                url: BASE_URL + "/api/feed/pdcreversefeedupload",
+                url: BASE_URL + "/api/batch/achOrPdcRealizationUpload",
                 data: {
-                    file: file
+                    file: file,
+                    repaymentMode:'PDC'
                 }
             }).then(function(resp) {
                 // TODO handle success

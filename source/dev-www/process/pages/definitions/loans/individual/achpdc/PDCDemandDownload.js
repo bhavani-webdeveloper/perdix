@@ -98,7 +98,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCDemandDownload")
                             PDC.pdcReverseFeedListUpload(file, progress)
                                 .then(
                                         function(response){
-                                            PageHelper.showProgress("pdc-upload", "Upload success!", 5000);
+                                            PageHelper.showProgress("action-succes", "Batch task for collection-demand-upload has been successfully created. Please check the status in PDC Realization Batch Monitoring screen.", 5000);
                                         }, function(httpResponse){
                                             PageHelper.showProgress("pdc-upload", "Upload Failed!", 5000);
                                         }

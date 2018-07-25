@@ -99,7 +99,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHDemandDownload")
                                 ACH.achDemandListUpload(file, progress)
                                     .then(
                                         function(response){
-                                            PageHelper.showProgress("collection-demand-upload", "Upload success!", 5000);
+                                            PageHelper.showProgress("action-succes", "Batch task for collection-demand-upload has been successfully created. Please check the status in ACH Realization Batch Monitoring screen.", 5000);
                                         }, function(httpResponse){
                                             PageHelper.showProgress("collection-demand-upload", "Upload Failed!", 5000);
                                         }
