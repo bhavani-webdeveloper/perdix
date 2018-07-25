@@ -33,7 +33,7 @@ irf.pageCollection.controller(irf.controller("pahal.loans.LoanOriginationDashboa
                 "Page/Engine/pahal.loans.individual.screening.FieldInvestigation2Queue",
                 "Page/Engine/pahal.loans.individual.screening.FieldInvestigation3Queue",
                 "Page/Engine/pahal.loans.individual.screening.CreditAppraisalQueue",
-                "Page/Engine/pahal.loans.individual.screening.DeviationApproval1Queue",
+                "Page/Engine/pahal.loans.individual.screening.DeviationApprovalQueue",
                 "Page/Engine/pahal.loans.individual.screening.CreditApproval1Queue",
                 "Page/Engine/pahal.loans.individual.screening.CreditApproval2Queue",
                 "Page/Engine/pahal.loans.individual.screening.RejectedQueue"            
@@ -406,10 +406,10 @@ irf.pageCollection.controller(irf.controller("pahal.loans.LoanOriginationDashboa
             }
 
 
-            var daq1Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.DeviationApproval1Queue"];
+            var daq1Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.DeviationApprovalQueue"];
             if (daq1Menu) {
                 IndividualLoan.search({
-                    'stage': 'DeviationApproval1',
+                    'stage': 'DeviationApproval',
                     'enterprisePincode': '',
                     'applicantName': '',
                     'area': '',
