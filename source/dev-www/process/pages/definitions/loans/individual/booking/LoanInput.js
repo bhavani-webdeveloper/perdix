@@ -788,23 +788,23 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             {
                                 "key": "loanAccount.transactionType",
                                 "type":"select",
-                                "enumCode":undefined,
                                 "title":"TRANSACTION_TYPE",
                                 "required": true,
-                                "titleMap":{
-                                    "New Loan":"New Loan"
-                                },
+                                "enumCode":"new_loan_transaction_type", 
+                                // "titleMap":{
+                                //     "New Loan":"New Loan"
+                                // },
                                 "condition": "model.siteCode == 'kinara' && !model.loanAccount.linkedAccountNumber"
                             },
                             {
                                 "key": "loanAccount.transactionType",
                                 "required": true,
-                                "enumCode":undefined,
+                                "enumCode":"restructure_loan_transaction_type", 
                                 "type":"select",
-                                "titleMap":{
-                                    "Loan Restructure":"Loan Restructure",
-                                    "Internal Foreclosure":"Internal Foreclosure"
-                                },
+                                // "titleMap":{
+                                //     "Loan Restructure":"Loan Restructure",
+                                //     "Internal Foreclosure":"Internal Foreclosure"
+                                // },
                                 "title":"TRANSACTION_TYPE",
                                 "condition": "model.siteCode == 'kinara' && model.loanAccount.linkedAccountNumber && model.loanAccount.transactionType.toLowerCase() != 'renewal'"
                             },
