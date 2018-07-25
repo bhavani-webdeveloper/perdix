@@ -85,12 +85,12 @@ define({
 						} else {
 							PageHelper.hideLoader();
 							irfProgressMessage.pop("group-init", "Load Complete. No Group Members Found", 2000);
-							backToDashboard();
+							irfNavigator.goBack();
 						}
 					}, function(resp) {
 						PageHelper.hideLoader();
 						irfProgressMessage.pop("group-init", "Oops. An error occurred", 2000);
-						backToDashboard();
+						irfNavigator.goBack();
 					});
 				}
 			},
@@ -244,16 +244,31 @@ define({
                     PageHelper.clearErrors();
                     model.groupAction = "SAVE";
                     model.group.groupStatus=false;
-                    var reqData = _.cloneDeep(model);
-                    GroupProcess.updateGroup(reqData, function(res) {
-                        PageHelper.hideLoader();
-                        irfProgressMessage.pop('Close-proceed', 'Operation Succeeded.', 5000);
-                        irfNavigator.goBack();
-                    }, function(res) {
-                        PageHelper.hideLoader();
-                        irfProgressMessage.pop('Close-proceed', 'Oops. Some error.', 2000);
-                        PageHelper.showErrors(res);
-                    });
+                    if(model.group.groupCategory=="Perdix7"){
+                    	var reqData={};
+                    	reqData.groupId=model.group.id;
+                    	reqData.remarks=model.group.remarks;
+                    	GroupProcess.closeLegacyGroup(reqData,function(res){
+                    		PageHelper.hideLoader();
+	                        irfProgressMessage.pop('Close-proceed', 'Operation Succeeded.', 5000);
+	                        irfNavigator.goBack();
+                    	},function(res) {
+	                        PageHelper.hideLoader();
+	                        irfProgressMessage.pop('Close-proceed', 'Oops. Some error.', 2000);
+	                        PageHelper.showErrors(res);
+	                    });	
+                    }else{
+                    	var reqData = _.cloneDeep(model);
+	                    GroupProcess.updateGroup(reqData, function(res) {
+	                        PageHelper.hideLoader();
+	                        irfProgressMessage.pop('Close-proceed', 'Operation Succeeded.', 5000);
+	                        irfNavigator.goBack();
+	                    }, function(res) {
+	                        PageHelper.hideLoader();
+	                        irfProgressMessage.pop('Close-proceed', 'Oops. Some error.', 2000);
+	                        PageHelper.showErrors(res);
+	                    });	
+                    }   
 				},
 			}
 		}
