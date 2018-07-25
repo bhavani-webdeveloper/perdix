@@ -53,7 +53,7 @@ define({
                 "items": [{
                     "key": "product.productCategory",
                     "type": "select",
-                    "enumCode": "loan_product_category",
+                    "enumCode": "loan_product_category_master",
                     "required": true,
                 }, {
                     "key": "product.productCode",
