@@ -466,6 +466,12 @@ irf.commons.run(["irfStorageService", "SessionStore", "$q", "$log", "filterFilte
 					o.data[i].value = o.data[i].field1.toString().trim();
 				}
 			});
+			createEnum("new_loan_transaction_type", "loan_transaction_type", function(s, o) {
+				o.data = filterFilter(o.data, {name:'New Loan'}, true);
+			});
+			createEnum("restructure_loan_transaction_type", "loan_transaction_type", function(s, o) {
+				o.data = filterFilter(o.data, function(a,p){ if(a.value != "New Loan"){ return true}});
+			});
 			createEnum("groupLoanStages", "groupLoanBackStages", function(s, o) {
 				var filterData = [] , names = [];
 				for (i in o.data) {
