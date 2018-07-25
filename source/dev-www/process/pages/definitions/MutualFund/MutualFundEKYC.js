@@ -33,11 +33,9 @@ irf.pageCollection.controller(irf.controller("MutualFund.MutualFundEKYC"), ["$lo
             
             document.getElementById("ekyctype").value = 'I';
             document.getElementById("kyc_data").value = kyc_data.join('|');
-            document.getElementById("url").value = irf.MANAGEMENT_BASE_URL + '/camsResponse.php';
-
+            document.getElementById("url").value = irf.MANAGEMENT_BASE_URL + '/server-ext/camsResponse.php?customer_id='+$stateParams.pageId+'&url='+irf.CLIENT_URL;
             document.getElementById('ekycForm').action = irf.CAMS_EKYC_INTEG_URL;
             document.getElementById('ekycForm').submit();
-
         }, function(err) {
             PageHelper.showProgress('EKYC', 'EKYC login failed.', 5000);
             PageHelper.showErrors(err);
