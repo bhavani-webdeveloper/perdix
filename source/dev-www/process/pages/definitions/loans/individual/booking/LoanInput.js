@@ -18,10 +18,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
         };
 
         var validateForm = function(formCtrl){
-            formCtrl.scope.$broadcast('schemaFormValidate');
-            if (formCtrl && formCtrl.$invalid) {
-                PageHelper.showProgress("enrolment","Your form have errors. Please fix them.", 5000);
-                return false;
+            if(PageHelper.isFormInvalid(formCtrl)) { 
+                return false; 
             }
             return true;
         };
@@ -790,26 +788,24 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             {
                                 "key": "loanAccount.transactionType",
                                 "type":"select",
+                                "enumCode":undefined,
                                 "title":"TRANSACTION_TYPE",
+                                "required": true,
                                 "titleMap":{
                                     "New Loan":"New Loan"
-                                },
-                                "schema":{
-                                    "enumCode":undefined
                                 },
                                 "condition": "model.siteCode == 'kinara' && !model.loanAccount.linkedAccountNumber"
                             },
                             {
                                 "key": "loanAccount.transactionType",
+                                "required": true,
+                                "enumCode":undefined,
                                 "type":"select",
                                 "titleMap":{
                                     "Loan Restructure":"Loan Restructure",
                                     "Internal Foreclosure":"Internal Foreclosure"
                                 },
                                 "title":"TRANSACTION_TYPE",
-                                 "schema":{
-                                    "enumCode":undefined
-                                },
                                 "condition": "model.siteCode == 'kinara' && model.loanAccount.linkedAccountNumber && model.loanAccount.transactionType.toLowerCase() != 'renewal'"
                             },
                             {
@@ -3100,9 +3096,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     $log.info(model);
                     PageHelper.clearErrors();
 
-                    if (formCtrl && formCtrl.$invalid) {
-                        PageHelper.showProgress("loan","Your form have errors. Please fix them.", 5000);
-                        return false;
+                    if (!validateForm(formCtrl)){
+                        return;
                     }
 
                     if(model.loanAccount.linkedAccountNumber && model.siteCode == 'kinara' && model.linkedAccount){
