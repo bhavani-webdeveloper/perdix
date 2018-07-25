@@ -2577,8 +2577,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 PageHelper.clearErrors();
                                 BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
                             }, function (err) {
-                                PageHelper.showErrors(err);
-                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);                                
+                                PageHelper.showErrors(err.message);
+                                PageHelper.showProgress('enrolment', err.message, 5000);                                
                                 PageHelper.hideLoader();
                             });
                     }
