@@ -15,10 +15,10 @@
             method: 'POST',
             url: endpoint + '/server-ext/reportmaster/report_master_add.php'
         },
-	reportParameterList: {
+	    reportParameterList: {
             method: 'GET',
             url: endpoint + '/server-ext/reportmaster/report_parameter_mapping.php',
-            isArray: true
+            //isArray: true
         },
         reportParametername: {
             method: 'GET',
@@ -50,7 +50,7 @@
             method:'GET',
             url: endpoint + '/server-ext/reportmaster/report_master_delete.php'
         },
-	getConfigurationJson:{
+	    getConfigurationJson:{
             method:'GET',
             url:'process/schemas/:name'
         },

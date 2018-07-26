@@ -3,10 +3,14 @@
         var endpoint = BASE_URL + '/api/enrollments';
         
         return $resource(endpoint, null, {
-            getSchema:{
+            getSchema: searchResource({
                 method:'GET',
-                url:'process/schemas/death_marking.json'
-            },
+                url: endpoint + '/fetchDeceasedDetails'
+            }),
+            updateDeadMarkingStatus: searchResource({
+                method:'POST',
+                url:endpoint+'/updatedDeceasedDetails'
+            }),
             deathMarkingSchema:{
                 method:'GET',
                 url:'process/schemas/deathMarking.json'

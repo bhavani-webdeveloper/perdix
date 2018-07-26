@@ -18,7 +18,9 @@ define({
                     return formHelper;
                 },
                 getResultsPromise: function(searchOptions, pageOpts) {
-                    return DeathMarking.getSchema().$promise;
+                    return DeathMarking.getSchema({
+                       'status':'PENDING'
+                    }).$promise;
                 },
                 paginationOptions: {
                     "getItemsPerPage": function(response, headers) {
@@ -40,7 +42,7 @@ define({
                         return [];
                     },
                     getListItem: function(item) {
-                        return [item.name, item.urnNo, item.dateOfIncident];
+                        return [item.familyMemberName, item.urnNo, item.dateOfIncident, item.id];
                     },
                     getTableConfig: function() {
                         return {
@@ -52,7 +54,7 @@ define({
                     getColumns: function() {
                         return [{
                             title: 'DEATH_MARKING_COLUMN_NAME',
-                            data: 'name'
+                            data: 'familyMemberName'
                         }, {
                             title: 'DEATH_MARKING_COLUMN_URN',
                             data: 'urnNo'
@@ -63,7 +65,7 @@ define({
                     },
                     getActions: function() {
                         return [{
-                            name: "Approve_Death_Details",
+                            name: "APPROVE_DEATH_DETAILS",
                             desc: "",
                             icon: "fa fa-user",
                             fn: function(item, index){

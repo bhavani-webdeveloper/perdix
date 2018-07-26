@@ -67,7 +67,7 @@
                             PageHelper.showLoader();
                         var promise =  ReportMaintenance.reportParameterList({report_name : model.management.report_name}).$promise;
                         promise .then(function(resp) { 
-                            model.selectedReport = resp;                              
+                            model.selectedReport = resp.parameterMappingList;                              
                             delete model.management._filterCollection;
                             model.management._filterCollection = [];
                             if (model.selectedReport) {
@@ -79,6 +79,8 @@
                                      } 
                                 }
                             }
+                            model.management.report_access_hierarchy = resp.accessHierarchy.status;
+                            model.management.report_access_hierarchy_details = resp.accessHierarchy.access_filter_query_column;
                             PageHelper.hideLoader();
                         },function(resp){
                             PageHelper.hideLoader();
@@ -172,8 +174,33 @@
                             ]
                         }
                     ]
-                }
-                ,{
+                },
+                    {
+                    type: "box",
+                    condition:"model.management.report_name",
+                    title: "REPORT_ACCESS_HIERARCHY", 
+                    colClass: "col-sm-9",
+                    items: [
+                        {
+                               key:"management.report_access_hierarchy",
+                                    title: "REPORT_ACCESS_HIERARCHY",
+                                    type:"radios",
+                                    required:true,
+                                    titleMap:{
+                                        1 : "yes",
+                                        0 : "No"
+                                    }                               
+                        },
+                          {
+                               key:"management.report_access_hierarchy_details",
+                                    title: "REPORT_ACCESS_HIERARCHY_DETAILS",
+                                    condition:"model.management.report_access_hierarchy == 1",
+                                    type:"textarea",
+                                    required:true ,                           
+                        }]
+                    },
+
+                {
                     type: "actionbox",
                     condition:"model.management.report_name",
                     items: [{
@@ -208,6 +235,8 @@
                     submit: function(model, form, formName) {
                         var req = {
                             report_name :model.management.report_name,
+                            access_hierarchy:model.management.report_access_hierarchy_details,
+                            status:model.management.report_access_hierarchy,
                             parameter: []
                         };   
                          for (var i = 0; i < model.management._filterCollection.length; i++) {
