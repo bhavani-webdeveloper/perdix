@@ -66,16 +66,9 @@
 		<br>
 		<br>
 		<div>
-			You will be redirected to perdix application in 5 seconds.
-			<br>
-			Click here to <a href="<?php echo $url ?>">Go back</a>
+			Continue with MutualFund Process
 		</div>
 	</div>
 	<div class="footer"></div>
-    <script>
-        var timer = setTimeout(function() {
-            window.location= "<?php echo $url ?>";
-        }, 5000);
-    </script>
 </body>
 </html>
