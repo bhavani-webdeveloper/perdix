@@ -110,6 +110,29 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
             }
         };
 
+        var validateWaiverDetails = function(model) {
+            PageHelper.clearErrors();
+            if(parseFloat(model.loanAccount.disbursementSchedules[0].normalInterestDuePayment)>parseFloat(model.loanAccount.precloseureNormalInterest)){
+                PageHelper.clearErrors();
+                PageHelper.setError({
+                    message: "Normal InterestDue Waiver Payment should not be greater then" +" " + model.loanAccount.precloseureNormalInterest
+                });
+                return false;
+            }else if(parseFloat(model.loanAccount.disbursementSchedules[0].penalInterestDuePayment)>parseFloat(model.loanAccount.precloseurePenalInterest)){
+                PageHelper.clearErrors();
+                PageHelper.setError({
+                    message: "Penal Interest Due Waiver Payment should not be greater then" +" " + model.loanAccount.precloseurePenalInterest
+                });
+                return false;
+            }else if(parseFloat(model.loanAccount.disbursementSchedules[0].feeAmountPayment)>parseFloat(model.loanAccount.precloseureTotalFee)){
+                PageHelper.clearErrors();
+                PageHelper.setError({
+                    message: "Fee Amount Waiver Payment should not be greater then" +" " + model.loanAccount.precloseureTotalFee
+                });
+                return false;
+            }
+        };
+
         return {
             "type": "schema-form",
             "title": "CAPTURE_DATES",
@@ -886,17 +909,17 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         "key": "loanAccount.disbursementSchedules[0].normalInterestDuePayment",
                         "title": "TOTAL_INTEREST_DUE",
                         //"type": "amount",
-                        "onChange": "actions.validateWaiverAmount(model.loanAccount.disbursementSchedules[0].normalInterestDuePayment,model.loanAccount.precloseureNormalInterest)"
+                        "onChange": "actions.validateWaiverAmount(model.loanAccount.disbursementSchedules[0].normalInterestDuePayment,model.loanAccount.precloseureNormalInterest,modelValue)"
                     }, {
                         "key": "loanAccount.disbursementSchedules[0].penalInterestDuePayment",
                         "title": "TOTAL_PENAL_INTEREST_DUE",
                         //"type": "amount",
-                        "onChange": "actions.validateWaiverAmount(model.loanAccount.disbursementSchedules[0].penalInterestDuePayment,model.loanAccount.precloseurePenalInterest)"
+                        "onChange": "actions.validateWaiverAmount(model.loanAccount.disbursementSchedules[0].penalInterestDuePayment,model.loanAccount.precloseurePenalInterest,modelValue)"
                     }, {
                         "key": "loanAccount.disbursementSchedules[0].feeAmountPayment",
                         "title": "TOTAL_FEE_DUE",
                         //"type": "amount",
-                        "onChange": "actions.validateWaiverAmount(model.loanAccount.disbursementSchedules[0].feeAmountPayment,model.loanAccount.precloseureTotalFee)"
+                        "onChange": "actions.validateWaiverAmount(model.loanAccount.disbursementSchedules[0].feeAmountPayment,model.loanAccount.precloseureTotalFee,modelValue)"
                     }]
                 }
                 ]
@@ -973,7 +996,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     //$log.info(BackedDatedDiffmonth);
                     /* 1) Loc-Renewal chnage includes default processing fee to 0.2 ans calculation of process amount 
                     */
-
+                    if (!validateWaiverDetails(model)){
+                        return;
+                    }
                     validateDisbursementDate(model);
 
                     if(model.loanAccount.linkedAccountNumber && model.siteCode == 'kinara'){
@@ -1116,7 +1141,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         PageHelper.setError({
                             message: "Amount should not be greater then" +" " + amount2
                         });
-                    }
+                        return 
+                    }  
                 },
                 reject: function (model, form, formName) {
 
