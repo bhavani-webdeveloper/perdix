@@ -77,26 +77,36 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
             }
         };
 
+        var validateDisbursementDate = function(model){
+            if (model.disbursementCutOffTime && model.CutOffdate &&(moment(model._currentDisbursement.scheduledDisbursementDate).isBefore(model.CutOffdate))) {
+                PageHelper.setError({
+                    message: "Scheduled Disbursement Date should be greater then or equal" + " " + moment(model.CutOffdate).format(SessionStore.getDateFormat())
+                });
+                return;
+            }
+            if (model.disbursementRestrictionDays && model.scheduledDisbursementAllowedDate && (moment(model._currentDisbursement.scheduledDisbursementDate).isAfter(model.scheduledDisbursementAllowedDate))) {
+                PageHelper.setError({
+                    message: "Scheduled Disbursement Date should not be greater then" + " " + moment(model._currentDisbursement.scheduledDisbursementDate).format(SessionStore.getDateFormat())
+                });
+                return;
+            }
+        }
 
         var populateDisbursementScheduledDate = function(model) {
-            var now= moment(new Date()).format('HH:MM');
-            var disbursementRestrictionDays= Number(SessionStore.getGlobalSetting("disbursementRestrictionDays")) ||5;
-            var today=new Date(SessionStore.getCBSDate());
-            var tomorrow=new Date(SessionStore.getCBSDate());
-            model.scheduledDisbursementAllowedDate=new Date(SessionStore.getCBSDate());
-            var tomorrow= new Date(tomorrow.setDate(today.getDate()+1));
+            var now= moment().format('HH:MM');
+            var today=SessionStore.getCBSDate();
+            var tomorrow= moment(SessionStore.getCBSDate()).add("days", 1).format(SessionStore.getSystemDateFormat());
+            model._currentDisbursement.customerSignatureDate = today;
             if(now < model.disbursementCutOffTime){
-               model._currentDisbursement.customerSignatureDate = today;
                model._currentDisbursement.scheduledDisbursementDate = today;
-               model.CutOffdate=today;
+               model.CutOffdate=moment(today);
                model.CutOffTime=false;
-               model.scheduledDisbursementAllowedDate= new Date(model.scheduledDisbursementAllowedDate.setDate(today.getDate()+ disbursementRestrictionDays));
+               model.scheduledDisbursementAllowedDate= moment(today).add("days", model.disbursementRestrictionDays);
             }else{
-               model._currentDisbursement.customerSignatureDate = today;
                model._currentDisbursement.scheduledDisbursementDate = tomorrow;
-               model.CutOffdate=tomorrow;
+               model.CutOffdate=moment(tomorrow);
                model.CutOffTime=true;
-               model.scheduledDisbursementAllowedDate= new Date(model.scheduledDisbursementAllowedDate.setDate(tomorrow.getDate()+ disbursementRestrictionDays));
+               model.scheduledDisbursementAllowedDate= moment(tomorrow).add("days", model.disbursementRestrictionDays);
             }
         };
 
@@ -107,7 +117,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                 $log.info("Individual Loan Booking Page got initialized");
                 model.siteCode = SessionStore.getGlobalSetting("siteCode");
                 model.disbursementCutOffTime=SessionStore.getGlobalSetting("disbursementCutOffTime");
-                model.disbursementRestriction=(SessionStore.getGlobalSetting("disbursementRestriction")=='true');
+                model.disbursementRestrictionDays= Number(SessionStore.getGlobalSetting("disbursementRestrictionDays") || 0);
                 model._currentDisbursement=model._currentDisbursement||{};
                 PageHelper.showProgress('load-loan', 'Loading loan account...');
                 PagesDefinition.getPageConfig("Page/Engine/loans.individual.booking.LoanInput").then(function(data) {
@@ -157,7 +167,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                                 return;
                             }
 
-                            if (model.disbursementRestriction) {
+                            model.scheduledDisbursementAllowedDate= moment(SessionStore.getCBSDate()).add("days", model.disbursementRestrictionDays);
+                            if (model.disbursementCutOffTime) {
                                 populateDisbursementScheduledDate(model);
                             }
 
@@ -271,7 +282,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     {
                         "key": "_currentDisbursement.customerSignatureDate",
                         "title": "CUSTOMER_SIGNATURE_DATE",
-                        "condition":"!model.disbursementRestriction",
+                        "condition":"!model.disbursementCutOffTime",
                         "type": "date",
                         "required": true,
                         "onChange":function(modelValue,form,model){
@@ -281,7 +292,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     {
                         "key": "_currentDisbursement.customerSignatureDate",
                         "title": "CUSTOMER_SIGNATURE_DATE",
-                        "condition":"model.disbursementRestriction",
+                        "condition":"model.disbursementCutOffTime",
                         "type": "date",
                         "required": false,
                         "readonly":true,
@@ -295,21 +306,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         "type": "date",
                         "required": true,
                         "onChange": function(value ,form ,model, event){
-                            var CutOffdate= moment(model.CutOffdate).format('DD-MM-YYYY');
-                            var scheduledDisbursementAllowedDate = moment(model.scheduledDisbursementAllowedDate).format('DD-MM-YYYY');
-                            var disbursementdate=moment(model._currentDisbursement.scheduledDisbursementDate).format('DD-MM-YYYY');
-                            if (model.disbursementRestriction && model.CutOffTime &&(disbursementdate < CutOffdate)) {
-                                PageHelper.setError({
-                                    message: "Scheduled Disbursement Date should be greater then or equal" + " " + CutOffdate
-                                });
-                                return;
-                            }
-                            if (model.disbursementRestriction && (disbursementdate > scheduledDisbursementAllowedDate)) {
-                                PageHelper.setError({
-                                    message: "Scheduled Disbursement Date should not be greater then" + " " + scheduledDisbursementAllowedDate
-                                });
-                                return;
-                            }
+                            validateDisbursementDate(model);
                         }
                     },
                     {
@@ -977,21 +974,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     /* 1) Loc-Renewal chnage includes default processing fee to 0.2 ans calculation of process amount 
                     */
 
-                    var CutOffdate=moment(model.CutOffdate).format('DD-MM-YYYY');
-                    var scheduledDisbursementAllowedDate = moment(model.scheduledDisbursementAllowedDate).format('DD-MM-YYYY');
-                    var disbursementdate=moment(model._currentDisbursement.scheduledDisbursementDate).format('DD-MM-YYYY');
-                    if (model.disbursementRestriction && model.CutOffTime &&(disbursementdate < CutOffdate)) {
-                        PageHelper.setError({
-                            message: "Scheduled Disbursement Date should be greater then or equal" + " " + CutOffdate
-                        });
-                        return;
-                    }
-                    if (model.disbursementRestriction && (disbursementdate > scheduledDisbursementAllowedDate)) {
-                        PageHelper.setError({
-                            message: "Scheduled Disbursement Date should not be greater then" + " " + scheduledDisbursementAllowedDate
-                        });
-                        return;
-                    }
+                    validateDisbursementDate(model);
 
                     if(model.loanAccount.linkedAccountNumber && model.siteCode == 'kinara'){
                         if(model.loanAccount.transactionType && model.loanAccount.transactionType.toLowerCase()=='renewal'){
@@ -1113,11 +1096,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         PageHelper.showProgress('preclosure', 'Preclosure loan details are generated', 2000);
                         model.loanAccount.precloseuredetails=true;
                         model.loanAccount.precloseurePayOffAmount=response.part1;
-                        model.loanAccount.precloseurePayOffAmountWithDue=response.part2;
-                        model.loanAccount.precloseurePrincipal=model.loanAccount.disbursementSchedules[0].linkedAccountTotalPrincipalDue= (response.part3.slice(3)).replace(/\,/g,"");
-                        model.loanAccount.precloseureNormalInterest=model.loanAccount.disbursementSchedules[0].linkedAccountNormalInterestDue=(response.part4.slice(3)).replace(/\,/g,"");
-                        model.loanAccount.precloseurePenalInterest=model.loanAccount.disbursementSchedules[0].linkedAccountPenalInterestDue=(response.part5.slice(3)).replace(/\,/g,"");
-                        model.loanAccount.precloseureTotalFee=model.loanAccount.disbursementSchedules[0].linkedAccountTotalFeeDue=(response.part6.slice(3)).replace(/\,/g,"");
+                        model.loanAccount.precloseurePayOffAmountWithDue=(response.part2?accounting.unformat(response.part2.slice(3)): 0) +  (response.part6?accounting.unformat(response.part6.slice(3)):0);
+                        model.loanAccount.precloseurePrincipal=model.loanAccount.disbursementSchedules[0].linkedAccountTotalPrincipalDue= response.part3?accounting.unformat(response.part3.slice(3)):0;
+                        model.loanAccount.precloseureNormalInterest=model.loanAccount.disbursementSchedules[0].linkedAccountNormalInterestDue=response.part4?accounting.unformat(response.part4.slice(3)):0;
+                        model.loanAccount.precloseurePenalInterest=model.loanAccount.disbursementSchedules[0].linkedAccountPenalInterestDue=response.part5?accounting.unformat(response.part5.slice(3)):0;
+                        model.loanAccount.precloseureTotalFee=model.loanAccount.disbursementSchedules[0].linkedAccountTotalFeeDue=response.part6?accounting.unformat(response.part6.slice(3)):0;
                     },function(error){
                         model.loanAccount.precloseuredetails=false;
                         PageHelper.showProgress('preclosure', 'Error Getting Preclosure loan details', 2000);
@@ -1127,8 +1110,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                 },
                 validateWaiverAmount: function(amount1,amount2) {
                     PageHelper.clearErrors();
-                    amount2= parseInt(amount2);
-                    if (amount1> parseInt(amount2)) {
+                    amount2= parseFloat(amount2);
+                    if (amount1> parseFloat(amount2)) {
                         PageHelper.clearErrors();
                         PageHelper.setError({
                             message: "Amount should not be greater then" +" " + amount2
