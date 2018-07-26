@@ -80,7 +80,9 @@
             "beneficiaryMobileNumber": {
                 "key": "payment.beneficiaryMobileNumber",
                 "type": "string",
-                "title": "BENEFICIARY_MOBILE_NO"
+                "title": "BENEFICIARY_MOBILE_NO",
+                "inputmode": "number",
+                "numberType": "tel"
             },
             "creditAccountNo": {
                 "key": "payment.beneficiaryAccountNumber",
@@ -143,7 +145,9 @@
             "debitMobileNumber": {
                 "key": "payment.debitMobileNumber",
                 "type": "string",
-                "title": "MOBILE_NO"
+                "title": "MOBILE_NO",
+                "inputmode": "number",
+                "numberType": "tel"
             },
             "debitTransactionParticulars": {
                 "key": "payment.debitTransactionParticulars",
@@ -209,7 +213,7 @@
             }
 
         }
-    },                
+    },
     "BatchSummary": {
         "type": "box",
         "title": "BATCH_SUMMARY",
@@ -272,7 +276,7 @@
                     "title": "REJECT",
                     "required": true,
                     "onClick": "actions.reject(model, formCtrl, form, $event)"
-                },        
+                },
             "sendbacksectionremarks":
                 {
                 "title": "REMARKS",
@@ -287,7 +291,7 @@
                 "onClick": "actions.sendBack(model, formCtrl, form, $event)"
                  },
         "proceedsectionremarks": {
-            
+
                 "title": "REMARKS",
                 "key": "review.remarks",
                 "type": "textarea",
@@ -300,7 +304,7 @@
                 "onClick": "actions.proceed(model, formCtrl, form, $event)"
             }
         }
-    
+
     },
     "UploadPaymentConfirmation": {
         "type": "box",
@@ -321,5 +325,5 @@
                 "fileType": "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
             }
         }
-    }    
+    }
 }
