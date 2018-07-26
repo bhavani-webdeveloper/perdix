@@ -885,17 +885,17 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     "items": [{
                         "key": "loanAccount.disbursementSchedules[0].normalInterestDuePayment",
                         "title": "TOTAL_INTEREST_DUE",
-                        "type": "amount",
+                        //"type": "amount",
                         "onChange": "actions.validateWaiverAmount(model.loanAccount.disbursementSchedules[0].normalInterestDuePayment,model.loanAccount.precloseureNormalInterest)"
                     }, {
                         "key": "loanAccount.disbursementSchedules[0].penalInterestDuePayment",
                         "title": "TOTAL_PENAL_INTEREST_DUE",
-                        "type": "amount",
+                        //"type": "amount",
                         "onChange": "actions.validateWaiverAmount(model.loanAccount.disbursementSchedules[0].penalInterestDuePayment,model.loanAccount.precloseurePenalInterest)"
                     }, {
                         "key": "loanAccount.disbursementSchedules[0].feeAmountPayment",
                         "title": "TOTAL_FEE_DUE",
-                        "type": "amount",
+                        //"type": "amount",
                         "onChange": "actions.validateWaiverAmount(model.loanAccount.disbursementSchedules[0].feeAmountPayment,model.loanAccount.precloseureTotalFee)"
                     }]
                 }
