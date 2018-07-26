@@ -5,7 +5,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
         var branch = SessionStore.getBranch();
         var siteCode = SessionStore.getGlobalSetting("siteCode");
         var requires = {
-            "modeOfDisbursement": siteCode == 'kinara' || siteCode =='sambandh' || siteCode =='saija'
+            "modeOfDisbursement": siteCode == 'kinara' || siteCode =='sambandh' || siteCode =='saija' || siteCode == 'pahal'
         }
         var backToQueue = function(){
             $state.go("Page.Engine",{

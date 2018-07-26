@@ -266,6 +266,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -282,6 +283,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -298,6 +300,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -313,21 +316,13 @@
             "minimum": 1,
             "maximum": 12,
             "captureStages": [
-               "ScreeningReview",
+                "ScreeningReview",
+                "ApplciationReview",
                 "GoNoGoApproval1",
                 "GoNoGoApproval2",
-                "DeviationApproval1",
-                "DeviationApproval2",
-                "BusinessApproval1",
-                "BusinessApproval2",
-                "BusinessApproval3",
-                "BusinessApproval4",
-                "BusinessApproval5",
                 "CreditApproval1",
                 "CreditApproval2",
-                "CreditApproval3",
-                "CreditApproval4",
-                "CreditApproval5"
+                "CreditApproval3"
             ]
           },
           "productType": {
@@ -337,6 +332,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -353,6 +349,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -369,6 +366,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -385,20 +383,12 @@
             "maximum": 10000000,
             "captureStages": [
                 "ScreeningReview",
+                "ApplciationReview",
                 "GoNoGoApproval1",
                 "GoNoGoApproval2",
-                "DeviationApproval1",
-                "DeviationApproval2",
-                "BusinessApproval1",
-                "BusinessApproval2",
-                "BusinessApproval3",
-                "BusinessApproval4",
-                "BusinessApproval5",
                 "CreditApproval1",
                 "CreditApproval2",
-                "CreditApproval3",
-                "CreditApproval4",
-                "CreditApproval5"
+                "CreditApproval3"
             ]
           },
           "doCustomerLoanAmount": {
@@ -408,6 +398,7 @@
             "maximum": 10000000,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -424,6 +415,7 @@
             "maximum": 10000000,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -440,6 +432,7 @@
             "maximum": 10000000,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -456,6 +449,7 @@
             "maximum": 10000000,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -472,6 +466,7 @@
             "maximum": 10000000,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -488,6 +483,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -504,6 +500,7 @@
             "maximum": 10000000,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -520,6 +517,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -536,6 +534,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -552,6 +551,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -567,6 +567,7 @@
             "type": "string",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -582,6 +583,7 @@
             "type": "number",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -597,6 +599,7 @@
             "type": "string",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -613,6 +616,7 @@
             "maximum": 10000000,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -627,6 +631,7 @@
             "type": "string",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -641,6 +646,7 @@
             "type": "string",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -655,6 +661,7 @@
             "type": "string",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -669,6 +676,7 @@
             "type": "string",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -686,6 +694,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -702,6 +711,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -718,6 +728,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -732,6 +743,7 @@
             "type": "boolean",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -748,6 +760,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -764,6 +777,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -780,6 +794,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -794,6 +809,7 @@
             "type": "string",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -811,6 +827,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -827,6 +844,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -843,6 +861,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -859,6 +878,7 @@
             "maximum": 1000000000,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -875,6 +895,7 @@
             "maximum": 10000000,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -891,6 +912,7 @@
             "maxLength": 16,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -907,6 +929,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -923,6 +946,7 @@
             "maximum": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -939,6 +963,7 @@
             "maxLength": 16,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -955,6 +980,7 @@
             "maxLength": 16,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -971,6 +997,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -985,6 +1012,7 @@
             "type": "date",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1001,6 +1029,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1017,6 +1046,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1033,13 +1063,16 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
               "TeleVerification",
               "CreditAppraisal",
-              "LoanInitiation"
+              "LoanInitiation",
+              "DocumentUpload",
+              "DocumentVerification"
             ]
           },
           "customerBankIfscCode": {
@@ -1049,13 +1082,16 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
               "TeleVerification",
               "CreditAppraisal",
-              "LoanInitiation"
+              "LoanInitiation",
+              "DocumentUpload",
+              "DocumentVerification"
             ]
           },
           "customerBank": {
@@ -1065,13 +1101,16 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
               "TeleVerification",
               "CreditAppraisal",
-              "LoanInitiation"
+              "LoanInitiation",
+              "DocumentUpload",
+              "DocumentVerification"
             ]
           },
           "customerBranch": {
@@ -1081,13 +1120,16 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
               "TeleVerification",
               "CreditAppraisal",
-              "LoanInitiation"
+              "LoanInitiation",
+              "DocumentUpload",
+              "DocumentVerification"
             ]
           },
           "oldAccountNO": {
@@ -1097,6 +1139,7 @@
             "maxLength": 1000,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1113,6 +1156,7 @@
             "maximum": 10000000,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1129,20 +1173,13 @@
             "maximum": 10000000,
             "captureStages": [
                 "ScreeningReview",
+                "ApplciationReview",
                 "GoNoGoApproval1",
                 "GoNoGoApproval2",
-                "DeviationApproval1",
-                "DeviationApproval2",
-                "BusinessApproval1",
-                "BusinessApproval2",
-                "BusinessApproval3",
-                "BusinessApproval4",
-                "BusinessApproval5",
                 "CreditApproval1",
                 "CreditApproval2",
                 "CreditApproval3",
-                "CreditApproval4",
-                "CreditApproval5"
+                "LoanInitiation"
             ]
           },
           "loanCycle": {
@@ -1152,6 +1189,7 @@
             "maximum": 1000,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1168,6 +1206,7 @@
             "maxLength": 1000,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1184,6 +1223,7 @@
             "maximum": 100000000,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1200,6 +1240,7 @@
             "maximum": 100000000,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1216,6 +1257,7 @@
             "maximum": 100000000,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1232,6 +1274,7 @@
             "maxLength": 1000,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1248,6 +1291,7 @@
             "maxLength": 1000,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1264,6 +1308,7 @@
             "maxLength": 1000,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1278,6 +1323,7 @@
             "type": "date",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1294,6 +1340,7 @@
             "maxLength": 1000,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1310,6 +1357,7 @@
             "maxLength": 1000,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1326,6 +1374,7 @@
             "maximum": 10000000,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1342,6 +1391,7 @@
             "maximum": 10000000,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1358,6 +1408,7 @@
             "maximum": 10000000,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1374,6 +1425,7 @@
             "maxLength": 16,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1390,6 +1442,7 @@
             "maxLength": 16,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1404,20 +1457,12 @@
             "type": "float",
             "captureStages": [
                 "ScreeningReview",
+                "ApplciationReview",
                 "GoNoGoApproval1",
                 "GoNoGoApproval2",
-                "DeviationApproval1",
-                "DeviationApproval2",
-                "BusinessApproval1",
-                "BusinessApproval2",
-                "BusinessApproval3",
-                "BusinessApproval4",
-                "BusinessApproval5",
                 "CreditApproval1",
                 "CreditApproval2",
                 "CreditApproval3",
-                "CreditApproval4",
-                "CreditApproval5",
                 "LoanInitiation"
             ]
           },
@@ -1426,6 +1471,7 @@
             "type": "number",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1440,20 +1486,13 @@
             "type": "number",
             "captureStages": [
                 "ScreeningReview",
+                "ApplciationReview",
                 "GoNoGoApproval1",
                 "GoNoGoApproval2",
-                "DeviationApproval1",
-                "DeviationApproval2",
-                "BusinessApproval1",
-                "BusinessApproval2",
-                "BusinessApproval3",
-                "BusinessApproval4",
-                "BusinessApproval5",
                 "CreditApproval1",
                 "CreditApproval2",
                 "CreditApproval3",
-                "CreditApproval4",
-                "CreditApproval5"
+                "LoanInitiation"
             ]
           },
           "expectedProcessingFeePercentage": {
@@ -1461,6 +1500,7 @@
             "type": "number",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1475,6 +1515,7 @@
             "type": "string",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1489,6 +1530,7 @@
             "type": "number",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1503,6 +1545,7 @@
             "type": "number",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1517,6 +1560,7 @@
             "type": "number",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1531,6 +1575,7 @@
             "type": "date",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1546,6 +1591,7 @@
             "type": "string",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1560,6 +1606,7 @@
             "type": "string",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1574,6 +1621,7 @@
             "type": "number",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1588,6 +1636,7 @@
             "type": "string",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1602,6 +1651,7 @@
             "type": "number",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1616,6 +1666,7 @@
             "type": "number",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1630,6 +1681,7 @@
             "type": "string",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1644,6 +1696,7 @@
             "type": "string",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1658,6 +1711,7 @@
             "type": "string",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1672,6 +1726,7 @@
             "type": "number",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1686,6 +1741,7 @@
             "type": "number",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1700,6 +1756,7 @@
             "type": "string",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1714,6 +1771,7 @@
             "type": "number",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1728,6 +1786,7 @@
             "type": "number",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1742,6 +1801,7 @@
             "type": "date",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1756,6 +1816,7 @@
             "type": "date",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1770,6 +1831,7 @@
             "type": "number",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1784,6 +1846,7 @@
             "type": "number",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1798,6 +1861,7 @@
             "type": "number",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1812,6 +1876,7 @@
             "type": "string",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1826,6 +1891,7 @@
             "type": "string",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1840,6 +1906,7 @@
             "type": "string",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1854,6 +1921,7 @@
             "type": "string",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1868,6 +1936,7 @@
             "type": "string",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1882,6 +1951,7 @@
             "type": "string",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1896,6 +1966,7 @@
             "type": "string",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1910,6 +1981,7 @@
             "type": "string",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1924,6 +1996,7 @@
             "type": "string",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1938,6 +2011,7 @@
             "type": "string",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1952,6 +2026,7 @@
             "type": "string",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1966,6 +2041,7 @@
             "type": "string",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -1994,6 +2070,7 @@
               "maxLength": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -2010,6 +2087,7 @@
               "maxLength": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -2026,6 +2104,7 @@
               "maxLength": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -2040,6 +2119,7 @@
               "type": "string",
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -2057,6 +2137,7 @@
               "maxLength": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -2073,6 +2154,7 @@
               "maxLength": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -2089,6 +2171,7 @@
               "maxLength": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -2103,6 +2186,7 @@
               "type": "string",
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -2120,6 +2204,7 @@
               "maxLength": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -2136,6 +2221,7 @@
               "maximum": 6,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -2150,6 +2236,7 @@
               "type": "string",
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -2164,6 +2251,7 @@
               "type": "string",
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -2179,6 +2267,7 @@
               "type": "boolean",
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -2195,6 +2284,7 @@
               "maxLength": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -2211,6 +2301,7 @@
               "maxLength": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -2227,6 +2318,7 @@
               "maxLength": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -2243,6 +2335,7 @@
               "maxLength": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -2257,6 +2350,7 @@
               "type": "string",
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -2272,6 +2366,7 @@
               "type": "string",
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -2288,6 +2383,7 @@
               "maxLength": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -2304,6 +2400,7 @@
               "maxLength": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -2320,6 +2417,7 @@
               "maxLength": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -2334,6 +2432,7 @@
               "type": "string",
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -2351,6 +2450,7 @@
               "maxLength": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -2367,6 +2467,7 @@
               "maximum": 6,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -2381,6 +2482,7 @@
               "type": "string",
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -2411,6 +2513,7 @@
               "maximum": 16,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -2427,6 +2530,7 @@
               "maxLength": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -2443,6 +2547,7 @@
               "maximum": 100000000,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -2459,6 +2564,7 @@
               "maximum": 100000000,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -2493,6 +2599,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -2509,6 +2616,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -2525,6 +2633,7 @@
             "maximum": 9999999,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -2539,6 +2648,7 @@
             "type": "string",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -2555,6 +2665,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -2569,6 +2680,7 @@
             "type": "boolean",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -2585,6 +2697,7 @@
             "maximum": 99999999,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -2614,6 +2727,7 @@
               "maxLength": 16,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -2630,6 +2744,7 @@
               "maximum": 9999999,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -2646,6 +2761,7 @@
               "maxLength": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -2662,6 +2778,7 @@
               "maxLength": 3,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -2678,6 +2795,7 @@
               "maxLength": 3,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -2694,6 +2812,7 @@
               "maxLength": 3,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -2720,6 +2839,7 @@
             "type": "string",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -2737,6 +2857,7 @@
             "maximum": 9999999,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -2751,6 +2872,7 @@
             "type": "string",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -2765,6 +2887,7 @@
             "type": "boolean",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -2781,6 +2904,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -2795,6 +2919,7 @@
             "type": "string",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -2811,6 +2936,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -2825,6 +2951,7 @@
             "type": "string",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -2841,6 +2968,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -2857,6 +2985,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -2873,6 +3002,7 @@
             "maximum": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -2900,6 +3030,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -2916,6 +3047,7 @@
             "maximum": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -2932,6 +3064,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -2948,6 +3081,7 @@
             "maximum": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -2962,6 +3096,7 @@
             "type": "boolean",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -2976,6 +3111,7 @@
             "type": "boolean",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3003,6 +3139,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3019,6 +3156,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3035,6 +3173,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3051,6 +3190,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3067,6 +3207,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3083,6 +3224,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3097,6 +3239,7 @@
             "type": "date",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3113,6 +3256,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3129,6 +3273,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3145,6 +3290,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3161,6 +3307,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3175,6 +3322,7 @@
             "type": "date",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3191,6 +3339,7 @@
             "maxLength": 20,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3207,6 +3356,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3221,6 +3371,7 @@
             "type": "number",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3237,6 +3388,7 @@
             "maxLength": 45,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3253,6 +3405,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3267,6 +3420,7 @@
             "type": "number",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3281,6 +3435,7 @@
             "type": "number",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3295,6 +3450,7 @@
             "type": "number",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3309,6 +3465,7 @@
             "type": "number",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3323,6 +3480,7 @@
             "type": "number",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3337,6 +3495,7 @@
             "type": "number",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3351,6 +3510,7 @@
             "type": "number",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3365,6 +3525,7 @@
             "type": "number",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3379,6 +3540,7 @@
             "type": "number",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3393,6 +3555,7 @@
             "type": "number",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3409,6 +3572,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3423,6 +3587,7 @@
             "type": "boolean",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3439,6 +3604,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3455,6 +3621,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3471,6 +3638,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3487,6 +3655,7 @@
             "maxLength": 45,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3503,6 +3672,7 @@
             "maxLength": 50,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3519,6 +3689,7 @@
             "maxLength": 50,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3533,6 +3704,7 @@
             "type": "boolean",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3549,6 +3721,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3565,6 +3738,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3581,6 +3755,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3597,6 +3772,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3613,6 +3789,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3629,6 +3806,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3645,6 +3823,7 @@
               "maxLength":100,
               "captureStages":[
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -3661,6 +3840,7 @@
               "maxLength":100,
               "captureStages":[
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -3677,6 +3857,7 @@
             "maximum": 99999999,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3693,6 +3874,7 @@
             "maximum": 99999999,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3709,6 +3891,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3725,6 +3908,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3741,6 +3925,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3755,6 +3940,7 @@
             "type": "boolean",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3771,6 +3957,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3787,6 +3974,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3803,6 +3991,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3819,6 +4008,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3835,6 +4025,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3851,6 +4042,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3865,6 +4057,7 @@
             "type": "date",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3881,6 +4074,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3897,6 +4091,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3913,6 +4108,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3929,6 +4125,7 @@
             "maximum": 999999999,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3945,6 +4142,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3961,6 +4159,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3977,6 +4176,7 @@
             "maximum": 99999999,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -3993,6 +4193,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -4007,6 +4208,7 @@
             "type": "boolean",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -4023,6 +4225,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -4037,6 +4240,7 @@
             "type": "date",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -4053,6 +4257,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -4069,6 +4274,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -4085,6 +4291,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -4101,6 +4308,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -4117,6 +4325,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -4133,6 +4342,7 @@
             "maximum": 99999999,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -4147,6 +4357,7 @@
             "type": "date",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -4161,6 +4372,7 @@
             "type": "date",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -4177,6 +4389,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -4193,6 +4406,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -4207,6 +4421,7 @@
             "type": "boolean",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -4223,6 +4438,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -4239,6 +4455,7 @@
             "maximum": 99999999,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -4255,6 +4472,7 @@
             "maximum": 99999999,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -4269,6 +4487,7 @@
             "type": "boolean",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -4285,6 +4504,7 @@
             "maximum": 99999999,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -4299,6 +4519,7 @@
             "type": "boolean",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -4315,6 +4536,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -4331,6 +4553,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -4345,6 +4568,7 @@
             "type": "date",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -4359,6 +4583,7 @@
             "type": "boolean",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -4373,6 +4598,7 @@
             "type": "boolean",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -4387,6 +4613,7 @@
             "type": "boolean",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -4401,6 +4628,7 @@
             "type": "boolean",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -4417,6 +4645,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -4431,6 +4660,7 @@
             "type": "boolean",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -4447,6 +4677,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -4463,6 +4694,7 @@
             "maximum": 1000000,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -4479,6 +4711,7 @@
             "maximum": 10000000,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -4495,6 +4728,7 @@
             "maximum": 10000000,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -4511,6 +4745,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -4527,6 +4762,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -4543,6 +4779,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -4559,6 +4796,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -4575,6 +4813,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -4591,6 +4830,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -4607,6 +4847,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -4623,6 +4864,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -4639,6 +4881,7 @@
             "maxLength": 100,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -4667,6 +4910,7 @@
               "maxLength": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -4681,6 +4925,7 @@
               "type": "date",
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -4695,6 +4940,7 @@
               "type": "number",
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -4724,6 +4970,7 @@
               "maxLength": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -4740,6 +4987,7 @@
               "maxLength": 100,
               "captureStages": [
                 "Screening",
+                "Application", 
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -4754,6 +5002,7 @@
               "type": "date",
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -4768,6 +5017,7 @@
               "type": "date",
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -4782,6 +5032,7 @@
               "type": "string",
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -4796,6 +5047,7 @@
               "type": "string",
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -4810,6 +5062,7 @@
               "type": "string",
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -4824,6 +5077,7 @@
               "type": "string",
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -4838,6 +5092,7 @@
               "type": "string",
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -4852,6 +5107,7 @@
               "type": "string",
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -4866,6 +5122,7 @@
               "type": "string",
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -4880,6 +5137,7 @@
               "type": "string",
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -4894,6 +5152,7 @@
               "type": "string",
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -4923,6 +5182,7 @@
               "maxLength": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -4939,6 +5199,7 @@
               "maxLength": 1000,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -4955,6 +5216,7 @@
               "maxLength": 1000,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -4971,6 +5233,7 @@
               "maxLength": 1000,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -5000,6 +5263,7 @@
               "maxLength": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -5016,6 +5280,7 @@
               "maxLength": 1000,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -5032,6 +5297,7 @@
               "maxLength": 1000,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -5061,6 +5327,7 @@
               "maxLength": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -5077,6 +5344,7 @@
               "maxLength": 1000,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -5093,6 +5361,7 @@
               "maxLength": 1000,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -5122,6 +5391,7 @@
               "maxLength": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -5136,6 +5406,7 @@
               "type": "number",
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -5165,6 +5436,7 @@
               "maxLength": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -5179,6 +5451,7 @@
               "type": "number",
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -5208,6 +5481,7 @@
               "maxLength": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -5224,6 +5498,7 @@
               "maxLength": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -5238,6 +5513,7 @@
               "type": "number",
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -5252,6 +5528,7 @@
               "type": "number",
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -5268,6 +5545,7 @@
               "maxLength": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -5297,6 +5575,7 @@
               "maxLength": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -5313,6 +5592,7 @@
               "maximum": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -5329,6 +5609,7 @@
               "maximum": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -5345,6 +5626,7 @@
               "maximum": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -5361,6 +5643,7 @@
               "maximum": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -5377,6 +5660,7 @@
               "maximum": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -5393,6 +5677,7 @@
               "maximum": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -5409,6 +5694,7 @@
               "maximum": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -5425,6 +5711,7 @@
               "maxLength": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -5441,6 +5728,7 @@
               "maxLength": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -5474,6 +5762,7 @@
               "type": "string",
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -5491,6 +5780,7 @@
               "maxLength": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -5507,6 +5797,7 @@
               "maximum": 999999999,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -5523,6 +5814,7 @@
               "maximum": 999999999,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -5539,6 +5831,7 @@
               "maximum": 99999999,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -5555,6 +5848,7 @@
               "maxLength": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -5571,6 +5865,7 @@
               "maximum": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -5587,6 +5882,7 @@
               "maxLength": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -5603,6 +5899,7 @@
               "maximum": 99999999,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -5617,6 +5914,7 @@
               "type": "boolean",
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -5631,6 +5929,7 @@
               "type": "number",
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -5647,6 +5946,7 @@
               "maxLength": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -5663,6 +5963,7 @@
               "maxLength": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -5679,6 +5980,7 @@
               "maxLength": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -5695,6 +5997,7 @@
               "maxLength": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -5711,6 +6014,7 @@
               "maxLength": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -5725,6 +6029,7 @@
               "type": "string",
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -5741,6 +6046,7 @@
               "maxLength": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -5757,6 +6063,7 @@
               "maxLength": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -5773,6 +6080,7 @@
               "maxLength": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -5787,6 +6095,7 @@
               "type": "string",
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -5816,6 +6125,7 @@
               "maxLength": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -5832,6 +6142,7 @@
               "maximum": 100000000,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -5848,6 +6159,7 @@
               "maximum": 100000000,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -5876,6 +6188,7 @@
             "maxLength": 500,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -5890,6 +6203,7 @@
             "type": "boolean",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -5904,6 +6218,7 @@
             "type": "number",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -5918,6 +6233,7 @@
             "type": "number",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -5931,6 +6247,7 @@
             "type": "number",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -5944,20 +6261,12 @@
             "type": "number",
             "captureStages": [
                "ScreeningReview",
+                "ApplciationReview",
                 "GoNoGoApproval1",
                 "GoNoGoApproval2",
-                "DeviationApproval1",
-                "DeviationApproval2",
-                "BusinessApproval1",
-                "BusinessApproval2",
-                "BusinessApproval3",
-                "BusinessApproval4",
-                "BusinessApproval5",
                 "CreditApproval1",
                 "CreditApproval2",
-                "CreditApproval3",
-                "CreditApproval4",
-                "CreditApproval5"
+                "CreditApproval3"
             ]
           }
         }
@@ -5977,6 +6286,7 @@
             "type": "string",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -5991,6 +6301,7 @@
             "type": "string",
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -6018,6 +6329,7 @@
             "maximum": 999999,
             "captureStages": [
               "Screening",
+              "Application",
               "VehicleValuation",
               "FieldInvestigation1",
               "FieldInvestigation2",
@@ -6047,6 +6359,7 @@
               "maxLength": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -6063,6 +6376,7 @@
               "maxLength": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -6079,6 +6393,7 @@
               "maxLength": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -6107,6 +6422,7 @@
               "type": "date",
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -6124,6 +6440,7 @@
               "maximum": 10000000,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -6138,6 +6455,7 @@
               "type": "integer",
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -6152,6 +6470,7 @@
               "type": "string",
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -6166,6 +6485,7 @@
               "type": "date",
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -6181,6 +6501,7 @@
               "type": "string",
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -6197,6 +6518,7 @@
               "maxLength": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -6213,13 +6535,16 @@
               "maxLength": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
                 "TeleVerification",
                 "CreditAppraisal",
-                "LoanInitiation"
+                "LoanInitiation",
+                "DocumentUpload",
+                "DocumentVerification"
               ]
             },
             "customerNameInBank": {
@@ -6229,13 +6554,16 @@
               "maxLength": 100,
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
                 "TeleVerification",
                 "CreditAppraisal",
-                "LoanInitiation"
+                "LoanInitiation",
+                "DocumentUpload",
+                "DocumentVerification"
               ]
             },
             "ifscCode": {
@@ -6243,6 +6571,7 @@
               "type": "string",
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -6257,6 +6586,7 @@
               "type": "string",
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -6271,6 +6601,7 @@
               "type": "string",
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
@@ -6285,13 +6616,16 @@
               "type": "string",
               "captureStages": [
                 "Screening",
+                "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
                 "TeleVerification",
                 "CreditAppraisal",
-                "LoanInitiation"
+                "LoanInitiation",
+                "DocumentUpload",
+                "DocumentVerification"
               ]
             }
           }

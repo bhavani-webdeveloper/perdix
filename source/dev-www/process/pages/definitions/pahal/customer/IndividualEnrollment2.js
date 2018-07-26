@@ -165,6 +165,71 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "ResidenceVerification"
                             ]
                         },
+                        "Application": {
+                            "overrides": {
+
+                            },
+                            "excludes": [
+                                "EnterpriseReferences",
+                                "IndividualReferences",
+                                "PhysicalAssets",
+                                "ResidenceVerification"
+                            ]
+                        },
+                        "ApplicationReview": {
+                            "overrides": {
+                                "KYC": {
+                                    "readonly": true
+                                },
+                                "IndividualInformation": {
+                                    "readonly": true
+                                },
+                                "ContactInformation": {
+                                    "readonly": true
+                                },
+                                "FamilyDetails": {
+                                    "readonly": true,
+                                    "title": "HOUSEHOLD_DETAILS"
+                                },
+                                "Liabilities": {
+                                    "readonly": true
+                                },
+                                "HouseVerification": {
+                                    "readonly": true
+                                },
+                                "CustomerDocumentUpload": {
+                                    "readonly": true
+                                },
+                                "CustomerLicenceDetails":{
+                                    "readonly": true
+                                },
+                                "BankAccounts": {
+                                    "readonly": true
+                                }
+                            },
+                            "excludes": [
+                                "EnterpriseReferences",
+                                "IndividualReferences",
+                                "PhysicalAssets",
+                                "ResidenceVerification"
+                            ]
+                        },
+                        "TeleVerification": {
+                            "overrides": {
+                                "PhysicalAssets": {
+                                    "readonly": true
+                                },
+                                "ResidenceVerification": {
+                                    "readonly": true
+                                },
+                                "EnterpriseReferences":{
+                                    "readonly": true
+                                }
+                            },
+                            "excludes": [
+                                "ContactInformation.location",
+                            ]
+                        },
                         "FieldInvestigation1": {
                             "overrides": {
                                 "FamilyDetails": {
@@ -204,22 +269,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "ContactInformation.location"
                             ]
                         },
-                        "TeleVerification": {
-                            "overrides": {
-                                "PhysicalAssets": {
-                                    "readonly": true
-                                },
-                                "ResidenceVerification": {
-                                    "readonly": true
-                                },
-                                "EnterpriseReferences":{
-                                    "readonly": true
-                                }
-                            },
-                            "excludes": [
-                                "ContactInformation.location",
-                            ]
-                        },
+                        
                         "CreditAppraisal": {
                             "overrides": {
                                 "PhysicalAssets": {
@@ -234,316 +284,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             },
                             "excludes": [
                                 "ContactInformation.location",
-                            ]
-                        },
-                        "DeviationApproval1": {
-                            "overrides": {
-                                "KYC": {
-                                    "readonly": true
-                                },
-                                "IndividualInformation": {
-                                    "readonly": true
-                                },
-                                "ContactInformation": {
-                                    "readonly": true
-                                },
-                                "FamilyDetails": {
-                                    "readonly": true,
-                                    "title": "HOUSEHOLD_DETAILS"
-                                },
-                                "Liabilities": {
-                                    "readonly": true
-                                },
-                                "CustomerDocumentUpload": {
-                                    "readonly": true
-                                },
-                                "CustomerLicenceDetails":{
-                                    "readonly": true
-                                },
-                                "HouseVerification": {
-                                    "readonly": true
-                                },
-                                "BankAccounts": {
-                                    "readonly": true
-                                },
-                                "PhysicalAssets": {
-                                    "readonly": true
-                                },
-                                "ResidenceVerification": {
-                                    "readonly": true
-                                },
-                                "EnterpriseReferences":{
-                                    "readonly": true
-                                }
-                            },
-                            "excludes": [
-                                "ContactInformation.location",
-                            ]
-                        },
-                        "DeviationApproval2": {
-                            "overrides": {
-                                "KYC": {
-                                    "readonly": true
-                                },
-                                "IndividualInformation": {
-                                    "readonly": true
-                                },
-                                "ContactInformation": {
-                                    "readonly": true
-                                },
-                                "FamilyDetails": {
-                                    "readonly": true,
-                                    "title": "HOUSEHOLD_DETAILS"
-                                },
-                                "Liabilities": {
-                                    "readonly": true
-                                },
-                                "CustomerDocumentUpload": {
-                                    "readonly": true
-                                },
-                                "CustomerLicenceDetails":{
-                                    "readonly": true
-                                },
-                                "HouseVerification": {
-                                    "readonly": true
-                                },
-                                "BankAccounts": {
-                                    "readonly": true
-                                },
-                                "PhysicalAssets": {
-                                    "readonly": true
-                                },
-                                "ResidenceVerification": {
-                                    "readonly": true
-                                },
-                                "EnterpriseReferences":{
-                                    "readonly": true
-                                }
-                            },
-                            "excludes": [
-                                "ContactInformation.location",
-                            ]
-                        },
-                        "BusinessApproval1": {
-                            "overrides": {
-                                "KYC": {
-                                    "readonly": true
-                                },
-                                "IndividualInformation": {
-                                    "readonly": true
-                                },
-                                "ContactInformation": {
-                                    "readonly": true
-                                },
-                                "FamilyDetails": {
-                                    "readonly": true,
-                                    "title": "HOUSEHOLD_DETAILS"
-                                },
-                                "Liabilities": {
-                                    "readonly": true
-                                },
-                                "CustomerDocumentUpload": {
-                                    "readonly": true
-                                },
-                                "CustomerLicenceDetails":{
-                                    "readonly": true
-                                },
-                                "HouseVerification": {
-                                    "readonly": true
-                                },
-                                "BankAccounts": {
-                                    "readonly": true
-                                },
-                                "PhysicalAssets": {
-                                    "readonly": true
-                                },
-                                "ResidenceVerification": {
-                                    "readonly": true
-                                },
-                                "EnterpriseReferences":{
-                                    "readonly": true
-                                }
-                            },
-                            "excludes": [
-                                "ContactInformation.location"
-                            ]
-                        },
-                        "BusinessApproval2": {
-                            "overrides": {
-                                "KYC": {
-                                    "readonly": true
-                                },
-                                "IndividualInformation": {
-                                    "readonly": true
-                                },
-                                "ContactInformation": {
-                                    "readonly": true
-                                },
-                                "FamilyDetails": {
-                                    "readonly": true,
-                                    "title": "HOUSEHOLD_DETAILS"
-                                },
-                                "Liabilities": {
-                                    "readonly": true
-                                },
-                                "CustomerDocumentUpload": {
-                                    "readonly": true
-                                },
-                                "CustomerLicenceDetails":{
-                                    "readonly": true
-                                },
-                                "HouseVerification": {
-                                    "readonly": true
-                                },
-                                "BankAccounts": {
-                                    "readonly": true
-                                },
-                                "PhysicalAssets": {
-                                    "readonly": true
-                                },
-                                "ResidenceVerification": {
-                                    "readonly": true
-                                },
-                                "EnterpriseReferences":{
-                                    "readonly": true
-                                }
-                            },
-                            "excludes": [
-                                "ContactInformation.location",
-                                "IndividualReferences"
-                                // "IndividualReferences.verifications.ReferenceCheck"
-                            ]
-                        },
-                        "BusinessApproval3": {
-                            "overrides": {
-                                "KYC": {
-                                    "readonly": true
-                                },
-                                "IndividualInformation": {
-                                    "readonly": true
-                                },
-                                "ContactInformation": {
-                                    "readonly": true
-                                },
-                                "FamilyDetails": {
-                                    "readonly": true,
-                                    "title": "HOUSEHOLD_DETAILS"
-                                },
-                                "Liabilities": {
-                                    "readonly": true
-                                },
-                                "CustomerDocumentUpload": {
-                                    "readonly": true
-                                },
-                                "CustomerLicenceDetails":{
-                                    "readonly": true
-                                },
-                                "HouseVerification": {
-                                    "readonly": true
-                                },
-                                "BankAccounts": {
-                                    "readonly": true
-                                },
-                                "PhysicalAssets": {
-                                    "readonly": true
-                                },
-                                "ResidenceVerification": {
-                                    "readonly": true
-                                },
-                                "EnterpriseReferences":{
-                                    "readonly": true
-                                }
-                            },
-                            "excludes": [
-                                "ContactInformation.location"
-                            ]
-                        },
-                        "BusinessApproval4": {
-                            "overrides": {
-                                "KYC": {
-                                    "readonly": true
-                                },
-                                "IndividualInformation": {
-                                    "readonly": true
-                                },
-                                "ContactInformation": {
-                                    "readonly": true
-                                },
-                                "FamilyDetails": {
-                                    "readonly": true,
-                                    "title": "HOUSEHOLD_DETAILS"
-                                },
-                                "Liabilities": {
-                                    "readonly": true
-                                },
-                                "CustomerDocumentUpload": {
-                                    "readonly": true
-                                },
-                                "CustomerLicenceDetails":{
-                                    "readonly": true
-                                },
-                                "HouseVerification": {
-                                    "readonly": true
-                                },
-                                "BankAccounts": {
-                                    "readonly": true
-                                },
-                                "PhysicalAssets": {
-                                    "readonly": true
-                                },
-                                "ResidenceVerification": {
-                                    "readonly": true
-                                },
-                                "EnterpriseReferences":{
-                                    "readonly": true
-                                }
-                            },
-                            "excludes": [
-                                "ContactInformation.location"
-                            ]
-                        },
-                        "BusinessApproval5": {
-                            "overrides": {
-                                "KYC": {
-                                    "readonly": true
-                                },
-                                "IndividualInformation": {
-                                    "readonly": true
-                                },
-                                "ContactInformation": {
-                                    "readonly": true
-                                },
-                                "FamilyDetails": {
-                                    "readonly": true,
-                                    "title": "HOUSEHOLD_DETAILS"
-                                },
-                                "Liabilities": {
-                                    "readonly": true
-                                },
-                                "CustomerDocumentUpload": {
-                                    "readonly": true
-                                },
-                                "CustomerLicenceDetails":{
-                                    "readonly": true
-                                },
-                                "HouseVerification": {
-                                    "readonly": true
-                                },
-                                "BankAccounts": {
-                                    "readonly": true
-                                },
-                                "PhysicalAssets": {
-                                    "readonly": true
-                                },
-                                "ResidenceVerification": {
-                                    "readonly": true
-                                },
-                                "EnterpriseReferences":{
-                                    "readonly": true
-                                }
-                            },
-                            "excludes": [
-                                "ContactInformation.location"
                             ]
                         },
                         "CreditApproval1": {
@@ -591,138 +331,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             ]
                         },
                         "CreditApproval2": {
-                            "overrides": {
-                                "KYC": {
-                                    "readonly": true
-                                },
-                                "IndividualInformation": {
-                                    "readonly": true
-                                },
-                                "ContactInformation": {
-                                    "readonly": true
-                                },
-                                "FamilyDetails": {
-                                    "readonly": true,
-                                    "title": "HOUSEHOLD_DETAILS"
-                                },
-                                "Liabilities": {
-                                    "readonly": true
-                                },
-                                "CustomerDocumentUpload": {
-                                    "readonly": true
-                                },
-                                "CustomerLicenceDetails":{
-                                    "readonly": true
-                                },
-                                "HouseVerification": {
-                                    "readonly": true
-                                },
-                                "BankAccounts": {
-                                    "readonly": true
-                                },
-                                "PhysicalAssets": {
-                                    "readonly": true
-                                },
-                                "ResidenceVerification": {
-                                    "readonly": true
-                                },
-                                "EnterpriseReferences":{
-                                    "readonly": true
-                                }
-                            },
-                            "excludes": [
-                                "ContactInformation.location"
-                            ]
-                        },
-                        "CreditApproval3": {
-                            "overrides": {
-                                "KYC": {
-                                    "readonly": true
-                                },
-                                "IndividualInformation": {
-                                    "readonly": true
-                                },
-                                "ContactInformation": {
-                                    "readonly": true
-                                },
-                                "FamilyDetails": {
-                                    "readonly": true,
-                                    "title": "HOUSEHOLD_DETAILS"
-                                },
-                                "Liabilities": {
-                                    "readonly": true
-                                },
-                                "CustomerDocumentUpload": {
-                                    "readonly": true
-                                },
-                                "CustomerLicenceDetails":{
-                                    "readonly": true
-                                },
-                                "HouseVerification": {
-                                    "readonly": true
-                                },
-                                "BankAccounts": {
-                                    "readonly": true
-                                },
-                                "PhysicalAssets": {
-                                    "readonly": true
-                                },
-                                "ResidenceVerification": {
-                                    "readonly": true
-                                },
-                                "EnterpriseReferences":{
-                                    "readonly": true
-                                }
-                            },
-                            "excludes": [
-                                "ContactInformation.location"
-                            ]
-                        },
-                        "CreditApproval4": {
-                            "overrides": {
-                                "KYC": {
-                                    "readonly": true
-                                },
-                                "IndividualInformation": {
-                                    "readonly": true
-                                },
-                                "ContactInformation": {
-                                    "readonly": true
-                                },
-                                "FamilyDetails": {
-                                    "readonly": true,
-                                    "title": "HOUSEHOLD_DETAILS"
-                                },
-                                "Liabilities": {
-                                    "readonly": true
-                                },
-                                "CustomerDocumentUpload": {
-                                    "readonly": true
-                                },
-                                "CustomerLicenceDetails":{
-                                    "readonly": true
-                                },
-                                "HouseVerification": {
-                                    "readonly": true
-                                },
-                                "BankAccounts": {
-                                    "readonly": true
-                                },
-                                "PhysicalAssets": {
-                                    "readonly": true
-                                },
-                                "ResidenceVerification": {
-                                    "readonly": true
-                                },
-                                "EnterpriseReferences":{
-                                    "readonly": true
-                                }
-                            },
-                            "excludes": [
-                                "ContactInformation.location"
-                            ]
-                        },
-                        "CreditApproval5": {
                             "overrides": {
                                 "KYC": {
                                     "readonly": true
@@ -1761,7 +1369,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 {
                                     "type": "actionbox",
-                                    "condition": "model.customer.currentStage && (model.loanProcess.loanAccount.currentStage=='Screening' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation1' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation2' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation3' || model.loanProcess.loanAccount.currentStage=='CreditAppraisal' || model.loanProcess.loanAccount.currentStage=='TeleVerification')",
+                                    "condition": "model.customer.currentStage && (model.loanProcess.loanAccount.currentStage=='Screening' || model.loanProcess.loanAccount.currentStage=='Application' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation1' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation2' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation3' || model.loanProcess.loanAccount.currentStage=='CreditAppraisal' || model.loanProcess.loanAccount.currentStage=='TeleVerification')",
                                     "orderNo": 1200,
                                     "items": [
                                         {

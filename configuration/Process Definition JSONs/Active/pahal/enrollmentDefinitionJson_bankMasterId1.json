@@ -3919,7 +3919,6 @@
           "required": [
             "registrationType",
             "registrationNumber",
-            "registeredDate",
             "documentId"
           ],
           "properties": {
