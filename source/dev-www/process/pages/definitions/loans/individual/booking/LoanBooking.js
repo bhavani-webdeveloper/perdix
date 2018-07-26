@@ -131,6 +131,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                 });
                 return false;
             }
+            return true;
         };
 
         return {
