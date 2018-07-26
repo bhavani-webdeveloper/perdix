@@ -4611,7 +4611,7 @@
               "title": "Purchase Price",
               "type": "number",
               "minimum": 0,
-              "maximum": 10000000,
+              "maximum": 100000000,
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"
@@ -4631,7 +4631,7 @@
               "title": "Present Value",
               "type": "integer",
               "minimum": 0,
-              "maximum": 10000000,
+              "maximum": 100000000,
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"
