@@ -1977,6 +1977,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                 {
                     "type":"box",
                     "title": "PAYER_DETAILS",
+                    "condition": "model.siteCode != 'IREPDhan'",
                         "items": [
                         {
                             "key":"loanAccount.payeeName",
