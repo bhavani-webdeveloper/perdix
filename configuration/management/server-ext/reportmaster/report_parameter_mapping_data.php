@@ -7,6 +7,7 @@ use GuzzleHttp\Client as GuzzleClient;
 use Illuminate\Database\Capsule\Manager as DB;
 use EllipseSynergie\ApiResponse\Contracts\Response;
 use App\Models\ReportParameterMapping;
+use App\Models\ReportsAccessHierarchy;
 
 $queryString = $_SERVER['QUERY_STRING'];
 // $authHeader = $_SERVER['HTTP_AUTHORIZATION'];
@@ -48,6 +49,16 @@ $allInsertParameters[] = array(
 
 ReportParameterMapping::insert($allInsertParameters);
 
+/// Delete existing access_filter_query_column
+$accessHierarchy = ReportsAccessHierarchy::where('report_name',$reportName)->delete();
+
+if(isset($userInput['status']) && $userInput['status'] == 1){
+    $hierarchy = new ReportsAccessHierarchy();
+    $hierarchy->report_name = $reportName;
+    $hierarchy->access_filter_query_column = $userInput['access_hierarchy'];
+    $hierarchy->save();
+}
+
 $response = get_response_obj();    
 return $response->setStatusCode(200)->json(array('success'=>'Updated'));
 } catch (Exception $e) {
@@ -55,7 +66,3 @@ return $response->setStatusCode(200)->json(array('success'=>'Updated'));
 	$response->setStatusCode(500)->json(['error'=> $e->getMessage()]);
     throw $e;
 }
-
-
-
-
