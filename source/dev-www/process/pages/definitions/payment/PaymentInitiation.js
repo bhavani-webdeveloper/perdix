@@ -339,10 +339,7 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                     },
                     "PostReviewDecision":{
                         "condition":"model.payment.currentStage == 'PaymentApproval'"  
-                    },
-                    "PaymentDetails.fileId": {
-                        "required": false
-                    }                    
+                    }                 
                 };
             }
             var getIncludes = function(model) {
