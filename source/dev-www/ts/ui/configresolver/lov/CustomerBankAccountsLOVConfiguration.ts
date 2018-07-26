@@ -9,8 +9,11 @@ export class CustomerBankAccountsLOVConfiguration extends LOVElementConfiguratio
         "customer_name_as_in_bank": "payment.beneficiaryAccountName",
         "email": "payment.beneficiaryEmailId",
         "mobile_phone": "payment.beneficiaryMobileNumber",
-        "account_number": "payment.beneficiaryAccountNumber"/*,
-        "ifsc_code": "payment.beneficiaryIfsc"*/
+        "account_number": "payment.beneficiaryAccountNumber",
+        "ifsc_code": "payment.beneficiaryIfsc",
+        "customer_bank_name": "payment.beneficiaryBankName",
+        "customer_bank_branch_name": "payment.beneficiaryBankBranch",
+        "customer_id": "payment.customerId"
     };
 
     search: Function = function(inputModel, form) {
@@ -28,7 +31,7 @@ export class CustomerBankAccountsLOVConfiguration extends LOVElementConfiguratio
     };
 
     onSelect: Function = function(valueObj, model, context) {
-
+        //console.log
     };
 
     inputMap: Object = {

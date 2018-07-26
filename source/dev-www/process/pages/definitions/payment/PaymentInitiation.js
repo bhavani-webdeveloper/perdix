@@ -73,12 +73,8 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                                         "readonly":true,
                                         "orderNo": 5
                                     },
-                                    "BeneficiaryDetails.confirmAccountNo":{
-                                        "readonly":true,
-                                         "orderNo": 6
-                                    },
                                     "BeneficiaryDetails.beneficiaryIfsc":{
-                                        "resolver": "PaymentBankIFSCLOVConfiguration",  
+                                        // "resolver": "PaymentBankIFSCLOVConfiguration",  
                                         "readonly":true,
                                         "orderNo": 7
                                     },
@@ -213,10 +209,6 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                                         "readonly":true,
                                         "orderNo": 5
                                     },
-                                    "BeneficiaryDetails.confirmAccountNo":{
-                                        "readonly":true,
-                                         "orderNo": 6
-                                    },
                                     "BeneficiaryDetails.beneficiaryIfsc":{
                                         "readonly":true,
                                         "orderNo": 7
@@ -229,7 +221,7 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                                         "readonly":true,
                                         "orderNo": 9
                                     },
-                               "BeneficiaryDetails.beneficiaryTransactionParticulars":{
+                                    "BeneficiaryDetails.beneficiaryTransactionParticulars":{
                                         
                                         "orderNo": 10
                                     },
@@ -295,16 +287,14 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                     },         
                     "BeneficiaryDetails.beneficiaryMobileNumber":{
                         "orderNo":40, 
+                        "type":"number",
                         "schema":{
-                            "maxLength": 10,
-                            "minLength": 10,
+                            "pattern":"^[0-9]{10}$"
                         }
                     },
                     "BeneficiaryDetails.creditAccountNo":{
+                        "readonly": true,
                         "orderNo":50
-                    },
-                    "BeneficiaryDetails.confirmAccountNo":{                       
-                        "orderNo":60
                     },
                     "BeneficiaryDetails.beneficiaryBankName":{
                         "orderNo":80,
@@ -320,11 +310,10 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                     "BeneficiaryDetails.beneficiaryTransactionRemarks":{
                         "orderNo":110
                     },
-
                     "DebitAccountDetails.debitMobileNumber":{
+                        "type":"number",
                         "schema":{
-                            "maxLength": 10,
-                            "minLength": 10,
+                            "pattern":"^[0-9]{10}$"
                         }
                     },
 
@@ -333,13 +322,15 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                     },
                     "PaymentDetails.accountNumber":{
                         "resolver": "LoanAccountsLOVConfiguration" ,
-                        "condition":"model.payment.paymentPurpose == 'Loan Disbursement'"                    
+                        "condition":"model.payment.paymentPurpose == 'Loan Disbursement' || model.payment.paymentPurpose == 'Security EMI Refunds'"                    
                     },
                     "DebitAccountDetails.debitAccountName":{
                         "resolver": "PaymentBankAccountsLOVConfiguration"
                     },
                     "BeneficiaryDetails.beneficiaryIfsc":{
-                        "resolver": "PaymentBankIFSCLOVConfiguration",
+                        // "resolver": "PaymentBankIFSCLOVConfiguration",
+                        "type": "string",
+                        "readonly": true,
                         "orderNo":70
                     },
                     "BeneficiaryDetails.beneficiaryName":{
@@ -349,7 +340,9 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                     "PostReviewDecision":{
                         "condition":"model.payment.currentStage == 'PaymentApproval'"  
                     },
-                    
+                    "PaymentDetails.fileId": {
+                        "required": false
+                    }                    
                 };
             }
             var getIncludes = function(model) {
@@ -368,7 +361,6 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                     "BeneficiaryDetails.beneficiaryEmailId",                  
                     "BeneficiaryDetails.beneficiaryMobileNumber",
                     "BeneficiaryDetails.creditAccountNo",
-                    "BeneficiaryDetails.confirmAccountNo",
                     "BeneficiaryDetails.beneficiaryIfsc",
                     "BeneficiaryDetails.beneficiaryBankName",
                     "BeneficiaryDetails.beneficiaryBankBranch",

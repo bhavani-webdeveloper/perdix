@@ -17,6 +17,7 @@ define({
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 model.branch = branch;
+                model.modeOfPayment = 'Manual';
                 $log.info("search-list sample got initialized");
                 var centres = SessionStore.getCentres();
                 if (_.isArray(centres) && centres.length > 0) {
@@ -50,9 +51,9 @@ define({
                                 },
                                 getListDisplayItem: function(item, index) {
                                     return [
-					item.bank_name,
-					item.branch_name,
-					item.account_number
+                    					item.bank_name,
+                    					item.branch_name,
+                    					item.account_number
                                     ];
                                 },
                                 onSelect: function(result, model, context) {									

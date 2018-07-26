@@ -8,7 +8,8 @@ define({
 			"title": "PAYMENT_APPROVAL_SEARCH",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
-				$log.info("payment approval list got initialized");
+				$log.info("payment approval list got initialized");				
+                model.modeOfPayment = 'Manual';
 			},
 			definition: {
 				title: "Search",

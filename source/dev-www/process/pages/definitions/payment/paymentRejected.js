@@ -16,7 +16,8 @@ define({
             "title": "PAYMENT_REJECTED_SEARCH",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
-                model.branch = branch;
+                model.branch = branch;                
+                model.modeOfPayment = 'Manual';
                 $log.info("search-list sample got initialized");
                 var centres = SessionStore.getCentres();
                 if (_.isArray(centres) && centres.length > 0) {
