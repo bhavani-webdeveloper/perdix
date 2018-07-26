@@ -212,7 +212,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                     {
                         "key": "loanAccountDisbursementSchedule.referenceNumber",
                         "title": "CHEQUE_NO",
-                        "condition":"model.siteCode=='witfin'&& model.loanAccountDisbursementSchedule.modeOfDisbursement.toLowerCase()=='cheque'"
+                        "condition":"model.loanAccountDisbursementSchedule.modeOfDisbursement.toLowerCase()=='cheque'"
                     },
                     {
                         key: "loanAccountDisbursementSchedule.disbursementFromBankAccountNumber",
@@ -457,7 +457,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                     }
                 ]
             }
-            
+
 
 
             ],
