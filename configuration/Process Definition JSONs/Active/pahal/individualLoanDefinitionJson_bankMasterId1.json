@@ -316,6 +316,15 @@
             "minimum": 1,
             "maximum": 12,
             "captureStages": [
+                "Screening",
+                "Application",
+                "VehicleValuation",
+                "FieldInvestigation1",
+                "FieldInvestigation2",
+                "FieldInvestigation3",
+                "TeleVerification",
+                "CreditAppraisal",
+                "LoanInitiation"
                 "ScreeningReview",
                 "ApplciationReview",
                 "GoNoGoApproval1",
@@ -382,6 +391,15 @@
             "minimum": 1,
             "maximum": 10000000,
             "captureStages": [
+                "Screening",
+                "Application",
+                "VehicleValuation",
+                "FieldInvestigation1",
+                "FieldInvestigation2",
+                "FieldInvestigation3",
+                "TeleVerification",
+                "CreditAppraisal",
+                "LoanInitiation"
                 "ScreeningReview",
                 "ApplciationReview",
                 "GoNoGoApproval1",
