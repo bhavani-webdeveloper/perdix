@@ -324,7 +324,7 @@
                 "FieldInvestigation3",
                 "TeleVerification",
                 "CreditAppraisal",
-                "LoanInitiation"
+                "LoanInitiation",
                 "ScreeningReview",
                 "ApplciationReview",
                 "GoNoGoApproval1",
@@ -399,7 +399,7 @@
                 "FieldInvestigation3",
                 "TeleVerification",
                 "CreditAppraisal",
-                "LoanInitiation"
+                "LoanInitiation",
                 "ScreeningReview",
                 "ApplciationReview",
                 "GoNoGoApproval1",
