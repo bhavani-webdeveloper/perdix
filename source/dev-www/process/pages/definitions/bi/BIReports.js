@@ -233,6 +233,7 @@ irf.pageCollection.factory(irf.page("bi.BIReports"), ["$log", "RolesPages", "BIR
                           } else {
                             link.download = SessionStore.getLoginname() + '_' + model.selectedReport.name + '_' + moment().format('YYYYMMDDhhmmss');
                           }
+                          document.body.appendChild(link);
                           link.click();
                           irfProgressMessage.pop("Reports","Report downloaded.", 5000);
                         }, function(err) {
