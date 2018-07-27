@@ -1,12 +1,13 @@
-<div>
+<div ng-hide="iframe">
     <br>
     <br>
     <br>
     <br>
     <ripple-loader></ripple-loader>
-    <form id ="ekycForm" name = "ekycForm" method = "POST">
+    <form id ="ekycForm" name = "ekycForm" method = "POST" target="ekyctarget">
         <input type="hidden" id="ekyctype" name="ekyctype">
         <input type="hidden" id="kyc_data" name="kyc_data">
         <input type="hidden" id="url" name="url">
     </form>
 </div>
+<iframe ng-show="iframe" id="ekyctarget" name="ekyctarget" src="" width="100%" height="500"></iframe>

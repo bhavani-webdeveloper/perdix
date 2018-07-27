@@ -2,6 +2,9 @@ irf.pageCollection.controller(irf.controller("MutualFund.MutualFundEKYC"), ["$lo
     function($log, irfProgressMessage, Enrollment, $q, Utils, $stateParams, $scope, PagesDefinition, PageHelper, irfNavigator, Audit, formHelper, SessionStore, elementsUtils) {
         // $scope.$templateUrl = "process/pages/templates/mutualFund/MutualFundEKYC.html";
 
+        var location=window.location.href;
+        var clientBaseUrl = location.toString().split("#");
+
         if (!$stateParams.pageId) {
             irfNavigator.goBack();
         }
@@ -30,12 +33,14 @@ irf.pageCollection.controller(irf.controller("MutualFund.MutualFundEKYC"), ["$lo
                 '', // Sess_id
                 '' // Devicetype (Mandatory for Biometric)
             ];
+
             
             document.getElementById("ekyctype").value = 'I';
             document.getElementById("kyc_data").value = kyc_data.join('|');
-            document.getElementById("url").value = irf.MANAGEMENT_BASE_URL + '/server-ext/camsResponse.php?customer_id='+$stateParams.pageId+'&url='+irf.CLIENT_URL;
+            document.getElementById("url").value = irf.MANAGEMENT_BASE_URL + '/server-ext/camsResponse.php?customer_id='+$stateParams.pageId+'&url='+clientBaseUrl[0]+ '#/Page/Engine/MutualFund.MutualFundCustomerSearch';
             document.getElementById('ekycForm').action = irf.CAMS_EKYC_INTEG_URL;
             document.getElementById('ekycForm').submit();
+            $scope.iframe = true;
         }, function(err) {
             PageHelper.showProgress('EKYC', 'EKYC login failed.', 5000);
             PageHelper.showErrors(err);
