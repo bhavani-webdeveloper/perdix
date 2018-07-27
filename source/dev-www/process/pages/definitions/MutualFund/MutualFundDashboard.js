@@ -1,5 +1,5 @@
-irf.pageCollection.controller(irf.controller("MutualFund.MutualFundDashboard"), ['$log', '$scope', "formHelper", "$state", "$q", "Utils", 'PagesDefinition', 'SessionStore', "entityManager", "IndividualLoan", "LoanBookingCommons", "Messaging",
-    function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionStore, entityManager, IndividualLoan, LoanBookingCommons, Messaging) {
+irf.pageCollection.controller(irf.controller("MutualFund.MutualFundDashboard"), ['$log', '$scope', 'PagesDefinition', 'SessionStore',
+    function($log, $scope, PagesDefinition, SessionStore) {
         $log.info("MutualFundDashboard loaded");
         $scope.$templateUrl = "process/pages/templates/Page.Dashboard.html";
         var currentBranch = SessionStore.getCurrentBranch();
