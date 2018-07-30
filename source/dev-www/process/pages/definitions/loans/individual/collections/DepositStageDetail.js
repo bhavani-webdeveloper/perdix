@@ -1,8 +1,8 @@
 define({
     pageUID: "loans.individual.collections.DepositStageDetail",
     pageType: "Engine",
-    dependencies: ["$log","SessionStore", "formHelper", "$stateParams", "PageHelper", "Utils", "LoanCollection", "irfNavigator","Queries","Files"],
-    $pageFn: function ($log,SessionStore, formHelper, $stateParams, PageHelper, Utils, LoanCollection, irfNavigator, Queries, Files) {
+    dependencies: ["$log","CustomerBankBranch","SessionStore", "formHelper", "$stateParams", "PageHelper", "Utils", "LoanCollection", "irfNavigator","Queries","Files"],
+    $pageFn: function ($log,CustomerBankBranch,SessionStore, formHelper, $stateParams, PageHelper, Utils, LoanCollection, irfNavigator, Queries, Files) {
         return {
             "type": "schema-form",
             "title": "DEPOSIT_STAGE_DETAIL",
@@ -17,6 +17,7 @@ define({
                  */
                 model.branchname = SessionStore.getCurrentBranch().branchId;
                 model.depositDetails = $stateParams.pageData;
+                //model.depositDetails.ifscCode = model.depositDetails.collectionDetail.ifscCode;
             },
             form: [{
                 "type": "box",
@@ -56,20 +57,48 @@ define({
                         },
                         getListDisplayItem: function (item, index) {
                             return [
-                                item.account_number,
-                                item.ifsc_code,
-                                item.branch_name
+                                item.account_number
                             ];
                         },
                         onSelect: function (valueObj, model, context) {
                             model.depositDetails.collectionDetail.bankAccountNumber = valueObj.account_number;
-                            model.depositDetails.collectionDetail.ifscCode = valueObj.ifsc_code;
-                            model.depositDetails.collectionDetail.bankBranchDetails = valueObj.branch_name; 
                         }
                     },
                     {
-                        "key":"depositDetails.collectionDetail.ifscCode",
-                        "title": "CASH_DEPOSIT_IFSC_CODE"
+                        key: "depositDetails.collectionDetail.ifscCode",
+                        type: "lov",
+                        "title": "CASH_DEPOSIT_IFSC_CODE",
+                        lovonly: true,
+                        inputMap: {
+                            "ifscCode": {
+                                "key": "depositDetails.collectionDetail.ifscCode"
+                            },
+                            "depositBank": {
+                                "key": "depositDetails.collectionDetail.depositBank"
+                            },
+                            "depositBranch": {
+                                "key": "depositDetails.collectionDetail.depositBranch"
+                            }
+                        },
+                        onSelect: function(results, model, context) {
+                            model.depositDetails.collectionDetail.ifscCode = results.ifscCode;
+                            model.depositDetails.collectionDetail.bankBranchDetails = results.branchName;
+                        },
+                        searchHelper: formHelper,
+                        search: function(inputModel, form) {
+                            $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                            var promise = CustomerBankBranch.search({
+                                'ifscCode': inputModel.ifscCode,
+                                'branchName': inputModel.depositBranch
+                            }).$promise;
+                            return promise;
+                        },
+                        getListDisplayItem: function(data, index) {
+                            return [
+                                data.ifscCode,
+                                data.branchName
+                            ];
+                        },
                     },
                     {
                         "key": "depositDetails.collectionDetail.bankBranchDetails",
@@ -179,24 +208,27 @@ define({
                 "$schema": "http://json-schema.org/draft-04/schema#",
                 "type": "object",
                 "properties": {
-                    "collectionDetails1": {
+                    "depositDetails":{
                         "type": "object",
                         "properties": {
-                            "customerName": {
-                                "type": ["string", null],
-                                "title": "BUSINESS_NAME"
-                            },
-                            "accountNumber": {
-                                "type": ["string", null],
-                                "title": "LOAN_ACCOUNT_NO"
-
-                            },
-                            "repaymentAmount": {
-                                "type": ["string", null],
-                                "title": "Collected Amount"
+                            "collectionDetail":{    
+                                "type":"object",
+                                "properties":{
+                                    "ifscCode": {
+                                        "type": "string",
+                                        "title": "IFSC_CODE"
+                                    },
+                                    "depositBank":{
+                                        "type": "string",
+                                        "title": "DEPOSITE_BANK"
+                                    },
+                                    "depositBranch":{
+                                        "type": "string",
+                                        "title": "DEPOSITE_BRANCH"
+                                    }
+                                }
                             }
-                        }
-                    }
+                    }}
                 },
                 "required": []
             },
