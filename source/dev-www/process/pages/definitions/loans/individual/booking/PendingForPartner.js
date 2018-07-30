@@ -655,7 +655,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.PendingForPartner"
                         "title": "LOAN_DETAILS",
                         "items": [
                             {
-                                "key": "loanAccount.loanAmountRequested",
+                                "key": "loanAccount.loanAmount",
                                 "type":"amount",
                                 "title":"LOAN_AMOUNT_REQUESTED",
                                 "placeholderExpr":"model.additional.product.amountBracket"

@@ -3243,7 +3243,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     enumCode: "decisionmaker",
                 }, {
                     key: "customer.isBusinessEffectingTheEnvironment",
-                    title: "IS_THE_BUSSINESS_IN_EFFECTING_ENVIRONMENT",
+                    title: "IS_THE_BUSSINESS_IN_AFFECTING_ENVIRONMENT",
                     type: "select",
                     required: "true",
                     enumCode: "decisionmaker",
@@ -3455,8 +3455,10 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 title:"CONTACT_NUMBER",
                                 type:"string",
                                 inputmode: "number",
-                                numberType: "tel"
-
+                                numberType: "tel",
+                                "schema": {
+                                     "pattern": "^[0-9]{10}$"
+                                }
                             }/*,
                             {
                                 key:"customer.verifications[].businessSector",

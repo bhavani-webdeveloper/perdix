@@ -13,7 +13,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             model.customerHistory=[];
             var keybasicLoanInfo = ['Loan Account Number', 'Operational Status', 'Product', 'Loan Amount', 'Frequency', 'Tenure', '# Tranche', 'EMI', 'Normal Interest Rate'];
             var p1 = Queries.getLoanAccountsByUrnAndStage(model.customerUrn, ["Completed",
-            "Rejected"]);
+            ]);
 
             var promiseArr = [];
 
