@@ -465,6 +465,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                 "subTitle": "BUSINESS",
                 initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
                     // $log.info("Inside initialize of IndividualEnrolment2 -SPK " + formCtrl.$name);
+                    var self = this;
                     if (bundlePageObj) {
                         model._bundlePageObj = _.cloneDeep(bundlePageObj);
                     }
@@ -479,8 +480,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     model.customer = model.enrolmentProcess.customer;
                     /* End of setting data for the form */
                     var p1 = UIRepository.getEnrolmentProcessUIRepository().$promise;
-                    var self = this;
-                    p1.then(function(repo){
+                    p1
+                    .then(function(repo){
                         var formRequest = {
                             "overrides": {
                                 "CommercialCBCheck": {
@@ -796,8 +797,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 ]
                             }
                         };
-                        self.form = IrfFormRequestProcessor.getFormDefinition(repo, formRequest, configFile(), model);
+                        return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model);
                     })
+                    .then(function(form){
+                        self.form = form;
+                    });
+                    
                 },
                 offline: false,
                 getOfflineDisplayItem: function(item, index){

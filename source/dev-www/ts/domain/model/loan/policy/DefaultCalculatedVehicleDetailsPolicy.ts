@@ -95,7 +95,7 @@ export class DefaultCalculatedVehicleDetailsPolicy extends IPolicy<LoanProcess> 
                          }
 
                          // Calculation for free cash flow
-                         if (_.isArray(loanProcess.loanAccount.vehicleLoanDetails.vehicleLoanIncomes) && loanProcess.loanAccount.vehicleLoanDetails.vehicleLoanIncomes[0].incomeAmount && loanProcess.loanAccount.vehicleLoanDetails.totalMonthlyExpense)
+                         if (_.isArray(loanProcess.loanAccount.vehicleLoanDetails.vehicleLoanIncomes) && loanProcess.loanAccount.vehicleLoanDetails.vehicleLoanIncomes[0] && loanProcess.loanAccount.vehicleLoanDetails.vehicleLoanIncomes[0].incomeAmount && loanProcess.loanAccount.vehicleLoanDetails.totalMonthlyExpense)
                             loanProcess.loanAccount.vehicleLoanDetails.freeCashFlow = parseFloat(loanProcess.loanAccount.vehicleLoanDetails.vehicleLoanIncomes[0].incomeAmount) - parseFloat(loanProcess.loanAccount.vehicleLoanDetails.totalMonthlyExpense);
                          else {
                             console.log("Fields required for Free Cash Flow are empty");

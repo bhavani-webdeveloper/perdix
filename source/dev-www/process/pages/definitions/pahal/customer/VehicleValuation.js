@@ -98,7 +98,6 @@ define(
                         "VehiclePrimaryInfo.district",
                         "VehiclePrimaryInfo.state",
                         "VehicleValuationPriliminaryInformation",
-                        "VehicleValuationPriliminaryInformation.valuationPurpose",
                         "VehicleValuationPriliminaryInformation.valuationDate",
                         "VehicleValuationPriliminaryInformation.valuationPlace",
                         "VehicleValuationPriliminaryInformation.registeredOwnerName",

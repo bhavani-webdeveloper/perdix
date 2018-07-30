@@ -153,7 +153,6 @@ define([], function() {
                         "FieldInvestigation1": {
                             "excludes": [
                                 "LoanRecommendation",
-                                "TeleVerification"
                             ],
                             "overrides": {
 
@@ -162,7 +161,6 @@ define([], function() {
                         "FieldInvestigation2": {
                             "excludes": [
                                 "LoanRecommendation",
-                                "TeleVerification"
                             ],
                             "overrides": {
 
@@ -171,7 +169,6 @@ define([], function() {
                         "FieldInvestigation3": {
                             "excludes": [
                                 "LoanRecommendation",
-                                "TeleVerification"
                             ],
                             "overrides": {
 
@@ -311,6 +308,7 @@ define([], function() {
                     "PreliminaryInformation.loan",
                     "PreliminaryInformation.loanPurpose1",
                     "PreliminaryInformation.loanPurpose2",
+                    "PreliminaryInformation.productCategory",
                     "PreliminaryInformation.loanAmountRequested",
                     "PreliminaryInformation.loanToValue",
                     "PreliminaryInformation.parentLoanAccount",
@@ -366,6 +364,7 @@ define([], function() {
                     "actionbox",
                     "actionbox.submit",
                     "actionbox.save",
+                    "actionbox.holdAction"
                 ];
 
             }
@@ -393,6 +392,9 @@ define([], function() {
                     var self = this;
                     var formRequest = {
                         "overrides": {
+                            "PreliminaryInformation.productCategory": {
+                                "orderNo": 45
+                            },
                             "TeleVerification.verifications.personContacted": {
                                 "required": true
                             },
@@ -479,6 +481,12 @@ define([], function() {
                                             "title" : "FLAT_RATE",
                                             "type": "string",
                                             "orderNo" : 75
+                                        },
+                                        "productCategory": {
+                                            "key": "loanAccount.productCategory",
+                                            "title": "PRODUCT_TYPE",
+                                            "enumCode": "loan_product_category",
+                                            "type": "select"
                                         },
                                         "calculateEmi": {
                                             "title": "CALCULATE_EMI",
@@ -736,7 +744,8 @@ define([], function() {
                                     titleMap: {
                                         "REJECT": "REJECT",
                                         "SEND_BACK": "SEND_BACK",
-                                        "PROCEED": "PROCEED"
+                                        "PROCEED": "PROCEED",
+                                        "HOLD": "HOLD"
                                     }
                                 }, {
                                     type: "section",
@@ -824,41 +833,12 @@ define([], function() {
                                             type: "textarea",
                                             required: true
                                         }, {
-                                            key: "loanAccount.rejectReason",
-                                            type: "lov",
-                                            autolov: true,
-                                            required: true,
                                             title: "REJECT_REASON",
-                                            bindMap: {},
-                                            searchHelper: formHelper,
-                                            search: function(inputModel, form, model, context) {
-                                                var stage1 = model.loanProcess.loanAccount.currentStage;
-
-                                                var rejectReason = formHelper.enum('application_reject_reason').data;
-                                                var out = [];
-                                                for (var i = 0; i < rejectReason.length; i++) {
-                                                    var t = rejectReason[i];
-                                                    if (t.field1 == stage1) {
-                                                        out.push({
-                                                            name: t.name,
-                                                        })
-                                                    }
-                                                }
-                                                return $q.resolve({
-                                                    headers: {
-                                                        "x-total-count": out.length
-                                                    },
-                                                    body: out
-                                                });
-                                            },
-                                            onSelect: function(valueObj, model, context) {
-                                                model.loanAccount.rejectReason = valueObj.name;
-                                            },
-                                            getListDisplayItem: function(item, index) {
-                                                return [
-                                                    item.name
-                                                ];
-                                            }
+                                            fieldType: "string",
+                                            key: "loanAccount.rejectReason",
+                                            "type": "lov",
+                                            "autolov": true,
+                                            resolver: "RejectReasonLOVConfiguration"
                                         },
                                         {
                                             key: "review.rejectButton",
@@ -868,18 +848,34 @@ define([], function() {
                                             onClick: "actions.reject(model, formCtrl, form, $event)"
                                         }
                                     ]
+                                },
+                                {
+                                    type: "section",
+                                    condition: "model.review.action=='HOLD'",
+                                    items: [{
+                                        title: "REMARKS",
+                                        key: "review.remarks",
+                                        type: "textarea",
+                                        required: true
+                                    }, {
+                                        key: "review.holdButton",
+                                        type: "button",
+                                        title: "HOLD",
+                                        required: true,
+                                        onClick: "actions.holdAction(model, formCtrl, form, $event)"
+                                    }]
                                 }]
                             }]
                         }
                     };
-                    var p1 = UIRepository.getLoanProcessUIRepository().$promise;
 
-                    p1.then(function(repo) {
-                        self.form = IrfFormRequestProcessor.getFormDefinition(repo, formRequest, configFile(), model);
-                    }, function(err) {
-                        console.log(err);
-
-                    })
+                    UIRepository.getLoanProcessUIRepository().$promise
+                        .then(function(repo){
+                            return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model)
+                        })
+                        .then(function(form){
+                            self.form = form;
+                        });
 
                 },
                 offline: false,
@@ -1015,6 +1011,39 @@ define([], function() {
                                 PageHelper.showErrors(err);
                                 PageHelper.hideLoader();
                             });
+                    },
+                    holdAction: function(model, formCtrl, form, $event) {
+                        $log.info("Inside save()");
+                        PageHelper.clearErrors();
+                        /* TODO Call save service for the loan */
+                        // if(isEnrollmentsSubmitPending(model)){
+                        //     return;
+                        // }                        
+
+                        if (model.review.remarks==null || model.review.remarks ==""){
+                            PageHelper.showProgress("update-loan", "Remarks is mandatory");
+                            return false;
+                        }
+
+                        Utils.confirm("Are You Sure?")
+                        .then(
+                            function(){
+                                PageHelper.showLoader();
+                                model.loanProcess.hold()
+                                    .finally(function() {
+                                        PageHelper.hideLoader();
+                                    })
+                                    .subscribe(function(value) {
+                                        Utils.removeNulls(value, true);
+                                        PageHelper.showProgress('enrolment', 'Done.', 5000);
+                                        irfNavigator.goBack();
+                                    }, function(err) {
+                                        PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                        PageHelper.showErrors(err);
+                                        PageHelper.hideLoader();
+                                    });
+                                }
+                        );
                     }
                 }
             };

@@ -1452,13 +1452,15 @@ define(
                             }
                         }
                     };
-                    var p1 = UIRepository.getLoanProcessUIRepository().$promise;
+                    
+                    UIRepository.getLoanProcessUIRepository().$promise
+                        .then(function(repo){
+                            return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model)
+                        })
+                        .then(function(form){
+                            self.form = form;
+                        });
 
-                    p1.then(function(repo) {
-                        self.form = IrfFormRequestProcessor.getFormDefinition(repo, formRequest, configFile(), model);
-                    }, function(err){
-                        console.log(err);
-                    })
                 },
                 offline: false,
                 getOfflineDisplayItem: function(item, index){

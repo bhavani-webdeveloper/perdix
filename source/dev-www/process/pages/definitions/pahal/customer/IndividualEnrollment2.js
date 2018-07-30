@@ -216,18 +216,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         },
                         "TeleVerification": {
                             "overrides": {
-                                "PhysicalAssets": {
-                                    "readonly": true
-                                },
-                                "ResidenceVerification": {
-                                    "readonly": true
-                                },
-                                "EnterpriseReferences":{
-                                    "readonly": true
-                                }
                             },
                             "excludes": [
                                 "ContactInformation.location",
+                                "EnterpriseReferences",
+                                "PhysicalAssets",
+                                "ResidenceVerification",
+                                "IndividualReferences"
                             ]
                         },
                         "FieldInvestigation1": {
