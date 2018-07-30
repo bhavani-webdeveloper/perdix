@@ -175,6 +175,18 @@
          "allowedRoles":[
             "WM"
          ]
+      },
+      {
+         "order":15,
+         "code":"Completed",
+         "name":"Completed",
+         "stageType":"CAPTURE",
+         "sendSms":"No",
+         "smsCategory":"LoanBooking",
+         "isAccountOpening":false,
+         "allowedRoles":[
+            "WM"
+         ]
       }
    ],
    "schema":{
