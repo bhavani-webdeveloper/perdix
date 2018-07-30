@@ -218,20 +218,7 @@ irf.pageCollection.factory(irf.page("customer360.CustomerDeathMarking"), ["$log"
                             title: "SUBMIT",                           
                         }                    
                     ]
-                },{
-                    type: "actionbox",
-                    items: [
-                        {
-                            type: "button",
-                            title: "BACK",
-                            onClick: function(model, form, formName) {
-                                irfNavigator.goBack();
-                            }
-                            
-                        }                      
-                    ]
-                }
-                
+                }                
             ],
             schema: function() {               
                 return DeathMarking.getCustomerDeathMarking().$promise;

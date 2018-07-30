@@ -91,7 +91,7 @@ define({
                                 PageHelper.clearErrors();
                                 PageHelper.showLoader();
                                 DeathMarking.updateDeadMarkingStatus(req).$promise.then(function(resp) {
-                                    Utils.alert("Death Marking Approved Successfully");
+                                    PageHelper.showProgress("ApproveDeathDetails-pages", "Death Marking Approved Successfully", 3000);
                                     irfNavigator.goBack();
                                 }, function(err) {
                                     PageHelper.showErrors(err);
@@ -123,13 +123,6 @@ define({
                                     PageHelper.hideLoader();
                                 });
                             }                          
-                        },
-                        {
-                            type: "button",
-                            title: "BACK",
-                            onClick: function(model, form, formName) {
-                                irfNavigator.goBack();
-                            }
                         }                      
                     ]
                 },

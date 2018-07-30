@@ -196,9 +196,16 @@
                   "captureStages":["PaymentInitiation","PaymentApproval","ReadyForManualDispatch","PaymentCompleted","PaymentRejected","RejectedPaymentProcessed"
                   ]
                },
-			   "paymentPurpose":{  
+               "paymentPurpose":{  
                   "title":"paymentPurpose",
                   "type":"string",
+                  "captureStages":["PaymentInitiation","PaymentApproval","ReadyForManualDispatch","PaymentCompleted","PaymentRejected","RejectedPaymentProcessed"
+                  ]
+               },
+			      "paymentDate":{  
+                  "title":"paymentDate",
+                  "type":"string",
+                  "format": "date",
                   "captureStages":["PaymentInitiation","PaymentApproval","ReadyForManualDispatch","PaymentCompleted","PaymentRejected","RejectedPaymentProcessed"
                   ]
                },

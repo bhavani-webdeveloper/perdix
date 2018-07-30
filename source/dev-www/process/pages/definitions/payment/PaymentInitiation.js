@@ -119,7 +119,7 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                                     "PaymentDetails.accountNumber":{
                                         "resolver": "LoanAccountsLOVConfiguration",
                                         "readonly":true,
-                                        "orderNo": 5                      
+                                        "orderNo": 5,                    
                                     }
                                     
     
@@ -320,9 +320,25 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                     "DebitAccountDetails.debitAccountNumber":{
                         "readonly":true
                     },
+                    "PaymentDetails.paymentPurpose": {
+                        "onChange": function(modelValue, form, model) {
+                            model.payment.accountNumber = null;
+                            model.payment.customerId = null;
+                            model.payment.loanId = null;
+                            model.payment.beneficiaryName = null;
+                            model.payment.beneficiaryMobileNumber = null;
+                            model.payment.beneficiaryEmailI = null;
+                            model.payment.amount = null;
+                            model.payment.beneficiaryAccountNumber = null;
+                            model.payment.beneficiaryIfsc = null;
+                            model.payment.beneficiaryBankName = null;
+                            model.payment.beneficiaryBankBranch = null;
+                            model.payment.beneficiaryAccountName = null;
+                        }
+                    },
                     "PaymentDetails.accountNumber":{
                         "resolver": "LoanAccountsLOVConfiguration" ,
-                        "condition":"model.payment.paymentPurpose == 'Loan Disbursement' || model.payment.paymentPurpose == 'Security EMI Refunds'"                    
+                        "condition":"model.payment.paymentPurpose == 'Loan Disbursement' || model.payment.paymentPurpose == 'Security EMI Refunds'"                   
                     },
                     "DebitAccountDetails.debitAccountName":{
                         "resolver": "PaymentBankAccountsLOVConfiguration"
@@ -339,7 +355,7 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                     },
                     "PostReviewDecision":{
                         "condition":"model.payment.currentStage == 'PaymentApproval'"  
-                    }                 
+                    }             
                 };
             }
             var getIncludes = function(model) {
@@ -397,7 +413,7 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                             model.PaymentProcess = res;
                             model.payment = res.payment;
 
-                    model.payment.paymentDate = new Date();
+                    model.payment.paymentDate = moment(new Date()).format('YYYY-MM-DD');
                     model.payment.transactionType = "Manual";  
                     UIRepository.getPaymentDetails().$promise
                     .then(function(repo) {

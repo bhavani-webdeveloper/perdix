@@ -35,7 +35,6 @@ define([], function() {
                     "CreateBatch.spokeName",
                     "CreateBatch.debitAccountName",
                     "CreateBatch.beneficiaryName",
-                    "CreateBatch.paymentType",
                     "CreateBatch.paymentPurpose",
                     "CreateBatch.beneficiaryAccountName",
                     "CreateBatch.submit",
@@ -63,7 +62,7 @@ define([], function() {
                                 "CreateBatch":  {
                                 "items":{
                                     "submit": {                                         
-                                        "type": "submit",
+                                        "type": "button",
                                         "title": "Create Batch",
                                         "onClick": "actions.submit(model, formCtrl, form, $event)"  
                                     }

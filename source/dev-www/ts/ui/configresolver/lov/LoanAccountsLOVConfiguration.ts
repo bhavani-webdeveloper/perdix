@@ -7,7 +7,6 @@ export class LoanAccountsLOVConfiguration extends LOVElementConfiguration {
     outputMap: Object = {
         "account_number": "payment.accountNumber",
         "customer_id": "payment.customerId",
-        "collection_customer_name_as_in_bank": "payment.beneficiaryAccountName",
         "id": "payment.loanId",
         "first_name": "payment.beneficiaryName",
         "mobile_phone": "payment.beneficiaryMobileNumber",
@@ -40,10 +39,19 @@ export class LoanAccountsLOVConfiguration extends LOVElementConfiguration {
                 if(model.payment.paymentPurpose == 'Loan Disbursement') {
                     model.payment.amount = res.loanAmount;
                 }
-                model.payment.beneficiaryAccountNumber = res.disbursementSchedules[0].customerAccountNumber;
-                model.payment.beneficiaryIfsc = res.disbursementSchedules[0].ifscCode;
-                model.payment.beneficiaryBankName = res.disbursementSchedules[0].customerBankName;
-                model.payment.beneficiaryBankBranch = res.disbursementSchedules[0].customerBankBranchName;
+                if(res.disbursementSchedules.length > 0) {                    
+                    model.payment.beneficiaryAccountNumber = res.disbursementSchedules[0].customerAccountNumber;
+                    model.payment.beneficiaryIfsc = res.disbursementSchedules[0].ifscCode;
+                    model.payment.beneficiaryBankName = res.disbursementSchedules[0].customerBankName;
+                    model.payment.beneficiaryBankBranch = res.disbursementSchedules[0].customerBankBranchName;
+                    model.payment.beneficiaryAccountName = res.disbursementSchedules[0].customerNameInBank;
+                } else {
+                    model.payment.beneficiaryAccountNumber = null;
+                    model.payment.beneficiaryIfsc = null;
+                    model.payment.beneficiaryBankName = null;
+                    model.payment.beneficiaryBankBranch = null;
+                    model.payment.beneficiaryAccountName = null;
+                }
             });
 
             // Get security EMI deails of the loan
