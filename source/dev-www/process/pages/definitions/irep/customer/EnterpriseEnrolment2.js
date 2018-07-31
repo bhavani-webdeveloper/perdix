@@ -961,7 +961,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                          "title": "Enterprise Assets"
                                      },
                                    "EnterpriseAssets.enterpriseAssets.assetType": {
-                                        "title": "Enterprise Assets"                                     
+                                         "title": "Enterprise Assets"                                        
                                    },
                                     "Machinery.fixedAssetsMachinaries.hypothecatedToUs": {
                                         "condition":"model.customer.fixedAssetsMachinaries[arrayIndex].isTheMachineHypothecated=='NO'"
