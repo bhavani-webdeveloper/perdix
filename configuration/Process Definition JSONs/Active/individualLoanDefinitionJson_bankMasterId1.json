@@ -826,6 +826,15 @@
                      "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                   ]
                },
+			   "schemeCode":{
+                  "title":"schemeCode",
+                 "type":"string",
+                  "minLength":1,
+                  "maxLength":50,
+                  "captureStages":[
+                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                  ]
+               },
              "loanChannels":{
                   "title":"loanChannels",
                  "type":"string",
