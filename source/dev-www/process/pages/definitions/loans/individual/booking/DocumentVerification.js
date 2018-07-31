@@ -13,6 +13,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
             initialize: function(model, form, formCtrl) {
                 $log.info("Demo Customer Page got initialized");
                 model.loanView = SessionStore.getGlobalSetting("LoanViewPageName");
+                model.siteCode = SessionStore.getGlobalSetting("siteCode");
                 var loanId = $stateParams['pageId'];
                 PageHelper.showProgress('loan-load', 'Loading loan details...');
                 PageHelper.showLoader();
@@ -25,6 +26,15 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                         irfNavigator.goBack();
                         return;
                     }
+                    if(model.siteCode == 'kinara' && model.loanAccount.linkedAccountNumber && model.loanAccount.transactionType=='Internal Foreclosure'){
+                        if (_.has(res, 'disbursementSchedules') &&
+                        _.isArray(res.disbursementSchedules) &&
+                        res.disbursementSchedules.length > 0 &&
+                        res.numberOfDisbursed < res.disbursementSchedules.length){
+                        model._currentDisbursement = res.disbursementSchedules[res.numberOfDisbursed];
+                        model._currentDisbursement.precloseurePayOffAmountWithDue =model._currentDisbursement.linkedAccountTotalPrincipalDue +model._currentDisbursement.linkedAccountNormalInterestDue + model._currentDisbursement.linkedAccountPenalInterestDue+model._currentDisbursement.linkedAccountTotalFeeDue;
+                        } 
+                    } 
                     if(model.loanAccount.disbursementSchedules && model.loanAccount.disbursementSchedules.length)
                     {
                         model.loanAccount.disbursementSchedules[0].party = model.loanAccount.disbursementSchedules[0].party || 'CUSTOMER';
@@ -307,6 +317,79 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                             }] // END of array items
                         }]
                     }] // END of box items
+            },
+            {
+                "type": "box",
+                "readonly":true,
+                "title": "INTERNAL_FORE_CLOSURE_DETAILS",
+                "condition": "model.siteCode == 'kinara' && model.loanAccount.linkedAccountNumber && model.loanAccount.transactionType=='Internal Foreclosure'",
+                "items": [{
+                    "key": "loanAccount.linkedAccountNumber",
+                    "title":"LINKED_ACCOUNT_NUMBER",
+                    "readonly":true
+                }, {
+                    "key": "_currentDisbursement.customerSignatureDate",
+                    "title": "CUSTOMER_SIGNATURE_DATE",
+                    "type": "date",
+                    "readonly":true
+                },
+                {
+                    "key": "_currentDisbursement.scheduledDisbursementDate",
+                    "title": "SCHEDULED_DISBURSEMENT_DATE",
+                    "type": "date",
+                    "readonly":true
+                },
+                {
+                    "key": "loanAccount.firstRepaymentDate",
+                    "title": "REPAYMENT_DATE",
+                    "type": "date",
+                    "readonly":true
+                },{
+                    "key": "loanAccount.transactionType",
+                    "title":"TRANSACTION_TYPE",
+                    "readonly":true,
+                },{
+                    "type":"fieldset",
+                    "items":[
+                    {
+                        "key": "_currentDisbursement.precloseurePayOffAmountWithDue",
+                        "title": "PAYOFF_AMOUNT_WITH_DUE",
+                        "readonly": true,
+                    },{
+                        "key": "_currentDisbursement.linkedAccountTotalPrincipalDue",
+                        "title": "TOTAL_PRINCIPAL_DUE",
+                        "readonly": true
+                    }, {
+                        "key": "_currentDisbursement.linkedAccountNormalInterestDue",
+                        "title": "TOTAL_INTEREST_DUE",
+                        "readonly": true,
+                    },{
+                        "key": "_currentDisbursement.linkedAccountPenalInterestDue",
+                        "title": "TOTAL_PENAL_INTEREST_DUE",
+                        "readonly": true
+                    }, {
+                        "key": "_currentDisbursement.linkedAccountTotalFeeDue",
+                        "title": "TOTAL_FEE_DUE",
+                        "readonly": true,
+                    }
+                    ]
+                },
+                {
+                    "type": "fieldset",
+                    "readonly":true,
+                    "title": "WAIVER_DETAILS",
+                    "items": [{
+                        "key": "_currentDisbursement.normalInterestDuePayment",
+                        "title": "TOTAL_INTEREST_DUE"
+                    }, {
+                        "key": "_currentDisbursement.penalInterestDuePayment",
+                        "title": "TOTAL_PENAL_INTEREST_DUE"
+                    }, {
+                        "key": "_currentDisbursement.feeAmountPayment",
+                        "title": "TOTAL_FEE_DUE"
+                    }]
+                }
+                ]
             },
             {
                 "type": "box",
