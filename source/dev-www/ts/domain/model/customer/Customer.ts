@@ -27,6 +27,7 @@ import SupplierDetail = require("./SupplierDetail");
 import Udf = require("./Udf");
 import Verification = require("./Verification");
 import EnterpriseNetworth = require("./EnterpriseNetworth");
+import CurrentAsset = require("./CurrentAsset");
 
 export enum CustomerTypes {
     INDIVIDUAL = "Individual",
@@ -312,5 +313,10 @@ export class Customer {
 
     @Type(() => EnterpriseNetworth)
     enterpriseNetworth: EnterpriseNetworth[];
+
+    @Type(() => CurrentAsset)
+    currentAssets: CurrentAsset[] = [];
+
+
 
 }

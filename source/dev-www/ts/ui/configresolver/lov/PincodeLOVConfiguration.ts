@@ -9,6 +9,12 @@ export class PincodeLOVConfiguration extends LOVElementConfiguration {
         },
         "state": {
             key: "customer.state"
+        },
+        "division": {
+            key: "customer.division"
+        },
+        "region": {
+            key: "customer.region"
         }
     };
     outputMap: Object = {
@@ -16,7 +22,7 @@ export class PincodeLOVConfiguration extends LOVElementConfiguration {
         "region": "customer.villageName",
         "pincode": "customer.pincode",
         "district": "customer.district",
-        "state": "customer.state",
+        "state": "customer.state"
     };
     initialize: Function = function(inputModel) {
         let $log = AngularResourceService.getInstance().getNGService("$log");
@@ -32,7 +38,9 @@ export class PincodeLOVConfiguration extends LOVElementConfiguration {
         return Queries.searchPincodes(
             inputModel.pincode,
             inputModel.district,
-            inputModel.state
+            inputModel.state,
+            inputModel.region,
+            inputModel.division
         );
     };
 

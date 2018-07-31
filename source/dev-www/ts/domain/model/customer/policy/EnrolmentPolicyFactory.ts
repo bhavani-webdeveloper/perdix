@@ -58,7 +58,7 @@ export class EnrolmentPolicyFactory implements IPolicyFactory{
             case 'VerifyIndividualReferencePolicy':
                 return new VerifyIndividualReferencePolicy();
             default:
-                return null;
+                return new (<any>window)[name]();
 
         }
 

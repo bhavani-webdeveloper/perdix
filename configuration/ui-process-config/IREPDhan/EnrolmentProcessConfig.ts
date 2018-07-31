@@ -39,7 +39,11 @@ let config = {
                     {
                         "name": "LoadEnrolmentCustomerDataPolicy",
                         "arguments": null
-                    }                    
+                    },
+                    {
+                        "name": "PreSaveCustomerPolicy",
+                        "arguments": null
+                    }
                 ],
                 "overrides": [
                     {

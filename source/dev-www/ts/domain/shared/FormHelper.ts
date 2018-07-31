@@ -15,6 +15,7 @@ export interface IFormHelper {
     getExpenseType(): any;
     getReferencetype(): any;
     getVehicleDocuments(): any;
+    getByEnumCode(enumCode: string): any;
 }
 
 export abstract class NeedsAngularInjector {
@@ -77,5 +78,8 @@ export class FormHelper extends NeedsAngularInjector implements IFormHelper {
     }
     getVehicleDocuments() : any {
         return this.getInjector().enum('vehicle_doc_type').data;
+    }
+    getByEnumCode(enumCode: string) : any {
+        return this.getInjector().enum(enumCode).data;
     }
 }

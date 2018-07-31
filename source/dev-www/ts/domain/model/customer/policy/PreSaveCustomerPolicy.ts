@@ -54,6 +54,22 @@ export class PreSaveCustomerPolicy extends IPolicy<EnrolmentProcess> {
                 }
             }
 
+            if (_.hasIn(enrolmentProcess, 'customer.currentAssets') && _.isArray(enrolmentProcess.customer.currentAssets)){
+                let current_asset_type=formHelperData.getByEnumCode('current_asset_type');
+                let ca = enrolmentProcess.customer.currentAssets;
+                var currentAsset = ca.map(function (ca, index, array) {
+                    if(ca.assetType && !ca.assetCategory){
+                        let c = current_asset_type.map(function (cas, index, array){
+                            if(cas.name == ca.assetType){
+                                ca.assetCategory = cas.parentCode;
+                            }
+                        }) 
+                    }
+                    return ca.assetCategory; 
+                });
+                      
+            }
+
             return Observable.of(enrolmentProcess);
         } catch(err) {
             console.error(err);
