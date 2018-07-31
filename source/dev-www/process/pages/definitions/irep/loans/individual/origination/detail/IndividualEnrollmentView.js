@@ -21,8 +21,7 @@ define({
                     'cibil': {},
                     'highmark': {},
                     'customer_address': {}
-                };
-
+                };                
                 Enrollment.getCustomerById({
                     id: model.customerId
                 }).$promise.then(function(res) {
@@ -39,14 +38,15 @@ define({
                             model.bundleModel.guarantors.push(res);
                             break;
                     };
+                    model.customer.presetAddress = 'Present Address';
 
 
-                    model.customer.presetAddress = [
-                        res.doorNo,
-                        res.street,
-                        res.district,
-                        res.state
-                    ].join(', ') + ' - ' + res.pincode;
+                    // model.customer.presetAddress = [
+                    //     res.doorNo,
+                    //     res.street,
+                    //     res.district,
+                    //     res.state
+                    // ].join(', ') + ' - ' + res.pincode;
 
                     /*Family fields*/
                     model.UIUDF.family_fields.family_member_count = model.customer.familyMembers.length;
@@ -349,10 +349,27 @@ define({
                             }, {
                                 "key": "customer.email",
                                 "title": "EMAIL"
-                            }, {
-                                "key": "customer.presetAddress",
-                                "type": "html",
-                                "title": "Present Address"
+                            }, {  
+                                "type": "section",                                
+                                "htmlClass": "row",
+                                "items": [
+                                    {
+                                        "type": "section",
+                                        "htmlClass": "col-sm-4",
+                                        "html": '<h5>' + "Present Address" + '</h5>'
+                                    },
+                                    {
+                                        "type": "section",
+                                        "htmlClass": "col-sm-8",
+                                        "html": '<p style = "font-size: 14px; color: #555;"><strong>{{model.customer.doorNo}} <br />\
+                                        {{model.customer.street}} <br />\
+                                        {{model.customer.district}} <br />\
+                                        {{model.customer.state}} <br /> \
+                                        {{model.customer.pincode}} <br /> \
+                                        <br /><strong></p>\
+                                        '
+                                    }]
+                                       
                             }]
                         }, {
                             "type": "grid",
