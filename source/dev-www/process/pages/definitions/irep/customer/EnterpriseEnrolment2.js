@@ -960,14 +960,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                      "EnterpriseAssets.enterpriseAssets": {
                                          "title": "Enterprise Assets"
                                      },
-                                     "EnterpriseAssets.enterpriseAssets.assetType": {
-                                         "title": "Enterprise Assets",
-                                         "schema": {
-                                             "orderNo": 10,
-                                             "type": "select",
-                                             "enumCode": "stock_enterprise_assets"
-                                    }
-                                   },
                                     "Machinery.fixedAssetsMachinaries.hypothecatedToUs": {
                                         "condition":"model.customer.fixedAssetsMachinaries[arrayIndex].isTheMachineHypothecated=='NO'"
                                     },
