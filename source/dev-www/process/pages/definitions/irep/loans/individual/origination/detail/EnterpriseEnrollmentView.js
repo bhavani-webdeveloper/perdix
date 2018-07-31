@@ -390,12 +390,28 @@ define({
                         }, {
                             "key": "customer.enterprise.companyEmailId",
                             "title": "Email ID"
-                        }, {
-                            "title": "Present Address",
-                            "key": "customer.presetAddress",                            
-                            "type": "html"
-
-                        }]
+                        }, {  
+                            "type": "section",                                
+                            "htmlClass": "row",
+                            "items": [
+                                {
+                                    "type": "section",
+                                    "htmlClass": "col-sm-4",
+                                    "html": '<h5>' + "Present Address" + '</h5>'
+                                },
+                                {
+                                    "type": "section",
+                                    "htmlClass": "col-sm-8",
+                                    "html": '<p style = "font-size: 14px; color: #555;"><strong>{{model.customer.doorNo}} <br />\
+                                    {{model.customer.street}} <br />\
+                                    {{model.customer.district}} <br />\
+                                    {{model.customer.state}} <br /> \
+                                    {{model.customer.pincode}} <br /> \
+                                    <br /><strong></p>\
+                                    '
+                                }]
+                                       
+                            }]
                     }, {
                         "type": "grid",
                         "orientation": "vertical",

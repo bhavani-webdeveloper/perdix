@@ -419,17 +419,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
 
                     "EnterpriseAssets",
                     "EnterpriseAssets.enterpriseAssets",
-                    "EnterpriseAssets.enterpriseAssets.assetType",
-                    "EnterpriseAssets.enterpriseAssets.endUse",
-                    "EnterpriseAssets.enterpriseAssets.natureOfUse",
-                    "EnterpriseAssets.enterpriseAssets.manufacturer",
-                    "EnterpriseAssets.enterpriseAssets.make",
-                    "EnterpriseAssets.enterpriseAssets.assetCategory",
-                    "EnterpriseAssets.enterpriseAssets.vehicleMakeModel",
-                    "EnterpriseAssets.enterpriseAssets.manufactureDate",
-                    "EnterpriseAssets.enterpriseAssets.details",
-                    "EnterpriseAssets.enterpriseAssets.subDetails",
-                    "EnterpriseAssets.enterpriseAssets.assetregistrationNumber",
+                    "EnterpriseAssets.enterpriseAssets.assetType",                    
                     "EnterpriseAssets.enterpriseAssets.valueOfAsset",                    
                     
                     "Machinery",
@@ -745,7 +735,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             "Appraisal": {
                                 "excludes": [
                                     "ProxyIndicators",
-                                    "EnterpriseAssets",
                                     "EnterpriseReferences.verifications.knownSince",
                                     "EnterpriseReferences.verifications.goodsSold",
                                     "EnterpriseReferences.verifications.goodsBought",
@@ -965,6 +954,20 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "required": true
 
                                     },
+                                    "EnterpriseAssets": {
+                                        "title": "Enterprise Assets"
+                                     },
+                                     "EnterpriseAssets.enterpriseAssets": {
+                                         "title": "Enterprise Assets"
+                                     },
+                                     "EnterpriseAssets.enterpriseAssets.assetType": {
+                                         "title": "Enterprise Assets",
+                                         "schema": {
+                                             "orderNo": 10,
+                                             "type": "select",
+                                             "enumCode": "stock_enterprise_assets"
+                                    }
+                                },
                                     "Machinery.fixedAssetsMachinaries.hypothecatedToUs": {
                                         "condition":"model.customer.fixedAssetsMachinaries[arrayIndex].isTheMachineHypothecated=='NO'"
                                     },

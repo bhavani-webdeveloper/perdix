@@ -351,6 +351,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             },
                             "state": {
                                 key: "customer.state"
+                            },
+                            "division": {
+                                key: "customer.division"
+                            },
+                            "region": {
+                                key: "customer.region"
                             }
                         },
                         outputMap: {
@@ -365,7 +371,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             if (!inputModel.pincode) {
                                 return $q.reject();
                             }
-                            return Queries.searchPincodes(inputModel.pincode, inputModel.district, inputModel.state);
+                            return Queries.searchPincodes(inputModel.pincode, inputModel.district, inputModel.state, inputModel.division, inputModel.region);
                         },
                         getListDisplayItem: function(item, index) {
                             return [

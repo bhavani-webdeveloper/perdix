@@ -261,7 +261,7 @@
                         },
                         "state": {
                             "type":["string","null"]
-                        },
+                        },                        
                         "version": {
                             "type": ["integer","null"]
                         }
@@ -369,6 +369,13 @@
                         },
                         "pincode": {
                             "type": ["integer","null"]
+                        },
+                        "division": {
+                            "type": ["string","null"],
+                            "title": "Division"
+                        },
+                        "region": {
+                            "type":["string","null"]
                         },
                         "registeredAt": {
                             "type": ["string","null"]
@@ -1057,6 +1064,14 @@
                     "type": ["string","null"],
                     "title": "STATE",
                     "enumCode":"state_master"
+                },  
+                "mailingRegion": {
+                    "type": ["string","null"],
+                    "title": "Region"
+                },
+                "mailingDivision": {
+                    "type": ["string","null"],
+                    "title": "Division"
                 },
                 "mailingStreet": {
                     "type": ["string","null"],
@@ -1232,6 +1247,13 @@
                     "minimum":100000,
                     "maximum":999999
                 },
+                "division": {
+                    "type": ["string","null"],
+                    "title": "Division"
+                },
+                "region": {
+                    "type":["string","null"]
+                },
                 "place": {
                     "type": ["string","null"],
                     "title": "PLACE"
@@ -1274,7 +1296,7 @@
                     "type": ["string","null"],
                     "title": "STATE",
                     "enumCode":"state_master"
-                },
+                },                
                 "stdCode": {
                     "type": ["string","null"],
                     "title": "STD_CODE"

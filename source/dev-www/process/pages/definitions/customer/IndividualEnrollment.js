@@ -257,6 +257,12 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                                 },
                                 "state": {
                                     key: "customer.state"
+                                },
+                                "division": {
+                                    key: "customer.division"
+                                },
+                                "region": {
+                                    key: "customer.region"
                                 }
                             },
                             outputMap: {
@@ -278,7 +284,9 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                                 return Queries.searchPincodes(
                                     inputModel.pincode,
                                     inputModel.district,
-                                    inputModel.state
+                                    inputModel.state,
+                                    inputModel.division,
+                                    inputModel.region
                                 );
                             },
                             getListDisplayItem: function(item, index) {
@@ -319,13 +327,21 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                                 },
                                 "mailingState": {
                                     key: "customer.mailingState"
+                                },
+                                "mailingDivision": {
+                                    key: "customer.mailingDivision"
+                                },
+                                "mailingRegion": {
+                                    key: "customer.mailingRegion"
                                 }
                             },
                             outputMap: {
                                 "mailingDivision": "customer.mailingLocality",
                                 "mailingPincode": "customer.mailingPincode",
                                 "mailingDistrict": "customer.mailingDistrict",
-                                "mailingState": "customer.mailingState"
+                                "mailingState": "customer.mailingState",
+                                "mailingRegion": "customer.mailingRegion"
+
                             },
                             searchHelper: formHelper,
                             initialize: function(inputModel) {
@@ -339,7 +355,9 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                                 return Queries.searchPincodes(
                                     inputModel.mailingPincode,
                                     inputModel.mailingDistrict,
-                                    inputModel.mailingState
+                                    inputModel.mailingState,
+                                    inputModel.mailingDivision,
+                                    inputModel.mailingRegion
                                 );
                             },
                             getListDisplayItem: function(item, index) {
