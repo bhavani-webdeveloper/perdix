@@ -401,6 +401,16 @@
                 "Completed"
               ]
             },
+            "assetCategory": {
+              "title": "assetCategory",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
             "description": {
               "title": "description",
               "type": "string",
