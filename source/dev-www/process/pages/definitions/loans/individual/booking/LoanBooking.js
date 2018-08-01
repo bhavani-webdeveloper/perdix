@@ -78,6 +78,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
         };
 
         var validateDisbursementDate = function(model){
+            if(model.siteCode == "IREPDhan" && (moment(model._currentDisbursement.scheduledDisbursementDate).isBefore(model._currentDisbursement.customerSignatureDate))){
+                PageHelper.setError({
+                    message: "Scheduled Disbursement Date should greater then or equal" + " " + moment(model._currentDisbursement.customerSignatureDate).format(SessionStore.getDateFormat())
+                });
+                return;
+            }
             if (model.disbursementCutOffTime && model.CutOffdate &&(moment(model._currentDisbursement.scheduledDisbursementDate).isBefore(model.CutOffdate))) {
                 PageHelper.setError({
                     message: "Scheduled Disbursement Date should be greater then or equal" + " " + moment(model.CutOffdate).format(SessionStore.getDateFormat())
@@ -192,7 +198,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                             }
 
                             model.scheduledDisbursementAllowedDate= moment(SessionStore.getCBSDate()).add("days", model.disbursementRestrictionDays);
-                            if (model.disbursementCutOffTime) {
+                            if (model.disbursementCutOffTime ) {
                                 populateDisbursementScheduledDate(model);
                             }
 

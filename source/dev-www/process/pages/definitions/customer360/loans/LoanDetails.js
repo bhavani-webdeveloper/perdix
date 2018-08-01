@@ -468,14 +468,24 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                             }
                         }
                         $q.all(promiseArray).finally(function() {
-                            PageHelper.hideLoader();
-                        })
+                            //getting form key for form download , for loan documents
                         if (model.loanAccount.loanDocuments) {
-                            for (var i = 0; i < model.loanAccount.loanDocuments.length; i++) {
-
-                                model.loanDocuments.existingDocuments.push(model.loanAccount.loanDocuments[i]);
-                            }
-                        }
+                            model.loanDocuments.existingDocuments = _.cloneDeep(model.loanAccount.loanDocuments);
+                            Queries.getLoanProductDocuments(model.loanAccount.productCode, "LoanBooking", "DocumentUpload")
+                                .then(function (docs) {
+                                    
+                                    _.forEach(model.loanDocuments.existingDocuments, function (obj, i) {
+                                        obj.$downloadRequired = docs[i].download_required,
+                                            obj.$formsKey = docs[i].forms_key,
+                                            obj.disbursementId = docs[i].id
+                                    })
+                                    PageHelper.showProgress('Loan-Documents', 'Done.', 2000);
+                                }, function (httpRes) {
+                                    PageHelper.showProgress('Loan-Documents', "Error while getting template key", 2000);
+                                })
+                        };
+                        PageHelper.hideLoader();
+                        })
                     }, function(err){
                         PageHelper.showErrors(err);
                         PageHelper.hideLoader();
@@ -1865,32 +1875,71 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                     "title": "LOAN_DOCUMENTS",
                     "condition": 'model.loanAccount.loanType != "JLG"',
                     "items": [{
-                                "type": "fieldset",
-                                "title": "EXISTING_LOAN_DOCUMENTS",
-                                "items": [{
+                            "type": "fieldset",
+                            "title": "EXISTING_LOAN_DOCUMENTS",
+                            "items": [{
                                     "type": "array",
-                                    "required":false,
                                     "key": "loanDocuments.existingDocuments",
                                     "add": null,
                                     "startEmpty": true,
                                     "remove": null,
-                                    "titleExpr": "model.loanDocuments.existingDocuments[arrayIndex].document",
+                                    "notitle": true,
+                                    "view": "fixed",
                                     "items": [{
-                                        "title": "DOWNLOAD_FORM",
-                                        "notitle": true,
-                                        "fieldHtmlClass": "btn-block",
-                                        "style": "btn-default",
-                                        "icon": "fa fa-download",
-                                        "type": "button",
-                                        "readonly": false,
-                                        "key": "loanAccount.loanDocs[].documentId",
-                                        "onClick": function(model, form, schemaForm, event) {
-                                            var fileId = model.loanDocuments.existingDocuments[schemaForm.arrayIndex].documentId;
-                                            Utils.downloadFile(Files.getFileDownloadURL(fileId));
-                                        }
+                                    "type": "section",
+                                    "htmlClass": "row",
+                                    "items": [{
+                                            "type": "section",
+                                            "htmlClass": "col-sm-6",
+                                            "items": [{
+                                                "key": "loanDocuments.existingDocuments[].document",
+                                                "notitle": true,
+                                                "titleExpr": "model.loanDocuments.existingDocuments[arrayIndex].document",
+                                                "type": "anchor",
+                                                "fieldHtmlClass": "text-bold",
+                                                "onClick": function (model, form, schemaForm, event) {
+                                                    var doc = model.loanDocuments.existingDocuments[event.arrayIndex];
+                                                    console.log(doc);
+                                                    Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=" + doc.$formsKey + "&record_id=" + model.loanAccount.id)
+                                                }
+                                            }]
+                                        },
+                                        {
+                                            "type": "section",
+                                            "htmlClass": "col-sm-6",
+                                            "comdition": "model.pageConfig.documentUploadAllowed && model.pageConfig.documentUploadAllowed == true",
+                                            "items": [{
+                                                title: "Upload",
+                                                key: "loanDocuments.existingDocuments[].documentId",
+                                                type: "file",
+                                                fileType: "application/pdf",
+                                                category: "Loan",
+                                                subCategory: "DOC1",
+                                                "notitle": true,
+                                                using: "scanner"
 
-                                    }]
+                                            }]
+                                        },{
+                                            "type": "section",
+                                            "htmlClass": "col-sm-6",
+                                            "condition": "!model.pageConfig || !model.pageConfig.documentUploadAllowed || model.pageConfig.documentUploadAllowed != true",
+                                            "items": [{
+                                                title: "Upload",
+                                                key: "loanDocuments.existingDocuments[].documentId",
+                                                "readonly": true,
+                                                type: "file",
+                                                fileType: "application/pdf",
+                                                category: "Loan",
+                                                subCategory: "DOC1",
+                                                "notitle": true,
+                                                using: "scanner"
+
+                                            }]
+
+                                        }]
                                 }]
+
+                            }]
                             },
                      {
                         "type": "fieldset",
@@ -1932,6 +1981,11 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                 // }
                             ]
                         }]
+                    },{
+                        "type": "button",
+                        "title": "Update",
+                        "condition": "model.pageConfig.documentUploadAllowed && model.pageConfig.documentUploadAllowed == true",
+                        "onClick": "actions.update(model, formCtrl, form, $event)"
                     },{
                         "title": "Loan Doument Download",
                         "key": "loanAccount.applicationFileId",
@@ -2113,6 +2167,39 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                         deferred.reject();
                     }
                     return deferred.promise;
+                },
+                update: function(model, formCtrl, form, $event){
+                    /* 1)This update is used to update the Existing Document section , 
+                    2) separate pageConfig is required to enable this button as it is role specific
+                    */
+                    $log.info(model);
+                    PageHelper.clearErrors();
+                    var reqData = {
+                        loanAccount : null,
+                        loanProcessAction : "SAVE"
+                    };
+
+                    //updating existing doc
+                    reqData.loanAccount = _.cloneDeep(model.loanAccount);
+                    _.forEach(model.loanDocuments.existingDocuments, function(obj,i){
+                        if(obj.documentId != reqData.loanAccount.loanDocuments[i].documentId){
+                             reqData.loanAccount.loanDocuments[i].documentId = obj.documentId;
+                        }
+                    })
+                    PageHelper.showLoader();
+                    IndividualLoan.update(reqData).$promise.then(function(response) {
+                        PageHelper.hideLoader();
+                        $log.info(response);
+                        PageHelper.showProgress("Loan_Document_Upload", "Update Successful", 5000)
+                        $state.reload();
+                    }, function(errorResponse) {
+                        PageHelper.showErrors(errorResponse);
+                        PageHelper.showProgress("Loan_Document_Upload", "Oops. An Error Occurred", 5000);
+                        PageHelper.hideLoader();
+                    }).finally(function() {
+                        PageHelper.hideLoader();
+                    });
+
                 },
                 submit: function(model, form, formName) {
                     $log.info(model);
