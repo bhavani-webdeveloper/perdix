@@ -69,8 +69,8 @@
     },
     {
       "order": 6,
-      "code": "ApplciationReview",
-      "name": "ApplciationReview",
+      "code": "ApplicationReview",
+      "name": "ApplicationReview",
       "stageType": "CAPTURE",
       "sendSms": "No",
       "smsCategory": "LoanBooking",
@@ -168,18 +168,6 @@
     },
     {
       "order": 16,
-      "code": "Rejected",
-      "name": "Rejected",
-      "stageType": "CAPTURE",
-      "sendSms": "Yes",
-      "smsCategory": "UponRejection",
-      "isAccountOpening": false,
-      "allowedRoles": [
-        "WM"
-      ]
-    },
-    {
-      "order": 17,
       "code": "LoanInitiation",
       "name": "Loan Input",
       "stageType": "CAPTURE",
@@ -191,7 +179,7 @@
       ]
     },
     {
-      "order": 18,
+      "order": 17,
       "code": "PendingForPartner",
       "name": "Pending for Partner",
       "stageType": "CAPTURE",
@@ -203,7 +191,7 @@
       ]
     },
     {
-      "order": 19,
+      "order": 18,
       "code": "LoanBooking",
       "name": "Loan Booking",
       "stageType": "CAPTURE",
@@ -215,7 +203,7 @@
       ]
     },
     {
-      "order": 20,
+      "order": 19,
       "code": "DocumentUpload",
       "name": "Document Download and Upload",
       "stageType": "CAPTURE",
@@ -227,12 +215,24 @@
       ]
     },
     {
-      "order": 21,
+      "order": 20,
       "code": "DocumentVerification",
       "name": "Document Verification",
       "stageType": "CAPTURE",
       "sendSms": "No",
       "smsCategory": "LoanBooking",
+      "isAccountOpening": false,
+      "allowedRoles": [
+        "WM"
+      ]
+    },
+    {
+      "order": 21,
+      "code": "Rejected",
+      "name": "Rejected",
+      "stageType": "CAPTURE",
+      "sendSms": "Yes",
+      "smsCategory": "UponRejection",
       "isAccountOpening": false,
       "allowedRoles": [
         "WM"
