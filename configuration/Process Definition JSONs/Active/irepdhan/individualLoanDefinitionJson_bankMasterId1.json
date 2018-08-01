@@ -3496,7 +3496,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "DocumentVerification", "DocumentUpload", "KYC", "KYCReview", "Appraisal", "AppraisalReview", "FieldAppraisal", "FieldAppraisalReview", "Televerification", "Evaluation", "CreditCommitteeReview","Rejected", "LoanInitiation"
+                        "DocumentVerification", "Completed","DocumentUpload", "KYC", "KYCReview", "Appraisal", "AppraisalReview", "FieldAppraisal", "FieldAppraisalReview", "Televerification", "Evaluation", "CreditCommitteeReview","Rejected", "LoanInitiation"
                      ]
                   },
                   "document":{
@@ -3505,7 +3505,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "DocumentVerification", "DocumentUpload", "KYC", "KYCReview", "Appraisal", "AppraisalReview", "FieldAppraisal", "FieldAppraisalReview", "Televerification", "Evaluation", "CreditCommitteeReview","Rejected", "LoanInitiation"
+                        "DocumentVerification", "Completed","DocumentUpload", "KYC", "KYCReview", "Appraisal", "AppraisalReview", "FieldAppraisal", "FieldAppraisalReview", "Televerification", "Evaluation", "CreditCommitteeReview","Rejected", "LoanInitiation"
                      ]
                   },
                   "remarks":{
@@ -3514,7 +3514,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "DocumentVerification"
+                        "DocumentVerification","Completed"
                      ]
                   }
                }
