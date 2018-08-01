@@ -1042,7 +1042,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                             }
                         }
 
-                        if(model.BackedDatedDisbursement && model.BackedDatedDisbursement=="CURRENT_MONTH"){
+                        if(model.BackedDatedDisbursement && model.BackedDatedDisbursement=="CURRENT_MONTH" && model.siteCode!='irepDhan'){
                             if (scheduledDisbursementDate.diff(cbsdate, "days") <0 && (cbsmonth !== dismonth)) {
                                 PageHelper.showProgress("loan-create", "scheduledDisbursementDate date should not be a previous month of CBS date", 5000);
                                 return false;
