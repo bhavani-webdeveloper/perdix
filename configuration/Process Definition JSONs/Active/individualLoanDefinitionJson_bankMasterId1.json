@@ -216,7 +216,7 @@
       },
       {
         "order":18,
-        "code":"COMPLETED",
+        "code":"Completed",
         "name":"Completed",
         "stageType":"CAPTURE",
         "sendSms":"No",
