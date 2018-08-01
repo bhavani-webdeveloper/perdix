@@ -1042,7 +1042,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                             }
                         }
 
-                        if(model.BackedDatedDisbursement && model.BackedDatedDisbursement=="CURRENT_MONTH" && model.siteCode!='IREPDhan'){
+                        if(model.BackedDatedDisbursement && model.BackedDatedDisbursement=="CURRENT_MONTH"){
                             if (scheduledDisbursementDate.diff(cbsdate, "days") <0 && (cbsmonth !== dismonth)) {
                                 PageHelper.showProgress("loan-create", "scheduledDisbursementDate date should not be a previous month of CBS date", 5000);
                                 return false;
@@ -1064,7 +1064,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         }
                     }
                     
-                    if(model.siteCode == 'sambandh' || model.siteCode == 'saija'||model.siteCode == 'kinara' ) {
+                    if(model.siteCode == 'sambandh' || model.siteCode == 'saija'||model.siteCode == 'kinara' || model.siteCode == 'IREPDhan') {
                         if (scheduledDisbursementDate.diff(customerSignatureDate,"days") < 0){
                             PageHelper.showProgress("loan-create","Scheduled disbursement date should be greater than or equal to Customer sign date",5000);
                             return false;
