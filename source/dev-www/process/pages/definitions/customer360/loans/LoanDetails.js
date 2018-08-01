@@ -2186,6 +2186,17 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                              reqData.loanAccount.loanDocuments[i].documentId = obj.documentId;
                         }
                     })
+                    // updating new loan Account
+                    if (model.loanDocuments.newLoanDocuments) {
+                        for (var i = 0; i < model.loanDocuments.newLoanDocuments.length; i++) {
+                            model.loanDocuments.newLoanDocuments[i].loanId = reqData.loanAccount.id;
+                            model.loanDocuments.newLoanDocuments[i].accountNumber = reqData.loanAccount.accountNumber;
+                            model.loanDocuments.newLoanDocuments[i].documentStatus = "APPROVED";
+
+                            reqData.loanAccount.loanDocuments.push(model.loanDocuments.newLoanDocuments[i]);
+                        }
+
+                    }
                     PageHelper.showLoader();
                     IndividualLoan.update(reqData).$promise.then(function(response) {
                         PageHelper.hideLoader();
