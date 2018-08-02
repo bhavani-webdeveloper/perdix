@@ -650,6 +650,15 @@
           "type": "object",
           "required": [],
           "properties": {
+            "liabilityType": {
+              "title": "Liability Type",
+              "type": "string",
+              "refCodeCategory": "customer_liability_type",
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+             },
             "loanType": {
               "title": "Loan Type",
               "type": "string",
@@ -2339,16 +2348,6 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 45,
-            "captureStages": [
-              "BasicEnrolment",
-              "Completed"
-            ]
-          },
-      "panNo": {
-            "title": "Pan Number",
-            "type": "string",
-            "minLength": 10,
-            "maxLength": 10,
             "captureStages": [
               "BasicEnrolment",
               "Completed"
