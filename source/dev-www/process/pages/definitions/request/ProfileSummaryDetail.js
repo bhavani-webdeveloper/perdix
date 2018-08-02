@@ -19,9 +19,9 @@ define([], function(){
             initialize: function(model, form, formCtrl) {
                 model.userInfo = {};
                 $log.info("Customer Profile Detail got initialized");
-                var urn = $stateParams.pageId;
+                var mobile_phone = $stateParams.pageId;
                 Worklist.getProfile({
-                  userId : urn
+                  userId : mobile_phone
                 }, function(res) {
                     model.userInfo = res;
                   formCtrl.redraw();

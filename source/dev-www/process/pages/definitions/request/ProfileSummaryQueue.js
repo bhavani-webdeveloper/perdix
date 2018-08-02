@@ -126,7 +126,7 @@ define([],function(){
 								fn: function(item, index) {
 									$state.go("Page.Engine", {
 										pageName: "request.ProfileSummaryDetail",
-										pageId: item.urn_no
+										pageId: item.mobile_phone
 									});
 								},
 								isApplicable:function(){
