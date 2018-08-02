@@ -1,6 +1,8 @@
 <?php
     use App\Responses\IRFResponse;
-    include_once("../bootload.php"); 
+	include_once("bootload.php");
+	use Illuminate\Database\Capsule\Manager as DB;
+
     $result = $_POST["result"];
     $resultArray= explode('|', $result);
     $ekyc =  $resultArray[0];
