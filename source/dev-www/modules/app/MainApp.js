@@ -78,4 +78,8 @@ function($scope, $log, SessionStore, Queries, $state, $timeout) {
 			//try { $('.irf-table-view .root-table').dataTable().fnAdjustColumnSizing(); } catch (e) {}
 		}, 301);
 	});
+
+	$('div.footer-version').contextmenu(function() {
+		window.open(irf.MANAGEMENT_BASE_URL + '/server-ext/serverError.php', '_blank');
+	});
 }]);
