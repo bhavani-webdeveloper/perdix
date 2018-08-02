@@ -1928,6 +1928,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             "Sanction": {
                                 "excludes": [
                                     "EnterpriseAssets",
+                                    "ProxyIndicators",
                                     "Liabilities.liabilities.liabilityType",
                                     "EnterpriseFinancials.dailySales",
                                     "EnterpriseFinancials.currentAsset",

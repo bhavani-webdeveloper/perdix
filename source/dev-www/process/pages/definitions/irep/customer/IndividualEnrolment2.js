@@ -228,6 +228,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "FamilyDetails.familyMembers.incomes.incomeSource",
                                 "FamilyDetails.familyMembers.incomes.incomeEarned",
                                 "FamilyDetails.familyMembers.incomes.frequency",
+                                "ContactInformation.whatsAppMobileNoOption",
                                 "HouseVerification.latitude",
                                 "HouseVerification.houseVerificationPhoto",
                                 "HouseVerification.date",

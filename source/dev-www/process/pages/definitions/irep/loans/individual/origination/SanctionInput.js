@@ -168,16 +168,16 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 var loanAccount = loanProcess;
                                 loanAccount.applicantEnrolmentProcess.customer.customerId = loanProcess.loanAccount.customerId;
 
-                                $this.bundlePages.push({
-                                    pageClass: 'summary',
-                                    model: {
-                                        cbModel: {
-                                            customerId:loanProcess.loanAccount.customerId,
-                                            loanId:bundleModel.loanId,
-                                            scoreName:'RiskScore3'
-                                        }
-                                    }
-                                });
+                                // $this.bundlePages.push({
+                                //     pageClass: 'summary',
+                                //     model: {
+                                //         cbModel: {
+                                //             customerId:loanProcess.loanAccount.customerId,
+                                //             loanId:bundleModel.loanId,
+                                //             scoreName:'RiskScore3'
+                                //         }
+                                //     }
+                                // });
 
                                 $this.bundlePages.push({
                                     pageClass: 'applicant',
