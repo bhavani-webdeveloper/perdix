@@ -950,6 +950,7 @@ define({
 								'<tr><td>{{"RAW_MATERIAL" | translate}}</td><td>{{model.assetsAndLiabilities.rawMaterial | irfCurrency}}</td><td>{{"CURRENT_PORTION_OF_LONG_TERM_DEBT" | translate}}</td><td>{{model.assetsAndLiabilities.currentPortionOfLongTermDeb | irfCurrency}}</td></tr>' +
 								'<tr><td>{{"WORK_IN_PROGRESS" | translate}}</td><td>{{model.assetsAndLiabilities.workInProgress | irfCurrency}}</td><td></td><td></td></tr>' +
 								'<tr><td>{{"FINISHED_GOODS" | translate}}</td><td>{{model.assetsAndLiabilities.finishedGoods | irfCurrency}}</td><td></td><td></td></tr>' +
+								'<tr><td>{{"CHIT_FUND_BALANCES" | translate}}</td><td>{{model.assetsAndLiabilities.chitFundBalances | irfCurrency}}</td><td></td><td></td></tr>' +
 								'<trclass="table-sub-header"><th>{{"TOTAL_CURRENT_ASSETS" | translate}}</th><th>{{model.assetsAndLiabilities.totalCurrentAssets | irfCurrency}}</th><th>{{"TOTAL_CURRENT_LIABILITIES" | translate}}</th><th>{{model.assetsAndLiabilities.totalCurrentLiabilities | irfCurrency}}</th></tr>' +
 								'<tr ><td >{{"FIXED_ASSETS" | translate}}</td><td></td><td >{{"LONG_TERM_LIABILITIES" | translate}}</td><td></td></tr><tr><td>{{"MACHINERY" | translate}}</td><td>{{model.assetsAndLiabilities.machinery | irfCurrency}}</td><td>{{"LONGTERMDEBT" | translate}}</td><td>{{model.assetsAndLiabilities.longTermDebt | irfCurrency}}</td></tr>' +
 								'<tr><td>{{"LAND" | translate}}</td><td>{{model.assetsAndLiabilities.land | irfCurrency}}</td><td>{{"OWN_CAPITAL" | translate}}</td><td>{{model.assetsAndLiabilities.ownCapital | irfCurrency}}</td></tr><tr><td>{{"BUILDING" | translate}}</td><td>{{model.assetsAndLiabilities.building | irfCurrency}}</td><td></td><td></td></tr>' +
@@ -1673,6 +1674,7 @@ define({
 					model.assetsAndLiabilities = {
 						"cashInBank": bs['Cash in bank'],
 						"payables": bs['Payables'],
+						"chitFundBalances": bs['Chit fund balances'],
 						"accountsReceivable": bs['Accounts receivables'],
 						"shortTermDebts": bs['Short-term debts '],
 						"rawMaterial": bs['Raw material'],
