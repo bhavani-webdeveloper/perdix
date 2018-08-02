@@ -47,10 +47,6 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                                         "readonly":true,
                                         "orderNo": 6
                                     },
-                                    "PaymentDetails.paymentDate":{
-                                        "readonly":true,
-                                        "orderNo": 7
-                                    },
                                     "BeneficiaryDetails.beneficiaryName":{
                                         "type": "lov",
                                         "resolver": "CustomerBankAccountsLOVConfiguration" ,
@@ -185,10 +181,6 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                                         "readonly":true,
                                         "orderNo": 6
                                     },
-                                    "PaymentDetails.paymentDate":{
-                                        "readonly":true,
-                                        "orderNo": 7
-                                    },
                                     "BeneficiaryDetails.beneficiaryName":{
                                         "readonly":true,
                                         "orderNo": 1
@@ -271,9 +263,6 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                         "orderNo":30
                     },
                     "PaymentDetails.transactionType":{
-                        "readonly":true
-                    },
-                    "PaymentDetails.paymentDate":{
                         "readonly":true
                     },
                     "BeneficiaryDetails.beneficiaryName": {
@@ -367,7 +356,6 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                     "PaymentDetails.paymentPurpose",
                     "PaymentDetails.accountNumber",
                     "PaymentDetails.transactionType",
-                    "PaymentDetails.paymentDate",
                     "BeneficiaryDetails",
                     "BeneficiaryDetails.beneficiaryName",
                     "BeneficiaryDetails.beneficiaryAccountName",
@@ -412,8 +400,6 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                         obs.subscribe(function(res) {                            
                             model.PaymentProcess = res;
                             model.payment = res.payment;
-
-                    model.payment.paymentDate = moment(new Date()).format('YYYY-MM-DD');
                     model.payment.transactionType = "Manual";  
                     UIRepository.getPaymentDetails().$promise
                     .then(function(repo) {
