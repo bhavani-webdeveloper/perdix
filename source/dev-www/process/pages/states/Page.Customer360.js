@@ -21,7 +21,9 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 			return "Page/Engine/customer.IndividualEnrollmentStage2";
 		} else if(siteCode == 'witfin') {
 			return "Page/Engine/witfin.customer360.CustomerProfile";
-		} else {
+		} else if(siteCode == 'pahal') {
+			return "Page/Engine/pahal.customer360.CustomerProfile";
+		}else {
 			return "Page/Engine/customer360.CustomerProfile";
 		}
 
@@ -30,6 +32,8 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 	var getBusinessProfilePageUrl = function() {
 		if(siteCode == 'witfin') {
 			return "Page/Engine/witfin.customer360.BusinessProfile";
+		}else if(siteCode == 'pahal') {
+			return "Page/Engine/pahal.customer360.BusinessProfile";
 		} else {
 			return "Page/Engine/customer360.BusinessProfile";
 		}
