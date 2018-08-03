@@ -415,6 +415,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                                     if(existingDocuments.length > docsForProduct.length){
                                                         model.loanDocuments.existingDocuments = existingDocuments.slice(0,docsForProduct.length);
                                                         model.loanDocuments.newLoanDocuments = existingDocuments.slice(docsForProduct.length);
+                                                        model.loanDocuments.newLoanDocuments.map(o => o.readonly=true);
 
                                                     }else {
                                                         model.loanDocuments.existingDocuments = existingDocuments;
@@ -1885,9 +1886,9 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                     "title": "LOAN_DOCUMENTS",
                     "condition": 'model.loanAccount.loanType != "JLG"',
                     "items": [{
-                            "type": "fieldset",
-                            "title": "EXISTING_LOAN_DOCUMENTS",
-                            "items": [{
+                                "type": "fieldset",
+                                "title": "EXISTING_LOAN_DOCUMENTS",
+                                "items": [{
                                     "type": "array",
                                     "key": "loanDocuments.existingDocuments",
                                     "add": null,
@@ -1896,114 +1897,181 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                     "notitle": true,
                                     "view": "fixed",
                                     "items": [{
-                                    "type": "section",
-                                    "htmlClass": "row",
-                                    "items": [{
-                                            "type": "section",
-                                            "htmlClass": "col-sm-6",
-                                            "items": [{
-                                                "key": "loanDocuments.existingDocuments[].document",
-                                                "notitle": true,
-                                                "titleExpr": "model.loanDocuments.existingDocuments[arrayIndex].document",
-                                                "type": "anchor",
-                                                "fieldHtmlClass": "text-bold",
-                                                "onClick": function (model, form, schemaForm, event) {
-                                                    var doc = model.loanDocuments.existingDocuments[event.arrayIndex];
-                                                    console.log(doc);
-                                                    Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=" + doc.$formsKey + "&record_id=" + model.loanAccount.id)
-                                                }
-                                            }]
-                                        },
-                                        {
-                                            "type": "section",
-                                            "htmlClass": "col-sm-6",
-                                            "items": [{
-                                                title: "Upload",
-                                                key: "loanDocuments.existingDocuments[].documentId",
-                                                "condition": "model.pageConfig.documentUploadAllowed",
-                                                type: "file",
-                                                fileType: "application/pdf",
-                                                category: "Loan",
-                                                subCategory: "DOC1",
-                                                "notitle": true,
-                                                using: "scanner"
+                                        "type": "section",
+                                        "htmlClass": "row",
+                                        "items": [{
+                                                "type": "section",
+                                                "htmlClass": "col-sm-7",
+                                                "items": [{
+                                                    "key": "loanDocuments.existingDocuments[].document",
+                                                    "notitle": true,
+                                                    "titleExpr": "model.loanDocuments.existingDocuments[arrayIndex].document",
+                                                    "type": "anchor",
+                                                    "fieldHtmlClass": "text-bold",
+                                                    "onClick": function (model, form, schemaForm, event) {
+                                                        var doc = model.loanDocuments.existingDocuments[event.arrayIndex];
+                                                        console.log(doc);
+                                                        Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=" + doc.$formsKey + "&record_id=" + model.loanAccount.id)
+                                                    }
+                                                }]
+                                            },
+                                            {
+                                                "type": "section",
+                                                "htmlClass": "col-sm-5",
+                                                "items": [{
+                                                    title: "Upload",
+                                                    key: "loanDocuments.existingDocuments[].documentId",
+                                                    "condition": "model.pageConfig.documentUploadAllowed",
+                                                    type: "file",
+                                                    fileType: "application/pdf",
+                                                    category: "Loan",
+                                                    subCategory: "DOC1",
+                                                    "notitle": true,
+                                                    using: "scanner"
 
-                                            },{
-                                                title: "Upload",
-                                                key: "loanDocuments.existingDocuments[].documentId",
-                                                "condition": "!model.pageConfig.documentUploadAllowed",
-                                                readonly: true,
-                                                type: "file",
-                                                fileType: "application/pdf",
-                                                category: "Loan",
-                                                subCategory: "DOC1",
-                                                "notitle": true,
-                                                using: "scanner"
+                                                }, {
+                                                    title: "Upload",
+                                                    key: "loanDocuments.existingDocuments[].documentId",
+                                                    "condition": "!model.pageConfig.documentUploadAllowed",
+                                                    readonly: true,
+                                                    type: "file",
+                                                    fileType: "application/pdf",
+                                                    category: "Loan",
+                                                    subCategory: "DOC1",
+                                                    "notitle": true,
+                                                    using: "scanner"
 
-                                            }]
-                                        }]
+                                                }]
+                                            }
+                                        ]
+                                    }]
+
                                 }]
-
-                            }]
-                            },
-                     {
-                        "type": "fieldset",
-                        "title": "ADD_LOAN_DOCUMENTS",
-                        "condition": "model.loanAccount.loanType != 'JLG'",
-                        "items": [{
-                            "type": "array",
-                            "required":false,
-                            "key": "loanDocuments.newLoanDocuments",
-                            "title": "ADD_DOCUMENTS",
-                            "startEmpty": true,
-                            "titleExpr": "model.loanDocuments.newLoanDocuments[arrayIndex].document",
-                            "items": [
-                                {
-                                    "key": "loanDocuments.newLoanDocuments[].document",
-                                    "title": "Name",
-                                    "type": "string"
-                                },
-                                // {
-                                //     "key": "loanDocuments.newLoanDocuments[].disbursementId",
-                                //     "title": "DISBURSEMENT_ID",
-                                //     "type": "string"
-                                // },
-                                {
-                                    "title": "Upload",
-                                    "required":false,
-                                    "condition": "!model.pageConfig.readonly",
-                                    "key": "loanDocuments.newLoanDocuments[].documentId",
-                                    type: "file",
-                                    fileType: "*/*",
-                                    category: "Loan",
-                                    subCategory: "DOC1",
-                                    notitle: true
-
-                                },
-                                {
-                                    "title": "Upload",
-                                    "required":false,
-                                    "condition": "model.pageConfig.readonly",
-                                    "key": "loanDocuments.newLoanDocuments[].documentId",
+                            }, {
+                                "type": "fieldset",
+                                "title": "ADD_LOAN_DOCUMENTS",
+                                "items": [{
+                                    "type": "array",
+                                    "key": "loanDocuments.newLoanDocuments",
+                                    "startEmpty": true,
+                                    "title": "ADD_DOCUMENTS",
+                                    "remove": null,
+                                    "notitle": true,
+                                    "condition": "!(!_.isUndefined(model.pageConfig.readonly) && model.pageConfig.readonly==false)",
                                     "readonly": true,
-                                    type: "file",
-                                    fileType: "*/*",
-                                    category: "Loan",
-                                    subCategory: "DOC1",
-                                    notitle: true
+                                    "view": "fixed",
+                                    "items": [{
+                                        "type": "section",
+                                        "htmlClass": "row",
+                                        "items": [{
+                                                "type": "section",
+                                                "htmlClass": "col-sm-7",
+                                                "items": [{
+                                                    "key": "loanDocuments.newLoanDocuments[].document",
+                                                    "notitle": true,
+                                                    "titleExpr": "model.loanDocuments.newLoanDocuments[arrayIndex].document",
+                                                    "placeholder": "Name",
+                                                    "fieldHtmlClass": "text-bold",
+                                                }]
+                                            },
+                                            {
+                                                "type": "section",
+                                                "htmlClass": "col-sm-5",
+                                                "items": [{
+                                                    title: "Upload",
+                                                    "key": "loanDocuments.newLoanDocuments[].documentId",
+                                                    type: "file",
+                                                    fileType: "application/pdf",
+                                                    category: "Loan",
+                                                    subCategory: "DOC1",
+                                                    "notitle": true,
+                                                    using: "scanner"
 
-                                }
-                                // ,
-                                // {
-                                //     "key": "loanDocuments.newLoanDocuments[].documentStatus",
-                                //     "type": "string"
-                                // }
-                            ]
-                        }]
-                    },{
+                                                }]
+                                            }
+                                        ]
+                                    }]
+
+                                }, {
+                                    "type": "array",
+                                    "key": "loanDocuments.newLoanDocuments",
+                                    "startEmpty": true,
+                                    "title": "ADD_DOCUMENTS",
+                                    "remove": null,
+                                    "notitle": true,
+                                    "condition": "!_.isUndefined(model.pageConfig.readonly) && model.pageConfig.readonly==false",
+                                    "view": "fixed",
+                                    "items": [{
+                                        "type": "section",
+                                        "htmlClass": "row",
+                                        "condition": "model.loanDocuments.newLoanDocuments[arrayIndex].readonly",
+                                        "readonly": true,
+                                        "items": [{
+                                                "type": "section",
+                                                "htmlClass": "col-sm-7",
+                                                "items": [{
+                                                    "key": "loanDocuments.newLoanDocuments[].document",
+                                                    "notitle": true,
+                                                    "titleExpr": "model.loanDocuments.newLoanDocuments[arrayIndex].document",
+                                                    "placeholder": "Name",
+                                                    "fieldHtmlClass": "text-bold",
+                                                }]
+                                            },
+                                            {
+                                                "type": "section",
+                                                "htmlClass": "col-sm-5",
+                                                "items": [{
+                                                    title: "Upload",
+                                                    "key": "loanDocuments.newLoanDocuments[].documentId",
+                                                    type: "file",
+                                                    fileType: "application/pdf",
+                                                    category: "Loan",
+                                                    subCategory: "DOC1",
+                                                    "notitle": true,
+                                                    using: "scanner"
+
+                                                }]
+                                            }
+                                        ]
+                                    }, {
+                                        "type": "section",
+                                        "htmlClass": "row",
+                                        "condition": "!model.loanDocuments.newLoanDocuments[arrayIndex].readonly",
+                                        "items": [{
+                                                "type": "section",
+                                                "htmlClass": "col-sm-7",
+                                                "items": [{
+                                                    "key": "loanDocuments.newLoanDocuments[].document",
+                                                    "notitle": true,
+                                                    "titleExpr": "model.loanDocuments.newLoanDocuments[arrayIndex].document",
+                                                    "placeholder": "Name",
+                                                    "fieldHtmlClass": "text-bold",
+                                                }]
+                                            },
+                                            {
+                                                "type": "section",
+                                                "htmlClass": "col-sm-5",
+                                                "items": [{
+                                                    title: "Upload",
+                                                    "key": "loanDocuments.newLoanDocuments[].documentId",
+                                                    type: "file",
+                                                    fileType: "application/pdf",
+                                                    category: "Loan",
+                                                    subCategory: "DOC1",
+                                                    "notitle": true,
+                                                    using: "scanner"
+
+                                                }]
+                                            }
+                                        ]
+                                    }]
+
+                                }]
+                            },
+                    {
                         "type": "button",
                         "title": "Update",
-                        "condition": "model.pageConfig.documentUploadAllowed && model.pageConfig.documentUploadAllowed == true",
+                        "notitle": true,
                         "onClick": "actions.update(model, formCtrl, form, $event)"
                     },{
                         "title": "Loan Doument Download",
@@ -2070,14 +2138,15 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                         }
                     ]
                 },
-                {
+                //submit is hidden by default for irep now 
+                /*{
                     "type": "actionbox",
                     "condition": "model.siteCode == 'IREPDhan'",
                     "items": [{
                         "type": "submit",
                         "title":"SUBMIT"
                     }]
-                },
+                },*/
                 {
                     "type": "actionbox",
                     "condition": "model.loanAccount.loanType != 'JLG' && model.siteCode == 'KGFS'",
