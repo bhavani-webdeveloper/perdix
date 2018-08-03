@@ -304,8 +304,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 "overrides": {
                                     
                                 },
-                                "excludes": [
-                                    "IndividualReferences"                                    
+                                "excludes": [                                   
                                 ]
                             },
                             "ApplicationReview": {
@@ -333,6 +332,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "TangibleNetWorth": {
                                       "readonly": true
+                                    },
+                                    "IndividualReferences":{
+                                        "readonly": true 
                                     }
                                 },
                                 "excludes": [
@@ -364,6 +366,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "TangibleNetWorth": {
                                       "readonly": true
+                                    },
+                                    "IndividualReferences":{
+                                        "readonly": true 
                                     }
                                 },
                                 "excludes": [
@@ -395,6 +400,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "TangibleNetWorth": {
                                       "readonly": true
+                                    },
+                                    "IndividualReferences":{
+                                        "readonly": true 
                                     }
                                 },
                                 "excludes": [
@@ -423,6 +431,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "ContactInformation": {
                                         "readonly": true
+                                    },
+                                    "IndividualReferences":{
+                                        "readonly": true 
                                     }
                                 }
                             }

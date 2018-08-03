@@ -143,6 +143,7 @@ define([], function() {
                         "TeleVerification": {
                             "excludes": [
                                 "LoanRecommendation",
+                                "FieldInvestigationDetails"
                             ],
                             "overrides": {
                                 "FieldInvestigationDetails": {
