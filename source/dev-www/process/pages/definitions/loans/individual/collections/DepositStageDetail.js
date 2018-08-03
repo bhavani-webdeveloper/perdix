@@ -38,7 +38,7 @@ define({
                         "readonly":true
                     },
                     {
-                        "key":"",
+                        "key":"depositDetails.collectionDetail.reference",
                         "title": "Refrence"
                     },
                     {
@@ -208,27 +208,28 @@ define({
                 "$schema": "http://json-schema.org/draft-04/schema#",
                 "type": "object",
                 "properties": {
-                    "depositDetails":{
+                    "depositDetails": {
                         "type": "object",
                         "properties": {
-                            "collectionDetail":{    
-                                "type":"object",
-                                "properties":{
+                            "collectionDetail": {
+                                "type": "object",
+                                "properties": {
                                     "ifscCode": {
                                         "type": "string",
                                         "title": "IFSC_CODE"
                                     },
-                                    "depositBank":{
+                                    "depositBank": {
                                         "type": "string",
                                         "title": "DEPOSITE_BANK"
                                     },
-                                    "depositBranch":{
+                                    "depositBranch": {
                                         "type": "string",
                                         "title": "DEPOSITE_BRANCH"
                                     }
                                 }
                             }
-                    }}
+                        }
+                    }
                 },
                 "required": []
             },
@@ -297,15 +298,6 @@ define({
                 },
                 reject: function (model, formCtrl, form, $event) {
                 /* 1)rejection from this stage will go to preDeposit stage */
-                if (PageHelper.isFormInvalid(formCtrl)) {
-                            return false;
-                        }
-                        formCtrl.scope.$broadcast('schemaFormValidate');
-
-                        if (formCtrl && formCtrl.$invalid) {
-                            PageHelper.showProgress("loan", "Your form have errors. Please fix them.", 5000);
-                            return false;
-                }
                 $log.info("Inside reject()");
                 Utils.confirm("Are you sure ? ")
                     .then(function () {

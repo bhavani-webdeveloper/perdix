@@ -1357,7 +1357,16 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                         });
                     }
                     populatePhysicalAssets(model);
-                    if (model.customer.dateOfBirth) {
+
+                    if (model.siteCode == 'sambandh' && expenditures && expenditures.length != 0) {
+                        for (i = 0; i < expenditures.length - 1; i++) {
+                            model.customer.expenditures.push({
+                                'expenditureSource': expenditures[i].name,
+                                'frequency': 'Monthly'
+                            });
+                        }
+                    }
+                   if (model.customer.dateOfBirth) {
                         model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                     }
 
@@ -1381,6 +1390,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                             model.customer.udf.userDefinedFieldValues.udf39 = "No";
                             model.customer.udf.userDefinedFieldValues.udf40 = "No";
                             model.customer.udf.userDefinedFieldValues.udf5 = "Good";
+                            var expenditures = formHelper.enum('expenditure').data;
                     }
                     else if(SessionStore.getGlobalSetting('siteCode') == "sambandh"){
                        // model.customer.udf = {};

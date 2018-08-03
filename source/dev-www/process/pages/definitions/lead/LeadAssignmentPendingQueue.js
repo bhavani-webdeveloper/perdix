@@ -24,7 +24,7 @@ irf.pageCollection.factory(irf.page("lead.leadAssignmentPendingQueue"),
 					"properties": {
 						"branch": {
 							"title": "HUB_NAME",
-							"type": "string",
+							"type": ["string","null"],
 							"enumCode": "branch",
 							"x-schema-form": {
 								"type": "select",
