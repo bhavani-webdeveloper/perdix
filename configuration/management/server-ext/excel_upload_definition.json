@@ -61,5 +61,114 @@
                 "default": "NOW()"
             }
         ]
+    },
+    "Scheme Master":{
+        "table": "sms_scheduler_details",
+        "columns":[
+            {
+                "columnName": "version",
+                "default": "0"
+            },
+            {
+                "columnName": "scheme_code",
+                "default": "0"
+            },
+            {
+                "columnName": "status",
+                "default": "0"
+            },
+            {
+                "columnName": "valid_from",
+                "default": "0"
+            },
+            {
+                "columnName": "valid_till",
+                "default": "0"
+            },
+            {
+                "columnName": "branch",
+                "default": "0"
+            },
+            {
+                "columnName": "dealer",
+                "default": "0"
+            },
+            {
+                "columnName": "model",
+                "default": "0"
+            },
+            {
+                "columnName": "min_loan_amount",
+                "default": "0"
+            },
+            {
+                "columnName": "default_loan_amount",
+                "default": "0"
+            },
+            {
+                "columnName": "max_loan_amount",
+                "default": "0"
+            },
+            {
+                "columnName": "min_interest_rate",
+                "default": "0"
+            },
+            {
+                "columnName": "default_interest_rate",
+                "default": "0"
+            },
+            {
+                "columnName": "max_interest_rate",
+                "default": "0"
+            },
+            {
+                "columnName": "frequency",
+                "default": "0"
+            },
+            {
+                "columnName": "min_tenure",
+                "default": "0"
+            },
+            {
+                "columnName": "default_tenure",
+                "default": "0"
+            },
+            {
+                "columnName": "max_tenure",
+                "default": "0"
+            },
+            {
+                "columnName": "pf_type",
+                "default": "0"
+            },
+            {
+                "columnName": "processing_fee",
+                "default": "0"
+            },
+            {
+                "columnName": "dealer_incentive_type",
+                "default": "0"
+            },
+            {
+                "columnName": "dealer_incentive",
+                "default": "0"
+            },
+            {
+                "columnName": "dealer_staff_incentive_type",
+                "default": "0"
+            },
+            {
+                "columnName": "dealer_staff_incentive",
+                "default": "0"
+            },
+            {
+                "columnName": "employee_incentive_type",
+                "default": "0"
+            },
+            {
+                "columnName": "employee_incentive",
+                "default": "0"
+            }  
+        ]
     }
 }
