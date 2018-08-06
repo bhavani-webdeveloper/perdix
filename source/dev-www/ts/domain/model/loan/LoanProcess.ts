@@ -277,7 +277,7 @@ export class LoanProcess {
 
     hold(): any {
         this.loanProcessAction = "SAVE";
-        this.loanAccount.status = 'HOLD';
+        this.loanAccount.status = "HOLD";
         let pmBeforeUpdate: PolicyManager<LoanProcess> = new PolicyManager(this, LoanPolicyFactory.getInstance(), 'beforeSave', LoanProcess.getProcessConfig());
         let obs1 = pmBeforeUpdate.applyPolicies();
         let obs2 = null;

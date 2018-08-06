@@ -8,7 +8,7 @@
                 "key": "customer.enterpriseAssets",
                 "type": "array",
                 "startEmpty": true,
-                "title": "VEHICLE_INFORMATION",
+                "title": "ENTERPRISE_ASSETS",
                 "items": {
                     "assetType": {
                         "key": "customer.enterpriseAssets[].assetType",
