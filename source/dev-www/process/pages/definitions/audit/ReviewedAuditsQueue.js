@@ -158,6 +158,7 @@ irf.pageCollection.factory(irf.page("audit.ReviewedAuditsQueue"), ["$log", "Quer
                     Audit.online.getAuditList({
                         'auditor_id': searchOptions.auditor_id,
                         'branch_id': searchOptions.branch_id,
+                        'bankId': searchOptions.bankId,
                         'audit_type': searchOptions.audit_type,
                         'start_date': searchOptions.start_date ? searchOptions.start_date + " 00:00:00" : "",
                         'end_date': searchOptions.end_date ? searchOptions.end_date + " 23:59:59" : "",
