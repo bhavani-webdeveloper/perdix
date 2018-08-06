@@ -421,13 +421,13 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                                         model.loanDocuments.existingDocuments = existingDocuments;
                                                     }
                                                             
-                                                           /* _.forEach(model.loanDocuments.existingDocuments, function (obj, i) {
-                                                                if(i<=docsForProduct.length()){
+                                                    _.forEach(model.loanDocuments.existingDocuments, function (obj, i) {
+                                                                if(i<=docsForProduct.length){
                                                                 obj.$downloadRequired = docsForProduct[i].download_required,
                                                                     obj.$formsKey = docsForProduct[i].forms_key,
                                                                     obj.disbursementId = docsForProduct[i].id
                                                                 }
-                                                            })*/
+                                                        })
                                                 
                                                 };
 
