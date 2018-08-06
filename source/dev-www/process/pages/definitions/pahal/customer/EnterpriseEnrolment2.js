@@ -141,20 +141,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "IndividualReferences.verifications.mobileNo",
                     "IndividualReferences.verifications.knownSince",
                     "IndividualReferences.verifications.relationship",
-                    "EnterpriseAssets",
-                    "EnterpriseAssets.enterpriseAssets",
-                    "EnterpriseAssets.enterpriseAssets.assetType",
-                    "EnterpriseAssets.enterpriseAssets.endUse",
-                    "EnterpriseAssets.enterpriseAssets.natureOfUse",
-                    "EnterpriseAssets.enterpriseAssets.manufacturer",
-                    "EnterpriseAssets.enterpriseAssets.make",
-                    "EnterpriseAssets.enterpriseAssets.assetCategory",
-                    "EnterpriseAssets.enterpriseAssets.vehicleMakeModel",
-                    "EnterpriseAssets.enterpriseAssets.manufactureDate",
-                    "EnterpriseAssets.enterpriseAssets.details",
-                    "EnterpriseAssets.enterpriseAssets.subDetails",
-                    "EnterpriseAssets.enterpriseAssets.assetregistrationNumber",
-                    "EnterpriseAssets.enterpriseAssets.valueOfAsset",
                     "TangibleNetWorth",
                     "TangibleNetWorth.enterpriseNetworth",
                     "TangibleNetWorth.enterpriseNetworth.tangibleNetworth",
@@ -192,7 +178,20 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "CommercialCBCheck.enterpriseBureauDetails.loss",
                     "CommercialCBCheck.enterpriseBureauDetails.specialMentionAccount",
                     "CommercialCBCheck.enterpriseRegistrations.standard",
-                    "CommercialCBCheck.enterpriseRegistrations.subStandard"
+                    "CommercialCBCheck.enterpriseRegistrations.subStandard",
+                    "EnterpriseAssets",
+                    "EnterpriseAssets.enterpriseAssets",
+                    "EnterpriseAssets.enterpriseAssets.udf5",
+                    "EnterpriseAssets.enterpriseAssets.endUse",
+                    "EnterpriseAssets.enterpriseAssets.natureOfUse",
+                    "EnterpriseAssets.enterpriseAssets.udf3",
+                    "EnterpriseAssets.enterpriseAssets.udf4",
+                    "EnterpriseAssets.enterpriseAssets.manufacturer",
+                    "EnterpriseAssets.enterpriseAssets.vehicleMakeModel",
+                    "EnterpriseAssets.enterpriseAssets.udf1",
+                    "EnterpriseAssets.enterpriseAssets.udf2",
+                    "EnterpriseAssets.enterpriseAssets.valueOfAsset",
+                    "EnterpriseAssets.enterpriseAssets.yearOfManufacture"
                 ];
             }
 
@@ -232,6 +231,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "TangibleNetWorth": {
                                       "readonly": true
+                                    },
+                                    "EnterpriseAssets": {
+                                        "readonly": true
                                     }
                                 },
                                 "excludes": [
@@ -335,6 +337,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "IndividualReferences":{
                                         "readonly": true 
+                                    },
+                                    "EnterpriseAssets": {
+                                        "readonly": true
                                     }
                                 },
                                 "excludes": [
@@ -369,6 +374,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "IndividualReferences":{
                                         "readonly": true 
+                                    },
+                                    "EnterpriseAssets": {
+                                        "readonly": true
                                     }
                                 },
                                 "excludes": [
@@ -403,6 +411,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "IndividualReferences":{
                                         "readonly": true 
+                                    },
+                                    "EnterpriseAssets": {
+                                        "readonly": true
                                     }
                                 },
                                 "excludes": [
@@ -434,6 +445,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "IndividualReferences":{
                                         "readonly": true 
+                                    },
+                                    "EnterpriseAssets": {
+                                        "readonly": true
                                     }
                                 }
                             }
@@ -544,16 +558,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 "EnterpriseInformation.enterpriseCustomerRelations.relationshipType": {
                                     "required": true
                                 },
-                                "EnterpriseAssets.enterpriseAssets.assetType": {
-                                    "required": true
-                                },
-                                "EnterpriseAssets.enterpriseAssets.valueOfAsset": {
-                                    "required": true
-                                },
-                                "EnterpriseAssets.enterpriseAssets.endUse": {
-                                    "type": "select",
-                                    "enumCode": "vehicle_end_use"
-                                },
                                 "EnterpriseInformation": {
                                     "condition": "model.customer.enterprise.enterpriseType=='Enterprise'"
                                 },
@@ -575,14 +579,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 },
                                 "BankAccounts.customerBankAccounts": {
                                     startEmpty: true
-                                },
-                                "EnterpriseAssets.enterpriseAssets": {
-                                    startEmpty: true
-                                },
-                                "EnterpriseAssets.enterpriseAssets.subDetails": {
-                                    "enumCode": "business_asset_sub_description",
-                                    "parentEnumCode": "business_asset_description",
-                                    "parentValueExpr": "model.customer.enterpriseAssets[arrayIndex].details"
                                 },
                                 "Liabilities.liabilities": {
                                     startEmpty: true
@@ -631,6 +627,43 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 },
                                 "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerName" :{
                                     "readonly": true
+                                },
+                                "EnterpriseAssets.enterpriseAssets": {
+                                    "startEmpty": true
+                                },
+                                "EnterpriseAssets.enterpriseAssets.udf5": {
+                                    "orderNo": 10
+                                },
+                                "EnterpriseAssets.enterpriseAssets.endUse" : {
+                                    "orderNo": 20
+                                },
+                                "EnterpriseAssets.enterpriseAssets.natureOfUse": {
+                                    "orderNo": 30
+                                },
+                                "EnterpriseAssets.enterpriseAssets.udf3": {
+                                    "orderNo": 40
+                                },
+                                "EnterpriseAssets.enterpriseAssets.udf4": {
+                                    "orderNo": 50
+                                },
+                                "EnterpriseAssets.enterpriseAssets.manufacturer": {
+                                    "title": "MAKE",
+                                    "orderNo": 60
+                                },
+                                "EnterpriseAssets.enterpriseAssets.vehicleMakeModel": {
+                                    "orderNo": 70
+                                },
+                                "EnterpriseAssets.enterpriseAssets.yearOfManufacture": {
+                                    "orderNo": 80
+                                },
+                                "EnterpriseAssets.enterpriseAssets.udf1": {
+                                    "orderNo": 90
+                                },
+                                "EnterpriseAssets.enterpriseAssets.udf2": {
+                                    "orderNo": 100
+                                },
+                                "EnterpriseAssets.enterpriseAssets.valueOfAsset": {
+                                    "orderNo": 110
                                 }
                             },
                             "includes": getIncludes(model),
@@ -762,6 +795,47 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                                     type:"number"
                                                 }
                                                 }
+                                            }
+                                        }
+                                    },
+                                    "EnterpriseAssets": {
+                                        "items": {
+                                            "enterpriseAssets": {
+                                                "items": {
+                                                    "udf1": {
+                                                        "key": "customer.enterpriseAssets[].udf1",
+                                                        "type": "select",
+                                                        "title": "BODY_TYPE",
+                                                        "enumCode": "business_asset_description"
+                                                    },
+                                                    "udf2": {
+                                                        "key": "customer.enterpriseAssets[].udf2",
+                                                        "type": "select",
+                                                        "title": "SUB_TYPE",
+                                                        "enumCode": "business_asset_sub_description",
+                                                        "parentEnumCode": "business_asset_description",
+                                                        "parentValueExpr": "model.customer.enterpriseAssets[arrayIndexes[0]].udf1"  
+                                                    },
+                                                    "udf3": {
+                                                        "key": "customer.enterpriseAssets[].udf3",
+                                                        "title": "SEGMENT",
+                                                    },
+                                                    "udf4": {
+                                                          "key": "customer.enterpriseAssets[].udf4",
+                                                          "title": "CATEGORY"  
+                                                    },
+                                                    "udf5": {
+                                                        "key": "customer.enterpriseAssets[].udf5",
+                                                        "type": "select",
+                                                        "enumCode": "new_vehicle_category",
+                                                        "title": "VEHICLE_TYPE"
+                                                    },
+                                                    "yearOfManufacture": {
+                                                        "title": "MANUFACTURER_YEAR",
+                                                        "key": "customer.enterpriseAssets[].yearOfManufacture"
+
+                                                    }
+                                                },               
                                             }
                                         }
                                     }

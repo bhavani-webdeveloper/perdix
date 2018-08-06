@@ -42,7 +42,7 @@ export class CloseLeadonLoanSave extends IPolicy<LoanProcess> {
                 .map((leadProcess) => {
                     leadProcess.stage = this.args.stage;
                     if(leadProcess.lead.currentStage==this.args.fromStage) {
-                        return leadProcess.proceed();
+                        leadProcess.proceed();
                     }
                     return loanProcess;
                 })
