@@ -44,14 +44,6 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
             $scope.dashboardDefinition = resp;
             if (!SessionStore.session.offline) {
                 var auditor_id = SessionStore.getLoginname();
-                var bankName = SessionStore.getBankName();
-                var banks = formHelper.enum('bank').data;
-                for (var i = 0; i < banks.length; i++) {
-                    if (banks[i].name == bankName) {
-                        var bankId = banks[i].value;
-                        var bankName = banks[i].name;
-                    }
-                }
 
                 var saqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.ScheduledAuditsQueue"];
                 var savqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.ScheduledAuditsViewQueue"];
@@ -156,8 +148,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 if (doaq) {
                     Audit.online.findAuditInfo({
                         'current_stage': 'draft',
-                        'status': 'D',
-                        'bankId': bankId
+                        'status': 'D'
                     }).$promise.then(function(data) {
                         doaq.data = data.body.length;
                     });
@@ -167,7 +158,6 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                     Audit.online.findAuditInfo({
                         'auditor_id': auditor_id,
                         'current_stage': 'draft-review',
-                        'bankId': bankId,
                         'status': 'D'
                     }).$promise.then(function(data) {
                         daaq.data = data.body.length;
@@ -176,8 +166,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
 
                 if (pavq || paq) {
                     Audit.online.findAuditInfo({
-                        'current_stage': 'publish',
-                        'bankId': bankId
+                        'current_stage': 'publish'
                     }).$promise.then(function(data) {
                         if (pavq) {
                             pavq.data = data.body.length;
@@ -190,8 +179,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
 
                 if (raq || ravq) {
                     Audit.online.findAuditInfo({
-                        'current_stage': 'L1-approve',
-                        'bankId': bankId
+                        'current_stage': 'L1-approve'
                     }).$promise.then(function(data) {
                         if (raq) {
                             raq.data = data.body.length;
@@ -204,8 +192,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
 
                 if (aaq || aavq) {
                     Audit.online.findAuditInfo({
-                        'current_stage': 'approve',
-                        'bankId': bankId
+                        'current_stage': 'approve'
                     }).$promise.then(function(data) {
                         if (aaq) {
                             aaq.data = data.body.length;
@@ -240,9 +227,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 }
 
                 if (avq) {
-                    Audit.online.findAuditInfo({
-                        'bankId': bankId
-                    }).$promise.then(function(data) {
+                    Audit.online.findAuditInfo({}).$promise.then(function(data) {
                         avq.data = data.body.length;
                     });
                 }
