@@ -158,6 +158,7 @@ irf.pageCollection.factory(irf.page("audit.ApprovedAuditsQueue"), ["$log", "Quer
                     Audit.online.findAuditInfo({
                         'auditor_id': searchOptions.auditor_id,
                         'branch_id': searchOptions.branch_id,
+                        'bankId': searchOptions.bankId,
                         'audit_type': searchOptions.audit_type,
                         'days_left': searchOptions.days_left,
                         'start_date': searchOptions.start_date ? searchOptions.start_date + " 00:00:00" : "",
