@@ -151,7 +151,10 @@
         "isAccountOpening": false,
         "allowedRoles": [
           "WM"
-        ] 
+        ],
+        "notRequiredForTranches":[
+
+         ]
       }
    ],
    "schema":{
