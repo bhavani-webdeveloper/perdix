@@ -22,8 +22,18 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                 model.customer=model.customer||{};
                 model.loanAccountDisbursementSchedule = model.loanAccountDisbursementSchedule || {};
                 model.fee=model.fee||{};
-                model.additional = {"branchName":branch};
+                model.additional = {"branchName":branch};            
+                model.CBSDate=SessionStore.getCBSDate();
                 model.siteCode = SessionStore.getGlobalSetting("siteCode");
+                model.validateDisbursementDate = function(model){
+                    if(model.siteCode == "IREPDhan" && (moment(model.loanAccountDisbursementSchedule.scheduledDisbursementDate).isSameOrAfter(model.CBSDate))){
+                        PageHelper.setError({
+                            message: "disbursement date should be less than or equal to current system date" + " " + moment(model.CBSDate).format(SessionStore.getDateFormat())
+                        });
+                        return;
+                    }
+                }
+
                 if (!model._disbursement) {
                     $log.info("Page visited directly");
                     $state.go('Page.Engine', {
@@ -84,7 +94,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                             model.additional.feeamount=resp[0].fees;
                         }
 */
-
+                        
                         model.additional.netDisbursementAmount = Number(resp[0].netDisbursementAmount);
                         var j=1;
                         if(model.additional.tempfees){
@@ -246,8 +256,19 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                     {
                         "key": "loanAccountDisbursementSchedule.scheduledDisbursementDate",
                         "title": "SCHEDULED_DISBURSEMENT_DATE",
+                        "condition": "model.siteCode != 'IREPDhan'",
                         "type": "date",
                         "required": true
+                    },
+                    {
+                        "key": "loanAccountDisbursementSchedule.scheduledDisbursementDate",
+                        "title": "SCHEDULED_DISBURSEMENT_DATE",
+                        "condition": "model.siteCode == 'IREPDhan'",
+                        "type": "date",
+                        "required": true,
+                        "onChange": function(value ,form ,model, event){
+                            model.validateDisbursementDate(model);
+                        }
                     },
                     {
                         "key":"customer.firstName",
@@ -472,6 +493,12 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                     formCtrl.scope.$broadcast("schemaFormValidate");
                     if(!formCtrl.$valid){
                         PageHelper.showProgress('disbursement', "Errors found in the form. Please fix to continue",3000);
+                        return;
+                    }
+                    if(model.siteCode == "IREPDhan" && (moment(model.loanAccountDisbursementSchedule.scheduledDisbursementDate).isSameOrAfter(model.CBSDate))){
+                        PageHelper.setError({
+                            message: "disbursement date should be less than or equal to current system date" + " " + moment(model.CBSDate).format(SessionStore.getDateFormat())
+                        });
                         return;
                     }
 
