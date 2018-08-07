@@ -4452,7 +4452,6 @@
         "items": {
           "type": "object",
           "required": [
-            "assetType",
             "valueOfAsset"
           ],
           "properties": {
