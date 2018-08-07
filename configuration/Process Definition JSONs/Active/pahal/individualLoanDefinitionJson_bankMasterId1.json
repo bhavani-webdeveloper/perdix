@@ -6384,7 +6384,9 @@
                 "FieldInvestigation3",
                 "TeleVerification",
                 "CreditAppraisal",
-                "LoanInitiation"
+                "LoanInitiation",
+                "DocumentUpload",
+                "DocumentVerification"
               ]
             },
             "document": {
@@ -6401,7 +6403,9 @@
                 "FieldInvestigation3",
                 "TeleVerification",
                 "CreditAppraisal",
-                "LoanInitiation"
+                "LoanInitiation",
+                "DocumentUpload",
+                "DocumentVerification"
               ]
             },
             "remarks": {
@@ -6418,7 +6422,9 @@
                 "FieldInvestigation3",
                 "TeleVerification",
                 "CreditAppraisal",
-                "LoanInitiation"
+                "LoanInitiation",
+                "DocumentUpload",
+                "DocumentVerification"
               ]
             }
           }
