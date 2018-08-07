@@ -773,6 +773,16 @@ irf.pageCollection.factory("Pages__ProfileInformation", ["$log", "Lead", "LeadHe
                             required: true,
                             //maximum:99,
                             title: "NO_OF_EMI_CHEQUE_BOUNCED"
+                        },{
+                            key: "customer.customerBankAccounts[].bankStatements[].bankStatementPhoto",
+                            type: "file",
+                            required: true,
+                            title: "BANK_STATEMENT_UPLOAD",
+                            fileType: "application/pdf",
+                            "category": "CustomerEnrollment",
+                            "subCategory": "IDENTITYPROOF",
+                            using: "scanner",
+                            offline:true
                         }]
                     }]
                 }]
