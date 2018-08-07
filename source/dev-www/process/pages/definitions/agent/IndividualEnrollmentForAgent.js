@@ -50,12 +50,22 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                         fieldType: "number",
                         resolver: "PincodeLOVConfiguration"
                     },
-                    "ContactInformation.whatsAppMobileNo": {
-                        "condition": "model.customer.whatsAppMobileNoOption =='3'"
-                    },
                     "IndividualInformation.dateOfBirth": {
-                        onChange: function(valueObj, model, context) {
-                            context.customer.age = moment().diff(moment(valueObj, SessionStore.getSystemDateFormat()), 'years');
+                        "onChange": function (modelValue, form, model) {
+                            if (model.customer.dateOfBirth) {
+                                model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                            }
+                        }
+                    },
+                    "IndividualInformation.age": {
+                        "onChange": function (modelValue, form, model) {
+                            if (model.customer.age > 0) {
+                                if (model.customer.dateOfBirth) {
+                                    model.customer.dateOfBirth = moment(new Date()).subtract(model.customer.age, 'years').format('YYYY-') + moment(model.customer.dateOfBirth, 'YYYY-MM-DD').format('MM-DD');
+                                } else {
+                                    model.customer.dateOfBirth = moment(new Date()).subtract(model.customer.age, 'years').format('YYYY-MM-DD');
+                                }
+                            }
                         }
                     },
                     "BankAccounts.customerBankAccounts.accountNumber": {
@@ -208,6 +218,61 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                     BundleManager.pushEvent(model.pageClass + "-updated", model._bundlePageObj, enrolmentProcess);
                                 })
                         }
+                    },
+                    "AgentInformation.agentId": {
+                        type: "lov",
+                        "orderNo": 5,
+                        lovonly: true,
+                        bindMap: {},
+                        key: "agent.id",
+                        "inputMap": {
+                            "agentId": {
+                                "key": "agent.agentId",
+                                "type": "number"
+                            },
+                            // "agentName": {
+                            //     "key": "agent.agentName", 
+                            //     "type": "string"
+                            // },            
+                            "agentType": {
+                                "key": "agent.agentType",
+                                "type": "select",
+                                "enumCode": "agent_type",
+                                "title": "AGENT_TYPE"
+                            },
+                        },
+                        "outputMap": {
+                            "agentId": "agent.agentId",
+                            'agentName': "agent.agentName",
+                            'agentType': "agent.agentType"
+                        },
+                        "searchHelper": formHelper,
+                        "search": function(inputModel, form) {
+                            var promise = Agent.search({
+                                'agentId': inputModel.agentId,
+                                'agentName': inputModel.agentName,
+                                'agentType': inputModel.agentType,
+                                'currentStage': "",
+                                'customerType': ""
+                            }).$promise;
+                            return promise;
+                        },
+                        getListDisplayItem: function(data, index) {
+                            return [
+                                data.agentId,
+                                data.agentType,
+                                data.agentName
+                            ];
+                        },
+                        onSelect: function(valueObj, model, context) {
+                            PageHelper.showProgress('customer-load', 'Loading customer...');
+                            model.agent.id = valueObj.id;
+                            model.agent.agentCompanyId = valueObj.agentCompanyId;
+                            model.agent.agentName = valueObj.agentName;
+                            model.agent.agentRegistrationNumber = valueObj.agentRegistrationNumber;
+                            model.agent.companyName = valueObj.companyName;
+                            model.agent.designation = valueObj.designation;
+                        }
                     }
                 }
             }
@@ -229,7 +294,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                     "ContactInformation.whatsAppMobileNo",
                     "ContactInformation.location",
                     "ContactInformation.email",
-                    "ContactInformation.careOf",
+                    "ContactInformation.careOf",    
                     "ContactInformation.doorNo",
                     "ContactInformation.street",
                     "ContactInformation.postOffice",
@@ -257,7 +322,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                     "agentProcess.agent.currentStage": {
                         "PendingForApproval": {
                             "excludes": [
-                                "actionbox"
+                                "actionbox",
+                                 "ContactInformation.whatsAppMobileNoOption"
                             ],
                             "overrides": {
                                 "IndividualInformation": {
@@ -273,7 +339,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                         },
                         "Approved": {
                             "excludes": [
-                                "actionbox"
+                                "actionbox",
+                                 "ContactInformation.whatsAppMobileNoOption"
                             ],
                             "overrides": {
                                 "IndividualInformation": {
@@ -289,7 +356,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                         },
                         "Rejected": {
                             "excludes": [
-                                "actionbox"
+                                "actionbox",
+                                 "ContactInformation.whatsAppMobileNoOption"
                             ],
                             "overrides": {
                                 "IndividualInformation": {
@@ -320,6 +388,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                     model.pageClass = bundlePageObj.pageClass;
                     /* Setting data for the form */
                     model.customer = model.enrolmentProcess.customer;
+                    if (model.customer.dateOfBirth) {
+                        model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                    }
                     /* End of setting data for the form */
                     // model.currentStage = bundleModel.currentStage;
                     /* End of setting data recieved from Bundle */

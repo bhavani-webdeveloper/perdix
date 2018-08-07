@@ -22,7 +22,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                     "agentProcess.agent.currentStage": {
                         "PendingForApproval": {
                             "excludes": [
-                                "actionbox"
+                                "actionbox",
+                                "ContactInformation.whatsAppMobileNoOption"
                             ],
                             "overrides": {
                                 "AgentInformation": {
@@ -35,20 +36,22 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                         },
                         "Approved": {
                             "excludes": [
-                                "actionbox"
+                                "actionbox",
+                                "ContactInformation.whatsAppMobileNoOption"
                             ],
                             "overrides": {
-                                // "AgentInformation":{
-                                //     "readonly":true
-                                // },
-                                // "AgentFeeDetails":{
-                                //     "readonly":true
-                                // }
+                                "AgentInformation":{
+                                    "readonly":true
+                                },
+                                "AgentFeeDetails":{
+                                    "readonly":true
+                                }
                             }
                         },
                         "Rejected": {
                             "excludes": [
-                                "actionbox"
+                                "actionbox",
+                                "ContactInformation.whatsAppMobileNoOption"
                             ],
                             "overrides": {
                                 "AgentInformation": {
@@ -393,7 +396,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                     "items": {
                                         "agentEmployees": {
                                             "type": "array",
-                                            "startEmpty": true,
+                                            // "startEmpty": true,
                                             "title": "AGENT_EMPLOYEES",
                                             "key": "agent.agentEmployees",
                                             "items": {
@@ -524,7 +527,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                 }, {
                                     "type": "button",
                                     "title": "PROCEED",
-                                    "condition": "model.agentProcess.agent.id",
+                                    "condition": "model.agentProcess.agent.id && !(model.agentProcess.agent.currentStage == 'AgentInitiation')",
                                     "onClick": "actions.proceed(model, formCtrl, form, $event)"
                                 }]
                             }]
