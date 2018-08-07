@@ -11,6 +11,7 @@ function($log, $scope, PagesDefinition, SessionStore, IndividualLoan) {
             "Page/Engine/loans.individual.disbursement.DisbursementConfirmationQueue",
             "Page/Engine/loans.individual.disbursement.DisbursementUpload",
             "Page/Engine/loans.individual.disbursement.DisbursementConfirmationUpload",
+            "Page/Engine/loans.individual.booking.DisbursementDocumentUploadQueue",
             "Page/Engine/loans.individual.disbursement.RejectedDisbursementQueue",
             "Page/Engine/loans.individual.disbursement.MultiTrancheQueue",
             "Page/Engine/loans.individual.disbursement.PendingFROQueue",
@@ -142,6 +143,20 @@ function($log, $scope, PagesDefinition, SessionStore, IndividualLoan) {
                 mdvqMenu.data = response.headers['x-total-count'];
             }, function() {
                 mdvqMenu.data = '-';
+            });
+        }
+
+        var dduMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.disbursement.DisbursementDocumentUploadQueue"];
+        if (dduMenu) {
+             IndividualLoan.search({
+                'stage': 'DisbursementDocumentUpload',
+                'branchName': '',
+                'page': 1,
+                'per_page': 1
+            }).$promise.then(function(response,headerGetter){
+                dduMenu.data = Number(response.headers['x-total-count']);
+            }, function() {
+                dduMenu.data = '-';
             });
         }
     });
