@@ -8,7 +8,9 @@ irf.pageCollection.controller(irf.controller("MutualFund.MutualFundDashboard"), 
             "title": "Mutual Fund Dashboard",
             "iconClass": "fa fa-money",
             "items": [
-                "Page/Engine/MutualFund.MutualFundCustomerSearch"
+                "Page/Engine/MutualFund.MutualFundCustomerSearch",
+                "Page/Engine/MutualFund.MutualFundDownloadFeed",
+                "Page/Engine/MutualFund.MutualFundUploadFeed"
             ]
         };
 
