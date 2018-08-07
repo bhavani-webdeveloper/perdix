@@ -99,7 +99,26 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHDemandDownload")
                                 ACH.achDemandListUpload(file, progress)
                                     .then(
                                         function(response){
-                                            PageHelper.showProgress("action-succes", "Batch task for collection-demand-upload has been successfully created. Please check the status in ACH Realization Batch Monitoring screen.", 5000);
+                                            var responseData ;
+                                            var data1={
+                                                data:{
+                                                    error: ""
+                                                }
+                                                
+
+                                            }
+                                            if(response.data && response.data.length!= 0){
+                                                _.forEach(response.data,function(data){
+                                                    if(data.errorMessage != null){
+                                                        data1.data.error =data1.data.error+"  "+ data.errorMessage;
+                                                        PageHelper.showErrors(data1);
+                                                        responseData = false;
+                                                    }
+                                                })
+                                            }
+                                            if(responseData == true){
+                                                PageHelper.showProgress("action-succes", "Batch task for collection-demand-upload has been successfully created. Please check the status in ACH Realization Batch Monitoring screen.", 5000);
+                                            }
                                         }, function(httpResponse){
                                             PageHelper.showProgress("collection-demand-upload", "Upload Failed!", 5000);
                                         }
