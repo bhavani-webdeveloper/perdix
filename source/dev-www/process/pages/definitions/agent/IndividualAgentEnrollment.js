@@ -39,12 +39,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                 "actionbox"
                             ],
                             "overrides": {
-                                // "AgentInformation":{
-                                //     "readonly":true
-                                // },
-                                // "AgentFeeDetails":{
-                                //     "readonly":true
-                                // }
+                                "AgentInformation":{
+                                    "readonly":true
+                                },
+                                "AgentFeeDetails":{
+                                    "readonly":true
+                                }
                             }
                         },
                         "Rejected": {
@@ -67,7 +67,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
             var overridesFields = function(bundlePageObj) {
                 return {
                     "AgentFeeDetails.agentFeeDetails.feeAmount": {
-                        "key": "agent.feeAmount",
+                        "key": "agent.agentFeeDetails[].feeAmount",
                         "title": "FEE_AMOUT",
                         "type": "amount"
                     },
@@ -290,7 +290,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                 }, {
                                     "type": "button",
                                     "title": "PROCEED",
-                                    "condition": "model.agentProcess.agent.id",
+                                    "condition": "model.agentProcess.agent.id && !(model.agentProcess.agent.currentStage == 'AgentInitiation')",
                                     "onClick": "actions.proceed(model, formCtrl, form, $event)"
                                 }]
                             }]

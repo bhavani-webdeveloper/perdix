@@ -133,7 +133,7 @@
                                 "format": "date"
                             },
                             "feeAmount": {
-                                "type": ["string", "null"],
+                                "type": ["number", "null"],
                                 "title": "FEE_AMOUT"
                             },
                             "feeName": {
