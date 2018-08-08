@@ -4724,7 +4724,7 @@
                 "Completed"
               ]
             },
-"hypothecatedToUs": {
+           "hypothecatedToUs": {
               "title": "hypothecatedToUs",
               "type": "string",
               "minLength": 1,
@@ -4754,7 +4754,7 @@
                 "Completed"
               ]
             }, 
-"isHypothecated": {
+          "isHypothecated": {
               "title": "isHypothecated",
               "type": "string",
               "minLength": 1,
@@ -4764,7 +4764,7 @@
                 "Completed"
               ]
             },
-"assetName": {
+          "assetName": {
               "title": "assetName",
               "type": "string",
               "minLength": 1,
@@ -4774,7 +4774,7 @@
                 "Completed"
               ]
             },
-"assetImageId": {
+          "assetImageId": {
               "title": "assetImageId",
               "type": "string",
               "minLength": 1,
@@ -4784,7 +4784,7 @@
                 "Completed"
               ]
             },
-      "details": {
+          "details": {
               "title": "details",
               "type": "string",
               "minLength": 1,
@@ -4901,6 +4901,30 @@
               "type": "string",
               "minLength": 1,
               "maxLength": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "udfDate1": {
+              "type": "string",
+              "format": "date",
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },  
+            "udfDate2": {
+              "type": "string",
+              "format": "date",
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },  
+            "udfDate3": {
+              "type": "string",
+              "format": "date",
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"
