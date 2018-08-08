@@ -405,8 +405,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),["$log", "$
                                 type:"file",
                                 required: true,
                                 fileType:"application/pdf",
-                                using: "scanner",
-                                offline:true
+                                using: "scanner"
                             },
                             {
                                 key:"customer.identityProofNo",
@@ -433,8 +432,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),["$log", "$
                                 type:"file",
                                 required: true,
                                 fileType:"application/pdf",
-                                using: "scanner",
-                                offline:true
+                                using: "scanner"
                             },
                             {
                                 key:"customer.addressProofNo",
@@ -466,8 +464,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),["$log", "$
                                 type:"file",
                                 required: true,
                                 fileType:"application/pdf",
-                                using: "scanner",
-                                offline:true
+                                using: "scanner"
                             },
                             {
                                 key:"customer.additionalKYCs[].kyc1ProofNumber",
@@ -562,8 +559,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),["$log", "$
                                 key:"customer.identityProofImageId",
                                 type:"file",
                                 fileType:"application/pdf",
-                                using: "scanner",
-                                offline:true
+                                using: "scanner"
                             }/*,
                              {
                              key:"customer.identityProofReverseImageId",
@@ -605,8 +601,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),["$log", "$
                                 key:"customer.addressProofImageId",
                                 type:"file",
                                 fileType:"application/pdf",
-                                using: "scanner",
-                                offline:true
+                                using: "scanner"
                             }/*,
                              {
                              key:"customer.addressProofReverseImageId",
@@ -651,8 +646,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),["$log", "$
                                 key:"customer.additionalKYCs[].kyc1ImagePath",
                                 type:"file",
                                 fileType:"application/pdf",
-                                using: "scanner",
-                                offline:true
+                                using: "scanner"
                             },
                             // {
                             //     key:"customer.additionalKYCs[].kyc1ReverseImagePath",
@@ -2273,8 +2267,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),["$log", "$
                                         fileType: "application/pdf",
                                         "category": "CustomerEnrollment",
                                         "subCategory": "IDENTITYPROOF",
-                                        using: "scanner",
-                                        offline:true
+                                        using: "scanner"
                                     }
                                 ]
                             },
@@ -2343,8 +2336,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),["$log", "$
                                 fileType:"application/pdf",
                                 "category": "CustomerEnrollment",
                                 "subCategory": "IDENTITYPROOF",
-                                using: "scanner",
-                                offline:true
+                                using: "scanner"
                             },
                             {
                                 key: "customer.customerBankAccounts[].bankStatements",
@@ -2391,8 +2383,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),["$log", "$
                                         fileType: "application/pdf",
                                         "category": "CustomerEnrollment",
                                         "subCategory": "IDENTITYPROOF",
-                                        using: "scanner",
-                                        offline:true
+                                        using: "scanner"
                                     }
                                 ]
                             },
