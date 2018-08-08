@@ -23,4 +23,8 @@ export class QueryRepository implements IQueryRepository{
         return RxObservable.fromPromise(this.queryService.getVehicleDetails());
     }
 
+    getVehicleSchemeCodes(branch:string,centre:string): Observable<any> {
+        return RxObservable.fromPromise(this.queryService.getVehicleSchemeCodes(branch,centre));
+    }
+
 }

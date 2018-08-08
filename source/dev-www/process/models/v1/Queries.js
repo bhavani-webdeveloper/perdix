@@ -1,6 +1,6 @@
 irf.models.factory('Queries', [
-    "$resource", "SysQueries", "$httpParamSerializer", "BASE_URL", "$q", "$log", "SessionStore",
-    function($resource, SysQueries, $httpParamSerializer, BASE_URL, $q, $log, SessionStore) {
+    "$resource", "SysQueries","formHelper","filterFilter", "$httpParamSerializer", "BASE_URL", "$q", "$log", "SessionStore",
+    function($resource, SysQueries,formHelper,filterFilter, $httpParamSerializer, BASE_URL, $q, $log, SessionStore) {
         var endpoint = BASE_URL + '/api';
 
         var resource = $resource(endpoint, null, {
@@ -942,7 +942,34 @@ irf.models.factory('Queries', [
                 }
             }, deferred.reject)
         return deferred.promise;
-    }
+    };
+    resource.getVehicleSchemeCodes = function(branchName,centreName) {
+        var deferred = $q.defer();
+        var centres = formHelper.enum('centre').data;
+        var branches = formHelper.enum('branch_id').data;
+        var centrevalue = filterFilter(centres, {
+            "value": Number(centreName)
+        }, true)[0].name;
+        var branchvalue = filterFilter(branches, {
+            "value": Number(branchName)
+        }, true)[0].name;
+        
+        resource.getResult("vehicleSchemeCodeDetails.list", {
+                "branch_name": branchvalue,
+                "centre_name":centrevalue
+            })
+            .then(function(response) {
+                var result = {
+                    headers: {
+                        "x-total-count": response.results.length
+                    },
+                    body: response.results
+                };
+                deferred.resolve(result);
+                console.log(response.results)
+            }, deferred.reject);
+        return deferred.promise;
+    };
     resource.deseaseDetails = function(customerId) {
         var deferred = $q.defer();
         var request = {

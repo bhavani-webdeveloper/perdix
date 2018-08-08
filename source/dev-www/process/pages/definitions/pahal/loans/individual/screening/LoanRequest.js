@@ -309,6 +309,7 @@ define([], function() {
                     "PreliminaryInformation.loan",
                     "PreliminaryInformation.loanPurpose1",
                     "PreliminaryInformation.loanPurpose2",
+                    "PreliminaryInformation.schemeCode",
                     "PreliminaryInformation.productCategory",
                     "PreliminaryInformation.loanAmountRequested",
                     "PreliminaryInformation.loanToValue",
