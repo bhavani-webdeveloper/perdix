@@ -31,6 +31,14 @@
                 "title": "LOAN_PURPOSE_2",
                 "orderNo": 40
             },
+            "schemeCode":{
+                "key":"loanAccount.schemeCode",
+                "type":"lov",
+                "resolver":"SchemeCodeLOVConfiguration",
+                "autolov":true,
+                "title":"SCHEME_CODE",
+                "orderNo":45
+            },
             "loanAmountRequested": {
                 "key": "loanAccount.loanAmountRequested",
                 "type": "amount",
