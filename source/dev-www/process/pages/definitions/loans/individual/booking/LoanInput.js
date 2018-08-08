@@ -392,7 +392,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             model.additional.portfolioUrnSelector = "coapplicant";
                         }
 
-                        if (model.loanAccount.disbursementSchedules.length >= 0 && _.isNumber(model.loanAccount.disbursementSchedules[0].moratoriumPeriodInDays) && model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate) {
+                        if (model.loanAccount.disbursementSchedules.length > 0 && model.loanAccount.disbursementSchedules[0] && model.loanAccount.disbursementSchedules[0].moratoriumPeriodInDays && _.isNumber(model.loanAccount.disbursementSchedules[0].moratoriumPeriodInDays)  && model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate) {
                             model._currentDisbursement = model.loanAccount.disbursementSchedules[0];
                             model.loanAccount.scheduleStartDate = moment(model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate, "YYYY-MM-DD").add(model.loanAccount.disbursementSchedules[0].moratoriumPeriodInDays, 'days').format("YYYY-MM-DD");
                         }
