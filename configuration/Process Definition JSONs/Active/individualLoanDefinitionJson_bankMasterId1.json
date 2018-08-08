@@ -586,7 +586,7 @@
                   "minLength":16,
                   "maxLength":16,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "PendingForPartner"
+                     "Screening", "LoanInitiation", "LoanBooking", "PendingForPartner"
                   ]
                },
                "coApplicant":{
@@ -595,7 +595,7 @@
                   "minLength":16,
                   "maxLength":16,
                   "captureStages":[
-                     "Screening", "LoanInitiation"
+                     "Screening", "LoanInitiation", "LoanBooking"
                   ]
                },
                "rejectReason":{
@@ -1466,7 +1466,7 @@
                      "minimum":16,
                      "maximum":16,
                      "captureStages":[
-                        "Screening", "LoanInitiation", "PendingForPartner"
+                        "Screening", "LoanInitiation", "LoanBooking", "PendingForPartner"
                      ]
                   },
                   "assetDetails":{
