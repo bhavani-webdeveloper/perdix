@@ -150,6 +150,8 @@ define({
 
 
             model.enterpriseDetailsData = model.enterpriseDetails.data[0];
+            model.workingCapital1 = model.ratioDetails.data[0]['Working Capital 1 - Quick Check'];
+            model.workingCapital2 = model.ratioDetails.data[0]['Working Capital 2'];
 
         }; // END OF prepareData()
 
@@ -267,6 +269,11 @@ define({
                             "key": "loanAccount.loanAmountRequested",
                             "title": "Loan Amount Requested",
                             "type": "amount"
+                        },{
+                            "key": "workingCapital1",
+                            "title": "Working Capital 1 - Quick Check",
+                            "type": "amount"
+                        
                         }]
                     }, {
                         "type": "grid",
@@ -317,6 +324,10 @@ define({
                         }, {
                             "key": "loanAccount.expectedInterestRate",
                             "title": "Rate of Interest"
+                        },{
+                            "key": "workingCapital2",
+                            "title": "Working Capital 2",
+                            "type": "amount"
                         }]
                     }]
                 }]
