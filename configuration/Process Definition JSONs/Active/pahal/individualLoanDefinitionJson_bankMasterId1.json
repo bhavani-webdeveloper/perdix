@@ -237,7 +237,19 @@
       "allowedRoles": [
         "WM"
       ]
-    }
+    },
+    {
+      "order": 22,
+      "code":"Completed",
+      "name":"Completed",
+      "stageType":"CAPTURE",
+      "sendSms":"No",
+      "smsCategory":"LoanBooking",
+      "isAccountOpening":false,
+      "allowedRoles":[
+         "WM"
+      ]
+   }
   ],
   "schema": {
     "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
