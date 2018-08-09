@@ -129,10 +129,7 @@ define({
                                     irfNavigator.go({
                                         'state': 'Page.Bundle',
                                         'pageName': 'agent.IndividualAgentEnrollmentScreening',
-                                        'pageId': item.id,
-                                        // 'pageData': {
-                                        //     "readonly": false
-                                        // }
+                                        'pageId': item.id
                                     }, {
                                         'state': 'Page.Engine',
                                         'pageName': 'agent.AgentSearch',
@@ -145,10 +142,7 @@ define({
                                     irfNavigator.go({
                                         'state': 'Page.Bundle',
                                         'pageName': 'agent.EnterpriseAgentEnrollmentScreening',
-                                        'pageId': item.id,
-                                        // 'pageData': {
-                                        //     "readonly": false
-                                        // }
+                                        'pageId': item.id
                                     }, {
                                         'state': 'Page.Engine',
                                         'pageName': 'agent.AgentSearch',

@@ -13,7 +13,6 @@ irf.pageCollection.controller(irf.controller("agent.AgentDashboard"),
                 "Page/Bundle/agent.EnterpriseAgentEnrollmentScreening",
                 "Page/Engine/agent.EnrollAgent",
                 "Page/Engine/agent.ApproveAgent",
-                "Page/Engine/agent.AgentSearch",
                 "Page/Engine/agent.AgentRejectedQueue"                  
             ]
         };

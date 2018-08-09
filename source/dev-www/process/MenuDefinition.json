@@ -2,7 +2,15 @@
     "title": "Main navigation",
     "items": [
         "Page/Landing",
-        "Page/Adhoc/agent.AgentDashboard", {
+         {
+            "title": "AGENT",
+            "iconClass": "fa fa-user-secret",
+            "items": [
+                "Page/Engine/agent.AgentSearch",
+                "Page/Adhoc/agent.AgentDashboard"
+            ]
+        },
+        {
             "title": "CUSTOMER",
             "iconClass": "fa fa-user",
             "items": [
