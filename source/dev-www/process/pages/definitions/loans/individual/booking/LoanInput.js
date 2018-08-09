@@ -1,7 +1,11 @@
 irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
 ["$log","SessionStore","$state","LoanAccount", "$stateParams", "SchemaResource","PageHelper","Enrollment","formHelper","IndividualLoan","Utils","$filter","$q","irfProgressMessage", "Queries","LoanProducts", "LoanBookingCommons", "BundleManager", "irfNavigator","PagesDefinition",
     function($log, SessionStore,$state,LoanAccount,$stateParams, SchemaResource,PageHelper,Enrollment,formHelper,IndividualLoan,Utils,$filter,$q,irfProgressMessage, Queries,LoanProducts, LoanBookingCommons, BundleManager,irfNavigator,PagesDefinition){
-
+        var siteCode = SessionStore.getGlobalSetting('siteCode');
+        var nonEditable = {
+            "loanAccount.interestRate" : siteCode == 'IREPDhan',
+            "loanAccount.processingFeePercentage" : siteCode == 'IREPDhan'
+        }       
         var branchId = SessionStore.getBranchId();
         var branchName = SessionStore.getBranch();
         var bankName = SessionStore.getBankName();
@@ -150,9 +154,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             console.error(err);
                         }
                         model.additional.product = res;
-                        model.additional.product.interestBracket = res.minInterestRate + '% - ' + res.maxInterestRate + '%';
-                        model.additional.product.amountBracket = model.additional.product.amountFrom + ' - ' + model.additional.product.amountTo;
-                        $log.info(model.additional.product.interestBracket);
+                        if(res.minInterestRate == res.maxInterestRate){
+                            model.loanAccount.interestRate = res.minInterestRate;
+                        }
+                        model.additional.product.interestBracket = res.minInterestRate + '% - ' + res.maxInterestRate + '%';                                              
+                        model.additional.product.amountBracket = model.additional.product.amountFrom + ' - ' + model.additional.product.amountTo;             
                         model.loanAccount.frequency = model.additional.product.frequency;
                         // if (model.additional.product.frequency == 'M')
                         //     model.loanAccount.frequency = 'Monthly';
@@ -258,7 +264,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     model.loanAccount.coBorrowers = [];
                     model.loanAccount.guarantors = [];
                     model.showLoanBookingDetails = showLoanBookingDetails;
-
+                    if(model.siteCode == 'IREPDhan'){
+                        model.loanAccount.commercialCibilCharge = 0;
+                        model.loanAccount.processingFeePercentage = 1.75;
+                        model.loanAccount.securityEmiRequired = 'No';
+                        model.loanAccount.otherFee = 0;
+                    }
                     PagesDefinition.getPageConfig("Page/Engine/loans.individual.booking.LoanInput").then(function(data){
                         $log.info(data);
                         if(data.showLoanBookingDetails != undefined && data.showLoanBookingDetails !== null && data.showLoanBookingDetails !=""){
@@ -824,6 +835,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             {
                                 key:"loanAccount.commercialCibilCharge",
                                 type:"amount",
+                                "condition" : "model.siteCode != 'IREPDhan'",
                                 onChange:function(value,form,model){
                                     getSanctionedAmount(model);
                                 }
@@ -832,20 +844,24 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 key:"loanAccount.securityEmiRequired",
                                 type:"select",
                                 required: true,
-                                enumCode: "decisionmaker"
+                                enumCode: "decisionmaker",
+                                "condition" : "model.siteCode != 'IREPDhan'"
                             },
                             {
                                 key:"loanAccount.processingFeePercentage",
                                 type:"number",
+                                "readonly" : nonEditable['loanAccount.processingFeePercentage'],
                                 "title":"PROCESSING_FEES_IN_PERCENTAGE"
                             },
                             {
                                 key:"loanAccount.otherFee",
-                                type:"amount"
+                                type:"amount",
+                                "condition" : "model.siteCode != 'IREPDhan'"
                             },
                             {
                                 "key":"loanAccount.interestRate",
                                 "type":"number",
+                                "readonly" : nonEditable['loanAccount.interestRate'],
                                 "placeholderExpr":"model.additional.product.interestBracket"
                             },
                             {
