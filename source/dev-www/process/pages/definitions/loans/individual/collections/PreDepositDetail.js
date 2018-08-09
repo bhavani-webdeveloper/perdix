@@ -170,6 +170,13 @@ define({
                         .then(function () {
                             $log.info("Inside proceed()");
                             PageHelper.showBlockingLoader("Processing...");
+                            model.collectionDetailsCopy = model.collectionDetails;
+                            model.collectionDetails =[];
+                            _.forEach( model.collectionDetailsCopy, function(collectionDetail){
+                                    if(collectionDetail.$selected == true){
+                                        model.collectionDetails.push(collectionDetail)
+                                    }
+                            })
                             if (model.collectionDetails && model.collectionDetails[0]['instrumentType'] == 'CASH') {
                                 var cashDepositSummary = {
                                         bankDepositSummary : {
@@ -244,6 +251,13 @@ define({
                                 "repaymentProcessAction": "PROCEED",
                                 "stage": "BranchDeposit"
                             }
+                            model.collectionDetailsCopy = model.collectionDetails;
+                            model.collectionDetails =[];
+                            _.forEach( model.collectionDetailsCopy, function(collectionDetail){
+                                    if(collectionDetail.$selected == true){
+                                        model.collectionDetails.push(collectionDetail)
+                                    }
+                            })
                             if (model.collectionDetails && model.collectionDetails[0]['instrumentType'] == 'CASH') {
                                 _.each(model.collectionDetails, function (collectionDetail) {
                                     collectionData.loanCollectionSummaryDTOs.push({

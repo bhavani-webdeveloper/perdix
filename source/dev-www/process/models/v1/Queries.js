@@ -980,6 +980,23 @@ irf.models.factory('Queries', [
         }, deferred.reject);
         return deferred.promise;
     }
+    resource.getBankAccountByPartnerForLoanRepay = function(partnerCode) {
+            var deferred = $q.defer();
+            request = {};
+            request.partner_code = (_.isNull(partnerCode) || _.isUndefined(partnerCode)) ? "%" : ("%" + partnerCode + "%");
+            resource.getResult("LoanRepayBankAccountByPartnerCode.list", request, 10).then(function(records) {
+                if (records && records.results) {
+                    var result = {
+                        headers: {
+                            "x-total-count": records.results.length
+                        },
+                        body: records.results
+                    };
+                    deferred.resolve(result);
+                }
+            }, deferred.reject);
+            return deferred.promise;
+        }
 
     return resource;
     }

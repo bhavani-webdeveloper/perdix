@@ -53,7 +53,7 @@ define({
                         },
                         searchHelper: formHelper,
                         search: function (inputModel, form, model) {
-                            return Queries.getBankAccountsByPartnerForLoanRepay();
+                            return Queries.getBankAccountByPartnerForLoanRepay();
                         },
                         getListDisplayItem: function (item, index) {
                             return [

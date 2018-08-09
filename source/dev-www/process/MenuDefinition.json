@@ -28,6 +28,7 @@
                 "Page/Engine/customer360.RecaptureQueue"
             ]
         },
+        "Page/Adhoc/sambandh.customer.EnrollmentDashboard",
         "Page/Adhoc/MutualFund.MutualFundDashboard",
         "Page/ServiceRequestDashboard",
         "Page/LeadDashboard",
