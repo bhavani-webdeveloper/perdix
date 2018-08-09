@@ -71,7 +71,16 @@ NOW() as created_at,
 'FollowUp' AS 'lead_status',
 'Assignment Pending' AS 'current_stage',
 COUNT(d.account_id) AS EMICount,
-COUNT(r.account_id) AS paidEMI,
+(SELECT COUNT(EMIpaid.account_id) FROM $encore_db.loan_od_demands EMIpaid WHERE EMIpaid.account_id = d.account_id AND EMIpaid.demand_num<=(
+      -- get the satisfied demand num
+      SELECT IFNULL((
+		  SELECT REPAYMENTS.last_satisfied_demand_num
+		  FROM $encore_db.loan_od_repayments REPAYMENTS
+		  WHERE REPAYMENTS.account_id = d.account_id AND REPAYMENTS.tenant_code = 'KGFS'
+		  ORDER BY REPAYMENTS.last_satisfied_demand_num DESC
+		  LIMIT 1
+		), 0)
+) AND EMIpaid.tenant_code = 'KGFS') AS paidEMI,
 gl.value
 FROM $perdix_db.loan_accounts l
 LEFT JOIN $perdix_db.customer c ON c.id = l.customer_id
@@ -84,10 +93,6 @@ LEFT JOIN $perdix_db.family_details cfm ON cfm.customer_id = applicant.id AND cf
 LEFT JOIN $perdix_db.enterprise enp ON c.enterprise_id = enp.id 
 LEFT JOIN $perdix_db.global_settings gl ON gl.name = 'LOCEMILimitForLeadPopulation'
 LEFT JOIN $encore_db.loan_od_demands d ON d.account_id = l.account_number AND d.tenant_code = 'KGFS' AND scheduled_demand = 1
-LEFT JOIN $encore_db.loan_od_repayments r ON r.account_id = d.account_id AND r.last_satisfied_demand_num=(
-      -- get the satisfied demand num
-      SELECT MIN(last_satisfied_demand_num) FROM $encore_db.loan_od_repayments WHERE last_satisfied_demand_num>=d.demand_num AND account_id = d.account_id AND tenant_code = 'KGFS'
-) AND r.tenant_code = 'KGFS'
 
 WHERE 
 l.loan_purpose_1 = 'Line of credit' AND 
