@@ -6398,7 +6398,8 @@
                 "CreditAppraisal",
                 "LoanInitiation",
                 "DocumentUpload",
-                "DocumentVerification"
+                "DocumentVerification",
+                "Completed"
               ]
             },
             "document": {
@@ -6417,7 +6418,8 @@
                 "CreditAppraisal",
                 "LoanInitiation",
                 "DocumentUpload",
-                "DocumentVerification"
+                "DocumentVerification",
+                "Completed"
               ]
             },
             "remarks": {
@@ -6436,7 +6438,8 @@
                 "CreditAppraisal",
                 "LoanInitiation",
                 "DocumentUpload",
-                "DocumentVerification"
+                "DocumentVerification",
+                "Completed"
               ]
             }
           }
