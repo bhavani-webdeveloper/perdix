@@ -37,7 +37,7 @@ queryForScore1=select (select ss.score from score_segment ss  where ss.score_nam
 familyMembers.list=select fa.family_member_first_name as nomineeFirstName, fa.gender as nomineeGender, fa.date_of_birth as nomineeDOB, fa.relationship as nomineeRelationship from family_details fa, loan_customer_relation lcr where lcr.loan_id = :loanId and fa.customer_id = lcr.customer_id and lcr.relation != 'Guarantor' and relationship != 'self'
 globalSettingsIn.list=SELECT * from global_settings where name in (:names)
 enterpriseRelations.list= (SELECT id,`first_name` as firstName FROM `customer` WHERE `urn_no`in (SELECT `urn` FROM `loan_customer_relation` WHERE `loan_id`in (SELECT id FROM `loan_accounts` WHERE `customer_id`=:customerId)) )union(SELECT id,`first_name` as firstName FROM `customer` WHERE `id`in (SELECT `linked_to_customer_id` FROM `enterprise_customer_relations` WHERE `customer_id`=:customerId)) 
-LoanRepayBankAccountsByPartnerCode.list=SELECT * from bank_account_master where allow_collection = 1 and partner_code LIKE :partner_code
+LoanRepayBankAccountsByPartnerCode.list=SELECT * from bank_account_master where allow_collection = 1 and partner_code LIKE :partner_code 
 loanProductCode.list=SELECT `product_code` as productCode, tenure_from, tenure_to, frequency FROM `loan_products` WHERE `product_category`=:productCategory and `partner_code`=:partner and `frequency`=:frequency
 UserList.list=select user_name as user_id from oauth_access_token where user_name != :userId
 CBCheck.customerList=select max(created_at) as created_at, customer_id from highmark_interface where customer_id in (:customerIds) and status = 'PROCESSED' group by customer_id
@@ -53,7 +53,7 @@ vehicleViability.list = SELECT * from vehicle_viability_master
 AllLoanPurposeMapping.list = select loan_purpose_first_level as purpose1,loan_purpose_second_level as purpose2,loan_purpose as purpose3 from loan_purpose_mapping_master
 PDCDemands.list= select repayment_amount, cheque_number from repayment_batch_details  where account_number=:accountNumber and repayment_type='PDC' and processing_status='FAILURE' order by id desc limit 1
 loanAccountsByUrnAndStage.list = Select l.account_Number as accountNumber, l.id as loanId, l.current_stage as currentStage from loan_accounts l where l.urn_no = :urn and l.current_stage IN (:currentStage)
-LookUpCodeByFrequency.list = select lookup_code from `equated_installment_lookup_master` where frequency=:frequency
+LookUpCodeByFrequency.list = select distinct lookup_code from `equated_installment_lookup_master` where frequency=:frequency
 physicalAssets.list= select * from asset_master
 profileSummary.list = select * from `customer_profile_summary` where current_stage='PendingVerification'
 activeLoansCountByProduct = select count(*) as count from loan_accounts l where l.product_code = :product_code and (l.urn_no = :urn_no or l.applicant = :applicant) and l.id != :loan_id and l.account_number is NOT NULL and l.is_closed = 0 
@@ -62,3 +62,4 @@ groupDetailsByGroupCode.list = select * from jlg_groups where group_code IN (:gr
 pincodeMaster.list= SELECT p.pincode,p.division, p.region, p.taluk, p.district, p.state,s.id as 'state_id', d.id as 'district_id' FROM pincode_master p left join state_master s on p.state= s.state_name left join district_master d on p.district= d.district  WHERE p.pincode like concat(:pincode,'%')  AND LOWER(p.division) LIKE concat(LOWER(:division), '%') AND LOWER(p.region) LIKE concat(LOWER(:region), '%') AND LOWER(p.taluk) like concat(LOWER(:taluk),'%') AND LOWER(p.district) LIKE concat(LOWER(:district), '%') AND LOWER(p.state) like concat(LOWER(:state),'%')
 deseaseDetails = select * from desease_details where customer_id = :customer_id
 vehicleSchemeCodeDetails.list = select * from vehicle_loan_scheme_master where DATE(`valid_till`)>= CURDATE() and `status`="Active" and `branch`= :branch_name and `dealer`=:centre_name
+LoanRepayBankAccountByPartnerCode.list=SELECT * from bank_account_master where allow_collection = 1 and partner_code LIKE :partner_code and bank_name in ('HDFC Bank','RBL Bank')
