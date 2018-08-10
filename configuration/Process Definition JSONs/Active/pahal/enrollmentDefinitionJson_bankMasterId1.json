@@ -508,7 +508,6 @@
             "loanType": {
               "title": "Loan Type",
               "type": "string",
-              "refCodeCategory": "liability_loan_type",
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"
@@ -517,7 +516,6 @@
             "loanSource": {
               "title": "Loan Source",
               "type": "string",
-              "refCodeCategory": "loan_source",
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"
