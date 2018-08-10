@@ -104,7 +104,7 @@
                                     "type": ["null", "number", "string"]
                                 },
                                 "udf3":{
-                                    "type":["null","number"]
+                                    "type":["null","number", "string"]
                                 }
                             }
                         },

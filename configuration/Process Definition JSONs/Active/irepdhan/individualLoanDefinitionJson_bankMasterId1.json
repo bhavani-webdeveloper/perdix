@@ -3433,7 +3433,7 @@
                },
                "udf7": {
                   "title": "Eligible Disposable Income",
-                  "type": "number",
+                  "type": "string",
                   "captureStages": [
                      "KYC", "LoanInitiation", "PendingForPartner"
                   ]
