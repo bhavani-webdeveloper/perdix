@@ -3435,7 +3435,7 @@
                   "title": "Eligible Disposable Income",
                   "type": "number",
                   "captureStages": [
-                     "Evaluation"
+                     "KYC", "LoanInitiation", "PendingForPartner"
                   ]
                }
             }
