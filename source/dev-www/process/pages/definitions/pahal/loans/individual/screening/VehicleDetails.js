@@ -732,11 +732,8 @@ define(
                             "vehicleLoanDocuments.vehicleLoanDocuments.docType": {
                                 "required": true
                             },
-                            "vehicleLoanDocuments.vehicleLoanDocuments.fileId": {
-                                "required": true
-                            },
                             "VehicleRouteDetails": {
-                                "condition": "(model.loanAccount.loanPurpose1 == 'Purchase - New Vehicle' || model.loanAccount.loanPurpose1 == 'Purchase - Used Vehicle' || model.loanAccount.loanPurpose1 == 'Refinance')&& (model.loanAccount.vehicleLoanDetails.segment.toLowerCase() == 'goods')"
+                                "condition": "(model.loanAccount.loanPurpose1 == 'Purchase - New Vehicle' || model.loanAccount.loanPurpose1 == 'Purchase - Used Vehicle' || model.loanAccount.loanPurpose1 == 'Refinance')"
                             },
                             "VehicleRouteDetails.vehicleRouteDetails.routeFrom": {
                                 "required": true
@@ -962,8 +959,7 @@ define(
                                 "title": "SUB_DESCRIPTION"
                             },
                             "NewVehicleDetails.registrationNumber": {
-                                "orderNo": 110,
-                                "required": true
+                                "orderNo": 110
                             },
                             "NewVehicleDetails.originalInvoiceValue": {
                                 "orderNo": 120,
@@ -1621,13 +1617,6 @@ define(
                                         model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[1].expenseAmount = parseFloat(model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].kmPerMonth) * parseFloat(model.loanAccount.vehicleLoanDetails.noOfTyres) * parseFloat(model.loanAccount.vehicleLoanDetails.costOfTyre)/parseFloat(model.loanAccount.vehicleLoanDetails.lifeOfTyre);
                                 } else {
                                      model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[1].expenseAmount = 0;
-                                }
-
-                                // Calculation for lubricant
-                                if(vehicleDetail.calculation_method == "TIME") {
-                                    model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[2].expenseAmount = parseFloat(model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[0].expenseAmount * 0.1);
-                                } else {
-                                    model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[2].expenseAmount = 0;
                                 }
 
 
