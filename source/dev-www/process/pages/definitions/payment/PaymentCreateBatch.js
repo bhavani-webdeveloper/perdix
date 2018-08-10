@@ -41,7 +41,6 @@ define([], function() {
                     "BatchSummary",
                     "BatchSummary.dispatchId",
                     "BatchSummary.bankCode",
-                    "BatchSummary.debitAccountNumbe",
                     "BatchSummary.count",
                     "BatchSummary.totalAmount",
 
