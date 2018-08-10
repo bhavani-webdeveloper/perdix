@@ -99,6 +99,12 @@
                             "properties": {
                                 "udf5": {
                                     "type": ["null", "string"]
+                                }, 
+                                "udf7": {
+                                    "type": ["null", "number"]
+                                },
+                                "udf3":{
+                                    "type":["null","number"]
                                 }
                             }
                         },
@@ -508,7 +514,7 @@
 
                               "udf3":{
                                  "title":"udf3",
-                                 "type":["null","string"]
+                                 "type":["null","number"]
                               },
 
                             "udf5":{

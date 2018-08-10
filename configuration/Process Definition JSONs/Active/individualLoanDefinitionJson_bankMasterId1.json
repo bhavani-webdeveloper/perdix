@@ -3747,6 +3747,13 @@
                   "captureStages": [
                      "Screening", "LoanInitiation", "PendingForPartner"
                   ]
+               },
+               "udf7": {
+                  "title": "Eligible Disposable Income",
+                  "type": "number",
+                  "captureStages": [
+                     "Screening", "LoanInitiation", "PendingForPartner"
+                  ]
                }
             }
          },
