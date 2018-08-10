@@ -76,6 +76,18 @@
                 "type": "string",
                 "orderNo" : 75
             },
+            "udf7": {
+                "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf7",
+                "title" : "ELIGIBLE_DISPOSABLE_INCOME",
+                "type": "number",
+                "orderNo" : 150
+            },
+            "udf3": {
+                "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf3",
+                "type": "number",
+                "title":"MAXIMUM_ELIGIBLE_LOAN",
+                "orderNo" : 160
+            },
             "expectedInterestRate": {
                 "key": "loanAccount.expectedInterestRate",
                 "type": "number",
