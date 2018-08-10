@@ -142,7 +142,14 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidati
                     key: "_credit.reference",
                     title: "REFERENCE_NUMBER",
                     readonly: true,
+                    condition:"model._credit.instrumentType !='CASH' && model._credit.instrumentType !='CHEQUE'",
                     //type:"amount"
+                },
+                {
+                    key: "Collection.depositsummary.depositId",
+                    title: "REFERENCE_NUMBER",
+                    readonly: true,
+                    condition:"model._credit.instrumentType =='CASH' || model._credit.instrumentType =='CHEQUE'",
                 },
                 {
                     key: "_credit.transactionName",
@@ -372,7 +379,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidati
                     }]
                 }]
             },
-             {
+            {
                 "type": "actionbox",
                 "items": [{
                     "type": "submit",
