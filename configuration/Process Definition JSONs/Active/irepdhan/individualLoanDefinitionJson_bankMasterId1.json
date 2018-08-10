@@ -3430,6 +3430,13 @@
                   "captureStages": [
                      "Evaluation"
                   ]
+               },
+               "udf7": {
+                  "title": "Eligible Disposable Income",
+                  "type": "number",
+                  "captureStages": [
+                     "Evaluation"
+                  ]
                }
             }
          },
