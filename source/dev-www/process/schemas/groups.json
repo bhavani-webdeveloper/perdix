@@ -350,7 +350,7 @@
 
                 },
                 "grtPhoto": {
-                    "type": "string",
+                    "type": ["string", "null"],
                     "title": "GRT_PHOTO",
                     "category": "Group",
                     "subCategory": "GRTPHOTO"
