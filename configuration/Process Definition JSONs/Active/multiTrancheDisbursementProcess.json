@@ -140,6 +140,21 @@
          "notRequiredForTranches":[
 
          ]
+      },{
+         "order":11,
+         "code":"Completed",
+         "name":"Completed",
+         "stageType":"DISBURSEMENTCONFIRMATION",
+         "sendSms":"Yes",
+         "smsCategory":"Disbursed",
+         "documentTrackingRequired":"Yes",
+         "allowedRoles":[
+            "WM"
+         ],
+         "notRequiredForTranches":[
+
+         ]
+
       }
    ],
    "schema":{
@@ -523,7 +538,7 @@
                          "ReadyForDisbursement"
                      ]
                   },
-				   "overrideCheckerRemarks":{
+			"overrideCheckerRemarks":{
                      "title":"overrideCheckerRemarks",
                      "type":"string",
                      "captureStages":[

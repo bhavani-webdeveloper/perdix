@@ -56,6 +56,19 @@ function($log, $scope, PagesDefinition, SessionStore, IndividualLoan) {
             });
         }
 
+        var dcqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.disbursement.DisbursementReversalQueue"];
+        if (dcqMenu) {
+            IndividualLoan.searchDisbursement({
+                'currentStage': 'Completed',
+                'page': 1,
+                'per_page': 1
+            }).$promise.then(function(response,headerGetter){
+                dcqMenu.data = response.headers['x-total-count'];
+            }, function() {
+                dcqMenu.data = '-';
+            });
+        }
+
         var rdqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.disbursement.RejectedDisbursementQueue"];
         if (rdqMenu) {
             IndividualLoan.searchDisbursement({
