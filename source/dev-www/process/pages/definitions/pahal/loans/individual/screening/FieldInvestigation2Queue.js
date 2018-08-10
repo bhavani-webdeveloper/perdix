@@ -4,13 +4,6 @@ define({
     dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager", "IndividualLoan", "LoanBookingCommons"],
     $pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
         var branch = SessionStore.getBranch();
-        var centres = SessionStore.getCentres();
-        var centreId = [];
-        if (centres && centres.length) {
-            for (var i = 0; i < centres.length; i++) {
-                centreId.push(centres[i].centreId);
-            }
-        }
         return {
             "type": "search-list",
             "title": "FIELD_INVESTIGATION_QUEUE",
@@ -34,50 +27,6 @@ define({
                     "type": 'object',
                     "title": 'SEARCH_OPTIONS',
                     "properties": {
-                        "centre": {
-                            "title": "CENTRE",
-                            "type": "string",
-                            "required": true,
-                            "x-schema-form": {
-                                type: "lov",
-                                autolov: true,
-                                bindMap: {},
-                                searchHelper: formHelper,
-                                lovonly: true,
-                                search: function(inputModel, form, model, context) {
-                                    var centres = SessionStore.getCentres();
-                                    var centreCode = formHelper.enum('centre').data;
-                                    var out = [];
-                                    if (centres && centres.length) {
-                                        for (var i = 0; i < centreCode.length; i++) {
-                                            for (var j = 0; j < centres.length; j++) {
-                                                if (centreCode[i].value == centres[j].id) {
-                                                    out.push({
-                                                        name: centreCode[i].name,
-                                                        value: centreCode[i].code
-                                                    })
-                                                }
-                                            }
-                                        }
-                                    }
-                                    return $q.resolve({
-                                        headers: {
-                                            "x-total-count": out.length
-                                        },
-                                        body: out
-                                    });
-                                },
-                                onSelect: function(valueObj, model, context) {
-                                    model.centre = valueObj.name;
-                                    model.centreCode = valueObj.value;
-                                },
-                                getListDisplayItem: function(item, index) {
-                                    return [
-                                        item.name
-                                    ];
-                                }
-                            }
-                        },
                         "applicantName": {
                             "title": "APPLICANT_NAME",
                             "type": "string"
@@ -109,9 +58,6 @@ define({
                     return formHelper;
                 },
                 getResultsPromise: function(searchOptions, pageOpts) {
-                    if (_.hasIn(searchOptions, 'centreCode')) {
-                        searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centre, formHelper);
-                    }
                     return IndividualLoan.search({
                         'stage': 'FieldInvestigation2',
                         'branchName': branch,
@@ -123,8 +69,7 @@ define({
                         'villageName': searchOptions.villageName,
                         'customerName': searchOptions.businessName,
                         'page': pageOpts.pageNo,
-                        'per_page': pageOpts.itemsPerPage,
-                        'centreCode': searchOptions.centreCode
+                        'per_page': pageOpts.itemsPerPage
 
                     }).$promise;
                 },
