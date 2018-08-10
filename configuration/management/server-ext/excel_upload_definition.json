@@ -63,112 +63,149 @@
         ]
     },
     "Vehicle Loan Scheme Master":{
-        "table": "sms_scheduler_details",
+        "table": "vehicle_loan_scheme_master",
         "columns":[
             {
-                "columnName": "version",
-                "default": "0"
-            },
-            {
                 "columnName": "scheme_code",
+                "fieldName": "scheme_code",
                 "default": "0"
             },
             {
                 "columnName": "status",
+                "fieldName": "Status",
                 "default": "0"
             },
             {
                 "columnName": "valid_from",
+                "fieldName": "valid_from",
                 "default": "0"
             },
             {
                 "columnName": "valid_till",
+                "fieldName": "valid_till",
                 "default": "0"
             },
             {
                 "columnName": "branch",
+                "fieldName": "branch",
                 "default": "0"
             },
             {
                 "columnName": "dealer",
+                "fieldName": "dealer",
                 "default": "0"
             },
             {
                 "columnName": "model",
+                "fieldName": "model",
                 "default": "0"
             },
             {
                 "columnName": "min_loan_amount",
+                "fieldName": "min_loan_amount",
                 "default": "0"
             },
             {
                 "columnName": "default_loan_amount",
+                "fieldName": "default_loan_amount",
                 "default": "0"
             },
             {
                 "columnName": "max_loan_amount",
+                "fieldName": "max_loan_amount",
                 "default": "0"
             },
             {
                 "columnName": "min_interest_rate",
+                "fieldName": "min_interest_rate",
                 "default": "0"
             },
             {
                 "columnName": "default_interest_rate",
+                "fieldName": "default_interest_rate",
                 "default": "0"
             },
             {
                 "columnName": "max_interest_rate",
+                "fieldName": "max_interest_rate",
                 "default": "0"
             },
             {
                 "columnName": "frequency",
+                "fieldName": "frequency",
                 "default": "0"
             },
             {
                 "columnName": "min_tenure",
+                "fieldName": "min_tenure",
                 "default": "0"
             },
             {
                 "columnName": "default_tenure",
+                "fieldName": "default_tenure",
                 "default": "0"
             },
             {
                 "columnName": "max_tenure",
+                "fieldName": "max_tenure",
                 "default": "0"
             },
             {
                 "columnName": "pf_type",
+                "fieldName": "pf_type",
                 "default": "0"
             },
             {
                 "columnName": "processing_fee",
+                "fieldName": "processing_fee",
                 "default": "0"
             },
             {
                 "columnName": "dealer_incentive_type",
+                "fieldName": "dealer_incentive_type",
                 "default": "0"
             },
             {
                 "columnName": "dealer_incentive",
+                "fieldName": "dealer_incentive",
                 "default": "0"
             },
             {
                 "columnName": "dealer_staff_incentive_type",
+                "fieldName": "dealer_staff_incentive_type",
                 "default": "0"
             },
             {
                 "columnName": "dealer_staff_incentive",
+                "fieldName": "dealer_staff_incentive",
                 "default": "0"
             },
             {
                 "columnName": "employee_incentive_type",
+                "fieldName": "employee_incentive_type",
                 "default": "0"
             },
             {
                 "columnName": "employee_incentive",
+                "fieldName": "employee_incentive",
                 "default": "0"
-            }  
+            },
+            {
+                "columnName": "created_by",
+                "default": "system"
+            },
+            {
+                "columnName": "created_at",
+                "default": "NOW()"
+            },
+            {
+                "columnName": "last_edited_by",
+                "default": "SYSTEM"
+            },
+            {
+                "columnName": "last_edited_at",
+                "default": "NOW()"
+            }
         ]
     }
 }
