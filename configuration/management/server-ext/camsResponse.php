@@ -14,7 +14,7 @@
         $affected = DB::update('update customer set is_ekyc_done = ?, pekrn = ? where id = ?', ['true', $pekrn, $customer_id]);
         $status = true;
         $statusHead = "eKYC is completed successfullly";
-        $statusMessage = "Procced with mutual fund application";
+        $statusMessage = "Proceed with mutual fund application";
     } else if ($ekyc ==='N' && substr($resultArray[2], 0, 2) ==='KS') {
         $status = true;
         $statusHead =  'eKYC Aleady done.';
@@ -23,7 +23,8 @@
         $status = false;
         $statusHead =  "eKYC is Failed";
         $statusMessage = $resultArray[3];
-    }
+	}
+	header("Content-Type: text/html");
 ?><html lang="en">
 <head>
 	<title>Perdix - CAMS</title>
