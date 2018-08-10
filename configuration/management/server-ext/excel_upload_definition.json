@@ -62,7 +62,7 @@
             }
         ]
     },
-    "Scheme Master":{
+    "Vehicle Loan Scheme Master":{
         "table": "sms_scheduler_details",
         "columns":[
             {
