@@ -550,7 +550,6 @@
             "frequencyOfInstallment": {
               "title": "Frequency Of Installment",
               "type": "string",
-              "refCodeCategory": "frequency",
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"
@@ -4619,6 +4618,39 @@
               "type": "string",
               "minLength": 1,
               "maxLength": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "udfDate1": {
+              "title": "udfDate1",
+              "type": "string",
+              "format": "date",
+              "minimum": 0,
+              "maximum": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "udfDate2": {
+              "title": "udfDate2",
+             "type": "string",
+              "format": "date",
+              "minimum": 0,
+              "maximum": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "udfDate3": {
+              "title": "udfDate3",
+             "type": "string",
+              "format": "date",
+              "minimum": 0,
+              "maximum": 100,
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"
