@@ -993,7 +993,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                             model.loanAccount.firstRepaymentDate = scheduleStartDate.format("YYYY-MM-DD");
                         }
                         for (var i = 0; i < model.loanAccount.disbursementSchedules.length; i++) {
-                            model.loanAccount.disbursementSchedules[i].moratoriumPeriodInDays = diffDays;
+                            model.loanAccount.disbursementSchedules[i].moratoriumPeriodInDays = diffDay;
                         }
                     }
 
