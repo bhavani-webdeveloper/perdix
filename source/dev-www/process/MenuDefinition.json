@@ -21,6 +21,7 @@
         },
         "Page/LeadDashboard",
         "Page/LoanOriginationDashboard",
+        "Page/Adhoc/payment.PaymentDashboard",
         "Page/DocumentTrackingDashboard",
         {
             "title": "INDIVIDUAL_LOANS",

@@ -1,0 +1,336 @@
+{
+    "PaymentDetails":{
+        "type": "box",
+        "title": "PAYMENT_DETAILS",
+        "items": {
+            "modeOfPayment": {
+                "key": "payment.modeOfPayment",
+                "type": "select",
+                "required":true,
+                "title": "PAYMENT_TYPE",
+                "enumCode": "payment_type"
+            },
+            "amount": {
+                "key": "payment.amount",
+                "type": "number",
+                "required":true,
+                "title": "PAYMENT_AMOUNT"
+            },
+            "fileId": {
+                "title": "UPLOAD_OF_CHEQUE",
+                "key": "payment.fileId",
+                "category": "Collection",
+                "subCategory": "Cheque",
+                "type": "file",
+                "required":true,
+                "fileType": "*/*"
+            },
+            "paymentPurpose": {
+                "key": "payment.paymentPurpose",
+                "type": "select",
+                "required":true,
+                "title": "PAYMENT_PURPOSE",
+                "enumCode": "payment_purpose"
+            },
+            "accountNumber": {
+                "key": "payment.accountNumber",
+                "type": "lov",
+                "required":true,
+                "lovonly": true,
+                "title": "LOAN_ACCOUNT"
+            },
+            "transactionType": {
+                "key": "payment.transactionType",
+                "type": "select",
+                "required":true,
+                "title": "PAYMENT_MODE",
+                "enumCode": "mode_of_payment"
+            },
+            "paymentDate": {
+                "key": "payment.paymentDate",
+                "type": "date",
+                "required":true,
+                "title": "PAYMENT_DATE"
+            }
+        }
+    },
+    "BeneficiaryDetails":{
+        "type": "box",
+        "title": "BENEFICIARY_DETAILS",
+        "items": {
+            "beneficiaryName": {
+                "key": "payment.beneficiaryName",
+                "orderNo":1,
+                "required":true,
+                "type": "string",
+                "title": "BENEFICIARY_NAME"
+            },
+            "beneficiaryAccountName": {
+                "key": "payment.beneficiaryAccountName",
+                "type": "string",
+                "required":true,
+                "title": "BENEFICIARY_ACCOUNT_NAME"
+            },
+            "beneficiaryEmailId": {
+                "key": "payment.beneficiaryEmailId",
+                "type": "email",
+                "pattern": "^\\S+@\\S+$",
+                "title": "BENEFICIARY_EMAIL_ID"
+            },
+            "beneficiaryMobileNumber": {
+                "key": "payment.beneficiaryMobileNumber",
+                "type": "string",
+                "title": "BENEFICIARY_MOBILE_NO",
+                "inputmode": "number",
+                "numberType": "tel"
+            },
+            "creditAccountNo": {
+                "key": "payment.beneficiaryAccountNumber",
+                "type": "string",
+                "required":true,
+                "title": "CREDIT_ACCOUNT_NO"
+            },
+            "confirmAccountNo": {
+                "key": "payment.beneficiaryConfirmAccountNumber",
+                "type": "string",
+                "title": "CONFIRM_ACCOUNT_NO"
+            },
+            "beneficiaryIfsc": {
+                "key": "payment.beneficiaryIfsc",
+                "type": "lov",
+                "lovonly": true,
+                "required":true,
+                "title": "BANK_IFSC"
+            },
+            "beneficiaryBankName": {
+                "key": "payment.beneficiaryBankName",
+                "type": "string",
+                "required":true,
+                "title": "BANK_NAME"
+            },
+            "beneficiaryBankBranch": {
+                "key": "payment.beneficiaryBankBranch",
+                "type": "string",
+                "required":true,
+                "title": "BRANCH_NAME"
+            },
+            "beneficiaryTransactionParticulars": {
+                "key": "payment.beneficiaryTransactionParticulars",
+                "type": "string",
+                "title": "TRANSACTION_DETAILS"
+            },
+            "beneficiaryTransactionRemarks": {
+                "key": "payment.beneficiaryTransactionRemarks",
+                "type": "string",
+                "title": "REMARKS"
+            }
+        }
+    },
+    "DebitAccountDetails":{
+        "type": "box",
+        "title": "DEBIT_ACCOUNT_DETAILS",
+        "items": {
+            "debitAccountName": {
+                "key": "payment.debitAccountName",
+                "type": "lov",
+                "lovonly": true,
+                "required":true,
+                "title": "DEBIT_ACCOUNT_NAME"
+            },
+            "debitAccountNumber": {
+                "key": "payment.debitAccountNumber",
+                "type": "string",
+                "title": "DEBIT_ACCOUNT_NO"
+            },
+            "debitMobileNumber": {
+                "key": "payment.debitMobileNumber",
+                "type": "string",
+                "title": "MOBILE_NO",
+                "inputmode": "number",
+                "numberType": "tel"
+            },
+            "debitTransactionParticulars": {
+                "key": "payment.debitTransactionParticulars",
+                "type": "string",
+                "title": "TRANSACTION_DETAILS"
+            },
+            "debitTransactionRemarks": {
+                "key": "payment.debitTransactionRemarks",
+                "type": "string",
+                "title": "REMARKS"
+            }
+        }
+    },
+    "CreateBatch": {
+        "type": "box",
+        "title": "CREATE_BATCH",
+        "items": {
+            "paymentDate": {
+                "key": "payment.paymentDate",
+                "type": "date",
+                "title": "PAYMENT_DATE"
+            },
+            "modeOfPayment": {
+                "key": "payment.modeOfPayment",
+                "type": "select",
+                "required":true,
+                "title": "PAYMENT_TYPE",
+                "enumCode": "payment_type"
+            },
+            "beneficiaryBankBranch": {
+                "key": "payment.beneficiaryBankBranch",
+                "type": "string",
+                "title": "BRANCH_NAME"
+            },
+            "spokeName": {
+                "key": "payment.spokeName",
+                "type": "string",
+                "title": "SPOKE_NAME"
+            },
+            "debitAccountName": {
+                "key": "payment.debitAccountName",
+                "type": "lov",
+                "required":true,
+                "lovonly": true,
+                "title": "DEBIT_ACCOUNT_NAME"
+            },
+            "paymentMode": {
+                "key": "payment.paymentMode",
+                "type": "select",
+                "title": "PAYMENT_TYPE",
+                "enumCode": "payment_type"
+            },
+            "paymentType": {
+                "key": "payment.paymentType",
+                "type": "select",
+                "required":true,
+                "title": "PAYMENT_MODE",
+                "enumCode": "mode_of_payment"
+            },
+            "paymentPurpose": {
+                "key": "payment.paymentPurpose",
+                "type": "select",
+                "title": "PAYMENT_PURPOSE",
+                "enumCode": "payment_purpose"
+            },
+            "beneficiaryName": {
+                "key": "payment.beneficiaryName",
+                "type": "string",
+                "title": "BENEFICIARY_NAME"
+            }
+
+        }
+    },
+    "BatchSummary": {
+        "type": "box",
+        "title": "BATCH_SUMMARY",
+        "items": {
+            "dispatchId": {
+                "key": "dispatch.dispatchId",
+                "type": "string",
+                "readonly":true,
+                "title": "BATCH_ID"
+            },
+            "bankCode": {
+                "key": "dispatch.bankCode",
+                "type": "string",
+                "readonly":true,
+                "title": "DEBIT_BANK"
+            },
+            "debitAccountNumbe": {
+                "key": "dispatch.debitAccountNumbe",
+                "type": "string",
+                "readonly":true,
+                "title": "DEBIT_BANK_ACCOUNT_NO"
+            },
+            "count": {
+                "key": "dispatch.count",
+                "type": "string",
+                "readonly":true,
+                "title": "NO_OF_TRANSACTION"
+            },
+            "totalAmount": {
+                "key": "dispatch.totalAmount",
+                "type": "string",
+                "readonly":true,
+                "title": "TOTAL_PAYMENT_AMOUNT"
+            }
+        }
+    },
+    "PostReviewDecision": {
+        "type": "box",
+        "title": "POST_REVIEW_DECISION",
+        "orderNo": 40,
+        "items": {
+            "status":{
+                "key": "payment.status",
+                "type": "radios",
+                "titleMap": {
+                    "PROCEED": "PROCEED",
+                    "REJECT": "REJECT",
+                    "SEND_BACK": "SEND_BACK"
+                    }
+                },
+            "rejectsectionremarks":{
+                    "title": "REMARKS",
+                    "key": "review.remarks",
+                    "type": "textarea",
+                    "required": true
+                },
+            "rejectsectionbutton":{
+                    "key": "review.rejectButton",
+                    "type": "button",
+                    "title": "REJECT",
+                    "required": true,
+                    "onClick": "actions.reject(model, formCtrl, form, $event)"
+                },
+            "sendbacksectionremarks":
+                {
+                "title": "REMARKS",
+                "key": "review.remarks",
+                "type": "textarea",
+                "required": true
+                },
+            "sendbacksectionbutton": {
+                "key": "review.sendBackButton",
+                "type": "button",
+                "title": "SEND_BACK",
+                "onClick": "actions.sendBack(model, formCtrl, form, $event)"
+                 },
+        "proceedsectionremarks": {
+
+                "title": "REMARKS",
+                "key": "review.remarks",
+                "type": "textarea",
+                "required": true
+            },
+            "proceedsectionbutton": {
+                "key": "review.proceedButton",
+                "type": "button",
+                "title": "PROCEED",
+                "onClick": "actions.proceed(model, formCtrl, form, $event)"
+            }
+        }
+
+    },
+    "UploadPaymentConfirmation": {
+        "type": "box",
+        "title": "UPLOAD_PAYMENT_CONFIRMATION",
+        "items": {
+            "debitAccount": {
+                "key": "payment.debitAccountName",
+                "type": "lov",
+                "lovonly": true,
+                "title": "DEBIT_ACCOUNT"
+            },
+            "uploadPaymentConfirmation": {
+                "key": "payment.uploadPaymentConfirmation",
+                "type": "file",
+                "category": "ACH",
+                "subCategory": "cat2",
+                "title": "UPLOAD_PAYMENT_CONFIRMATION",
+                "fileType": "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            }
+        }
+    }
+}

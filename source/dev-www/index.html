@@ -212,6 +212,8 @@
 <script src="process/models/v1/bi/BIAnalytics.js"></script>
 <script src="process/models/v1/audit/Audit.js"></script>
 <script src="process/models/v1/mutualFund/MutualFund.js"></script>
+<script src="process/models/v1/ui/UIRepository.js"></script>
+<script src="process/models/v1/payment/Payment.js"></script>
 
 
 <script src="process/models/php/management/Masters.js"></script>
@@ -552,19 +554,37 @@
 <script src="process/pages/definitions/audit/detail/processcompliance/NonSamplingIssueDetails.js"></script>
 
 <script src="process/pages/definitions/bank/Survey.js"></script>
+<script src="process/pages/definitions/payment/PaymentDashboard.js"></script>
 
 <!-- endbuild -->
 <!--Cordova-->
 <script type="text/javascript" src="js/index.js"></script>
 <script type="text/javascript" src="js/require.js"></script>
+<script type="text/javascript" src="js/vendor/Reflect.js"></script>
 <script>
-  require.config({
+   require.config({
     baseUrl: "./",
     paths: {
-        "pages": "process/pages/definitions"
+        "pages": "process/pages/definitions",
+        "perdix": "tsjs",
+        "perdixConfig": "process/config",
+        "@reactivex/rxjs": "js/vendor/Rx",
+        "class-transformer": "js/vendor/class-transformer.amd"
     },
     waitSeconds: 0
   });
+
+  if (typeof _ === 'function') {
+      define('lodash', function(){
+          return _;
+      })
+  }
+
+  if (typeof moment === 'function') {
+      define('moment', function(){
+          return moment;
+      })
+  }
 
   requirejs.onError = function(err){
     console.log(err);

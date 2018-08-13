@@ -1,0 +1,2334 @@
+{
+    "EnterpriseAssets": {
+        "type": "box",
+        "title": "ASSET_DETAILS",
+        "orderNo": 400,
+        "items": {
+            "enterpriseAssets": {
+                "key": "customer.enterpriseAssets",
+                "type": "array",
+                "startEmpty": true,
+                "title": "ENTERPRISE_ASSETS",
+                "items": {
+                    "assetType": {
+                        "key": "customer.enterpriseAssets[].assetType",
+                        "orderNo": 10,
+                        "type": "select",
+                        "enumCode":"enterprise_asset_type"
+                    },
+                    "endUse": {
+                        "key": "customer.enterpriseAssets[].endUse",
+                        "orderNo": 20
+                    },
+                    "natureOfUse": {
+                        "key": "customer.enterpriseAssets[].natureOfUse",
+                        "orderNo": 30,
+                        "type":"radios",
+                        "enumCode":"nature_of_use"
+                    },
+                    "manufacturer": {
+                        "key": "customer.enterpriseAssets[].manufacturer",
+                        "orderNo": 40
+                    },
+                    "make": {
+                        "key": "customer.enterpriseAssets[].make",
+                        "orderNo": 50
+                    },
+                    "assetCategory": {
+                        "key": "customer.enterpriseAssets[].assetCategory",
+                        "orderNo": 60
+                    },
+                    "vehicleMakeModel": {
+                        "key": "customer.enterpriseAssets[].vehicleMakeModel",
+                        "orderNo": 70
+                    },
+                    "manufactureDate": {
+                        "key": "customer.enterpriseAssets[].manufactureDate",
+                        "orderNo": 80,
+                        "type": "date"
+                    },
+                    "details": {
+                        "key": "customer.enterpriseAssets[].details",
+                        "orderNo": 90,
+                        "type": "select",
+                        "enumCode": "business_asset_description"
+                    },
+                    "subDetails": {
+                        "key": "customer.enterpriseAssets[].subDetails",
+                        "orderNo": 100,
+                        "type": "select"
+                    },
+                    "assetregistrationNumber": {
+                        "key": "customer.enterpriseAssets[].assetregistrationNumber",
+                        "orderNo": 110
+                    },
+                    "valueOfAsset": {
+                        "key": "customer.enterpriseAssets[].valueOfAsset",
+                        "orderNo": 120
+                    }
+                }
+            }
+        }
+    },
+    "BankAccounts": {
+        "type": "box",
+        "title": "BANK_ACCOUNTS",
+        "orderNo": 90,
+        "items": {
+            "customerBankAccounts": {
+                "key": "customer.customerBankAccounts",
+                "type": "array",
+                "title": "BANK_ACCOUNTS",
+                "startEmpty": true,
+                "items": {
+                    "ifscCode": {
+                        "key": "customer.customerBankAccounts[].ifscCode",
+                        "resolver": "BankIFSCLOVConfiguration",
+                        "type": "lov",
+                        "lovonly": true,
+                        "orderNo": 10
+                    },
+                    "customerBankName": {
+                        "key": "customer.customerBankAccounts[].customerBankName",
+                        "orderNo": 20
+                    },
+                    "customerBankBranchName": {
+                        "key": "customer.customerBankAccounts[].customerBankBranchName",
+                        "orderNo": 30
+                    },
+                    "customerNameAsInBank": {
+                        "key": "customer.customerBankAccounts[].customerNameAsInBank",
+                        "orderNo": 40
+                    },
+                    "accountNumber": {
+                        "key": "customer.customerBankAccounts[].accountNumber",
+                        "required": true,
+                        "orderNo": 50
+                    },
+                    "confirmedAccountNumber" : {
+                        "key": "customer.customerBankAccounts[].confirmedAccountNumber",
+                        "orderNo": 51
+                    },
+                    "accountType": {
+                        "key": "customer.customerBankAccounts[].accountType",
+                        "type": "select",
+                        "orderNo": 60
+                    },
+                    "bankingSince": {
+                        "key": "customer.customerBankAccounts[].bankingSince",
+                        "type": "date",
+                        "title": "BANKING_SINCE",
+                        "orderNo": 70
+                    },
+                    "netBankingAvailable": {
+                        "key": "customer.customerBankAccounts[].netBankingAvailable",
+                        "type": "select",
+                        "title": "NET_BANKING_AVAILABLE",
+                        "enumCode": "decisionmaker",
+                        "orderNo": 80
+                    },
+                    "sanctionedAmount": {
+                        "key": "customer.customerBankAccounts[].sanctionedAmount",
+                        "type": "amount",
+                        "title": "OUTSTANDING_BALANCE",
+                        "orderNo": 90
+                    },
+                    "limit": {
+                        "key": "customer.customerBankAccounts[].limit",
+                        "orderNo": 91,
+                        "type": "amount"
+                    },
+                    "bankStatementDocId": {
+                        "key": "customer.customerBankAccounts[].bankStatementDocId",
+                        "type": "file",
+                        "title": "BANK_STATEMENT_UPLOAD",
+                        "fileType": "application/pdf",
+                        "category": "CustomerEnrollment",
+                        "subCategory": "IDENTITYPROOF",
+                        "using": "scanner",
+                        "orderNo": 100
+                    },
+                    "bankStatements": {
+                        "key": "customer.customerBankAccounts[].bankStatements",
+                        "type": "array",
+                        "title": "STATEMENT_DETAILS",
+                        "titleExpr": "moment(model.customer.customerBankAccounts[arrayIndexes[0]].bankStatements[arrayIndexes[1]].startMonth).format('MMMM YYYY') + ' ' + ('STATEMENT_DETAILS' | translate)",
+                        "titleExprLocals": {},
+                        "orderNo": 110,
+                        "items": {
+                            "startMonth": {
+                                "key": "customer.customerBankAccounts[].bankStatements[].startMonth",
+                                "type": "date",
+                                "title": "START_MONTH",
+                                "dateDisplayFormat": "MMM, YYYY",
+                                "required": true,
+                                "orderNo": 110
+                            },
+                            "openingBalance": {
+                                "key": "customer.customerBankAccounts[].bankStatements[].openingBalance",
+                                "type": "amount",
+                                "title": "OPENING_BALANCE",
+                                "orderNo": 111
+
+                            },
+                            "closingBalance": {
+                                "key": "customer.customerBankAccounts[].bankStatements[].closingBalance",
+                                "type": "amount",
+                                "title": "CLOSING_BALANCE",
+                                "orderNo": 112
+                            },
+                            "emiAmountdeducted": {
+                                "key": "customer.customerBankAccounts[].bankStatements[].amountOfEmiDeducted",
+                                "type": "amount",
+                                "title": "EMI_AMOUNT_DEDUCTED",
+                                "orderNo": 113
+                            },
+                            "totalDeposits": {
+                                "key": "customer.customerBankAccounts[].bankStatements[].totalDeposits",
+                                "type": "amount",
+                                "calculator": true,
+                                "creditDebitBook": true,
+                                "title": "TOTAL_DEPOSITS",
+                                "orderNo": 120
+                            },
+                            "totalWithdrawals": {
+                                "key": "customer.customerBankAccounts[].bankStatements[].totalWithdrawals",
+                                "type": "amount",
+                                "title": "TOTAL_WITHDRAWALS",
+                                "orderNo": 130
+                            },
+                            "balanceAsOn15th": {
+                                "key": "customer.customerBankAccounts[].bankStatements[].balanceAsOn15th",
+                                "type": "amount",
+                                "title": "BALENCE_AS_ON_REQUESTED_EMI_DATE",
+                                "orderNo": 140
+                            },
+                            "noOfChequeBounced": {
+                                "key": "customer.customerBankAccounts[].bankStatements[].noOfChequeBounced",
+                                "type": "amount",
+                                "title": "NO_OF_CHEQUE_BOUNCED",
+                                "orderNo": 150
+                            },
+                            "noOfEmiChequeBounced": {
+                                "key": "customer.customerBankAccounts[].bankStatements[].noOfEmiChequeBounced",
+                                "type": "amount",
+                                "title": "NO_OF_EMI_CHEQUE_BOUNCED",
+                                "orderNo": 160
+                            },
+                            "bankStatementPhoto": {
+                                "key": "customer.customerBankAccounts[].bankStatements[].bankStatementPhoto",
+                                "type": "file",
+                                "title": "BANK_STATEMENT_UPLOAD",
+                                "fileType": "application/pdf",
+                                "category": "CustomerEnrollment",
+                                "subCategory": "IDENTITYPROOF",
+                                "using": "scanner",
+                                "orderNo": 170
+                            }
+                        }
+                    },
+                    "isDisbersementAccount": {
+                        "key": "customer.customerBankAccounts[].isDisbersementAccount",
+                        "orderNo": 180,
+                        "type": "radios",
+                        "titleMap": [{
+                            "value": true,
+                            "name": "Yes"
+                        },{
+                            "value": false,
+                            "name": "No"
+                        }]
+                    }
+                }
+            }
+        }
+    },
+    "IndividualReferences": {
+        "type": "box",
+        "title": "REFERENCES",
+        "orderNo": 100,
+        "items": {
+            "verifications": {
+                "key": "customer.verifications",
+                "title": "REFERENCES",
+                "startEmpty": true,
+                "titleExpr": "model.customer.verifications[arrayIndexes[0]].referenceFirstName",
+                "type": "array",
+                "items": {
+                    "referenceFirstName": {
+                        "key": "customer.verifications[].referenceFirstName",
+                        "title": "CONTACT_PERSON_NAME",
+                        "type": "string"
+                    },
+                    "mobileNo": {
+                        "key": "customer.verifications[].mobileNo",
+                        "title": "CONTACT_NUMBER",
+                        "type": "string",
+                        "inputmode": "number",
+                        "numberType": "tel"
+                    },
+                    "relationship": {
+                        "key": "customer.verifications[].relationship",
+                        "title": "REFERENCE_TYPE1",
+                        "type": "select",
+                        "titleMap": {
+                            "Neighbour": "Neighbour",
+                            "Relative/friend": "Relative/friend"
+                        }
+                    },
+                    "knownSince": {
+                        "key": "customer.verifications[].knownSince"
+                    },
+                    "occupation": {
+                        "key": "customer.verifications[].occupation",
+                        "title": "OCCUPATION",
+                        "type": "select",
+                        "enumCode": "occupation"
+                    },
+                    "address": {
+                        "key": "customer.verifications[].address",
+                        "type": "textarea"
+                    },
+                    "opinion": {
+                        "key": "customer.verifications[].opinion"
+                    },
+                    "financialStatus": {
+                        "key": "customer.verifications[].financialStatus"
+                    },
+                    "customerResponse": {
+                        "key": "customer.verifications[].customerResponse",
+                        "title": "CUSTOMER_RESPONSE",
+                        "type": "select",
+                        "enumCode": "customer_response"
+                    }
+                }
+            }
+        }
+    },
+    "EnterpriseReferences": {
+        "type": "box",
+        "title": "REFERENCES",
+        "orderNo": 110,
+        "items": {
+            "verifications": {
+                "key": "customer.verifications",
+                "title": "REFERENCES",
+                "startEmpty": true,
+                "type": "array",
+                "items": {
+                    "relationship": {
+                        "key": "customer.verifications[].relationship",
+                        "title": "REFERENCE_TYPE",
+                        "type": "select",
+                        "enumCode": "business_reference_type"
+                    },
+                    "businessName": {
+                        "key": "customer.verifications[].businessName",
+                        "title": "BUSINESS_NAME",
+                        "type": "string"
+                    },
+                    "referenceFirstName": {
+                        "key": "customer.verifications[].referenceFirstName",
+                        "title": "CONTACT_PERSON_NAME",
+                        "type": "string"
+                    },
+                    "mobileNo": {
+                        "key": "customer.verifications[].mobileNo",
+                        "title": "CONTACT_NUMBER",
+                        "type": "string",
+                        "inputmode": "number",
+                        "numberType": "tel"
+                    },
+                    "address": {
+                        "key": "customer.verifications[].address",
+                        "type": "textarea"
+                    },
+                    "knownSince": {
+                        "key": "customer.verifications[].knownSince"
+                    },
+                    "goodsSold": {
+                        "key": "customer.verifications[].goodsSold",
+                        "condition": "model.customer.verifications[arrayIndex].relationship=='Business Material Suppliers'"
+                    },
+                    "goodsBought": {
+                        "key": "customer.verifications[].goodsBought",
+                        "condition": "model.customer.verifications[arrayIndex].relationship=='Business Buyer'"
+                    },
+                    "paymentTerms": {
+                        "key": "customer.verifications[].paymentTerms",
+                        "type": "select",
+                        "title": "payment_tarms",
+                        "enumCode": "payment_terms"
+                    },
+                    "modeOfPayment": {
+                        "key": "customer.verifications[].modeOfPayment",
+                        "type": "select",
+                        "enumCode": "payment_mode"
+                    },
+                    "outstandingPayable": {
+                        "key": "customer.verifications[].outstandingPayable",
+                        "condition": "model.customer.verifications[arrayIndex].relationship=='Business Material Suppliers'"
+                    },
+                    "outstandingReceivable": {
+                        "key": "customer.verifications[].outstandingReceivable",
+                        "condition": "model.customer.verifications[arrayIndex].relationship=='Business Buyer'"
+                    },
+                    "customerResponse": {
+                        "key": "customer.verifications[].customerResponse",
+                        "title": "CUSTOMER_RESPONSE",
+                        "type": "select"
+                    },
+                    "opinion": {
+                        "key": "customer.verifications[].opinion"
+                    }
+                }
+            }
+        }
+    },
+    "KYC": {
+        "type": "box",
+        "title": "KYC",
+        "orderNo": 10,
+        "items": {
+            "customerId": {
+                "key": "customer.id",
+                "title": "CUSTOMER_SEARCH",
+                "type": "lov",
+                "lovonly": true
+            },
+            "identityProof": {
+                "key": "customer.identityProof",
+                "type": "select"
+            },
+            "identityProofImageId": {
+                "key": "customer.identityProofImageId",
+                "type": "file",
+                "fileType": "application/pdf",
+                "using": "scanner"
+            },
+            "identityProofNo": {
+                "key": "customer.identityProofNo",
+                "type": "barcode"
+            },
+            "idProofIssueDate": {
+                "key" : "customer.idProofIssueDate",
+                "type" : "date"
+            },
+            "idProofValidUptoDate": {
+                "key" : "customer.idProofValidUptoDate",
+                "type" : "date"
+            },
+            "addressProof": {
+                "key": "customer.addressProof",
+                "type": "select"
+            },
+            "addressProofImageId": {
+                "key": "customer.addressProofImageId",
+                "type": "file",
+                "fileType": "application/pdf",
+                "using": "scanner"
+            },
+            "addressProofNo": {
+                "key": "customer.addressProofNo",
+                "type": "qrcode"
+            },
+            "addressProofIssueDate": {
+                "key": "customer.addressProofIssueDate",
+                "type": "date"
+            },
+            "addressProofValidUptoDate": {
+                "key": "customer.addressProofValidUptoDate",
+                "type": "date"
+            },
+            "additionalKYCs": {
+                "key": "customer.additionalKYCs",
+                "type": "array",
+                "title": "ADDITIONAL_KYC",
+                "startEmpty": true,
+                "items": {
+                    "kyc1ProofType": {
+                        "key": "customer.additionalKYCs[].kyc1ProofType",
+                        "type": "select",
+                        "enumCode": "identity_proof"
+                    },
+                    "kyc1ImagePath": {
+                        "key": "customer.additionalKYCs[].kyc1ImagePath",
+                        "type": "file",
+                        "fileType": "application/pdf",
+                        "using": "scanner"
+                    },
+                    "kyc1ProofNumber": {
+                        "key": "customer.additionalKYCs[].kyc1ProofNumber",
+                        "type": "barcode"
+                    },
+                    "kyc1IssueDate": {
+                        "key": "customer.additionalKYCs[].kyc1IssueDate",
+                        "type": "date"
+                    },
+                    "kyc1ValidUptoDate": {
+                        "key": "customer.additionalKYCs[].kyc1ValidUptoDate",
+                        "type": "date"
+                    }
+                }
+            },
+            "identityProofFieldSet": {
+                "type": "fieldset",
+                "title": "IDENTITY_PROOF",
+                "items": []
+            },
+            "addressProofFieldSet": {
+                "type": "fieldset",
+                "title": "ADDRESS_PROOF",
+                "items": []
+            }
+        }
+    },
+    "IndividualInformation": {
+        "type": "box",
+        "title": "PERSONAL_INFORMATION",
+        "orderNo": 20,
+        "items": {
+            "customerBranchId": {
+                "key": "customer.customerBranchId",
+                "title": "BRANCH_NAME",
+                "type": "select",
+                "orderNo": 10
+            },
+            "centreId": {
+                "key": "customer.centreId",
+                "type": "lov",
+                "title": "CENTRE",
+                "filter": {
+                    "parentCode": "branch_id"
+                },
+                "parentEnumCode": "branch_id",
+                "parentValueExpr": "model.customer.customerBranchId",
+                "orderNo": 20
+            },
+            "oldCustomerId": {
+                "key": "customer.oldCustomerId",
+                "title": "CUSTOMER_ID",
+                "titleExpr": "('CUSTOMER_ID'|translate)+' (Artoo)'",
+                "orderNo": 40
+            },
+            "customerId": {
+                "key": "customer.id",
+                "title": "CUSTOMER_ID",
+                "orderNo": 50
+            },
+            "urnNo": {
+                "key": "customer.urnNo",
+                "title": "URN_NO",
+                "orderNo": 60
+            },
+            "photoImageId": {
+                "key": "customer.photoImageId",
+                "type": "file",
+                "fileType": "image/*",
+                "orderNo": 70
+            },
+            "existingLoan": {
+                "key": "customer.existingLoan",
+                "title": "EXISTING_LOAN",
+                "type": "radios",
+                "enumCode": "decisionmaker",
+                "orderNo": 80
+            },
+            "title": {
+                "key": "customer.title",
+                "title": "TITLE",
+                "type": "select",
+                "enumCode": "title",
+                "orderNo": 90
+            },
+            "firstName": {
+                "key": "customer.firstName",
+                "title": "FULL_NAME",
+                "type": "string",
+                "orderNo": 100
+            },
+            "enrolledAs": {
+                "key": "customer.enrolledAs",
+                "type": "radios",
+                "orderNo": 110
+            },
+            "gender": {
+                "key": "customer.gender",
+                "type": "radios",
+                "orderNo": 120
+            },
+            "dateOfBirth": {
+                "key": "customer.dateOfBirth",
+                "type": "date",
+                "orderNo": 130
+            },
+            "age": {
+                "key": "customer.age",
+                "title": "AGE",
+                "type": "number",
+                "orderNo": 131,
+                "readonly": true
+            },
+            "religion": {
+                "key": "customer.religion",
+                "type": "select",
+                "orderNo": 140
+            },
+            "language": {
+                "key": "customer.language",
+                "title": "PREFERRED_LANGUAGE",
+                "type": "select",
+                "enumCode": "language",
+                "orderNo": 150
+            },
+            "fatherFirstName": {
+                "key": "customer.fatherFirstName",
+                "title": "FATHER_FULL_NAME",
+                "orderNo": 160
+            },
+            "motherName": {
+                "key": "customer.motherName",
+                "title": "MOTHER_NAME",
+                "orderNo": 170
+            },
+            "maritalStatus": {
+                "key": "customer.maritalStatus",
+                "type": "select",
+                "orderNo": 180
+            },
+            "spouseFirstName": {
+                "key": "customer.spouseFirstName",
+                "title": "SPOUSE_FULL_NAME",
+                "type": "qrcode",
+                "orderNo": 190
+            },
+            "spouseDateOfBirth": {
+                "key": "customer.spouseDateOfBirth",
+                "type": "date",
+                "orderNo": 200
+            },
+            "weddingDate": {
+                "key": "customer.weddingDate",
+                "type": "date",
+                "title": "WEDDING_ANNIVERSERY",
+                "condition": "model.customer.maritalStatus==='MARRIED'"
+            },
+            "caste": {
+                "key": "customer.caste",
+                "type": "select",
+                "title": "CASTE"
+            }
+        }
+    },
+    "EnterpriseInformation": {
+        "type": "box",
+        "title": "ENTITY_INFORMATION",
+        "orderNo": 10,
+        "items": {
+            "enterpriseType": {
+                "key": "customer.enterprise.enterpriseType",
+                "title": "ENTERPRISE_TYPE",
+                "type": "select",
+                "titleMap": [
+                    {
+                        "name": "Sole Proprietorship",
+                        "value": "Sole Proprietorship"
+                    },
+                    {
+                        "name": "Enterprise",
+                        "value": "Enterprise"
+                    }
+                ]
+            },
+            "customerId": {
+                "key": "customer.id",
+                "title": "LOAD_EXISTING_CUSTOMER",
+                "resolver": "EnterpriseCustomerIDLOVConfiguration",
+                "type": "lov",
+                "orderNo": 10
+            },
+            "customerBranchId": {
+                "key": "customer.customerBranchId",
+                "title": "BRANCH_NAME",
+                "type": "select",
+                "orderNo": 20
+            },
+            "entityId": {
+                "key": "customer.id",
+                "type": "number",
+                "readonly": true,
+                "title": "ENTITY_ID",
+                "orderNo": 30
+            },
+            "urnNo": {
+                "key": "customer.urnNo",
+                "readonly": true,
+                "condition": "model.customer.urnNo",
+                "title": "URN_NO",
+                "orderNo": 40
+            },
+            "centreId": {
+                "key": "customer.centreId",
+                "type": "select",
+                "title": "CENTRE_NAME",
+                "filter": {
+                    "parentCode": "branch_id"
+                },
+                "parentEnumCode": "branch_id",
+                "parentValueExpr": "model.customer.customerBranchId",
+                "orderNo": 50
+            },
+            "oldCustomerId": {
+                "key": "customer.oldCustomerId",
+                "title": "ENTITY_ID",
+                "titleExpr": "('ENTITY_ID'|translate)+' (Artoo)'",
+                "orderNo": 60
+            },
+            "firstName": {
+                "key": "customer.firstName",
+                "title": "ENTITY_NAME",
+                "orderNo": 70
+            },
+            "referredBy": {
+                "key": "customer.enterprise.referredBy",
+                "title": "SOURCED",
+                "type": "select",
+                "enumCode": "referredBy",
+                "orderNo": 80
+            },
+            "referredName": {
+                "key": "customer.enterprise.referredName",
+                "title": "REFERRED_NAME",
+                "orderNo": 90
+            },
+            "companyOperatingSince": {
+                "key": "customer.enterprise.companyOperatingSince",
+                "title": "OPERATING_SINCE",
+                "type": "date",
+                "orderNo": 100
+            },
+            "companyEmailId": {
+                "key": "customer.enterprise.companyEmailId",
+                "type": "email",
+                "pattern": "^\\S+@\\S+$",
+                "title": "COMPANY_EMAIL_ID",
+                "orderNo": 110
+            },
+            "latitude": {
+                "key": "customer.latitude",
+                "title": "BUSINESS_LOCATION",
+                "type": "geotag",
+                "latitude": "customer.latitude",
+                "longitude": "customer.longitude",
+                "orderNo": 120
+            },
+            "photoImageId": {
+                "key": "customer.photoImageId",
+                "title": "BUSINESS_LOCATION_PHOTO",
+                "type": "file",
+                "fileType": "image/*",
+                "category": "CustomerEnrollment",
+                "subCategory": "PHOTO",
+                "orderNo": 130
+            },
+            "ownership": {
+                "key": "customer.enterprise.ownership",
+                "title": "OWNERSHIP",
+                "type": "select",
+                "enumCode": "ownership",
+                "orderNo": 140
+            },
+            "businessConstitution": {
+                "key": "customer.enterprise.businessConstitution",
+                "title": "CONSTITUTION",
+                "type": "select",
+                "enumCode": "constitution",
+                "orderNo": 150
+            },
+            "businessHistory": {
+                "key": "customer.enterprise.businessHistory",
+                "title": "BUSINESS_HISTORY",
+                "type": "select",
+                "enumCode": "business_history",
+                "orderNo": 160
+            },
+            "noOfPartners": {
+                "key": "customer.enterprise.noOfPartners",
+                "title": "NO_OF_PARTNERS",
+                "type": "select",
+                "titleMap": {
+                    "2": "2",
+                    "3": "3",
+                    "4": "4",
+                    ">4": ">4"
+                },
+                "orderNo": 170
+            },
+            "anyPartnerOfPresentBusiness": {
+                "key": "customer.enterprise.anyPartnerOfPresentBusiness",
+                "title": "HAS_ANYONE_ELSE_PARTNER",
+                "type": "select",
+                "enumCode": "decisionmaker",
+                "orderNo": 180
+            },
+            "partnershipDissolvedDate": {
+                "key": "customer.enterprise.partnershipDissolvedDate",
+                "title": "PREVIOUS_PARTNERSHIP_DISSOLVED_DATE",
+                "type": "date",
+                "orderNo": 190
+            },
+            "regularEmployees": {
+                "key": "customer.enterprise.noOfRegularEmployees",
+                "title": "REGULAR_EMPLOYEES",
+                "type": "number",
+                "orderNo": 191
+            },
+            "contractEmployee": {
+                "key": "customer.enterprise.noOfContractEmployees",
+                "title": "CONTRACT_EMPLOYEES",
+                "type": "number",
+                "orderNo": 192
+
+            },
+            "companyRegistered": {
+                "key": "customer.enterprise.companyRegistered",
+                "type": "select",
+                "enumCode": "decisionmaker",
+                "title": "IS_REGISTERED",
+                "orderNo": 200
+            },
+            "isGSTAvailable": {
+                "key": "customer.enterprise.isGSTAvailable",
+                "type": "radios",
+                "enumCode": "decisionmaker",
+                "title": "IS_GST_AVAILABLE",
+                "orderNo": 210
+            },
+            "enterpriseRegistrations": {
+                "key": "customer.enterpriseRegistrations",
+                "type": "array",
+                "startEmpty": true,
+                "title": "REGISTRATION_DETAILS",
+                "orderNo": 211,
+                "items": {
+                    "registrationType": {
+                        "key": "customer.enterpriseRegistrations[].registrationType",
+                        "title": "REGISTRATION_TYPE",
+                        "type": "select",
+                        "required": true,
+                        "enumCode": "business_registration_type",
+                        "orderNo": 220
+                    },
+                    "registrationNumber": {
+                        "key": "customer.enterpriseRegistrations[].registrationNumber",
+                        "title": "REGISTRATION_NUMBER",
+                        "required": true,
+                        "orderNo": 230
+                    },
+                    "registeredDate": {
+                        "key": "customer.enterpriseRegistrations[].registeredDate",
+                        "type": "date",
+                        "title": "REGISTRATION_DATE",
+                        "orderNo": 240
+                    },
+                    "expiryDate": {
+                        "key": "customer.enterpriseRegistrations[].expiryDate",
+                        "type": "date",
+                        "title": "VALID_UPTO",
+                        "orderNo": 250
+                    },
+                    "documentId": {
+                        "key": "customer.enterpriseRegistrations[].documentId",
+                        "type": "file",
+                        "title": "REGISTRATION_DOCUMENT",
+                        "category": "CustomerEnrollment",
+                        "subCategory": "REGISTRATIONDOCUMENT",
+                        "fileType": "application/pdf",
+                        "using": "scanner",
+                        "orderNo": 260
+                    }
+                }
+            },
+            "businessType": {
+                "key": "customer.enterprise.businessType",
+                "title": "BUSINESS_TYPE",
+                "type": "select",
+                "enumCode": "businessType",
+                "orderNo": 270
+            },
+            "businessActivity": {
+                "key": "customer.enterprise.businessActivity",
+                "title": "BUSINESS_ACTIVITY",
+                "type": "select",
+                "enumCode": "businessActivity",
+                "parentEnumCode": "businessType",
+                "parentValueExpr": "model.customer.enterprise.businessType",
+                "orderNo": 280
+            },
+            "businessSector": {
+                "key": "customer.enterprise.businessSector",
+                "title": "BUSINESS_SECTOR",
+                "type": "select",
+                "enumCode": "businessSector",
+                "parentEnumCode": "businessType",
+                "parentValueExpr": "model.customer.enterprise.businessType",
+                "orderNo": 290
+            },
+            "businessSubsector": {
+                "key": "customer.enterprise.businessSubsector",
+                "title": "BUSINESS_SUBSECTOR",
+                "type": "lov",
+                "orderNo": 300
+            },
+            "itrAvailable": {
+                "key": "customer.enterprise.itrAvailable",
+                "title": "ITR_AVAILABLE",
+                "type": "select",
+                "enumCode": "decisionmaker",
+                "orderNo": 310
+            },
+            "enterpriseCustomerRelations": {
+                "key": "customer.enterpriseCustomerRelations",
+                "type": "array",
+                "startEmpty": true,
+                "title": "RELATIONSHIP_TO_BUSINESS",
+                "items": {
+                    "relationshipType": {
+                        "key": "customer.enterpriseCustomerRelations[].relationshipType",
+                        "title": "RELATIONSHIP_TYPE",
+                        "type": "select",
+                        "enumCode": "relationship_type",
+                        "orderNo": 320
+                    },
+                    "linkedToCustomerId": {
+                        "key": "customer.enterpriseCustomerRelations[].linkedToCustomerId",
+                        "resolver": "EnterpriseCustomerIDLOVConfiguration",
+                        "type": "lov",
+                        "title": "CUSTOMER_ID",
+                        "orderNo": 330
+                    },
+                    "linkedToCustomerName": {
+                        "key": "customer.enterpriseCustomerRelations[].linkedToCustomerName",
+                        "title": "CUSTOMER_NAME",
+                        "orderNo": 340
+                    },
+                    "experienceInBusiness": {
+                        "key": "customer.enterpriseCustomerRelations[].experienceInBusiness",
+                        "title": "EXPERIENCE_IN_BUSINESS",
+                        "type": "select",
+                        "enumCode": "years_in_current_area",
+                        "orderNo": 350
+                    },
+                    "businessInvolvement": {
+                        "key": "customer.enterpriseCustomerRelations[].businessInvolvement",
+                        "title": "BUSINESS_INVOLVEMENT",
+                        "type": "select",
+                        "enumCode": "business_involvement",
+                        "orderNo": 360
+                    },
+                    "partnerOfAnyOtherCompany": {
+                        "key": "customer.enterpriseCustomerRelations[].partnerOfAnyOtherCompany",
+                        "title": "PARTNER_OF_ANY_OTHER_COMPANY",
+                        "type": "select",
+                        "enumCode": "decisionmaker",
+                        "orderNo": 370
+                    },
+                    "otherBusinessClosed": {
+                        "key": "customer.enterpriseCustomerRelations[].otherBusinessClosed",
+                        "title": "OTHER_BUSINESS_CLOSED",
+                        "type": "select",
+                        "enumCode": "decisionmaker",
+                        "orderNo": 380
+                    },
+                    "otherBusinessClosureDate": {
+                        "key": "customer.enterpriseCustomerRelations[].otherBusinessClosureDate",
+                        "type": "date",
+                        "title": "OTHER_BUSINESS_CLOSE_DATE",
+                        "orderNo": 390
+                    }
+                }
+            }
+        }
+    },
+    "ContactInformation": {
+        "type": "box",
+        "title": "CONTACT_INFORMATION",
+        "orderNo": 30,
+        "items": {
+            "mobilePhone": {
+                "key": "customer.mobilePhone",
+                "type": "text",
+                "inputmode": "number",
+                "numberType": "tel",
+                "orderNo": 10
+            },
+            "landLineNo": {
+                "key": "customer.landLineNo",
+                "type": "string",
+                "inputmode": "number",
+                "numberType": "tel",
+                "orderNo": 20
+            },
+            "whatsAppMobileNoOption": {
+                "key": "customer.whatsAppMobileNoOption",
+                "type": "radios",
+                "title": "CHOOSE_WHATSAPP_NO",
+                "resolver": "IndividualWhatsappMobileLOVConfiguration",
+                "titleMap": {
+                    "1": "Mobile Phone",
+                    "2": "Phone 2",
+                    "3": "Other"
+                },
+                "orderNo": 30
+            },
+            "whatsAppMobileNo": {
+                "key": "customer.whatsAppMobileNo",
+                "type": "string",
+                "title": "WHATSAPP_MOBILE_NO",
+                "inputmode": "number",
+                "numberType": "tel",
+                "orderNo": 40
+            },
+            "location": {
+                "key": "customer.latitude",
+                "title": "LOCATION",
+                "type": "geotag",
+                "latitude": "customer.latitude",
+                "longitude": "customer.longitude",
+                "orderNo": 50
+            },
+            "email": {
+                "key": "customer.email",
+                "type": "string",
+                "orderNo": 50
+            },
+            "careOf": {
+                "key": "customer.careOf",
+                "title": "C/O",
+                "orderNo": 60
+            },
+            "doorNo": {
+                "key": "customer.doorNo",
+                "orderNo": 70
+            },
+            "street": {
+                "key": "customer.street",
+                "orderNo": 80
+            },
+            "postOffice": {
+                "key": "customer.postOffice",
+                "orderNo": 90
+            },
+            "landmark": {
+                "key": "customer.landmark",
+                "orderNo": 100
+            },
+            "pincode": {
+                "key": "customer.pincode",
+                "title": "PIN_CODE",
+                "type": "lov",
+                "fieldType": "number",
+                "autolov": true,
+                "orderNo": 100
+            },
+            "locality": {
+                "key": "customer.locality",
+                "orderNo": 110
+            },
+            "villageName": {
+                "key": "customer.villageName",
+                "orderNo": 120
+            },
+            "district": {
+                "key": "customer.district",
+                "orderNo": 130
+            },
+            "state": {
+                "key": "customer.state",
+                "orderNo": 140
+            },
+            "mailSameAsResidence": {
+                "key": "customer.mailSameAsResidence",
+                "orderNo": 150
+            },
+            "mailingDoorNo": {
+                "key": "customer.mailingDoorNo",
+                "orderNo": 160
+            },
+            "mailingStreet": {
+                "key": "customer.mailingStreet",
+                "orderNo": 170
+            },
+            "mailingPostoffice": {
+                "key": "customer.mailingPostoffice",
+                "orderNo": 180
+            },
+            "mailingPincode": {
+                "key": "customer.mailingPincode",
+                "type": "lov",
+                "inputmode": "number",
+                "autolov": true,
+                "orderNo": 190
+            },
+            "mailingLocality": {
+                "key": "customer.mailingLocality",
+                "orderNo": 200
+            },
+            "mailingDistrict": {
+                "key": "customer.mailingDistrict",
+                "orderNo": 210
+            },
+            "mailingState": {
+                "key": "customer.mailingState",
+                "orderNo": 220
+            },
+            "distanceFromBranch": {
+                "key": "customer.distanceFromBranch",
+                "type": "select",
+                "enumCode": "loan_distance_from_branch",
+                "title": "DISTANCE_FROM_BRANCH",
+                "orderNo": 230
+            },
+            "businessInPresentAreaSince": {
+                "key": "customer.enterprise.businessInPresentAreaSince",
+                "type": "select",
+                "enumCode": "business_in_present_area_since",
+                "title": "YEARS_OF_BUSINESS_PRESENT_AREA",
+                "orderNo": 240
+            },
+            "businessInCurrentAddressSince": {
+                "key": "customer.enterprise.businessInCurrentAddressSince",
+                "type": "select",
+                "enumCode": "bsns_in_current_addrss_since",
+                "title": "YEARS_OF_BUSINESS_PRESENT_ADDRESS",
+                "orderNo": 250
+            },
+            "residentialAddressFieldSet": {
+                "type": "fieldset",
+                "orderNo": 51,
+                "title": "CUSTOMER_RESIDENTIAL_ADDRESS",
+                "items": [
+                ]
+            },
+            "permanentAddressFieldSet": {
+                "type": "fieldset",
+                "orderNo": 159,
+                "title": "CUSTOMER_PERMANENT_ADDRESS",
+                "items": [
+                ]
+            }
+        }
+    },
+    "IndividualFinancials": {
+        "type": "box",
+        "title": "HOUSEHOLD_FINANCIALS",
+        "orderNo": 40,
+        "items": {
+            "expenditures": {
+                "key": "customer.expenditures",
+                "type": "array",
+                "startEmpty": true,
+                "title": "EXPENDITURES",
+                "view": "fixed",
+                "items": {
+                    "expenditureSource": {
+                        "key": "customer.expenditures[].expenditureSource",
+                        "type": "select",
+                        "title": "EXPENSE_TYPE"
+                    },
+                    "annualExpenses": {
+                        "key": "customer.expenditures[].annualExpenses",
+                        "type": "amount",
+                        "title": "AMOUNT"
+                    },
+                    "frequency": {
+                        "key": "customer.expenditures[].frequency",
+                        "type": "select",
+                        "title": "FREQUENCY"
+                    }
+                }
+            }
+        }
+    },
+    "EnterpriseFinancials": {
+        "type": "box",
+        "title": "T_BUSINESS_FINANCIALS",
+        "items": {
+            "monthlyTurnover": {
+                "key": "customer.enterprise.monthlyTurnover",
+                "title": "MONTHLY_TURNOVER",
+                "type": "amount"
+            },
+            "monthlyBusinessExpenses": {
+                "key": "customer.enterprise.monthlyBusinessExpenses",
+                "title": "MONTHLY_BUSINESS_EXPENSES",
+                "type": "amount"
+            },
+            "avgMonthlyNetIncome": {
+                "key": "customer.enterprise.avgMonthlyNetIncome",
+                "title": "AVERAGE_MONTHLY_NET_INCOME",
+                "type": "amount"
+            },
+            "otherBusinessIncomes": {
+                "key": "customer.otherBusinessIncomes",
+                "type": "array",
+                "startEmpty": true,
+                "title": "OTHER_BUSINESS_INCOME",
+                "items": {
+                    "incomeSource": {
+                        "key": "customer.otherBusinessIncomes[].incomeSource",
+                        "title": "INCOME_SOURCE",
+                        "type": "select",
+                        "enumCode": "occupation"
+                    },
+                    "amount": {
+                        "key": "customer.otherBusinessIncomes[].amount",
+                        "title": "AMOUNT",
+                        "type": "amount"
+                    },
+                    "otherBusinessIncomeDate": {
+                        "key": "customer.otherBusinessIncomes[].otherBusinessIncomeDate",
+                        "title": "DATE",
+                        "type": "date"
+                    }
+                }
+            },
+            "incomeThroughSales": {
+                "key": "customer.incomeThroughSales",
+                "type": "array",
+                "startEmpty": true,
+                "title": "INCOMRE_THROUGH_SALES",
+                "items": {
+                    "buyerName": {
+                        "key": "customer.incomeThroughSales[].buyerName",
+                        "type": "lov",
+                        "autolov": true
+                    },
+                    "incomeType": {
+                        "key": "customer.incomeThroughSales[].incomeType",
+                        "title": "INCOME_TYPE",
+                        "type": "radios",
+                        "enumCode": "salesincome_income_type"
+                    },
+                    "invoiceType": {
+                        "key": "customer.incomeThroughSales[].invoiceType",
+                        "title": "INVOICE_TYPE",
+                        "type": "select",
+                        "enumCode": "salesincome_invoice_type",
+                        "parentValueExpr": "model.customer.enterprise.businessType"
+                    },
+                    "amount": {
+                        "key": "customer.incomeThroughSales[].amount",
+                        "title": "AMOUNT",
+                        "type": "amount",
+                        "calculator": true,
+                        "creditDebitBook": true
+                    },
+                    "incomeSalesDate": {
+                        "key": "customer.incomeThroughSales[].incomeSalesDate",
+                        "title": "DATE",
+                        "type": "date"
+                    },
+                    "invoiceDocId": {
+                        "key": "customer.incomeThroughSales[].invoiceDocId",
+                        "type": "file",
+                        "title": "INVOICE_DOCUMENT",
+                        "fileType": "application/pdf",
+                        "category": "CustomerEnrollment",
+                        "subCategory": "IDENTITYPROOF",
+                        "using": "scanner"
+                    }
+                }
+            },
+            "dailySales": {
+                "type": "fieldset",
+                "title": "SALESINFO_DAILY_SALES",
+                "items": {
+                    "avgDailySaleAmount": {
+                        "key": "customer.enterprise.avgDailySaleAmount",
+                        "title": "AVERAGE_DAILY_SALE_AMT",
+                        "type": "amount"
+                    },
+                    "workingDaysInMonth": {
+                        "key": "customer.enterprise.workingDaysInMonth",
+                        "title": "WORKING_DAYS_COUNT",
+                        "type": "number"
+                    }
+                }
+            },
+            "enterpriseMonthlySales": {
+                "key": "customer.enterpriseMonthlySales",
+                "type": "array",
+                "title": "ENTERPRISE_MONTHLY_SALES",
+                "startEmpty": true,
+                "items": {
+                    "month": {
+                        "key": "customer.enterpriseMonthlySales[].month",
+                        "type": "date",
+                        "title": "START_MONTH",
+                        "dateDisplayFormat": "MMM, YYYY"
+                    },
+                    "totalSales": {
+                        "key": "customer.enterpriseMonthlySales[].totalSales",
+                        "type": "amount",
+                        "calculator": true,
+                        "creditDebitBook": true,
+                        "title": "TOTAL_SALES"
+                    },
+                    "seasonType": {
+                        "key": "customer.enterpriseMonthlySales[].seasonType",
+                        "type": "select",
+                        "title": "SEASON_TYPE",
+                        "enumCode": "enterprise_season_types"
+                    }
+                }
+            },
+            "marginDetails":{
+                "type": "fieldset",
+                "title": "SALESINFO_MARGIN_DETAILS",
+                "items": {
+                   "grossMarginPercentage": {
+                        "key": "customer.enterprise.grossMarginPercentage",
+                        "type": "number",
+                        "title":"GROSS_MARGIN_PERCT"
+                    },
+                    "netMarginPercentage": {
+                        "key": "customer.enterprise.netMarginPercentage",
+                        "type": "number",
+                        "title": "NET_MARGIN_PRCT"
+                    }
+                }
+            },
+            "expenditures": {
+                "key": "customer.expenditures",
+                "type": "array",
+                "startEmpty": true,
+                "title": "BUSINESS_EXPENSE",
+                "items": {
+                    "expenditureSource": {
+                        "key": "customer.expenditures[].expenditureSource",
+                        "title": "EXPENDITURE_SOURCE",
+                        "type": "select",
+                        "enumCode": "business_expense"
+                    },
+                    "annualExpenses": {
+                        "key": "customer.expenditures[].annualExpenses",
+                        "title": "AMOUNT",
+                        "type": "amount"
+                    },
+                    "frequency": {
+                        "key": "customer.expenditures[].frequency",
+                        "title": "FREQUENCY",
+                        "type": "select",
+                        "enumCode": "frequency"
+                    },
+                    "billDocId": {
+                        "key": "customer.expenditures[].billDocId",
+                        "type": "file",
+                        "title": "BILLS",
+                        "fileType": "application/pdf",
+                        "category": "CustomerEnrollment",
+                        "subCategory": "IDENTITYPROOF",
+                        "using": "scanner"
+                    }
+                }
+            },
+            "rawMaterialExpenses": {
+                "key": "customer.rawMaterialExpenses",
+                "type": "array",
+                "startEmpty": true,
+                "title": "PURCHASES",
+                "items": {
+                    "vendorName": {
+                        "key": "customer.rawMaterialExpenses[].vendorName",
+                        "type": "lov",
+                        "autolov": true
+                    },
+                    "rawMaterialType": {
+                        "key": "customer.rawMaterialExpenses[].rawMaterialType",
+                        "title": "TYPE",
+                        "type": "radios",
+                        "titleMap": {
+                            "Cash": "Cash",
+                            "Invoice": "Invoice"
+                        }
+                    },
+                    "amount": {
+                        "key": "customer.rawMaterialExpenses[].amount",
+                        "title": "AMOUNT",
+                        "type": "amount"
+                    },
+                    "freequency": {
+                        "key": "customer.rawMaterialExpenses[].frequency",
+                        "title": "FREQUENCY",
+                        "type": "select",
+                        "enumCode": "frequency"
+
+                    },
+                    "rawMaterialDate": {
+                        "key": "customer.rawMaterialExpenses[].rawMaterialDate",
+                        "title": "DATE",
+                        "type": "date"
+                    },
+                    "invoiceDocId": {
+                        "key": "customer.rawMaterialExpenses[].invoiceDocId",
+                        "title": "PURCHASE_BILLS",
+                        "category": "Loan",
+                        "subCategory": "DOC1",
+                        "type": "file",
+                        "fileType": "application/pdf",
+                        "using": "scanner"
+                    }
+                }
+            },
+             "currentAsset": {
+                "key": "customer.currentAssets",
+                "type": "array",
+                "startEmpty": true,
+                "title": "IREP_CRNT_ASSET",
+                "items": {
+                    "assetType": {
+                        "key": "customer.currentAssets[].assetType",
+                        "type": "select",
+                        "enumCode": "current_asset_type",
+                        "title": "CRNT_ASSET_TYPE"
+                    },
+                    "value": {
+                        "key": "customer.currentAssets[].assetValue",
+                        "type": "string",
+                        "title": "CRNT_ASSET_VAL"
+                    }
+                }
+            },
+            "rawMaterial": {
+                "key": "customer.enterprise.rawMaterial",
+                "title": "RAW_MATERIAL",
+                "type": "amount"
+            },
+            "workInProgress": {
+                "key": "customer.enterprise.workInProgress",
+                "title": "WIP",
+                "type": "amount"
+            },
+            "finishedGoods": {
+                "key": "customer.enterprise.finishedGoods",
+                "title": "FINISHED_GOODS",
+                "type": "amount"
+            }
+        }
+    },
+    "FamilyDetails": {
+        "type": "box",
+        "title": "FAMILY_DETAILS",
+        "orderNo": 50,
+        "items": {
+            "familyMembers": {
+                "key": "customer.familyMembers",
+                "type": "array",
+                "startEmpty": true,
+                "items": {
+                    "relationShip": {
+                        "key": "customer.familyMembers[].relationShip",
+                        "type": "select",
+                        "title": "T_RELATIONSHIP"
+                    },
+                    "familyMemberFirstName": {
+                        "key": "customer.familyMembers[].familyMemberFirstName",
+                        "title": "FAMILY_MEMBER_FULL_NAME"
+                    },
+                    "dateOfBirth": {
+                        "key": "customer.familyMembers[].dateOfBirth",
+                        "title": "FAMILY_MEMBER_DATE_OF_BIRTH",
+                        "type": "date"
+                    },
+                    "educationStatus": {
+                        "key": "customer.familyMembers[].educationStatus",
+                        "type": "select",
+                        "title": "T_EDUCATION_STATUS"
+                    },
+                    "anualEducationFee": {
+                        "key": "customer.familyMembers[].anualEducationFee",
+                        "type": "amount",
+                        "title": "ANNUAL_EDUCATION_FEE"
+                    },
+                    "salary": {
+                        "key": "customer.familyMembers[].salary",
+                        "type": "amount",
+                        "title": "SALARY"
+                    },
+                    "maritalStatus": {
+                        "key":"customer.familyMembers[].maritalStatus",
+                        "type": "select",
+                        "title": "MARITAL_STATUS"
+
+                    },
+                    "incomes": {
+                        "key": "customer.familyMembers[].incomes",
+                        "type": "array",
+                        "startEmpty": true,
+                        "items": {
+                            "incomeSource": {
+                                "key": "customer.familyMembers[].incomes[].incomeSource",
+                                "title":"INCOME_SOURCE",
+                                "type": "select",
+                                "enumCode": "occupation"
+                            },
+                            "incomeType": {
+                                "key": "",
+                                "title": "INCOME_TYPE",
+                                "type": "select",
+                                "enumCode": "income_types"
+                            },
+                            "incomeEarned": {
+                                "key": "customer.familyMembers[].incomes[].incomeEarned"
+                            },
+                            "frequency": {
+                                "key": "customer.familyMembers[].incomes[].frequency",
+                                "type": "select"
+                            }
+                        }
+                    },
+                    "noOfDependents": {
+                        "key": "customer.familyMembers[].noOfDependents",
+                        "type": "number",
+                        "title": "NO_OF_DEPENDENTS"
+                    }
+                }
+            }
+        }
+    },
+    "Liabilities": {
+        "type": "box",
+        "title": "HOUSEHOLD_LIABILITIES",
+        "orderNo": 70,
+        "items": {
+            "liabilities": {
+                "key": "customer.liabilities",
+                "type": "array",
+                "startEmpty": true,
+                "title": "HOUSEHOLD_LIABILITIES",
+                "items": {
+                    "liabilityType": {
+                        "key": "customer.liabilities[].liabilityType",
+                        "title": "CUSTOMER_LIABILITY_TYPE",
+                        "type": "select",
+                        "orderNo": 8,
+                        "enumCode": "customer_liability_type"
+                    },
+                    "loanType": {
+                        "key": "customer.liabilities[].loanType",
+                        "type": "select",
+                        "enumCode": "liability_loan_type",
+                        "orderNo": 9
+                    },
+                    "loanSourceCategory": {
+                        "key": "customer.liabilities[].loanSourceCategory",
+                        "type":"select",
+                        "orderNo": 10
+                    },
+                    "loanSource": {
+                        "key": "customer.liabilities[].loanSource",
+                        "type": "select",
+                        "enumCode": "loan_source",
+                        "orderNo": 11
+                    },
+                    "loanAmountInPaisa": {
+                        "key": "customer.liabilities[].loanAmountInPaisa",
+                        "type": "amount",
+                        "orderNo": 20
+                    },
+                    "installmentAmountInPaisa": {
+                        "key": "customer.liabilities[].installmentAmountInPaisa",
+                        "type": "amount",
+                        "title": "AVG_INSTALLEMENT_AMOUNT",
+                        "orderNo": 30
+                    },
+                    "outstandingAmountInPaisa": {
+                        "key": "customer.liabilities[].outstandingAmountInPaisa",
+                        "type": "amount",
+                        "title": "OUTSTANDING_AMOUNT",
+                        "orderNo": 40
+                    },
+                    "startDate": {
+                        "key": "customer.liabilities[].startDate",
+                        "type": "date",
+                        "orderNo": 50
+                    },
+                    "maturityDate": {
+                        "key": "customer.liabilities[].maturityDate",
+                        "type": "date",
+                        "orderNo": 60
+                    },
+                    "noOfInstalmentPaid": {
+                        "key": "customer.liabilities[].noOfInstalmentPaid",
+                        "type": "number",
+                        "title": "NO_OF_INSTALLMENT_PAID",
+                        "orderNo": 70
+                    },
+                    "frequencyOfInstallment": {
+                        "key": "customer.liabilities[].frequencyOfInstallment",
+                        "type": "select",
+                        "orderNo": 80
+                    },
+                    "liabilityLoanPurpose": {
+                        "key": "customer.liabilities[].liabilityLoanPurpose",
+                        "orderNo": 90
+                    },
+                    "interestOnly": {
+                        "key": "customer.liabilities[].interestOnly",
+                        "type": "radios",
+                        "title": "INTEREST_ONLY",
+                        "enumCode": "decisionmaker",
+                        "orderNo": 100
+                    },
+                    "interestRate": {
+                        "key": "customer.liabilities[].interestRate",
+                        "type": "number",
+                        "title": "RATE_OF_INTEREST",
+                        "orderNo": 110
+                    },
+                    "proofDocuments": {
+                        "key": "customer.liabilities[].proofDocuments",
+                        "title": "DOCUMENTS",
+                        "category": "Loan",
+                        "subCategory": "DOC1",
+                        "type": "file",
+                        "fileType": "application/pdf",
+                        "using": "scanner",
+                        "orderNo": 120
+                    }
+                }
+            }
+        }
+    },
+    "HouseVerification": {
+        "type": "box",
+        "title": "T_HOUSE_VERIFICATION",
+        "orderNo": 80,
+        "items": {
+            "ownership": {
+                "key": "customer.ownership",
+                "type": "select"
+            },
+            "inCurrentAddressSince": {
+                "key": "customer.inCurrentAddressSince",
+                "type": "select",
+                "title": "IN_CURRENT_ADDRESS_SINCE"
+            },
+            "inCurrentAreaSince": {
+                "key": "customer.inCurrentAreaSince",
+                "type": "select",
+                "title": "IN_CURRENT_AREA_SINCE"
+            },
+            "latitude": {
+                "key": "customer.latitude",
+                "title": "HOUSE_LOCATION",
+                "type": "geotag",
+                "latitude": "customer.latitude",
+                "longitude": "customer.longitude"
+            },
+            "houseVerificationPhoto": {
+                "key": "customer.houseVerificationPhoto",
+                "type": "file",
+                "fileType": "image/*"
+            },
+            "date": {
+                "key": "customer.date",
+                "type": "date"
+            },
+            "place": {
+                "key": "customer.place"
+            },
+            "distanceFromBranch": {
+                "key": "customer.distanceFromBranch",
+                "type": "select",
+                "title": "DISTANCE_FROM_BRANCH",
+                "enumCode": "loan_distance_from_branch"
+            },
+            "monthlyRent": {
+                "key": "customer.monthlyRent",
+                "type": "number",
+                "title": "MONTHLY_RENT"
+            },
+            "previousRentDetails": {
+                "key": "customer.previousRentDetails",
+                "title": "PREVIOUS_RENT_DEATLS"
+            },
+            "houseDetailsFieldSet": {
+                "type":"fieldset",
+                "title":"HOUSE_DETAILS",
+                "items":[
+                ]
+            }
+        }
+    },
+    "PhysicalAssets": {
+        "type": "box",
+        "title": "PHYSICAL_ASSETS",
+        "orderNo": 150,
+        "items": {
+            "physicalAssets": {
+                "key": "customer.physicalAssets",
+                "type": "array",
+                "startEmpty": true,
+                "title": "PHYSICAL_ASSETS",
+                "items": {
+                    "assetType": {
+                        "key": "customer.physicalAssets[].assetType",
+                        "title": "ASSET_TYPE",
+                        "type": "select",
+                        "enumCode": "asset_type"
+                    },
+                    "nameOfOwnedAsset": {
+                        "key": "customer.physicalAssets[].nameOfOwnedAsset",
+                        "title": "NAME_OF_OWNED_ASSET",
+                        "type": "select",
+                        "enumCode": "physical_asset_name"
+                    },
+                    "vehicleModel": {
+                        "key": "customer.physicalAssets[].vehicleModel",
+                        "title": "VEHICLE_MAKE_MODEL",
+                        "type": "string"
+                    },
+                    "numberOfOwnedAsset": {
+                        "key": "customer.physicalAssets[].numberOfOwnedAsset",
+                        "type":"number",
+                        "title": "NUMBER_OF_OWNED_ASSET"
+                    },
+                    "registeredOwner": {
+                        "key": "customer.physicalAssets[].registeredOwner",
+                        "title": "REGISTERED_OWNER",
+                        "type": "string"
+                    },
+                    "ownedAssetValue": {
+                        "key": "customer.physicalAssets[].ownedAssetValue",
+                        "title": "VALUE_OF_THE_ASSET",
+                        "type": "amount"
+                    },
+                    "unit": {
+                        "key": "customer.physicalAssets[].unit",
+                        "title": "AREA_UNITS_OF_ASSETS",
+                        "type": "number"
+                    }
+                }
+            }
+        }
+    },
+    "EmployeeDetails": {
+        "type": "box",
+        "title": "EMPLOYEE_DETAILS",
+        "orderNo": 30,
+        "items": {
+            "noOfFemaleEmployees": {
+                "key": "customer.enterprise.noOfFemaleEmployees",
+                "title": "NO_OF_MALE_EMPLOYEES",
+                "type": "number"
+            },
+            "noOfMaleEmployees": {
+                "key": "customer.enterprise.noOfMaleEmployees",
+                "title": "NO_OF_FEMALE_EMPLOYEES",
+                "type": "number"
+            },
+            "avgMonthlySalary": {
+                "key": "customer.enterprise.avgMonthlySalary",
+                "title": "AVERAGE_MONTHLY_SALARY",
+                "type": "amount"
+            }
+        }
+    },
+    "ProxyIndicators": {
+        "type": "box",
+        "title": "PROXY_INDICATORS",
+        "items": {
+            "properAndMatchingSignboard": {
+                "key": "customer.properAndMatchingSignboard",
+                "title": "PROPER_MATCHING_SIGNBOARD",
+                "type": "select",
+                "enumCode": "decisionmaker"
+            },
+            "bribeOffered": {
+                "key": "customer.bribeOffered",
+                "title": "BRIBE_OFFERED",
+                "type": "select",
+                "enumCode": "decisionmaker"
+            },
+            "shopOrganized": {
+                "key": "customer.shopOrganized",
+                "title": "SHOP_SHED_ORGANIZED",
+                "type": "select",
+                "enumCode": "status_scale_2"
+            },
+            "isIndustrialArea": {
+                "key": "customer.isIndustrialArea",
+                "title": "IN_INDUSTRIAL_AREA",
+                "type": "select",
+                "enumCode": "decisionmaker"
+            },
+            "customerAttitudeToKinara": {
+                "key": "customer.customerAttitudeToKinara",
+                "title": "CUSTOMER_ATTITUDE_TO_KINARA",
+                "type": "select",
+                "enumCode": "status_scale_2"
+            },
+            "bookKeepingQuality": {
+                "key": "customer.bookKeepingQuality",
+                "title": "BOOK_KEEPING_QUALITY",
+                "type": "select",
+                "enumCode": "status_scale_2"
+            },
+            "challengingChequeBounce": {
+                "key": "customer.challengingChequeBounce",
+                "title": "CHALLENGING_CHEQUE_BOUNCE/FESS_CHARGE/POLICIES",
+                "type": "select",
+                "enumCode": "decisionmaker"
+            },
+            "allMachinesAreOperational": {
+                "key": "customer.allMachinesAreOperational",
+                "title": "ALL_MACHINES_OPERATIONAL?",
+                "type": "select",
+                "enumCode": "decisionmaker"
+            },
+            "employeeSatisfaction": {
+                "key": "customer.employeeSatisfaction",
+                "title": "EMPLOYEE_SATISFACTION",
+                "type": "select",
+                "enumCode": "status_scale_2"
+            },
+            "politicalOrPoliceConnections": {
+                "key": "customer.politicalOrPoliceConnections",
+                "title": "POLITICAL_POLICE_CONNECTIONS",
+                "type": "select",
+                "enumCode": "decisionmaker"
+            },
+            "multipleProducts": {
+                "key": "customer.multipleProducts",
+                "title": "MULTIPLE_PRODUCTS_MORE_THAN_3",
+                "type": "select",
+                "enumCode": "decisionmaker"
+            },
+            "multipleBuyers": {
+                "key": "customer.multipleBuyers",
+                "title": "MULTIPLE_BUYERS_MORE_THAN_3",
+                "condition": "model.customer.enterprise.businessType == 'Manufacturing'",
+                "type": "select",
+                "enumCode": "decisionmaker"
+            },
+            "seasonalBusiness": {
+                "key": "customer.seasonalBusiness",
+                "title": "SEASONAL_BUSINESS",
+                "type": "select",
+                "enumCode": "decisionmaker"
+            },
+            "incomeStability": {
+                "key": "customer.incomeStability",
+                "title": "INCOME STABILITY",
+                "type": "select",
+                "enumCode": "income_stability"
+            },
+            "utilisationOfBusinessPremises": {
+                "key": "customer.utilisationOfBusinessPremises",
+                "title": "UTILIZATION_OF_BUSINESS_PREMISES ",
+                "type": "select",
+                "enumCode": "utilisation_of_business"
+            },
+            "approachForTheBusinessPremises": {
+                "key": "customer.approachForTheBusinessPremises",
+                "title": "APPROACH_FOR_THE_BUSINESS_PREMISES",
+                "type": "select",
+                "enumCode": "status_scale_2"
+            },
+            "safetyMeasuresForEmployees": {
+                "key": "customer.safetyMeasuresForEmployees",
+                "title": "SAFETY_MEASURES_FOR_EMPLOYEES",
+                "type": "select",
+                "enumCode": "decisionmaker"
+            },
+            "childLabours": {
+                "key": "customer.childLabours",
+                "title": "CHILD_LABOURERS",
+                "type": "select",
+                "enumCode": "decisionmaker"
+            },
+            "isBusinessEffectingTheEnvironment": {
+                "key": "customer.isBusinessEffectingTheEnvironment",
+                "title": "IS_THE_BUSSINESS_IN_EFFECTING_ENVIRONMENT",
+                "type": "select",
+                "enumCode": "decisionmaker"
+            },
+            "stockMaterialManagement": {
+                "key": "customer.stockMaterialManagement",
+                "title": "STOCK_MATERIAL_MANAGEMENT",
+                "type": "select",
+                "enumCode": "status_scale_2"
+            },
+            "customerWalkinToBusiness": {
+                "key": "customer.customerWalkinToBusiness",
+                "condition": "model.customer.enterprise.businessType == 'Trading'",
+                "title": "CUSTOMER_WALK_IN_TO_THE_BUSINESS",
+                "type": "select",
+                "enumCode": "status_scale"
+            },
+            "businessSignboardImage": {
+                "key": "customer.businessSignboardImage",
+                "title": "SIGN_BOARD",
+                "category": "Loan",
+                "subCategory": "DOC1",
+                "type": "file",
+                "fileType": "application/pdf",
+                "using": "scanner"
+            }
+        }
+    },
+    "TrackDetails": {
+        "type": "box",
+        "title": "TRACK_DETAILS",
+        "orderNo": 80,
+        "items": {
+            "vehiclesOwned": {
+                "key": "customer.vehiclesOwned",
+                "type": "number",
+                "title": "No of Vehicles owned by customer"
+            },
+            "vehiclesFinanced": {
+                "key": "customer.vehiclesFinanced",
+                "type": "number",
+                "title": "No of Vehicles financed"
+            },
+            "vehiclesFree": {
+                "key": "customer.vehiclesFree",
+                "type": "number",
+                "title": "No of Vehicles Free"
+            }
+        }
+    },
+    "CommercialCBCheck": {
+        "type": "box",
+        "title": "COMMERCIAL_CB_CHECK",
+        "items": {
+            "enterpriseBureauDetails": {
+                "key": "customer.enterpriseBureauDetails",
+                "title": "CB Check",
+                "type": "array",
+                "items": {
+                    "bureau": {
+                        "key": "customer.enterpriseBureauDetails[].bureau",
+                        "title": "BUREAU",
+                        "type": "select",
+                        "titleMap": {
+                            "CIBIL": "CIBIL",
+                            "Highmark": "Highmark"
+                        }
+                    },
+                    "fileId": {
+                        "key": "customer.enterpriseBureauDetails[].fileId",
+                        "title": "FILE",
+                        "type": "file",
+                        "fileType": "application/pdf",
+                        "using": "scanner"
+                    },
+                    "doubtful": {
+                        "key": "customer.enterpriseBureauDetails[].doubtful",
+                        "title": "DOUBTFUL_ACS",
+                        "type": "number"
+                    },
+                    "loss": {
+                        "key": "customer.enterpriseBureauDetails[].loss",
+                        "title": "LOSS_ACS",
+                        "type": "number"
+                    },
+                    "specialMentionAccount": {
+                        "key": "customer.enterpriseBureauDetails[].specialMentionAccount",
+                        "title": "SPECIAL_MENTION_ACS",
+                        "type": "number"
+                    },
+                    "standard": {
+                        "key": "customer.enterpriseBureauDetails[].standard",
+                        "title": "STANDARD_ACS",
+                        "type": "number"
+                    },
+                    "subStandard": {
+                        "key": "customer.enterpriseBureauDetails[].subStandard",
+                        "title": "SUB_STANDARD_ACS",
+                        "type": "number"
+                    }
+                }
+            }
+        }
+    },
+    "BuyerDetails": {
+        "type": "box",
+        "title": "CUSTOMER_BUYER_DETAILS",
+        "items": {
+            "buyerDetails": {
+                "key": "customer.buyerDetails",
+                "type": "array",
+                "startEmpty": true,
+                "title": "BUYER_DETAILS",
+                "items": {
+                    "buyerName": {
+                        "key": "customer.buyerDetails[].buyerName",
+                        "title": "BUYER_NAME",
+                        "type": "string"
+                    },
+                    "customerSince": {
+                        "key": "customer.buyerDetails[].customerSince",
+                        "title": "CUSTOMER_SINCE",
+                        "type": "number"
+                    },
+                    "paymentDate": {
+                        "key": "customer.buyerDetails[].paymentDate",
+                        "title": "PAYMET_DATE",
+                        "type": "date"
+                    },
+                    "paymentFrequency": {
+                        "key": "customer.buyerDetails[].paymentFrequency",
+                        "title": "PAYMENT_FREQUENCY",
+                        "type": "select",
+                        "enumCode": "payment_frequency"
+                    },
+                    "paymentTerms": {
+                        "key": "customer.buyerDetails[].paymentTerms",
+                        "title": "PAYEMNT_TERMS",
+                        "type": "select",
+                        "enumCode": "payment_terms"
+                    },
+                    "product": {
+                        "key": "customer.buyerDetails[].product",
+                        "title": "PRODUCT",
+                        "type": "string"
+                    },
+                    "sector": {
+                        "key": "customer.buyerDetails[].sector",
+                        "title": "SECTOR",
+                        "type": "select",
+                        "enumCode": "businessSector"
+                    },
+                    "subSector": {
+                        "key": "customer.buyerDetails[].subSector",
+                        "title": "SUBSECTOR",
+                        "type": "select",
+                        "parentEnumCode": "businessSector",
+                        "enumCode": "businessSubSector"
+                    },
+                    "receivablesOutstanding": {
+                        "key": "customer.buyerDetails[].receivablesOutstanding",
+                        "title": "RECEIVABLES_OUTSTANDING_CUSTOMER_CREDIT",
+                        "type": "number"
+                    }
+                }
+            }
+        }
+    },
+    "SuppliersDeatils": {
+        "type": "box",
+        "title": "SUPPLIERS_DEATILS",
+        "items": {
+            "supplierDetails": {
+                "key": "customer.supplierDetails",
+                "title": "SUPPLIERS_DEATILS",
+                "startEmpty": true,
+                "type": "array",
+                "items": {
+                    "supplierName": {
+                        "key": "customer.supplierDetails[].supplierName",
+                        "title": "SUPPLIERS_NAME",
+                        "type": "string"
+                    },
+                    "supplierType": {
+                        "key": "customer.supplierDetails[].supplierType",
+                        "title": "TYPE",
+                        "type": "select",
+                        "enumCode": "supplier_type"
+                    },
+                    "paymentTerms": {
+                        "key": "customer.supplierDetails[].paymentTerms",
+                        "title": "PAYMENT_TERMS_IN_DAYS",
+                        "type": "select",
+                        "enumCode": "payment_terms"
+                    },
+                    "amount": {
+                        "key": "customer.supplierDetails[].amount",
+                        "title": "PAYABLE_OUTSTANDING",
+                        "type": "amount"
+                    }
+                }
+            }
+        }
+    },
+    "Machinery": {
+        "type": "box",
+        "title": "MACHINERY",
+        "items": {
+            "fixedAssetsMachinaries": {
+                "key": "customer.fixedAssetsMachinaries",
+                "type": "array",
+                "startEmpty": true,
+                "title": "MACHINERY_SECTION",
+                "items": {
+                    "machineDescription": {
+                        "key": "customer.fixedAssetsMachinaries[].machineDescription",
+                        "title": "MACHINE_DESCRIPTION",
+                        "type": "string"
+                    },
+                    "manufacturerName": {
+                        "key": "customer.fixedAssetsMachinaries[].manufacturerName",
+                        "title": "MANUFACTURER_NAME",
+                        "type": "string"
+                    },
+                    "machineType": {
+                        "key": "customer.fixedAssetsMachinaries[].machineType",
+                        "title": "MACHINE_TYPE",
+                        "type": "select",
+                        "enumCode": "collateral_type"
+                    },
+                    "machineModel": {
+                        "key": "customer.fixedAssetsMachinaries[].machineModel",
+                        "title": "MACHINE_MODEL",
+                        "type": "string"
+                    },
+                    "serialNumber": {
+                        "key": "customer.fixedAssetsMachinaries[].serialNumber",
+                        "title": "SERIAL_NUMBER",
+                        "type": "string"
+                    },
+                    "purchasePrice": {
+                        "key": "customer.fixedAssetsMachinaries[].purchasePrice",
+                        "title": "PURCHASE_PRICE",
+                        "type": "amount",
+                        "required": true
+                    },
+                    "machinePurchasedYear": {
+                        "key": "customer.fixedAssetsMachinaries[].machinePurchasedYear",
+                        "title": "MACHINE_PURCHASED_YEAR",
+                        "type": "number"
+                    },
+                    "presentValue": {
+                        "key": "customer.fixedAssetsMachinaries[].presentValue",
+                        "title": "PRESSENT_VALUE",
+                        "type": "amount",
+                        "required": true
+                    },
+                    "isTheMachineNew": {
+                        "key": "customer.fixedAssetsMachinaries[].isTheMachineNew",
+                        "title": "IS_THE_MACHINE_NEW",
+                        "type": "select",
+                        "enumCode": "decisionmaker"
+                    },
+                    "fundingSource": {
+                        "key": "customer.fixedAssetsMachinaries[].fundingSource",
+                        "title": "FUNDING_SOURCE",
+                        "type": "select",
+                        "enumCode": "machinery_funding_source"
+                    },
+                    "isTheMachineHypothecated": {
+                        "key": "customer.fixedAssetsMachinaries[].isTheMachineHypothecated",
+                        "title": "IS_THE_MACHINE_HYPOTHECATED",
+                        "type": "radios",
+                        "enumCode": "decisionmaker"
+                    },
+                    "hypothecatedTo": {
+                        "key": "customer.fixedAssetsMachinaries[].hypothecatedTo",
+                        "title": "HYPOTHECATED_TO",
+                        "type": "string",
+                        "condition": "model.customer.fixedAssetsMachinaries[arrayIndex].isTheMachineHypothecated=='YES'"
+                    },
+                    "hypothecatedToUs": {
+                        "key": "customer.fixedAssetsMachinaries[].hypothecatedToUs",
+                        "title": "CAN_BE_HYPOTHECATED_TO_US",
+                        "type": "radios",
+                        "enumCode": "decisionmaker",
+                        "condition": "model.customer.fixedAssetsMachinaries[arrayIndex].isTheMachineHypothecated=='NO'"
+                    },
+                    "machinePermanentlyFixedToBuilding": {
+                        "key": "customer.fixedAssetsMachinaries[].machinePermanentlyFixedToBuilding",
+                        "title": "MACHINE_PERMANENTLY_FIXED_TO_BUILDING",
+                        "type": "radios",
+                        "enumCode": "decisionmaker"
+                    },
+                    "machineBillsDocId": {
+                        "key": "customer.fixedAssetsMachinaries[].machineBillsDocId",
+                        "title": "MACHINE_BILLS",
+                        "category": "Loan",
+                        "subCategory": "DOC1",
+                        "type": "file",
+                        "fileType": "application/pdf",
+                        "using": "scanner"
+                    },
+                    "machineImage": {
+                        "key": "customer.fixedAssetsMachinaries[].machineImage",
+                        "title": "MACHINE_IMAGE",
+                        "category": "Loan",
+                        "subCategory": "DOC1",
+                        "type": "file",
+                        "fileType": "application/pdf",
+                        "using": "scanner"
+                    }
+                }
+            }
+        }
+    },
+    "LenderContactDetails": {
+        "type": "box",
+        "title": "CONTACT_DETAILS",
+        "orderNo": 20,
+        "items": {
+            "LenderContactDetails": {
+                "key": "customer.lenderContactDetails",
+                "type": "array",
+                "title": "CONTACT_DETAILS",
+                "items": {
+                    "contactPersonName": {
+                        "key": "customer.lenderContactDetails[].contactPersonName",
+                        "title": "CONTACT_PERSON_NAME",
+                        "type": "string",
+                        "orderNo": 9
+                    },
+                    "designation": {
+                        "key": "customer.lenderContactDetails[].designation",
+                        "title": "DESIGNATION",
+                        "type":"string",
+                        "orderNo": 10
+                    },
+                    "mobilePhone1": {
+                        "key": "customer.lenderContactDetails[].mobilePhone1",
+                        "title": "mobilePhone",
+                        "type": "string",
+                        "inputmode": "number",
+                        "numberType": "tel",
+                        "orderNo": 11
+                    },
+                    "mobilePhone2": {
+                        "key": "customer.lenderContactDetails[].mobilePhone2",
+                        "title": "MOBILE_NUMBER2",
+                        "type": "string",
+                        "inputmode": "number",
+                        "numberType": "tel",
+                        "orderNo": 20
+                    },
+                    "whatsappNo": {
+                        "key": "customer.lenderContactDetails[].whatsappNo",
+                        "type": "string",
+                        "title": "WHATSAPP_MOBILE_NO",
+                        "inputmode": "number",
+                        "numberType": "tel",
+                        "orderNo": 30
+                    },
+                    "landLineNo": {
+                        "key": "customer.lenderContactDetails[].landLineNo",
+                        "title": "LAND_LINE_NUMBER",
+                        "type": "string",
+                        "inputmode": "number",
+                        "numberType": "tel",
+                        "orderNo": 40
+                    },
+                    "faxNo": {
+                        "key": "customer.lenderContactDetails[].faxNo",
+                        "title": "FAX_NUMBER",
+                        "type": "string",
+                        "inputmode": "number",
+                        "orderNo": 50
+                    },
+                    "emailId": {
+                        "key": "customer.lenderContactDetails[].emailId",
+                        "title": "EMAIL",
+                        "type": "email",
+                        "pattern": "^\\S+@\\S+$",
+                        "orderNo": 60
+                    }
+                }
+            }
+        }
+    },
+    "LenderInformation": {
+        "type": "box",
+        "title": "LENDER_INFORMATION",
+        "orderNo": 80,
+        "items": {
+            "firstName": {
+                "key": "customer.firstName",
+                "title": "LENDER_NAME",
+                "type": "string"
+            },
+            "source": {
+                "key": "customer.source",
+                "title": "SOURCE_THROUGH",
+                "type": "select",
+                "enumCode": "lender_source"
+            },
+            "lenderType": {
+                "key": "customer.lenderType",
+                "title": "LENDER_TYPE",
+                "type": "select",
+                "enumCode": "loan_source_category"
+            },
+            "businessConstitution": {
+                "key": "customer.enterprise.businessConstitution",
+                "title": "CONSTITUTION",
+                "type": "select",
+                "enumCode": "constitution"
+            },
+            "companyOperatingSince": {
+                "key": "customer.enterprise.companyOperatingSince",
+                "title": "OPERATING_SINCE",
+                "type": "date"
+            }
+        }
+    },
+    "TangibleNetWorth": {
+        "type": "box",
+        "title": "TANGIBLE_NET_WORTH",
+        "orderNo" : 85,
+        "items": {
+            "enterpriseNetworth": {
+                "key": "customer.enterpriseNetworth",
+                "type": "array",
+                "title": "TANGIBLE_NET_WORTH",
+                "startEmpty" : true,
+                "items": {
+                    "financialYear": {
+                        "key": "customer.enterpriseNetworth[].financialYear",
+                        "type": "date",
+                        "title": "FINANCIAL_YEAR",
+                        "required": true
+                    },
+                    "tangibleNetworth": {
+                          "key": "customer.enterpriseNetworth[].tangibleNetworth",
+                          "type": "number",
+                          "title": "TANGIBLE_NET_WORTH",
+                          "required": true
+                    }
+                }
+            }
+        }
+    },
+    "EnterpriseDocuments": {
+        "type": "box",
+        "title": "INCOME_DOCUMENT",
+        "orderNo": 86,
+        "items": {
+            "enterpriseDocuments":{
+                "type":"array",
+                "title": "INCOME_DOCUMENT",
+                "key": "customer.enterpriseDocuments",
+                "startEmpty": true,
+                "items": {
+                    "docType": {
+                        "type": "select",
+                        "enumCode": "income_doc_type",
+                        "title": "DOCUMENT_TYPE",
+                        "key": "customer.enterpriseDocuments[].docType",
+                        "required": true
+                    },
+                    "fileId": {
+                        "key": "customer.enterpriseDocuments[].fileId",
+                        "type": "file",
+                        "title": "DOCUMENT_UPLOAD",
+                        "category": "CustomerEnrollment",
+                        "subCategory": "PHOTO",
+                        "required": true
+                    }
+                }
+            }
+        }
+    }
+}

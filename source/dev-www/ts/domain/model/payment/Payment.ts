@@ -1,0 +1,55 @@
+import { Type } from "class-transformer";
+
+export class Payment {
+	accountNumber: string;
+    amount: number;
+    beneficiaryAccountName: string;
+    beneficiaryAccountNumber: string;
+    beneficiaryBankBranch: string;
+    beneficiaryBankCode: string;
+    beneficiaryBankName: string;
+    beneficiaryEmailId: string;
+    beneficiaryIfsc: string;
+    beneficiaryMobileNumber: string;
+    beneficiaryName: string;
+    beneficiaryTransactionParticulars: string;
+    beneficiaryTransactionRemarks: string;
+    branchId: number;
+    centreId: number;
+    currentStage: string;
+    debitAccountName: string;
+    debitAccountNumber: string;
+    debitMobileNumber: string;
+    debitTransactionParticulars: string;
+    debitTransactionRemarks: string;
+    dispatchId: string;
+    errorCode: string;
+    errorDescription: string;
+    fileId: string;
+    id: number;
+    issueBranchCode: string;
+    journalTransactionId: string;
+    modeOfPayment: string;
+    paymentDate: string;
+    paymentPurpose: string;
+    paymentStatus: string;
+    ponum: string;
+    responseReferenceNumber: string;
+    rptCode: string;
+    rrn: string;
+    transactionId: string;
+    transactionName: string;
+    transactionTime: Date;
+    transactionType: string;
+    udf1: string;
+    udf2: string;
+    udf3: string;
+    udf4: string;
+    udf5: string;
+    udfDate1: string;
+    udfDate2: string;
+    udfDate3: string;
+    utrReferenceNumber: string;
+    version: number;
+}
+

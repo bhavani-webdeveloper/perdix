@@ -1,0 +1,615 @@
+
+export interface UserDefinedDateFieldValues {
+}
+
+export interface UserDefinedFieldValues {
+}
+
+export interface AccountUserDefinedFields {
+    accountNumber: string;
+    id: number;
+    loanId: number;
+    userDefinedDateFieldValues: UserDefinedDateFieldValues;
+    userDefinedFieldValues: UserDefinedFieldValues;
+    version: number;
+}
+
+export interface BcAccount {
+    accountNumber: string;
+    agreementFileId: string;
+    agreementFileName: string;
+    agreementStatus: string;
+    agreementStatusUpdatedBy: string;
+    agreementStatusUpdatedOn: Date;
+    applicationNumber: string;
+    axisAccountNoUpdatedBy: string;
+    axisAccountNoUpdatedOn: string;
+    axisAccountNumber: string;
+    axisAccountOpeningDate: string;
+    axisLoanAmount: number;
+    barcode: string;
+    bcAccountNo: string;
+    bcProductCode: string;
+    cmsDisbursementDate: string;
+    custIdSentStatus: boolean;
+    fldgFlag: boolean;
+    fldgUpdatedAt: string;
+    fldgUpdatedBy: string;
+    id: number;
+    installmentAmountInPaisa: number;
+    lastInstallmentAmountInPaisa: number;
+    loanId: number;
+    maritalStatus: string;
+    newProcess: string;
+    nomineeId: number;
+    numberOfInstallments: number;
+    outstandingLoanAmount: string;
+    spouseDateOfBirth: string;
+    spouseFirstName: string;
+    spouseLastName: string;
+    spouseMiddleName: string;
+    version: number;
+}
+
+export interface Collateral {
+    accountNumber: string;
+    collateral1FilePath: string;
+    collateral2FilePath: string;
+    collateral3FilePath: string;
+    collateralDescription: string;
+    collateralType: string;
+    collateralValue: number;
+    electricityAvailable: string;
+    expectedIncome: number;
+    expectedPurchaseDate: string;
+    hypothecatedToBank: string;
+    id: number;
+    loanId: number;
+    loanToValue: number;
+    machineAttachedToBuilding: string;
+    machineOld: boolean;
+    manufacturer: string;
+    marginValue: number;
+    modelNo: string;
+    photoFilePath: string;
+    quantity: number;
+    serialNo: string;
+    spaceAvailable: string;
+    totalValue: number;
+    version: number;
+}
+
+export interface DisbursementSchedule {
+    accountNumber: string;
+    actualDisbursementDate: string;
+    bookedNotDueNormalInterestPayment: string;
+    bookedNotDuePenalInterestPayment: string;
+    currentStage: string;
+    customerAccountNumber: string;
+    customerBankBranchName: string;
+    customerBankName: string;
+    customerName: string;
+    customerNameInBank: string;
+    customerSignatureDate: string;
+    disbursedAmount: number;
+    disbursementAmount: number;
+    disbursementFromBankAccountNumber: string;
+    feeAmountPayment: string;
+    fpVerified: boolean;
+    id: number;
+    ifscCode: string;
+    latitude: string;
+    loanId: number;
+    longitude: string;
+    modeOfDisbursement: string;
+    moratoriumPeriodInDays: number;
+    normalInterestDuePayment: string;
+    overrideCheckerRemarks: string;
+    overrideRequestRemarks: string;
+    overrideRequested: boolean;
+    overrideStatus: string;
+    partnerAccountNumber: string;
+    party: string;
+    penalInterestDuePayment: string;
+    photoImageId: string;
+    principalDuePayment: string;
+    referenceDate: string;
+    referenceNumber: string;
+    remarks1: string;
+    remarks2: string;
+    responseCode: string;
+    scheduledDisbursementDate: string;
+    tranchCondition: string;
+    trancheNumber: string;
+    transactionId: string;
+    udf1: string;
+    udf2: string;
+    udf3: string;
+    udf4: string;
+    udf5: string;
+    udfDate1: string;
+    udfDate2: string;
+    udfDate3: string;
+    udfDate4: string;
+    udfDate5: string;
+    version: number;
+}
+
+export interface Guarantor {
+    accountNumber: string;
+    address: string;
+    assetDetails: string;
+    dscIntegrationId: number;
+    guaCustomerId: number;
+    guaDob: string;
+    guaDscOverride: boolean;
+    guaDscRemarks: string;
+    guaFirstName: string;
+    guaLastName: string;
+    guaMiddleName: string;
+    guaUrnNo: string;
+    id: number;
+    loanId: number;
+    relationFirstName: string;
+    relationLastName: string;
+    relationMiddleName: string;
+    relationship: string;
+    totalLiabilities: number;
+    version: number;
+}
+
+export interface JewelLoanDetails {
+    accountNumber: string;
+    authenticationRegisterId: number;
+    encoreClosed: boolean;
+    id: number;
+    jewelLoanEligibleMarketRate: number;
+    jewelPouchLocationId: number;
+    jewelPouchLocationType: string;
+    jewelPouchMovementId: number;
+    jewelPouchNo: string;
+    loanId: number;
+    ratePerGram22CaratInPaisa: number;
+    transitRequest: boolean;
+    version: number;
+}
+
+export interface LoanCentre {
+    centreId: number;
+    id: number;
+    loanId: number;
+}
+
+export interface LoanCustomerRelation {
+    customerId: number;
+    id: number;
+    loanId: number;
+    psychometricCompleted: string;
+    psychometricRequired: string;
+    relation: string;
+    relationshipWithApplicant: string;
+    urn: string;
+    version: number;
+}
+
+export interface LoanDocument {
+    accountNumber: string;
+    disbursementId: number;
+    document: string;
+    documentId: string;
+    documentStatus: string;
+    id: number;
+    loanId: number;
+    rejectReason: string;
+    remarks: string;
+    version: number;
+}
+
+export interface LoanInsurance {
+    accountNumber: string;
+    applicationDate: string;
+    id: number;
+    insuranceCompany: string;
+    insuranceExpiryDate: string;
+    insuranceFrom: string;
+    insuranceHypothecation: boolean;
+    insuranceId: number;
+    insuranceType: string;
+    insurerId: number;
+    loanId: number;
+    rfidTag: string;
+    sumInsured: number;
+    version: number;
+}
+
+export interface LoanMitigant {
+    id: number;
+    loanId: number;
+    mitigant: string;
+    parameter: string;
+    riskScore: string;
+    version: number;
+}
+
+export interface Nominee {
+    accountNumber: string;
+    familyMemberName: string;
+    guardianAddressSameAsCustomer: boolean;
+    guardianDOB: string;
+    guardianDistrict: string;
+    guardianDoorNo: string;
+    guardianFirstName: string;
+    guardianGender: string;
+    guardianLastName: string;
+    guardianLocality: string;
+    guardianMiddleName: string;
+    guardianPincode: string;
+    guardianRelationWithMinor: string;
+    guardianState: string;
+    guardianStreet: string;
+    guardianTitle: string;
+    id: number;
+    loanId: number;
+    nomineeAddressSameAsCustomer: boolean;
+    nomineeDOB: string;
+    nomineeDistrict: string;
+    nomineeDoorNo: string;
+    nomineeFirstName: string;
+    nomineeGender: string;
+    nomineeLastName: string;
+    nomineeLocality: string;
+    nomineeMiddleName: string;
+    nomineeMinor: boolean;
+    nomineePincode: string;
+    nomineeRelationship: string;
+    nomineeState: string;
+    nomineeStreet: string;
+    version: number;
+}
+
+export interface OrnamentsAppraisal {
+    accountNumber: string;
+    grossWeightInGrams: number;
+    id: number;
+    jewelDefects: string;
+    loanId: number;
+    marketValueInPaisa: number;
+    netWeightInGrams: number;
+    noOfArticles: number;
+    ornamentsDescription: string;
+    qualityInCarats: number;
+    ratePerGram22CaratInPaisa: number;
+    ratePerGramInPaisa: number;
+    stoneDescription: string;
+    version: number;
+}
+
+export interface VehiclePastValuation {
+    financier: string;
+    id: number;
+    loanId: number;
+    valuation: number;
+    valuationDate: string;
+    vehicleLoanId: number;
+    version: number;
+}
+
+export interface VehicleLoanDetails {
+    accessories: string;
+    accessoriesStatus: boolean;
+    accident: boolean;
+    accidentRemarks: string;
+    airbag: boolean;
+    bankReferenceNumber: string;
+    batteryCondition: string;
+    batteryRemarks: string;
+    bodyCondition: string;
+    bodyRemarks: string;
+    bodyType: string;
+    chasisCondition: string;
+    chasisNo: string;
+    chasisRemarks: string;
+    colour: string;
+    cubicCapacity: number;
+    currentInvoiceValue: number;
+    currentMarketValue: number;
+    distressValue: number;
+    electricalPartsCondition: string;
+    electricalPartsRemarks: string;
+    engineCondition: string;
+    engineNo: string;
+    engineRemarks: string;
+    engineStarted: boolean;
+    estimatedReading: number;
+    fitnesscertifiedUpto: string;
+    fogLampCondition: string;
+    fogLampRemarks: string;
+    fuelUsed: string;
+    futureLife: number;
+    gearBoxCondition: string;
+    gearBoxremarks: string;
+    hypothecatedTo: string;
+    id: number;
+    inspectedBy: string;
+    inspectionAltitude: string;
+    inspectionDate: string;
+    inspectionLatitude: string;
+    inspectionLongitude: string;
+    insuranceCompany: string;
+    insuranceIdv: number;
+    insurancePolicyNumber: string;
+    insurancePolicyType: string;
+    insuranceValidTo: string;
+    lhFrontCondition: string;
+    lhFrontMake: string;
+    lhRearCondition: string;
+    lhRearMake: string;
+    lightWiringCondition: string;
+    lightWiringRemarks: string;
+    loanId: number;
+    majorRepair: boolean;
+    make: string;
+    makersClassification: string;
+    modelUnderProduction: boolean;
+    numberPlateCOlour: string;
+    odometer: string;
+    odometerReading: number;
+    operationroute: string;
+    originalInvoiceValue: number;
+    ownerSerialNo: string;
+    paintCondition: string;
+    paintRemarks: string;
+    permitStatus: string;
+    permitValidUpto: string;
+    photoFileId1: string;
+    photoFileId10: string;
+    photoFileId2: string;
+    photoFileId3: string;
+    photoFileId4: string;
+    photoFileId5: string;
+    photoFileId6: string;
+    photoFileId7: string;
+    photoFileId8: string;
+    photoFileId9: string;
+    photoRemarks1: string;
+    photoRemarks10: string;
+    photoRemarks2: string;
+    photoRemarks3: string;
+    photoRemarks4: string;
+    photoRemarks5: string;
+    photoRemarks6: string;
+    photoRemarks7: string;
+    photoRemarks8: string;
+    photoRemarks9: string;
+    photoType1: string;
+    photoType10: string;
+    photoType2: string;
+    photoType3: string;
+    photoType4: string;
+    photoType5: string;
+    photoType6: string;
+    photoType7: string;
+    photoType8: string;
+    photoType9: string;
+    powerSteering: boolean;
+    powerWindowFont: boolean;
+    powerWindowRear: boolean;
+    previousRegistrationNumber: string;
+    proposedOwnerName: string;
+    rcbookStatus: boolean;
+    reRegistered: boolean;
+    recommendationDate: string;
+    recommendationRemarks: string;
+    recommendationStatus: string;
+    registeredAddress: string;
+    registeredOwnerName: string;
+    registrationAsPerActual: string;
+    registrationAsPerRcbook: string;
+    registrationDate: string;
+    registrationNumber: string;
+    rhFrontCondition: string;
+    rhFrontMake: string;
+    rhRearMake: string;
+    rhrearCondition: string;
+    seatingCapacity: string;
+    steeringCondiiton: string;
+    steeringRemarks: string;
+    suspensionCondition: string;
+    suspensionRemarks: string;
+    taxPaid: string;
+    taxValidUpto: string;
+    trailer: string;
+    transimissionCondition: string;
+    transmission: string;
+    transmissionRemarks: string;
+    tyreRemarks: string;
+    tyreType: string;
+    unladenWeight: number;
+    upholsteryCondition: string;
+    upholsteryRemarks: string;
+    usedFor: string;
+    valuationDate: string;
+    valuationPlace: string;
+    valuationPurpose: string;
+    valuationRating: string;
+    variant: string;
+    vehicleClass: string;
+    vehicleMoved: boolean;
+    vehiclePastValuations: VehiclePastValuation[];
+    version: number;
+}
+
+export interface LoanAccount {
+    accountNumber: string;
+    accountUserDefinedFields: AccountUserDefinedFields;
+    annualizedPercentage: number;
+    applicant: string;
+    applicationFileId: string;
+    applicationFileName: string;
+    applicationStatus: string;
+    applicationStatusUpdatedBy: string;
+    applicationStatusUpdatedOn: Date;
+    assetAvailableForHypothecation: string;
+    bankId: number;
+    bcAccount: BcAccount;
+    borrowerIlliterate: boolean;
+    branchCode: string;
+    branchId: number;
+    chk1FileUploadId: string;
+    chk1UploadFilePath: string;
+    closed: boolean;
+    coApplicant: string;
+    coBorrowerUrnNo: string;
+    collateral: Collateral[];
+    collectionAccountNumber: string;
+    collectionAccountType: string;
+    collectionBankBranchName: string;
+    collectionBankName: string;
+    collectionCustomerNameAsInBank: string;
+    collectionIfscCode: string;
+    collectionPaymentType: string;
+    commercialCibilCharge: number;
+    currentStage: string;
+    customerBank: string;
+    customerBankAccountNumber: string;
+    customerBankIfscCode: string;
+    customerBranch: string;
+    customerId: number;
+    customerPortfolioInsurancePremium: number;
+    customerSignDateExpected: string;
+    dealIrr: number;
+    disbursedAmountInPaisa: number;
+    disbursementFromBankAccountNumber: string;
+    disbursementSchedules: DisbursementSchedule[];
+    doCustomerLoanAmount: number;
+    doCustomerProcessingFee: number;
+    dob: string;
+    documentTracking: string;
+    dsaPayout: number;
+    dscIntegrationId: number;
+    dscLoanAmount: number;
+    dscOverride: boolean;
+    dscOverrideRemarks: string;
+    emiPaymentDateRequested: string;
+    emiRequested: number;
+    endTime: Date;
+    estimatedDateOfCompletion: string;
+    estimatedEmi: number;
+    estimatedValueOfAssets: number;
+    expectedCommercialCibilCharge: number;
+    expectedIncrementalIncome: number;
+    expectedInterestRate: number;
+    expectedInterestSaving: number;
+    expectedJobCreation: number;
+    expectedPortfolioInsurancePremium: number;
+    expectedProcessingFeePercentage: number;
+    fee3: number;
+    fee4: number;
+    fee5: number;
+    fileNumber: number;
+    firstRepaymentDate: string;
+    frequency: string;
+    frequencyRequested: string;
+    gstNumber: string;
+    guarantors: Guarantor[];
+    husbandOrFatherFirstName: string;
+    husbandOrFatherLastName: string;
+    husbandOrFatherMiddleName: string;
+    id: number;
+    insuranceFee: number;
+    insuranceRateCode: string;
+    insuranceType: string;
+    interestRate: number;
+    isNpa: boolean;
+    isRestructure: boolean;
+    jewelLoanDetails: JewelLoanDetails;
+    lastStageChangedAt: Date;
+    leadId: number;
+    linkedAccountNumber: string;
+    literateWitnessFirstName: string;
+    literateWitnessLastName: string;
+    literateWitnessMiddleName: string;
+    loanAmount: number;
+    loanAmountRequested: number;
+    loanApplicationDate: string;
+    loanCentre: LoanCentre;
+    loanClosedAt: Date;
+    loanClosedBy: string;
+    loanCustomerRelations: LoanCustomerRelation[];
+    loanCycle: number;
+    loanDisbursementDate: string;
+    loanDocuments: LoanDocument[];
+    loanInsurance: LoanInsurance;
+    loanMitigants: LoanMitigant[];
+    loanPurpose1: string;
+    loanPurpose2: string;
+    loanPurpose3: string;
+    loanToValue: number;
+    loanType: string;
+    maxEmi: number;
+    nominees: Nominee[];
+    numberOfDisbursed: number;
+    numberOfDisbursements: number;
+    oldAccountNO: string;
+    originalAccountNumber: string;
+    ornamentsAppraisals: OrnamentsAppraisal[];
+    otherFee: number;
+    partnerAccountNumber: string;
+    partnerApprovalStatus: string;
+    partnerCode: string;
+    partnerLoanAmount: number;
+    partnerProcessingFee: number;
+    partnerRemarks: string;
+    pendingApproval: string;
+    percentageIncreasedIncome: number;
+    percentageInterestSaved: number;
+    portfolioInsurancePremium: number;
+    portfolioInsurancePremiumCalculated: string;
+    portfolioInsuranceServiceCharge: number;
+    portfolioInsuranceServiceTax: number;
+    portfolioInsuranceUrn: string;
+    preEmi: number;
+    processType: string;
+    processingFeeInPaisa: number;
+    processingFeePercentage: number;
+    processingFeeServiceTax: number;
+    productCategory: string;
+    productCode: string;
+    productType: string;
+    proposedHires: string;
+    psychometricCompleted: string;
+    rejectReason: string;
+    relation: string;
+    sanctionDate: string;
+    sbAccountNo: string;
+    scheduleStartDate: string;
+    screeningDate: string;
+    securityDepositAllowed: boolean;
+    securityEmi: number;
+    securityEmiRequired: string;
+    spousePortfolioInsurancePremium: number;
+    startTime: Date;
+    status: string;
+    tenure: string;
+    tenureInYears: number;
+    tenureRequested: number;
+    urnNo: string;
+    valuator: string;
+    vehicleLoanDetails: VehicleLoanDetails;
+    version: number;
+    witnessFirstName: string;
+    witnessLastName: string;
+    witnessMiddleName: string;
+    witnessRelationship: string;
+    wmName: string;
+}
+
+export interface RootObject {
+    loanAccount: LoanAccount;
+    loanProcessAction: string;
+    remarks: string;
+    stage: string;
+}
+
+
+
