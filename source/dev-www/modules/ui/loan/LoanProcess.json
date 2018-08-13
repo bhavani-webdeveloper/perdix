@@ -363,7 +363,7 @@
             "udf8": {
                 "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf8",
                 "title" : "ELIGIBLE_DISPOSABLE_INCOME",
-                "type": "string"
+                "type": "number"
             },
             "udf3": {
                 "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf3",
