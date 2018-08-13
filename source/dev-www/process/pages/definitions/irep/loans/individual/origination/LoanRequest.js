@@ -369,6 +369,8 @@ define([],function(){
                                 "DeductionsFromLoan",
                                 "NomineeDetails.nominees.nomineeButton",
                                 "LoanMitigants",
+                                "LoanRecommendation.udf7",
+                                "LoanRecommendation.udf3",
                     "LoanMitigants.deviationParameter"             
                             ],
                             "overrides": {
@@ -408,6 +410,8 @@ define([],function(){
                                 "ProposedUtilizationPlan",
                                 "LoanSanction",
                                 "LoanMitigants",
+                                "LoanRecommendation.udf7",
+                                "LoanRecommendation.udf3",
                     "LoanMitigants.deviationParameter",
                                 "PreliminaryInformation.actualAmountRequired",
                                 "PreliminaryInformation.fundsFromDifferentSources",
@@ -521,6 +525,12 @@ define([],function(){
                                     "orderNo": 6,
                                     "readonly": true
                                 },
+                                "LoanRecommendation.udf7":{
+                                    "readonly": true
+                                },
+                                "LoanRecommendation.udf3":{
+                                    "readonly": true
+                                },
                                 "CollateralDetails": {
                                     "orderNo": 7,
                                     "readonly": true
@@ -548,6 +558,12 @@ define([],function(){
                             "overrides": {
                                 "PreliminaryInformation": {
                                     "orderNo": 1,
+                                    "readonly": true
+                                },
+                                "LoanRecommendation.udf7":{
+                                    "readonly": true
+                                },
+                                "LoanRecommendation.udf3":{
                                     "readonly": true
                                 },
                                 "LoanCustomerRelations": {
@@ -592,7 +608,7 @@ define([],function(){
                         "PreliminaryInformation.linkedAccountNumber": {
                             "resolver": "LinkedAccountNumberLOVConfiguration"
                         },
-                        "PreliminaryInformation.udf7": {
+                        "LoanRecommendation.udf7": {
                             "title": "ELIGIBLE_DISPOSABLE_INCOME",
                             "onChange": function(modelValue, form, model, formCtrl, event) {                                
                                 var eligibleDi = modelValue * podiValue / 100;
@@ -605,7 +621,7 @@ define([],function(){
                                 model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf3 = Math.round(maximumLoanEligible);  
                             }                          
                         },
-                        "PreliminaryInformation.udf3": {
+                        "LoanRecommendation.udf3": {
                              "title": "MAXIMUM_ELIGIBLE_LOAN",
                              "readonly":true
                         },
@@ -688,8 +704,7 @@ define([],function(){
                     "PreliminaryInformation.expectedPortfolioInsurancePremium",
                     "PreliminaryInformation.actualAmountRequired",
                     "PreliminaryInformation.fundsFromDifferentSources",
-                    "PreliminaryInformation.udf7",
-                    "PreliminaryInformation.udf3",
+                    
 
                     "LoanCustomerRelations",
                     "LoanCustomerRelations.loanCustomerRelations",
@@ -726,6 +741,9 @@ define([],function(){
                     "LoanRecommendation.processingFeePercentage",
                     "LoanRecommendation.securityEmiRequired",
                     "LoanRecommendation.commercialCibilCharge",
+                    "LoanRecommendation.udf7",
+                    "LoanRecommendation.udf3",
+
                     "LoanSanction",
                     "LoanSanction.sanctionDate",
                     "LoanSanction.numberOfDisbursements",
