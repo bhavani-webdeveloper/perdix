@@ -176,15 +176,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                     p1.then(function(repo) {
                         var formRequest = {
                             "overrides": {
-                                "BankAccounts.customerBankAccounts.accountNumber": {
-                                    "type": "password",
-                                    "required": true
-                                },
-                                "BankAccounts.customerBankAccounts.confirmedAccountNumber": {
-                                    "type": "string",
-                                    "title": "CONFIRMED_ACCOUNT_NUMBER",
-                                    "required": true
-                                },
                                 "ContactInformation.locality": {
                                     "readonly": true
                                 },
@@ -228,6 +219,25 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                             });
                                         }
                                     }
+                                },
+                                "BankAccounts.customerBankAccounts.accountNumber": {
+                                    "type": "password",
+                                    "pattern": "^[0-9a-zA-Z]+$",
+                                    "required": true
+                                },
+                                "BankAccounts.customerBankAccounts.customerBankName": {
+                                    "type": "string",
+                                    "readonly": true
+                                },
+                                "BankAccounts.customerBankAccounts.customerBankBranchName": {
+                                    "type": "string",
+                                    "readonly": true
+                                },
+                                "BankAccounts.customerBankAccounts.confirmedAccountNumber": {
+                                    "type": "string",
+                                    "title": "CONFIRMED_ACCOUNT_NUMBER",
+                                    "required": true,
+                                    "pattern": "^[0-9a-zA-Z]+$",
                                 },
                                 "EnterpriseInformation.customerId": {
                                     type: "lov",

@@ -184,6 +184,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                             model.agent.customerId = valueObj.id;
                         }
                     },
+                    "AgentEmployees.agentEmployees" :{
+                        "startEmpty" : false
+                    },
+                    "AgentFeeDetails.agentFeeDetails" :{
+                        "startEmpty" : false
+                    },
                     "AgentEmployees.agentEmployees.agentId": {
                         type: "lov",
                         "orderNo": 5,
@@ -233,7 +239,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                     "AgentFeeDetails.agentFeeDetails.feeAmount": {
                         "key": "agent.feeAmount",
                         "title": "FEE_AMOUT",
-                        "type": "amount"
+                        "type": "amount",
+                        "required" : true
+                    },
+                    "AgentFeeDetails.agentFeeDetails.feeName" :{
+                        "required" : true
                     },
                     "AgentEmployees.agentEmployees.agentType": {
                         "title": "AGENT_TYPE",
@@ -304,6 +314,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                 return [
                     "AgentInformation",
                     "AgentInformation.agentId1",
+                    "AgentInformation.customerId",
+
                     "AgentEmployees",
                     "AgentEmployees.agentEmployees",
                     "AgentEmployees.agentEmployees.agentId",
@@ -312,6 +324,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                     "AgentEmployees.agentEmployees.agentType",
                     "AgentEmployees.agentEmployees.companyName",
                     "AgentEmployees.agentEmployees.designation",
+
                     "AgentFeeDetails",
                     "AgentFeeDetails.agentFeeDetails",
                     "AgentFeeDetails.agentFeeDetails.feeAmount",
@@ -319,7 +332,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                     "AgentFeeDetails.agentFeeDetails.feeType",
                     "AgentFeeDetails.agentFeeDetails.frequency",
                     "AgentFeeDetails.agentFeeDetails.dateOfIncorporation",
-                    "AgentInformation.customerId",
+                    
                     "PostReview",
                     "PostReview.action",
                     "PostReview.proceed",
@@ -376,17 +389,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                     "title": "PERSIONAL_INFORMATION",
                                     "orderNo": 10,
                                     "items": {
-                                        "customerId": {
-                                            "key": "agent.customerId",
+                                        "entityId": {
+                                            "key": "agent.entityId",
                                             "title": "ENTITY_ID",
                                             "readonly": true
-                                        },
-                                        "agentId1": {
-                                            "key": "agent.id",
-                                            "title": "AGENT_ID",
-                                            "type": "integer",
-                                            "readonly": true,
-                                            "orderNo": 10
                                         }
                                     }
                                 },
@@ -411,7 +417,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                 "PostReview": {
                                     "type": "box",
                                     "title": "POST_REVIEW",
-                                    "condition": "model.agentProcess.agent.id && !(model.agentProcess.agent.currentStage == 'AgentInitiation')",
+                                    "condition": "model.agentProcess.agent.id && model.agentProcess.agent.currentStage !== 'AgentInitiation' && model.agentProcess.agent.currentStage !== 'Rejected'",
                                     "orderNo": 600,
                                     "items": {
                                         "action": {
@@ -518,18 +524,19 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                             },
                             "additions": [{
                                 "type": "actionbox",
-                                // "condition": "model.customer.currentStage && model.customer.id",
                                 "orderNo": 1200,
                                 "items": [{
                                     "type": "button",
                                     "title": "SAVE",
                                     "onClick": "actions.save(model, formCtrl, form, $event)"
-                                }, {
-                                    "type": "button",
-                                    "title": "PROCEED",
-                                    "condition": "model.agentProcess.agent.id && !(model.agentProcess.agent.currentStage == 'AgentInitiation')",
-                                    "onClick": "actions.proceed(model, formCtrl, form, $event)"
-                                }]
+                                }
+                                // , {
+                                //     "type": "button",
+                                //     "title": "PROCEED",
+                                //     "condition": "model.agentProcess.agent.id && !(model.agentProcess.agent.currentStage == 'AgentInitiation' && model.agentProcess.agent.currentStage == 'Rejected')",
+                                //     "onClick": "actions.proceed(model, formCtrl, form, $event)"
+                                // }
+                                ]
                             }]
                         }
                     }

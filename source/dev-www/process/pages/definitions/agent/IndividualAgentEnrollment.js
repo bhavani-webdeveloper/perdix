@@ -81,6 +81,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                         "key": "agent.agentCompanyId",
                         "title": "AGENT_ENTERPRISE_ID"
                     },
+                    "AgentFeeDetails.agentFeeDetails" :{
+                        "startEmpty" : false
+                    },
+                    "AgentFeeDetails.agentFeeDetails.feeName" :{
+                        "required" : true
+                    },
+                    "AgentFeeDetails.agentFeeDetails.feeAmount" :{
+                        "required" : true
+                    },
                     "AgentInformation.agentType": {
                         "title": "AGENT_TYPE",
                         "type": "select",
@@ -122,7 +131,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                     "PostReview.reject.rejectButton",
                     "PostReview.hold",
                     "PostReview.hold.remarks",
-                    "PostReview.hold.holdButton"
+                    "PostReview.hold.holdButton",
+                    ""
+
                 ];
 
             }
@@ -171,10 +182,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                         }
                                     }
                                 },
+
                                 "PostReview": {
                                     "type": "box",
                                     "title": "POST_REVIEW",
-                                    "condition": "model.agentProcess.agent.id && !(model.agentProcess.agent.currentStage == 'AgentInitiation')",
+                                    "condition": "model.agentProcess.agent.id && model.agentProcess.agent.currentStage !== 'AgentInitiation' && model.agentProcess.agent.currentStage !== 'Rejected'",
                                     "orderNo": 600,
                                     "items": {
                                         "action": {
@@ -281,18 +293,19 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                             },
                             "additions": [{
                                 "type": "actionbox",
-                                // "condition": "model.customer.currentStage && model.customer.id",
                                 "orderNo": 1200,
                                 "items": [{
                                     "type": "button",
                                     "title": "SAVE",
                                     "onClick": "actions.save(model, formCtrl, form, $event)"
-                                }, {
-                                    "type": "button",
-                                    "title": "PROCEED",
-                                    "condition": "model.agentProcess.agent.id && !(model.agentProcess.agent.currentStage == 'AgentInitiation')",
-                                    "onClick": "actions.proceed(model, formCtrl, form, $event)"
-                                }]
+                                }
+                                // {
+                                //     "type": "button",
+                                //     "title": "PROCEED",
+                                //     "condition": "model.agentProcess.agent.id && !(model.agentProcess.agent.currentStage == 'AgentInitiation' && model.agentProcess.agent.currentStage == 'Rejected')",
+                                //     "onClick": "actions.proceed(model, formCtrl, form, $event)"
+                                // }   
+                                ]
                             }]
                         }
                     }

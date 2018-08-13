@@ -21,7 +21,7 @@ define({
                 }
             },
             definition: {
-                title: "SEARCH_LEAD",
+                title: "SEARCH_AGENT",
                 searchForm: [
                     "*"
                 ],
