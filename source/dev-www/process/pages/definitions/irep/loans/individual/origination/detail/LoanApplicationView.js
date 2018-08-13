@@ -533,6 +533,17 @@ define({
                             "condition": "model.loanAccount.currentStage=='Evaluation'",
                             "title": "AVERAGE_MONTHLY_SALES",
                             "type": "amount"
+                        },{
+                            "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf8",
+                            "condition": "model.loanAccount.currentStage=='Evaluation'",
+                            "title": "ELIGIBLE_DISPOSABLE_INCOME",
+                            "type": "number"
+                        },{
+                            "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf3",
+                            "condition": "model.loanAccount.currentStage=='Evaluation'",
+                            "title": "MAXIMUM_ELIGIBLE_LOAN",
+                            "type": "number",
+                            "readonly": true 
                         }]
                     }]
                 }]

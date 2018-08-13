@@ -103,6 +103,9 @@
                                 "udf7": {
                                     "type": ["null", "number", "string"]
                                 },
+                                "udf8": {
+                                    "type": ["null", "number", "string"]
+                                },
                                 "udf3":{
                                     "type":["null","number", "string"]
                                 }

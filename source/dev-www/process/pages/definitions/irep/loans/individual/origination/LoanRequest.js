@@ -369,7 +369,7 @@ define([],function(){
                                 "DeductionsFromLoan",
                                 "NomineeDetails.nominees.nomineeButton",
                                 "LoanMitigants",
-                                "LoanRecommendation.udf7",
+                                "LoanRecommendation.udf8",
                                 "LoanRecommendation.udf3",
                     "LoanMitigants.deviationParameter"             
                             ],
@@ -410,7 +410,7 @@ define([],function(){
                                 "ProposedUtilizationPlan",
                                 "LoanSanction",
                                 "LoanMitigants",
-                                "LoanRecommendation.udf7",
+                                "LoanRecommendation.udf8",
                                 "LoanRecommendation.udf3",
                     "LoanMitigants.deviationParameter",
                                 "PreliminaryInformation.actualAmountRequired",
@@ -525,7 +525,7 @@ define([],function(){
                                     "orderNo": 6,
                                     "readonly": true
                                 },
-                                "LoanRecommendation.udf7":{
+                                "LoanRecommendation.udf8":{
                                     "readonly": true
                                 },
                                 "LoanRecommendation.udf3":{
@@ -560,7 +560,7 @@ define([],function(){
                                     "orderNo": 1,
                                     "readonly": true
                                 },
-                                "LoanRecommendation.udf7":{
+                                "LoanRecommendation.udf8":{
                                     "readonly": true
                                 },
                                 "LoanRecommendation.udf3":{
@@ -608,7 +608,7 @@ define([],function(){
                         "PreliminaryInformation.linkedAccountNumber": {
                             "resolver": "LinkedAccountNumberLOVConfiguration"
                         },
-                        "LoanRecommendation.udf7": {
+                        "LoanRecommendation.udf8": {
                             "title": "ELIGIBLE_DISPOSABLE_INCOME",
                             "onChange": function(modelValue, form, model, formCtrl, event) {                                
                                 var eligibleDi = modelValue * podiValue / 100;
@@ -741,7 +741,7 @@ define([],function(){
                     "LoanRecommendation.processingFeePercentage",
                     "LoanRecommendation.securityEmiRequired",
                     "LoanRecommendation.commercialCibilCharge",
-                    "LoanRecommendation.udf7",
+                    "LoanRecommendation.udf8",
                     "LoanRecommendation.udf3",
 
                     "LoanSanction",
