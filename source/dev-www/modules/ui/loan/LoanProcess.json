@@ -75,19 +75,7 @@
                 "title" : "FLAT_RATE",
                 "type": "string",
                 "orderNo" : 75
-            },
-            "udf7": {
-                "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf7",
-                "title" : "ELIGIBLE_DISPOSABLE_INCOME",
-                "type": "number",
-                "orderNo" : 150
-            },
-            "udf3": {
-                "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf3",
-                "type": "number",
-                "title":"MAXIMUM_ELIGIBLE_LOAN",
-                "orderNo" : 160
-            },
+            },           
             "expectedInterestRate": {
                 "key": "loanAccount.expectedInterestRate",
                 "type": "number",
@@ -371,6 +359,16 @@
                 "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6",
                 "type": "string",
                 "required": true
+            },
+            "udf8": {
+                "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf8",
+                "title" : "ELIGIBLE_DISPOSABLE_INCOME",
+                "type": "string"
+            },
+            "udf3": {
+                "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf3",
+                "type": "number",
+                "title":"MAXIMUM_ELIGIBLE_LOAN"
             },
             "processingFeePercentage": {
                 "key": "loanAccount.processingFeePercentage",
