@@ -554,7 +554,6 @@ define({
                         },{
                             "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf8",
                             "title": "ELIGIBLE_DISPOSABLE_INCOME",
-                            "type": "number",
                             "onChange": function(modelValue, form, model, formCtrl, event) {                                
                                 var eligibleDi = modelValue * podiValue / 100;
                                 var rate =  model.loanAccount.expectedInterestRate / 100;
@@ -567,8 +566,7 @@ define({
                             }
                         },{
                             "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf3",
-                            "title": "MAXIMUM_ELIGIBLE_LOAN",
-                            "type": "number",                            
+                            "title": "MAXIMUM_ELIGIBLE_LOAN",          
                             "readonly": true 
                         }]
                     }]
