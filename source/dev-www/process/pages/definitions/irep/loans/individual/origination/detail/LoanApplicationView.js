@@ -15,6 +15,24 @@ define({
 
             return irfElementsConfig.currency.iconHtml+irfCurrencyFilter(data, null, null, "decimal");
         }
+        var podiValue = SessionStore.getGlobalSetting("percentOfDisposableIncome");
+            //PMT calculation
+        var pmt = function(rate, nper, pv, fv, type) {
+            if (!fv) fv = 0;
+            if (!type) type = 0;
+
+            if (rate == 0) return -(pv + fv) / nper;
+
+            var pvif = Math.pow(1 + rate, nper);
+            var pmt = rate / (pvif - 1) * -(pv * pvif + fv);
+
+            if (type == 1) {
+                pmt /= (1 + rate);
+            };
+
+            return pmt;
+        }
+            //pmt function completed
 
             var getStageNameByStageCode = function(stageCode) {
                 var stageName = $filter('translate')(stageCode) || stageCode;
@@ -535,14 +553,22 @@ define({
                             "type": "amount"
                         },{
                             "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf8",
-                            "condition": "model.loanAccount.currentStage=='Evaluation'",
                             "title": "ELIGIBLE_DISPOSABLE_INCOME",
-                            "type": "number"
+                            "type": "number",
+                            "onChange": function(modelValue, form, model, formCtrl, event) {                                
+                                var eligibleDi = modelValue * podiValue / 100;
+                                var rate =  model.loanAccount.expectedInterestRate / 100;
+                                var ir = rate / 12;
+                                var tenure = model.loanAccount.tenureRequested; 
+                                var constant = 1; 
+                                var pmt1 = pmt(ir, tenure, constant, 0, 0);
+                                var maximumLoanEligible = eligibleDi / (-pmt(ir, tenure, constant, 0, 0)) * 1;
+                                model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf3 = Math.round(maximumLoanEligible);  
+                            }
                         },{
                             "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf3",
-                            "condition": "model.loanAccount.currentStage=='Evaluation'",
                             "title": "MAXIMUM_ELIGIBLE_LOAN",
-                            "type": "number",
+                            "type": "number",                            
                             "readonly": true 
                         }]
                     }]

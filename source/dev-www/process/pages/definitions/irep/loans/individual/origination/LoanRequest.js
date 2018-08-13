@@ -11,7 +11,7 @@ define([],function(){
                           irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch, IndividualLoan,
                           BundleManager, PsychometricTestService, LeadHelper, Message, $filter, Psychometric, IrfFormRequestProcessor, UIRepository, $injector, irfNavigator) {
             var branch = SessionStore.getBranch();
-            var podiValue = 50;
+            var podiValue = SessionStore.getGlobalSetting("percentOfDisposableIncome");
             //PMT calculation
             var pmt = function(rate, nper, pv, fv, type) {
                 if (!fv) fv = 0;

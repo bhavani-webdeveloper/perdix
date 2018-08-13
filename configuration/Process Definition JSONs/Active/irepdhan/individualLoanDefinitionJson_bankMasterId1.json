@@ -3414,7 +3414,7 @@
                   "title": "Business Income",
                   "type": "number",
                   "captureStages": [
-                     "KYC", "LoanInitiation", "PendingForPartner"
+                     "KYC", "LoanInitiation", "PendingForPartner", "Evaluation", "CreditCommitteeReview","Rejected"
                   ]
                },
                "udf4": {
@@ -3435,7 +3435,7 @@
                   "title": "Eligible Disposable Income",
                   "type": "string",
                   "captureStages": [
-                     "KYC", "LoanInitiation", "PendingForPartner"
+                    "Evaluation", "CreditCommitteeReview","Rejected"
                   ]
                }
             }
