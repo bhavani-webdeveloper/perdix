@@ -339,9 +339,9 @@
 // 	};
 // }]);
 
-irf.pageCollection.factory(irf.page("CustomerSearch"),
-["$log", "formHelper","filterFilter", "Enrollment","Queries","$q","$state", "SessionStore", "Utils", "PagesDefinition", "irfNavigator",
-function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionStore, Utils, PagesDefinition, irfNavigator){
+irf.pageCollection.factory(irf.page("sambandh.customer.CustomerSearchQueue"),
+["$log","PageHelper","CreditBureau","formHelper","filterFilter", "Enrollment","Queries","$q","$state", "SessionStore", "Utils", "PagesDefinition", "irfNavigator",
+function($log,PageHelper,CreditBureau,formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionStore, Utils, PagesDefinition, irfNavigator){
 	var branch = SessionStore.getBranch();
 	return {
 		"type": "search-list",
@@ -496,6 +496,7 @@ function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionSto
 					'kycNumber': searchOptions.kyc_no,
 					'lastName': searchOptions.lastName,
 					'urnNo': searchOptions.urnNo,
+					'stage':"Stage02"
 				}).$promise;
 
 				return promise;
@@ -682,7 +683,44 @@ function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionSto
 								});
 							},
 							isApplicable: function(item, model){
-								return ((model.siteCode === "saija" || model.siteCode === "sambandh") && item.currentStage === 'Stage02');
+								return ((model.siteCode === "saija") && item.currentStage === 'Stage02');
+							}
+						},
+						{
+							name: "Edit Customer",
+							desc: "",
+							icon: "fa fa-pencil",
+							fn: function(item, model){
+                            CreditBureau.listCreditBureauStatus({
+                                'branchName': item.kgfsName,
+                                'customerId': item.id
+                            }).$promise.then(function(res){
+                                if (res.body.length != 0) {
+                                    response = res.body[0];
+                                } else {
+                                    PageHelper.showProgress('CBCHECK', 'CBCHECK is not initiated.', 5000);
+                                }
+                            	if (response.status == 'PROCESSED') {
+                                    irfNavigator.go({
+                                        state: "Page.Engine",
+                                        pageName: "customer.IndividualEnrollmentStage2",
+                                        pageId: item.id,
+                                        pageData: {
+                                            currentStage: item.currentStage
+                                        }
+                                    });
+                                }
+                                else if(responsestatus == 'PENDING'){
+                                	PageHelper.showProgress('CBCHECK', 'CBCHECK is pending.Try again later', 5000);
+                                }
+                                
+                            	
+                            },function(err){
+                            	console.log(res)
+                            })
+							},
+							isApplicable: function(item, model){
+								return ((model.siteCode === "sambandh"));
 							}
 						}
 					];

@@ -861,7 +861,8 @@ function ($log, Enrollment, $state, $stateParams, Lead, LeadHelper, SessionStore
                                 "enumCode":undefined
                             },
                             condition: "model.lead.transactionType.toLowerCase()=='renewal'",
-                            readonly: true
+                            readonly: true,
+                            required:true
                         },
                         {
                             key: "lead.transactionType",
@@ -876,7 +877,8 @@ function ($log, Enrollment, $state, $stateParams, Lead, LeadHelper, SessionStore
                             "schema":{
                                 "enumCode":undefined
                             },
-                            condition: "model.lead.transactionType.toLowerCase()!='renewal'"
+                            condition: "model.lead.transactionType.toLowerCase()!='renewal'",
+                            required:true
                         },
                         {
                             key: "lead.linkedLoanAccountNo",
