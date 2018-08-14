@@ -42,20 +42,20 @@ function ($log, Enrollment, $state, $stateParams, Lead, LeadHelper, SessionStore
                             if (model.siteCode == 'sambandh' || model.siteCode == 'saija' || model.siteCode == 'IREPDhan') {
                                 model.lead.customerTypeString = model.lead.customerType;
                             }
-                        /* 1) Defaulting interestedInProduct to 'yes' for transaction type as renewal 
+                        /* 1) Defaulting interestedInProduct to 'yes' for transaction type as renewal
                            2) calling individualLoan search api to find the existing loan details where transaction type is renewal
                         */
                             if(model.lead.currentStage=="Inprocess" && model.lead.transactionType && model.lead.transactionType.toLowerCase() == 'renewal'){
-                                model.lead.interestedInProduct = 'YES';
                                 var p1 = IndividualLoan.search({
                                     accountNumber:model.lead.linkedLoanAccountNo
                                 }).$promise;
                                 p1.then(function(response, headerGetter){
-                                  model.linkedLoanAmount=response.body[0]['loanAmount'];
+                                  model.lead.loanAmountRequested=response.body[0]['loanAmount'];
+                                  model.linkedLoanAmount = model.lead.loanAmountRequested;
                                 },function(err){
                                     $log.info("leadGeneration Individual/find api failure" + err);
                                     PageHelper.showProgress("lead-generate", "Existing loan details not loaded", 5000);
-						            
+
                                 });
                             }
 
@@ -938,13 +938,6 @@ function ($log, Enrollment, $state, $stateParams, Lead, LeadHelper, SessionStore
                          }
                          },*/
                         {
-                            "key": "linkedLoanAmount",
-                            "type":"amount",
-                            "title": "Current loan Amount",
-                            condition: "model.lead.interestedInProduct=='YES' && model.lead.transactionType.toLowerCase()=='renewal'"
-
-                        },
-                        {
                             key: "lead.loanAmountRequested",
                             type: "amount",
                             condition: "model.lead.interestedInProduct==='YES'&& (model.lead.productSubCategory !== 'investment' || model.lead.transactionType=='Renewal')",
@@ -1343,8 +1336,8 @@ function ($log, Enrollment, $state, $stateParams, Lead, LeadHelper, SessionStore
                                 $state.go('Page.LeadDashboard', null);
                             });
                         } else {
-                            /* 1)validating before proceeding that loan amount requested should be greater then or equal 
-                                to existing loan amount in case of transaction renewal 
+                            /* 1)validating before proceeding that loan amount requested should be greater then or equal
+                                to existing loan amount in case of transaction renewal
                             */
                             if (model.linkedLoanAmount && model.lead.transactionType && model.lead.transactionType.toLowerCase() == 'renewal' && model.lead.loanAmountRequested < model.linkedLoanAmount) {
                                 var res = {
@@ -1362,7 +1355,7 @@ function ($log, Enrollment, $state, $stateParams, Lead, LeadHelper, SessionStore
                                 // Utils.removeNulls(resp.lead, true);
                                 // model.lead = resp.lead;
                             });
-                           
+
                         }
                     } else {
                         LeadHelper.saveData(reqData).then(function (res) {
