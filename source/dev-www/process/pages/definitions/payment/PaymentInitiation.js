@@ -14,6 +14,14 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                 var configFile = function() {                
                     return {
                         "payment.currentStage": {
+                            "PaymentInitiation":{
+                                "overrides": {
+                                },
+                                "excludes": [
+                                    "PaymentDetails.paymentDate"
+                                ]
+
+                            },
                             "PaymentRejected": {
                                 "overrides": {
                                     "PaymentDetails":{
@@ -100,10 +108,6 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                                         "readonly":true,
                                         "orderNo": 2
                                     },
-                                    "DebitAccountDetails.debitMobileNumber":{
-                                        "readonly":true,
-                                        "orderNo": 3
-                                    },  
                                     "DebitAccountDetails.debitTransactionParticulars":{                       
                                         "orderNo": 4,
                                         "readonly":true,
@@ -124,13 +128,8 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                                 ]
                             },
                             "PaymentApproval": {
-                                "overrides": {
-                                    "PaymentDetails":{
-                                        "orderNo": 20
-                                    },
-                
-                                    "PostReviewDecision.rejectsectionremarks":{
-                
+                                "overrides": {              
+                                    "PostReviewDecision.rejectsectionremarks":{                
                                         "condition": "model.payment.status=='REJECT'"
                                     },
                                     "PostReviewDecision.rejectsectionbutton":{
@@ -228,11 +227,7 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                                     "DebitAccountDetails.debitAccountNumber":{
                                         "readonly":true,
                                         "orderNo": 2
-                                    },
-                                    "DebitAccountDetails.debitMobileNumber":{
-                                        "readonly":true,
-                                        "orderNo": 3
-                                    },  
+                                    }, 
                                     "DebitAccountDetails.debitTransactionParticulars":{                                   "orderNo": 4
                                     },
                                     "DebitAccountDetails.debitTransactionRemarks":{                                       "orderNo": 5
@@ -241,6 +236,18 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                                         "resolver": "LoanAccountsLOVConfiguration",
                                         "readonly":true,
                                         "orderNo": 5                      
+                                    },                                    
+                                    "BeneficiaryDetails.beneficiaryTransactionParticulars": {
+                                        "readonly": true
+                                    },
+                                    "BeneficiaryDetails.beneficiaryTransactionRemarks": {
+                                        "readonly": true
+                                    },                                    
+                                    "DebitAccountDetails.debitTransactionParticulars": {
+                                        "readonly": true
+                                    },
+                                    "DebitAccountDetails.debitTransactionRemarks": {
+                                        "readonly": true
                                     }
     
                                 },
@@ -299,13 +306,6 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                     "BeneficiaryDetails.beneficiaryTransactionRemarks":{
                         "orderNo":110
                     },
-                    "DebitAccountDetails.debitMobileNumber":{
-                        "type":"number",
-                        "schema":{
-                            "pattern":"^[0-9]{10}$"
-                        }
-                    },
-
                     "DebitAccountDetails.debitAccountNumber":{
                         "readonly":true
                     },
@@ -344,6 +344,9 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                     },
                     "PostReviewDecision":{
                         "condition":"model.payment.currentStage == 'PaymentApproval'"  
+                    },
+                    "PaymentDetails.paymentDate": {
+                        "readonly": true
                     }             
                 };
             }
@@ -356,6 +359,7 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                     "PaymentDetails.paymentPurpose",
                     "PaymentDetails.accountNumber",
                     "PaymentDetails.transactionType",
+                    "PaymentDetails.paymentDate",
                     "BeneficiaryDetails",
                     "BeneficiaryDetails.beneficiaryName",
                     "BeneficiaryDetails.beneficiaryAccountName",
@@ -370,7 +374,6 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                     "DebitAccountDetails",
                     "DebitAccountDetails.debitAccountName",
                     "DebitAccountDetails.debitAccountNumber",
-                    "DebitAccountDetails.debitMobileNumber",
                     "DebitAccountDetails.debitTransactionParticulars",
                     "DebitAccountDetails.debitTransactionRemarks",
                     "PostReviewDecision",
@@ -400,7 +403,9 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                         obs.subscribe(function(res) {                            
                             model.PaymentProcess = res;
                             model.payment = res.payment;
-                    model.payment.transactionType = "Manual";  
+                        model.payment.transactionType = "Manual";  
+                        model.payment.currentStage = "PaymentInitiation";
+
                     UIRepository.getPaymentDetails().$promise
                     .then(function(repo) {
                         return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model)

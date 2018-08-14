@@ -25,12 +25,16 @@ define([], function() {
                     "CreateBatch.debitAccountName":{
                         "resolver": "PaymentBankAccountsLOVConfiguration"
                     },
+                    "CreateBatch.modeOfPayment": {
+                        "required": false
+                    }
                 }
             } 
             var getIncludes = function(model) {
                 return [                  
                     "CreateBatch",
                     "CreateBatch.paymentDate",
+                    "CreateBatch.modeOfPayment",
                     "CreateBatch.beneficiaryBankBranch",
                     "CreateBatch.spokeName",
                     "CreateBatch.debitAccountName",

@@ -1,7 +1,7 @@
-irf.pages.controller("PaymentDashboardCtrl", ['$log', '$scope', "formHelper", "$state", "$q", "Utils", 'PagesDefinition', 'SessionStore',"Payment",
+irf.pageCollection.controller(irf.controller("payment.PaymentDashboardCtrl"), ['$log', '$scope', "formHelper", "$state", "$q", "Utils", 'PagesDefinition', 'SessionStore',"Payment",
     function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionStore, Payment) {
         $log.info("Page.PaymentDashboard.html loaded");
-
+        $scope.$templateUrl = "process/pages/templates/Page.Dashboard.html";
         var fullDefinition = {
             "title": "PAYMENT_DASHBOARD",
             "iconClass": "fa fa-inr",
