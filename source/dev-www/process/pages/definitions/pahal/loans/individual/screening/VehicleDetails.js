@@ -793,7 +793,6 @@ define(
                                     model.loanAccount.vehicleLoanDetails.assetDetails = null;
                                     model.loanAccount.vehicleLoanDetails.assetSubDetails = null;
                                     model.loanAccount.vehicleLoanDetails.price = null;
-                                    model.loanAccount.vehicleLoanDetails.registrationNumber = null;
                                     model.loanAccount.vehicleLoanDetails.permitType = null;
                                     model.loanAccount.vehicleLoanDetails.insuredDeclaredValue = null;
                                     model.loanAccount.vehicleLoanDetails.viabilityCategory = null;

@@ -88,7 +88,7 @@ define([], function() {
                // Returns null if no acceptable result was found after 40 tries.
                return null;
             };
-            
+
             var configFile = function() {
                 return {
                     "loanProcess.loanAccount.currentStage": {
@@ -444,7 +444,24 @@ define([], function() {
                     "actionbox",
                     "actionbox.submit",
                     "actionbox.save",
-                    "actionbox.holdAction"
+                    "actionbox.holdAction",
+                    "actions",
+                    "actions.options",
+                    "actions.proceed",
+                    "actions.proceed.remarks",
+                    "actions.proceed.valuator",
+                    "actions.proceed.proceedButton",
+                    "actions.sendBack",
+                    "actions.sendBack.remarks",
+                    "actions.sendBack.stage",
+                    "actions.sendBack.sendBackButton",
+                    "actions.reject",
+                    "actions.reject.remarks",
+                    "actions.reject.rejectReason",
+                    "actions.reject.rejectButton",
+                    "actions.hold",
+                    "actions.hold.remarks",
+                    "actions.hold.holdButton"
                 ];
 
             }
