@@ -17,10 +17,10 @@
                             _.each(model.branchCollectionDetail,function(cashItems){
                                 model.loanCollectionDetail.totalCashCollected += cashItems.repaymentAmount;
                             })
-                        }
-                        if(model.loanCollectionDetail.totalCashCollected){
-                            var roundingPrecision = SessionStore.getGlobalSetting("currencyPrecision");
-                            model.loanCollectionDetail.totalCashCollected = _.round(model.loanCollectionDetail.totalCashCollected, roundingPrecision)
+                            if(model.loanCollectionDetail.totalCashCollected){
+                                var roundingPrecision = SessionStore.getGlobalSetting("currencyPrecision");
+                                model.loanCollectionDetail.totalCashCollected = _.round(model.loanCollectionDetail.totalCashCollected, roundingPrecision)
+                            }
                         }
                         if(model.branchCollectionDetail && model.branchCollectionDetail[0]['instrumentType']=='CHQ'){
                             model.loanCollectionDetail = {

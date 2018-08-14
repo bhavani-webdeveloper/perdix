@@ -59,12 +59,14 @@ define({
                     return formHelper;
                 },
                 getResultsPromise: function(searchOptions, pageOpts) {
-
+                    let temp = searchOptions.instrument;
+                    if(searchOptions.instrument == "Cheque")
+                        temp = 'CHQ';
                     var promise=LoanCollection.query({
                         'currentStage':"BranchDeposit",
                         'accountBranchId': searchOptions.branchName,
                         'accountCentreId': searchOptions.centreName,
-                        'instrumentType': searchOptions.instrument
+                        'instrumentType': temp
                     }).$promise;
 
                     return promise;
