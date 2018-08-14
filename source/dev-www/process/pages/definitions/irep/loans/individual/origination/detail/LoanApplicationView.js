@@ -558,7 +558,7 @@ define({
                                 var eligibleDi = modelValue * podiValue / 100;
                                 var rate =  model.loanAccount.expectedInterestRate / 100;
                                 var ir = rate / 12;
-                                var tenure = model.loanAccount.tenureRequested; 
+                                var tenure = model.loanAccount.tenure; 
                                 var constant = 1; 
                                 var pmt1 = pmt(ir, tenure, constant, 0, 0);
                                 var maximumLoanEligible = eligibleDi / (-pmt(ir, tenure, constant, 0, 0)) * 1;
