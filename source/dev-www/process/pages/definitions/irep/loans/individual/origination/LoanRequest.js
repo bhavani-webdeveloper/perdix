@@ -148,6 +148,12 @@ define([],function(){
                                     "orderNo": 1,
                                     "readonly": true
                                 },
+                                "LoanRecommendation.udf8":{
+                                    "readonly": true
+                                },
+                                "LoanRecommendation.udf3":{
+                                    "readonly": true
+                                },
                                 "LoanCustomerRelations": {
                                     "orderNo": 2,
                                     "readonly": true
