@@ -251,6 +251,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                         "enumCode": "agent_type",
                         "required":true
                     },
+                    "AgentFeeDetails.agentFeeDetails.frequency" :{
+                        "type": "select",
+                        "enumCode": "agent_frequency_type",
+                    },
                     "AgentInformation.agentId": {
                         type: "lov",
                         "orderNo": 5,
@@ -389,11 +393,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                     "title": "PERSIONAL_INFORMATION",
                                     "orderNo": 10,
                                     "items": {
-                                        "entityId": {
-                                            "key": "agent.entityId",
+                                        "customerId": {
+                                            "key": "agent.customerId",
                                             "title": "ENTITY_ID",
                                             "readonly": true
-                                        }
+                                        },
                                     }
                                 },
                                 "AgentEmployees": {

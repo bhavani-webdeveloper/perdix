@@ -96,6 +96,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                         "enumCode": "agent_type",
                         "required": true
                     },
+                    "AgentFeeDetails.agentFeeDetails.frequency" :{
+                        "type": "select",
+                        "enumCode": "agent_frequency_type",
+                    }
                 }
             }
 
