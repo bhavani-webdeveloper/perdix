@@ -115,6 +115,10 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                                     "DebitAccountDetails.debitTransactionRemarks":{                       
                                         "orderNo": 5,
                                         "readonly":true,
+                                    }, 
+                                    "PaymentDetails.customerId": {
+                                        "readonly": true,
+                                        "orderNo": 5
                                     },                 
                                     "PaymentDetails.accountNumber":{
                                         "resolver": "LoanAccountsLOVConfiguration",
@@ -231,12 +235,16 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                                     "DebitAccountDetails.debitTransactionParticulars":{                                   "orderNo": 4
                                     },
                                     "DebitAccountDetails.debitTransactionRemarks":{                                       "orderNo": 5
+                                    }, 
+                                    "PaymentDetails.customerId": {
+                                        "readonly": true,
+                                        "orderNo": 5
                                     },
                                     "PaymentDetails.accountNumber":{
                                         "resolver": "LoanAccountsLOVConfiguration",
                                         "readonly":true,
                                         "orderNo": 5                      
-                                    },                                    
+                                    },                                
                                     "BeneficiaryDetails.beneficiaryTransactionParticulars": {
                                         "readonly": true
                                     },
