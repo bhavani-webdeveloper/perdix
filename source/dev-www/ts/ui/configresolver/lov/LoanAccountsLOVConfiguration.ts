@@ -5,34 +5,35 @@ import {EnrolmentProcess} from '../../../domain/model/customer/EnrolmentProcess'
 import * as _ from 'lodash';
 export class LoanAccountsLOVConfiguration extends LOVElementConfiguration {
     outputMap: Object = {
-        "account_number": "payment.accountNumber",
-        "customer_id": "payment.customerId",
-        "id": "payment.loanId",
-        "first_name": "payment.beneficiaryName",
+        "accountNumber": "payment.accountNumber",
+        "loanId": "payment.loanId",
+        "customerName": "payment.beneficiaryName",
         "mobile_phone": "payment.beneficiaryMobileNumber",
         "mail": "payment.beneficiaryEmailId"
     };
 
-    search: Function = function(inputModel, form) {
-        let Queries = AngularResourceService.getInstance().getNGService("Queries");
+    search: Function = function(inputModel, form, model) {
+        /*let Queries = AngularResourceService.getInstance().getNGService("Queries");
         return Queries.getAccountDetails([inputModel.accountNumber]);
+*/
+        let IndividualLoan = AngularResourceService.getInstance().getNGService("IndividualLoan");
+        return IndividualLoan.search({urn: model.customer.urnNo}).$promise;
     };
 
     getListDisplayItem: Function =  function(data, index) {
-        console.log(data);
         return [
-            'Customer Name : ' + data.first_name,
-            'URN : ' + data.urn_no,
-            'Account Number : ' + data.account_number,
-            'Loan Amount : ' + data.loan_amount
+            'Account Number : ' + data.accountNumber,
+            'Loan Amount : ' + data.loanAmount
         ];
     };
 
     onSelect: Function = function(valueObj, model, context) {
         let LoanAccount = AngularResourceService.getInstance().getNGService("LoanAccount");
         let IndividualLoan = AngularResourceService.getInstance().getNGService("IndividualLoan");
+        let Queries = AngularResourceService.getInstance().getNGService("Queries");
 
         if(model.payment.loanId) {
+            
             // Get particular loan disbursement details
             IndividualLoan.get({id: model.payment.loanId}).$promise.then(function(res){
                 // if payment purpose is loan disbursement
@@ -65,9 +66,6 @@ export class LoanAccountsLOVConfiguration extends LOVElementConfiguration {
     };
 
     inputMap: Object = {
-        "accountNumber": {
-            "key": "loanAccount.accountNumber"
-        }
     };
 
     lovonly: boolean = true;
