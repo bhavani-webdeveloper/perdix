@@ -984,12 +984,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         var diffDay = 0;
                         var scheduleStartDate;
                         if(model.loanAccount.scheduleStartDate){
-                            scheduleStartDate = moment(model.loanAccount.scheduleStartDate,SessionStore.getSystemDateFormat());
+                            scheduleStartDate = moment(model.loanAccount.scheduleStartDate, SessionStore.getSystemDateFormat());
                         }
-                        if(model.loanAccount.scheduleStartDate && scheduledDisbursementDate){
-                            diffday = scheduleStartDate.diff(moment(scheduledDisbursementDate.format(SessionStore.getSystemDateFormat())), "days");
+                        if(scheduleStartDate && scheduledDisbursementDate){
+                            diffDay = scheduleStartDate.diff(scheduledDisbursementDate, "days");
                         }
-                        if (diffday > 0) {
+                        if (diffDay > 0) {
                             model.loanAccount.firstRepaymentDate = scheduleStartDate.format("YYYY-MM-DD");
                         }
                         for (var i = 0; i < model.loanAccount.disbursementSchedules.length; i++) {
