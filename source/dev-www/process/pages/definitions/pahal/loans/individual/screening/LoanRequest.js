@@ -406,6 +406,7 @@ define([], function() {
                     "DeductionsFromLoan.estimatedEmi",
                     "DeductionsFromLoan.calculateDisbursedAmount",
                     "DeductionsFromLoan.fee3",
+                    "DeductionsFromLoan.OtherFee",
                     "DeductionsFromLoan.fee4",
                     "DeductionsFromLoan.expectedPortfolioInsurancePremium",
                     "DeductionsFromLoan.dealIrr",
@@ -668,18 +669,23 @@ define([], function() {
                                         },
                                         "fee3": {
                                             "key": "loanAccount.fee3",
-                                            "title": "ACTUAL_FRANKING",
+                                            "title": "HOSPI_CASH_INSURANCE",
                                             "orderNo": 40
                                         },
                                         "expectedPortfolioInsurancePremium": {
                                             "key": "loanAccount.expectedPortfolioInsurancePremium",
-                                            "title": "PERSONAL_INSURANCE",
+                                            "title": "LOAN_PROTECTION_INSURANCE",
                                             "orderNo": 50
                                         },
                                         "fee4": {
                                             "key": "loanAccount.fee4",
                                             "title": "VEHICLE_INSURANCE",
                                             "orderNo": 60
+                                        },
+                                        "OtherFee": {
+                                            "key": "loanAccount.otherFee",
+                                            "title": "OTHER_DEDUCTIONS",
+                                            "orderNo": 65
                                         },
                                         "dealIrr": {
                                             "key": "loanAccount.dealIrr",

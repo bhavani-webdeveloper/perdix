@@ -1,9 +1,9 @@
 {
-   "feeNames":[
+   "feeNames":[      
       {
-         "displayFeeName":"Processing Fee",
+         "displayFeeName":"Expected Processing Fee",
          "encoreFeeName":"Processing Fee",
-         "feeColumnName":"processingFeeInPaisa",
+         "feeColumnName":"expectedProcessingFeePercentage",
          "override":"Yes"
       },
       {
@@ -13,9 +13,9 @@
          "override":"Yes"
       },
       {
-         "displayFeeName":"Portfolio Insurance Premium",
+         "displayFeeName":"Loan protection Insurance",
          "encoreFeeName":"Portfolio Insurance",
-         "feeColumnName":"portfolioInsurancePremium",
+         "feeColumnName":"expectedPortfolioInsurancePremium",
          "override":"Yes"
       },
       {
@@ -46,6 +46,24 @@
          "displayFeeName":"Portfolio Insurance Service Charge",
          "encoreFeeName":"Service Charges",
          "feeColumnName":"portfolioInsuranceServiceCharge",
+         "override":"Yes"
+      },
+      {
+         "displayFeeName":"Hospi Cash Insurance",
+         "encoreFeeName":"Hospi Cash Insurance",
+         "feeColumnName":"fee3",
+         "override":"Yes"
+      },
+      {
+         "displayFeeName":"Vehicle Insurance",
+         "encoreFeeName":"VehicleInsurance",
+         "feeColumnName":"fee4",
+         "override":"Yes"
+      },
+      {
+         "displayFeeName":"Other Charges",
+         "encoreFeeName":"Other Charges",
+         "feeColumnName":"otherFee",
          "override":"Yes"
       }
    ]
