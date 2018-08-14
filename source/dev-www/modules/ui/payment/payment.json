@@ -170,6 +170,13 @@
                 "type": "date",
                 "title": "PAYMENT_DATE"
             },
+            "modeOfPayment": {
+                "key": "payment.modeOfPayment",
+                "type": "select",
+                "required":true,
+                "title": "PAYMENT_TYPE",
+                "enumCode": "payment_type"
+            },
             "beneficiaryBankBranch": {
                 "key": "payment.beneficiaryBankBranch",
                 "type": "string",
