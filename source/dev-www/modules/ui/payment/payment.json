@@ -32,6 +32,13 @@
                 "title": "PAYMENT_PURPOSE",
                 "enumCode": "payment_purpose"
             },
+            "customerId": {
+                "key": "payment.customerId",
+                "type": "lov",
+                "required":true,
+                "lovonly": true,
+                "title": "CUSTOMER_ID"
+            },
             "accountNumber": {
                 "key": "payment.accountNumber",
                 "type": "lov",
