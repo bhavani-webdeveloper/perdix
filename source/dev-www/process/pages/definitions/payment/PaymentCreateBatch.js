@@ -26,7 +26,7 @@ define([], function() {
                         "resolver": "PaymentBankAccountsLOVConfiguration"
                     },
                     "CreateBatch.modeOfPayment": {
-                        "readOnly": true
+                        "required": false
                     }
                 }
             } 

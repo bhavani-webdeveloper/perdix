@@ -14,6 +14,14 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                 var configFile = function() {                
                     return {
                         "payment.currentStage": {
+                            "PaymentInitiation":{
+                                "overrides": {
+                                },
+                                "excludes": [
+                                    "PaymentDetails.paymentDate"
+                                ]
+
+                            },
                             "PaymentRejected": {
                                 "overrides": {
                                     "PaymentDetails":{
@@ -120,10 +128,7 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                                 ]
                             },
                             "PaymentApproval": {
-                                "overrides": {
-                                    "PaymentDetails":{
-                                        "orderNo": 20
-                                    },                
+                                "overrides": {              
                                     "PostReviewDecision.rejectsectionremarks":{                
                                         "condition": "model.payment.status=='REJECT'"
                                     },
@@ -339,6 +344,9 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                     },
                     "PostReviewDecision":{
                         "condition":"model.payment.currentStage == 'PaymentApproval'"  
+                    },
+                    "PaymentDetails.paymentDate": {
+                        "readonly": true
                     }             
                 };
             }
@@ -351,6 +359,7 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                     "PaymentDetails.paymentPurpose",
                     "PaymentDetails.accountNumber",
                     "PaymentDetails.transactionType",
+                    "PaymentDetails.paymentDate",
                     "BeneficiaryDetails",
                     "BeneficiaryDetails.beneficiaryName",
                     "BeneficiaryDetails.beneficiaryAccountName",
@@ -394,7 +403,9 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                         obs.subscribe(function(res) {                            
                             model.PaymentProcess = res;
                             model.payment = res.payment;
-                    model.payment.transactionType = "Manual";  
+                        model.payment.transactionType = "Manual";  
+                        model.payment.currentStage = "PaymentInitiation";
+
                     UIRepository.getPaymentDetails().$promise
                     .then(function(repo) {
                         return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model)
