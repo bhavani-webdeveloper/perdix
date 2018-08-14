@@ -327,7 +327,7 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                     },
                     "PaymentDetails.accountNumber":{
                         "resolver": "LoanAccountsLOVConfiguration" ,
-                        "condition":"model.payment.paymentPurpose == 'Loan Disbursement' || model.payment.paymentPurpose == 'Security EMI Refunds'"                   
+                        "condition":"(model.payment.paymentPurpose == 'Loan Disbursement' || model.payment.paymentPurpose == 'Security EMI Refunds') && model.payment.customerId"                   
                     },
                     "DebitAccountDetails.debitAccountName":{
                         "resolver": "PaymentBankAccountsLOVConfiguration"
@@ -347,7 +347,11 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                     },
                     "PaymentDetails.paymentDate": {
                         "readonly": true
-                    }             
+                    },
+                    "PaymentDetails.customerId": {
+                        "condition":"model.payment.paymentPurpose == 'Loan Disbursement' || model.payment.paymentPurpose == 'Security EMI Refunds'",
+                        "resolver": "PaymentCustomerIDLOVConfiguration"
+                    }         
                 };
             }
             var getIncludes = function(model) {
@@ -357,6 +361,7 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                     "PaymentDetails.amount",
                     "PaymentDetails.fileId",
                     "PaymentDetails.paymentPurpose",
+                    "PaymentDetails.customerId",
                     "PaymentDetails.accountNumber",
                     "PaymentDetails.transactionType",
                     "PaymentDetails.paymentDate",
@@ -557,6 +562,10 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                                 "urnNo": {
                                     "type": ["string","null"],
                                     "title": "URN_NO"
+                                },
+                                "firstName": {
+                                    "type": ["string","null"],
+                                    "title": "CUSTOMER_NAME"
                                 }
                             }
                         },
