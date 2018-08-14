@@ -20,6 +20,9 @@ define(
 
                 var overridesFields = function (bundlePageObj) {
                 return {
+                    "VehiclePastValuations": {
+                        "startEmpty": true
+                    },
                     "VehicleRegistrationDetails.cubicCapacity":{
                         "inputmode": "number",
                         "numberType": "number",

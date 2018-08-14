@@ -11,18 +11,11 @@ export class RejectReasonLOVConfiguration extends LOVElementConfiguration {
 		let formHelper = AngularResourceService.getInstance().getNGService("formHelper");
         let stage1 = model.loanProcess.loanAccount.currentStage;
 
-        if (model.currentStage == 'Application' || model.currentStage == 'ApplicationReview') {
-            stage1 = "Application";
-        }
-        if (model.currentStage == 'FieldAppraisal' || model.currentStage == 'FieldAppraisalReview') {
-            stage1 = "FieldAppraisal";
-        }
-
         let rejectReason = formHelper.enum('application_reject_reason').data;
         let out = [];
         for (let i = 0; i < rejectReason.length; i++) {
             let t = rejectReason[i];
-            if (t.field1 == stage1) {
+            if (t.field1 == stage1 || t.field1 == null) {
                 out.push({
                     name: t.name,
                 })

@@ -688,7 +688,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                     for (var i = 0; i < reqData.loanAccount.loanDocuments.length; i++) {
                         var doc = reqData.loanAccount.loanDocuments[i];
                         if (_.indexOf(allowedStatues, doc.documentStatus) == -1) {
-                            PageHelper.showProgress('update-loan', 'Invalid document status selected. Only Approved or Rejected are allowed.');
+                            PageHelper.showProgress('update-loan', 'Invalid document status selected. Only Approved or Rejected are allowed.',3000);
                             return;
                         }
 
