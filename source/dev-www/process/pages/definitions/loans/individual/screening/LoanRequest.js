@@ -621,14 +621,14 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 model.loanAccount.leadId  = obj.id;
                 model.loanAccount.linkedAccountNumber= obj.linkedLoanAccountNo;
                 model.loanAccount.baseLoanAccount = obj.baseLoanAccount;
-                model.loanAccount.transactionType = (obj.transactionType && obj.transactionType.toLowerCase() == 'renewal')?obj.transactionType:"New Loan";
+                model.loanAccount.transactionType = obj.transactionType ? obj.transactionType:"New Loan";
                 /*calling individual loan api to get the current loan amount for validating that loan amount requested should be greater then current loan amount */
                 if(obj.transactionType && obj.transactionType.toLowerCase() == 'renewal'){
                     var p1 = IndividualLoan.search({
                         accountNumber:obj.linkedLoanAccountNo
                     }).$promise;
                     p1.then(function(response, headerGetter){
-                      model.linkedLoanAmount=response.body[0]['loanAmount'];
+                        model.linkedLoanAmount=response.body[0]['loanAmount'];
                     },function(err){
                         $log.info("loan request Individual/find api failure" + err);
                     });
