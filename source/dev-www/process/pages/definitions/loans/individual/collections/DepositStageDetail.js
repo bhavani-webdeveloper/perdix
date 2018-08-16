@@ -139,13 +139,13 @@ define({
                 },
                 {
                     "key":"depositDetails.collectionDetail.chequeDepositedBankIfscCode",
-                    "title": "CASH_DEPOSIT_IFSC_CODE",
+                    "title": "CHEQUE_DEPOSIT_IFSC_CODE",
                     "readonly": true,
                     "condition": "model.depositDetails && model.depositDetails.instrumentType.toLowerCase()=='chq'"
                 },
                 {
                     "key": "depositDetails.collectionDetail.accountBranchId",
-                    "title": "CASH_DEPOSIT_BRANCH",
+                    "title": "CHEQUE_DEPOSIT_BRANCH",
                     "readonly": true,
                     "condition":"model.depositDetails && model.depositDetails.instrumentType.toLowerCase()=='chq'"
                 },
