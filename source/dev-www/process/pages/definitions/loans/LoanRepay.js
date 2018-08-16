@@ -579,17 +579,6 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 condition:"model.repayment.instrument=='CHQ'"
                             },
                             {
-                                key:"repayment.reference",
-                                title:"CHEQUE_NUMBER",
-                                "schema": {
-                                    type:"string",
-                                    maxLength:6,
-                                    minLength:6
-                                },
-                                required:true,
-                                condition:"model.repayment.instrument=='CHQ'"
-                            },
-                            {
                                 key: "repayment.bankAccountNumber",
                                 type: "lov",
                                 lovonly: true,
