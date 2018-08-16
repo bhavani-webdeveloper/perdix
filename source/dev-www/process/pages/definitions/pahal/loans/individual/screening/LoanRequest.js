@@ -89,6 +89,53 @@ define([], function() {
                return null;
             };
 
+            var calculateNominalRate = function(loanAmount, frequency, tenure, flatRate){
+                var frequencyFactor;
+                if (frequency && tenure && flatRate) {
+                    switch (frequency) {
+                        case 'D':
+                        case 'Daily':
+                            frequencyFactor = 365;
+                            break;
+                        case 'F':
+                        case 'Fortnightly':
+                            frequencyFactor = parseInt(365 / 15);
+                            break;
+                        case 'M':
+                        case 'Monthly':
+                            frequencyFactor = 12;
+                            break;
+                        case 'Q':
+                        case 'Quarterly':
+                            frequencyFactor = 4;
+                            break;
+                        case 'H':
+                        case 'Half Yearly':
+                            frequencyFactor = 2;
+                            break;
+                        case 'W':
+                        case 'Weekly':
+                            frequencyFactor = parseInt(365 / 7);
+                            break;
+                        case 'Y':
+                        case 'Yearly':
+                            frequencyFactor = 1;
+                            break;
+                        default:
+                            throw new Error("Invalid frequency");
+                    }
+                    var nominalRate = Math.round(excelRate(parseFloat(tenure), -parseFloat(1 + ((parseFloat((flatRate) / 100) * parseFloat(tenure) / frequencyFactor))) / parseFloat(tenure)) * 100 * 100 * frequencyFactor) / 100;
+                    var someRate = parseFloat(nominalRate / (100 * frequencyFactor));
+                    var estimatedEmi = (parseFloat(loanAmount) * someRate / parseFloat((1 - Math.pow(1 + someRate, -tenure))));
+                    return {
+                        nominalRate: nominalRate,
+                        estimatedEmi: Math.round(estimatedEmi)
+                    };
+                } else {
+                    throw new Error("Invalid input for nominal rate calculation");
+                }
+            }
+
             var configFile = function() {
                 return {
                     "loanProcess.loanAccount.currentStage": {
@@ -394,8 +441,8 @@ define([], function() {
                     "PreliminaryInformation.parentLoanAccount",
                     "PreliminaryInformation.frequencyRequested",
                     "PreliminaryInformation.udf5",
-                    "PreliminaryInformation.tenureRequested", 
-                    "PreliminaryInformation.collectionPaymentType",   
+                    "PreliminaryInformation.tenureRequested",
+                    "PreliminaryInformation.collectionPaymentType",
                     "PreliminaryInformation.expectedInterestRate",
                     "PreliminaryInformation.calculateEmi",
                     "PreliminaryInformation.estimatedEmi",
@@ -420,6 +467,7 @@ define([], function() {
                     "PayerDetails.payeeRelationToApplicant",
                     "LoanRecommendation",
                     "LoanRecommendation.loanAmount",
+                    "LoanRecommendation.frequency",
                     "LoanRecommendation.tenure",
                     "LoanRecommendation.interestRate",
                     "LoanRecommendation.processingFeePercentage",
@@ -446,23 +494,24 @@ define([], function() {
                     "actionbox.submit",
                     "actionbox.save",
                     "actionbox.holdAction",
-                    "actions",
-                    "actions.options",
-                    "actions.proceed",
-                    "actions.proceed.remarks",
-                    "actions.proceed.valuator",
-                    "actions.proceed.proceedButton",
-                    "actions.sendBack",
-                    "actions.sendBack.remarks",
-                    "actions.sendBack.stage",
-                    "actions.sendBack.sendBackButton",
-                    "actions.reject",
-                    "actions.reject.remarks",
-                    "actions.reject.rejectReason",
-                    "actions.reject.rejectButton",
-                    "actions.hold",
-                    "actions.hold.remarks",
-                    "actions.hold.holdButton"
+                    "PostReview",
+                    "PostReview.options",
+                    "PostReview.proceed",
+                    "PostReview.proceed.remarks",
+                    "PostReview.proceed.valuator",
+                    "PostReview.proceed.proceedButton",
+                    "PostReview.sendBack",
+                    "PostReview.sendBack.remarks",
+                    "PostReview.sendBack.stage",
+                    "PostReview.sendBack.sendBackButton",
+                    "PostReview.reject",
+                    "PostReview.reject.remarks",
+                    "PostReview.reject.rejectReason",
+                    "PostReview.reject.rejectButton",
+                    "PostReview.hold",
+                    "PostReview.hold.remarks",
+                    "PostReview.hold.holdButton"
+
                 ];
 
             }
@@ -493,6 +542,10 @@ define([], function() {
                             "PreliminaryInformation.productCategory": {
                                 "orderNo": 45
                             },
+                            "PreliminaryInformation.expectedInterestRate": {
+                                "title": "NOMINAL_RATE",
+                                "readonly": true
+                            },
                             "TeleVerification.verifications.personContacted": {
                                 "required": true
                             },
@@ -500,7 +553,7 @@ define([], function() {
                                 "type": "select",
                                 "enumCode": "customer_response"
                             },
-                            "LoanRecommendation.udf6": {
+                            "LoanRecommendation.interestRate": {
                                 "title": "NOMINAL_RATE",
                                 "readonly": true
                             },
@@ -515,11 +568,11 @@ define([], function() {
                             "VehicleExpensesInformation.VehicleExpenses.expenseAmount": {
                                 "required": true
                             },
-                            
+
                             "DeductionsFromLoan.estimatedEmi": {
                                 "readonly": true,
                                 "condition": "model.loanAccount.securityEmiRequired == 'YES'"
-                            },                            
+                            },
                             "PreliminaryInformation.loanAmountRequested": {
                                 onChange: function(modelValue, form, model) {
                                     model.loanAccount.estimatedEmi = null;
@@ -551,14 +604,7 @@ define([], function() {
                                     model.loanAccount.estimatedEmi = null;
                                     model.loanAccount.expectedInterestRate = null;
                                 }
-                            },
-                            
-                            "PreliminaryInformation.expectedInterestRate": {
-                                "required": true,
-                                "title": "NOMINAL_RATE",
-                                "readonly": true
                             }
-                            
                         },
                         "includes": getIncludes(model),
                         "excludes": [
@@ -590,75 +636,22 @@ define([], function() {
                                             "title": "CALCULATE_EMI",
                                             "type": "button",
                                             "onClick": function(model, formCtrl) {
-                                                var frequencyRequested1, frequencyRequested2;
-                                                if (model.loanAccount.frequencyRequested && model.loanAccount.tenureRequested && model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5) {
-                                                    switch (model.loanAccount.frequencyRequested) {
-                                                        case 'Daily':
-                                                            frequencyRequested1 = 365;
-                                                            break;
-                                                        case 'Fortnightly':
-                                                            frequencyRequested1 = parseInt(365 / 15);
-                                                            break;
-                                                        case 'Monthly':
-                                                            frequencyRequested1 = 12;
-                                                            break;
-                                                        case 'Quarterly':
-                                                            frequencyRequested1 = 4;
-                                                            break;
-                                                        case 'Weekly':
-                                                            frequencyRequested1 = parseInt(365 / 7);
-                                                            break;
-                                                        case 'Yearly':
-                                                            frequencyRequested1 = 1;
-                                                    }
-                                                    model.loanAccount.expectedInterestRate = Math.round((((Math.pow((((parseFloat((model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5)/100)*2*parseFloat(model.loanAccount.tenureRequested))/(parseFloat(model.loanAccount.tenureRequested)+1))+1),(1/frequencyRequested1))-1)*frequencyRequested1)*100)*100)/100;
-                                                } else {
-                                                    PageHelper.showErrors({
-                                                        data: {
-                                                            error: "Please Enter Required Values for calculating Nominal Rate"
-                                                        }
-                                                    });
-                                                    return false;
+                                                try{
+                                                    var obj = calculateNominalRate(model.loanAccount.loanAmountRequested, model.loanAccount.frequencyRequested, model.loanAccount.tenureRequested, parseFloat(model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5));
+                                                    model.loanAccount.expectedInterestRate = obj.nominalRate;
+                                                    model.loanAccount.estimatedEmi = obj.estimatedEmi;
+                                                } catch (e){
+                                                    console.log(e);
+                                                    PageHelper.showProgress("nominal-rate-calculation", "Error while calculating nominal rate, check the input values.", 5000);
                                                 }
-                                                if (parseFloat(model.loanAccount.expectedInterestRate) && model.loanAccount.tenureRequested && model.loanAccount.frequencyRequested && model.loanAccount.loanAmountRequested) {
-                                                    switch (model.loanAccount.frequencyRequested) {
-                                                        case 'Daily':
-                                                            frequencyRequested2 = 365;
-                                                            break;
-                                                        case 'Fortnightly':
-                                                            frequencyRequested2 = parseInt(365 / 15);
-                                                            break;
-                                                        case 'Monthly':
-                                                            frequencyRequested2 = 12;
-                                                            break;
-                                                        case 'Quarterly':
-                                                            frequencyRequested2 = 4;
-                                                            break;
-                                                        case 'Weekly':
-                                                            frequencyRequested2 = parseInt(365 / 7);
-                                                            break;
-                                                        case 'Yearly':
-                                                            frequencyRequested2 = 1;
-                                                    }
-                                                    var rate = parseFloat((model.loanAccount.expectedInterestRate) / (100 * frequencyRequested2));
-                                                    var n = parseFloat(model.loanAccount.tenureRequested);
-                                                    var calculateEmi = (parseFloat(model.loanAccount.loanAmountRequested) * rate / parseFloat((1 - Math.pow(1 + rate, -n))));
-                                                    model.loanAccount.estimatedEmi = parseInt(calculateEmi.toFixed());
-                                                } else {
-                                                    PageHelper.showErrors({
-                                                        data: {
-                                                            error: "Nominal Rate is not proper"
-                                                        }
-                                                    });
-                                                    return false;
-                                                }
+
                                             }
                                         }
-                                        
-                                        
+
+
                                     }
                                 },
-                                
+
                                 "DeductionsFromLoan": {
                                     "items": {
                                         "dsaPayout": {
@@ -782,57 +775,27 @@ define([], function() {
                                 },
                                 "LoanRecommendation": {
                                     "items": {
+                                        "udf6": {
+                                            "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6",
+                                            "title": "FLAT_RATE",
+                                            "type": "string",
+                                            "required": true,
+                                            "orderNo": 25
+                                        },
                                         "calculateNominalRate": {
                                             "title": "CALCULATE_NOMINAL_RATE",
                                             "type": "button",
                                             onClick: function(model, formCtrl) {
-                                                // var frequencyRequested;
-                                                // if (model.loanAccount.frequencyRequested && model.loanAccount.tenure && model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5) {
-                                                //     switch (model.loanAccount.frequencyRequested) {
-                                                //         case 'Daily':
-                                                //             frequencyRequested = 365;
-                                                //             break;
-                                                //         case 'Fortnightly':
-                                                //             frequencyRequested = parseInt(365 / 15);
-                                                //             break;
-                                                //         case 'Monthly':
-                                                //             frequencyRequested = 12;
-                                                //             break;
-                                                //         case 'Quarterly':
-                                                //             frequencyRequested = 4;
-                                                //             break;
-                                                //         case 'Weekly':
-                                                //             frequencyRequested = parseInt(365 / 7);
-                                                //             break;
-                                                //         case 'Yearly':
-                                                //             frequencyRequested = 1;
-                                                //     }
-                                                //     model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = Math.round((((Math.pow((((2 * parseFloat((model.loanAccount.interestRate)/100) * parseFloat(model.loanAccount.tenure)) / (parseFloat(model.loanAccount.tenure) + 1)) + 1), 1 / frequencyRequested) - 1) * frequencyRequested)*100)*100)/100;
-                                                // }
-                                                var frequencyRequested;
-                                                if (model.loanAccount.frequencyRequested && model.loanAccount.tenure && model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5) {
-                                                    switch (model.loanAccount.frequencyRequested) {
-                                                        case 'Daily':
-                                                            frequencyRequested = 365;
-                                                            break;
-                                                        case 'Fortnightly':
-                                                            frequencyRequested = parseInt(365 / 15);
-                                                            break;
-                                                        case 'Monthly':
-                                                            frequencyRequested = 12;
-                                                            break;
-                                                        case 'Quarterly':
-                                                            frequencyRequested = 4;
-                                                            break;
-                                                        case 'Weekly':
-                                                            frequencyRequested = parseInt(365 / 7);
-                                                            break;
-                                                        case 'Yearly':
-                                                            frequencyRequested = 1;
-                                                    }
-
-                                                    model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 =
-                                                        Math.round(excelRate(parseFloat(model.loanAccount.tenure), -parseFloat(1 + ((parseFloat((model.loanAccount.interestRate) / 100) * parseFloat(model.loanAccount.tenure) / frequencyRequested))) / parseFloat(model.loanAccount.tenure)) * 100 * 100 * frequencyRequested) / 100;
+                                                try{
+                                                    var obj = calculateNominalRate(model.loanAccount.loanAmount,
+                                                        model.loanAccount.frequency,
+                                                        model.loanAccount.tenure,
+                                                        parseFloat(model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6));
+                                                    model.loanAccount.interestRate = obj.nominalRate;
+                                                    model.loanAccount.estimatedEmi = obj.estimatedEmi;
+                                                } catch (e){
+                                                    console.log(e);
+                                                    PageHelper.showProgress("nominal-rate-calculation", "Error while calculating nominal rate, check the input values.", 5000);
                                                 }
                                             }
                                         }
@@ -860,11 +823,11 @@ define([], function() {
                                         }
                                     }
                                 },
-                                "actions": {
+                                "PostReview": {
                                     "type": "box",
                                     "orderNo": 999,
                                     "title": "POST_REVIEW",
-                                    "condition": "model.loanAccount.id && model.loanAccount.isReadOnly!='Yes'",
+                                    "condition": "model.loanAccount.id",
                                     "items": {
                                         "options": {
                                             key: "review.action",
@@ -894,7 +857,7 @@ define([], function() {
                                                     "titleMap": {
                                                         "test": "test"
                                                     }
-                                                }, 
+                                                },
                                                 "proceedButton": {
                                                     key: "review.proceedButton",
                                                     type: "button",
@@ -960,7 +923,7 @@ define([], function() {
                                                     onClick: "actions.sendBack(model, formCtrl, form, $event)"
                                                 }
                                             }
-                                        },                                        
+                                        },
                                         "reject": {
                                             type: "section",
                                             condition: "model.review.action=='REJECT'",
@@ -970,7 +933,7 @@ define([], function() {
                                                     key: "loanProcess.remarks",
                                                     type: "textarea",
                                                     required: true
-                                                }, 
+                                                },
                                                 "rejectReason": {
                                                     title: "REJECT_REASON",
                                                     fieldType: "string",
@@ -997,7 +960,7 @@ define([], function() {
                                                     key: "review.remarks",
                                                     type: "textarea",
                                                     required: true
-                                                }, 
+                                                },
                                                 "holdButton": {
                                                     key: "review.holdButton",
                                                     type: "button",
@@ -1162,7 +1125,7 @@ define([], function() {
                         /* TODO Call save service for the loan */
                         // if(isEnrollmentsSubmitPending(model)){
                         //     return;
-                        // }                        
+                        // }
 
                         if (model.review.remarks==null || model.review.remarks ==""){
                             PageHelper.showProgress("update-loan", "Remarks is mandatory");

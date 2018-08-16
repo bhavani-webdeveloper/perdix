@@ -152,7 +152,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                         LoanProcess.get(bundleModel.loanId)
                             .subscribe(function(loanProcess){
                             bundleModel.loanProcess = loanProcess;
-                               var loanAccount = loanProcess;
+                                var loanAccount = loanProcess;
                                 // loanAccount.applicantEnrolmentProcess.customer.customerId = loanAccount.loanAccount.customerId;
                                 if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
                                     var _leadId = $stateParams.pageData['lead_id'];
@@ -197,7 +197,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 }
 
-                                 $this.bundlePages.push({
+                                $this.bundlePages.push({
                                     pageClass: 'business',
                                     model: {
                                         enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
@@ -214,6 +214,13 @@ define(["perdix/domain/model/loan/LoanProcess",
 
                                 $this.bundlePages.push({
                                     pageClass: 'vehicle-details',
+                                    model: {
+                                        loanProcess: loanProcess
+                                    }
+                                });
+
+                                $this.bundlePages.push({
+                                    pageClass: 'cb-check',
                                     model: {
                                         loanProcess: loanProcess
                                     }
@@ -274,7 +281,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     model: {
                                         loanProcess: loanProcess
                                     }
-                                });                                
+                                });
 
                                 $this.bundlePages.push({
                                     pageClass: 'loan-request',

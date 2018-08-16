@@ -17,11 +17,11 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
         }
         else if(customerType == 'CO-APP'){
             customerId = model.customer.coapplicants[index].coapplicantid;
-            loanAmount = model.customer.coapplicants[index].loanAmount;
+            loanAmount = model.customer.coapplicants[index].loanAmount || model.customer.loanAmount;
         }
         else if(customerType == 'GUARANTOR'){
             customerId = model.customer.guarantors[index].guarantorid;
-            loanAmount = model.customer.guarantors[index].loanAmount;
+            loanAmount = model.customer.guarantors[index].loanAmount || model.customer.loanAmount;
         }
 
         $log.info("Inside submit()");
@@ -48,7 +48,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                     PageHelper.showProgress("cb-check", "Failed while placing Credit Bureau Request", 5000);
             });
         } else {
-            model.idenCheck.customerId = customerId;
+            model.idenCheck.customerId = model.customer.applicantid;
             model.idenCheck.type = CBType;
             Enrollment.idenCheckVerification(model.idenCheck).$promise.
             then(function(response) {
@@ -262,13 +262,42 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             model.customer.coapplicants = model.customer.coapplicants || [];
             model.customer.guarantors = model.customer.guarantors || [];
             model.customer.loanSaved = false;
+
+            if (_.hasIn(model, "loanProcess")){
+                /* Loan process data is available. derive applicant / coapplicant / guarantors data from it */
+                var lp = model.loanProcess;
+                model.customer.applicantid = lp.applicantEnrolmentProcess.customer.id;
+                model.customer.applicantname = lp.applicantEnrolmentProcess.customer.firstName;
+
+                model.coapplicants = [];
+                _.forEach(lp.coApplicantsEnrolmentProcesses, function(ep){
+                    model.coapplicants.push({
+                        coapplicantid: ep.customer.id,
+                        coapplicantname: ep.customer.firstName
+                    });
+                })
+
+                _.forEach(lp.guarantorsEnrolmentProcesses, function(ep){
+                    model.guarantors.push({
+                        guarantorid: ep.customer.id,
+                        guarantorname: ep.customer.firstName
+                    });
+                })
+
+                model.customer.loanAmount = lp.loanAccount.loanAmount || lp.loanAccount.loanAmountRequested;
+                model.customer.loanPurpose1 = lp.loanAccount.loanPurpose1;
+                model.customer.loanSaved = true;
+            }
+
             model.idenCheckParam = SessionStore.getGlobalSetting("IdentCheckSettings");
             model.idenCheck = {};
             if(model.idenCheckParam != null){
                 var idencheckArray =  model.idenCheckParam.split('~');
-                model.idenCheck.reqServiceType = idencheckArray[0]; 
+                model.idenCheck.reqServiceType = idencheckArray[0];
+                model.idenCheck.dobSegmentRequired = Boolean(idencheckArray[1]);
+                model.idenCheck.addressSegmentReqired = Boolean(idencheckArray[2]);
             }
-            
+
 
             model.CBType= SessionStore.getGlobalSetting("CBCheckType");
             if(model.CBType){
@@ -298,7 +327,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                     for(x=0;x<res.cbCheckList.length;x++){
                                         if(res.cbCheckList[x].cbCheckValid){
                                             BundleManager.pushEvent('cb-check-done', model._bundlePageObj, {customerId: res.cbCheckList[x].customerId, cbType:res.cbCheckList[x].reportType});
-                                            if(res.cbCheckList[x].reportType=='BASE' 
+                                            if(res.cbCheckList[x].reportType=='BASE'
                                                 || res.cbCheckList[x].reportType=='AOR'
                                                 || res.cbCheckList[x].reportType=='INDIVIDUAL')
                                                 model.customer.highmarkStatus = 'PROCESSED';
@@ -328,7 +357,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                     for(x=0;x<res.cbCheckList.length;x++){
                                         if(res.cbCheckList[x].cbCheckValid){
                                             BundleManager.pushEvent('cb-check-done', model._bundlePageObj, {customerId: res.cbCheckList[x].customerId, cbType:res.cbCheckList[x].reportType});
-                                            if(res.cbCheckList[x].reportType=='BASE' 
+                                            if(res.cbCheckList[x].reportType=='BASE'
                                                     || res.cbCheckList[x].reportType=='AOR'
                                                     || res.cbCheckList[x].reportType=='INDIVIDUAL')
                                             {
@@ -365,7 +394,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                     for(x=0;x<res.cbCheckList.length;x++){
                                         if(res.cbCheckList[x].cbCheckValid){
                                             BundleManager.pushEvent('cb-check-done', model._bundlePageObj, {customerId: res.cbCheckList[x].customerId, cbType:res.cbCheckList[x].reportType});
-                                            if(res.cbCheckList[x].reportType=='BASE' 
+                                            if(res.cbCheckList[x].reportType=='BASE'
                                                     || res.cbCheckList[x].reportType=='AOR'
                                                     || res.cbCheckList[x].reportType=='INDIVIDUAL')
                                             {
@@ -468,7 +497,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 }
             }
         },
-        
+
         form: [
             {
                 "type": "box",
@@ -552,7 +581,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
 
                                 ]
                             },
-                            
+
                             {
                                 type: "fieldset",
                                 condition:"model.BASE",
@@ -757,7 +786,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                 }
                                 ]
                             },
-                            
+
                             {
                                 type: "fieldset",
                                 condition:"model.EQUIFAX",
@@ -874,7 +903,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                        "condition": "model.customer.loanSaved",
                                         title: 'Submit for CBCheck',
                                         "onClick":"actions.save(model,'APP','CHMHUB', null)"
-                                       
+
                                     }, {
                                         "key": "customer.idenCheckStatus",
                                         "condition": "model.customer.idenCheckStatus",
@@ -961,9 +990,9 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                         }]
                                     }
                                 ]
-                            },   
+                            },
                         ]
-            }   
+            }
         ],
         schema: function() {
             return SchemaResource.getLoanAccountSchema().$promise;
@@ -979,4 +1008,4 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
 }
 
 ]);
-    
+

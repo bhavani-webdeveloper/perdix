@@ -416,7 +416,7 @@ define(
                         },
                         "CreditApproval1": {
                             "excludes": [
-                              "VehicleViability.calculateVehicleDetails"  
+                              "VehicleViability.calculateVehicleDetails"
                             ],
                             "overrides": {
                                 "VehicleLoanIncomesInformation": {
@@ -450,7 +450,7 @@ define(
                         },
                         "CreditApproval2": {
                             "excludes": [
-                              "VehicleViability.calculateVehicleDetails"  
+                              "VehicleViability.calculateVehicleDetails"
                             ],
                             "overrides": {
                                 "VehicleLoanIncomesInformation": {
@@ -484,7 +484,7 @@ define(
                         },
                         "CreditApproval3": {
                             "excludes": [
-                              "VehicleViability.calculateVehicleDetails" 
+                              "VehicleViability.calculateVehicleDetails"
                             ],
                             "overrides": {
                                 "VehicleLoanIncomesInformation": {
@@ -518,7 +518,7 @@ define(
                         },
                         "CreditApproval4": {
                             "excludes": [
-                              "VehicleViability.calculateVehicleDetails" 
+                              "VehicleViability.calculateVehicleDetails"
                             ],
                             "overrides": {
                                 "VehicleLoanIncomesInformation": {
@@ -552,7 +552,7 @@ define(
                         },
                         "CreditApproval5": {
                             "excludes": [
-                              "VehicleViability.calculateVehicleDetails" 
+                              "VehicleViability.calculateVehicleDetails"
                             ],
                             "overrides": {
                                 "VehicleLoanIncomesInformation": {
@@ -627,7 +627,7 @@ define(
                     "NewVehicleDetails.permitType",
                     "NewVehicleDetails.price",
                     "NewVehicleDetails.udf1",
-                    "NewVehicleDetails.insuredDeclaredValue",  
+                    "NewVehicleDetails.insuredDeclaredValue",
                     "VehicleViability",
                     "VehicleViability.viabilityCategory",
                     "VehicleViability.grossVehicleWeight",
@@ -687,11 +687,11 @@ define(
                     "VehiclePhotoCaptures",
                     "VehiclePhotoCaptures.vehiclePhotoCaptures",
                     "VehiclePhotoCaptures.vehiclePhotoCaptures.photoFileId",
-                    "VehiclePhotoCaptures.vehiclePhotoCaptures.photoRemarks", 
+                    "VehiclePhotoCaptures.vehiclePhotoCaptures.photoRemarks",
                     "calculateVehicleDetails",
                     "calculateVehicleDetails.calculateVehicleDetails",
                     "calculateVehicleDetails1",
-                    "calculateVehicleDetails1.calculateVehicleDetails1",        
+                    "calculateVehicleDetails1.calculateVehicleDetails1",
                     "actionbox",
                     "actionbox.save",
                 ];
@@ -832,9 +832,9 @@ define(
                                        for (var i=0;i<model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes.length;i++) {
                                             var vehicleLoanIncome = model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes[i];
                                             vehicleLoanIncome.incomeAmount = 0;
-                                        } 
+                                        }
                                     }
-                                                    
+
                                 },
                                 "required": true
                             },
@@ -859,7 +859,7 @@ define(
                                         },
                                         body: out
                                     });
-                                },                                
+                                },
                                 onSelect: function(valueObj, model, context) {
                                     model.loanAccount.vehicleLoanDetails.category = valueObj.category;
                                     model.loanAccount.vehicleLoanDetails.make = null;
@@ -978,7 +978,7 @@ define(
                                 "condition": "(model.loanAccount.loanPurpose1 == 'Purchase - New Vehicle' || model.loanAccount.loanPurpose1 == 'Purchase - Used Vehicle' || model.loanAccount.loanPurpose1 == 'Refinance') && model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1.toUpperCase() == 'YES'"
                             },
                             "VehicleLoanIncomesInformation.VehicleLoanIncomes": {
-                                "startEmpty": true   
+                                "startEmpty": true
                             },
                             "VehicleLoanIncomesInformation.VehicleLoanIncomes.incomeAmount": {
                                 "required": true
@@ -1082,9 +1082,9 @@ define(
                                                             'expenseType': "Miscellaneous",
                                                             'expenseAmount': 0
                                                         }
-                                                    );      
+                                                    );
 
-                                                   
+
                                                     model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes = [];
                                                     model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes.push({
                                                         'incomeType': 'Monthly Revenue',
@@ -1318,7 +1318,7 @@ define(
                                             "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'YES'",
                                             "readonly": true
                                         },
-                                                  
+
                                     }
                                 },
                                 "VehicleAssetUse": {
@@ -1440,14 +1440,14 @@ define(
                                         "calculateVehicleDetails1": {
                                             "type": "button",
                                             "title": "CALCULATE_VEHICLE_DETAILS",
-                                            "onClick": "actions.calculateVehicleDetails1(model, formCtrl, form, $event)"    
+                                            "onClick": "actions.calculateVehicleDetails1(model, formCtrl, form, $event)"
                                         }
-                                    }                                    
+                                    }
                                 }
                             }
                         }
                     };
-                    
+
                     UIRepository.getLoanProcessUIRepository().$promise
                         .then(function(repo){
                             return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model)
@@ -1511,7 +1511,7 @@ define(
                                         "totalMonthlyExpense": null,
                                         "freeCashFlow": null,
                                         "fcfToEmi": null,
-                                        "emi": null,                                                         
+                                        "emi": null,
                                         "monthlyWorkingHours" : null
                                     };
                                     _.assign(model.loanAccount.vehicleLoanDetails, calculateFields);
@@ -1535,7 +1535,7 @@ define(
                                     model.loanAccount.vehicleLoanDetails.noOfTyres = vehicleDetail.no_of_tyres;
                                     model.loanAccount.vehicleLoanDetails.costOfTyre = vehicleDetail.cost_of_tyre;
                                     model.loanAccount.vehicleLoanDetails.lifeOfTyre = vehicleDetail.life_of_tyre;
-                                    
+
                                     // vehicle Expense Details
                                     if (model.loanAccount && model.loanAccount.vehicleLoanDetails && model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses && _.isArray(model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses)) {
                                             model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses = [];
@@ -1580,7 +1580,7 @@ define(
                                                     'expenseType': "Miscellaneous",
                                                     'expenseAmount': vehicleDetail.miscellaneous_expense
                                                 }
-                                            );      
+                                            );
                                         }
 
 
@@ -1596,14 +1596,14 @@ define(
                                 if (vehicleDetail.calculation_method == "DISTANCE") {
                                     if(_.isArray(model.loanAccount.vehicleLoanDetails.vehicleRouteDetails) && model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0] && model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].routesKms && model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].trips) {
                                         model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].kmPerMonth = model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].routesKms * model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].trips;
-                                    }    
+                                    }
                                 }
-                                
+
 
                                 // Calculation for Fuel_Cost_per_month
                                 if (vehicleDetail.calculation_method == "DISTANCE") {
                                     if (vehicleDetail.fuel_cost && model.loanAccount.vehicleLoanDetails.mileage)
-                                        model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[0].expenseAmount = parseFloat(model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].kmPerMonth) * parseFloat(vehicleDetail.fuel_cost) / parseFloat(model.loanAccount.vehicleLoanDetails.mileage);                               
+                                        model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[0].expenseAmount = parseFloat(model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].kmPerMonth) * parseFloat(vehicleDetail.fuel_cost) / parseFloat(model.loanAccount.vehicleLoanDetails.mileage);
                                 } else if (vehicleDetail.calculation_method == "TIME") {
                                     if (model.loanAccount.vehicleLoanDetails.fuelConsumptionPerHour && model.loanAccount.vehicleLoanDetails.monthlyWorkingDays && vehicleDetail.fuel_cost)
                                         model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[0].expenseAmount = parseFloat(model.loanAccount.vehicleLoanDetails.monthlyWorkingHours) * parseFloat(model.loanAccount.vehicleLoanDetails.fuelConsumptionPerHour) * parseFloat(vehicleDetail.fuel_cost);
@@ -1623,7 +1623,7 @@ define(
                                  if (vehicleDetail.calculation_method == 'DISTANCE') {
                                     let incomeAmount = model.loanAccount.vehicleLoanDetails.ratePerTrip * model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].trips;
                                     if (model.loanAccount && model.loanAccount.vehicleLoanDetails && model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes && _.isArray(model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes)) {
-                                        model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes = [];   
+                                        model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes = [];
                                         model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes.push({
                                             'incomeType': 'Monthly Revenue',
                                             'incomeAmount': incomeAmount
@@ -1632,7 +1632,7 @@ define(
                                  } else if (vehicleDetail.calculation_method == 'TIME'){
                                     let incomeAmount = model.loanAccount.vehicleLoanDetails.monthlyWorkingHours * model.loanAccount.vehicleLoanDetails.hourlyRate;
                                     if (model.loanAccount && model.loanAccount.vehicleLoanDetails && model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes && _.isArray(model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes)) {
-                                        model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes = [];   
+                                        model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes = [];
                                         model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes.push({
                                             'incomeType': 'Monthly Revenue',
                                             'incomeAmount': incomeAmount
@@ -1649,14 +1649,14 @@ define(
                                             model.loanAccount.vehicleLoanDetails.validation = "ERROR";
                                         } else {
                                             model.loanAccount.vehicleLoanDetails.validation = "OK";
-                                        }    
-                                    }     
+                                        }
+                                    }
                                  }
 
 
                                  // calculation for totalMonthlyExpense
                                  if (_.isArray(model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses)) {
-                                     var sum = 0;   
+                                     var sum = 0;
                                      for (i=0; i<model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses.length; i++) {
                                         var vehicleLoanExpense = model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[i];
                                         sum = sum + vehicleLoanExpense.expenseAmount;
@@ -1673,7 +1673,7 @@ define(
                                  // Calculation for fcfToEmi
                                  if (model.loanAccount.vehicleLoanDetails.freeCashFlow && model.loanAccount.estimatedEmi)
                                      model.loanAccount.vehicleLoanDetails.fcfToEmi = Math.round(parseFloat(model.loanAccount.vehicleLoanDetails.freeCashFlow) / parseFloat(model.loanAccount.estimatedEmi))*100/100;
-                                    
+
                                   break;
 
                             }
@@ -1695,7 +1695,7 @@ define(
                             "totalMonthlyExpense": null,
                             "freeCashFlow": null,
                             "fcfToEmi": null,
-                            "emi": null,                                                         
+                            "emi": null,
                             "monthlyWorkingHours" : null
                         };
                         _.assign(model.loanAccount.vehicleLoanDetails, calculateFields);
@@ -1731,14 +1731,14 @@ define(
                                     model.loanAccount.vehicleLoanDetails.validation = "ERROR";
                                 } else {
                                     model.loanAccount.vehicleLoanDetails.validation = "OK";
-                                }    
-                            }   
+                                }
+                            }
                          }
 
 
                          // calculation for totalMonthlyExpense
                          if (_.isArray(model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses)) {
-                             var sum = 0;   
+                             var sum = 0;
                              for (i=0; i<model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses.length; i++) {
                                 var vehicleLoanExpense = model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[i];
                                 sum = sum + vehicleLoanExpense.expenseAmount;
