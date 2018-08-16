@@ -1025,8 +1025,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "title": "LOCATION",
                                             "type": "geotag",
                                             "orderNo": 10,
-                                            "latitude": "latitude",
-                                            "longitude": "longitude",
+                                            "latitude": "customer.latitude",
+                                            "longitude": "customer.longitude",
                                         },
                                         "locatingHouse": {
                                             "key": "customer.udf.userDefinedFieldValues.udf16",
