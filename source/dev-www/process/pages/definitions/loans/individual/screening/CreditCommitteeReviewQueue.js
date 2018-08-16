@@ -1,13 +1,13 @@
 irf.pageCollection.factory(irf.page("loans.individual.screening.CreditCommitteeReviewQueue"), 
 	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons", "irfNavigator",
 	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons, irfNavigator) {
-		var branch = SessionStore.getBranch();
+		
 		return {
 			"type": "search-list",
 			"title": "CREDIT_COMMITTEE_REVIEW", 
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
-				
+				model.branch = SessionStore.getCurrentBranch().branchId;
 				$log.info("search-list sample got initialized");
 			},
 			definition: {
@@ -23,19 +23,19 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.CreditCommitteeR
 						'branch': {
 	                    	'title': "BRANCH",
 	                    	"type": ["string", "null"],
-	                    	"enumCode": "branch",
 							"x-schema-form": {
-								"type": "select",
+								"type":"userbranch",
 								"screenFilter": true
 							}
 	                    },
-						"centre": {
+                        "centre": {
 							"title": "CENTRE",
 							"type": ["integer", "null"],
 							"x-schema-form": {
 								"type": "select",
 								"enumCode": "centre",
 								"parentEnumCode": "branch",
+								"parentValueExpr": "model.branch",
 								"screenFilter": true
 							}
 						},
@@ -89,9 +89,9 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.CreditCommitteeR
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
 	                    'villageName':searchOptions.villageName,
-	                    'branchName': searchOptions.branch,
-	                    'status':searchOptions.status,
+	                    'branchId':searchOptions.branch,
 	                    'centreCode': searchOptions.centre,
+	                    'status':searchOptions.status,
 	                    'customerName': searchOptions.businessName,
 	                    'page': pageOpts.pageNo,
 	                    'per_page': pageOpts.itemsPerPage,
