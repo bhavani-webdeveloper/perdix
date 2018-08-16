@@ -81,7 +81,8 @@
                         "title": "DO_EKYC",
                         "onClick": "actions.proceed(model, formCtrl, form, $event)"
                     }]
-                }, {
+                }, 
+                {
                     "type": "box",
                     "title": "CUSTOMER_INFORMATION",
                     "condition": "model.customer.ekycDone === true",
@@ -104,7 +105,54 @@
                         type: "date",
                         required: false
                     }]
-                }, {
+                },
+                {
+                    "type": "box",
+                    "title": "BANK_ACCOUNTS",
+                    "condition": "model.customer.ekycDone === true",
+                    "items": [
+                        {
+                        key: "application.mutualFundAccountProfile.accountNumber",
+                        "title": "ACCOUNT_NUMBER",
+                        required:true,
+                        type: "lov",
+                        autolov: true,
+                        lovonly: true,
+                        bindMap: {},
+                        searchHelper: formHelper,
+                        search: function(inputModel, form, model, context) {
+                            return $q.resolve({
+                                headers: {
+                                    "x-total-count":model.customer.customerBankAccounts.length
+                                },
+                                body: model.customer.customerBankAccounts
+                            });
+                        },
+                        onSelect: function(valueObj, model, context) {
+                            model.application.mutualFundAccountProfile.accountNumber= valueObj.accountNumber;
+                            model.application.mutualFundAccountProfile.accountType= valueObj.accountType;
+                            model.application.mutualFundAccountProfile.bankCity= valueObj.customerBankBranchName;
+                            model.application.mutualFundAccountProfile.bankName= valueObj.customerBankName;
+                            model.application.mutualFundAccountProfile.branchName= valueObj.customerBankBranchName;
+                        },
+                        getListDisplayItem: function(item, index) {
+                            return [
+                                item.customerBankName,
+                                item.accountNumber,
+                                item.accountType
+                            ];
+                        }
+                    },{
+                        key: "application.mutualFundAccountProfile.bankName",
+                        "readonly":true,
+                        "title": "BANK_NAME",
+                    },{
+                        key: "application.mutualFundAccountProfile.branchName",
+                        "readonly":true,
+                        "title": "BANK_BRANCH_NAME",
+                    }]
+                },
+                {
                     type: "box",
                     title: "FIRST_PURCHASE",
                     "condition": "model.customer.ekycDone === true && !model.isCreated",
@@ -117,15 +165,12 @@
                             key: "formApplication.intialInvestment",
                             type: "amount",
                             required: true
-                        }, {
-                            title: "UNIT_BALANCE",
-                            key: "formApplication.unitBalance",
-                            type: "number",
-                            required: true
-                        }, {
+                        }, 
+                        {
                             title: "NOMINEE_FIRST_NAME",
                             key: "formApplication.nomineeFirstName",
                             type: "lov",
+                            autolov: true,
                             lovonly: true,
                             required: true,
                             searchHelper: formHelper,
@@ -250,7 +295,6 @@
                                     item.name
                                 ];
                             }
-
                         }, {
                             "condition": "model.isMinor",
                             title: "GUARDIAN_DOB",
@@ -301,11 +345,8 @@
                             irfProgressMessage.pop("First-Purchase ", "Successful", 5000);
                             irfNavigator.goBack();
                         }, function(errResp) {
-                            PageHelper.setError({
-                                message: "first purchase failed!"
-                            });
+                            PageHelper.showErrors(errResp);
                             PageHelper.hideLoader();
-                            irfNavigator.goBack();
                         });
                     },
                     proceed: function(model, formCtrl, form, $event) {
@@ -313,7 +354,7 @@
                         irfNavigator.go({
                             state: "Page.Adhoc",
                             pageName: "MutualFund.MutualFundEKYC",
-                            pageId: $stateParams.pageId,
+                            pageId:  model.customer.id
                         });                       
                         PageHelper.hideLoader();
                     }
