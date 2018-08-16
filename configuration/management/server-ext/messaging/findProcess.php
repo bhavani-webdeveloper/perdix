@@ -52,8 +52,8 @@ try {
 	->join("$db.loan_centre as lc", "lc.loan_id", "=", "la.id")
 	->join("$db.centre_master as cm", "cm.id", "=", "lc.centre_id")
 	->where("mc.process_type", "=", "LOAN");
-	if(isset($query['branchName']) && !empty($query['branchName'])) 
-		$conversationMessage = $conversationMessage->where('bm.branch_name','=', $query['branchName']);
+	if(isset($query['branchId']) && !empty($query['branchId'])) 
+		$conversationMessage = $conversationMessage->whereIn('la.branch_id','=', $query['branchId']);
 	
 	if($query['status']=='Active') 
 		$conversationMessage = $conversationMessage->whereNull('closed_at');
