@@ -1,9 +1,9 @@
 define({
     pageUID: "management.BranchMaintenance",
     pageType: "Engine",
-    dependencies: ["$log","Pages_ManagementHelper","Queries","Lead","Enrollment","BranchCreationResource", "$q",'PageHelper', 'formHelper','irfProgressMessage',
+    dependencies: ["$log","Pages_ManagementHelper","PagesDefinition","Queries","Lead","Enrollment","BranchCreationResource", "$q",'PageHelper', 'formHelper','irfProgressMessage',
         'SessionStore', "$state", "$stateParams", "Masters", "authService"],
-    $pageFn: function($log,Pages_ManagementHelper,Queries,Lead,Enrollment,BranchCreationResource, $q, PageHelper, formHelper, irfProgressMessage,
+    $pageFn: function($log,Pages_ManagementHelper,PagesDefinition,Queries,Lead,Enrollment,BranchCreationResource, $q, PageHelper, formHelper, irfProgressMessage,
         SessionStore, $state, $stateParams, Masters, authService) {
 
         return {
@@ -58,6 +58,16 @@ define({
                             break;
                         }
                     }
+                    model.autoBranchCode= true;
+                    PagesDefinition.getRolePageConfig("Page/Engine/management.BranchMaintenance").then(function(data){
+                        $log.info(data);
+                        $log.info(data.autoBranchCode);
+                        if(data){
+                            model.autoBranchCode= data.autoBranchCode;
+                        }
+                    },function(err){
+                        model.autoBranchCode= true;
+                    });
                 }    
             },
 
@@ -90,6 +100,12 @@ define({
                     "type": "string",
                     "title": "BRANCH_NAME",
                     "condition":"model.branch.id"
+                },{
+                    "key": "branch.branchCode",
+                    "required":true,
+                    "type": "string",
+                    "title": "BRANCH_CODE",
+                    "condition":"!model.branch.id && !model.autoBranchCode"
                 },{
                     "key": "branch.branchCode",
                     "readonly":true,
@@ -280,6 +296,9 @@ define({
                     }
                     if (model.branch.branchCloseTime) {
                         model.branch.branchCloseTime = moment(model.branch.branchCloseTime).format("HH:mm:ss");
+                    }
+                    if(!model.branch.operationalStatus){
+                       model.branch.operationalStatus='ACTIVE'; 
                     }
                     PageHelper.showLoader();
                     PageHelper.showProgress("Branch Save", "Working...");
