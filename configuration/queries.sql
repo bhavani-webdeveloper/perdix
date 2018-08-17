@@ -13,7 +13,7 @@ globalSettings.list=SELECT * from global_settings
 customerBankAccounts.list=SELECT * from customer_bank_accounts where customer_id = :customer_id
 bankAccounts.list=SELECT * from bank_account_master
 bankAccountsByPartnerCode.list=SELECT * from bank_account_master where partner_code=:partner_code
-bankAccountsByProductCode.list=SELECT * from bank_account_master where partner_code= (select partner_code from loan_products where product_code = :product_code) and (:allow_disbursement and allow_disbursement = :allow_disbursement or :allow_collection and allow_collection = :allow_collection)
+bankAccountsByProductCode.list=SELECT * from bank_account_master where partner_code= (select partner_code from loan_products where product_code = :product_code) and allow_disbursement in (:allow_disbursement) and allow_collection in (:allow_collection)
 latestLoanRepayments.list=SELECT lr.branch_name, lr.account_number, c.urn_no, c.first_name, lr.transaction_id, lr.repayment_type, lr.repayment_date, ROUND(lr.repayment_amount_in_paisa/100) repayment_amount FROM loan_repayment_details lr, customer c WHERE lr.enrollment_id = c.enrollment_id AND lr.reverse_flag = 'N' AND lr.repayment_type NOT LIKE '%_REV' AND lr.account_number = :account_number ORDER BY lr.created_at DESC
 depositstage.list=select * from loan_collections where current_stage = 'Deposit' and created_by = :deposit_user
 customerBasicDetails.list=select first_name, customer_branch_id, centre_id, urn_no, id, mobile_phone from customer where id IN (:ids) OR urn_no IN (:urns)
