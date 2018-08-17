@@ -87,6 +87,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                         "required": true,
                         "pattern": "^[0-9a-zA-Z]+$",
                     },
+                    "ContactInformation.whatsAppMobileNo" :{
+                        "readonly" : true
+                    },
                     "IndividualInformation.customerId": {
                         type: "lov",
                         lovonly: true,
