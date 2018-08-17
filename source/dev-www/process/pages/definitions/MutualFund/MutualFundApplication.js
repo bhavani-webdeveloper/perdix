@@ -134,6 +134,11 @@
                             model.application.mutualFundAccountProfile.bankCity= valueObj.customerBankBranchName;
                             model.application.mutualFundAccountProfile.bankName= valueObj.customerBankName;
                             model.application.mutualFundAccountProfile.branchName= valueObj.customerBankBranchName;
+                           if(valueObj.accountType == "Savings"){
+                            model.application.mutualFundAccountProfile.accountType="SB";
+                           }else if(valueObj.accountType == "Current"){
+                            model.application.mutualFundAccountProfile.accountType="CA";
+                           }
                         },
                         getListDisplayItem: function(item, index) {
                             return [
