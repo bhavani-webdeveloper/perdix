@@ -129,11 +129,11 @@ define({
                 
                 , {
                     type: "box",
-                    title: "SCHEME DETAILS",
+                    title: "SCHEME_DETAILS",
                     items: [
                             {
                             type: "fieldset",
-                            title: "MUTUAL FUND SCHEMES",
+                            title: "MUTUAL_FUND_SCHEMES",
                             items: [{
                                     title: "CUSTOMER_ID",
                                     key: "customer.customerId",
