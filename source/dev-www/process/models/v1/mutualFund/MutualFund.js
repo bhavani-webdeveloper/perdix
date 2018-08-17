@@ -53,6 +53,10 @@ irf.models.factory('MutualFund', ["$resource", "$httpParamSerializer", "BASE_URL
                 url: endpoint + '/mutualFundFileExchangeLog',
                 isArray: true
             },
+            getMutualFundFileExchangeLog: searchResource({
+                method: 'GET',
+                url: endpoint + '/mutualFundFileExchangeLog'
+            }),
             camsInteg: {
                 method: 'POST',
                 url: camsendpoint

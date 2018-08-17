@@ -10,7 +10,8 @@ irf.pageCollection.controller(irf.controller("MutualFund.MutualFundDashboard"), 
             "items": [
                 "Page/Engine/MutualFund.MutualFundCustomerSearch",
                 "Page/Engine/MutualFund.MutualFundDownloadFeed",
-                "Page/Engine/MutualFund.MutualFundUploadFeed"
+                "Page/Engine/MutualFund.MutualFundUploadFeed",
+                "Page/Engine/MutualFund.MutualFundFileExchangeLog"
             ]
         };
 
