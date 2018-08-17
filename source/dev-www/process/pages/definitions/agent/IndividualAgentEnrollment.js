@@ -71,7 +71,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                     "AgentFeeDetails.agentFeeDetails.feeAmount": {
                         "key": "agent.agentFeeDetails[].feeAmount",
                         "title": "FEE_AMOUT",
-                        "type": "amount"
+                        "type": "amount",
+                        "required": true
                     },
                     "AgentInformation.customerId": {
                         "key": "agent.customerId",
@@ -87,9 +88,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                         "startEmpty": false
                     },
                     "AgentFeeDetails.agentFeeDetails.feeName": {
-                        "required": true
-                    },
-                    "AgentFeeDetails.agentFeeDetails.feeAmount": {
                         "required": true
                     },
                     "AgentInformation.agentType": {
