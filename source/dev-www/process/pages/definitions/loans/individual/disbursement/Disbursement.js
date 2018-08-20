@@ -26,7 +26,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                 model.CBSDate=SessionStore.getCBSDate();
                 model.siteCode = SessionStore.getGlobalSetting("siteCode");
                 model.validateDisbursementDate = function(model){
-                    if(model.siteCode == "IREPDhan" && (moment(model.loanAccountDisbursementSchedule.scheduledDisbursementDate).isSameOrAfter(model.CBSDate))){
+                    if(model.siteCode == "IREPDhan" && (moment(model.loanAccountDisbursementSchedule.scheduledDisbursementDate).isAfter(model.CBSDate))){
                         PageHelper.setError({
                             message: "disbursement date should be less than or equal to current system date" + " " + moment(model.CBSDate).format(SessionStore.getDateFormat())
                         });
