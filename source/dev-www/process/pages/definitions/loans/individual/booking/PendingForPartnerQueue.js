@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.booking.PendingForPartnerQueue"),
-["$log", "formHelper","entityManager", "IndividualLoan","$state", "SessionStore", "Utils","irfNavigator",
-function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Utils, irfNavigator){
+["$log", "formHelper","entityManager","PagesDefinition", "IndividualLoan","$state", "SessionStore", "Utils","irfNavigator",
+function($log, formHelper,EntityManager,PagesDefinition, IndividualLoan,$state, SessionStore, Utils, irfNavigator){
 
 	var branch = SessionStore.getBranch();
 
@@ -11,6 +11,17 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 
 		initialize: function (model, form, formCtrl) {
 			model.branch = SessionStore.getCurrentBranch().branchId;
+			model.DoPartnerView= true;
+			PagesDefinition.getRolePageConfig("Page/Engine/loans.individual.booking.PendingForPartnerQueue").then(function(data){
+				$log.info(data);
+				$log.info(data.DoPartnerView);
+				if(data){
+					model.DoPartnerView= data.DoPartnerView;
+				}
+			},function(err){
+				model.DoPartnerView= true;
+			});
+
 		},
 
 		definition: {
@@ -106,20 +117,25 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 						name: "REVIEW",
 						desc: "",
 						icon: "fa fa-book",
-						fn: function(item, index){
-							//EntityManager.setModel("loans.individual.booking.IFMRDO",{_loan:item});
-							/*$state.go("Page.Engine",{
-								pageName:"loans.individual.booking.PendingForPartner",
-								pageId:item.loanId
-							});*/
-							irfNavigator.go({
-								state: "Page.Bundle",
-								pageName: "loans.individual.screening.DoPartnerView",
-								pageId: item.loanId
-							}, {
-								state: 'Page.Engine',
-								pageName: "loans.individual.booking.PendingForPartnerQueue"
-							});
+						fn: function(item, model){
+							if(!model.searchOptions.DoPartnerView){
+								EntityManager.setModel("loans.individual.booking.IFMRDO",{_loan:item});
+								irfNavigator.go({
+									state: 'Page.Engine',
+									pageName:"loans.individual.booking.PendingForPartner",
+									pageId:item.loanId
+								});
+							}else{
+								irfNavigator.go({
+									state: "Page.Bundle",
+									pageName: "loans.individual.screening.DoPartnerView",
+									pageId: item.loanId
+								}, {
+									state: 'Page.Engine',
+									pageName: "loans.individual.booking.PendingForPartnerQueue"
+								});
+
+							}	
 						},
 						isApplicable: function(item, index){
 							return true;
