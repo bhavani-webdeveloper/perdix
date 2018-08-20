@@ -495,7 +495,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         PageHelper.showProgress('disbursement', "Errors found in the form. Please fix to continue",3000);
                         return;
                     }
-                    if(model.siteCode == "IREPDhan" && (moment(model.loanAccountDisbursementSchedule.scheduledDisbursementDate).isSameOrAfter(model.CBSDate))){
+                    if(model.siteCode == "IREPDhan" && (moment(model.loanAccountDisbursementSchedule.scheduledDisbursementDate).isAfter(model.CBSDate))){
                         PageHelper.setError({
                             message: "disbursement date should be less than or equal to current system date" + " " + moment(model.CBSDate).format(SessionStore.getDateFormat())
                         });
