@@ -1155,7 +1155,7 @@ var navigateToQueue = function(model) {
                 }
 */
                     /* validating that loan AmountRequested should be greater than current loan amount*/
-                    if (!_.isNull(model.loanAccount.transactionType) && model.loanAccount.transactionType.toLowerCase == 'renewal') {
+                    if (!_.isNull(model.loanAccount.transactionType) && model.loanAccount.transactionType.toLowerCase() == 'renewal') {
                         if (model.linkedLoanAmount && model.loanAccount.loanAmountRequested < model.linkedLoanAmount) {
 
                             var res = {

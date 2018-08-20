@@ -3049,7 +3049,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 //     return
                 // }
                 /* 1)validating loan amount requested should be greater then current loan account */
-                if(!_.isNull(model.loanAccount.transactionType) && model.loanAccount.transactionType.toLowerCase =='renewal'){
+                if(!_.isNull(model.loanAccount.transactionType) && model.loanAccount.transactionType.toLowerCase() =='renewal'){
                     if(model.linkedLoanAmount && (model.loanAccount.loanAmountRequested < model.linkedLoanAmount || model.loanAccount.loanAmount < model.linkedLoanAmount)){
 
                         var res = {
