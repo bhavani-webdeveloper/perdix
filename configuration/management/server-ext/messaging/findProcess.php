@@ -8,6 +8,30 @@ use Illuminate\Validation\Rule;
 use App\Models\Messaging\Conversation;
 use App\Models\Messaging\Message;
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+$authHeader = $_SERVER['HTTP_AUTHORIZATION'];
+try{
+	$url = $settings['perdix']['v8_url'] . "/api/account";
+	$client = new GuzzleClient();
+	$reqResAuth = $client->request('GET', $url, [
+		'headers' => [
+			'Authorization' => $authHeader
+		],
+		'connect_timeout' => 3600,
+		'timeout' => 3600
+	]);
+
+	$responseBody = $reqResAuth->getBody()->getContents();
+	$parsedArrUser = \GuzzleHttp\json_decode($responseBody, true);
+	$username = (string)($parsedArrUser['login']);
+
+} catch (\Exception $e){
+	throw $e;
+}
+
 // Response
 $response = get_response_obj();
 
@@ -32,17 +56,53 @@ $customeMessage = [
 	'replied.required' => 'required'
 ];
 
+
+
 $validator = get_validator()->make($query, $rule,$customeMessage);
 if ($validator->fails()) {
 	$response->setStatusCode(500);
 	exit();
 }
 
+
 try {
 	$skip = ($query['page']-1)*$query['per_page'];
 	// Fetching the messaging details depends on the conversation ID
 	$havingCondition = ($query['replied']=='true') ? 'count(conversation_id) > 1' : 'count(conversation_id) = 1';
 	$havingCondition = ($query['replied']=='true') ? "(SELECT count(conversation_id) FROM $db.ms_message WHERE conversation_id = mc.id AND reply_reference_id IS NOT NULL) > 0" : "(SELECT count(conversation_id) FROM $db.ms_message WHERE conversation_id = mc.id AND reply_reference_id IS NOT NULL) = 0";
+	$defaultBranchList = "(SELECT id
+	from $db.branch_master
+	WHERE branch_name in (
+					SELECT branch_name
+					from $db.users
+					where user_id = '$username'
+	)
+	UNION
+	SELECT branch_id
+	from $db.user_branches
+	where user_id = '$username'
+	UNION
+	SELECT child_branch_id
+	from $db.branchset_access
+	where branch_id in (
+					SELECT id
+					from $db.branch_master
+					WHERE branch_name in (
+									SELECT branch_name
+									from $db.users
+									where user_id = '$username'
+					)
+	)
+	UNION
+	SELECT child_branch_id
+	from $db.branchset_access
+	where branch_id in (
+					SELECT branch_id
+					from $db.user_branches
+					where user_id = '$username'
+	)) as dbl";
+	
+	
 	$conversationMessage = DB::table("$db.ms_conversation as mc")
 	->join("$db.ms_message as mm", "mm.conversation_id", "=", "mc.id")
 	->join("$db.loan_accounts as la", "la.id", "=", "mc.process_id")
@@ -52,9 +112,23 @@ try {
 	->join("$db.loan_centre as lc", "lc.loan_id", "=", "la.id")
 	->join("$db.centre_master as cm", "cm.id", "=", "lc.centre_id")
 	->where("mc.process_type", "=", "LOAN");
-	if(isset($query['branchId']) && !empty($query['branchId'])) 
-		$conversationMessage = $conversationMessage->whereIn('la.branch_id','=', $query['branchId']);
+	if(isset($query['branchId']) && !empty($query['branchId'])){
+		$userBranchId = $query['branchId'];
+		$branchList = "(SELECT $userBranchId
+		UNION
+		SELECT child_branch_id
+		from $db.branchset_access
+		where branch_id = $userBranchId) as nbl";
+		$newBranchlist =DB::raw($branchList);
+	}
+	else
+		$newBranchlist =DB::raw($defaultBranchList);
+		
+	$conversationMessage = $conversationMessage->whereIn('la.branch_id',function($query) use($newBranchlist) {
+		$query->select('*')->from($newBranchlist);
+	});
 	
+	// $conversationMessage = $conversationMessage->whereIn('la.branch_id',$defaultBranchList);
 	if($query['status']=='Active') 
 		$conversationMessage = $conversationMessage->whereNull('closed_at');
 	else 
@@ -104,11 +178,10 @@ try {
 	// ->take($query['per_page'])
 	->havingRaw($havingCondition)
 	->get();
-
+	//print_r($conversationMessage);
 	$response->setStatusCode(200)->json($conversationMessage->toArray());
 } catch(Exception $e) {
 	//echo $e->getMessage();
 	$response->setStatusCode(500);
 }
 ?>
-
