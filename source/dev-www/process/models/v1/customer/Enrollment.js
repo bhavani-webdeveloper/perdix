@@ -435,7 +435,7 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
                 model.customer.identityProof = 'Aadhar card';
                 model.customer.identityProofNo = aadhaarData.uid;
             }
-            if (!model.customer.addressProof && !model.customer.addressProofNo) {
+            if (!model.customer.addressProof && model.customer.addressProof && !model.customer.addressProofNo) {
                 model.customer.addressProof = 'Aadhar card';
                 model.customer.addressProofNo = aadhaarData.uid;
             }
