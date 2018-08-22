@@ -23,28 +23,17 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
                 "Page/Engine/witfin.lead.ReadyForScreeningQueue",
                 "Page/Engine/witfin.loans.individual.screening.ScreeningQueue",
                 "Page/Engine/witfin.loans.individual.screening.ScreeningReviewQueue",
-                "Page/Engine/witfin.loans.individual.screening.GoNoGoApproval1Queue",
-                "Page/Engine/witfin.loans.individual.screening.GoNoGoApproval2Queue",
-                "Page/Engine/witfin.loans.individual.screening.VehicleValuationQueue",
                 "Page/Engine/witfin.loans.individual.screening.FieldInvestigation1Queue",
                 "Page/Engine/witfin.loans.individual.screening.FieldInvestigation2Queue",
                 "Page/Engine/witfin.loans.individual.screening.FieldInvestigation3Queue",
                 "Page/Engine/witfin.loans.individual.screening.TeleVerificationQueue",
-                "Page/Engine/witfin.loans.individual.screening.CreditAppraisalQueue",
-                "Page/Engine/witfin.loans.individual.screening.DeviationApproval1Queue",
-                "Page/Engine/witfin.loans.individual.screening.DeviationApproval2Queue",
                 "Page/Engine/witfin.loans.individual.screening.BusinessApproval1Queue",
                 "Page/Engine/witfin.loans.individual.screening.BusinessApproval2Queue",
-                "Page/Engine/witfin.loans.individual.screening.BusinessApproval3Queue",
-                "Page/Engine/witfin.loans.individual.screening.BusinessApproval4Queue",
-                "Page/Engine/witfin.loans.individual.screening.BusinessApproval5Queue",
                 "Page/Engine/witfin.loans.individual.screening.CreditApproval1Queue",
                 "Page/Engine/witfin.loans.individual.screening.CreditApproval2Queue",
                 "Page/Engine/witfin.loans.individual.screening.CreditApproval3Queue",
-                "Page/Engine/witfin.loans.individual.screening.CreditApproval4Queue",
-                "Page/Engine/witfin.loans.individual.screening.CreditApproval5Queue",
-                "Page/Engine/witfin.loans.individual.screening.RejectedQueue"            
-            ]
+                "Page/Engine/witfin.loans.individual.screening.RejectedQueue"
+              ]
         };
 
 

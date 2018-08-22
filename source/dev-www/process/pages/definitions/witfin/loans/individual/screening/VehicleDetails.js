@@ -49,10 +49,7 @@ define(
                                 "VehicleLoanIncomesInformation",
                                 "VehicleLoanIncomesInformation1",
                                 "VehicleViability",
-                                "VehicleViability.calculateVehicleDetails",
-                                "calculateVehicleDetails1",
-                                "calculateVehicleDetails",
-                                "VehicleViability1",
+                                "VehicleViability.calculateVehicleDetails"
                             ],
                             "overrides": {
 
@@ -646,6 +643,14 @@ define(
                     "VehicleViability.fcfToEmi",
                     "VehicleViability.totalMonthlyExpense",
                     "VehicleViability1",
+                    "VehicleViability1.grossVehicleWeight1",
+                    "VehicleViability1.payLoad1",
+                    "VehicleViability1.typeofLoad1",
+                    "VehicleViability1.ratePerTrip1",
+                    "VehicleViability1.mileage1",
+                    "VehicleViability1.noOfTyres1",
+                    "VehicleViability1.costOfTyre1",
+                    "VehicleViability1.lifeOfTyre1",
                     "VehicleViability1.fuelConsumptionPerHour1",
                     "VehicleViability1.validation1",
                     "VehicleViability1.fcfToEmi1",
@@ -962,7 +967,6 @@ define(
                                 "required": true
                             },
                             "actionbox": {
-                                "condition": "model.loanAccount.vehicleLoanDetails.freeCashFlow",
                                 "orderNo": 999
                             }
                         },

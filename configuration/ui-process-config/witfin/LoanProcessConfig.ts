@@ -32,10 +32,6 @@ let config = {
                     {
                         "name": "DefaultVehicleDocumentsPolicy",
                         "arguments": {}
-                    },
-                    {
-                        "name": "DefaultCalculatedVehicleDetailsPolicy",
-                        "arguments": {}
                     }
                 ],
                 "overrides": [
