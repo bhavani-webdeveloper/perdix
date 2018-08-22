@@ -79,6 +79,7 @@
                 "Page/Engine/management.UserRoles",
                 "Page/Engine/management.RolesPages",
                 "Page/Engine/management.RolesReports",
+                "Page/Engine/management.ScoreMaintenance",
                 "Page/Adhoc/management.product.LoanProductDashboard",
                 "Page/Engine/management.SpokeMerger/interbranch",
                 "Page/Engine/management.SpokeMerger/intrabranch",
