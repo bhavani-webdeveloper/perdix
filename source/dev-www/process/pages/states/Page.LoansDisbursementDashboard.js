@@ -56,7 +56,7 @@ function($log, $scope, PagesDefinition, SessionStore, IndividualLoan) {
             });
         }
 
-        var dcqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.disbursement.DisbursementReversalQueue"];
+        var drqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.disbursement.DisbursementReversalQueue"];
         if (dcqMenu) {
             IndividualLoan.searchDisbursement({
                 'currentStage': 'Completed',
