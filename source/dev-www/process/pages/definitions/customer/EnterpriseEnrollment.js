@@ -323,6 +323,26 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 title: "REGISTRATION_DATE"
                             },
                         ]
+                    },
+                    {
+                        type:"fieldset",
+                        title:"ADDRESS_PROOF",
+                        items:[
+                            {
+                                key:"customer.addressProof",
+                                type:"select",
+                                required: false
+                            },
+                            {
+                                key:"customer.addressProofNo",
+                                type:"barcode",
+                                required: false,
+                                onCapture: function(result, model, form) {
+                                    $log.info(result);
+                                    model.customer.addressProofNo = result.text;
+                                }
+                            }
+                        ]
                     }
                 ]
             },
