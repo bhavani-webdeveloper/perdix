@@ -41,6 +41,17 @@ let config = {
                 "overrides": [
                     {
                         "type": "expr",
+                        "expr": "this.loanAccount.currentStage=='CreditAppraisal'",
+			 "add": [
+                            {
+                                "name": "CalculateVehicleViabilityPolicy",
+                                "arguments": {
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "type": "expr",
                         "expr": "this.loanAccount.currentStage=='VehicleValuation'",
                         "add": [
                             {

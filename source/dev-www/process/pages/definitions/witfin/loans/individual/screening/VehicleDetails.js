@@ -46,7 +46,13 @@ define(
                     "loanProcess.loanAccount.currentStage": {
                         "Screening": {
                             "excludes": [
-
+                                "VehicleLoanIncomesInformation",
+                                "VehicleLoanIncomesInformation1",
+                                "VehicleViability",
+                                "VehicleViability.calculateVehicleDetails",
+                                "calculateVehicleDetails1",
+                                "calculateVehicleDetails",
+                                "VehicleViability1",
                             ],
                             "overrides": {
 
@@ -54,6 +60,7 @@ define(
                         },
                         "ScreeningReview": {
                             "excludes": [
+                                "VehicleViability",
 
                             ],
                             "overrides": {
@@ -88,6 +95,7 @@ define(
                         },
                         "GoNoGoApproval1": {
                             "excludes": [
+                                "VehicleViability",
                                 "VehicleViability.calculateVehicleDetails",
                             ],
                             "overrides": {
@@ -122,6 +130,7 @@ define(
                         },
                         "GoNoGoApproval2": {
                             "excludes": [
+                                "VehicleViability",
                                 "VehicleViability.calculateVehicleDetails",
                             ],
                             "overrides": {
@@ -156,7 +165,7 @@ define(
                         },
                         "FieldInvestigation": {
                             "excludes": [
-
+                                "VehicleViability",
                             ],
                             "overrides": {
 
@@ -164,7 +173,7 @@ define(
                         },
                         "TeleVerification": {
                             "excludes": [
-
+                                "VehicleViability",
                             ],
                             "overrides": {
 
@@ -552,6 +561,7 @@ define(
                         },
                         "CreditApproval5": {
                             "excludes": [
+                              "VehicleViability",
                               "VehicleViability.calculateVehicleDetails" 
                             ],
                             "overrides": {
@@ -630,28 +640,12 @@ define(
                     "NewVehicleDetails.insuredDeclaredValue",  
                     "VehicleViability",
                     "VehicleViability.viabilityCategory",
-                    "VehicleViability.grossVehicleWeight",
-                    "VehicleViability.payLoad",
-                    "VehicleViability.typeofLoad",
-                    "VehicleViability.ratePerTrip",
-                    "VehicleViability.mileage",
-                    "VehicleViability.noOfTyres",
-                    "VehicleViability.costOfTyre",
-                    "VehicleViability.lifeOfTyre",
                     "VehicleViability.fuelConsumptionPerHour",
                     "VehicleViability.validation",
                     "VehicleViability.freeCashFlow",
                     "VehicleViability.fcfToEmi",
                     "VehicleViability.totalMonthlyExpense",
                     "VehicleViability1",
-                    "VehicleViability1.grossVehicleWeight1",
-                    "VehicleViability1.payLoad1",
-                    "VehicleViability1.typeofLoad1",
-                    "VehicleViability1.ratePerTrip1",
-                    "VehicleViability1.mileage1",
-                    "VehicleViability1.noOfTyres1",
-                    "VehicleViability1.costOfTyre1",
-                    "VehicleViability1.lifeOfTyre1",
                     "VehicleViability1.fuelConsumptionPerHour1",
                     "VehicleViability1.validation1",
                     "VehicleViability1.fcfToEmi1",
@@ -674,7 +668,7 @@ define(
                     "VehicleRouteDetails.vehicleRouteDetails",
                     "VehicleRouteDetails.vehicleRouteDetails.routeFrom",
                     "VehicleRouteDetails.vehicleRouteDetails.routeTo",
-                    "VehicleRouteDetails.vehicleRouteDetails.routeVia",
+                    "VehicleRouteDetails.vehicleRouteDetails.ratePerTrip",
                     "VehicleRouteDetails.vehicleRouteDetails.trips",
                     "VehicleRouteDetails.vehicleRouteDetails.routesKms",
                     "VehicleRouteDetails.vehicleRouteDetails.kmPerMonth",
@@ -730,10 +724,10 @@ define(
                                 "remove": null
                             },
                             "vehicleLoanDocuments.vehicleLoanDocuments.docType": {
-                                "required": true
+                                // "required": true
                             },
                             "vehicleLoanDocuments.vehicleLoanDocuments.fileId": {
-                                "required": true
+                                // "required": true
                             },
                             "VehicleRouteDetails": {
                                 "condition": "(model.loanAccount.loanPurpose1 == 'Purchase - New Vehicle' || model.loanAccount.loanPurpose1 == 'Purchase - Used Vehicle' || model.loanAccount.loanPurpose1 == 'Refinance')&& (model.loanAccount.vehicleLoanDetails.segment.toLowerCase() == 'goods')"
@@ -742,6 +736,9 @@ define(
                                 "required": true
                             },
                             "VehicleRouteDetails.vehicleRouteDetails.routeTo": {
+                                "required": true
+                            },
+                            "VehicleRouteDetails.vehicleRouteDetails.ratePerTrip": {
                                 "required": true
                             },
                             "VehicleRouteDetails.vehicleRouteDetails.trips": {
@@ -787,6 +784,7 @@ define(
                             "NewVehicleDetails.segment": {
                                 "orderNo": 40,
                                 "enumCode": "vehicle_segment",
+                                "readonly": true,
                                 onChange: function(modelValue, form, model) {
                                     model.loanAccount.vehicleLoanDetails.category = null;
                                     model.loanAccount.vehicleLoanDetails.make = null;
@@ -820,6 +818,7 @@ define(
                                     model.loanAccount.vehicleLoanDetails.monthlyWorkingHours = null;
 
                                     model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].routeTo = null;
+                                    model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].ratePerTrip = null;
                                     model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].routeVia = null;
                                     model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].routesKms = null;
                                     model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].trips = null;
@@ -847,6 +846,7 @@ define(
                                 "key": "loanAccount.vehicleLoanDetails.category",
                                 "type": "lov",
                                 "autolov": true,
+                                "readonly": true,
                                 "lovonly": true,
                                 "title": "CATEGORY",
                                 searchHelper: formHelper,
@@ -883,6 +883,7 @@ define(
                                 "autolov": true,
                                 "lovonly": true,
                                 "title": "MAKE",
+                                "readonly": true,
                                 "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'NO'",
                                 bindMap: {},
                                 searchHelper: formHelper,
@@ -913,38 +914,10 @@ define(
                                 "required": true
                             },
                             "NewVehicleDetails.vehicleModel": {
-                                "orderNo": 70,
-                                "key": "loanAccount.vehicleLoanDetails.vehicleModel",
                                 "type": "lov",
-                                "autolov": true,
-                                "lovonly": true,
+                                "resolver": "VehicleDetailModelLOVConfiguration",
+                                "orderNo": 70,
                                 "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'NO'",
-                                bindMap: {},
-                                searchHelper: formHelper,
-                                search: function(inputModel, form, model, context) {
-                                    var vehicleDetails = model.vehicleDetails;
-                                    var out = [];
-                                    var res = $filter('filter')(vehicleDetails, {
-                                        'segment': model.loanAccount.vehicleLoanDetails.segment,
-                                        'category': model.loanAccount.vehicleLoanDetails.category,
-                                        'manufacturer': model.loanAccount.vehicleLoanDetails.make
-                                    }, true);
-                                    out = _.uniqBy(res, 'model');
-                                    return $q.resolve({
-                                        headers: {
-                                            "x-total-count": out.length
-                                        },
-                                        body: out
-                                    });
-                                },
-                                onSelect: function(valueObj, model, context) {
-                                    model.loanAccount.vehicleLoanDetails.vehicleModel = valueObj.model;
-                                },
-                                getListDisplayItem: function(item, index) {
-                                    return [
-                                        item.model
-                                    ];
-                                },
                                 "required": true
                             },
                             "NewVehicleDetails.yearOfManufacture": {
@@ -1039,6 +1012,7 @@ define(
 
                                                     if (model.loanAccount.vehicleLoanDetails.vehicleRouteDetails && _.isArray(model.loanAccount.vehicleLoanDetails.vehicleRouteDetails) && model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0]) {
                                                         model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].routeTo = null;
+                                                        model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].ratePerTrip = null;
                                                         model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].routeVia = null;
                                                         model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].routesKms = null;
                                                         model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].trips = null;
@@ -1467,6 +1441,14 @@ define(
                         item.customer.centreCode,
                         item.customer.id ? '{{"CUSTOMER_ID"|translate}} :' + item.customer.id : ''
                     ]
+                },
+                "post_pages_initialize": function(bundleModel){
+                    $log.info("Inside post_page_initialize");
+                    BundleManager.broadcastEvent('origination-stage', 'Screening');
+                    Queries.getVehicleDetails()
+                        .then(function (response) {
+                            model.vehicleDetails = responseobj.results;
+                        });
                 },
                 eventListeners: {
                     "lead-loaded": function(bundleModel, model, obj) {

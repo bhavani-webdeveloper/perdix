@@ -535,6 +535,21 @@
                 "vehicleLoanDetails": {
                     "type":"object",
                     "properties": {
+                        "segment1": {
+                            "type": "select",
+                            "enumCode": "vehicle_segment",
+                            "title": "SEGMENT"
+                         },
+                         "category1": {
+                            "type": "select",
+                            "enumCode": "vehicle_category",
+                            "title": "CATEGORY"
+                         },
+                         "make1": {
+                            "type": "select",
+                            "enumCode": "vehicle_make1",
+                            "title": "MAKE"
+                         },
                         "odometerReading": {
                             "type":["string", "null", "number"]
                         }

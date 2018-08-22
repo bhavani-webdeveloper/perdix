@@ -11,14 +11,7 @@ define(["require", "exports"], function (require, exports) {
                         }
                     ]
                 },
-                onLoad: {
-                // "defaults": [
-                //     {
-                //         "name": "LoadTotalAmountPolicy",
-                //         "arguments": {}
-                //     }
-                // ]
-                },
+                onLoad: {},
                 beforeProceed: {},
                 beforeSave: {},
             },

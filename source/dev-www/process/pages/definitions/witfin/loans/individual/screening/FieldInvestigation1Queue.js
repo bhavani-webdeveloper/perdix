@@ -114,7 +114,7 @@ define({
                     }
                     return IndividualLoan.search({
                         'stage': 'FieldInvestigation1',
-                        'branchName': branch,
+                        //'branchName': branch,
                         'enterprisePincode': searchOptions.pincode,
                         'enterprisePincode': searchOptions.pincode,
                         'applicantName': searchOptions.applicantName,
@@ -124,7 +124,7 @@ define({
                         'customerName': searchOptions.businessName,
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage,
-                        'centreCode': searchOptions.centreCode
+                        //'centreCode': searchOptions.centreCode
 
                     }).$promise;
                 },
