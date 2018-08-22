@@ -70,6 +70,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
 
             var overridesFields = function(bundlePageObj) {
                 return {
+                    "AgentInformation.agentCompanyId": {
+                        readonly: true
+                    },
+                    "AgentInformation.agentRegistrationNumber": {
+                        readonly: true
+                    },
+                    "AgentInformation.agentType": {
+                        readonly: true
+                    },
+                    "AgentInformation.companyName": {
+                        readonly: true
+                    },
                     "AgentEmployees.agentEmployees.customerId": {
                         "orderNo": 10,
                         type: "lov",
@@ -194,7 +206,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                     },
                     "AgentEmployees.agentEmployees.agentId": {
                         type: "lov",
-                        "title":"ENTERPRISE_AGENT_ID",
+                        "title": "ENTERPRISE_AGENT_ID",
                         "orderNo": 5,
                         lovonly: true,
                         bindMap: {},
@@ -409,7 +421,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                             "repositoryAdditions": {
                                 "AgentInformation": {
                                     "type": "box",
-                                    "title": "PERSIONAL_INFORMATION",
+                                    "title": "AGENT_INFORMATION",
                                     "orderNo": 10,
                                     "items": {
                                         "customerId": {

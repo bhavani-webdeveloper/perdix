@@ -2,6 +2,7 @@ irf.models.factory('IndividualLoan',[
 "$resource","$httpParamSerializer","BASE_URL","searchResource","Upload","$q","PageHelper",
 function($resource,$httpParamSerializer,BASE_URL,searchResource,Upload,$q,PageHelper){
     var endpoint = BASE_URL + '/api/individualLoan'; 
+    var endpoint1 = BASE_URL + '/api'; 
   
 
     var resource = $resource(endpoint, null, {
@@ -88,6 +89,10 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource,Upload,$q,PageHe
         getBatchSearch:{
             method:'GET',
             url:'process/schemas/ACHPDCRealizationBatchMonitoring.json'
+        },
+        bulkIndividualLoan:{
+            method:'PUT',
+            url:endpoint1+'/bulkIndividualLoan'
         },
         get:{
             method:'GET',
