@@ -269,6 +269,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         model.loanAccount.processingFeePercentage = 1.75;
                         model.loanAccount.securityEmiRequired = 'No';
                         model.loanAccount.otherFee = 0;
+                        model.loanAccount.interestRate = 26;
                     }
                     PagesDefinition.getPageConfig("Page/Engine/loans.individual.booking.LoanInput").then(function(data){
                         $log.info(data);
