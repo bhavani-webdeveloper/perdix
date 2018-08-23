@@ -62,7 +62,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                                                 docTitle: doc.document_name,
                                                 docCode: doc.document_code,
                                                 formsKey: doc.forms_key,
-                                                downloadRequired: doc.download_required
+                                                downloadRequired: doc.download_required,
+                                                mandatory: doc.mandatory
                                             })
                                         }
                                         var loanDocuments = model.loanAccount.loanDocuments;
@@ -77,11 +78,15 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                                                 loanDocuments[i].isHidden = true;
                                             }
 
+
                                             if (documentObj != null) {
                                                 loanDocuments[i].$title = documentObj.docTitle;
                                                 loanDocuments[i].$key = documentObj.formsKey;
                                                 loanDocuments[i].$formsKey = documentObj.formsKey;
                                                 loanDocuments[i].$downloadRequired = documentObj.downloadRequired;
+                                                loanDocuments[i].$mandatory = documentObj.mandatory;
+
+
                                             } else {
                                                 if (_.hasIn(loanDocuments[i],'document') && _.isString(loanDocuments[i].document)){
                                                     loanDocuments[i].$title = loanDocuments[i].document;
@@ -475,9 +480,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                                     "htmlClass": "col-sm-4",
                                     "key": "loanAccount.loanDocuments[].documentStatus",
                                     "condition": "model.loanAccount.loanDocuments[arrayIndex].documentStatus !== 'REJECTED' && model.loanAccount.loanDocuments[arrayIndex].documentStatus !== 'APPROVED'"
-                                }, {
+                                }, 
+                                {
                                     "type": "section",
-                                     "condition": "model.loanAccount.loanDocuments[arrayIndex].documentStatus !== 'APPROVED'",
+                                     "condition": "model.loanAccount.loanDocuments[arrayIndex].documentStatus !== 'APPROVED' && model.loanAccount.loanDocuments[arrayIndex].$mandatory == 'NO' ",
+                                     
                                     "htmlClass": "col-sm-3",
                                     "items": [{
                                         title: "Upload",
@@ -487,12 +494,31 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                                         category: "Loan",
                                         subCategory: "DOC1",
                                         "notitle": true,
-                                        using: "scanner"
+                                        using: "scanner",
+                                        required: false
                                     }]
-                                },{
+                                },
+                                {
+                                    "type": "section",
+                                     "condition": "model.loanAccount.loanDocuments[arrayIndex].documentStatus !== 'APPROVED' && model.loanAccount.loanDocuments[arrayIndex].$mandatory == 'YES' ",
+                                     
+                                    "htmlClass": "col-sm-3",
+                                    "items": [{
+                                        title: "Upload",
+                                        key: "loanAccount.loanDocuments[].documentId",
+                                        type: "file",
+                                        fileType: "application/pdf",
+                                        category: "Loan",
+                                        subCategory: "DOC1",
+                                        "notitle": true,
+                                        using: "scanner",
+                                        required: true
+                                        
+                                    }]
+                                }, {
                                     "type": "section",
                                      "condition": "model.loanAccount.loanDocuments[arrayIndex].documentStatus == 'APPROVED'",
-                                     readonly:true,
+                                     readonly: true,
                                     "htmlClass": "col-sm-3",
                                     "items": [{
                                         title: "Upload",
