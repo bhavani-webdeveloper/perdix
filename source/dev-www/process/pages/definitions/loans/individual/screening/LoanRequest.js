@@ -3050,7 +3050,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 // }
                 /* 1)validating loan amount requested should be greater then current loan account */
                 if(!_.isNull(model.loanAccount.transactionType) && model.loanAccount.transactionType.toLowerCase() =='renewal'){
-                    if(model.linkedLoanAmount && (model.loanAccount.loanAmountRequested < model.linkedLoanAmount || model.loanAccount.loanAmount < model.linkedLoanAmount)){
+                    if(model.linkedLoanAmount && (model.loanAccount.loanAmountRequested < model.linkedLoanAmount || ( !_.isNull(model.loanAccount.loanAmount) && model.loanAccount.loanAmount < model.linkedLoanAmount))){
 
                         var res = {
                             data: {
@@ -3058,7 +3058,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                             }
                         };
                         PageHelper.showErrors(res)
-                        return false;
+                        return;
                     }
                 }
 
