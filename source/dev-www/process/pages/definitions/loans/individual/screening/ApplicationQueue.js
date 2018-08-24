@@ -172,6 +172,12 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ApplicationQueue
 					},
 					getColumns: function() {
 						return [{
+							title: 'ID',
+							data: 'id'
+						}, {
+							title: 'HUB_NAME',
+							data: 'branchName'
+						}, {
 							title: 'SCREENING_DATE',
 							data: 'screeningDate'
 						}, {
