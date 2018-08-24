@@ -94,7 +94,10 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         model.liabilitiesSummary = res[19];
         model.machineryDetails = res[20];
         model.opexDetails = res[21];
+        model.stockDetails = res[23];
+        model.nonMachineryDetails = res[24];
         model.hypothecationType = res[25];
+
 
         model.enterpriseDetails.columns = model.enterpriseDetails.columns.concat(model.ratioDetails.columns);
         _.merge(model.enterpriseDetails.data[0], model.ratioDetails.data[0]);
@@ -768,7 +771,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         '<tr><td>{{"LAND" | translate}}</td><td>{{model.assetsAndLiabilities.land | irfCurrency}}</td><td>{{"OWN_CAPITAL" | translate}}</td><td>{{model.assetsAndLiabilities.ownCapital | irfCurrency}}</td></tr><tr><td>{{"BUILDING" | translate}}</td><td>{{model.assetsAndLiabilities.building | irfCurrency}}</td><td></td><td></td></tr>'+
         '<tr><td>{{"VEHICLE" | translate}}</td><td>{{model.assetsAndLiabilities.vehicle | irfCurrency}}</td><td></td><td></td></tr>'+
         '<tr><td>{{"FURNITURE" | translate}}</td><td>{{model.assetsAndLiabilities.furniture | irfCurrency}}</td><td></td><td></td></tr>'+
-                '<tr><td>{{"FIXTURES" | translate}}</td><td>{{model.assetsAndLiabilities.fixture | irfCurrency}}</td><td></td><td></td></tr>'+
+        '<tr><td>{{"FIXTURES" | translate}}</td><td>{{model.assetsAndLiabilities.fixture | irfCurrency}}</td><td></td><td></td></tr>'+
         '<tr><td>{{"TOTAL_FIXED_ASSETS" | translate}}</td><td>{{model.assetsAndLiabilities.totalFixedAssets | irfCurrency}}</td><td>{{"TOTAL_LONG_TERM_LIABILITIES" | translate}}</td><td>{{model.assetsAndLiabilities.totalLengTermLiabilities | irfCurrency}}</td></tr><tr></tr>'+
         '<tr class="table-bottom-summary"><th>{{"TOTAL_ASSETS" | translate}}</th><th>{{model.assetsAndLiabilities.totalAssets | irfCurrency}}</th><th>{{"TOTAL_LIABILITIES" | translate}}</th><th>{{model.assetsAndLiabilities.totalLiabilities | irfCurrency}}</th></tr>'+
     '</tbody>'+
@@ -856,6 +859,36 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                     type: "section",
                     colClass: "col-sm-12",
                     html: machineryDetailsTable
+                }
+            ]
+        });
+
+        var stockDetailsTable = "<irf-simple-summary-table irf-table-def = 'model.stockDetails'></irf-simple-summary-table>";
+
+        form.push({
+             type: "box",
+            colClass: "col-sm-12 table-box",
+            title: model.stockDetails.title,
+            items: [
+                {
+                    type: "section",
+                    colClass: "col-sm-12",
+                    html: stockDetailsTable
+                }
+            ]
+        });
+
+        var nonMachineryDetailsTable = "<irf-simple-summary-table irf-table-def = 'model.nonMachineryDetails'></irf-simple-summary-table>";
+
+        form.push({
+             type: "box",
+            colClass: "col-sm-12 table-box",
+            title: model.nonMachineryDetails.title,
+            items: [
+                {
+                    type: "section",
+                    colClass: "col-sm-12",
+                    html: nonMachineryDetailsTable
                 }
             ]
         });
