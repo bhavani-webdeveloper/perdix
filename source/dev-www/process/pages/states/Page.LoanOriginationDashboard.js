@@ -50,7 +50,6 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
                         'customerName': '',
                         'page': 1,
                         'per_page': 1,
-                        'branchName': currentBranch.branchName,
                         'centreCode': centre.centreCode
                     }).$promise.then(function(response, headerGetter) {
                         sqMenu.data = sqMenu.data + Number(response.headers['x-total-count']);
@@ -75,7 +74,6 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
                         'customerName': '',
                         'page': 1,
                         'per_page': 1,
-                        'branchName': currentBranch.branchName,
                         'centreCode': centre.centreCode
                     }).$promise.then(function(response, headerGetter) {
                         dqMenu.data = dqMenu.data + Number(response.headers['x-total-count']);
@@ -138,7 +136,6 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
                         'customerName': '',
                         'page': 1,
                         'per_page': 1,
-                        'branchName': currentBranch.branchName,
                         'centreCode': centre.centreCode
                     }).$promise.then(function(response, headerGetter) {
                         aqMenu.data = aqMenu.data + Number(response.headers['x-total-count']);
@@ -159,8 +156,7 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
                     'villageName': '',
                     'customerName': '',
                     'page': 1,
-                    'per_page': 1,
-                    'branchName': currentBranch.branchName
+                    'per_page': 1
                 }).$promise.then(function(response, headerGetter) {
                     arqMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
@@ -178,8 +174,7 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
                     'villageName': '',
                     'customerName': '',
                     'page': 1,
-                    'per_page': 1,
-                    'branchName': currentBranch.branchName
+                    'per_page': 1
                 }).$promise.then(function(response, headerGetter) {
                     faqMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
@@ -197,8 +192,7 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
                     'villageName': '',
                     'customerName': '',
                     'page': 1,
-                    'per_page': 1,
-                    'branchName': currentBranch.branchName
+                    'per_page': 1
                 }).$promise.then(function(response, headerGetter) {
                     farqMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
@@ -216,8 +210,7 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
                     'villageName': '',
                     'customerName': '',
                     'page': 1,
-                    'per_page': 1,
-                    'branchName': currentBranch.branchName
+                    'per_page': 1
                 }).$promise.then(function(response, headerGetter) {
                     zrrqMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
@@ -235,8 +228,7 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
                     'villageName': '',
                     'customerName': '',
                     'page': 1,
-                    'per_page': 1,
-                    'branchName': currentBranch.branchName
+                    'per_page': 1
                 }).$promise.then(function(response, headerGetter) {
                     crrqMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
@@ -321,8 +313,7 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
                 Messaging.findConversation({
                     'replied':  'false',
                     'page': 1,
-                    'per_page': 1,
-                    'branchName': currentBranch.branchName
+                    'per_page': 1
                 }).$promise.then(function(response, headerGetter) {
                     bncqMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
@@ -335,8 +326,7 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
                 Messaging.findConversation({
                     'replied':  'true',
                     'page': 1,
-                    'per_page': 1,
-                    'branchName': currentBranch.branchName
+                    'per_page': 1
                 }).$promise.then(function(response, headerGetter) {
                     brcqMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
@@ -356,7 +346,6 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
                     'replied':  'false',
                     'page': 1,
                     'per_page': 1,
-                    'branchName': currentBranch.branchName,
                     'centreCode': centreCode
                 }).$promise.then(function(response, headerGetter) {
                     sncqMenu.data = Number(response.headers['x-total-count']);
@@ -376,7 +365,6 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
                     'replied':  'true',
                     'page': 1,
                     'per_page': 1,
-                    'branchName': currentBranch.branchName,
                     'centreCode': centreCode
                 }).$promise.then(function(response, headerGetter) {
                     srcqMenu.data = Number(response.headers['x-total-count']);
