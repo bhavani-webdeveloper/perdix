@@ -450,6 +450,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
         "title": "LOAN_REQUEST",
         "subTitle": "BUSINESS",
         initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
+           
             model.currentStage = bundleModel.currentStage;
             model.customer=model.customer || {};
             model.review = model.review|| {};
@@ -457,6 +458,21 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
             if (_.hasIn(model, 'loanAccount')){
                 $log.info('Printing Loan Account');
                 $log.info(model.loanAccount);
+                 /* Fixing on urgent basis , but better to get this detail from api getting model data only ,
+                             1)give data from backend/server , so we can save multiple api call 
+                             2) Some how , lead loaded - event is not working, we have data there already , 
+                             */
+                 /*calling individual loan api to get the current loan amount for validating that loan amount requested should be greater then current loan amount */
+                 if (!(_.isNull(model.loanAccount.transactionType)) && model.loanAccount.transactionType.toLowerCase() == 'renewal') {
+                     var p1 = IndividualLoan.search({
+                         accountNumber: model.loanAccount.linkedLoanAccountNo
+                     }).$promise;
+                     p1.then(function (response, headerGetter) {
+                         model.linkedLoanAmount = response.body[0]['loanAmount'];
+                     }, function (err) {
+                         $log.info("loan request Individual/find api failure" + err);
+                     });
+                 }
                 if(model.currentStage=='Screening' || model.currentStage=='ScreeningReview'|| model.currentStage=='Application') {
                     if(model.loanAccount.estimatedEmi){
                         model.loanAccount.expectedEmi = model.loanAccount.estimatedEmi;
