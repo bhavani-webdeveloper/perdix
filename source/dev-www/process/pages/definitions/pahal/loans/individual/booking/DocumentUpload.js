@@ -1,8 +1,10 @@
-irf.pageCollection.factory(irf.page("pahal.loans.individual.booking.DocumentUpload"), ["$log", "Enrollment", "SessionStore", "$state", '$stateParams', 'PageHelper', 'IndividualLoan', 'Queries', 'Utils', 'formHelper', "LoanProcess", "CustomerBankBranch", "SchemaResource", "LoanAccount", "irfNavigator", "PagesDefinition",
-    function($log, Enrollment, SessionStore, $state, $stateParams, PageHelper, IndividualLoan, Queries, Utils, formHelper, LoanProcess, CustomerBankBranch, SchemaResource, LoanAccount, irfNavigator, PagesDefinition) {
-
-
-        var getDocument = function(docsArr, docCode) {
+define({
+    pageUID: "pahal.loans.individual.booking.DocumentUpload",
+    pageType: "Engine",
+    dependencies:  ["$log", "Enrollment", "SessionStore", "$state", '$stateParams', 'PageHelper', 'IndividualLoan', 'Queries', 'Utils', 'formHelper', "LoanProcess", "CustomerBankBranch", "SchemaResource", "LoanAccount", "irfNavigator", "PagesDefinition",
+    "PageHelper", "Utils", "PagesDefinition", "Queries", "$stateParams", "Queries", "DeathMarking"],
+    $pageFn:function($log, Enrollment, SessionStore, $state, $stateParams, PageHelper, IndividualLoan, Queries, Utils, formHelper, LoanProcess, CustomerBankBranch, SchemaResource, LoanAccount, irfNavigator, PagesDefinition) {
+            var getDocument = function(docsArr, docCode) {
             var i = 0;
             for (i = 0; i < docsArr.length; i++) {
                 if (docsArr[i].docCode == docCode) {
@@ -11,7 +13,6 @@ irf.pageCollection.factory(irf.page("pahal.loans.individual.booking.DocumentUplo
             }
             return null;
         }
-
         return {
             "type": "schema-form",
             "title": "LOAN_DOCUMENT_UPLOAD_QUEUE",
@@ -51,7 +52,7 @@ irf.pageCollection.factory(irf.page("pahal.loans.individual.booking.DocumentUplo
                             {
                                  model.loanAccount.disbursementSchedules[0].party = model.loanAccount.disbursementSchedules[0].party || 'CUSTOMER';
                             }
-
+                            
                             Queries.getLoanProductDocuments(model.loanAccount.productCode, "LoanBooking", "DocumentUpload")
                                 .then(
                                     function(docs) {
@@ -73,6 +74,7 @@ irf.pageCollection.factory(irf.page("pahal.loans.individual.booking.DocumentUplo
                                             availableDocCodes.push(loanDocuments[i].document);
                                             var documentObj = getDocument(docsForProduct, loanDocuments[i].document);
                                             /* To add flag whether to show or not */
+                                            loanDocuments[i].isDocs = false;
                                             loanDocuments[i].isHidden = false;
                                             if (loanDocuments[i].documentStatus == 'APPROVED'){
                                                 loanDocuments[i].isHidden = true;
@@ -85,13 +87,14 @@ irf.pageCollection.factory(irf.page("pahal.loans.individual.booking.DocumentUplo
                                                 loanDocuments[i].$formsKey = documentObj.formsKey;
                                                 loanDocuments[i].$downloadRequired = documentObj.downloadRequired;
                                                 loanDocuments[i].$mandatory = documentObj.mandatory;
+                                                loanDocuments[i].isDocs = true;
 
 
                                             } else {
                                                 if (_.hasIn(loanDocuments[i],'document') && _.isString(loanDocuments[i].document)){
                                                     loanDocuments[i].$title = loanDocuments[i].document;
                                                 } else {
-                                                    loanDocuments[i].$title = "DOCUMENT_TITLE_NOT_MAINTAINED";
+                                                    loanDocuments[i].$title = "DOCUMENT_TITLE_NOT_MAINTAINED";    
                                                 }
                                             }
                                         }
@@ -103,7 +106,9 @@ irf.pageCollection.factory(irf.page("pahal.loans.individual.booking.DocumentUplo
                                                     $title: docsForProduct[i].docTitle,
                                                     $formsKey: docsForProduct[i].formsKey,
                                                     disbursementId: model.loanAccount.disbursementSchedules[0].id,
-                                                    isHidden: false
+                                                    isHidden: false,
+                                                    isDocs:true,
+                                                    $mandatory: docsForProduct[i].mandatory
                                                 })
                                             }
                                         }
@@ -333,7 +338,7 @@ irf.pageCollection.factory(irf.page("pahal.loans.individual.booking.DocumentUplo
                             });
                         },
                         onSelect: function(result, model, context) {
-
+                           
                         },
 
                         getListDisplayItem: function(item, index) {
@@ -399,7 +404,7 @@ irf.pageCollection.factory(irf.page("pahal.loans.individual.booking.DocumentUplo
                             {
                                 "type": "section",
                                 "htmlClass": "row",
-                                "condition": "model.loanAccount.loanDocuments[arrayIndex].isHidden === false",
+                                "condition": "model.loanAccount.loanDocuments[arrayIndex].isHidden === false && model.loanAccount.loanDocuments[arrayIndex].isDocs === true " ,
                                 "items": [
                                 {
                                     "type": "section",
@@ -424,7 +429,7 @@ irf.pageCollection.factory(irf.page("pahal.loans.individual.booking.DocumentUplo
                                         "condition": "!model.loanAccount.loanDocuments[arrayIndex].$downloadRequired",
                                         "readonly": true
                                     }]
-                                },
+                                }, 
 
                                 {
                                     "type": "section",
@@ -483,8 +488,24 @@ irf.pageCollection.factory(irf.page("pahal.loans.individual.booking.DocumentUplo
                                 },
                                 {
                                     "type": "section",
-                                     "condition": "model.loanAccount.loanDocuments[arrayIndex].documentStatus !== 'APPROVED' && model.loanAccount.loanDocuments[arrayIndex].$mandatory == 'NO' ",
-
+                                     "condition": "model.loanAccount.loanDocuments[arrayIndex].documentStatus == 'APPROVED'",
+                                     readonly: true,
+                                    "htmlClass": "col-sm-3",
+                                    "items": [{
+                                        title: "Upload",
+                                        key: "loanAccount.loanDocuments[].documentId",
+                                        type: "file",
+                                        fileType: "application/pdf",
+                                        category: "Loan",
+                                        subCategory: "DOC1",
+                                        "notitle": true,
+                                        using: "scanner"
+                                    }]
+                                }, 
+                                {
+                                    "type": "section",
+                                     "condition": "model.loanAccount.loanDocuments[arrayIndex].documentStatus !== 'APPROVED' && model.loanAccount.loanDocuments[arrayIndex].$mandatory == 'NO' && model.loanAccount.loanDocuments[arrayIndex].isDocs === true",
+                                     
                                     "htmlClass": "col-sm-3",
                                     "items": [{
                                         title: "Upload",
@@ -500,8 +521,8 @@ irf.pageCollection.factory(irf.page("pahal.loans.individual.booking.DocumentUplo
                                 },
                                 {
                                     "type": "section",
-                                     "condition": "model.loanAccount.loanDocuments[arrayIndex].documentStatus !== 'APPROVED' && model.loanAccount.loanDocuments[arrayIndex].$mandatory == 'YES' ",
-
+                                     "condition": "model.loanAccount.loanDocuments[arrayIndex].documentStatus !== 'APPROVED' && model.loanAccount.loanDocuments[arrayIndex].$mandatory == 'YES' && model.loanAccount.loanDocuments[arrayIndex].isDocs === true ",
+                                     
                                     "htmlClass": "col-sm-3",
                                     "items": [{
                                         title: "Upload",
@@ -513,22 +534,7 @@ irf.pageCollection.factory(irf.page("pahal.loans.individual.booking.DocumentUplo
                                         "notitle": true,
                                         using: "scanner",
                                         required: true
-
-                                    }]
-                                }, {
-                                    "type": "section",
-                                     "condition": "model.loanAccount.loanDocuments[arrayIndex].documentStatus == 'APPROVED'",
-                                     readonly: true,
-                                    "htmlClass": "col-sm-3",
-                                    "items": [{
-                                        title: "Upload",
-                                        key: "loanAccount.loanDocuments[].documentId",
-                                        type: "file",
-                                        fileType: "application/pdf",
-                                        category: "Loan",
-                                        subCategory: "DOC1",
-                                        "notitle": true,
-                                        using: "scanner"
+                                        
                                     }]
                                 }]
                             }] // END of array items
@@ -570,7 +576,7 @@ irf.pageCollection.factory(irf.page("pahal.loans.individual.booking.DocumentUplo
                                 condition: "model.siteCode != 'sambandh'",
                                 type: "textarea",
                                 required: true
-                            },
+                            }, 
                             {
                                 title: "REMARKS",
                                 key: "review.remarks",
@@ -620,7 +626,7 @@ irf.pageCollection.factory(irf.page("pahal.loans.individual.booking.DocumentUplo
                                     ];
                                 }
                             },
-
+                                
                             {
                                 key: "review.rejectButton",
                                 type: "button",
@@ -714,7 +720,7 @@ irf.pageCollection.factory(irf.page("pahal.loans.individual.booking.DocumentUplo
                         ]
                     }
                 ]
-            },
+            },          
             {
                 "type": "actionbox",
                 condition: "model.siteCode != 'sambandh' && model.siteCode != 'saija'",
@@ -833,7 +839,7 @@ irf.pageCollection.factory(irf.page("pahal.loans.individual.booking.DocumentUplo
                                                     if (_.hasIn(loanDocuments[i],'document') && _.isString(loanDocuments[i].document)){
                                                         loanDocuments[i].$title = loanDocuments[i].document;
                                                     } else {
-                                                        loanDocuments[i].$title = "DOCUMENT_TITLE_NOT_MAINTAINED";
+                                                        loanDocuments[i].$title = "DOCUMENT_TITLE_NOT_MAINTAINED";    
                                                     }
                                                 }
                                             }
@@ -857,7 +863,7 @@ irf.pageCollection.factory(irf.page("pahal.loans.individual.booking.DocumentUplo
                                         }
                                     );
                                     PageHelper.showProgress("update-loan", "ACH Details saved...", 3000);
-                                },
+                                }, 
                                 function(httpRes){
                                     PageHelper.showErrors(httpRes);
                                     PageHelper.hideLoader();
@@ -869,7 +875,7 @@ irf.pageCollection.factory(irf.page("pahal.loans.individual.booking.DocumentUplo
                 viewLoan: function(model, formCtrl, form, $event){
                     Utils.confirm("Save the data before proceed").then(function(){
                         $log.info("Inside ViewLoan()");
-
+                            
                         if(model.loanView) {
                             irfNavigator.go({
                                 state: "Page.Bundle",
@@ -895,7 +901,7 @@ irf.pageCollection.factory(irf.page("pahal.loans.individual.booking.DocumentUplo
                                 pageName: $stateParams.pageName,
                                 pageId: $stateParams.pageId,
                                 pageData: $stateParams.pageData
-                            });
+                            });  
                         }
                     });
                 },
@@ -950,8 +956,7 @@ irf.pageCollection.factory(irf.page("pahal.loans.individual.booking.DocumentUplo
                     }
                     var reqData = {
                         'loanAccount': _.cloneDeep(model.loanAccount),
-                        'loanProcessAction': 'PROCEED',
-                        'remarks': model.review.remarks
+                        'loanProcessAction': 'PROCEED'
                     };
                     PageHelper.showProgress('update-loan', 'Working...');
                     PageHelper.showLoader();
@@ -982,4 +987,4 @@ irf.pageCollection.factory(irf.page("pahal.loans.individual.booking.DocumentUplo
             }
         };
     }
-]);
+});
