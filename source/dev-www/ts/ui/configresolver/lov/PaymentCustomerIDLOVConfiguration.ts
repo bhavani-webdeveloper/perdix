@@ -13,7 +13,7 @@ export class PaymentCustomerIDLOVConfiguration extends LOVElementConfiguration {
         let SessionStore = AngularResourceService.getInstance().getNGService("SessionStore");
         let Enrollment = AngularResourceService.getInstance().getNGService("Enrollment");
         let promise = Enrollment.search({
-            // 'firstName': inputModel.firstName,
+            'firstName': inputModel.firstName,
             'urnNo': inputModel.urnNo,
             'branchName': SessionStore.getBranch(),
         }).$promise;
