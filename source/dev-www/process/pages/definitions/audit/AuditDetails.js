@@ -536,6 +536,10 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "tr
             },
             proceed: function(model) {
                 if (!model.ai) return;
+                if (model._processStatus == 'onProceed') {
+                    return;
+                }
+                model._processStatus = 'onProceed';
                 var nextStage = '';
                 switch (model.ai.current_stage) {
                     case 'start':
@@ -559,12 +563,14 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "tr
                         nextStage = 'approve';
                         break;
                     default:
+                        model._processStatus = '';
                         return;
                 }
                 if (!model.ai.message) {
                     PageHelper.setError({
                         message: 'Audit ' + nextStage + ' message is required'
                     });
+                    model._processStatus = '';
                     return;
                 }
                 $scope.actions.moveStage(model, nextStage);
@@ -592,6 +598,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "tr
             },
             moveStage: function(model, nextStage) {
                 PageHelper.clearErrors();
+                PageHelper.showLoader();
                 Utils.confirm("All unsaved data will be lost, Do you want to proceed?").then(function() {
                     var reqData = $scope.model.ai;
                     reqData.next_stage = nextStage;
@@ -604,6 +611,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "tr
                         PageHelper.showErrors(errRes);
                     }).finally(function() {
                         PageHelper.hideLoader();
+                        model._processStatus = '';
                     })
                 });
             },
