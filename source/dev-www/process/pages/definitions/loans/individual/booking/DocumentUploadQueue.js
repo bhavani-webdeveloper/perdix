@@ -1,6 +1,7 @@
 irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUploadQueue"),
 ["$log", "formHelper","$state", "SessionStore", "$q", "IndividualLoan", "entityManager", "LoanBookingCommons", "irfNavigator","$filter",
 function($log, formHelper,$state, SessionStore, $q, IndividualLoan, entityManager, LoanBookingCommons, irfNavigator, $filter){
+    var siteCode;
     return {
         "type": "search-list",
         "title": "DOCUMENT_EXECUTION",
@@ -10,6 +11,7 @@ function($log, formHelper,$state, SessionStore, $q, IndividualLoan, entityManage
             $log.info("search-list sample got initialized");
             model.branchName = SessionStore.getBranch();
             model.branchId = SessionStore.getBranchId();
+            siteCode = SessionStore.getGlobalSetting('siteCode');
         },
 
         definition: {
@@ -58,7 +60,7 @@ function($log, formHelper,$state, SessionStore, $q, IndividualLoan, entityManage
                     "loan_product": {
                         "title": "Loan Product",
                         "type": "string",
-                        
+
                         "x-schema-form": {
                             "type": "lov",
                             "lovonly": true,
@@ -153,15 +155,28 @@ function($log, formHelper,$state, SessionStore, $q, IndividualLoan, entityManage
                             name: "View / Upload Documents",
                             desc: "",
                             fn: function(item, index){
-                                irfNavigator.go({
-                                    state: 'Page.Engine', 
-                                    pageName: 'loans.individual.booking.DocumentUpload', 
-                                    pageData: item, 
-                                    pageId: item.loanId
-                                }, {
-                                    state: 'Page.Engine',
-                                    pageName: "loans.individual.booking.DocumentUploadQueue"
-                                });
+                                if (siteCode == 'pahal') {
+                                        irfNavigator.go({
+                                        state: 'Page.Engine',
+                                        pageName: 'pahal.loans.individual.booking.DocumentUpload',
+                                        pageData: item,
+                                        pageId: item.loanId
+                                    }, {
+                                        state: 'Page.Engine',
+                                        pageName: "loans.individual.booking.DocumentUploadQueue"
+                                    });
+                                } else {
+                                    irfNavigator.go({
+                                        state: 'Page.Engine',
+                                        pageName: 'loans.individual.booking.DocumentUpload',
+                                        pageData: item,
+                                        pageId: item.loanId
+                                    }, {
+                                        state: 'Page.Engine',
+                                        pageName: "loans.individual.booking.DocumentUploadQueue"
+                                    });
+                                }
+
                             },
                             isApplicable: function(item, index){
                                 return true;
