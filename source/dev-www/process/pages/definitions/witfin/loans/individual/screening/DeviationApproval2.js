@@ -101,7 +101,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 order:80
                             },{
                                 pageName: 'witfin.loans.individual.screening.detail.Scoring',
-                                title: 'Scoring',
+                                title: 'Cam',
                                 pageClass: 'scoring',
                                 minimum: 1,
                                 maximum: 1,

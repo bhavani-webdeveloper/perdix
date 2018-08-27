@@ -146,6 +146,10 @@
                     "title": "VALUATOR",
                     "type": ["string", "null"]
                 },
+                "user_name": {
+                    "title": "USER_NAME",
+                    "type": ["string", "null"]
+                },
                 "applicationStatusUpdatedBy": {
                     "type": ["string", "null"]
                 },

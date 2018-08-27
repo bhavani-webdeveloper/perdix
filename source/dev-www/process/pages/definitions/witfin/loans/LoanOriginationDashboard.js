@@ -255,7 +255,7 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
                 });
             }
 
-            var prqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.VehicleValuationQueue"];
+          /*  var prqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.VehicleValuationQueue"];
             if (prqMenu) {
                 IndividualLoan.search({
                     'stage': 'VehicleValuation',
@@ -271,7 +271,7 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
                 }, function() {
                     prqMenu.data = '-';
                 });
-            }
+            }*/
 
             var fiq1Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.FieldInvestigation1Queue"];
             if (fiq1Menu) {

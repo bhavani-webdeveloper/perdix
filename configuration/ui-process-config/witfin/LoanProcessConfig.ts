@@ -38,7 +38,7 @@ let config = {
                     {
                         "type": "expr",
                         "expr": "this.loanAccount.currentStage=='CreditAppraisal'",
-			 "add": [
+                        "add": [
                             {
                                 "name": "CalculateVehicleViabilityPolicy",
                                 "arguments": {

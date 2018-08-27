@@ -37,6 +37,7 @@
         "Page/Adhoc/payment.PaymentDashboard",
         "Page/Adhoc/irep.loans.LoanOriginationDashboard",
         "Page/Adhoc/witfin.loans.LoanOriginationDashboard",
+        "Page/Adhoc/witfin.loans.VehicleValuationDashboard",
         "Page/Adhoc/pahal.loans.LoanOriginationDashboard",
         "Page/DocumentTrackingDashboard", {
             "title": "INDIVIDUAL_LOANS",

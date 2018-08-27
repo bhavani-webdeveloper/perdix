@@ -53,7 +53,43 @@ define([], function() {
                                 "FieldInvestigationDetails"
                             ],
                             "overrides": {
-                                "PreliminaryInformation": {
+                                "PreliminaryInformation.linkedAccountNumber": {
+                                    "readonly": true
+                                },
+                                "PreliminaryInformation.loan": {
+                                    "readonly": true
+                                },
+                                "PreliminaryInformation.loanPurpose1": {
+                                    "readonly": true
+                                },
+                                "PreliminaryInformation.loanPurpose2": {
+                                    "readonly": true
+                                },
+                                "PreliminaryInformation.loanAmountRequested": {
+                                    "readonly": true
+                                },
+                                "PreliminaryInformation.loanToValue": {
+                                    "readonly": true
+                                },
+                                "PreliminaryInformation.parentLoanAccount": {
+                                    "readonly": true
+                                },
+                                "PreliminaryInformation.frequencyRequested": {
+                                    "readonly": true
+                                },
+                                "PreliminaryInformation.udf5": {
+                                    "readonly": true
+                                },
+                                "PreliminaryInformation.tenureRequested": {
+                                    "readonly": true
+                                }, 
+                                "PreliminaryInformation.collectionPaymentType": {
+                                    "readonly": true
+                                },   
+                                "PreliminaryInformation.expectedInterestRate": {
+                                    "readonly": true
+                                },
+                                "PreliminaryInformation.estimatedEmi": {
                                     "readonly": true
                                 },
                                 "DeductionsFromLoan": {
@@ -541,6 +577,7 @@ define([], function() {
                     "PreliminaryInformation.expectedInterestRate",
                     "PreliminaryInformation.calculateEmi",
                     "PreliminaryInformation.estimatedEmi",
+                    "PreliminaryInformation.VehicleValuator",
                     "DeductionsFromLoan",
                     "DeductionsFromLoan.expectedProcessingFeePercentage",
                     "DeductionsFromLoan.dsaPayout",
@@ -699,6 +736,14 @@ define([], function() {
                                             "title" : "FLAT_RATE",
                                             "type": "string",
                                             "orderNo" : 75
+                                        },
+                                        "VehicleValuator": {
+                                            key: "loanAccount.valuator",
+                                            type: "lov",
+                                            "resolver": "VehicleValuatorLOVConfiguration",
+                                            title: "VALUATOR",
+                                            "required": true,
+                                            "condition": "model.loanProcess.loanAccount.currentStage == 'ScreeningReview' && (model.loanAccount.loanPurpose1 == 'Purchase - Used Vehicle' || model.loanAccount.loanPurpose1 == 'Refinance')"
                                         },
                                         "calculateEmi": {
                                             "title": "CALCULATE_EMI",
@@ -966,14 +1011,6 @@ define([], function() {
                                         key: "loanProcess.remarks",
                                         type: "textarea",
                                         required: true
-                                    }, {
-                                        "title": "VALUATOR",
-                                        "key": "loanAccount.valuator",
-                                        "type": "select",
-                                        "condition": "model.loanProcess.loanAccount.currentStage == 'ScreeningReview' && (model.loanAccount.loanPurpose1 == 'Purchase – Used Vehicle' || model.loanAccount.loanPurpose1 == 'Refinance')",
-                                        "titleMap": {
-                                            "test": "test"
-                                        }
                                     }, {
                                         key: "review.proceedButton",
                                         type: "button",
