@@ -676,7 +676,7 @@ define([], function() {
                                             "orderNo": 60
                                         },
                                         "OtherFee": {
-                                            "key": "loanAccount.otherFee",
+                                            "key": "loanAccount.fee5",
                                             "title": "OTHER_DEDUCTIONS",
                                             "orderNo": 65
                                         },
