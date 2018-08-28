@@ -1,243 +1,352 @@
-{  
-   "stages":[
-      {  
-         "order":1,
-         "code":"AgentInitiation",
-         "name":"AgentInitiation",
-         "stageType":"CAPTURE",
-         "allowedRoles":[  
+{
+    "stages": [{
+        "order": 1,
+        "code": "AgentInitiation",
+        "name": "AgentInitiation",
+        "stageType": "CAPTURE",
+        "allowedRoles": [
             "WM"
-         ]
-      },  
-      {  
-         "order":2,
-         "code":"PendingForApproval",
-         "name":"PendingForApproval",
-         "stageType":"CAPTURE",
-         "allowedRoles":[  
+        ]
+    }, {
+        "order": 2,
+        "code": "PendingForApproval",
+        "name": "PendingForApproval",
+        "stageType": "CAPTURE",
+        "allowedRoles": [
             "WM"
-         ]
-      },
-      {  
-         "order":3,
-         "code":"Approved",
-         "name":"Approved",
-         "stageType":"CAPTURE",
-         "allowedRoles":[  
+        ]
+    }, {
+        "order": 3,
+        "code": "Approved",
+        "name": "Approved",
+        "stageType": "CAPTURE",
+        "allowedRoles": [
             "WM"
-         ]
-      },
-      { 
-         "order":4,
-         "code":"Rejected",
-         "name":"Rejected",
-         "stageType":"CAPTURE",
-         "allowedRoles":[
+        ]
+    }, {
+        "order": 4,
+        "code": "Rejected",
+        "name": "Rejected",
+        "stageType": "CAPTURE",
+        "allowedRoles": [
             "WM"
-         ]
-      }
-   ],
-   "schema":{  
-      "$schema":"http://json-schema.org/draft-04/schema#",
-      "type":"object",
-      "title":"Comment",
-      "required":[  
-         "agentDetails"
-      ],
-      "properties":{  
-         "agentDetails":{  
-            "title":"Agent Details",
-            "type":"object",
-            "maxItems":null,
-            "items":null,
-            "required":[  
+        ]
+    }],
+    "schema": {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "type": "object",
+        "title": "Comment",
+        "required": [
+            "agentDetails"
+        ],
+        "properties": {
+            "agentDetails": {
+                "title": "Agent Details",
+                "type": "object",
+                "maxItems": null,
+                "items": null,
+                "required": [
 
-            ],
-            "properties":{  
-               "agentRegistrationNumber":{  
-                  "title":"agentRegistrationNumber",
-                  "type":"string",
-                  "minLength":1,
-                  "maxLength":100,
-                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
-               },
-               "subType":{  
-                  "title":"subType",
-                  "type":"string",
-                  "minLength":1,
-                  "maxLength":100,
-                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
-               },
-               "agentType":{  
-                  "title":"agentType",
-                  "type":"string",
-                  "minLength":1,
-                  "maxLength":100,
-                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
-               },
-               "companyName":{  
-                  "title":"companyName",
-                  "type":"string",
-                  "minLength":1,
-                  "maxLength":100,
-                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
-               },
-               "designation":{  
-                  "title":"designation",
-                  "type":"string",
-                  "minLength":1,
-                  "maxLength":100,
-                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
-               },
-               "udf1":{  
-                  "title":"udf1",
-                  "type":"string",
-                  "minLength":1,
-                  "maxLength":100,
-                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
-               },
-               "udf2":{  
-                  "title":"udf2",
-                  "type":"string",
-                  "minLength":1,
-                  "maxLength":100,
-                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
-               },
-               "udf3":{  
-                  "title":"udf3",
-                  "type":"string",
-                  "minLength":1,
-                  "maxLength":100,
-                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
-               },
-               "udf4":{  
-                  "title":"udf4",
-				  "type":"string",
-                  "minLength":1,
-                  "maxLength":100,
-                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
-               },
-               "udf5":{  
-                  "title":"udf5",
-                  "type":"string",
-                  "minLength":1,
-                  "maxLength":100,
-                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
-               },
-               "udfDate1":{  
-                  "title":"udfDate1",
-                  "type":"date",
-                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
-               },
-               "udfDate2":{  
-                  "title":"udfDate2",
-                  "type":"date",
-                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
-               },
-               "udfDate3":{  
-                  "title":"udfDate3",
-                  "type":"date",
-                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
-               }
-            }
-         },
-     
-      "agentFeeDetails":{  
-         "title":"agentFeeDetails",
-         "type":"array",
-         "maxItems":null,
-         "items":{  
-            "type":"object",
-            "required":[  
+                ],
+                "properties": {
+                    "agentRegistrationNumber": {
+                        "title": "agentRegistrationNumber",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 100,
+                        "captureStages": ["AgentInitiation", "PendingForApproval", "Approved", "Rejected"]
+                    },
+                    "subType": {
+                        "title": "subType",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 100,
+                        "captureStages": ["AgentInitiation", "PendingForApproval", "Approved", "Rejected"]
+                    },
+                    "agentType": {
+                        "title": "agentType",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 100,
+                        "captureStages": ["AgentInitiation", "PendingForApproval", "Approved", "Rejected"]
+                    },
+                    "companyName": {
+                        "title": "companyName",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 100,
+                        "captureStages": ["AgentInitiation", "PendingForApproval", "Approved", "Rejected"]
+                    },
+                    "designation": {
+                        "title": "designation",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 100,
+                        "captureStages": ["AgentInitiation", "PendingForApproval", "Approved", "Rejected"]
+                    },
+                    "udf1": {
+                        "title": "udf1",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 100,
+                        "captureStages": ["AgentInitiation", "PendingForApproval", "Approved", "Rejected"]
+                    },
+                    "udf2": {
+                        "title": "udf2",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 100,
+                        "captureStages": ["AgentInitiation", "PendingForApproval", "Approved", "Rejected"]
+                    },
+                    "udf3": {
+                        "title": "udf3",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 100,
+                        "captureStages": ["AgentInitiation", "PendingForApproval", "Approved", "Rejected"]
+                    },
+                    "udf4": {
+                        "title": "udf4",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 100,
+                        "captureStages": ["AgentInitiation", "PendingForApproval", "Approved", "Rejected"]
+                    },
+                    "udf5": {
+                        "title": "udf5",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 100,
+                        "captureStages": ["AgentInitiation", "PendingForApproval", "Approved", "Rejected"]
+                    },
+                    "udfDate1": {
+                        "title": "udfDate1",
+                        "type": "date",
+                        "captureStages": ["AgentInitiation", "PendingForApproval", "Approved", "Rejected"]
+                    },
+                    "udfDate2": {
+                        "title": "udfDate2",
+                        "type": "date",
+                        "captureStages": ["AgentInitiation", "PendingForApproval", "Approved", "Rejected"]
+                    },
+                    "udfDate3": {
+                        "title": "udfDate3",
+                        "type": "date",
+                        "captureStages": ["AgentInitiation", "PendingForApproval", "Approved", "Rejected"]
+                    }
+                }
+            },
 
-            ],
-            "properties":{  
-               "feeName":{  
-                  "title":"feeName",
-                  "type":"string",
-                  "minLength":1,
-                  "maxLength":100,
-                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
-               },
-               "feeType":{  
-                  "title":"feeType",
-                  "type":"string",
-                  "minLength":1,
-                  "maxLength":100,
-                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
-               },
-               "feeAmount":{  
-                  "title":"feeAmount",
-                  "type":"number",
-                  "minimum":1,
-                  "maximum":10000000,
-                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
-               },
-               "frequency":{  
-                  "title":"frequency",
-                  "type":"string",
-                  "minLength":1,
-                  "maxLength":100,
-                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
-               },
-               "dateOfIncorporation":{  
-                  "title":"dateOfIncorporation",
-                  "type":"date",
-                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
-               },
-               "udf1":{  
-                  "title":"udf1",
-                  "type":"string",
-                  "minLength":1,
-                  "maxLength":100,
-                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
-               },
-               "udf2":{  
-                  "title":"udf2",
-                 "type":"string",
-                  "minLength":1,
-                  "maxLength":100,
-                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
-               },
-               "udf3":{  
-                  "title":"udf3",
-                  "type":"string",
-                  "minLength":1,
-                  "maxLength":100,
-                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
-               },
-               "udf4":{  
-                  "title":"udf4",
-                  "type":"string",
-                  "minLength":1,
-                  "maxLength":100,
-                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
-               },
-               "udf5":{  
-                  "title":"udf5",
-                  "type":"string",
-                  "minLength":1,
-                  "maxLength":100,
-                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
-               },
-               "udfDate1":{  
-                  "title":"udfDate1",
-                  "type":"date",                  
-                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
-               },
-               "udfDate2":{  
-                  "title":"udfDate2",
-                  "type":"date",                  
-                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
-               },
-               "udfDate3":{  
-                  "title":"udfDate3",
-                  "type":"date",                  
-                  "captureStages":["AgentInitiation","PendingForApproval","Approved","Rejected"]
-               }
-            }
-         }
-      }
-   }
-}
+            "agentFeeDetails": {
+                "title": "agentFeeDetails",
+                "type": "array",
+                "maxItems": null,
+                "items": {
+                    "type": "object",
+                    "required": [
+
+                    ],
+                    "properties": {
+                        "feeName": {
+                            "title": "feeName",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": ["AgentInitiation", "PendingForApproval", "Approved", "Rejected"]
+                        },
+                        "feeType": {
+                            "title": "feeType",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": ["AgentInitiation", "PendingForApproval", "Approved", "Rejected"]
+                        },
+                        "feeAmount": {
+                            "title": "feeAmount",
+                            "type": "number",
+                            "minimum": 1,
+                            "maximum": 10000000,
+                            "captureStages": ["AgentInitiation", "PendingForApproval", "Approved", "Rejected"]
+                        },
+                        "frequency": {
+                            "title": "frequency",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": ["AgentInitiation", "PendingForApproval", "Approved", "Rejected"]
+                        },
+                        "dateOfIncorporation": {
+                            "title": "dateOfIncorporation",
+                            "type": "date",
+                            "captureStages": ["AgentInitiation", "PendingForApproval", "Approved", "Rejected"]
+                        },
+                        "udf1": {
+                            "title": "udf1",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": ["AgentInitiation", "PendingForApproval", "Approved", "Rejected"]
+                        },
+                        "udf2": {
+                            "title": "udf2",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": ["AgentInitiation", "PendingForApproval", "Approved", "Rejected"]
+                        },
+                        "udf3": {
+                            "title": "udf3",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": ["AgentInitiation", "PendingForApproval", "Approved", "Rejected"]
+                        },
+                        "udf4": {
+                            "title": "udf4",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": ["AgentInitiation", "PendingForApproval", "Approved", "Rejected"]
+                        },
+                        "udf5": {
+                            "title": "udf5",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": ["AgentInitiation", "PendingForApproval", "Approved", "Rejected"]
+                        },
+                        "udfDate1": {
+                            "title": "udfDate1",
+                            "type": "date",
+                            "captureStages": ["AgentInitiation", "PendingForApproval", "Approved", "Rejected"]
+                        },
+                        "udfDate2": {
+                            "title": "udfDate2",
+                            "type": "date",
+                            "captureStages": ["AgentInitiation", "PendingForApproval", "Approved", "Rejected"]
+                        },
+                        "udfDate3": {
+                            "title": "udfDate3",
+                            "type": "date",
+                            "captureStages": ["AgentInitiation", "PendingForApproval", "Approved", "Rejected"]
+                        }
+                    }
+                }
+            },
+
+            "agentEmployees": {
+                "title": "agentEmployees",
+                "type": "array",
+                "maxItems": null,
+                "items": {
+                    "type": "object",
+                    "required": [
+
+                    ],
+                    "properties": {
+                        "agentId": {
+                            "title": "agentId",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": ["AgentInitiation", "PendingForApproval", "Approved", "Rejected"]
+                        },
+                        "agentCompanyId": {
+                            "title": "agentCompanyId",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": ["AgentInitiation", "PendingForApproval", "Approved", "Rejected"]
+                        },
+                        "agentRegistrationNumber": {
+                            "title": "agentRegistrationNumber",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": ["AgentInitiation", "PendingForApproval", "Approved", "Rejected"]
+                        },
+                        "subType": {
+                            "title": "subType",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": ["AgentInitiation", "PendingForApproval", "Approved", "Rejected"]
+                        },
+                        "agentType": {
+                            "title": "agentType",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": ["AgentInitiation", "PendingForApproval", "Approved", "Rejected"]
+                        },
+                        "companyName": {
+                            "title": "companyName",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": ["AgentInitiation", "PendingForApproval", "Approved", "Rejected"]
+                        },
+                        "designation": {
+                            "title": "designation",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": ["AgentInitiation", "PendingForApproval", "Approved", "Rejected"]
+                        },
+                        "udf1": {
+                            "title": "udf1",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": ["AgentInitiation", "PendingForApproval", "Approved", "Rejected"]
+                        },
+                        "udf2": {
+                            "title": "udf2",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": ["AgentInitiation", "PendingForApproval", "Approved", "Rejected"]
+                        },
+                        "udf3": {
+                            "title": "udf3",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": ["AgentInitiation", "PendingForApproval", "Approved", "Rejected"]
+                        },
+                        "udf4": {
+                            "title": "udf4",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": ["AgentInitiation", "PendingForApproval", "Approved", "Rejected"]
+                        },
+                        "udf5": {
+                            "title": "udf5",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": ["AgentInitiation", "PendingForApproval", "Approved", "Rejected"]
+                        },
+                        "udfDate1": {
+                            "title": "udfDate1",
+                            "type": "date",
+                            "captureStages": ["AgentInitiation", "PendingForApproval", "Approved", "Rejected"]
+                        },
+                        "udfDate2": {
+                            "title": "udfDate2",
+                            "type": "date",
+                            "captureStages": ["AgentInitiation", "PendingForApproval", "Approved", "Rejected"]
+                        },
+                        "udfDate3": {
+                            "title": "udfDate3",
+                            "type": "date",
+                            "captureStages": ["AgentInitiation", "PendingForApproval", "Approved", "Rejected"]
+                        }
+                    }
+                }
+            },
+
+        }
+    }
 }

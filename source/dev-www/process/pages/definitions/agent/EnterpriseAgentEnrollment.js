@@ -73,10 +73,29 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                     "AgentInformation.agentCompanyId": {
                         readonly: true
                     },
-                    "AgentInformation.agentRegistrationNumber": {
+                    "AgentEmployees.agentEmployees": {
                         readonly: true
                     },
-                    "AgentInformation.agentType": {
+                    "AgentEmployees.agentEmployees.agentCompanyId": {
+                        readonly: true
+                    },
+                    "AgentEmployees.agentEmployees.agentRegistrationNumber": {
+                        readonly: true
+                    },
+                    "AgentEmployees.agentEmployees.agentType": {
+                        readonly: true,
+                        "title": "AGENT_TYPE",
+                        "type": "select",
+                        "enumCode": "agent_type",
+                        "required": true
+                    },
+                    "AgentEmployees.agentEmployees.companyName": {
+                        readonly: true
+                    },
+                    "AgentEmployees.agentEmployees.designation": {
+                        readonly: true
+                    },
+                    "AgentInformation.agentRegistrationNumber": {
                         readonly: true
                     },
                     "AgentInformation.companyName": {
@@ -183,7 +202,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                             ];
                         },
                         onSelect: function(valueObj, model, context) {
-                            PageHelper.showProgress('customer-load', 'Loading customer...');
+                            PageHelper.showLoader();
                             EnrolmentProcess.fromCustomerID(valueObj.id)
                                 .finally(function() {
                                     PageHelper.showProgress('customer-load', 'Done.', 5000);
@@ -199,7 +218,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                         }
                     },
                     "AgentEmployees.agentEmployees": {
-                        "startEmpty": false
+                        "startEmpty": false,
                     },
                     "AgentFeeDetails.agentFeeDetails": {
                         "startEmpty": false
@@ -241,16 +260,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                             ];
                         },
                         onSelect: function(valueObj, model, context) {
-                            PageHelper.showProgress('customer-load', 'Loading customer...');
+                            // PageHelper.showProgress('customer-load', 'Loading customer...');
                             model.agent.agentEmployees[context.arrayIndex].agentId = valueObj.id;
                             model.agent.agentEmployees[context.arrayIndex].customerId = valueObj.customerId;
                             model.agent.agentEmployees[context.arrayIndex].agentCompanyId = valueObj.agentCompanyId;
                             model.agent.agentEmployees[context.arrayIndex].agentName = valueObj.agentName;
                             model.agent.agentEmployees[context.arrayIndex].agentRegistrationNumber = valueObj.agentRegistrationNumber;
                             model.agent.agentEmployees[context.arrayIndex].companyName = valueObj.companyName;
+                            model.agent.agentEmployees[context.arrayIndex].agentType = valueObj.agentType;
                             model.agent.agentEmployees[context.arrayIndex].designation = valueObj.designation;
 
                             model.agent.agentId = valueObj.id;
+                            model.agent.id = valueObj.id;
                             model.agent.customerId = valueObj.customerId;
                             model.agent.agentCompanyId = valueObj.agentCompanyId;
                             model.agent.agentName = valueObj.agentName;
@@ -264,12 +285,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                         "required": true
                     },
                     "AgentFeeDetails.agentFeeDetails.feeName": {
-                        "required": true
-                    },
-                    "AgentEmployees.agentEmployees.agentType": {
-                        "title": "ENTERPRISE_AGENT_TYPE",
-                        "type": "select",
-                        "enumCode": "agent_type",
                         "required": true
                     },
                     "AgentFeeDetails.agentFeeDetails.frequency": {
@@ -287,10 +302,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                 "key": "agent.agentId",
                                 "type": "number"
                             },
-                            // "agentName": {
-                            //     "key": "agent.agentName", 
-                            //     "type": "string"
-                            // },            
                             "agentType": {
                                 "key": "agent.agentType",
                                 "type": "select",
@@ -340,10 +351,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                     "AgentInformation",
                     "AgentInformation.agentId1",
                     "AgentInformation.customerId",
-                    "AgentInformation.agentCompanyId",
-                    "AgentInformation.agentRegistrationNumber",
-                    "AgentInformation.agentType",
-                    "AgentInformation.companyName",
+                    // "AgentInformation.agentCompanyId",
+                    // "AgentInformation.agentRegistrationNumber",
+                    // "AgentInformation.agentType",
+                    // "AgentInformation.companyName",
 
                     "AgentEmployees",
                     "AgentEmployees.agentEmployees",
