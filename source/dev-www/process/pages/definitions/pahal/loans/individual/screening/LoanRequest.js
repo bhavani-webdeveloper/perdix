@@ -455,7 +455,7 @@ define([], function() {
                     "DeductionsFromLoan.fee3",
                     "DeductionsFromLoan.OtherFee",
                     "DeductionsFromLoan.fee4",
-                    "DeductionsFromLoan.expectedPortfolioInsurancePremium",
+                    // "DeductionsFromLoan.expectedPortfolioInsurancePremium",
                     "DeductionsFromLoan.dealIrr",
                     "LoanDocuments",
                     "LoanDocuments.loanDocuments",
