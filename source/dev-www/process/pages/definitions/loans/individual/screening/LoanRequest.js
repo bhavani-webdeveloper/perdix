@@ -640,11 +640,12 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 model.loanAccount.transactionType = obj.transactionType ? obj.transactionType:"New Loan";
                 /*calling individual loan api to get the current loan amount for validating that loan amount requested should be greater then current loan amount */
                 if(obj.transactionType && obj.transactionType.toLowerCase() == 'renewal'){
+                    model.loanAccount.loanPurpose2 = obj.loanPurpose2;
                     var p1 = IndividualLoan.search({
                         accountNumber:obj.linkedLoanAccountNo
                     }).$promise;
                     p1.then(function(response, headerGetter){
-                        model.linkedLoanAmount=response.body[0]['loanAmount'];
+                      model.linkedLoanAmount=response.body[0]['loanAmount'];
                     },function(err){
                         $log.info("loan request Individual/find api failure" + err);
                     });
@@ -3067,10 +3068,9 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 /* 1)validating loan amount requested should be greater then current loan account */
                 if(!_.isNull(model.loanAccount.transactionType) && model.loanAccount.transactionType.toLowerCase() =='renewal'){
                     if(model.linkedLoanAmount && (model.loanAccount.loanAmountRequested < model.linkedLoanAmount || ( !_.isNull(model.loanAccount.loanAmount) && model.loanAccount.loanAmount < model.linkedLoanAmount))){
-
                         var res = {
                             data: {
-                                error: 'RequestedLoanAmount or recommended loan amount should be greater than or equal current loan amount'
+                                error: 'RequestedLoanAmount or recommended loan amount should be greater than or equal current loan amount' +"  "+ model.linkedLoanAmount 
                             }
                         };
                         PageHelper.showErrors(res)
@@ -3127,7 +3127,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
 
                 if(model.currentStage=='ScreeningReview'){
                     var commercialCheckFailed = false;
-                    if(model.enterprise.enterpriseBureauDetails && model.enterprise.enterpriseBureauDetails.length>0){
+                    if(model.enterprise && model.enterprise.enterpriseBureauDetails && model.enterprise.enterpriseBureauDetails.length>0){
                         for (var i = model.enterprise.enterpriseBureauDetails.length - 1; i >= 0; i--) {
                             if(!model.enterprise.enterpriseBureauDetails[i].fileId
                                 || !model.enterprise.enterpriseBureauDetails[i].bureau
@@ -3145,7 +3145,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         commercialCheckFailed = true;
 
                     if (commercialCheckFailed){
-                        if(model.enterprise.customerBankAccounts && model.enterprise.customerBankAccounts.length>0){
+                        if(model.enterprise && model.enterprise.customerBankAccounts && model.enterprise.customerBankAccounts.length>0){
                             for (var i = model.enterprise.customerBankAccounts.length - 1; i >= 0; i--) {
                                 if(model.enterprise.customerBankAccounts[i].accountType == 'OD' || model.enterprise.customerBankAccounts[i].accountType == 'CC' ){
                                     PageHelper.showProgress("enrolment","Commercial bureau check fields are mandatory",5000);
@@ -3158,7 +3158,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                 return false;
                         }
 
-                        if(model.enterprise.enterpriseCustomerRelations && model.enterprise.enterpriseCustomerRelations.length > 0){
+                        if(model.enterprise && model.enterprise.enterpriseCustomerRelations && model.enterprise.enterpriseCustomerRelations.length > 0){
                             for (var i = model.enterprise.enterpriseCustomerRelations.length - 1; i >= 0; i--) {
                                 if(((model.enterprise.enterpriseCustomerRelations[i].partnerOfAnyOtherCompany !=null && model.enterprise.enterpriseCustomerRelations[i].partnerOfAnyOtherCompany != undefined)
                                     &&model.enterprise.enterpriseCustomerRelations[i].partnerOfAnyOtherCompany == 'YES')
