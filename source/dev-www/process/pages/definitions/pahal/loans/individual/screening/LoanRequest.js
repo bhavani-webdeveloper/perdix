@@ -37,7 +37,7 @@ define([], function() {
             var excelRate = function(nper, pmt, pv, fv, type, guess) {
                 // Sets default values for missing parameters
                 fv = typeof fv !== 'undefined' ? fv : 0;
-                pv = typeof pv !== 'undefined' ? pv : 1;
+                pv = typeof pv !== 'undefined' ? pv : 0;
                 type = typeof type !== 'undefined' ? type : 0;
                 guess = typeof guess !== 'undefined' ? guess : 0.1;
 
@@ -46,50 +46,50 @@ define([], function() {
                 var lowLimit = 0;
                 var highLimit = 1;
 
-               // Defines a tolerance of up to +/- 0.00005% of pmt, to accept
-               // the solution as valid.
-               var tolerance = Math.abs(0.00000005 * pmt);
+                // Defines a tolerance of up to +/- 0.00005% of pmt, to accept
+                // the solution as valid.
+                var tolerance = Math.abs(0.00000005 * pmt);
 
-               // Tries at most 40 times to find a solution within the tolerance.
-               for (var i = 0; i < 40; i++) {
-                   // Resets the balance to the original pv.
-                   var balance = pv;
+                // Tries at most 40 times to find a solution within the tolerance.
+                for (var i = 0; i < 40; i++) {
+                    // Resets the balance to the original pv.
+                    var balance = pv;
 
-                   // Calculates the balance at the end of the loan, based
-                   // on loan conditions.
-                   for (var j = 0; j < nper; j++ ) {
-                       if (type == 0) {
-                           // Interests applied before payment
-                           balance = balance * (1 + guess) + pmt;
-                       } else {
-                           // Payments applied before insterests
-                           balance = (balance + pmt) * (1 + guess);
-                       }
-                   }
+                    // Calculates the balance at the end of the loan, based
+                    // on loan conditions.
+                    for (var j = 0; j < nper; j++) {
+                        if (type == 0) {
+                            // Interests applied before payment
+                            balance = balance * (1 + guess) + pmt;
+                        } else {
+                            // Payments applied before insterests
+                            balance = (balance + pmt) * (1 + guess);
+                        }
+                    }
 
-                   // Returns the guess if balance is within tolerance.  If not, adjusts
-                   // the limits and starts with a new guess.
-                   if (Math.abs(balance + fv) < tolerance) {
-                       return guess;
-                   } else if (balance + fv > 0) {
-                       // Sets a new highLimit knowing that
-                       // the current guess was too big.
-                       highLimit = guess;
-                   } else  {
-                       // Sets a new lowLimit knowing that
-                       // the current guess was too small.
-                       lowLimit = guess;
-                   }
+                    // Returns the guess if balance is within tolerance.  If not, adjusts
+                    // the limits and starts with a new guess.
+                    if (Math.abs(balance + fv) < tolerance) {
+                        return guess;
+                    } else if (balance + fv > 0) {
+                        // Sets a new highLimit knowing that
+                        // the current guess was too big.
+                        highLimit = guess;
+                    } else {
+                        // Sets a new lowLimit knowing that
+                        // the current guess was too small.
+                        lowLimit = guess;
+                    }
 
-                   // Calculates the new guess.
-                   guess = (highLimit + lowLimit) / 2;
-               }
+                    // Calculates the new guess.
+                    guess = (highLimit + lowLimit) / 2;
+                }
 
-               // Returns null if no acceptable result was found after 40 tries.
-               return null;
+                // Returns null if no acceptable result was found after 40 tries.
+                return null;
             };
 
-            var calculateNominalRate = function(loanAmount, frequency, tenure, flatRate){
+            var calculateNominalRate = function(loanAmount, frequency, tenure, flatRate) {
                 var frequencyFactor;
                 if (frequency && tenure && flatRate) {
                     switch (frequency) {
@@ -124,7 +124,7 @@ define([], function() {
                         default:
                             throw new Error("Invalid frequency");
                     }
-                    var nominalRate = Math.round(excelRate(parseFloat(tenure), -parseFloat(1 + ((parseFloat((flatRate) / 100) * parseFloat(tenure) / frequencyFactor))) / parseFloat(tenure)) * 100 * 100 * frequencyFactor) / 100;
+                    var nominalRate = Math.round(excelRate(parseFloat(tenure),  -Math.round(parseFloat(loanAmount) * (1 + (parseFloat(flatRate) / 100 * parseFloat(tenure) / frequencyFactor)) / parseFloat(tenure)), parseFloat(loanAmount)) * frequencyFactor * 1000000)/10000;
                     var someRate = parseFloat(nominalRate / (100 * frequencyFactor));
                     var estimatedEmi = (parseFloat(loanAmount) * someRate / parseFloat((1 - Math.pow(1 + someRate, -tenure))));
                     return {
