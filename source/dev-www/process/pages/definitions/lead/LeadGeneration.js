@@ -1,6 +1,6 @@
-irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment", "$state", "$stateParams", "Lead", "LeadHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "LoanAccount","Enrollment", "$state", "$stateParams", "Lead", "LeadHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
     "PageHelper", "Utils", "Queries","IndividualLoan",
-function ($log, Enrollment, $state, $stateParams, Lead, LeadHelper, SessionStore, formHelper,$q, irfProgressMessage,
+function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, SessionStore, formHelper,$q, irfProgressMessage,
               PageHelper, Utils, Queries, IndividualLoan) {
 
         var branch = SessionStore.getBranch();
@@ -46,16 +46,15 @@ function ($log, Enrollment, $state, $stateParams, Lead, LeadHelper, SessionStore
                            2) calling individualLoan search api to find the existing loan details where transaction type is renewal
                         */
                             if(model.lead.currentStage=="Inprocess" && model.lead.transactionType && model.lead.transactionType.toLowerCase() == 'renewal'){
-                                var p1 = IndividualLoan.search({
-                                    accountNumber:model.lead.linkedLoanAccountNo
-                                }).$promise;
-                                p1.then(function(response, headerGetter){
-                                  model.lead.loanAmountRequested=response.body[0]['loanAmount'];
-                                  model.linkedLoanAmount = model.lead.loanAmountRequested;
+                                LoanAccount.get({
+                                    accountId: model.lead.linkedLoanAccountNo
+                                })
+                                .$promise.then(function(res){
+                                    model.linkedAccount=res;
+                                    model.linkedLoanAmount = res.totalDisbursed;
+                                    model.lead.loanAmountRequested=res.totalDisbursed;
                                 },function(err){
-                                    $log.info("leadGeneration Individual/find api failure" + err);
-                                    PageHelper.showProgress("lead-generate", "Existing loan details not loaded", 5000);
-
+                                    $log.info("loan request Individual/find api failure" + err);
                                 });
                             }
 

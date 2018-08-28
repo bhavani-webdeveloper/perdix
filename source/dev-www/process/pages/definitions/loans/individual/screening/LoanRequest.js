@@ -455,6 +455,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
             model.customer=model.customer || {};
             model.review = model.review|| {};
             model.temp=model.temp||{}
+            model.linkedAccount={};
             if (_.hasIn(model, 'loanAccount')){
                 $log.info('Printing Loan Account');
                 $log.info(model.loanAccount);
@@ -464,14 +465,24 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                              */
                  /*calling individual loan api to get the current loan amount for validating that loan amount requested should be greater then current loan amount */
                  if (!(_.isNull(model.loanAccount.transactionType)) && model.loanAccount.transactionType.toLowerCase() == 'renewal') {
-                     var p1 = IndividualLoan.search({
-                         accountNumber: model.loanAccount.linkedLoanAccountNo
-                     }).$promise;
-                     p1.then(function (response, headerGetter) {
-                         model.linkedLoanAmount = response.body[0]['loanAmount'];
-                     }, function (err) {
-                         $log.info("loan request Individual/find api failure" + err);
-                     });
+                    //  var p1 = IndividualLoan.search({
+                    //      accountNumber: model.loanAccount.linkedLoanAccountNo
+                    //  }).$promise;
+                    //  p1.then(function (response, headerGetter) {
+                    //      model.linkedLoanAmount = response.body[0]['loanAmount'];
+                    //  }, function (err) {
+                    //      $log.info("loan request Individual/find api failure" + err);
+                    //  });
+
+                     LoanAccount.get({
+                        accountId: model.loanAccount.linkedAccountNumber
+                    })
+                    .$promise.then(function(res){
+                        model.linkedAccount=res;
+                        model.linkedLoanAmount = res.totalDisbursed;
+                    },function(err){
+                        $log.info("loan request Individual/find api failure" + err);
+                    });
                  }
                 if(model.currentStage=='Screening' || model.currentStage=='ScreeningReview'|| model.currentStage=='Application') {
                     if(model.loanAccount.estimatedEmi){
@@ -641,11 +652,12 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 /*calling individual loan api to get the current loan amount for validating that loan amount requested should be greater then current loan amount */
                 if(obj.transactionType && obj.transactionType.toLowerCase() == 'renewal'){
                     model.loanAccount.loanPurpose2 = obj.loanPurpose2;
-                    var p1 = IndividualLoan.search({
-                        accountNumber:obj.linkedLoanAccountNo
-                    }).$promise;
-                    p1.then(function(response, headerGetter){
-                      model.linkedLoanAmount=response.body[0]['loanAmount'];
+                    LoanAccount.get({
+                        accountId: model.loanAccount.linkedAccountNumber
+                    })
+                    .$promise.then(function(res){
+                        model.linkedAccount=res;
+                        model.linkedLoanAmount = res.totalDisbursed;
                     },function(err){
                         $log.info("loan request Individual/find api failure" + err);
                     });

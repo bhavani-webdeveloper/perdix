@@ -3118,7 +3118,14 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     }
 
                     if(model.loanAccount.linkedAccountNumber && model.siteCode == 'kinara' && model.linkedAccount){
-                        if(parseInt(model.loanAccount.disbursementSchedules[0].disbursementAmount) < parseInt(model.linkedAccount.accountBalance)){
+                        if(model.loanAccount.transactionType && model.loanAccount.transactionType.toLowerCase() == 'renewal'){
+                            if(parseInt(model.loanAccount.disbursementSchedules[0].disbursementAmount) < parseInt(model.linkedAccount.totalDisbursed)){
+                                PageHelper.setError({
+                                    message: "first Schedule disbursementAmount" + " " +model.loanAccount.disbursementSchedules[0].disbursementAmount+ " "+ "should  be greater then Linked Account Disbursed Amount" +"  " + model.linkedAccount.totalDisbursed
+                                });
+                               return;
+                            }
+                        }else if(parseInt(model.loanAccount.disbursementSchedules[0].disbursementAmount) < parseInt(model.linkedAccount.accountBalance)){
                             PageHelper.setError({
                                 message: "first Schedule disbursementAmount" + " " +model.loanAccount.disbursementSchedules[0].disbursementAmount+ " "+ "should  be greater then Linked Account Balence" +"  " + model.linkedAccount.accountBalance
                             });
