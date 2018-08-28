@@ -474,7 +474,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     //      $log.info("loan request Individual/find api failure" + err);
                     //  });
 
-                     LoanAccount.get({
+                    LoanAccount.get({
                         accountId: model.loanAccount.linkedAccountNumber
                     })
                     .$promise.then(function(res){
@@ -3088,6 +3088,15 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         PageHelper.showErrors(res)
                         return;
                     }
+                    if(model.loanAccount.disbursementSchedules && model.loanAccount.disbursementSchedules.length){
+                        if(parseInt(model.loanAccount.disbursementSchedules[0].disbursementAmount) < parseInt(model.linkedAccount.totalDisbursed)){
+                            PageHelper.setError({
+                                message: "first Schedule disbursementAmount" + " " +model.loanAccount.disbursementSchedules[0].disbursementAmount+ " "+ "should  be greater then Linked Account Disbursed Amount" +"  " + model.linkedAccount.totalDisbursed
+                            });
+                           return;
+                        }
+
+                    } 
                 }
 
                 if (!validateForm(formCtrl)){
