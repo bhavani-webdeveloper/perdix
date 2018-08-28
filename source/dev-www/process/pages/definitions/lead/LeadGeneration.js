@@ -956,9 +956,23 @@ function ($log, Enrollment, $state, $stateParams, Lead, LeadHelper, SessionStore
                         }, {
                             key: "lead.loanPurpose2",
                             condition: "model.lead.transactionType=='Renewal' && model.lead.interestedInProduct=='YES'",
-                            /* type: select,
-                               enumCode: ?
-                             */
+                            type: "lov",
+                            autolov: true,
+                            title:"LOAN_PURPOSE_2",
+                            bindMap: {
+                            },
+                            outputMap: {
+                                "purpose2": "lead.loanPurpose2"
+                            },
+                            searchHelper: formHelper,
+                            search: function(inputModel, form, model) {
+                                return Queries.getAllLoanPurpose2(model.lead.loanPurpose1);
+                            },
+                            getListDisplayItem: function(item, index) {
+                                return [
+                                    item.purpose2
+                                ];
+                            }
                         },{
                             key: "lead.productRequiredBy",
                             type: "select",
