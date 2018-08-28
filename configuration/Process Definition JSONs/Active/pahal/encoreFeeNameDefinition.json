@@ -20,21 +20,21 @@
       },
       {
          "displayFeeName":"Fee3",
-         "encoreFeeName":"fee3",
+         "encoreFeeName":"FrankingCharges",
          "feeColumnName":"fee3",
-         "override":"No"
+         "override":"Yes"
       },
       {
          "displayFeeName":"Fee4",
-         "encoreFeeName":"fee4",
-         "feeColumnName":"fee3",
-         "override":"No"
+         "encoreFeeName":"VehicleInsurance",
+         "feeColumnName":"fee4",
+         "override":"Yes"
       },
       {
          "displayFeeName":"Fee5",
-         "encoreFeeName":"fee5",
+         "encoreFeeName":"Other Charges",
          "feeColumnName":"fee5",
-         "override":"No"
+         "override":"Yes"
       },
       {
          "displayFeeName":"Security Deposit",

@@ -5,7 +5,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
         var nonEditable = {
             "loanAccount.interestRate" : siteCode == 'IREPDhan',
             "loanAccount.processingFeePercentage" : siteCode == 'IREPDhan'
-        }       
+        }
         var branchId = SessionStore.getBranchId();
         var branchName = SessionStore.getBranch();
         var bankName = SessionStore.getBankName();
@@ -22,8 +22,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
         };
 
         var validateForm = function(formCtrl){
-            if(PageHelper.isFormInvalid(formCtrl)) { 
-                return false; 
+            if(PageHelper.isFormInvalid(formCtrl)) {
+                return false;
             }
             return true;
         };
@@ -157,8 +157,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         if(res.minInterestRate == res.maxInterestRate){
                             model.loanAccount.interestRate = res.minInterestRate;
                         }
-                        model.additional.product.interestBracket = res.minInterestRate + '% - ' + res.maxInterestRate + '%';                                              
-                        model.additional.product.amountBracket = model.additional.product.amountFrom + ' - ' + model.additional.product.amountTo;             
+                        model.additional.product.interestBracket = res.minInterestRate + '% - ' + res.maxInterestRate + '%';
+                        model.additional.product.amountBracket = model.additional.product.amountFrom + ' - ' + model.additional.product.amountTo;
                         model.loanAccount.frequency = model.additional.product.frequency;
                         // if (model.additional.product.frequency == 'M')
                         //     model.loanAccount.frequency = 'Monthly';
@@ -802,7 +802,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "type":"select",
                                 "title":"TRANSACTION_TYPE",
                                 "required": true,
-                                "enumCode":"new_loan_transaction_type", 
+                                "enumCode":"new_loan_transaction_type",
                                 // "titleMap":{
                                 //     "New Loan":"New Loan"
                                 // },
@@ -811,7 +811,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             {
                                 "key": "loanAccount.transactionType",
                                 "required": true,
-                                "enumCode":"restructure_loan_transaction_type", 
+                                "enumCode":"restructure_loan_transaction_type",
                                 "type":"select",
                                 // "titleMap":{
                                 //     "Loan Restructure":"Loan Restructure",
@@ -857,7 +857,13 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             {
                                 key:"loanAccount.otherFee",
                                 type:"amount",
-                                "condition" : "model.siteCode != 'IREPDhan'"
+                                "condition" : "model.siteCode != 'IREPDhan' && model.siteCode!='pahal'"
+                            },
+                            {
+                                key:"loanAccount.fee5",
+                                title: "FEE5",
+                                type:"amount",
+                                condition: "model.siteCode=='pahal'"
                             },
                             {
                                 "key":"loanAccount.interestRate",
@@ -1462,7 +1468,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         "onChange": function(value ,form ,model, event){
                             var repaymentDate = moment(model.loanAccount.firstRepaymentDate,SessionStore.getSystemDateFormat());
                             var disbursementSchedules = moment(model._currentDisbursement.scheduledDisbursementDate,SessionStore.getSystemDateFormat());
-                           
+
                             if(!model.allowPreEmiInterest){
                                 return;
                             }
@@ -3039,7 +3045,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     if (!preLoanSaveOrProceed(model)){
                         return;
                     }
-                    
+
                     if(model.loanAccount.linkedAccountNumber && model.siteCode == 'kinara' && model.linkedAccount){
                         if(parseInt(model.loanAccount.disbursementSchedules[0].disbursementAmount) < parseInt(model.linkedAccount.accountBalance)){
                             PageHelper.setError({
