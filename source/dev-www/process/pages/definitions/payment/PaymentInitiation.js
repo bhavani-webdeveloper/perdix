@@ -543,23 +543,23 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                             "properties": {
                                 "beneficiaryIfsc": {
                                     "title": "BANK_IFSC",
-                                    "type": "string"
+                                    "type": ["string", "null"]
                                 },
                                 "beneficiaryBankName": {
                                     "title": "BANK_NAME",
-                                    "type": "string"
+                                    "type": ["string", "null"]
                                 },
                                 "beneficiaryBankBranch": {
                                     "title": "BRANCH_NAME",
-                                    "type": "string"
+                                    "type": ["string", "null"]
                                 },
                                 "debitAccountName": {
                                     "title": "DEBIT_ACCOUNT_NAME",
-                                    "type": "string"
+                                    "type": ["string", "null"]
                                 },
                                 "debitAccountNumber": {
                                     "title": "DEBIT_ACCOUNT_NO",
-                                    "type": "string"
+                                    "type": ["string", "null"]
                                 }
                             }
                         },
