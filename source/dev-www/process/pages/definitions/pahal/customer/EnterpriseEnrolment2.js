@@ -214,6 +214,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseInformation.enterpriseType" : {
                                         "readonly": true
                                     },
+                                    "CommercialCBCheck.enterpriseBureauDetails":{
+                                        "readonly": true
+                                    },
                                     "Liabilities": {
                                         "readonly": true
                                     },
@@ -248,6 +251,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseInformation.enterpriseType" : {
                                         "readonly": true
                                     },
+                                    "CommercialCBCheck.enterpriseBureauDetails":{
+                                        "readonly": true
+                                    },
                                     "Liabilities": {
                                         "readonly": true
                                     },
@@ -277,6 +283,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "readonly": true
                                     },
                                     "EnterpriseInformation.enterpriseType" : {
+                                        "readonly": true
+                                    },
+                                    "CommercialCBCheck.enterpriseBureauDetails":{
                                         "readonly": true
                                     },
                                     "Liabilities": {
@@ -317,6 +326,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseInformation.enterpriseType" : {
                                         "readonly": true
                                     },
+                                    "CommercialCBCheck.enterpriseBureauDetails":{
+                                        "readonly": true
+                                    },
                                     "Liabilities": {
                                         "readonly": true
                                     },
@@ -343,7 +355,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     }
                                 },
                                 "excludes": [
-                                    "IndividualReferences"                                    
+                                                                        
                                 ]
                             },
                             "CreditApproval1": {
@@ -352,6 +364,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "readonly": true
                                     },
                                     "EnterpriseInformation.enterpriseType" : {
+                                        "readonly": true
+                                    },
+                                    "CommercialCBCheck.enterpriseBureauDetails":{
                                         "readonly": true
                                     },
                                     "Liabilities": {
@@ -389,6 +404,49 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "readonly": true
                                     },
                                     "EnterpriseInformation.enterpriseType" : {
+                                        "readonly": true
+                                    },
+                                    "CommercialCBCheck.enterpriseBureauDetails":{
+                                        "readonly": true
+                                    },
+                                    "Liabilities": {
+                                        "readonly": true
+                                    },
+                                    "TrackDetails":{
+                                        "readonly": true
+                                    },
+                                    "EnterpriseAssets": {
+                                        "readonly": true
+                                    },
+                                    "BankAccounts": {
+                                        "readonly": true
+                                    },
+                                    "ContactInformation": {
+                                        "readonly": true
+                                    },
+                                    "TangibleNetWorth": {
+                                      "readonly": true
+                                    },
+                                    "IndividualReferences":{
+                                        "readonly": true 
+                                    },
+                                    "EnterpriseAssets": {
+                                        "readonly": true
+                                    }
+                                },
+                                "excludes": [
+                                    
+                                ]
+                            },
+                            "DeviationApproval": {
+                                "overrides": {
+                                    "EnterpriseInformation": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseInformation.enterpriseType" : {
+                                        "readonly": true
+                                    },
+                                    "CommercialCBCheck.enterpriseBureauDetails":{
                                         "readonly": true
                                     },
                                     "Liabilities": {
@@ -462,6 +520,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseInformation.enterpriseType" : {
                                         "readonly": true
                                     },
+                                    "CommercialCBCheck.enterpriseBureauDetails":{
+                                        "readonly": true
+                                    },
                                     "Liabilities": {
                                         "readonly": true
                                     },
@@ -527,6 +588,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 "BankAccounts.customerBankAccounts.accountNumber": {
                                     "type": "password",
                                     "required": true
+                                },
+                                "BankAccounts.customerBankAccounts.bankStatements":{
+                                    startEmpty: true
                                 },
                                 "BankAccounts.customerBankAccounts.confirmedAccountNumber": {
                                     "type": "string",

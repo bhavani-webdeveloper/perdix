@@ -496,6 +496,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "BankAccounts.customerBankAccounts": {
                         startEmpty: true
                     },
+                    "BankAccounts.customerBankAccounts.bankStatements":{
+                        startEmpty: true
+                    },
                     "BankAccounts.customerBankAccounts.accountNumber": {
                         "type": "password",
                         "required": true
@@ -1158,6 +1161,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "title": "HOUSE VERIFICATION PHOTO",
                                             "orderNo": 150,
                                             "type": "file",
+                                            "fileType": "image/*",
                                             "category": "CustomerEnrollment",
                                             "subCategory": "PHOTO",
                                             "onChange": function(){

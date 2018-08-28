@@ -14,7 +14,8 @@ export class SchemeCodeLOVConfiguration extends LOVElementConfiguration {
     };
     search: Function = function(inputModel, form, model, context) {
         let queryRepo:IQueryRepository = RepositoryFactory.createRepositoryObject(RepositoryIdentifiers.Queries);
-        return queryRepo.getVehicleSchemeCodes(model.loanAccount.branchId,model.loanAccount.loanCentre.centreId).toPromise();
+        let branchId=  model.loanAccount.branchId || model.loanProcess.applicantEnrolmentProcess.customer.customerBranchId;
+        return queryRepo.getVehicleSchemeCodes(branchId,model.loanAccount.loanCentre.centreId).toPromise();
     };
     onSelect: Function= function(valueObj, model, context){
         model.loanAccount.schemeCode= valueObj.scheme_code;
@@ -22,7 +23,7 @@ export class SchemeCodeLOVConfiguration extends LOVElementConfiguration {
             model.loanAccount.vehicleLoanDetails.vehicleModel=valueObj.model;
         }
         model.loanAccount.loanAmountRequested=valueObj.default_loan_amount;
-        model.loanAccount.expectedInterestRate=valueObj.default_interest_rate;
+        model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5=valueObj.default_interest_rate;
     };
     getListDisplayItem: Function= function(item, index) {
         return [
