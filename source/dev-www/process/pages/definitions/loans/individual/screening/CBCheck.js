@@ -276,7 +276,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                         coapplicantname: ep.customer.firstName
                     });
                 })
-                model.guarantors = [];
+
                 _.forEach(lp.guarantorsEnrolmentProcesses, function(ep){
                     model.guarantors.push({
                         guarantorid: ep.customer.id,
