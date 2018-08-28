@@ -14,6 +14,7 @@
             "title": "CUSTOMER",
             "iconClass": "fa fa-user",
             "items": [
+                "Page/Engine/sambandh.customer.CustomerSearch",
                 "Page/Engine/CustomerSearch",
                 "Page/Engine/FSOCustomerSearch",
                 "Page/Engine/ProfileInformation",

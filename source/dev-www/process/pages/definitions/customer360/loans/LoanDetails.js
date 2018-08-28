@@ -1534,61 +1534,79 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                     });
                                 }
                             }
-                        }, {
-                            key: "loanAccount.customerBankAccountNumber",
-                            "required":false,
-                            type: "lov",
-                            autolov: true,
-                            title: "CUSTOMER_BANK_ACC_NO",
-                            bindMap: {
-                                "customerId": "loanAccount.customerId"
-                            },
-                            outputMap: {
-                                "account_number": "loanAccount.customerBankAccountNumber",
-                                "ifsc_code": "loanAccount.customerBankIfscCode",
-                                "customer_bank_name": "loanAccount.customerBank",
-                                "customer_bank_branch_name": "loanAccount.customerBranch"
-                            },
-                            searchHelper: formHelper,
-                            search: function(inputModel, form, model) {
-                                return Queries.getCustomerBankAccounts(
-                                    inputModel.customerId
-                                );
-                            },
-                            getListDisplayItem: function(item, index) {
-                                return [
-                                    item.account_number + (item.is_disbersement_account == 1 ? '&nbsp;&nbsp;<span class="color-theme"><i class="fa fa-check-square">&nbsp;</i>{{"DEFAULT_DISB_ACCOUNT"|translate}}</span>' : ''),
-                                    item.ifsc_code + ', ' + item.customer_bank_name,
-                                    item.customer_bank_branch_name
-                                ];
-                            }
-                        }, {
-                            key: "loanAccount.customerBankIfscCode",
-                            "required":false,
-                            title: "CUSTOMER_BANK_IFSC",
-                            "readonly": true
-                        }, {
-                            key: "loanAccount.customerBank",
-                            "required":false,
-                            title: "CUSTOMER_BANK",
-                            "readonly": true
-                        }, {
-                            key: "loanAccount.customerBranch",
-                            "required":false,
-                            title: "BRANCH_NAME",
-                            "readonly": true
-                        }, {
+                        },
+                        // }, {
+                        //     key: "loanAccount.customerBankAccountNumber",
+                        //     "required":false,
+                        //     type: "lov",
+                        //     autolov: true,
+                        //     title: "CUSTOMER_BANK_ACC_NO",
+                        //     bindMap: {
+                        //         "customerId": "loanAccount.customerId"
+                        //     },
+                        //     outputMap: {
+                        //         "account_number": "loanAccount.customerBankAccountNumber",
+                        //         "ifsc_code": "loanAccount.customerBankIfscCode",
+                        //         "customer_bank_name": "loanAccount.customerBank",
+                        //         "customer_bank_branch_name": "loanAccount.customerBranch"
+                        //     },
+                        //     searchHelper: formHelper,
+                        //     search: function(inputModel, form, model) {
+                        //         return Queries.getCustomerBankAccounts(
+                        //             inputModel.customerId
+                        //         );
+                        //     },
+                        //     getListDisplayItem: function(item, index) {
+                        //         return [
+                        //             item.account_number + (item.is_disbersement_account == 1 ? '&nbsp;&nbsp;<span class="color-theme"><i class="fa fa-check-square">&nbsp;</i>{{"DEFAULT_DISB_ACCOUNT"|translate}}</span>' : ''),
+                        //             item.ifsc_code + ', ' + item.customer_bank_name,
+                        //             item.customer_bank_branch_name
+                        //         ];
+                        //     }
+                        // }, {
+                        //     key: "loanAccount.customerBankIfscCode",
+                        //     "required":false,
+                        //     title: "CUSTOMER_BANK_IFSC",
+                        //     "readonly": true
+                        // }, {
+                        //     key: "loanAccount.customerBank",
+                        //     "required":false,
+                        //     title: "CUSTOMER_BANK",
+                        //     "readonly": true
+                        // }, {
+                        //     key: "loanAccount.customerBranch",
+                        //     "required":false,
+                        //     title: "BRANCH_NAME",
+                        //     "readonly": true
+                        // },
+                         {
                             key: "loanAccount.disbursementSchedules",
                             "required":false,
                             title: "DISBURSEMENT_SCHEDULES",
                             add: null,
                             remove: null,
                             items: [{
+                                key: "loanAccount.disbursementSchedules[].customerAccountNumber",
+                                title: "CUSTOMER_BANK_ACC_NO",
+                                readonly: true
+                            },{
+                                key: "loanAccount.disbursementSchedules[].ifscCode",
+                                title: "CUSTOMER_BANK_IFSC",
+                                readonly: true
+                            },{
+                                key: "loanAccount.disbursementSchedules[].customerBankName",
+                                title: "CUSTOMER_BANK",
+                                readonly: true
+                            },{
+                                key: "loanAccount.disbursementSchedules[].customerBankBranchName",
+                                title: "BRANCH_NAME",
+                                readonly: true
+                            },{
                                 key: "loanAccount.disbursementSchedules[].trancheNumber",
                                 "required":false,
                                 title: "TRANCHE_NUMBER",
                                 readonly: true
-                            }, {
+                            },{
                                 key: "loanAccount.disbursementSchedules[].disbursementAmount",
                                 title: "DISBURSEMENT_AMOUNT",
                                 "required":false,
