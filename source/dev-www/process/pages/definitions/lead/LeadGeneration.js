@@ -1342,7 +1342,7 @@ function ($log, Enrollment, $state, $stateParams, Lead, LeadHelper, SessionStore
                             if (model.linkedLoanAmount && model.lead.transactionType && model.lead.transactionType.toLowerCase() == 'renewal' && model.lead.loanAmountRequested < model.linkedLoanAmount) {
                                 var res = {
                                     data: {
-                                        error: 'RequestedLoanAmount should be greater than or equal to existing loan amount'
+                                        error: 'RequestedLoanAmount should be greater than or equal to existing loan amount' + "  " + model.linkedLoanAmount 
                                     }
                                 };
                                 PageHelper.showErrors(res)
