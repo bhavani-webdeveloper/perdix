@@ -234,6 +234,7 @@ var navigateToQueue = function(model) {
                 model.currentStage = bundleModel.currentStage;
                 model.bundleModel = bundleModel;
                 model.loanAccount = bundleModel.loanAccount;
+                model.linkedAccount={};
                 model.siteCode = SessionStore.getGlobalSetting('siteCode');
                 model.review = model.review || {};
                 model.temp = model.temp || {}
@@ -272,16 +273,17 @@ var navigateToQueue = function(model) {
             });
             // calling individual loan api to get then result of loan amount requested
             if(_.isNull(model.loanAccount['transactionType'])) model.loanAccount.transactionType="New Loan";
-            if(model.loanAccount.transactionType && model.loanAccount.transactionType.toLowerCase() == 'renewal'){
-                var p1 = IndividualLoan.search({
-                    accountNumber:model.loanAccount.linkedAccountNumber
-                }).$promise;
-                p1.then(function(response, headerGetter){
-                  model.linkedLoanAmount=response.body[0]['loanAmount'];
+            if (!(_.isNull(model.loanAccount.transactionType)) && model.loanAccount.transactionType.toLowerCase() == 'renewal') {
+                 LoanAccount.get({
+                    accountId: model.loanAccount.linkedAccountNumber
+                })
+                .$promise.then(function(res){
+                    model.linkedAccount=res;
+                    model.linkedLoanAmount = res.totalDisbursed;
                 },function(err){
-                    $log.info("leadGeneration Individual/find api failure" + err);
+                    $log.info("loan request Individual/find api failure" + err);
                 });
-            }
+             }
 
         },
         form: [{
@@ -1155,16 +1157,15 @@ var navigateToQueue = function(model) {
                 }
 */
                     /* validating that loan AmountRequested should be greater than current loan amount*/
-                    if (!_.isNull(model.loanAccount.transactionType) && model.loanAccount.transactionType.toLowerCase() == 'renewal') {
-                        if (model.linkedLoanAmount && model.loanAccount.loanAmountRequested < model.linkedLoanAmount) {
-
+                    if(!_.isNull(model.loanAccount.transactionType) && model.loanAccount.transactionType.toLowerCase() =='renewal'){
+                        if(model.linkedLoanAmount && (model.loanAccount.loanAmountRequested < model.linkedLoanAmount || ( !_.isNull(model.loanAccount.loanAmount) && model.loanAccount.loanAmount < model.linkedLoanAmount))){
                             var res = {
                                 data: {
-                                    error: 'RequestedLoanAmount is not greater than or equal to current loan amount'
+                                    error: 'RequestedLoanAmount or recommended loan amount should be greater than or equal current loan amount' +"  "+ model.linkedLoanAmount 
                                 }
-                            };          
+                            };
                             PageHelper.showErrors(res)
-                            return false;
+                            return;
                         }
                     }
 
