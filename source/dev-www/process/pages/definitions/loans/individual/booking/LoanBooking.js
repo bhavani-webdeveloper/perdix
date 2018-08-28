@@ -149,6 +149,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                 model.disbursementCutOffTime=SessionStore.getGlobalSetting("disbursementCutOffTime");
                 model.disbursementRestrictionDays= Number(SessionStore.getGlobalSetting("disbursementRestrictionDays") || 0);
                 model._currentDisbursement=model._currentDisbursement||{};
+                model.loanAccount.precloseuredetails=false;
                 PageHelper.showProgress('load-loan', 'Loading loan account...');
                 PagesDefinition.getPageConfig("Page/Engine/loans.individual.booking.LoanInput").then(function(data) {
                     $log.info(data);
@@ -870,10 +871,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     "readonly":true
                 }, {
                     "key": "loanAccount.transactionType",
+                    "required":false,
                     "title":"TRANSACTION_TYPE",
                     "readonly":true,
                 },{
                     "key": "loanAccount.button",
+                    "required":true,
                     "title":"SUBMIT",
                     "type":"button",
                     "onClick": "actions.getPreClosureDetails(model, formCtrl, form, $event)"
@@ -1008,6 +1011,15 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     }
                     validateDisbursementDate(model);
 
+                    if(model.loanAccount.transactionType && model.loanAccount.transactionType !='New Loan'){
+                         if(!model.loanAccount.precloseuredetails){
+                            PageHelper.setError({
+                                message: "Please Generate Linked Account Details by clicking Submit" 
+                            });
+                            return;
+                         }
+                    }
+
                     if(model.loanAccount.linkedAccountNumber && model.siteCode == 'kinara'){
                         if(model.loanAccount.transactionType && model.loanAccount.transactionType.toLowerCase()=='renewal'){
                             model.loanAccount.processingFeePercentage=0.2;
@@ -1128,11 +1140,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         PageHelper.showProgress('preclosure', 'Preclosure loan details are generated', 2000);
                         model.loanAccount.precloseuredetails=true;
                         model.loanAccount.precloseurePayOffAmount=response.part1;
-                        model.loanAccount.precloseurePayOffAmountWithDue=(response.part2?accounting.unformat(response.part2.slice(3)): 0) +  (response.part6?accounting.unformat(response.part6.slice(3)):0);
+                        model.loanAccount.precloseurePayOffAmountWithDue=(response.part2?accounting.unformat(response.part2.slice(3)): 0) +  (response.part7?accounting.unformat(response.part7.slice(3)):0);
                         model.loanAccount.precloseurePrincipal=model.loanAccount.disbursementSchedules[0].linkedAccountTotalPrincipalDue= response.part3?accounting.unformat(response.part3.slice(3)):0;
                         model.loanAccount.precloseureNormalInterest=model.loanAccount.disbursementSchedules[0].linkedAccountNormalInterestDue=response.part4?accounting.unformat(response.part4.slice(3)):0;
                         model.loanAccount.precloseurePenalInterest=model.loanAccount.disbursementSchedules[0].linkedAccountPenalInterestDue=response.part5?accounting.unformat(response.part5.slice(3)):0;
-                        model.loanAccount.precloseureTotalFee=model.loanAccount.disbursementSchedules[0].linkedAccountTotalFeeDue=response.part6?accounting.unformat(response.part6.slice(3)):0;
+                        model.loanAccount.precloseureTotalFee=model.loanAccount.disbursementSchedules[0].linkedAccountTotalFeeDue=(response.part6?accounting.unformat(response.part6.slice(3)):0)  +  (response.part7?accounting.unformat(response.part7.slice(3)):0);
                     },function(error){
                         model.loanAccount.precloseuredetails=false;
                         PageHelper.showProgress('preclosure', 'Error Getting Preclosure loan details', 2000);
