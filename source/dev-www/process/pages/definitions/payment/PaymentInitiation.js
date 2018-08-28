@@ -297,16 +297,13 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                         }
                     },
                     "BeneficiaryDetails.creditAccountNo":{
-                        "readonly": true,
                         "orderNo":50
                     },
                     "BeneficiaryDetails.beneficiaryBankName":{
-                        "orderNo":80,
-                        "readonly":true
+                        "orderNo":80
                     },
                     "BeneficiaryDetails.beneficiaryBankBranch":{
-                        "orderNo":90,
-                        "readonly":true
+                        "orderNo":90
                     },
                     "BeneficiaryDetails.beneficiaryTransactionParticulars":{
                         "orderNo":100
@@ -343,7 +340,6 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                     "BeneficiaryDetails.beneficiaryIfsc":{
                         // "resolver": "PaymentBankIFSCLOVConfiguration",
                         "type": "string",
-                        "readonly": true,
                         "orderNo":70
                     },
                     "BeneficiaryDetails.beneficiaryName":{
