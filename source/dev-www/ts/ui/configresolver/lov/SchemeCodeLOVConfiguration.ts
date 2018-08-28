@@ -23,7 +23,7 @@ export class SchemeCodeLOVConfiguration extends LOVElementConfiguration {
             model.loanAccount.vehicleLoanDetails.vehicleModel=valueObj.model;
         }
         model.loanAccount.loanAmountRequested=valueObj.default_loan_amount;
-        model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5=valueObj.default_interest_rate;
+        model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5=valueObj.default_interest_rate.toString();
     };
     getListDisplayItem: Function= function(item, index) {
         return [
