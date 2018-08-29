@@ -39,6 +39,7 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
                         },
                         function (res) {
                             _.assign(model.lead, res);
+                             model.lead.age = moment().diff(moment(model.lead.dob, SessionStore.getSystemDateFormat()), 'years');
                             if (model.siteCode == 'sambandh' || model.siteCode == 'saija' || model.siteCode == 'IREPDhan') {
                                 model.lead.customerTypeString = model.lead.customerType;
                             }
