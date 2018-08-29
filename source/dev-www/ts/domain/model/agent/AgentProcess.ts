@@ -73,7 +73,22 @@ export class AgentProcess {
         return Observable.concat(obs1, obs2, obs3).last();
     }
 
-   
+    enterprisesave(): any {
+        /* Calls all business policies associated with save */
+        this.agentProcessAction = "SAVE";  
+        let pmBeforeUpdate: PolicyManager<AgentProcess> = new PolicyManager(this, AgentPolicyFactory.getInstance(), 'beforeSave', AgentProcess.getProcessConfig());
+        let obs1 = pmBeforeUpdate.applyPolicies();
+        let obs2 = null;
+        if (this.agent.id){
+            obs2 = this.agentRepo.update(this);
+        } 
+        else {
+            obs2 = this.agentRepo.create(this);
+        }
+        let pmAfterUpdate: PolicyManager<AgentProcess> = new PolicyManager(this, AgentPolicyFactory.getInstance(), 'afterSave', AgentProcess.getProcessConfig());
+        let obs3 = pmAfterUpdate.applyPolicies();
+        return Observable.concat(obs1, obs2, obs3).last();
+    }
     hold(): any {
         this.agentProcessAction = "SAVE";  
         let pmBeforeUpdate: PolicyManager<AgentProcess> = new PolicyManager(this, AgentPolicyFactory.getInstance(), 'beforeSave', AgentProcess.getProcessConfig());

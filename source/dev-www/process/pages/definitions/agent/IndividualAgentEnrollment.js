@@ -113,7 +113,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                     "AgentInformation.agentRegistrationNumber",
                     "AgentInformation.agentType",
                     "AgentInformation.companyName",
-
                     "AgentFeeDetails",
                     "AgentFeeDetails.agentFeeDetails",
                     "AgentFeeDetails.agentFeeDetails.feeAmount",
@@ -121,7 +120,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                     "AgentFeeDetails.agentFeeDetails.feeType",
                     "AgentFeeDetails.agentFeeDetails.frequency",
                     "AgentFeeDetails.agentFeeDetails.dateOfIncorporation",
-                    
                     "PostReview",
                     "PostReview.action",
                     "PostReview.proceed",
