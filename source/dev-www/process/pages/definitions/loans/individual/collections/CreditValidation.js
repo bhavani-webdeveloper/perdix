@@ -142,14 +142,14 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidati
                     key: "_credit.reference",
                     title: "REFERENCE_NUMBER",
                     readonly: true,
-                    condition:"model._credit.instrumentType !='CASH' && model._credit.instrumentType !='CHEQUE'",
+                    condition:"!model.Collection.depositsummary.depositId",
                     //type:"amount"
                 },
                 {
                     key: "Collection.depositsummary.depositId",
                     title: "REFERENCE_NUMBER",
                     readonly: true,
-                    condition:"model._credit.instrumentType =='CASH' || model._credit.instrumentType =='CHEQUE'",
+                    condition:"model.Collection.depositsummary.depositId",
                 },
                 {
                     key: "_credit.transactionName",
