@@ -371,7 +371,8 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     bundleModel.guarantors = [];
                                 }
                                 bundleModel.guarantors.push(params.guarantor);
-                                break;
+                                BundleManager.broadcastEvent("new-guarantor", params);
+                                 break;
                             case 'business':
                                 $log.info("New Business Enrolment");
                                 bundleModel.business = params.customer;

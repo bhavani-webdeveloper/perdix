@@ -362,9 +362,9 @@ irf.pageCollection.controller(irf.controller("pahal.loans.LoanOriginationDashboa
                     'page': 1,
                     'per_page': 1,
                 }).$promise.then(function(response, headerGetter) {
-                    fiq1Menu.data = Number(response.headers['x-total-count']);
+                    fiq2Menu.data = Number(response.headers['x-total-count']);
                 }, function() {
-                    fiq1Menu.data = '-';
+                    fiq2Menu.data = '-';
                 });
             }
 
@@ -380,15 +380,15 @@ irf.pageCollection.controller(irf.controller("pahal.loans.LoanOriginationDashboa
                     'page': 1,
                     'per_page': 1,
                 }).$promise.then(function(response, headerGetter) {
-                    fiq1Menu.data = Number(response.headers['x-total-count']);
+                    fiq3Menu.data = Number(response.headers['x-total-count']);
                 }, function() {
-                    fiq1Menu.data = '-';
+                    fiq3Menu.data = '-';
                 });
             }
 
 
-            var caq1Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.CreditAppraisalQueue"];
-            if (caq1Menu) {
+            var caqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.CreditAppraisalQueue"];
+            if (caqMenu) {
                 IndividualLoan.search({
                     'stage': 'CreditAppraisal',
                     'enterprisePincode': '',
@@ -399,9 +399,9 @@ irf.pageCollection.controller(irf.controller("pahal.loans.LoanOriginationDashboa
                     'page': 1,
                     'per_page': 1,
                 }).$promise.then(function(response, headerGetter) {
-                    caq1Menu.data = Number(response.headers['x-total-count']);
+                    caqMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
-                    caq1Menu.data = '-';
+                    caqMenu.data = '-';
                 });
             }
 

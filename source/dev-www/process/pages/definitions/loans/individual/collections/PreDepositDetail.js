@@ -21,16 +21,6 @@ define({
                 })
             /* 1)calculating toatal sum to update in bank deposit summary */
             
-                if(model.collectionDetails && model.collectionDetails[0]['instrumentType']=='CASH'){
-                    model.totalCashCollected =0;
-                    _.each(model.collectionDetails,function(cashItems){
-                        model.totalCashCollected += cashItems.repaymentAmount;
-                    })
-                }
-                if(model.totalCashCollected){
-                    var roundingPrecision = SessionStore.getGlobalSetting("currencyPrecision");
-                    model.totalCashCollected = _.round(model.totalCashCollected, roundingPrecision)
-                }
             },
             form: [{
                 "type": "box",
@@ -172,8 +162,14 @@ define({
                             PageHelper.showBlockingLoader("Processing...");
                             model.collectionDetailsCopy = model.collectionDetails;
                             model.collectionDetails =[];
+                            model.totalCashCollected = 0;
                             _.forEach( model.collectionDetailsCopy, function(collectionDetail){
                                     if(collectionDetail.$selected == true){
+                                        model.totalCashCollected += collectionDetail.repaymentAmount;
+                                        if (model.totalCashCollected) {
+                                            var roundingPrecision = SessionStore.getGlobalSetting("currencyPrecision");
+                                            model.totalCashCollected = _.round(model.totalCashCollected, roundingPrecision)
+                                        }
                                         model.collectionDetails.push(collectionDetail)
                                     }
                             })

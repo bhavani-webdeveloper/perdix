@@ -710,7 +710,7 @@ function($log,PageHelper,CreditBureau,formHelper,filterFilter, Enrollment,Querie
                                         }
                                     });
                                 }
-                                else if(responsestatus == 'PENDING'){
+                                else if(response.status == 'PENDING'){
                                 	PageHelper.showProgress('CBCHECK', 'CBCHECK is pending.Try again later', 5000);
                                 }
                                 

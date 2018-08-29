@@ -1541,7 +1541,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "key":"loanAccount.collateral[].collateralCategory",
                                 "type":"select",
                                 "enumCode":"hypothecation_type",
-                                "title":"HYPOTHECATION_TYPE"
+                                "title":"HYPOTHECATION_TYPE",
+                                "required":true
                             },
                             {
                                 "key":"loanAccount.collateral[].collateralType",
@@ -1549,7 +1550,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "enumCode":"hypothication_sub_type",
                                 "title":"HYPOTHECATION_SUB_TYPE",
                                 "parentEnumCode":"hypothecation_type",
-                                "parentValueExpr":"model.loanAccount.collateral[arrayIndex].collateralCategory",
+                                "parentValueExpr":"model.loanAccount.collateral[arrayIndex].collateralCategory"
                             },
                             {
                                 "key":"loanAccount.collateral[].collateralDescription",

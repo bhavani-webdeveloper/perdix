@@ -1425,10 +1425,19 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                             }}
                         };
                         // model.customer.udf.put("userDefinedFieldValues":userDefinedFieldValues);
-                        model.customer.udf.userDefinedFieldValues.udf38 = "No";
-                        model.customer.udf.userDefinedFieldValues.udf39 = "No";
-                        model.customer.udf.userDefinedFieldValues.udf40 = "No";
-                        model.customer.udf.userDefinedFieldValues.udf5 = "Good";
+                        customer.udf.userDefinedFieldValues.udf38 = "No";
+                        customer.udf.userDefinedFieldValues.udf39 = "No";
+                        customer.udf.userDefinedFieldValues.udf40 = "No";
+                        customer.udf.userDefinedFieldValues.udf5 = "Good";
+                        if(model.customer.udf != null){
+                            model.customer.udf.userDefinedFieldValues.udf38 = customer.udf.userDefinedFieldValues.udf38;
+                            model.customer.udf.userDefinedFieldValues.udf39 = customer.udf.userDefinedFieldValues.udf39;
+                            model.customer.udf.userDefinedFieldValues.udf40 = customer.udf.userDefinedFieldValues.udf40;
+                        }
+                        else{
+                            model.customer.udf = customer.udf
+                        }
+                        
                     }
                     deferred.resolve(model);
                     debugger;

@@ -1310,12 +1310,18 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
                         model.lead.leadStatus = "Incomplete";
                     }
                 },
-                preSave: function (model, form, formName) {
+                preSave: function (model, form, formName) { 
                     var deferred = $q.defer();
                     if (model.lead.leadName) {
                         deferred.resolve();
                     } else {
                         irfProgressMessage.pop('lead-save', 'Applicant Name is required', 3000);
+                        deferred.reject();
+                    }
+                    if (model.lead.centreName) {
+                        deferred.resolve();
+                    } else {
+                        irfProgressMessage.pop('lead-save', 'Spoke Name is required', 3000);
                         deferred.reject();
                     }
                     return deferred.promise;
