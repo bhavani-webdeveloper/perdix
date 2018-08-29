@@ -40,23 +40,23 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
 
             if (sqMenu) {
                 sqMenu.data = 0;
-                _.forEach(centres, function(centre) {
-                    IndividualLoan.search({
-                        'stage': 'Screening',
-                        'enterprisePincode': '',
-                        'applicantName': '',
-                        'area': '',
-                        'villageName': '',
-                        'customerName': '',
-                        'page': 1,
-                        'per_page': 1,
-                        'centreCode': centre.centreCode
-                    }).$promise.then(function(response, headerGetter) {
-                        sqMenu.data = sqMenu.data + Number(response.headers['x-total-count']);
-                    }, function() {
-                        sqMenu.data = '-';
-                    });
-                });
+                    _.forEach(centres, function(centre) {
+                        IndividualLoan.search({
+                            'stage': 'Screening',
+                            'enterprisePincode': '',
+                            'applicantName': '',
+                            'area': '',
+                            'villageName': '',
+                            'customerName': '',
+                            'page': 1,
+                            'per_page': 1,
+                            'centreCode': centre.centreCode
+                        }).$promise.then(function(response, headerGetter) {
+                            sqMenu.data = sqMenu.data + Number(response.headers['x-total-count']);
+                        }, function() {
+                            sqMenu.data = '-';
+                        });
+                    });   
             }
 
 
@@ -64,7 +64,26 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
 
             if (dqMenu) {
                 dqMenu.data = 0;
-                _.forEach(centres, function(centre) {
+                if(centres.length){
+                    _.forEach(centres, function(centre) {
+                        IndividualLoan.search({
+                            'stage': 'Dedupe',
+                            'enterprisePincode': '',
+                            'applicantName': '',
+                            'area': '',
+                            'villageName': '',
+                            'customerName': '',
+                            'page': 1,
+                            'per_page': 1,
+                            'centreCode': centre.centreCode
+                        }).$promise.then(function(response, headerGetter) {
+                            dqMenu.data = dqMenu.data + Number(response.headers['x-total-count']);
+                        }, function() {
+                            dqMenu.data = '-';
+                        });
+                    });
+
+                }else{
                     IndividualLoan.search({
                         'stage': 'Dedupe',
                         'enterprisePincode': '',
@@ -74,13 +93,14 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
                         'customerName': '',
                         'page': 1,
                         'per_page': 1,
-                        'centreCode': centre.centreCode
                     }).$promise.then(function(response, headerGetter) {
-                        dqMenu.data = dqMenu.data + Number(response.headers['x-total-count']);
+                        dqMenu.data = Number(response.headers['x-total-count']);
                     }, function() {
                         dqMenu.data = '-';
                     });
-                });
+
+                }
+                
             }
 
 
@@ -126,7 +146,26 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
                 aqMenu.data = 0;
                 $log.info("centres");
                 $log.info(centres);
-                _.forEach(centres, function(centre) {
+                if(centres.length){
+                    _.forEach(centres, function(centre) {
+                        IndividualLoan.search({
+                            'stage': 'Application',
+                            'enterprisePincode': '',
+                            'applicantName': '',
+                            'area': '',
+                            'villageName': '',
+                            'customerName': '',
+                            'page': 1,
+                            'per_page': 1,
+                            'centreCode': centre.centreCode
+                        }).$promise.then(function(response, headerGetter) {
+                            aqMenu.data = aqMenu.data + Number(response.headers['x-total-count']);
+                        }, function() {
+                            aqMenu.data = '-';
+                        });
+                    });
+
+                }else{
                     IndividualLoan.search({
                         'stage': 'Application',
                         'enterprisePincode': '',
@@ -135,14 +174,14 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
                         'villageName': '',
                         'customerName': '',
                         'page': 1,
-                        'per_page': 1,
-                        'centreCode': centre.centreCode
+                        'per_page': 1
                     }).$promise.then(function(response, headerGetter) {
-                        aqMenu.data = aqMenu.data + Number(response.headers['x-total-count']);
+                        aqMenu.data = Number(response.headers['x-total-count']);
                     }, function() {
                         aqMenu.data = '-';
                     });
-                });
+                }
+                
             }
 
 

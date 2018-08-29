@@ -14,9 +14,8 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.DedupeQueue"),
 			"title": "DEDUPE_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
-				// model.branch = branch;
+				//model.branch = SessionStore.getCurrentBranch().branchId;
 				$log.info("search-list sample got initialized");
-
 			},
 			definition: {
 				title: "SEARCH",

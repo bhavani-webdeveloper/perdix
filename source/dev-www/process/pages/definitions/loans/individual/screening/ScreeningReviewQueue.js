@@ -14,7 +14,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ScreeningReviewQ
 			"title": "SCREENING_REVIEW_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
-				// model.branch = branch;
+				//model.branch = SessionStore.getCurrentBranch().branchId;
 				$log.info("search-list sample got initialized");
 
 			},
