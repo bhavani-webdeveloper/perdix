@@ -48,24 +48,24 @@ function($log, $scope, PagesDefinition, SessionStore, IndividualLoan) {
             IndividualLoan.searchDisbursement({
                 'currentStage': 'DisbursementConfirmation',
                 'page': 1,
-                'per_page': 1
+                'per_page': 1,
             }).$promise.then(function(response,headerGetter){
-                dcqMenu.data = response.headers['x-total-count'];
+                dcqMenu.data = Number(response.headers['x-total-count']);
             }, function() {
                 dcqMenu.data = '-';
             });
         }
 
-        var drqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.disbursement.DisbursementReversalQueue"];
-        if (dcqMenu) {
+        var drqMenu1 = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.disbursement.DisbursementReversalQueue"];
+        if (drqMenu1) {
             IndividualLoan.searchDisbursement({
                 'currentStage': 'Completed',
                 'page': 1,
                 'per_page': 1
             }).$promise.then(function(response,headerGetter){
-                dcqMenu.data = response.headers['x-total-count'];
+                drqMenu1.data = Number(response.headers['x-total-count']);
             }, function() {
-                dcqMenu.data = '-';
+                drqMenu1.data = '-';
             });
         }
 
