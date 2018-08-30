@@ -11,7 +11,7 @@
     $customer_id = $GET['customer_id'];
     $status = false;
     if ($ekyc === 'Y') {
-        $affected = DB::update('update customer set is_ekyc_done = ?, pekrn = ? where id = ?', ['true', $pekrn, $customer_id]);
+        $affected = DB::update('update customer set is_ekyc_done = ?, pekrn = ? where id = ?', [true, $pekrn, $customer_id]);
         $status = true;
         $statusHead = "eKYC is completed successfullly";
         $statusMessage = "Proceed with mutual fund application";
@@ -69,7 +69,11 @@
 		<br>
 		<br>
 		<div>
-			Continue with MutualFund Process
+			<?php if ($status) {
+				echo 'Pl continue with first purchase';
+			} else {
+				echo "Pl contact administrator with below details. <br><br> <small><b>result:</b> $result<br><b>MFKYC:</b> ${$_POST["MFKYC"]}</small>";
+			} ?>
 		</div>
 	</div>
 	<div class="footer"></div>
