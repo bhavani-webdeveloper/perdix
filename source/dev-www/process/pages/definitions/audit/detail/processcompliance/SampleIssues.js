@@ -353,7 +353,7 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                             }
                             issueDetailsForm.push({
                                 "key": "sample.issue_details[" + i + "].option_id",
-                                "type": "select",
+                                "type": "radios",
                                 "title": "OPTION",
                                 "titleMap": dropdownTitleMap
                             });
