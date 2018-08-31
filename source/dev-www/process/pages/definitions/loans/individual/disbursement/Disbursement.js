@@ -104,10 +104,12 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                             }
                         }
 
-                        if(model.additional.netDisbursementAmount >= 200000){
-                              model.loanAccountDisbursementSchedule.modeOfDisbursement = "RTGS";
-                        }else{
-                            model.loanAccountDisbursementSchedule.modeOfDisbursement = "NEFT";
+                        if (!model.loanAccountDisbursementSchedule.modeOfDisbursement) {
+                            if(model.additional.netDisbursementAmount >= 200000){
+                                  model.loanAccountDisbursementSchedule.modeOfDisbursement = "RTGS";
+                            }else{
+                                model.loanAccountDisbursementSchedule.modeOfDisbursement = "NEFT";
+                            }
                         }
 
                         model.loanAccountDisbursementSchedule.overrideStatus = "Requested";
