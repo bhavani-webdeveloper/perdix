@@ -495,11 +495,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                     model.customer = enrolmentProcess.customer;
                                     BundleManager.pushEvent(model.pageClass + "-updated", model._bundlePageObj, enrolmentProcess);
                                 }
-                                if (obj.leadCategory == 'Existing' || obj.leadCategory == 'Return') {
-                                    model.customer.existingLoan = 'YES';
-                                } else {
-                                    model.customer.existingLoan = 'NO';
-                                }
+                                // if (obj.leadCategory == 'Existing' || obj.leadCategory == 'Return') {
+                                //     model.customer.existingLoan = 'YES';
+                                // } else {
+                                //     model.customer.existingLoan = 'NO';
+                                // }
                                 model.customer.mobilePhone = obj.mobileNo;
                                 model.customer.gender = obj.gender;
                                 model.customer.firstName = obj.leadName;
