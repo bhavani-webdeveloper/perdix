@@ -202,10 +202,11 @@
                   "captureStages":["PaymentInitiation","PaymentApproval","ReadyForManualDispatch","PaymentCompleted","PaymentRejected","RejectedPaymentProcessed"
                   ]
                },
-			      "paymentDate":{  
-                  "title":"paymentDate",
-                  "type":"string",
-                  "format": "date",
+               "customerId":{
+                  "title":"Customer Id",
+                  "type":"number",
+                  "minimum":1,
+                  "maximum":9999999,
                   "captureStages":["PaymentInitiation","PaymentApproval","ReadyForManualDispatch","PaymentCompleted","PaymentRejected","RejectedPaymentProcessed"
                   ]
                },
