@@ -501,26 +501,6 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                 condition:"model.customer.enterpriseCustomerRelations[arrayIndex].otherBusinessClosed == 'YES'"
                             }
                         ]
-                    },
-                    {
-                        type:"fieldset",
-                        title:"ADDRESS_PROOF",
-                        items:[
-                            {
-                                key:"customer.addressProof",
-                                type:"select",
-                                required: false
-                            },
-                            {
-                                key:"customer.addressProofNo",
-                                type:"barcode",
-                                required: false,
-                                onCapture: function(result, model, form) {
-                                    $log.info(result);
-                                    model.customer.addressProofNo = result.text;
-                                }
-                            }
-                        ]
                     }
                 ]
             },
