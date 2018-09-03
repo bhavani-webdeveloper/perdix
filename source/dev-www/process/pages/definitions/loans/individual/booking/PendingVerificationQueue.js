@@ -10,6 +10,7 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan,
         
             model.stage = 'DocumentVerification';
             model.branch = SessionStore.getCurrentBranch().branchId;
+            siteCode = SessionStore.getGlobalSetting('siteCode');
             console.log(model);
         },
 
@@ -140,16 +141,31 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan,
                             name: "VERIFY_DOCUMENT",
                             desc: "",
                             fn: function(item, index){
-                                entityManager.setModel('loans.individual.booking.DocumentVerification', {_queue:item});
-                                irfNavigator.go({
-                                    state: 'Page.Engine', 
-                                    pageName: 'loans.individual.booking.DocumentVerification', 
-                                    pageId: item.loanId
-                                },
-                                {
-                                    state: 'Page.Engine',
-                                    pageName: "loans.individual.booking.PendingVerificationQueue"
-                                });
+                                if (siteCode == 'pahal') {
+                                    entityManager.setModel('pahal.loans.individual.booking.DocumentVerification', {_queue:item});
+                                    irfNavigator.go({
+                                        state: 'Page.Engine', 
+                                        pageName: 'pahal.loans.individual.booking.DocumentVerification', 
+                                        pageId: item.loanId,
+                                        pageData: item
+                                    },
+                                    {
+                                        state: 'Page.Engine',
+                                        pageName: "loans.individual.booking.PendingVerificationQueue"
+                                    });   
+                                } else {
+                                    entityManager.setModel('loans.individual.booking.DocumentVerification', {_queue:item});
+                                    irfNavigator.go({
+                                        state: 'Page.Engine', 
+                                        pageName: 'loans.individual.booking.DocumentVerification', 
+                                        pageId: item.loanId
+                                    },
+                                    {
+                                        state: 'Page.Engine',
+                                        pageName: "loans.individual.booking.PendingVerificationQueue"
+                                    }); 
+                                }
+                                
                             },
                             isApplicable: function(item, index){
                                 return true;

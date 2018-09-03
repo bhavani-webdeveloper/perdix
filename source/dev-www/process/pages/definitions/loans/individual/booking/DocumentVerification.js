@@ -234,7 +234,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                                     "type": "section",
                                     "htmlClass": "col-sm-2",
                                     "key": "loanDocs[].downloadRequired",
-                                    "condition": "model.loanAccount.loanDocuments[arrayIndex].documentId",
                                     "items": [{
                                         "title": "DOWNLOAD_FORM",
                                         "notitle": true,
@@ -254,7 +253,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                                     "htmlClass": "col-sm-2",
                                     "items": [{
                                         "key": "loanAccount.loanDocuments[].documentStatus",
-                                        "condition": "model.loanAccount.loanDocuments[arrayIndex].documentId",
                                         "title": "Status",
                                         "notitle": true,
                                         "type": "select",
