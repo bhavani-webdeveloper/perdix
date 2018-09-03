@@ -293,7 +293,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 key:"repayment.transactionName",
                                 "type":"select",
                                 "required": true,
-                                condition: "!model._pageGlobals.hideTransactionName",
+                                //condition: "!model._pageGlobals.hideTransactionName",
                                 titleMap: {
                                     "Scheduled Demand":"Scheduled Demand",
                                     "Fee Payment":"Fee Payment",
@@ -418,13 +418,13 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             {
                                 key: "repayment.amount",
                                 type: "number",
-                                condition:"!model.repayment.chequeNumber && (model.repayment.transactionName !='PenalInterestPayment')"
+                                condition:"!model.repayment.chequeNumber"
                             },
                             {
                                 key: "repayment.amount",
                                 type: "number",
                                 "readonly":true,
-                                condition:"model.repayment.chequeNumber || (model.repayment.transactionName=='PenalInterestPayment')"
+                                condition:"model.repayment.chequeNumber"
                             },
                             {
                                 key: "repayment.chequeNumber",

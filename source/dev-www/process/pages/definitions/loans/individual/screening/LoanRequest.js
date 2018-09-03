@@ -848,11 +848,11 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     {
                         key:"loanAccount.linkedAccountNumber",
                         title:"LINKED_ACCOUNT_NUMBER",
+                        clear:true,
                         type: "lov",
                         lovonly: true,
                         autolov: true,
                         condition: "model.loanAccount.transactionType.toLowerCase() != 'renewal'",
-
                         searchHelper: formHelper,
                         search: function(inputModel, form, model, context) {
                             var out=[];
@@ -1123,6 +1123,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         type: "lov",
                         lovonly: true,
                         autolov: true,
+                        clear:true,
                         searchHelper: formHelper,
                         search: function(inputModel, form, model, context) {
                             var out=[];
@@ -3073,6 +3074,17 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 PageHelper.clearErrors();
                 var nextStage = null;
                 var dedupeCustomerIdArray = [];
+               if( !_.isNull(model.loanAccount.transactionType)&& (model.loanAccount.transactionType.toLowerCase() =='renewal'|| model.loanAccount.transactionType=='Internal Foreclosure')){
+                    if(!model.loanAccount.linkedAccountNumber){
+                        var res = {
+                            data: {
+                                error: 'Linked Account Number is mandatory'
+                            }
+                        };
+                        PageHelper.showErrors(res)
+                        return;
+                    }
+               }
                 /* TODO Call proceed servcie for the loan account */
                 // if(isEnrollmentsSubmitPending(model)){
                 //     return
