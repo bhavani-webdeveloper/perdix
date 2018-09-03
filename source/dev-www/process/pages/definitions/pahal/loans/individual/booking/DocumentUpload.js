@@ -408,7 +408,7 @@ define({
                                 "items": [
                                 {
                                     "type": "section",
-                                    "htmlClass": "col-sm-3",
+                                    "htmlClass": "col-sm-2",
                                     "items": [{
                                         "key": "loanAccount.loanDocuments[].$title",
                                         "notitle": true,
@@ -445,6 +445,26 @@ define({
                                     "htmlClass": "col-sm-4",
                                     "key": "loanAccount.loanDocuments[].remarks",
                                     "condition": "model.loanAccount.loanDocuments[arrayIndex].documentStatus === 'APPROVED'",
+                                    "items": [{
+                                        "notitle": true,
+                                        "key": "loanAccount.loanDocuments[].remarks",
+                                        "readonly": true
+                                    }]
+                                }, {
+                                    "type": "section",
+                                    "htmlClass": "col-sm-2",
+                                    "key": "loanAccount.loanDocuments[].rejectReason",
+                                    "condition": "!model.loanAccount.loanDocuments[arrayIndex].documentStatus",
+                                    "items": [{
+                                        "notitle": true,
+                                        "key": "loanAccount.loanDocuments[].rejectReason",
+                                        "readonly": true
+                                    }]
+                                }, {
+                                    "type": "section",
+                                    "htmlClass": "col-sm-2",
+                                    "key": "loanAccount.loanDocuments[].remarks",
+                                    "condition": "!model.loanAccount.loanDocuments[arrayIndex].documentStatus",
                                     "items": [{
                                         "notitle": true,
                                         "key": "loanAccount.loanDocuments[].remarks",

@@ -630,7 +630,8 @@ define([], function() {
                                             "key": "loanAccount.productCategory",
                                             "title": "PRODUCT_TYPE",
                                             "enumCode": "loan_product_category",
-                                            "type": "select"
+                                            "type": "select",
+                                            "required": true
                                         },
                                         "calculateEmi": {
                                             "title": "CALCULATE_EMI",
