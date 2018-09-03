@@ -705,6 +705,17 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "KYC.customerId": {
                         type: "lov",
                         key: "customer.id",
+                        initialize: function(model, form, parentModel, context) {
+                            model.customerBranchId = parentModel.customer.customerBranchId;
+                            model.centreId = parentModel.customer.centreId;
+                            var centreCode = formHelper.enum('centre').data;
+
+                            var centreName = $filter('filter')(centreCode, {value: parentModel.customer.centreId}, true);
+                            if(centreName && centreName.length > 0) {
+                                model.centreName = centreName[0].name;
+                            }
+
+                        },
                         "inputMap": {
                             "firstName": {
                                 "key": "customer.firstName",
@@ -717,9 +728,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             },
                             "customerBranchId": {
                                 "key": "customer.customerBranchId",
-                                "type": "select",
-                                "screenFilter": true,
-                                "readonly": true
+                                "readonly": true,
+                                "type": "select"
                             },
                             "centreName": {
                                 "key": "customer.place",
