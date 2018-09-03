@@ -651,6 +651,8 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 model.loanAccount.transactionType = obj.transactionType ? obj.transactionType:"New Loan";
                 /*calling individual loan api to get the current loan amount for validating that loan amount requested should be greater then current loan amount */
                 if(obj.transactionType && obj.transactionType.toLowerCase() == 'renewal'){
+                    model.loanAccount.processingFeePercentage = parseInt(SessionStore.getGlobalSetting('LOCRenewalProcessingFeePercentage'));
+                    model.loanAccount.expectedProcessingFeePercentage = parseInt(SessionStore.getGlobalSetting('LOCRenewalProcessingFeePercentage'));
                     model.loanAccount.loanPurpose2 = obj.loanPurpose2;
                     LoanAccount.get({
                         accountId: model.loanAccount.linkedAccountNumber
