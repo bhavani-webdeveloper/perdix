@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementDocumentUploadQueue"),
-    ["$log", "formHelper", "$state", "SessionStore", "$q", "IndividualLoan","entityManager", "irfNavigator",
-        function($log, formHelper, $state, SessionStore, $q, IndividualLoan,entityManager, irfNavigator){
+    ["$log", "formHelper", "$state", "SessionStore", "$q", "IndividualLoan","entityManager",
+        function($log, formHelper, $state, SessionStore, $q, IndividualLoan,entityManager){
             return {
                 "type": "search-list",
                 "title": "DISBURSEMENT_CONFIRMATION_QUEUE",
@@ -117,15 +117,16 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementD
                         getActions: function(){
                             return [
                                 {
-                                    name: "View / Upload Documents",
+                                    name: "Document Upload",
                                     desc: "",
                                     fn: function(item, index){
-                                        irfNavigator.go({
-                                            state: 'Page.Engine', 
-                                            pageName: 'loans.individual.disbursement.DisbursementDocumentUpload', 
-                                            pageData: item, 
-                                            pageId: [item.loanId,item.id].join(".")
-                                        })
+                                        entityManager.setModel('loans.individual.disbursement.DisbursementDocumentUpload', {_disbursementDocumentUpload:item});
+                                        $state.go("Page.Engine",{
+                                            pageName:"loans.individual.disbursement.DisbursementDocumentUpload",
+                                            pageId:[item.loanId,item.id].join(".")
+                                        });
+
+
                                     },
                                     isApplicable: function(item, index){
                                         return true;

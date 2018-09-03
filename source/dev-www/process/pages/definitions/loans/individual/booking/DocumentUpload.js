@@ -734,7 +734,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                 reject: function(model, formCtrl, form, $event){
                     $log.info("Inside reject()");
                     Utils.confirm("Are You Sure?").then(function(){
-                        var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
+                        var reqData = {
+                        'loanAccount': _.cloneDeep(model.loanAccount),
+                        'loanProcessAction': 'PROCEED',
+                        'remarks': model.review.remarks
+                        };
                         reqData.loanAccount.status = '';
                         reqData.loanProcessAction = "PROCEED";
                         reqData.stage = "Rejected";

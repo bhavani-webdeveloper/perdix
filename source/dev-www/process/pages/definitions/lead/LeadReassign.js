@@ -1,6 +1,6 @@
-irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$stateParams", "formHelper", "PageHelper", "Utils", "LeadHelper", "irfNavigator",
+irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$stateParams", "formHelper", "PageHelper", "Utils", "LeadHelper", "irfNavigator","Lead",
 
-    function($log,$stateParams,formHelper,PageHelper, Utils,LeadHelper,irfNavigator) {
+    function($log,$stateParams,formHelper,PageHelper, Utils,LeadHelper,irfNavigator,Lead) {
 
         return {
             "type": "schema-form",
@@ -15,16 +15,37 @@ irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$stateParams
                 if ($stateParams.pageData) {
                     var leadarray = $stateParams.pageData;
                     $log.info(leadarray);
-                    model.lead.leads=leadarray;
-                    model.customer.branchName=leadarray[0].branchName;
-                    var branches = formHelper.enum('branch_id').data;
-                    $log.info(branches);
-                    for (var i = 0; i < branches.length; i++) {
-                        if ((branches[i].name) == model.customer.branchName) {
-                            model.customer.branchId = branches[i].value;
+                    for (i in leadarray) {
+                        if (i == 0) {
+                            var leadIdList = "leadIdList=" + leadarray[i].id
+                        } else {
+                            var leadIdList = leadIdList + "&leadIdList=" + leadarray[i].id
                         }
                     }
-                   
+                    var leadArray = []
+                    Lead.findLeads({
+                        id: leadIdList
+                    }).$promise.then(
+                        function(res) {
+                            model.leadResponse = res;
+                            for (i in leadarray) {
+                                leadArray[i] = model.leadResponse[i]
+                            }
+                            console.log(leadArray);
+                            model.lead.leads = leadArray;
+                            model.customer.branchName = leadarray[0].branchName;
+                            var branches = formHelper.enum('branch_id').data;
+                            $log.info(branches);
+                            for (var i = 0; i < branches.length; i++) {
+                                if ((branches[i].name) == model.customer.branchName) {
+                                    model.customer.branchId = branches[i].value;
+                                }
+                            }
+                        },
+                        function(err) {
+                            console.log(err);
+                            PageHelper.showError(err);
+                        });
                 }
 
                 /*if ($stateParams.pageId) {

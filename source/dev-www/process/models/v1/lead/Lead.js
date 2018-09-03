@@ -33,7 +33,8 @@ irf.models.factory('Lead', ["$resource", "$httpParamSerializer", "BASE_URL", "se
 			},
 			findLeads : {
 				method:'GET',
-				url:endpoint + '/findLeads'
+				url:endpoint + '/findLeads?' + ':id',
+				isArray:true
 			}
 
 		});

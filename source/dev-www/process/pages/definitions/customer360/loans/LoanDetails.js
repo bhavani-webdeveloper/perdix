@@ -1585,7 +1585,12 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                             title: "DISBURSEMENT_SCHEDULES",
                             add: null,
                             remove: null,
-                            items: [{
+                            items: [
+                            {
+                                key: "loanAccount.disbursementSchedules[].customerNameInBank",
+                                title: "CUSTOMER_NAME",
+                                readonly: true
+                            },{
                                 key: "loanAccount.disbursementSchedules[].customerAccountNumber",
                                 title: "CUSTOMER_BANK_ACC_NO",
                                 readonly: true
@@ -1606,7 +1611,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                 "required":false,
                                 title: "TRANCHE_NUMBER",
                                 readonly: true
-                            },{
+                            }, {
                                 key: "loanAccount.disbursementSchedules[].disbursementAmount",
                                 title: "DISBURSEMENT_AMOUNT",
                                 "required":false,
