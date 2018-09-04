@@ -6,6 +6,18 @@ irf.pageCollection.factory(irf.page("audit.AuditDumpsQueue"), ["$log","Queries",
             "title": "AUDIT_DUMPS",
             initialize: function(model, form, formCtrl) {
                 model.branch = SessionStore.getCurrentBranch().branchId;
+                var bankName = SessionStore.getBankName();
+                var banks = formHelper.enum('bank').data;
+                for (var i = 0; i < banks.length; i++) {
+                    if (banks[i].name == bankName) {
+                        model.bankId = banks[i].value;
+                        model.bankName = banks[i].name;
+                    }
+                }
+                var userRole = SessionStore.getUserRole();
+                if (userRole && userRole.accessLevel && userRole.accessLevel === 5) {
+                    model.fullAccess = true;
+                }
                 formCtrl.submit();
                 if ($stateParams.pageData && $stateParams.pageData.auditData) {
                     returnObj.definition.listOptions.tableConfig.page = $stateParams.pageData.auditData;
@@ -21,6 +33,13 @@ irf.pageCollection.factory(irf.page("audit.AuditDumpsQueue"), ["$log","Queries",
             definition: {
                 title: "SEARCH_AUDIT",
                 searchForm: [{
+                        key: "bankId",
+                        readonly: true,
+                        condition: "!model.fullAccess"
+                    }, {
+                        key: "bankId",
+                        condition: "model.fullAccess"
+                    }, {
                         key: "auditor_id",
                         title: "AUDITOR_USERID",
                         type: "lov",
@@ -62,10 +81,10 @@ irf.pageCollection.factory(irf.page("audit.AuditDumpsQueue"), ["$log","Queries",
                     "branch_id",
                     "report_date",
                     "start_date",
-                    "end_date", {
+                    "end_date",
+                    {
                         "key": "current_stage",
                         "title": "STAGE",
-                        "type": "string",
                         "type": "select",
                         "titleMap": {
                             "scheduled": "Scheduled",
@@ -80,13 +99,22 @@ irf.pageCollection.factory(irf.page("audit.AuditDumpsQueue"), ["$log","Queries",
                             "approve": "Approve",
                             "close": "Close"
                         }
-                    },
-
+                    }
                 ],
                 searchSchema: {
                     "type": 'object',
                     "title": 'SearchOptions',
                     "properties": {
+                        "bankId": {
+                            "title": "BANK_NAME",
+                            "type": ["integer", "null"],
+                            "enumCode": "bank",
+                            "x-schema-form": {
+                                "type": "select",
+                                "screenFilter": true,
+
+                            }
+                        },
                         "auditor_id": {
                             "title": "AUDITOR_USERID"
                         },
@@ -141,6 +169,7 @@ irf.pageCollection.factory(irf.page("audit.AuditDumpsQueue"), ["$log","Queries",
                         'audit_id': searchOptions.audit_id,
                         'userId': searchOptions.userId,
                         "branch_id": searchOptions.branch_id,
+                        'bank_id': searchOptions.bankId,
                         "start_date": searchOptions.start_date ? searchOptions.start_date + " 00:00:00" : "",
                         "end_date": searchOptions.end_date ? searchOptions.end_date + " 23:59:59" : "",
                         "report_date": searchOptions.report_date ? searchOptions.report_date + " 00:00:00" : "",

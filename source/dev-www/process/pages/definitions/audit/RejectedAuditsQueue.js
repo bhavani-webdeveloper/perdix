@@ -7,6 +7,18 @@ irf.pageCollection.factory(irf.page("audit.RejectedAuditsQueue"), ["$log", "Quer
             initialize: function(model, form, formCtrl) {
                 model.Audits = model.Audits || {};
                 model.branch = SessionStore.getCurrentBranch().branchId;
+                var bankName = SessionStore.getBankName();
+                var banks = formHelper.enum('bank').data;
+                for (var i = 0; i < banks.length; i++) {
+                    if (banks[i].name == bankName) {
+                        model.bankId = banks[i].value;
+                        model.bankName = banks[i].name;
+                    }
+                }
+                var userRole = SessionStore.getUserRole();
+                if (userRole && userRole.accessLevel && userRole.accessLevel === 5) {
+                    model.fullAccess = true;
+                }
                 localFormController = formCtrl;
                 syncCheck = false;
                 if ($stateParams.pageData && $stateParams.pageData.page) {
@@ -23,6 +35,13 @@ irf.pageCollection.factory(irf.page("audit.RejectedAuditsQueue"), ["$log", "Quer
             definition: {
                 title: "SEARCH_AUDITS",
                 searchForm: [{
+                        key: "bankId",
+                        readonly: true,
+                        condition: "!model.fullAccess"
+                    }, {
+                        key: "bankId",
+                        condition: "model.fullAccess"
+                    }, {
                         key: "auditor_id",
                         title: "AUDITOR_USERID",
                         type: "lov",
@@ -69,6 +88,16 @@ irf.pageCollection.factory(irf.page("audit.RejectedAuditsQueue"), ["$log", "Quer
                     "type": 'object',
                     "title": 'SEARCH_OPTIONS',
                     "properties": {
+                        "bankId": {
+                            "title": "BANK_NAME",
+                            "type": ["integer", "null"],
+                            "enumCode": "bank",
+                            "x-schema-form": {
+                                "type": "select",
+                                "screenFilter": true,
+
+                            }
+                        },
                         "auditor_id": {
                             "title": "AUDITOR_ID",
                             "type": "string"
@@ -132,6 +161,7 @@ irf.pageCollection.factory(irf.page("audit.RejectedAuditsQueue"), ["$log", "Quer
                         'audit_id': searchOptions.audit_id,
                         'auditor_id': SessionStore.getLoginname(),
                         'branch_id': searchOptions.branch_id,
+                        'bank_id': searchOptions.bankId,
                         'audit_type': searchOptions.audit_type,
                         'start_date': searchOptions.start_date ? searchOptions.start_date + " 00:00:00" : "",
                         'end_date': searchOptions.end_date ? searchOptions.end_date + " 23:59:59" : "",
