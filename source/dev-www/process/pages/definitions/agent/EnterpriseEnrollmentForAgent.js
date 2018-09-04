@@ -44,7 +44,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                     "EnterpriseInformation",
                     "EnterpriseInformation.firstName",
                     "EnterpriseInformation.customerId",
-                    "EnterpriseInformation.customerBranchId",
                     "EnterpriseInformation.entityId",
                     "EnterpriseInformation.urnNo",
                     "EnterpriseInformation.centreId",
@@ -192,20 +191,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                     "fieldType": "number",
                                     "resolver": "PincodeLOVConfiguration"
                                 },
-                                "EnterpriseInformation.centreId": {
-                                    "readonly": true
-                                },
-                                "EnterpriseInformation.customerBranchId": {
-                                    "readonly": true
-                                },
-                                "BankAccounts.customerBankAccounts": {
-                                    "startEmpty": true
-                                },
-                                "EnterpriseInformation.centreId": {
-                                    "readonly": true
-                                },
-                                "EnterpriseInformation.customerBranchId": {
-                                    "readonly": true
+                                "ContactInformation.distanceFromBranch": {
+                                    key: "customer.distanceFromBranch",
+                                    type: "select",
+                                    enumCode: "distance_from_branch",
+                                    title: "DISTANCE_FROM_BRANCH"
                                 },
                                 "BankAccounts.customerBankAccounts": {
                                     startEmpty: true
@@ -374,6 +364,28 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                             "excludes": [],
                             "options": {
                                 "additions": [{
+                                    "targetID": "EnterpriseInformation",
+                                    "items": [{
+                                        "key": "customer.centreId",
+                                        "type": "select",
+                                        parentEnumCode: "userbranches",
+                                        parentValueExpr: "model.customer.customerBranchId",
+                                        "enumCode": "centre",
+                                        "title": "CENTRE_NAME",
+                                        "orderNo": 21,
+                                        // "readonly": true
+                                    }]
+                                }, {
+                                    "targetID": "EnterpriseInformation",
+                                    "items": [{
+                                        "key": "customer.customerBranchId",
+                                        title: "BRANCH_NAME",
+                                        type: "select",
+                                        enumCode: "userbranches",
+                                        "orderNo": 20,
+                                        // "readonly": true
+                                    }]
+                                }, {
                                     "type": "actionbox",
                                     "condition": "!model.customer.id",
                                     "orderNo": 2000,
