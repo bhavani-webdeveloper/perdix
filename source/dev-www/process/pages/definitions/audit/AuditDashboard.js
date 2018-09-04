@@ -252,6 +252,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 if (oiq || oivq) {
                     Audit.online.findIssues({
                         'current_stage': 'close',
+                        'issue_publish': "YES"
                     }).$promise.then(function(data) {
                         if (oiq) {
                             oiq.data = Number(data.headers['x-total-count']) || data.body.length;
