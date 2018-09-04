@@ -343,6 +343,7 @@ irf.pageCollection.factory(irf.page("sambandh.customer.CustomerSearchQueue"),
 ["$log","PageHelper","CreditBureau","formHelper","filterFilter", "Enrollment","Queries","$q","$state", "SessionStore", "Utils", "PagesDefinition", "irfNavigator",
 function($log,PageHelper,CreditBureau,formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionStore, Utils, PagesDefinition, irfNavigator){
 	var branch = SessionStore.getBranch();
+	var nDays = 15;
 	return {
 		"type": "search-list",
 		"title": "CUSTOMER_SEARCH",
@@ -496,7 +497,7 @@ function($log,PageHelper,CreditBureau,formHelper,filterFilter, Enrollment,Querie
 					'kycNumber': searchOptions.kyc_no,
 					'lastName': searchOptions.lastName,
 					'urnNo': searchOptions.urnNo,
-					'stage':"Stage02"
+					'stage': "Stage02"
 				}).$promise;
 
 				return promise;
@@ -691,12 +692,16 @@ function($log,PageHelper,CreditBureau,formHelper,filterFilter, Enrollment,Querie
 							desc: "",
 							icon: "fa fa-pencil",
 							fn: function(item, model){
+							var today = moment(new Date());
+							var nDaysBack = moment(new Date()).subtract(nDays, 'days');
                             CreditBureau.listCreditBureauStatus({
                                 'branchName': item.kgfsName,
-                                'customerId': item.id
+                                'customerId': item.id,
+                                'fromDate': nDaysBack.format('YYYY-MM-DD'),
+								'toDate': today.format('YYYY-MM-DD')
                             }).$promise.then(function(res){
                                 if (res.body.length != 0) {
-                                    response = res.body[0];
+                                    var response = res.body[0];
                                 } else {
                                     PageHelper.showProgress('CBCHECK', 'CBCHECK is not initiated.', 5000);
                                 }
