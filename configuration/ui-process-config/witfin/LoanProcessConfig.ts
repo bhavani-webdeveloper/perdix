@@ -149,6 +149,17 @@ let config = {
                     },
                     {
                         "type": "expr",
+                        "expr": "this.loanAccount.currentStage=='TeleVerification'",
+                        "add": [
+                            {
+                                "name": "VehicleValuationDone",
+                                "arguments": {
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "type": "expr",
                         "expr": "this.loanAccount.currentStage=='CreditApproval5' || this.loanAccount.currentStage=='CreditApproval4' || this.loanAccount.currentStage=='CreditApproval3' || this.loanAccount.currentStage=='CreditApproval2' || this.loanAccount.currentStage=='CreditApproval1' ",
                         "add": [{
                             "name": "CollateralFieldPolicy",

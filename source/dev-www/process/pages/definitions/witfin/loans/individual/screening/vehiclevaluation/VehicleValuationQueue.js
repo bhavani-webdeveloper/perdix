@@ -88,7 +88,8 @@ define({
            
                     return IndividualLoan.search({
                         'branchName':searchOptions.branch,
-                        'stage': ['FieldInvestigation1','FieldInvestigation2','FieldInvestigation3','TeleVerification'],
+                        // 'stage': ['FieldInvestigation1','FieldInvestigation2','FieldInvestigation3','TeleVerification'],
+                        'stage': 'Screening',
                         'enterprisePincode':searchOptions.pincode,
                         'applicantName':searchOptions.applicantName,
                         'area':searchOptions.area,
@@ -97,8 +98,8 @@ define({
                         'customerName': searchOptions.businessName,
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage,
-                        'centreCode': searchOptions.centre,
-                        'valuator': SessionStore.session.login
+                        'centreCode': searchOptions.centre
+                        // 'valuator': SessionStore.session.login
                     }).$promise;
                 },
                 paginationOptions: {

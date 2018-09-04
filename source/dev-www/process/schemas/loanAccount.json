@@ -138,8 +138,16 @@
                     "title": "DSA_LAYOUT",
                     "type": "number"
                 },
+                "dsaPayoutFee": {
+                    "title": "DSA_LAYOUT",
+                    "type": "number"
+                },
                 "dealIrr": {
                     "title": "DSA_LAYOUT",
+                    "type": "number"
+                },
+                "processingFee":{
+                    "title":"PROCESSING_FEE",
                     "type": "number"
                 },
                 "valuator": {

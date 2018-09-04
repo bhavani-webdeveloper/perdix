@@ -2527,7 +2527,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 key: "lead.educationStatus",
                                 type: "select",
                                 enumCode: "education",
-                                required: true
+                                //required: true
                                 /* titleMap: {
                                  "Below SSLC": "Below SSLC",
                                  "ITI/Diploma/Professional Qualification": "ITI/Diploma/ProfessionalQualification",

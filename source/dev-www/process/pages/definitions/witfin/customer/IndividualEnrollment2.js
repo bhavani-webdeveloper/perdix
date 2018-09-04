@@ -915,6 +915,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "IndividualInformation.photoImageId": {
                         "required": true
                     },
+                    "IndividualInformation.state": {
+                        "readonly": true
+                    },
                     "IndividualInformation.dateOfBirth": {
                         "onChange": function (modelValue, form, model) {
                             if (model.customer.dateOfBirth) {
@@ -1234,6 +1237,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "IndividualInformation.spouseFirstName",
                     "IndividualInformation.spouseDateOfBirth",
                     "IndividualInformation.weddingDate",
+                    "IndividualInformation.state",
                     "ContactInformation",
                     "ContactInformation.mobilePhone",
                     "ContactInformation.landLineNo",
@@ -1305,6 +1309,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "CustomerDocumentUpload.customerDocuments.fileId",
                     "CustomerDocumentUpload.customerDocuments.documentDate",
                     "CustomerDocumentUpload.customerDocuments.udfDate1",
+                    "CustomerDocumentUpload.customerDocuments.checkNumber",
                     "ResidenceVerification",
                     "ResidenceVerification.location",
                     "ResidenceVerification.locatingHouse",
@@ -1654,6 +1659,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "enumCode": "lead_category",
                                             "orderNo": 85,
                                             "required":true
+                                        },
+                                        "state": {
+                                            "title": "STATE"
                                         }
 
                                     }
@@ -1695,6 +1703,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                     "key": "customer.customerDocuments[].udfDate1",
                                                     "title": "EXPIRY_DATE",
                                                     "type": "date"
+                                                },
+                                                "checkNumber": {
+                                                    "key": "customer.customerDocuments[].documentNumber",
+                                                    "title": "CHECK_NUMBER",
+                                                    "type": "number",
+                                                    "condition":"model.customer.customerDocuments[arrayIndex].fileType=='Bank Signature Verification'",
                                                 }
                                             }
                                         }

@@ -2954,7 +2954,7 @@
                  ]
               },
               "grossVehicleWeight":{
-                 "title":"grossVehicleWeight",
+                 "title":"GROSS_VEHICLE_WEIGHT",
                  "type":"number",
                  "captureStages":[
                     "Screening",
@@ -3200,7 +3200,7 @@
                  ]
               },
               "yearOfManufacture":{
-                 "title":"yearOfManufacture",
+                 "title":"YEAR_OF_MANUFACTURE",
                  "type":"string",
                  "minLength":1,
                  "maxLength":45,
@@ -3213,6 +3213,21 @@
                     "TeleVerification",
                     "LoanInitiation"
                  ]
+              },
+              "noOfCylinders":{
+                "title":"NO_OF_CYLINDERS",
+                "type":"string",
+                "minLength":1,
+                "maxLength":50,
+                "captureStages":[
+                   "Screening",
+                   "VehicleValuation",
+                   "FieldInvestigation1",
+                   "FieldInvestigation2",
+                   "FieldInvestigation3",
+                   "TeleVerification",
+                   "LoanInitiation"
+                ]
               },
               "vehicleUseSegment":{
                  "title":"vehicleUseSegment",
@@ -3272,6 +3287,21 @@
                     "LoanInitiation"
                  ]
               },
+              "model":{
+                "title":"MODEL",
+                "type":"string",
+                "minLength":1,
+                "maxLength":100,
+                "captureStages":[
+                   "Screening",
+                   "VehicleValuation",
+                   "FieldInvestigation1",
+                   "FieldInvestigation2",
+                   "FieldInvestigation3",
+                   "TeleVerification",
+                   "LoanInitiation"
+                ]
+             },
               "variant":{
                  "title":"variant",
                  "type":"string",
@@ -3317,6 +3347,19 @@
                     "LoanInitiation"
                  ]
               },
+              "trailerAttached":{
+                "title":"TRAILER_ATTACHED",
+                "type":"string",
+                "captureStages":[
+                   "Screening",
+                   "VehicleValuation",
+                   "FieldInvestigation1",
+                   "FieldInvestigation2",
+                   "FieldInvestigation3",
+                   "TeleVerification",
+                   "LoanInitiation"
+                ]
+             },
               "chasisNo":{
                  "title":"chasisNo",
                  "type":"string",
@@ -4957,6 +5000,21 @@
                        "LoanInitiation"
                     ]
                  },
+               "noOfAxles":{
+                "title":"NO_OF_AXLES",
+                "type":"number",
+                "minimum":1,
+                "maximum":100,
+                "captureStages":[
+                   "Screening",
+                   "VehicleValuation",
+                   "FieldInvestigation1",
+                   "FieldInvestigation2",
+                   "FieldInvestigation3",
+                   "TeleVerification",
+                   "LoanInitiation"
+                ]
+              },
                  "netWeightInGrams":{
                     "title":"Net Weight In Grams",
                     "type":"number",

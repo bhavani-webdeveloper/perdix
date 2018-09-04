@@ -549,6 +549,14 @@
                 "Completed"
               ]
             },
+            "localityType": {
+              "title": "LOCALITY_TYPE",
+              "type": "string",
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
             "frequencyOfInstallment": {
               "title": "Frequency Of Installment",
               "type": "string",
@@ -3597,7 +3605,17 @@
               "BasicEnrolment",
               "Completed"
             ]
-          }
+          },
+          "floorArea": {
+            "title": "AREA_IN_SQ_FT",
+            "type": "string",
+            "minimum": 0,
+            "maximum": 100000000,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          }          
         }
       },
       "enterpriseCustomerRelation": {
@@ -5770,6 +5788,48 @@
                 "Completed"
               ]
             }
+          }
+        }
+      },
+      "fieldInvestigationDetails": {
+        "title": "Business Verification",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [],
+          "properties": {
+            "name": {
+              "title": "PERSON_NAME",
+              "type": "text",
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "category": {
+              "title": "PERSON_MET",
+              "type": "string",
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "yearsOfExperience": {
+              "title": "NO_OF_YEARS_WORKING",
+              "type": "string",
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "incomeEarned": {
+              "title": "INCOME_EARNED_PER_MONTH",
+              "type": "number",
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            }       
           }
         }
       }

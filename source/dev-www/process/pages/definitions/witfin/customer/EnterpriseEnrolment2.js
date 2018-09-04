@@ -131,6 +131,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "Liabilities.liabilities.customerLiabilityRepayments.emiAmount",
                     "Liabilities.liabilities.customerLiabilityRepayments.emiDueDate",
                     "Liabilities.liabilities.customerLiabilityRepayments.actualRepaymentDate",
+                    "BusinessVerification",
+                    "BusinessVerification.personMet",
+                    "BusinessVerification.personName",
+                    "BusinessVerification.noOfEmployeesWorking",
+                    "BusinessVerification.noofYearsWorking",
+                    "BusinessVerification.incomeEarnedPerMonth",
+                    "BusinessVerification.localityType",
+                    "BusinessVerification.areaInSqFt",
                     "TrackDetails",
                     "TrackDetails.vehiclesOwned",
                     "TrackDetails.vehiclesFinanced",
@@ -204,7 +212,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     
                                 },
                                 "excludes": [
-                                    "IndividualReferences"                                    
+                                    "IndividualReferences",
+                                    "Liabilities",                                   
                                 ]
                             },
                             "ScreeningReview": {
@@ -235,7 +244,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     }
                                 },
                                 "excludes": [
-                                    "IndividualReferences"                                    
+                                    "IndividualReferences",
+                                    "Liabilities"                                   
                                 ]
                             },
                             "GoNoGoApproval1": {
@@ -266,7 +276,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     }
                                 },
                                 "excludes": [
-                                "IndividualReferences"                                
+                                "IndividualReferences",
+                                "Liabilities"                              
                                 ]
                             },
                             "GoNoGoApproval2": {
@@ -297,7 +308,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     }
                                 },
                                 "excludes": [
-                                "IndividualReferences"                                    
+                                "IndividualReferences",
+                                "Liabilities"                                  
                                 ]
                             },
                             "DeviationApproval1": {
@@ -328,7 +340,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     }
                                 },
                                 "excludes": [
-                                    
+                                    "Liabilities"
                                 ]
                             },
                             "DeviationApproval2": {
@@ -359,7 +371,22 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     }
                                 },
                                 "excludes": [
-                                    
+                                    "Liabilities"
+                                ]
+                            },
+                            "FieldInvestigation1": {
+                                "excludes": [
+                                    "Liabilities"
+                                ]
+                            },
+                            "FieldInvestigation3": {
+                                "excludes": [
+                                    "Liabilities"
+                                ]
+                            },
+                            "FieldInvestigation3": {
+                                "excludes": [
+                                    "Liabilities"
                                 ]
                             },
                             "BusinessApproval1": {
@@ -1014,6 +1041,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 },
                                 "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerName" :{
                                     "readonly": true
+                                },
+                                "BusinessVerification":{
+                                    "condition": "model.customer.enterprise.enterpriseType=='Enterprise'" 
+                                },
+                                "BusinessVerification.personName":{
+                                    "condition": "model.customer.BusinessVerification.personName=='Business Partner'||model.customer.BusinessVerification.personName=='Others'" 
                                 }
                             },
                             "includes": getIncludes(model),

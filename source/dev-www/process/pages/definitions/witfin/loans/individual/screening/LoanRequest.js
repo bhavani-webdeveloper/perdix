@@ -578,6 +578,13 @@ define([], function() {
                     "PreliminaryInformation.calculateEmi",
                     "PreliminaryInformation.estimatedEmi",
                     "PreliminaryInformation.VehicleValuator",
+                    "LoanCustomerRelations",
+                    "LoanCustomerRelations.loanCustomerRelations",
+                    "LoanCustomerRelations.loanCustomerRelations.customerId",
+                    "LoanCustomerRelations.loanCustomerRelations.urn",
+                    "LoanCustomerRelations.loanCustomerRelations.name",
+                    "LoanCustomerRelations.loanCustomerRelations.relation",
+                    "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant",
                     "DeductionsFromLoan",
                     "DeductionsFromLoan.expectedProcessingFeePercentage",
                     "DeductionsFromLoan.dsaPayout",
@@ -588,6 +595,8 @@ define([], function() {
                     "DeductionsFromLoan.fee4",
                     "DeductionsFromLoan.expectedPortfolioInsurancePremium",
                     "DeductionsFromLoan.dealIrr",
+                    "DeductionsFromLoan.dsaPayout",
+                    "DeductionsFromLoan.processingFee",
                     "LoanDocuments",
                     "LoanDocuments.loanDocuments",
                     "LoanDocuments.loanDocuments.document",
@@ -602,6 +611,7 @@ define([], function() {
                     "LoanRecommendation.interestRate",
                     "LoanRecommendation.processingFeePercentage",
                     "LoanRecommendation.securityEmiRequired",
+                    "LoanRecommendation.loanChannels",
                     "LoanRecommendation.commercialCibilCharge",
                     "LoanRecommendation.calculateNominalRate",
                     "LoanRecommendation.udf6",
@@ -661,6 +671,10 @@ define([], function() {
                                 "title": "NOMINAL_RATE",
                                 "readonly": true
                             },
+                            "LoanRecommendation.loanChannels": {
+                                "condition": "model.loanProcess.loanAccount.currentStage == 'CreditApproval2'",
+                                "required": true
+                            },
                             "LoanRecommendation.tenure": {
                                 onChange: function(modelValue, form, model) {
                                     model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = null;
@@ -714,6 +728,30 @@ define([], function() {
                                 "required": true,
                                 "title": "NOMINAL_RATE",
                                 "readonly": true
+                            },
+                            "LoanCustomerRelations": {
+                                "orderNo": 2
+                            },
+                            "LoanCustomerRelations.loanCustomerRelations": {
+                                "add": null,
+                                "remove": null,
+                                "startEmpty": true
+                            },
+                            "LoanCustomerRelations.loanCustomerRelations.customerId": {
+                               "readonly": true
+                            },
+                            "LoanCustomerRelations.loanCustomerRelations.urn": {
+                               "readonly": true
+                            },
+                            "LoanCustomerRelations.loanCustomerRelations.name": {
+                               "readonly": true
+                            },
+                            "LoanCustomerRelations.loanCustomerRelations.relation": {
+                               "readonly": true
+                            },
+                            "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
+                               "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
+                               "required": true
                             }
                             
                         },
@@ -846,6 +884,20 @@ define([], function() {
                                             "title": "XIRR",
                                             "type": "number",
                                             "orderNo": 110,
+                                            "readonly": true
+                                        },
+                                        "processingFee":{
+                                            "key": "loanAccount.processingFee",
+                                            "title": "PROCESSING_FEE",
+                                            "type": "number",
+                                            "orderNo": 120,
+                                            "readonly": true
+                                        },
+                                        "dsaPayout":{
+                                            "key": "loanAccount.dsaPayout",
+                                            "title": "DSA_PAYOUT",
+                                            "type": "number",
+                                            "orderNo": 130,
                                             "readonly": true
                                         },
                                         "calculateDisbursedAmount": {
