@@ -1,10 +1,10 @@
 irf.pageCollection.factory("Pages__CentrePaymentCollectionDownload",
 ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper",
 "$stateParams", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService",
-"$filter", "elementsUtils", "Utils","authService", "$rootScope", "Queries",
+"$filter", "elementsUtils", "Utils","authService", "$rootScope", "Queries","PagesDefinition",
 function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 	$stateParams, LoanProcess, PM, PageHelper, StorageService,
-	$filter, elementsUtils, Utils,authService, $rootScope, Queries){
+	$filter, elementsUtils, Utils,authService, $rootScope, Queries, PagesDefinition){
 
 	return {
 		"id": "CentrePaymentCollection",
@@ -19,6 +19,17 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 				model.collectionDemandData = collectionData;
 			}
 			$log.info("I got initialized");
+			PagesDefinition.getPageConfig("Page/Engine/CentrePaymentCollectionDownload")
+		    .then(function(data) {
+		        // defaulting
+		        var defaultConfig = {
+		            AllowBackDatedDemandDownload: true,
+		            AllowBackDatedCollection: true
+		        };
+		        model.$pageConfig = _.defaults(data, defaultConfig);
+		    });
+		    model.todaysDate = SessionStore.getCBSDate();
+
 		},
 		form: [{
 			"type": "box",
@@ -49,14 +60,17 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 						PageHelper.showLoader();
 						PM.pop('collection-demand', "Downloading Collection Demands...", 2000);
 						var collectionBranch = SessionStore.getBranch();
-						var collectionDate = moment(new Date()).format('YYYY-MM-DD');
+						var collectionDate = SessionStore.getCBSDate();	
 						if(model.demandDate== undefined || model.demandDate==""){
 							PM.pop('collection-demand', 'Demand date is mandatory', 5000);
 							PageHelper.hideLoader();
 						}
-						else{
+						else if(model.$pageConfig.AllowBackDatedDemandDownload == false && moment(model.demandDate).format('YYYY-MM-DD') < collectionDate){
+							PM.pop('collection-demand','Demand date should not less than system\'s date',5000);
+							PageHelper.hideLoader();
+						}
+						else if(model.$pageConfig.AllowBackDatedDemandDownload == true || (model.$pageConfig.AllowBackDatedDemandDownload == false && moment(model.demandDate).format('YYYY-MM-DD') >= collectionDate)){
 							collectionDate = moment(model.demandDate).format('YYYY-MM-DD');
-
 							LoanProcess.collectionDemandSearch({
 								branch: collectionBranch,
 								// userId: SessionStore.getLoginname(),
@@ -140,6 +154,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 								PM.pop('collection-demand', "Couldn't fetch branch Collection Demands", 5000);
 							});
 						}
+						
 					}
 				},
 				{
@@ -150,7 +165,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
                     titleExprLocals: {moment: window.moment},
                     startEmpty: true,
                     add: null,
-                    remove: null,
+                    // remove: null,
                     view: "fixed",
                     items: [
 						{	"key":"collectionDemandData[].button",
@@ -158,12 +173,25 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 							"notitle": true,
 							"fieldHtmlClass": "btn-block",
 							"title": "COLLECT",
+							"condition": "model.$pageConfig.AllowBackDatedCollection == false && model.collectionDemandData[arrayIndex].collectionDate < model.todaysDate",
+							"onClick": function(model, form, formName,context){
+								console.log(model.collectionDemandData[context.arrayIndex]);
+								PM.pop('collection-demand','Demand date should not less than system\'s date',5000);
+								PageHelper.hideLoader();
+							}	
+						},
+						{	"key":"collectionDemandData[].button",
+							"type": "button",
+							"notitle": true,
+							"fieldHtmlClass": "btn-block",
+							"title": "COLLECT",
+							"condition" : "model.$pageConfig.AllowBackDatedCollection == true || (model.$pageConfig.AllowBackDatedCollection == false && model.collectionDemandData[arrayIndex].collectionDate >= model.todaysDate)",
 							"onClick": function(model, form, formName,context){
 								console.log(model.collectionDemandData[context.arrayIndex]);
 								$state.go("Page.Engine", {
 	                    			pageName: 'CentrePaymentCollection',
 	                    			pageData: model.collectionDemandData[context.arrayIndex]
-	               					 });
+	               				});
 								$log.info("Downloading branch Collection data..");
 							}
 						}
