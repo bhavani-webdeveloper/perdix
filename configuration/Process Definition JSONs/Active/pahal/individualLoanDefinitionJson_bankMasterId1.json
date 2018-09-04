@@ -338,7 +338,7 @@
                 "CreditAppraisal",
                 "LoanInitiation",
                 "ScreeningReview",
-                "ApplciationReview",
+                "ApplicationReview",
                 "GoNoGoApproval1",
                 "GoNoGoApproval2",
                 "CreditApproval1",
@@ -413,7 +413,7 @@
                 "CreditAppraisal",
                 "LoanInitiation",
                 "ScreeningReview",
-                "ApplciationReview",
+                "ApplicationReview",
                 "GoNoGoApproval1",
                 "GoNoGoApproval2",
                 "CreditApproval1",
@@ -1203,7 +1203,7 @@
             "maximum": 10000000,
             "captureStages": [
                 "ScreeningReview",
-                "ApplciationReview",
+                "ApplicationReview",
                 "GoNoGoApproval1",
                 "GoNoGoApproval2",
                 "CreditApproval1",
@@ -1487,7 +1487,7 @@
             "type": "float",
             "captureStages": [
                 "ScreeningReview",
-                "ApplciationReview",
+                "ApplicationReview",
                 "GoNoGoApproval1",
                 "GoNoGoApproval2",
                 "CreditApproval1",
@@ -1516,7 +1516,7 @@
             "type": "number",
             "captureStages": [
                 "ScreeningReview",
-                "ApplciationReview",
+                "ApplicationReview",
                 "GoNoGoApproval1",
                 "GoNoGoApproval2",
                 "CreditApproval1",
@@ -6291,7 +6291,7 @@
             "type": "number",
             "captureStages": [
                "ScreeningReview",
-                "ApplciationReview",
+                "ApplicationReview",
                 "GoNoGoApproval1",
                 "GoNoGoApproval2",
                 "CreditApproval1",
