@@ -1620,15 +1620,22 @@
             "title": "Frequency",
             "type": "string",
             "captureStages": [
-              "Screening",
-              "Application",
-              "VehicleValuation",
-              "FieldInvestigation1",
-              "FieldInvestigation2",
-              "FieldInvestigation3",
-              "TeleVerification",
-              "CreditAppraisal",
-              "LoanInitiation"
+                "Screening",
+                "Application",
+                "VehicleValuation",
+                "FieldInvestigation1",
+                "FieldInvestigation2",
+                "FieldInvestigation3",
+                "TeleVerification",
+                "CreditAppraisal",
+                "LoanInitiation",
+                "ScreeningReview",
+                "ApplicationReview",
+                "GoNoGoApproval1",
+                "GoNoGoApproval2",
+                "CreditApproval1",
+                "CreditApproval2",
+                "CreditApproval3"
             ]
           },
           "assetAvailableForHypothecation": {
