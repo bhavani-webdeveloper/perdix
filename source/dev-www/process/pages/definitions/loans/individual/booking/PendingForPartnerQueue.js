@@ -1,5 +1,5 @@
-irf.pageCollection.factory(irf.page("loans.individual.booking.PendingForPartnerQueue"), ["$log", "formHelper", "entityManager", "PagesDefinition", "IndividualLoan", "$state", "SessionStore", "Utils", "irfNavigator",
-    function($log, formHelper, EntityManager, PagesDefinition, IndividualLoan, $state, SessionStore, Utils, irfNavigator) {
+irf.pageCollection.factory(irf.page("loans.individual.booking.PendingForPartnerQueue"), ["$log", "formHelper", "PageHelper","entityManager", "PagesDefinition", "IndividualLoan", "$state", "SessionStore", "Utils", "irfNavigator",
+    function($log, formHelper, PageHelper,EntityManager, PagesDefinition, IndividualLoan, $state, SessionStore, Utils, irfNavigator) {
 
 
         var branch = SessionStore.getBranch();
@@ -13,14 +13,17 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.PendingForPartnerQ
             initialize: function(model, form, formCtrl) {
                 model.branch = SessionStore.getCurrentBranch().branchId;
                 model.DoPartnerView = true;
+                PageHelper.showLoader();
                 PagesDefinition.getRolePageConfig("Page/Engine/loans.individual.booking.PendingForPartnerQueue").then(function(data) {
                     $log.info(data);
-                    $log.info(data.DoPartnerView);
+                    $log.info(data.DOPartnerView);
                     if (data) {
-                        model.DoPartnerView = data.DoPartnerView;
+                        model.DoPartnerView = data.DOPartnerView;
                     }
+                    PageHelper.hideLoader();
                 }, function(err) {
                     model.DoPartnerView = true;
+                    PageHelper.hideLoader();
                 });
             },
             definition: {
@@ -143,7 +146,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.PendingForPartnerQ
                             desc: "",
                             icon: "fa fa-book",
                             fn: function(item, model) {
-                                if (!model.searchOptions.DoPartnerView) {
+                                if (!model.DoPartnerView) {
                                     EntityManager.setModel("loans.individual.booking.IFMRDO", {
                                         _loan: item
                                     });

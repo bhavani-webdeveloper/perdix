@@ -1,5 +1,5 @@
-irf.pageCollection.factory(irf.page("loans.individual.screening.DoPartnerReview"), ["$log", "$q", "$stateParams", "PageHelper", "formHelper", "IndividualLoan", "$state", "SessionStore", "Utils", "irfNavigator",
-    function($log, $q, $stateParams, PageHelper, formHelper, IndividualLoan, $state, SessionStore, Utils, irfNavigator) {
+irf.pageCollection.factory(irf.page("loans.individual.screening.DoPartnerReview"), ["$log","entityManager", "$q", "$stateParams", "PageHelper", "formHelper", "IndividualLoan", "$state", "SessionStore", "Utils", "irfNavigator","PagesDefinition",
+    function($log,EntityManager, $q, $stateParams, PageHelper, formHelper, IndividualLoan, $state, SessionStore, Utils, irfNavigator,PagesDefinition) {
 
         var branch = SessionStore.getBranch();
         var navigateToQueue = function(model) {
@@ -21,6 +21,22 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.DoPartnerReview"
                 }
                 $stateParams.pageData = $stateParams.pageData || {};
                 model.review = $stateParams.pageData;
+                model.DoPartnerView = true;
+                PageHelper.showLoader();
+                PagesDefinition.getRolePageConfig("Page/Engine/loans.individual.booking.PendingForPartnerQueue").then(function(data) {
+                    $log.info(data);
+                    $log.info(data.DOPartnerView);
+                    if (data) {
+                        model.DoPartnerView = data.DOPartnerView;
+                    }
+                    for(i in model.review){
+                        model.review[i].DoPartnerView=model.DoPartnerView;
+                    }
+                    PageHelper.hideLoader();
+                }, function(err) {
+                    model.DoPartnerView = true;
+                    PageHelper.hideLoader();
+                });
             },
             form: [{
                 "type": "box",
@@ -63,12 +79,27 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.DoPartnerReview"
                             name: "REVIEW",
                             desc: "",
                             icon: "fa fa-book",
-                            fn: function(item, index) {
-                                irfNavigator.go({
-                                    state: "Page.Bundle",
-                                    pageName: "loans.individual.screening.DoPartnerView",
-                                    pageId: item.id
-                                });
+                            fn: function(item) {
+                                if (!item.DoPartnerView) {
+                                    EntityManager.setModel("loans.individual.booking.IFMRDO", {
+                                        _loan: item
+                                    });
+                                    irfNavigator.go({
+                                        state: 'Page.Engine',
+                                        pageName: "loans.individual.booking.PendingForPartner",
+                                        pageId: item.loanId
+                                    });
+                                } else {
+                                    irfNavigator.go({
+                                        state: "Page.Bundle",
+                                        pageName: "loans.individual.screening.DoPartnerView",
+                                        pageId: item.loanId
+                                    }, {
+                                        state: 'Page.Engine',
+                                        pageName: "loans.individual.booking.PendingForPartnerQueue"
+                                    });
+
+                                }
                             },
                             isApplicable: function(item, index) {
                                 return true;
