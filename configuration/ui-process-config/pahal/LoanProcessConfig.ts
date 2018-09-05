@@ -56,7 +56,7 @@ let config = {
                     },
                     {
                         "type": "expr",
-                        "expr": "this.loanAccount.currentStage=='FieldInvestigation1' || this.loanAccount.currentStage=='FieldInvestigation2' || this.loanAccount.currentStage=='FieldInvestigation3'",
+                        "expr": "this.loanAccount.currentStage== 'Application' || 'FieldInvestigation1' || this.loanAccount.currentStage=='FieldInvestigation2' || this.loanAccount.currentStage=='FieldInvestigation3'",
                         "add": [
                             {
                                 "name": "DefaultIndividualReferencePolicy",
@@ -106,7 +106,7 @@ let config = {
                     },
                     {
                         "type": "expr",
-                        "expr": "this.loanAccount.currentStage=='FieldInvestigation1' || this.loanAccount.currentStage=='FieldInvestigation2' || this.loanAccount.currentStage=='FieldInvestigation3'",
+                        "expr": "this.loanAccount.currentStage== 'Application' || 'FieldInvestigation1' || this.loanAccount.currentStage=='FieldInvestigation2' || this.loanAccount.currentStage=='FieldInvestigation3'",
                         "add": [
                             {
                                 "name": "DefaultIndividualReferencePolicy",
@@ -166,7 +166,7 @@ let config = {
                 "overrides": [
                     {
                         "type": "expr",
-                        "expr": "this.loanAccount.currentStage=='FieldInvestigation1' || this.loanAccount.currentStage=='FieldInvestigation2' || this.loanAccount.currentStage=='FieldInvestigation3'",
+                        "expr": "this.loanAccount.currentStage== 'Application' || 'FieldInvestigation1' || this.loanAccount.currentStage=='FieldInvestigation2' || this.loanAccount.currentStage=='FieldInvestigation3'",
                         "add": [
                             {
                                 "name": "DefaultIndividualReferencePolicy",
