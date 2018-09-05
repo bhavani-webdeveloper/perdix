@@ -35,4 +35,12 @@ export class LeadProcessFactory {
                 }
             );
     }
+
+    static createFromPlainLeadObject(leadObj: Object) {
+         let obj:Object = Utils.toJSObj(leadObj);
+         let lead:Lead = <Lead>plainToClass<Lead, Object>(Lead, obj);
+         let leadProcess:LeadProcess = new LeadProcess();
+         leadProcess.lead = lead;
+         return Observable.of(leadProcess);
+    }
 }

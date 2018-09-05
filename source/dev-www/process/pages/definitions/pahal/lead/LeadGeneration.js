@@ -164,6 +164,7 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                     "actionbox.submit"
                 ];
             }
+
             return {
                 "type": "schema-form",
                 "title": "LEAD_GENERATION",
@@ -209,6 +210,7 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                             }
                         }
                     };
+
                     if (!(model && model.lead && model.lead.id && model.$$STORAGE_KEY$$) && $stateParams.pageId) {
                         var leadId = $stateParams.pageId;
                         LeadProcess.get(leadId)
@@ -244,6 +246,58 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                     return [
                         item.lead.leadName
                     ]
+                },
+                offlineInitialize: function(model, form, formCtrl) {
+                    console.log(model);
+                    model.siteCode = SessionStore.getGlobalSetting('siteCode');
+
+                    var self = this;
+                    var formRequest = {
+                        "overrides": getOverrides (model),
+                        "includes": getIncludes (model),
+                        "excludes": [
+                            "",
+                        ],
+                        "options": {
+                            "repositoryAdditions": {
+                                "productDetails": {
+                                    "items": {
+                                        "parentLoanAccount": {
+                                            "key": "lead.parentLoanAccount",
+                                            "title": "PARENT_LOAN_ACCOUNT",
+                                            "condition": "model.lead.loanPurpose1==='Insurance Loan'",
+                                            "orderNo": 40
+                                        },
+                                        "vehicleRegistrationNumber": {
+                                            "key": "lead.vehicleRegistrationNumber",
+                                            "title": "REGN_NO",
+                                            "condition": "model.lead.interestedInProduct==='YES' && (model.lead.loanPurpose1 == 'Purchase - Used Vehicle' || model.lead.loanPurpose1 == 'Refinance')",
+                                            "orderNo": 45
+                                        }
+                                    }
+                                },
+                                "sourceDetails":{
+                                    "items":{
+                                        "referredBy2":{
+                                            "key": "lead.referredBy",
+                                            "type": "select",
+                                            "enumCode": "dealer"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    };
+
+                    if (model.$$STORAGE_KEY$$) {
+                        // model.leadProcess = LeadProcess.createFromOfflineData(model.leadProcess);
+                        LeadProcess.createFromPlainLeadObject(model.lead)
+                            .subscribe(function(leadProcess){
+                                model.leadProcess = leadProcess;
+                                model.lead = leadProcess.lead;
+                                self.form = IrfFormRequestProcessor.getFormDefinition('LeadGeneration', formRequest);
+                            })
+                    }
                 },
 
                 form: [],
