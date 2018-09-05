@@ -82,20 +82,21 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                 PageHelper.setError({
                     message: "Scheduled Disbursement Date should greater then or equal" + " " + moment(model._currentDisbursement.customerSignatureDate).format(SessionStore.getDateFormat())
                 });
-                return;
+                return false;
             }
             if (model.disbursementCutOffTime && model.CutOffdate &&(moment(model._currentDisbursement.scheduledDisbursementDate).isBefore(model.CutOffdate))) {
                 PageHelper.setError({
                     message: "Scheduled Disbursement Date should be greater then or equal" + " " + moment(model.CutOffdate).format(SessionStore.getDateFormat())
                 });
-                return;
+                return false;
             }
             if (model.disbursementRestrictionDays && model.scheduledDisbursementAllowedDate && (moment(model._currentDisbursement.scheduledDisbursementDate).isAfter(model.scheduledDisbursementAllowedDate))) {
                 PageHelper.setError({
-                    message: "Scheduled Disbursement Date should not be greater then" + " " + moment(model._currentDisbursement.scheduledDisbursementDate).format(SessionStore.getDateFormat())
+                    message: "Scheduled Disbursement Date should not be greater then" + " " + moment(model.scheduledDisbursementAllowedDate).format(SessionStore.getDateFormat())
                 });
-                return;
+                return false;
             }
+            return true;
         }
 
         var populateDisbursementScheduledDate = function(model) {
@@ -1013,7 +1014,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     if (!validateWaiverDetails(model)){
                         return;
                     }
-                    validateDisbursementDate(model);
+                    if(!validateDisbursementDate(model)){
+                        return;
+                    };
 
                     if(model.loanAccount.transactionType && model.loanAccount.transactionType !='New Loan'){
                          if(!model.loanAccount.precloseuredetails){
