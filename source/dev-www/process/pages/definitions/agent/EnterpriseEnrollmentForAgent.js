@@ -42,11 +42,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
             var getIncludes = function(model) {
                 return [
                     "EnterpriseInformation",
+                    // "EnterpriseInformation.customerBranchId",
+                    "EnterpriseInformation.centreId",
                     "EnterpriseInformation.firstName",
                     "EnterpriseInformation.customerId",
                     "EnterpriseInformation.entityId",
                     "EnterpriseInformation.urnNo",
-                    "EnterpriseInformation.centreId",
                     "EnterpriseInformation.firstName",
                     "EnterpriseInformation.companyOperatingSince",
                     "EnterpriseInformation.companyEmailId",
@@ -186,6 +187,19 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                                 },
                                 "ContactInformation.state": {
                                     "readonly": true
+                                },
+                                // "EnterpriseInformation.customerBranchId": {
+                                //     key: "customer.customerBranchId",
+                                //     type: "select",
+                                //     enumCode: "userbranches",
+                                //     "required": true
+                                // },
+                                "EnterpriseInformation.centreId": {
+                                    key: "customer.centreId",
+                                    type: "select",
+                                    parentEnumCode: "userbranches",
+                                    parentValueExpr: "model.customer.customerBranchId",
+                                    "required": true
                                 },
                                 "ContactInformation.pincode": {
                                     "fieldType": "number",
@@ -363,27 +377,30 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
                             "includes": getIncludes(model),
                             "excludes": [],
                             "options": {
+                                "repositoryAdditions": {
+                                    "EnterpriseInformation": {
+                                        "type": "box",
+                                        "orderNo": 10,
+                                        "items": {
+                                            "centreId": {
+                                                "key": "customer.centreId",
+                                                "type": "select",
+                                                "parentEnumCode": "userbranches",
+                                                "parentValueExpr": "model.customer.customerBranchId",
+                                                "required": true,
+                                                "orderNo": 10
+                                            }
+                                        }
+                                    }
+                                },
                                 "additions": [{
                                     "targetID": "EnterpriseInformation",
                                     "items": [{
-                                        "key": "customer.centreId",
-                                        "type": "select",
-                                        parentEnumCode: "userbranches",
-                                        parentValueExpr: "model.customer.customerBranchId",
-                                        "enumCode": "centre",
-                                        "title": "CENTRE_NAME",
-                                        "orderNo": 21,
-                                        // "readonly": true
-                                    }]
-                                }, {
-                                    "targetID": "EnterpriseInformation",
-                                    "items": [{
                                         "key": "customer.customerBranchId",
-                                        title: "BRANCH_NAME",
-                                        type: "select",
-                                        enumCode: "userbranches",
-                                        "orderNo": 20,
-                                        // "readonly": true
+                                        "type": "select",
+                                        "enumCode": "userbranches",
+                                        "required": true,
+                                        "orderNo": 10
                                     }]
                                 }, {
                                     "type": "actionbox",
