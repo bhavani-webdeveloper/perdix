@@ -983,9 +983,11 @@ define({
                     // } else {
 
                         PageHelper.showProgress("New product", "Working...");
-                        model.product.lmsProductMasters.maxAmt = 0;
-                        model.product.lmsProductMasters.minAmt = 0;
-                        model.product.lmsProductMasters.newProduct = 'Y';
+                        for(i in model.product.lmsProductMasters){
+                            model.product.lmsProductMasters[i].maxAmt = 0;
+                            model.product.lmsProductMasters[i].minAmt = 0;
+                            model.product.lmsProductMasters[i].newProduct = 'Y';
+                        }
                         model.product.purposes = [];
                         //if (model.product.allPurposes)
                         _.filter(model.allPurposes, function(allPurposesValues) {
