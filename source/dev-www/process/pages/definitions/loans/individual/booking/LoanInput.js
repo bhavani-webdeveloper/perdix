@@ -2023,6 +2023,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         "items":[
                             {
                                 "key":"additional.portfolioUrnSelector",
+                                "required":true,
                                 "type":"select",
                                 "titleMap":{
                                     "applicant":"Applicant",
