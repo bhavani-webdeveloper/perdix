@@ -7,7 +7,7 @@ function($log, formHelper, entityManager, LoanCollection, $state, SessionStore,$
         //"subTitle": "T_ENROLLMENTS_PENDING",
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
-            model.branch = SessionStore.getBranch();
+            model.branch = SessionStore.getCurrentBranch().branchId;
         },
         /*offline: true,
         getOfflineDisplayItem: function(item, index){
@@ -54,22 +54,22 @@ function($log, formHelper, entityManager, LoanCollection, $state, SessionStore,$
                         "type": "string"
                     },*/
                     "branch": {
-                        "title": "BRANCH_NAME",
-                        "type": "string",
-                        "enumCode": "branch",
+                        'title': "BRANCH",
+                        "type": ["string", "null"],
                         "x-schema-form": {
-                            "type": "select"
+                            "type":"userbranch",
+                            "screenFilter": true
                         }
                     },
                     "centre": {
                         "title": "CENTRE",
-                        "type": ["null","integer"],
-                        "enumCode": "centre",
+                        "type": ["integer", "null"],
                         "x-schema-form": {
                             "type": "select",
-                            "filter": {
-                                "parentCode as branch": "model.branch"
-                            }
+                            "enumCode": "centre",
+                            "parentEnumCode": "branch_id",
+                            "parentValueExpr": "model.branch",
+                            "screenFilter": true
                         }
                     }
                 }
@@ -81,7 +81,7 @@ function($log, formHelper, entityManager, LoanCollection, $state, SessionStore,$
                 var promise = LoanCollection.query({
                     'currentStage':"PartialPayment",
                     'accountCentreId': searchOptions.centre,
-                    'accountBranchId': searchOptions.branch_id,
+                    'accountBranchId': searchOptions.branch,
                     'customerName': searchOptions.first_name,
                     'accountNumber': searchOptions.accountNumber,
                     'sortBy': '+repaymentDate',

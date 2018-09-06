@@ -60,28 +60,24 @@ define({
                             "type": "string"
                         },
                         "branch": {
-                            "title": "BRANCH_NAME",
-                            "type": ["integer", "null"],
-                            "enumCode": "branch_id",
-                            "parentEnumCode": "bank",
-                            "parentValueExpr": "model.bankId",
+                            'title': "BRANCH",
+                            "type": ["string", "null"],
                             "x-schema-form": {
-                                "type": "select",
-                                "screenFilter": true,
+                                "type":"userbranch",
+                                "screenFilter": true
                             }
                         },
                         "centre": {
                             "title": "CENTRE",
                             "type": ["integer", "null"],
-                            "enumCode": "centre",
                             "x-schema-form": {
                                 "type": "select",
+                                "enumCode": "centre",
                                 "parentEnumCode": "branch_id",
                                 "parentValueExpr": "model.branch",
                                 "screenFilter": true
                             }
                         }
-
                     }
                 },
                 getSearchFormHelper: function() {

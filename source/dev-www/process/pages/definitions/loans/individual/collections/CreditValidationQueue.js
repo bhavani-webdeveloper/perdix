@@ -6,6 +6,7 @@ function($log, formHelper, LoanCollection, $state, SessionStore, $q, entityManag
         "title": "CREDIT_VALIDATION_QUEUE",
         //"subTitle": "T_ENROLLMENTS_PENDING",
         initialize: function (model, form, formCtrl) {
+            model.branch = SessionStore.getCurrentBranch().branchId;
             $log.info("search-list sample got initialized");
         },
         definition: {
@@ -15,13 +16,13 @@ function($log, formHelper, LoanCollection, $state, SessionStore, $q, entityManag
                     "key": "accountNumber"
                 },
                 {
-                    "key": "branch_id",
-                    "type": "select"
+                    "key": "branch",
+                    "type":"userbranch"
                 },
                 {
                     "key": "centre",
                     "type": "select",
-                    "parentEnumCode": "branch_id"
+                    "parentEnumCode": "branch"
                 }
             ],
             autoSearch:false,
@@ -35,16 +36,25 @@ function($log, formHelper, LoanCollection, $state, SessionStore, $q, entityManag
                         "type": "string",
                         "pattern": "^[0-9a-zA-Z]+$"
                     },
-                    "branch_id": {
-                        "title": "BRANCH_NAME",
-                        "type": ["null", "number"],
-                        "enumCode": "branch_id"
+                    'branch': {
+                        'title': "BRANCH",
+                        "type": ["string", "null"],
+                        "x-schema-form": {
+                            "type":"userbranch",
+                            "screenFilter": true
+                        }
                     },
                     "centre": {
                         "title": "CENTRE",
-                        "type": ['null', 'number'],
-                        "enumCode": "centre"
-                    }
+                        "type": ["integer", "null"],
+                        "x-schema-form": {
+                            "type": "select",
+                            "enumCode": "centre",
+                            "parentEnumCode": "branch_id",
+                            "parentValueExpr": "model.branch",
+                            "screenFilter": true
+                        }
+                    },
                 }
             },
             getSearchFormHelper: function() {
@@ -54,7 +64,7 @@ function($log, formHelper, LoanCollection, $state, SessionStore, $q, entityManag
                 var promise = LoanCollection.query({
                     'currentStage':"CreditValidation",
                     'accountCentreId': searchOptions.centre,
-                    'accountBranchId': searchOptions.branch_id,
+                    'accountBranchId': searchOptions.branch,
                     'accountNumber': searchOptions.accountNumber
                 }).$promise;
 

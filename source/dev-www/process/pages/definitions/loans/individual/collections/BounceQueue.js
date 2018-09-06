@@ -6,7 +6,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager, 
         "title": "BOUNCED_PAYMENTS",
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
-            model.branchId = SessionStore.getCurrentBranch().branchId;
+            model.branch = SessionStore.getCurrentBranch().branchId;
             model.pageConfig = {
                 isAllBranchAllowed: false,
                 centresRestricted: false
@@ -60,7 +60,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager, 
                 "loan_no",
                 "first_name",
                 {
-                    "key": "branchId",
+                    "key": "branch",
                     "condition": "model.pageConfig.isAllBranchAllowed"
                 },
                 {
@@ -111,21 +111,23 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager, 
                         "title": "CUSTOMER_NAME",
                         "type": "string"
                     },
-                    "branchId": {
-                        "title": "BRANCH_NAME",
-                        "type": ["null","number"],
-                        "enumCode": "branch_id",
+                    "branch": {
+                        'title': "BRANCH",
+                        "type": ["string", "null"],
                         "x-schema-form": {
-                            "type": "select"
+                            "type":"userbranch",
+                            "screenFilter": true
                         }
                     },
                     "centre": {
                         "title": "CENTRE",
-                        "type": ["null", "number"],
-                        "enumCode": "centre",
+                        "type": ["integer", "null"],
                         "x-schema-form": {
                             "type": "select",
-                            "parentValueExpr": "model.branchId"
+                            "enumCode": "centre",
+                            "parentEnumCode": "branch_id",
+                            "parentValueExpr": "model.branch",
+                            "screenFilter": true
                         }
                     },
                     "promisreToPayDate":{
@@ -145,7 +147,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager, 
                 var promise = LoanProcess.bounceCollectionDemand({
                     'accountNumbers': searchOptions.loan_no,
                     /*Service missing_27082016*/
-                    'branchId': searchOptions.branchId || SessionStore.getBranchId(),
+                    'branchId': searchOptions.branch || SessionStore.getBranchId(),
                     'centreId': searchOptions.centre,
                     'customerName': searchOptions.first_name,
                     'promiseToPayDate': searchOptions.promisreToPayDate,
