@@ -150,6 +150,10 @@
                     "title":"PROCESSING_FEE",
                     "type": "number"
                 },
+                "fee5":{
+                    "title":"DOCUMENT_CHARGES",
+                    "type": "number"
+                },
                 "valuator": {
                     "title": "VALUATOR",
                     "type": ["string", "null"]

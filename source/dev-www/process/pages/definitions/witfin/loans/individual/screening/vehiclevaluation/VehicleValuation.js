@@ -25,6 +25,18 @@ define(
                         "numberType": "number",
                         "type": "number"
                     },
+                    "VehicleRegistrationDetails.hypothecatedTo":{
+                        "type": "text"
+                    },
+                    "VehicleOtherRemarks.rcbookStatus":{
+                        "required":"true"
+                    },
+                    "VehicleValuation.currentMarketValue":{
+                        "required":"true"
+                    },
+                    "VehicleValuation.futureLife":{
+                        "required":""
+                    },
                     "VehicleAsset.vehicleAssetConditions.componentCondition": {
                         "condition": "!(model.loanAccount.vehicleLoanDetails.vehicleAssetConditions[arrayIndex].componentType == 'LH Front' || model.loanAccount.vehicleLoanDetails.vehicleAssetConditions[arrayIndex].componentType == 'RH Front' || model.loanAccount.vehicleLoanDetails.vehicleAssetConditions[arrayIndex].componentType == 'LH Rear' || model.loanAccount.vehicleLoanDetails.vehicleAssetConditions[arrayIndex].componentType == 'RH Rear')",
                         "orderNo": 30
