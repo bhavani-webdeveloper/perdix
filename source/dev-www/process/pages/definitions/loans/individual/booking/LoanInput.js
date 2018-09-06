@@ -392,6 +392,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
 
                         model.additional = model.additional || {};
 
+                        if(!model.loanAccount.portfolioInsuranceUrn){
+                            model.additional.portfolioUrnSelector = "applicant";
+                            model.loanAccount.portfolioInsuranceUrn=model.loanAccount.applicant;
+                            model.loanAccount.portfolioInsuranceCustomerName = model.loanAccount.applicantName;
+                        }
+
                         if (model.loanAccount.portfolioInsuranceUrn == model.loanAccount.applicant){
                             model.additional.portfolioUrnSelector = "applicant";
                         }
@@ -2023,7 +2029,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         "items":[
                             {
                                 "key":"additional.portfolioUrnSelector",
-                                "required":true,
                                 "type":"select",
                                 "titleMap":{
                                     "applicant":"Applicant",
