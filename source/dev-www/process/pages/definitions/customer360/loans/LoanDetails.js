@@ -1132,7 +1132,8 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                     getSanctionedAmount(model);
                                 }
                             }, {
-                                key: "loanAccount.insuranceFee",
+                                key: "loanAccount.portfolioInsurancePremium",
+                                "title": "INSURANCE",
                                 "required":false,
                                 type: "amount",
                                 onChange: function(value, form, model) {
