@@ -5,6 +5,7 @@ irf.pageCollection.factory(irf.page("loans.individual.creditMonitoring.CreditMon
             "type": "search-list",
             "title": "CREDIT_MONITORING_RESCHEDULED_QUEUE",
             initialize: function(model, form, formCtrl) {
+                model.branch = SessionStore.getCurrentBranch().branchId;
                 $log.info("creditMonitoring Schedule Queue got initialized");
             },
             definition: {
@@ -18,20 +19,19 @@ irf.pageCollection.factory(irf.page("loans.individual.creditMonitoring.CreditMon
                     "title": 'SearchOptions',
                     "properties": {
                         "branch": {
-                            "title": "BRANCH_NAME",
-                            "type": "integer",
-                            "enumCode": "branch_id",
+                            'title': "BRANCH",
+                            "type": ["string", "null"],
                             "x-schema-form": {
-                                "type": "select",
+                                "type":"userbranch",
                                 "screenFilter": true
                             }
                         },
                         "centre": {
                             "title": "CENTRE",
-                            "type": "integer",
-                            "enumCode": "centre",
+                            "type": ["integer", "null"],
                             "x-schema-form": {
                                 "type": "select",
+                                "enumCode": "centre",
                                 "parentEnumCode": "branch_id",
                                 "parentValueExpr": "model.branch",
                                 "screenFilter": true
@@ -76,7 +76,7 @@ irf.pageCollection.factory(irf.page("loans.individual.creditMonitoring.CreditMon
                         'monitoringType': "CM",
                         'currentStage': "CMReschedule",
                         'centreId': searchOptions.centre,
-                        'branchName': branchName,
+                        'branchName': searchOptions.branch,
                         'lucRescheduledDate': searchOptions.cmRescheduledDate,
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage,

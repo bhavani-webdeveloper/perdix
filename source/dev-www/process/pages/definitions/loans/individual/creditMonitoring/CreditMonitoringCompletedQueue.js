@@ -8,6 +8,7 @@ define({
             "type": "search-list",
             "title": "CREDIT_MONITORING_COMPLETED_QUEUE",
             initialize: function(model, form, formCtrl) {
+                model.branch = SessionStore.getCurrentBranch().branchId;
                 $log.info("Credit Monitoring Schedule Queue got initialized");
             },
             definition: {
@@ -21,20 +22,19 @@ define({
                     "title": 'SearchOptions',
                     "properties": {
                         "branch": {
-                            "title": "BRANCH_NAME",
-                            "type": "integer",
-                            "enumCode": "branch_id",
+                            'title': "BRANCH",
+                            "type": ["string", "null"],
                             "x-schema-form": {
-                                "type": "select",
+                                "type":"userbranch",
                                 "screenFilter": true
                             }
                         },
                         "centre": {
                             "title": "CENTRE",
-                            "type": "integer",
-                            "enumCode": "centre",
+                            "type": ["integer", "null"],
                             "x-schema-form": {
                                 "type": "select",
+                                "enumCode": "centre",
                                 "parentEnumCode": "branch_id",
                                 "parentValueExpr": "model.branch",
                                 "screenFilter": true
@@ -82,7 +82,7 @@ define({
                         'monitoringType': "CM",
                         'currentStage': "Completed",
                         'centreId': searchOptions.centre,
-                        'branchName': branchName,
+                        'branchName': searchOptions.branch,
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage,
                         'applicantName': searchOptions.applicantName,

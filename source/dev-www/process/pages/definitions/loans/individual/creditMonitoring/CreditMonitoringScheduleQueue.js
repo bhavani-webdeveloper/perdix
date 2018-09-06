@@ -5,6 +5,7 @@ irf.pageCollection.factory(irf.page("loans.individual.creditMonitoring.CreditMon
             "type": "search-list",
             "title": "CREDIT_MONITORING_SCHEDULED_QUEUE",
             initialize: function(model, form, formCtrl) {
+                model.branch = SessionStore.getCurrentBranch().branchId;
                 $log.info("creditMonitoring Schedule Queue got initialized");
             },
             definition: {
@@ -18,20 +19,19 @@ irf.pageCollection.factory(irf.page("loans.individual.creditMonitoring.CreditMon
                     "title": 'SearchOptions',
                     "properties": {
                         "branch": {
-                            "title": "BRANCH_NAME",
-                            "type": "integer",
-                            "enumCode": "branch_id",
+                            'title': "BRANCH",
+                            "type": ["string", "null"],
                             "x-schema-form": {
-                                "type": "select",
+                                "type":"userbranch",
                                 "screenFilter": true
                             }
                         },
                         "centre": {
                             "title": "CENTRE",
-                            "type": "integer",
-                            "enumCode": "centre",
+                            "type": ["integer", "null"],
                             "x-schema-form": {
                                 "type": "select",
+                                "enumCode": "centre",
                                 "parentEnumCode": "branch_id",
                                 "parentValueExpr": "model.branch",
                                 "screenFilter": true
@@ -62,22 +62,14 @@ irf.pageCollection.factory(irf.page("loans.individual.creditMonitoring.CreditMon
                 getSearchFormHelper: function() {
                     return formHelper;
                 },
-                getResultsPromise: function(searchOptions, pageOpts) {
-                    var branches = formHelper.enum('branch').data;
-                    var branchName = null;
-                    for (var i = 0; i < branches.length; i++) {
-                        var branch = branches[i];
-                        if (branch.code == searchOptions.branch) {
-                            branchName = branch.name;
-                        }
-                    }
+                getResultsPromise: function(searchOptions, pageOpts) {                  
                     var promise = LUC.search({
                         'accountNumber': searchOptions.accountNumber,
                         'monitoringType': "CM",
                         'currentStage': "CMSchedule",
                         'lucScheduledDate': searchOptions.cmScheduledDate,
                         'centreId': searchOptions.centre,
-                        'branchName': branchName,
+                        'branchName': searchOptions.branch,
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage,
                         'applicantName': searchOptions.applicationName,

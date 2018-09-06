@@ -6,8 +6,8 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, LoanAccount, En
         "title": "PENDING_WRITEOFF_QUEUE",
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
-            $log.info("search-list sample got initialized");
-            model.branchName = SessionStore.getBranch();
+            $log.info("search-list sample got initialized");            
+            model.branch = SessionStore.getCurrentBranch().branchId;
             model.stage = 'WriteOff';
             console.log(model);
         },
@@ -25,15 +25,15 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, LoanAccount, En
                 "title": "VIEW_LOANS",
                 "required":["branch"],
                 "properties": {
-                    "branchId": {
-                        "title": "BRANCH_NAME",
-                        "type": "integer",
+                    'branch': {
+                        'title': "BRANCH",
+                        "required":true,
+                        "type": ["string", "null"],
                         "x-schema-form": {
-                            "type": "select"
-                        },
-                        "enumCode": "branch_id",
-                        "required": true
-                    }
+                            "type":"userbranch",
+                            "screenFilter": true
+                        }
+                    },
                 }
             },
             getSearchFormHelper: function() {
@@ -41,7 +41,7 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, LoanAccount, En
             },
             getResultsPromise: function(searchOptions, pageOpts){
                 return LoanAccount.writeOffQueue({
-                    'Branches': searchOptions.branchId
+                    'Branches': searchOptions.branch
                 }).$promise;
 
             },
