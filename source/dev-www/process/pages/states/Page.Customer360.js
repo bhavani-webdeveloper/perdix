@@ -83,7 +83,8 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 			},
 			"Page/CustomerHistory",
 			"Page/Engine/customer360.Recapture",
-			"Page/Engine/customer360.CustomerSummaryView"
+			"Page/Engine/customer360.CustomerSummaryView",
+			"Page/Engine/customer360.loans.CustomerGroupsView"
 		]
 	};
 
@@ -397,6 +398,12 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 
         if ($scope.dashboardDefinition.$menuMap['Page/Engine/customer360.loans.Service'])
 		$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.loans.Service'].onClick = function(event, menu) {
+			menu.stateParams.pageId = $scope.model.customer.urnNo;
+			return $q.resolve(menu);
+		};
+
+		if ($scope.dashboardDefinition.$menuMap['Page/Engine/customer360.loans.CustomerGroupsView'])
+		$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.loans.CustomerGroupsView'].onClick = function(event, menu) {
 			menu.stateParams.pageId = $scope.model.customer.urnNo;
 			return $q.resolve(menu);
 		};

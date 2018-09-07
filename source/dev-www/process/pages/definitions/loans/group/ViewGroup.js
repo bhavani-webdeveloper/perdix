@@ -63,6 +63,10 @@ define({
 				model.group = model.group || {};
 				model.group.branchName = SessionStore.getCurrentBranch().branchId;
 				$log.info(model.group.branchName);
+                model.close=true;
+				if($stateParams.pageData){
+					model.close= $stateParams.pageData.view;
+				}
 
 				if ($stateParams.pageId) {
 					var groupId = $stateParams.pageId;
@@ -201,11 +205,21 @@ define({
 
 				{
 					"type": "actionbox",
+					"condition":"model.close",
 					"items": [{
 						"style": "btn-theme",
 						"title": "CLOSE_GROUP",
 						"icon": "fa fa-times",
 						"onClick": "actions.closeGroup(model,form)"
+					}]
+				},
+				{
+					"type": "actionbox",
+					"condition":"!model.close",
+					"items": [{
+						"style": "btn-theme",
+						"title": "Back",
+						"onClick": "actions.goBack(model,form)"
 					}]
 				},
 			],
@@ -238,7 +252,6 @@ define({
 			actions: {
 				preSave: function(model, form, formName) {},
 				closeGroup: function(model, form) {
-					
                     PageHelper.showLoader();
                     irfProgressMessage.pop('Close-proceed', 'Working...');
                     PageHelper.clearErrors();
@@ -270,6 +283,9 @@ define({
 	                    });	
                     }   
 				},
+				goBack: function(model, form) {
+					irfNavigator.goBack();
+				}
 			}
 		}
 	}
