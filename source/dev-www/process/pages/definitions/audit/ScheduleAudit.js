@@ -29,7 +29,7 @@ irf.pageCollection.factory(irf.page("audit.ScheduleAudit"), ["$log", "translateF
             "title": "SCHEDULE_AUDIT",
             initialize: function(model, form, formCtrl) {
                 model.auditInfo = model.auditInfo || {};
-                model.branchName = SessionStore.getBranch();
+                model.branch = SessionStore.getCurrentBranch().branchId;
                 model.roleUsers = model.roleUsers || {};
                 model.master = Audit.offline.getAuditMaster();
                 if ($stateParams.pageId) {
@@ -58,7 +58,7 @@ irf.pageCollection.factory(irf.page("audit.ScheduleAudit"), ["$log", "translateF
                     readonly: true
                 }, {
                     key: "auditInfo.branch_id",
-                    type: "select",
+                    type: "userbranch",
                     required: true,
                     "onChange": function(modelValue, form, model) {
                         delete model.auditInfo.auditor_id;

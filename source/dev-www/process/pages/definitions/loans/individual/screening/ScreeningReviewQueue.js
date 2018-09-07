@@ -36,7 +36,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ScreeningReviewQ
 	                        "title": "BUSINESS_NAME",
 	                        "type": "string"
 	                    },
-	                    'branch': {
+	                    "branch": {
 	                    	'title': "BRANCH",
 	                    	"type": ["string", "null"],
 							"x-schema-form": {

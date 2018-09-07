@@ -7,6 +7,7 @@ irf.pageCollection.factory(irf.page("audit.DraftOperationQueue"), ["$log", "Util
             initialize: function(model, form, formCtrl) {
                 model.Audits = model.Audits || {};
                 localFormController = formCtrl;
+                model.branch_id = SessionStore.getCurrentBranch().branchId;
                 syncCheck = false;
                 if ($stateParams.pageData && $stateParams.pageData.page) {
                     returnObj.definition.listOptions.tableConfig.page = $stateParams.pageData.page;
@@ -103,7 +104,7 @@ irf.pageCollection.factory(irf.page("audit.DraftOperationQueue"), ["$log", "Util
                             "type": "number",
                             "enumCode": "branch_id",
                             "x-schema-form": {
-                                "type": "select"
+                                "type": "userbranch"
                             }
                         },
                         "start_date": {

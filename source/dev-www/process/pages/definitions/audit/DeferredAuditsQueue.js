@@ -5,7 +5,7 @@ irf.pageCollection.factory(irf.page("audit.DeferredAuditsQueue"), ["$log", "Page
             "title": "POSTPONED/CANCELLED_AUDITS",
             initialize: function(model, form, formCtrl) {
                 model.audits = model.audits || {};
-                model.branch = SessionStore.getCurrentBranch().branchId;
+                model.branch_id = SessionStore.getCurrentBranch().branchId;
                 model.roleUsers = model.roleUsers || {};
                 localFormController = formCtrl;
                 syncCheck = false;
@@ -77,7 +77,7 @@ irf.pageCollection.factory(irf.page("audit.DeferredAuditsQueue"), ["$log", "Page
                             "type": "number",
                             "enumCode": "branch_id",
                             "x-schema-form": {
-                                "type": "select"
+                                "type": "userbranch"
                             }
                         },
                         "start_date": {

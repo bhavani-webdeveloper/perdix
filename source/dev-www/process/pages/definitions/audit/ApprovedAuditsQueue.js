@@ -5,7 +5,7 @@ irf.pageCollection.factory(irf.page("audit.ApprovedAuditsQueue"), ["$log", "Quer
             "title": "PENDING_PUBLISH",
             initialize: function(model, form, formCtrl) {
                 model.Audits = model.Audits || {};
-                model.branch = SessionStore.getCurrentBranch().branchId;
+                model.branch_id = SessionStore.getCurrentBranch().branchId;
                 var bankName = SessionStore.getBankName();
                 var banks = formHelper.enum('bank').data;
                 for (var i = 0; i < banks.length; i++) {
@@ -105,7 +105,7 @@ irf.pageCollection.factory(irf.page("audit.ApprovedAuditsQueue"), ["$log", "Quer
                             "type": "number",
                             "enumCode": "branch_id",
                             "x-schema-form": {
-                                "type": "select"
+                                "type": "userbranch"
                             }
                         },
                         "audit_type": {

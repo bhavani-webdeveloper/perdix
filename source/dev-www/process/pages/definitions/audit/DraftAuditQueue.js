@@ -13,6 +13,7 @@ irf.pageCollection.factory(irf.page("audit.DraftAuditQueue"), ["$log", "Utils", 
                 } else {
                     returnObj.definition.listOptions.tableConfig.page = 0;
                 }
+                model.branch_id = SessionStore.getCurrentBranch().branchId;
                 var bankName = SessionStore.getBankName();
                 var banks = formHelper.enum('bank').data;
                 for (var i = 0; i < banks.length; i++) {
@@ -61,7 +62,7 @@ irf.pageCollection.factory(irf.page("audit.DraftAuditQueue"), ["$log", "Utils", 
                             "type": "number",
                             "enumCode": "branch_id",
                             "x-schema-form": {
-                                "type": "select"
+                                "type": "userbranch"
                             }
                         },
                         "start_date": {

@@ -9,7 +9,7 @@ define({
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 $log.info("Repayment Reminder Schedule Queue got initialized");
-                model.branchName = SessionStore.getCurrentBranch().branchId;
+                model.branch = SessionStore.getCurrentBranch().branchId;
                 Queries.getNextInstallmentDate()
                 .then(function(response){
                     $log.info(response);
@@ -36,23 +36,22 @@ define({
                             "title": "BUSINESS_NAME",
                             "type": "string"
                         },
-                        "branchName": {
-                            "title": "HUB_NAME",
-                            "type": ["integer", "null"],
-                            "enumCode": "branch_id",
+                        "branch": {
+                            'title': "BRANCH",
+                            "type": ["string", "null"],
                             "x-schema-form": {
-                                "type": "select",
+                                "type":"userbranch",
                                 "screenFilter": true
                             }
                         },
-                        "centreName": {
-                            "title": "SPOKE",
+                        "centre": {
+                            "title": "CENTRE",
                             "type": ["integer", "null"],
-                            "enumCode": "centre",
                             "x-schema-form": {
-                                "parentEnumCode": "branch_id",
-                                "parentValueExpr": "model.branchName",
                                 "type": "select",
+                                "enumCode": "centre",
+                                "parentEnumCode": "branch_id",
+                                "parentValueExpr": "model.branch",
                                 "screenFilter": true
                             }
                         },
@@ -113,7 +112,7 @@ define({
 
                     var promise = RepaymentReminder.query({
                         'customerUrn': searchOptions.customerUrn,
-                        'branchName': branchName,
+                        'branchName': searchOptions.branch,
                         'centreName': centreName,
                         'businessName': searchOptions.businessName,
                         'applicantName': searchOptions.applicantName,
