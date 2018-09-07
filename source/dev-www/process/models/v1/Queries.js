@@ -713,6 +713,22 @@ irf.models.factory('Queries', [
             return deferred.promise;
         }
 
+        resource.getCustomerGroups = function(urnNo) {
+            var deferred = $q.defer();
+            resource.getResult("getCustomerGroups.list",{'urn_no':urnNo}).then(function(records) {
+                if (records && records.results) {
+                    var result = {
+                        headers: {
+                            "x-total-count": records.results.length
+                        },
+                        body: records.results
+                    };
+                    deferred.resolve(result);
+                }
+            }, deferred.reject);
+            return deferred.promise;
+        }
+
         return resource;
     }
 ]);
