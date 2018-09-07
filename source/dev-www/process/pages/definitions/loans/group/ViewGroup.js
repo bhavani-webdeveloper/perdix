@@ -63,6 +63,10 @@ define({
 				model.group = model.group || {};
 				model.group.branchName = SessionStore.getCurrentBranch().branchId;
 				$log.info(model.group.branchName);
+                model.close=true;
+				if($stateParams.pageData){
+					model.close= $stateParams.pageData.view;
+				}
 
 				if ($stateParams.pageId) {
 					var groupId = $stateParams.pageId;
@@ -85,12 +89,12 @@ define({
 						} else {
 							PageHelper.hideLoader();
 							irfProgressMessage.pop("group-init", "Load Complete. No Group Members Found", 2000);
-							backToDashboard();
+							irfNavigator.goBack();
 						}
 					}, function(resp) {
 						PageHelper.hideLoader();
 						irfProgressMessage.pop("group-init", "Oops. An error occurred", 2000);
-						backToDashboard();
+						irfNavigator.goBack();
 					});
 				}
 			},
@@ -201,11 +205,21 @@ define({
 
 				{
 					"type": "actionbox",
+					"condition":"model.close",
 					"items": [{
 						"style": "btn-theme",
 						"title": "CLOSE_GROUP",
 						"icon": "fa fa-times",
 						"onClick": "actions.closeGroup(model,form)"
+					}]
+				},
+				{
+					"type": "actionbox",
+					"condition":"!model.close",
+					"items": [{
+						"style": "btn-theme",
+						"title": "Back",
+						"onClick": "actions.goBack(model,form)"
 					}]
 				},
 			],
@@ -238,23 +252,40 @@ define({
 			actions: {
 				preSave: function(model, form, formName) {},
 				closeGroup: function(model, form) {
-					
                     PageHelper.showLoader();
                     irfProgressMessage.pop('Close-proceed', 'Working...');
                     PageHelper.clearErrors();
                     model.groupAction = "SAVE";
                     model.group.groupStatus=false;
-                    var reqData = _.cloneDeep(model);
-                    GroupProcess.updateGroup(reqData, function(res) {
-                        PageHelper.hideLoader();
-                        irfProgressMessage.pop('Close-proceed', 'Operation Succeeded.', 5000);
-                        irfNavigator.goBack();
-                    }, function(res) {
-                        PageHelper.hideLoader();
-                        irfProgressMessage.pop('Close-proceed', 'Oops. Some error.', 2000);
-                        PageHelper.showErrors(res);
-                    });
+                    if(model.group.groupCategory=="Perdix7"){
+                    	var reqData={};
+                    	reqData.groupId=model.group.id;
+                    	reqData.remarks=model.group.remarks;
+                    	GroupProcess.closeLegacyGroup(reqData,function(res){
+                    		PageHelper.hideLoader();
+	                        irfProgressMessage.pop('Close-proceed', 'Operation Succeeded.', 5000);
+	                        irfNavigator.goBack();
+                    	},function(res) {
+	                        PageHelper.hideLoader();
+	                        irfProgressMessage.pop('Close-proceed', 'Oops. Some error.', 2000);
+	                        PageHelper.showErrors(res);
+	                    });	
+                    }else{
+                    	var reqData = _.cloneDeep(model);
+	                    GroupProcess.updateGroup(reqData, function(res) {
+	                        PageHelper.hideLoader();
+	                        irfProgressMessage.pop('Close-proceed', 'Operation Succeeded.', 5000);
+	                        irfNavigator.goBack();
+	                    }, function(res) {
+	                        PageHelper.hideLoader();
+	                        irfProgressMessage.pop('Close-proceed', 'Oops. Some error.', 2000);
+	                        PageHelper.showErrors(res);
+	                    });	
+                    }   
 				},
+				goBack: function(model, form) {
+					irfNavigator.goBack();
+				}
 			}
 		}
 	}

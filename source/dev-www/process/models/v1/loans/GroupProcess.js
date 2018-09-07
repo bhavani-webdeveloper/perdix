@@ -1,6 +1,7 @@
 irf.models.factory('GroupProcess', 
     function($log,$resource,$filter, $httpParamSerializer, BASE_URL, searchResource, $q, Queries, SessionStore) {
     var endpoint = BASE_URL + '/api/groupprocess';
+    var groupEndpoint = BASE_URL + '/api/groups';
     var resource =  $resource(endpoint, null, {
         search:searchResource({
             method:'GET',
@@ -32,9 +33,9 @@ irf.models.factory('GroupProcess',
             method: 'PUT',
             url: endpoint + '/groupBatchDisburse',
         },
-        closeGroup: {
+        closeLegacyGroup: {
             method: 'PUT',
-            url: endpoint + '/close',
+            url: groupEndpoint + '/close',
         }
     });
 
