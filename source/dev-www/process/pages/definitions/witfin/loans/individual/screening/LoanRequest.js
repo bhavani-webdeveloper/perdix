@@ -614,6 +614,7 @@ define([], function() {
                     "LoanRecommendation.loanChannels",
                     "LoanRecommendation.commercialCibilCharge",
                     "LoanRecommendation.calculateNominalRate",
+                    "LoanRecommendation.processingFee",
                     "LoanRecommendation.udf6",
                     "TeleVerification",
                     "TeleVerification.verifications",
@@ -655,6 +656,8 @@ define([], function() {
                         };
                     }
 
+                    model.loanAccount.processingFee = (model.loanAccount.expectedProcessingFeePercentage / 100) * model.loanAccount.loanAmountRequested;
+                    model.loanAccount.dsaPayoutFee = (model.loanAccount.dsaPayout / 100) * model.loanAccount.loanAmountRequested;
                     // model.loanAccount.accountUserDefinedFields = model.loanAccount.accountUserDefinedFields || {};
 
                     var self = this;

@@ -28,14 +28,36 @@ define(
                     "VehicleRegistrationDetails.hypothecatedTo":{
                         "type": "text"
                     },
+                    "VehicleRegistrationDetails.noOfCylinders": {
+                        "key": "loanAccount.vehicleLoanDetails.noOfCylinders",
+                        "title": "NO_OF_CYLINDERS",
+                        "inputmode": "number",
+                        "numberType": "number"
+                    },
+                    "VehicleRegistrationDetails.noOfAxles": {
+                        "key": "loanAccount.vehicleLoanDetails.noOfAxles",
+                        "title": "NO_OF_AXLES",
+                        "inputmode": "number",
+                        "numberType": "number"
+                    },
+                    "VehicleRegistrationDetails.grossVehicleWeight": {
+                        "key": "loanAccount.vehicleLoanDetails.grossVehicleWeight",
+                        "title": "GROSS_VEHICLE_WEIGHT",
+                        "inputmode": "number",
+                        "numberType": "number"
+                    },   
                     "VehicleOtherRemarks.rcbookStatus":{
                         "required":"true"
                     },
                     "VehicleValuation.currentMarketValue":{
-                        "required":"true"
+                        "numberType": "number",
+                        "type":"number",
+
                     },
                     "VehicleValuation.futureLife":{
-                        "required":""
+                        "numberType": "number",
+                        "required": "true",
+                        "type":"number"
                     },
                     "VehicleAsset.vehicleAssetConditions.componentCondition": {
                         "condition": "!(model.loanAccount.vehicleLoanDetails.vehicleAssetConditions[arrayIndex].componentType == 'LH Front' || model.loanAccount.vehicleLoanDetails.vehicleAssetConditions[arrayIndex].componentType == 'RH Front' || model.loanAccount.vehicleLoanDetails.vehicleAssetConditions[arrayIndex].componentType == 'LH Rear' || model.loanAccount.vehicleLoanDetails.vehicleAssetConditions[arrayIndex].componentType == 'RH Rear')",
@@ -91,6 +113,33 @@ define(
                     },
                     "VehicleRegistrationDetails.registrationDate": {
                         "orderNo":100
+                    },
+                    "VehicleIdentityDetails": {
+                        "items": {
+                            "make": {
+                                "type": "text",
+                                "readonly": "true"
+                            },
+                            "model": {
+                                "key": "loanAccount.vehicleLoanDetails.model",
+                                "title": "MODEL",
+                                "type": "text",
+                                "required": "true"
+                            },
+                            "yearOfManufacture": {
+                                "key": "loanAccount.vehicleLoanDetails.yearOfManufacture",
+                                "title": "YEAR_OF_MANUFACTURE",
+                                "type": "date",
+                                "required": "true"
+                            },
+                            "trailerAttached": {
+                                "key": "loanAccount.vehicleLoanDetails.trailerAttached",
+                                "title": "TRAILER_ATTACHED",
+                                "type": "select",
+                                "required": "true",
+                                "enumCode": "vehicle_trailer_attached"
+                            }
+                        }
                     }
 
                 }

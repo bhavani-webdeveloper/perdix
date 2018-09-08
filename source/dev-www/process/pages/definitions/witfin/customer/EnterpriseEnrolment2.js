@@ -972,7 +972,17 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 },
                                 "EnterpriseInformation.enterpriseType": {
                                     "title": "ENTERPRISE_TYPE",
-                                    "resolver": "SoleProprietorshipBusinessConfiguration"
+                                    "resolver": "SoleProprietorshipBusinessConfiguration",
+                                    "titleMap": [
+                                        {
+                                            "name": "Individual",
+                                            "value": "Sole Proprietorship"
+                                        },
+                                        {
+                                            "name": "Company",
+                                            "value": "Enterprise"
+                                        }
+                                    ]
                                 },
                                 "EnterpriseInformation.centreId" : {
                                     "readonly": true
@@ -1064,6 +1074,62 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             ],
                             "options": {
                                 "repositoryAdditions": {
+                                    "BusinessVerification":{
+                                        "type": "box",
+                                        "title": "BUSINESS_VERIFICATION",
+                                        "orderNo": 130,
+                                        "items": {
+                                            "personMet": { 
+                                                "key": "customer.BusinessVerification.personMet",
+                                                "type": "select",
+                                                "title": "PERSON_MET",
+                                                "enumCode": "person_met",
+                                                "required": "true"
+                                             },
+                                             "personName":{
+                                                "key": "customer.BusinessVerification.personName",
+                                                "title": "PERSON_NAME",
+                                                "type": "text",
+                                                "required": "true"
+                                             },
+                                             "noOfEmployeesWorking":{
+                                                "key": "customer.BusinessVerification.noOfEmployeesWorking",
+                                                "title": "NO_OF_EMPLOYEES_WORKING",
+                                                "type": "number",
+                                                "inputmode": "number",
+                                                "required": "true"
+                                             },
+                                             "noofYearsWorking":{
+                                                "key": "customer.BusinessVerification.noOfYearsWorking",
+                                                "type": "select",
+                                                "title": "NO_OF_YEARS_WORKING",
+                                                "enumCode": "no_of_years_working",
+                                                "required": "true"
+                                             },
+                                             "incomeEarnedPerMonth":{
+                                                "key": "customer.BusinessVerification.incomeEarnedPermonth",
+                                                "title": "INCOME_EARNED_PER_MONTH",
+                                                "type": "number",
+                                                "inputmode": "number",
+                                                "numberType": "number",
+                                                "required": "true"
+                                             },
+                                             "localityType":{
+                                                "key": "customer.BusinessVerification.localityType",
+                                                "type": "select",
+                                                "title": "LOCALITY_TYPE",
+                                                "enumCode": "locality_type",
+                                                "required": "true"
+                                             },
+                                             "areaInSqFt":{ 
+                                                "key": "customer.BusinessVerification.areaInSqFt",
+                                                "type": "select",
+                                                "title": "AREA_IN_SQ_FT",
+                                                "enumCode": "area_in_sq_ft",
+                                                "required": "true"
+                                             }            
+                                        }
+                                    },
                                     "Liabilities": {
                                         "items": {
                                             "liabilities": {

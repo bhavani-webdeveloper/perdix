@@ -32,6 +32,7 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
                 "Page/Engine/witfin.loans.individual.screening.CreditApproval1Queue",
                 "Page/Engine/witfin.loans.individual.screening.CreditApproval2Queue",
                 "Page/Engine/witfin.loans.individual.screening.CreditApproval3Queue",
+                "Page/Engine/witfin.loans.individual.screening.BusinessApproval2Queue",
                 "Page/Engine/witfin.loans.individual.screening.RejectedQueue"
               ]
         };

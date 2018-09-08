@@ -916,6 +916,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "required": true
                     },
                     "IndividualInformation.state": {
+                        "key": "customer.state",
                         "readonly": true
                     },
                     "IndividualInformation.dateOfBirth": {
