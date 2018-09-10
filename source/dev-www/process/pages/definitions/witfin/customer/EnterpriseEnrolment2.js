@@ -132,13 +132,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "Liabilities.liabilities.customerLiabilityRepayments.emiDueDate",
                     "Liabilities.liabilities.customerLiabilityRepayments.actualRepaymentDate",
                     "BusinessVerification",
-                    "BusinessVerification.personMet",
-                    "BusinessVerification.personName",
-                    "BusinessVerification.noOfEmployeesWorking",
-                    "BusinessVerification.noofYearsWorking",
-                    "BusinessVerification.incomeEarnedPerMonth",
-                    "BusinessVerification.localityType",
-                    "BusinessVerification.areaInSqFt",
+                    "BusinessVerification.businessVerification",
+                    "BusinessVerification.businessVerification.personMet",
+                    "BusinessVerification.businessVerification.personName",
+                    "BusinessVerification.businessVerification.noOfEmployeesWorking",
+                    "BusinessVerification.businessVerification.noofYearsWorking",
+                    "BusinessVerification.businessVerification.incomeEarnedPerMonth",
+                    "BusinessVerification.businessVerification.localityType",
+                    "BusinessVerification.businessVerification.areaInSqFt",
                     "TrackDetails",
                     "TrackDetails.vehiclesOwned",
                     "TrackDetails.vehiclesFinanced",
@@ -955,7 +956,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "required": true
                                 },
                                 "EnterpriseAssets.enterpriseAssets.assetType": {
-                                    "required": true
+                                    "required": true,
+                                    "enumCode": "vehicle_type"
                                 },
                                 "EnterpriseAssets.enterpriseAssets.valueOfAsset": {
                                     "required": true
@@ -1055,8 +1057,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 "BusinessVerification":{
                                     "condition": "model.customer.enterprise.enterpriseType=='Enterprise'" 
                                 },
-                                "BusinessVerification.personName":{
-                                    "condition": "model.customer.BusinessVerification.personName=='Business Partner'||model.customer.BusinessVerification.personName=='Others'" 
+                                "BusinessVerification.businessVerification.personName":{
+                                    "condition": "model.customer.fieldInvestigationDetails[0].category=='Business Partner' || model.customer.fieldInvestigationDetails[0].category == 'Others'" 
                                 }
                             },
                             "includes": getIncludes(model),
@@ -1079,56 +1081,64 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "title": "BUSINESS_VERIFICATION",
                                         "orderNo": 130,
                                         "items": {
-                                            "personMet": { 
-                                                "key": "customer.BusinessVerification.personMet",
-                                                "type": "select",
-                                                "title": "PERSON_MET",
-                                                "enumCode": "person_met",
-                                                "required": "true"
-                                             },
-                                             "personName":{
-                                                "key": "customer.BusinessVerification.personName",
-                                                "title": "PERSON_NAME",
-                                                "type": "text",
-                                                "required": "true"
-                                             },
-                                             "noOfEmployeesWorking":{
-                                                "key": "customer.BusinessVerification.noOfEmployeesWorking",
-                                                "title": "NO_OF_EMPLOYEES_WORKING",
-                                                "type": "number",
-                                                "inputmode": "number",
-                                                "required": "true"
-                                             },
-                                             "noofYearsWorking":{
-                                                "key": "customer.BusinessVerification.noOfYearsWorking",
-                                                "type": "select",
-                                                "title": "NO_OF_YEARS_WORKING",
-                                                "enumCode": "no_of_years_working",
-                                                "required": "true"
-                                             },
-                                             "incomeEarnedPerMonth":{
-                                                "key": "customer.BusinessVerification.incomeEarnedPermonth",
-                                                "title": "INCOME_EARNED_PER_MONTH",
-                                                "type": "number",
-                                                "inputmode": "number",
-                                                "numberType": "number",
-                                                "required": "true"
-                                             },
-                                             "localityType":{
-                                                "key": "customer.BusinessVerification.localityType",
-                                                "type": "select",
-                                                "title": "LOCALITY_TYPE",
-                                                "enumCode": "locality_type",
-                                                "required": "true"
-                                             },
-                                             "areaInSqFt":{ 
-                                                "key": "customer.BusinessVerification.areaInSqFt",
-                                                "type": "select",
-                                                "title": "AREA_IN_SQ_FT",
-                                                "enumCode": "area_in_sq_ft",
-                                                "required": "true"
-                                             }            
-                                        }
+                                            "businessVerification": {
+                                                "type": "array",
+                                                "add": null,
+                                                "remove": null,
+                                                "view": "fixed",
+                                                "items": {
+                                                    "personMet": { 
+                                                        "key": "customer.fieldInvestigationDetails[].category",
+                                                        "type": "select",
+                                                        "title": "PERSON_MET",
+                                                        "enumCode": "person_met",
+                                                        "required": "true"
+                                                    },
+                                                    "personName":{
+                                                        "key": "customer.fieldInvestigationDetails[].name",
+                                                        "title": "PERSON_NAME",
+                                                        "type": "text",
+                                                        "required": "true"
+                                                    },
+                                                    "noOfEmployeesWorking":{
+                                                        "key": "customer.enterprise.noOfRegularEmployees",
+                                                        "title": "NO_OF_EMPLOYEES_WORKING",
+                                                        "type": "number",
+                                                        "inputmode": "number",
+                                                        "required": "true"
+                                                    },
+                                                    "noofYearsWorking":{
+                                                        "key": "customer.fieldInvestigationDetails[].yearsOfExperience",
+                                                        "type": "select",
+                                                        "title": "NO_OF_YEARS_WORKING",
+                                                        "enumCode": "no_of_years_working",
+                                                        "required": "true"
+                                                    },
+                                                    "incomeEarnedPerMonth":{
+                                                        "key": "customer.fieldInvestigationDetails[].incomeEarned",
+                                                        "title": "INCOME_EARNED_PER_MONTH",
+                                                        "type": "number",
+                                                        "inputmode": "number",
+                                                        "numberType": "number",
+                                                        "required": "true"
+                                                    },
+                                                    "localityType":{
+                                                        "key": "customer.localityType",
+                                                        "type": "select",
+                                                        "title": "LOCALITY_TYPE",
+                                                        "enumCode": "locality_type",
+                                                        "required": "true"
+                                                    },
+                                                    "areaInSqFt":{ 
+                                                        "key": "customer.enterprise.floorArea",
+                                                        "type": "select",
+                                                        "title": "AREA_IN_SQ_FT",
+                                                        "enumCode": "area_in_sq_ft",
+                                                        "required": "true"
+                                                    }
+                                                }
+                                            }
+                                        }  
                                     },
                                     "Liabilities": {
                                         "items": {
@@ -1235,7 +1245,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                                       type:"file",
                                                       fileType:"application/pdf",
                                                       using: "scanner",
-                                                      offline:true,
+                                                      //offline:true,
                                                       "required": true
                                                 },
                                                 "doubtful": {
