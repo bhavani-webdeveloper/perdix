@@ -40,9 +40,9 @@ define({
                         onSelect: function (valueObj, model, context) {
                             //loadBRSRecords(model);
                             model.bankAccountGLCode = valueObj.account_code;
-                            setTimeout(function(){
+                            /*setTimeout(function(){
                                 localFormCtrl.submit();
-                            });
+                            });*/
                             
                         }
                     },
@@ -50,6 +50,11 @@ define({
                         "key": "bankAccountGLCode",
                         "type": "string",
                         "title": "GL_CODE"
+                    },
+                    {
+                        "key": "reference",
+                        "type": ["string",null],
+                        "title": "REFERENCE_NUMBER"
                     }
 
                 ], 
@@ -70,17 +75,24 @@ define({
                             "title": "GL_CODE",
                             "type": "string"
                         },
+                        "reference":{
+                            "type": ["string",null],
+                            "title": "REFERENCE_NUMBER"
+                        }
                     }
                 },
                 getSearchFormHelper: function() {
                     return formHelper;
                 },
-                getResultsPromise: function(searchOptions, pageOpts) { 
+                getResultsPromise: function(searchOptions, pageOpts) {
+                    if(typeof(searchOptions.reference)!= 'undefined' && searchOptions.reference.length==0)
+                    searchOptions.reference=null;
                     var promise = LoanCollection.findDepositSummaries({
                         'currentStage': "BRSValidation",
                         'bankAccountNumber': searchOptions.bankAccountNumber,
                         'page': pageOpts.pageNo,
-                        'per_page': pageOpts.itemsPerPage
+                        'per_page': pageOpts.itemsPerPage,
+                        'reference':searchOptions.reference
                     }).$promise;
                     return promise;
                 },

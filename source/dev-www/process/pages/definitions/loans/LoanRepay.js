@@ -889,7 +889,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                     if (model.repayment.id) {
                                         postData.loanCollection.feeAmount = 0;
                                         //According to new change , if instrument type is cash or cheque , they will go to BranchDeposit stage
-                                        if ( model.siteCode == 'kinara' && (postData.loanCollection.instrumentType == 'CASH')) {
+                                        if ( model.siteCode == 'kinara' && (postData.loanCollection.instrumentType == 'CASH' || postData.loanCollection.instrumentType=='CHQ')) {
                                             postData.stage = "BranchDeposit";
                                         } else if (model.siteCode != 'kinara' && postData.loanCollection.instrumentType == 'CASH') {
                                             postData.stage = "Deposit";
@@ -931,7 +931,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                             $log.info(resp);
                                             try {
                                                  //According to new change , if instrument type is cash or cheque , they will go to BranchDeposit stage
-                                                if ( model.siteCode == 'kinara' && (postData.loanCollection.instrumentType == 'CASH')) {
+                                                if ( model.siteCode == 'kinara' && (postData.loanCollection.instrumentType == 'CASH' || postData.loanCollection.instrumentType=='CHQ')) {
                                                     postData.stage = "BranchDeposit";
                                                 } else if (model.siteCode != 'kinara' && postData.loanCollection.instrumentType == 'CASH') {
                                                     postData.stage = "Deposit";
