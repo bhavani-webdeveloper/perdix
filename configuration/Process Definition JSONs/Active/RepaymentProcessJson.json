@@ -68,6 +68,17 @@
         "allowedRoles":[
            "APPROVER"
         ]
+     },
+     {
+       "order":8,
+       "code":"Rejected",
+       "name":"Rejected",
+       "stageType":"CAPTURE",
+       "isBankAccountReversal":false,
+       "allowedRoles":[
+         "WM"
+       ]
+       
      }
   ]
 }
