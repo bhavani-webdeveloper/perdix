@@ -213,7 +213,8 @@ define({
                     "enumCode":"insurance_rate_codes"
                 }, {
                     "key": "product.insuranceRequired",
-                }, {
+                },
+                {
                     "key": "product.insuranceType",
                     "type": "select",
                     "titleMap": [{
@@ -232,6 +233,10 @@ define({
                         "name": "Health Insurance",
                         "value": "HI",
                     }]
+                },
+                {
+                    "key": "product.repaymentReminderEnabled",
+                    "title": "REPAYMENT_REMINDER_ENABLED"
                 }]
             }, {
                 "type": "box",
@@ -725,6 +730,10 @@ define({
                             "insuranceType": {
                                 "type": ["string", 'null'],
                                 "title": "INSURANCE_TYPE"
+                            },
+                            "repaymentReminderEnabled": {
+                                "type": "boolean",
+                                "title": "REPAYMENT_REMINDER_ENABLED"
                             },
                             "sbAccountCheckRequired": {
                                 "type": "boolean",
