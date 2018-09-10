@@ -83,7 +83,8 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource, Upload, $q, Pag
         },
         processCashDeposite:{
             method:'POST',
-            url:endpoint+'/processCashDeposite'
+            url:endpoint+'/processCashDeposite',
+            isArray: true
         },
         updateDeposiSummary:{
             method: 'PUT',
