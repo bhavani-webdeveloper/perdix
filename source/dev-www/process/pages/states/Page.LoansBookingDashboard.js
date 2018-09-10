@@ -11,6 +11,7 @@ function($log, $scope, PagesDefinition, SessionStore, IndividualLoan) {
             "Page/Engine/loans.individual.booking.InitiationQueue",
             "Page/Engine/loans.individual.booking.PendingForPartnerQueue",
             "Page/Engine/loans.individual.booking.PendingQueue",
+            "Page/Engine/loans.individual.booking.LinkedAccountVerificationQueue",
             "Page/Engine/loans.individual.booking.DocumentUploadQueue",
             "Page/Engine/loans.individual.booking.PendingVerificationQueue"
         ]
@@ -96,6 +97,19 @@ function($log, $scope, PagesDefinition, SessionStore, IndividualLoan) {
                 pvqMenu.data = Number(response.headers['x-total-count']);
             }, function() {
                 pvqMenu.data = '-';
+            });
+        }
+        var laMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.booking.LinkedAccountVerificationQueue"];
+        if (laMenu) {
+            IndividualLoan.search({
+                'stage': 'LinkedAccountVerification',
+                'branchName': '',
+                'page': 1,
+                'per_page': 1
+            }).$promise.then(function(response,headerGetter){
+                laMenu.data = Number(response.headers['x-total-count']);
+            }, function() {
+                laMenu.data = '-';
             });
         }
     });

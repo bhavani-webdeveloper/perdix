@@ -191,7 +191,19 @@
          ]
       },
       {
-         "order":16,
+        "order":16,
+        "code":"LinkedAccountVerification",
+        "name":"Linked Account Verification",
+        "stageType":"CAPTURE",
+        "sendSms":"No",
+        "smsCategory":"LoanBooking",
+        "isAccountOpening":true,
+        "allowedRoles":[
+           "WM"
+        ]
+     },
+      {
+         "order":17,
          "code":"DocumentUpload",
          "name":"Document Download and Upload",
          "stageType":"CAPTURE",
@@ -203,7 +215,7 @@
          ]
       },
       {
-         "order":17,
+         "order":18,
          "code":"DocumentVerification",
          "name":"Document Verification",
          "stageType":"CAPTURE",
@@ -215,7 +227,7 @@
          ]
       },
       {
-        "order":18,
+        "order":19,
         "code":"Completed",
         "name":"Completed",
         "stageType":"CAPTURE",
@@ -1633,15 +1645,6 @@
                   },
                   "psychometricCompleted":{
                      "title":"psychometricCompleted",
-                     "type":"string",
-                     "minLength":0,
-                     "maxLength":3,
-                     "captureStages":[
-                        "Application", "Screening", "LoanInitiation"
-                     ]
-                  },
-                  "relationshipWithApplicant":{
-                     "title":"relationshipWithApplicant",
                      "type":"string",
                      "minLength":0,
                      "maxLength":3,
@@ -3425,14 +3428,6 @@
                      ]
                   },
 
-                  "collateral1FilePath":{
-                     "title":"collateral1FilePath",
-                     "type":"string",
-                     "captureStages":[
-                        "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
-                     ]
-                  },
-
                   "propertyType":{
                      "title":"propertyType",
                      "type":"string",
@@ -3451,14 +3446,6 @@
 
                   "extentOfPropertyUnit":{
                      "title":"extentOfPropertyUnit",
-                     "type":"string",
-                     "captureStages":[
-                        "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
-                     ]
-                  },
-
-                  "collateral1FilePath":{
-                     "title":"collateral1FilePath",
                      "type":"string",
                      "captureStages":[
                         "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
