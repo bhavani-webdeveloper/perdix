@@ -75,7 +75,7 @@
                 "title" : "FLAT_RATE",
                 "type": "string",
                 "orderNo" : 75
-            },           
+            },
             "expectedInterestRate": {
                 "key": "loanAccount.expectedInterestRate",
                 "type": "number",
@@ -389,6 +389,18 @@
                 "type": "amount",
                 "title": "COMMERCIAL_CIBIL_CHARGE"
 
+            },
+            "loanChannels": {
+                "key": "loanAccount.loanChannels",
+                "enumCode": "decisionmaker",
+                "type": "radios",
+                "title": "ESCALATE"
+            },
+            "processingFee":{
+                "key": "loanAccount.processingFee",
+                "title": "PROCESSING_FEE",
+                "type": "number",
+                "readonly": true
             }
         }
     },
@@ -490,6 +502,11 @@
                         "key": "loanAccount.vehicleLoanDetails.vehicleRouteDetails[].routeVia",
                         "title": "VEHICLE_ROUTE_VIA",
                         "type": "string"
+                    },
+                    "ratePerTrip": {
+                        "key": "loanAccount.vehicleLoanDetails.vehicleRouteDetails[].ratePerTrip",
+                        "title": "RATE_PER_TRIP",
+                        "type": "amount"
                     },
                     "trips": {
                         "key": "loanAccount.vehicleLoanDetails.vehicleRouteDetails[].trips",
@@ -870,6 +887,25 @@
                 "title": "USED_FOR",
                 "type": "radios",
                 "enumCode": "vehicle_used_for"
+            },
+            "model": {
+                "key": "loanAccount.vehicleLoanDetails.model",
+                "title": "MODEL",
+                "type": "text",
+                "required": "true"
+            },
+            "yearOfManufacture": {
+                "key": "loanAccount.vehicleLoanDetails.yearOfManufacture",
+                "title": "YEAR_OF_MANUFACTURE",
+                "type": "date",
+                "required": "true"
+            },
+            "trailerAttached": {
+                "key": "loanAccount.vehicleLoanDetails.trailerAttached",
+                "title": "TRAILER_ATTACHED",
+                "type": "select",
+                "required": "true",
+                "enumCode": "vehicle_trailerAttached"
             }
         }
     },
@@ -1101,7 +1137,7 @@
                 "key": "loanAccount.vehicleLoanDetails.currentInvoiceValue",
                 "title": "CURRENT_INVOICE_VALUE",
                 "inputmode": "number",
-                "numberType": "tel"
+                "numberType": "number"
             },
             "rcbookStatus": {
                 "key": "loanAccount.vehicleLoanDetails.rcbookStatus",
