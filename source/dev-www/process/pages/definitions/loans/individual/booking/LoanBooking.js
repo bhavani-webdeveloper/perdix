@@ -936,7 +936,25 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         //"type": "amount",
                         "onChange": "actions.validateWaiverAmount(model.loanAccount.disbursementSchedules[0].feeAmountPayment,model.loanAccount.preTotalFee,modelValue)"
                     }]
-                }
+                },
+                {
+                    "type": "fieldset",
+                    "condition": "model.loanAccount.precloseuredetails",
+                    "title": "WAIVER_APPROVAL_DOCUMENT",
+                    "items":[
+                        {
+                            title: "Upload",
+                            "required":true,
+                            "key": "loanAccount.waiverdocumentId",
+                            type: "file",
+                            fileType: "application/pdf",
+                            category: "Loan",
+                            subCategory: "DOC1",
+                            title:"WAIVER_APPROVAL_DOCUMENT",
+                            using: "scanner"
+                        }
+                    ]
+                },
                 ]
             },
             {
@@ -1046,6 +1064,15 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                                 message: "New loan First schedule disbursement amount with fees" + " " +netdisbursementamount+ " "+ "should  be greater then Linked Account Balence with Waiver amount" +"  " + linkedaccountoutstanding
                             });
                            return;
+                        }
+                        if(model.loanAccount.waiverdocumentId){
+                            model.loanAccount.loanDocuments.push({
+                                loanId:model.loanAccount.id,
+                                documentId:model.loanAccount.waiverdocumentId,
+                                document:"Waiver Approval",
+                                accountNumber:model.loanAccount.accountNumber,
+                                documentStatus:"PENDING",
+                            });
                         }
                     }
 
