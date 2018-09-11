@@ -1,5 +1,5 @@
-irf.pageCollection.factory(irf.page("loans.individual.booking.PendingForPartnerQueue"), ["$log", "formHelper", "PageHelper","entityManager", "PagesDefinition", "IndividualLoan", "$state", "SessionStore", "Utils", "irfNavigator",
-    function($log, formHelper, PageHelper,EntityManager, PagesDefinition, IndividualLoan, $state, SessionStore, Utils, irfNavigator) {
+irf.pageCollection.factory(irf.page("loans.individual.booking.PendingForPartnerQueue"), ["$log", "formHelper", "PageHelper", "entityManager", "PagesDefinition", "IndividualLoan", "$state", "SessionStore", "Utils", "irfNavigator",
+    function($log, formHelper, PageHelper, EntityManager, PagesDefinition, IndividualLoan, $state, SessionStore, Utils, irfNavigator) {
 
 
         var branch = SessionStore.getBranch();
@@ -183,6 +183,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.PendingForPartnerQ
                                 if (items.length == 0) {
                                     PageHelper.showProgress("bulk-create", "Atleast one loan should be selected for Batch creation", 5000);
                                     return false;
+                                }
+                                var compare = items[0].partnerCode;
+                                if(!(items.every(items => items.partnerCode === compare))){
+                                    return PageHelper.showProgress("bulk-create", "Partner Code should be same for selected records", 5000);
                                 }
                                 irfNavigator.go({
                                     'state': 'Page.Engine',
