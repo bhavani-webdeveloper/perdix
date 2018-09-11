@@ -160,7 +160,7 @@ let config = {
                     },
                     {
                         "type": "expr",
-                        "expr": "this.loanAccount.currentStage=='CreditApproval5' || this.loanAccount.currentStage=='CreditApproval4' || this.loanAccount.currentStage=='CreditApproval3' || this.loanAccount.currentStage=='CreditApproval2' || this.loanAccount.currentStage=='CreditApproval1' ",
+                        "expr": "this.loanAccount.currentStage=='BusinessApproval1' || this.loanAccount.currentStage=='CreditApproval3' || this.loanAccount.currentStage=='BusinessApproval2'",
                         "add": [{
                             "name": "CollateralFieldPolicy",
                             "arguments": {

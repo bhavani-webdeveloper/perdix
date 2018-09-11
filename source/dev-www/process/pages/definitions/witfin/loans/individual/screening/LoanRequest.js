@@ -550,8 +550,32 @@ define([], function() {
                                     "readonly": true
                                 },
                                 "PayerDetails": {
-                                    "readonly": true
-                                }
+                                "readonly": true
+                            },
+                            "LoanCustomerRelations": {
+                                "orderNo": 2
+                            },
+                            "LoanCustomerRelations.loanCustomerRelations": {
+                                "add": null,
+                                "remove": null,
+                                "startEmpty": true
+                            },
+                            "LoanCustomerRelations.loanCustomerRelations.customerId": {
+                               "readonly": true
+                            },
+                            "LoanCustomerRelations.loanCustomerRelations.urn": {
+                               "readonly": true
+                            },
+                            "LoanCustomerRelations.loanCustomerRelations.name": {
+                               "readonly": true
+                            },
+                            "LoanCustomerRelations.loanCustomerRelations.relation": {
+                               "readonly": true
+                            },
+                            "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
+                               "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
+                               "required": true
+                            }
                             }
                         }
                     }
@@ -882,6 +906,12 @@ define([], function() {
                                             "title": "VEHICLE_INSURANCE",
                                             "orderNo": 60
                                         },
+                                        "fee5":{
+                                            "key": "loanAccount.fee5",
+                                            "title": "DOCUMENT_CHARGES",
+                                            "type": "number",
+                                            "orderNo": 70
+                                        },
                                         "dealIrr": {
                                             "key": "loanAccount.dealIrr",
                                             "title": "XIRR",
@@ -903,6 +933,20 @@ define([], function() {
                                             "orderNo": 130,
                                             "readonly": true
                                         },
+                                        "processingFee":{
+                                            "key": "loanAccount.processingFee",
+                                            "title": "PROCESSING_FEE",
+                                            "type": "number",
+                                            "orderNo": 120,
+                                            "readonly": true
+                                        },
+                                        "dsaPayoutFee":{
+                                            "key": "loanAccount.dsaPayoutFee",
+                                            "title": "DSA_PAYOUT",
+                                            "type": "number",
+                                            "orderNo": 130,
+                                            "readonly": true
+                                        },
                                         "calculateDisbursedAmount": {
                                             "type": "button",
                                             "title": "CALCULATE_XIRR",
@@ -919,6 +963,8 @@ define([], function() {
                                                     processFee = (model.loanAccount.expectedProcessingFeePercentage / 100) * model.loanAccount.loanAmountRequested;
                                                     dsaPayout = (model.loanAccount.dsaPayout / 100) * model.loanAccount.loanAmountRequested;
                                                     frankingCharge = model.loanAccount.fee3;
+                                                    model.loanAccount.processingFee = processFee;
+                                                    model.loanAccount.dsaPayoutFee = dsaPayout;
                                                     model.netDisbursementAmount = model.loanAccount.loanAmountRequested - processFee - advanceEmi + dsaPayout;
                                                     switch (model.loanAccount.frequencyRequested) {
                                                         case 'Monthly':

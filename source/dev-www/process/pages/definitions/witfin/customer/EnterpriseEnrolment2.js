@@ -242,6 +242,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "TangibleNetWorth": {
                                       "readonly": true
+                                    },
+                                    "BusinessVerification": {
+                                        "readonly": true
                                     }
                                 },
                                 "excludes": [
@@ -415,6 +418,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "TangibleNetWorth": {
                                       "readonly": true
+                                    },
+                                    "BusinessVerification": {
+                                        "readonly": true
                                     }
                                 },
                                 "excludes": [
@@ -446,6 +452,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "TangibleNetWorth": {
                                       "readonly": true
+                                    },
+                                    "BusinessVerification": {
+                                        "readonly": true
                                     }
                                 },
                                 "excludes": [
@@ -477,6 +486,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "TangibleNetWorth": {
                                       "readonly": true
+                                    },
+                                    "BusinessVerification": {
+                                        "readonly": true
                                     }
                                 },
                                 "excludes": [
@@ -570,6 +582,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "TangibleNetWorth": {
                                       "readonly": true
+                                    },
+                                    "BusinessVerification": {
+                                        "readonly": true
                                     }
                                 },
                                 "excludes": [
@@ -601,6 +616,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "TangibleNetWorth": {
                                       "readonly": true
+                                    },
+                                    "BusinessVerification": {
+                                        "readonly": true
                                     }
                                 },
                                 "excludes": [
@@ -632,6 +650,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "TangibleNetWorth": {
                                       "readonly": true
+                                    },
+                                    "BusinessVerification": {
+                                        "readonly": true
                                     }
                                 },
                                 "excludes": [
@@ -846,6 +867,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "ContactInformation": {
                                         "readonly": true
+                                    },
+                                    "BusinessVerification": {
+                                        "readonly": true
                                     }
                                 }
                             }
@@ -873,6 +897,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "readonly": true
                                     },
                                     "ContactInformation": {
+                                        "readonly": true
+                                    },
+                                    "BusinessVerification": {
                                         "readonly": true
                                     }
                                 }

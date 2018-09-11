@@ -27,36 +27,22 @@ define(
                     },
                     "VehicleRegistrationDetails.hypothecatedTo":{
                         "type": "text"
-                    },
-                    "VehicleRegistrationDetails.noOfCylinders": {
-                        "key": "loanAccount.vehicleLoanDetails.noOfCylinders",
-                        "title": "NO_OF_CYLINDERS",
-                        "inputmode": "number",
-                        "numberType": "number"
-                    },
-                    "VehicleRegistrationDetails.noOfAxles": {
-                        "key": "loanAccount.vehicleLoanDetails.noOfAxles",
-                        "title": "NO_OF_AXLES",
-                        "inputmode": "number",
-                        "numberType": "number"
-                    },
-                    "VehicleRegistrationDetails.grossVehicleWeight": {
-                        "key": "loanAccount.vehicleLoanDetails.grossVehicleWeight",
-                        "title": "GROSS_VEHICLE_WEIGHT",
-                        "inputmode": "number",
-                        "numberType": "number"
-                    },   
+                    }, 
                     "VehicleOtherRemarks.rcbookStatus":{
                         "required":"true"
                     },
                     "VehicleValuation.currentMarketValue":{
                         "numberType": "number",
+                        "required": "true",
                         "type":"number",
 
                     },
                     "VehicleValuation.futureLife":{
                         "numberType": "number",
-                        "required": "true",
+                        "type":"number"
+                    },
+                    "VehicleValuation.distressValue":{
+                        "numberType": "number",
                         "type":"number"
                     },
                     "VehicleAsset.vehicleAssetConditions.componentCondition": {
@@ -118,19 +104,22 @@ define(
                         "items": {
                             "make": {
                                 "type": "text",
-                                "readonly": "true"
+                                "title": "MANUFACTURER",
+                                "readonly":  true
                             },
-                            "model": {
-                                "key": "loanAccount.vehicleLoanDetails.model",
+                            "vehicleModel": {
+                                "key": "loanAccount.vehicleLoanDetails.vehicleModel",
                                 "title": "MODEL",
                                 "type": "text",
-                                "required": "true"
+                                "required": "true",
+                                "readonly":  true
                             },
                             "yearOfManufacture": {
                                 "key": "loanAccount.vehicleLoanDetails.yearOfManufacture",
                                 "title": "YEAR_OF_MANUFACTURE",
                                 "type": "date",
-                                "required": "true"
+                                "required": "true",
+                                "readonly":  true
                             },
                             "trailerAttached": {
                                 "key": "loanAccount.vehicleLoanDetails.trailerAttached",
@@ -140,7 +129,34 @@ define(
                                 "enumCode": "vehicle_trailer_attached"
                             }
                         }
-                    }
+                    },
+                    "VehicleRegistrationDetails":{
+                        "items": {
+                            "noOfCylinders":{
+                                "key": "loanAccount.vehicleLoanDetails.noOfCylinders",
+                                "title": "NO_OF_CYLINDERS",
+                                "inputmode": "number",
+                                "numberType": "number",
+                                "type": "number"
+                            },
+                            "grossVehicleWeight":{
+                                "key": "loanAccount.vehicleLoanDetails.grossVehicleWeight",
+                                "title": "GROSS_VEHICLE_WEIGHT",
+                                "inputmode": "number",
+                                "numberType": "number"
+                            },
+                            "noOfAxles":{
+                                "key": "loanAccount.vehicleLoanDetails.noOfAxles",
+                                "title": "NO_OF_AXLES",
+                                "inputmode": "number",
+                                "numberType": "number",
+                                "type": "number"
+                            },
+                            "vehicleClass":{
+                                "readonly":  true
+                            }
+                        }
+                    } 
 
                 }
             }
@@ -179,7 +195,7 @@ define(
                         "VehicleIdentityDetails.transmission",
                         "VehicleIdentityDetails.odometer",
                         "VehicleIdentityDetails.usedFor",
-                        "VehicleIdentityDetails.model",
+                        "VehicleIdentityDetails.vehicleModel",
                         "VehicleIdentityDetails.yearOfManufacture",
                         "VehicleIdentityDetails.trailerAttached",                        
                         "VehicleRegistrationDetails",
@@ -227,10 +243,6 @@ define(
                         "VehicleOtherRemarks.majorRepair",
                         "VehicleOtherRemarks.currentInvoiceValue",
                         "VehicleOtherRemarks.rcbookStatus",
-                        "VehiclePastValuations",
-                        "VehiclePastValuations.vehiclePastValuations",
-                        "VehiclePastValuations.vehiclePastValuations.valuationDate",
-                        "VehiclePastValuations.vehiclePastValuations.valuation",
                         "VehicleAsset",
                         "VehicleAsset.vehicleAssetConditions",
                         "VehicleAsset.vehicleAssetConditions.make",

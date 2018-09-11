@@ -4334,6 +4334,21 @@
                     "TeleVerification",
                     "LoanInitiation"
                  ]
+              },
+              "noOfAxles":{
+                "title":"NO_OF_AXLES",
+                "type":"number",
+                "minimum":1,
+                "maximum":100,
+                "captureStages":[
+                   "Screening",
+                   "VehicleValuation",
+                   "FieldInvestigation1",
+                   "FieldInvestigation2",
+                   "FieldInvestigation3",
+                   "TeleVerification",
+                   "LoanInitiation"
+                ]
               }
            }
         },
