@@ -909,6 +909,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         "key": "loanAccount.precloseureTotalFee",
                         "title": "TOTAL_FEE_DUE",
                         "readonly": true,
+                    },{
+                        "key": "loanAccount.precloseureTotalPreclosureFee",
+                        "title": "TOTAL_PRECLOSURE_FEE_DUE",
+                        "readonly": true,
                     }
                     ]
                 },
@@ -930,7 +934,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         "key": "loanAccount.disbursementSchedules[0].feeAmountPayment",
                         "title": "TOTAL_FEE_DUE",
                         //"type": "amount",
-                        "onChange": "actions.validateWaiverAmount(model.loanAccount.disbursementSchedules[0].feeAmountPayment,model.loanAccount.precloseureTotalFee,modelValue)"
+                        "onChange": "actions.validateWaiverAmount(model.loanAccount.disbursementSchedules[0].feeAmountPayment,model.loanAccount.preTotalFee,modelValue)"
                     }]
                 }
                 ]
@@ -1151,7 +1155,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         model.loanAccount.precloseurePrincipal=model.loanAccount.disbursementSchedules[0].linkedAccountTotalPrincipalDue= response.part3?accounting.unformat(response.part3.slice(3)):0;
                         model.loanAccount.precloseureNormalInterest=model.loanAccount.disbursementSchedules[0].linkedAccountNormalInterestDue=response.part4?accounting.unformat(response.part4.slice(3)):0;
                         model.loanAccount.precloseurePenalInterest=model.loanAccount.disbursementSchedules[0].linkedAccountPenalInterestDue=response.part5?accounting.unformat(response.part5.slice(3)):0;
-                        model.loanAccount.precloseureTotalFee=model.loanAccount.disbursementSchedules[0].linkedAccountTotalFeeDue=(response.part6?accounting.unformat(response.part6.slice(3)):0)  +  (response.part7?accounting.unformat(response.part7.slice(3)):0);
+                        model.loanAccount.precloseureTotalPreclosureFee=(response.part7?accounting.unformat(response.part7.slice(3)):0);
+                        model.loanAccount.precloseureTotalFee=(response.part6?accounting.unformat(response.part6.slice(3)):0);
+                        model.loanAccount.precloseureTotalPreclosureFee=model.loanAccount.disbursementSchedules[0].linkedAccountPreclosureFee=(response.part7?accounting.unformat(response.part7.slice(3)):0)||7;
+                        model.loanAccount.preTotalFee=model.loanAccount.disbursementSchedules[0].linkedAccountTotalFeeDue= (model.loanAccount.precloseureTotalFee + model.loanAccount.precloseureTotalPreclosureFee);
                     },function(error){
                         model.loanAccount.precloseuredetails=false;
                         PageHelper.showProgress('preclosure', 'Error Getting Preclosure loan details', 2000);

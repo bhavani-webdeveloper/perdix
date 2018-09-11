@@ -69,7 +69,8 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         model.loanAccountDisbursementSchedule.principalDuePayment= resp[0].principalDuePayment;
                         model.loanAccountDisbursementSchedule.linkedAccountNumber= resp[0].linkedAccountNumber;
 
-                        model.loanAccountDisbursementSchedule.linkedAccountTotalFeeDue= resp[0].linkedAccountTotalFeeDue;
+                        model.loanAccountDisbursementSchedule.linkedAccountTotalFeeDue= resp[0].linkedAccountTotalFeeDue- resp[0].linkedAccountPreclosureFee;
+                        model.loanAccountDisbursementSchedule.linkedAccountPreclosureFee=resp[0].linkedAccountPreclosureFee;
                         model.loanAccountDisbursementSchedule.linkedAccountPenalInterestDue= resp[0].linkedAccountPenalInterestDue;
                         model.loanAccountDisbursementSchedule.linkedAccountNormalInterestDue= resp[0].linkedAccountNormalInterestDue;
                         model.loanAccountDisbursementSchedule.linkedAccountTotalPrincipalDue= resp[0].linkedAccountTotalPrincipalDue;
@@ -454,6 +455,10 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                             }, {
                                 "key": "loanAccountDisbursementSchedule.linkedAccountTotalFeeDue",
                                 "title": "TOTAL_FEE_DUE",
+                                "readonly": true
+                            },{
+                                "key": "loanAccountDisbursementSchedule.linkedAccountPreclosureFee",
+                                "title": "TOTAL_PRECLOSURE_FEE_DUE",
                                 "readonly": true
                             }
                         ]
