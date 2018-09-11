@@ -44,7 +44,8 @@ if (isset($_GET)) {
 	'' AS 'OverallPassValue',
 	'' AS 'OverallWeightedScore',
 	'' AS 'OverallPassStatus',
-	'' AS 'Parameters'
+	'' AS 'Parameters',
+    c.customer_category
 	FROM $perdix_db.loan_accounts l
 	LEFT JOIN $perdix_db.loan_customer_relation lcr ON l.id=lcr.loan_id
 	LEFT JOIN $perdix_db.customer app ON (lcr.customer_id=app.id AND LOWER(lcr.relation) IN ('Sole Proprieter', 'APPLICANT'))
@@ -74,6 +75,7 @@ if (isset($_GET)) {
         $loan_purpose_2 = $AvailCustomerParams['loan_purpose_2'];
         $business_type = $AvailCustomerParams['business_type'];
         $existing_customer = $AvailCustomerParams['existing_customer'];
+        $customer_category = $AvailCustomerParams['customer_category'];
 
     } catch (PDOException $e) {
         $error_log['CustomerDetails'] = $e->getMessage();
@@ -375,7 +377,8 @@ if (isset($_GET)) {
 	AND (sc_parameters.loan_purpose_2='All' OR sc_parameters.loan_purpose_2 LIKE '%$loan_purpose_2%')
 	AND (sc_parameters.business_type='All' OR sc_parameters.business_type LIKE '%$business_type%')
 	AND (sc_parameters.existing_customer='All' OR sc_parameters.existing_customer LIKE '%$existing_customer%')
-	AND (sc_parameters.loan_type='All' OR sc_parameters.existing_customer LIKE '%$loan_type%')
+    AND (sc_parameters.loan_type='All' OR sc_parameters.loan_type LIKE '%$loan_type%')
+	AND (sc_parameters.customer_category='All' OR sc_parameters.customer_category LIKE '%$customer_category%')
 	GROUP BY sc_perdixparameters.ParameterName ORDER BY sc_parameters.param_id ASC
 	";
             // echo $GetCustomerInputs; die();

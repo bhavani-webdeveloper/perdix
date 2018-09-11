@@ -18,10 +18,10 @@ define({
             model.enterpriseDetails = res[0];
             model.secName = res[0].data[0]['Sector'];
             model.subSecName = res[0].data[0]['Sub-Sector'];
-            model.scoreDetails = [res[1], res[2], res[3], res[4]];
-            model.CamDetails =[res[7], res[8], res[9], res[10],res[11],res[12]];
-            model.totalScores = res[6];
-            model.deviationDetails = res[7];
+            model.scoreDetails = [res[1], res[2], res[3]];
+            model.CamDetails =[res[6], res[7], res[8], res[9],res[10],res[11]];
+            model.totalScores = res[5];
+            model.deviationDetails = res[6];
 
 
 
@@ -114,18 +114,6 @@ define({
                                 htmlClass: "col-sm-6",
                                 title: model.scoreDetails[2].title,
                                 html: '<h3>{{ model.scoreDetails[2].title }} ({{ model.totalScores.data[0][model.scoreDetails[2].title] }})</h3><table class="table"><colgroup><col width="50%"><col width="10%"><col width="40%"></colgroup><tbody><tr><th>Parameter</th><th></th><th>Actual Value</th></tr><tr ng-repeat="data in model.scoreDetails[2].data"><td>{{ data.Parameter }}</td><td> <span class="square-color-box" style="background: {{ data.color_hexadecimal }}"> </span></td><td>{{ data["Actual Value"] }}</td></tr></tbody></table>'
-                            }
-                        ]
-                    },
-                    {
-                        type: "section",
-                        htmlClass: "row",
-                        items: [
-                            {
-                                type: "section",
-                                htmlClass: "col-sm-6",
-                                title: model.scoreDetails[3].title,
-                                html: '<h3>{{ model.scoreDetails[3].title }} ({{ model.totalScores.data[0][model.scoreDetails[3].title] }})</h3><table class="table"><colgroup><col width="50%"><col width="10%"><col width="40%"></colgroup><tbody><tr><th>Parameter</th><th></th><th>Actual Value</th></tr><tr ng-repeat="data in model.scoreDetails[3].data"><td>{{ data.Parameter }}</td><td> <span class="square-color-box" style="background: {{ data.color_hexadecimal }}"> </span></td><td>{{ data["Actual Value"] }}</td></tr></tbody></table>'
                             }
                         ]
                     }
