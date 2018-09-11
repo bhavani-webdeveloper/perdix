@@ -85,14 +85,15 @@ define({
                     return formHelper;
                 },
                 getResultsPromise: function(searchOptions, pageOpts) {
-                    if(typeof(searchOptions.reference)!= 'undefined' && searchOptions.reference.length==0)
-                    searchOptions.reference=null;
+                    var temp=null;
+                    if(typeof(searchOptions.reference)!= 'undefined' && searchOptions.reference.length!=0)
+                        temp = searchOptions.reference;
                     var promise = LoanCollection.findDepositSummaries({
                         'currentStage': "BRSValidation",
                         'bankAccountNumber': searchOptions.bankAccountNumber,
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage,
-                        'reference':searchOptions.reference
+                        'reference': temp
                     }).$promise;
                     return promise;
                 },
