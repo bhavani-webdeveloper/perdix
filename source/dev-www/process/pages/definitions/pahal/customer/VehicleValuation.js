@@ -1576,6 +1576,12 @@ define(
                                    return false;
                             }
 
+                            if (_.isArray(model.loanAccount.vehicleLoanDetails.vehiclePastValuations) && !model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[0]) {
+                                 PageHelper.showProgress("update-loan", "Please Fill Past Valuation Section", 3000);
+                                 PageHelper.hideLoader();
+                                return false;   
+                            }
+
                             Utils.confirm("Are You Sure?")
                                 .then(
                                     function(){

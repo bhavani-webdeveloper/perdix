@@ -6476,7 +6476,9 @@
                 "TeleVerification",
                 "CreditAppraisal",
                 "LoanInitiation",
-                "LoanBooking"
+                "LoanBooking",
+                "DocumentUpload",
+                "DocumentVerification"
               ]
             },
             "moratoriumPeriodInDays": {
@@ -6493,7 +6495,9 @@
                 "FieldInvestigation3",
                 "TeleVerification",
                 "CreditAppraisal",
-                "LoanInitiation"
+                "LoanInitiation",
+                "DocumentUpload",
+                "DocumentVerification"
               ]
             },
             "disbursementAmount": {
@@ -6508,7 +6512,9 @@
                 "FieldInvestigation3",
                 "TeleVerification",
                 "CreditAppraisal",
-                "LoanInitiation"
+                "LoanInitiation",
+                "DocumentUpload",
+                "DocumentVerification"
               ]
             },
             "disbursementFromBankAccountNumber": {
@@ -6523,7 +6529,9 @@
                 "FieldInvestigation3",
                 "TeleVerification",
                 "CreditAppraisal",
-                "LoanInitiation"
+                "LoanInitiation",
+                "DocumentUpload",
+                "DocumentVerification"
               ]
             },
             "scheduledDisbursementDate": {
@@ -6539,7 +6547,9 @@
                 "TeleVerification",
                 "CreditAppraisal",
                 "LoanInitiation",
-                "LoanBooking"
+                "LoanBooking",
+                "DocumentUpload",
+                "DocumentVerification"
               ]
             },
             "trancheNumber": {
@@ -6554,7 +6564,9 @@
                 "FieldInvestigation3",
                 "TeleVerification",
                 "CreditAppraisal",
-                "LoanInitiation"
+                "LoanInitiation",
+                "DocumentUpload",
+                "DocumentVerification"
               ]
             },
             "tranchCondition": {
@@ -6571,7 +6583,9 @@
                 "FieldInvestigation3",
                 "TeleVerification",
                 "CreditAppraisal",
-                "LoanInitiation"
+                "LoanInitiation",
+                "DocumentUpload",
+                "DocumentVerification"
               ]
             },
             "customerAccountNumber": {
@@ -6624,7 +6638,9 @@
                 "FieldInvestigation3",
                 "TeleVerification",
                 "CreditAppraisal",
-                "LoanInitiation"
+                "LoanInitiation",
+                "DocumentUpload",
+                "DocumentVerification"
               ]
             },
             "customerBankName": {
@@ -6639,7 +6655,9 @@
                 "FieldInvestigation3",
                 "TeleVerification",
                 "CreditAppraisal",
-                "LoanInitiation"
+                "LoanInitiation",
+                "DocumentUpload",
+                "DocumentVerification"
               ]
             },
             "customerBankBranchName": {
@@ -6654,7 +6672,9 @@
                 "FieldInvestigation3",
                 "TeleVerification",
                 "CreditAppraisal",
-                "LoanInitiation"
+                "LoanInitiation",
+                "DocumentUpload",
+                "DocumentVerification"
               ]
             },
             "party": {

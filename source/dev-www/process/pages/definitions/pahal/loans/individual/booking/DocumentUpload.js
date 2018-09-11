@@ -199,7 +199,6 @@ define({
                         type: "lov",
                         autolov: true,
                         title: "CUSTOMER_BANK_ACC_NO",
-                        "condition": "model.loanAccount.disbursementSchedules[0].party=='CUSTOMER'",
                         bindMap: {
                             "customerId": "loanAccount.customerId"
                         },
@@ -242,19 +241,21 @@ define({
 
                             ];
                         }
-                    }, {
-                        key: "loanAccount.customerBankAccountNumber",
-                        title: "CUSTOMER_BANK_ACC_NO",
-                        "condition": "model.loanAccount.disbursementSchedules[0].party=='VENDOR'"
-                    }, {
-                        key: "loanAccount.customerBankIfscCode",
-                        title: "CUSTOMER_BANK_IFSC",
-                        "condition": "model.loanAccount.disbursementSchedules[0].party=='CUSTOMER'"
-                    }, {
+                     },
+                     // {
+                     //    key: "loanAccount.customerBankAccountNumber",
+                     //    title: "CUSTOMER_BANK_ACC_NO",
+                     //    "condition": "model.loanAccount.disbursementSchedules[0].party=='VENDOR'"
+                     // },
+                     // {
+                     //    key: "loanAccount.customerBankIfscCode",
+                     //    title: "CUSTOMER_BANK_IFSC",
+                     //    "condition": "model.loanAccount.disbursementSchedules[0].party=='CUSTOMER'"
+                     // },
+                     {
                         key: "loanAccount.customerBankIfscCode",
                         type: "lov",
                         lovonly: true,
-                        "condition": "model.loanAccount.disbursementSchedules[0].party=='VENDOR'",
                         inputMap: {
                             "ifscCode": {
                                 "key": "loanAccount.customerBankIfscCode"

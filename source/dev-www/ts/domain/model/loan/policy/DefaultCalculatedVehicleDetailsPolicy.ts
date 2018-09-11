@@ -57,7 +57,7 @@ export class DefaultCalculatedVehicleDetailsPolicy extends IPolicy<LoanProcess> 
 
 
                         // Calculation for Km per month
-                        if(_.isArray(loanProcess.loanAccount.vehicleLoanDetails.vehicleRouteDetails) && loanProcess.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].routesKms && loanProcess.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].trips) {
+                        if(_.isArray(loanProcess.loanAccount.vehicleLoanDetails.vehicleRouteDetails) && loanProcess.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0] && loanProcess.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].routesKms && loanProcess.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].trips) {
                             loanProcess.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].kmPerMonth = loanProcess.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].routesKms * loanProcess.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].trips;
                         }
 
