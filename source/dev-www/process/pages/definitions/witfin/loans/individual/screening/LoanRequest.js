@@ -617,9 +617,10 @@ define([], function() {
                     "DeductionsFromLoan.calculateDisbursedAmount",
                     "DeductionsFromLoan.fee3",
                     "DeductionsFromLoan.fee4",
+                    "DeductionsFromLoan.fee5",
                     "DeductionsFromLoan.expectedPortfolioInsurancePremium",
                     "DeductionsFromLoan.dealIrr",
-                    "DeductionsFromLoan.dsaPayout",
+                    "DeductionsFromLoan.dsaPayoutFee",
                     "DeductionsFromLoan.processingFee",
                     "LoanDocuments",
                     "LoanDocuments.loanDocuments",
@@ -917,20 +918,6 @@ define([], function() {
                                             "title": "XIRR",
                                             "type": "number",
                                             "orderNo": 110,
-                                            "readonly": true
-                                        },
-                                        "processingFee":{
-                                            "key": "loanAccount.processingFee",
-                                            "title": "PROCESSING_FEE",
-                                            "type": "number",
-                                            "orderNo": 120,
-                                            "readonly": true
-                                        },
-                                        "dsaPayout":{
-                                            "key": "loanAccount.dsaPayout",
-                                            "title": "DSA_PAYOUT",
-                                            "type": "number",
-                                            "orderNo": 130,
                                             "readonly": true
                                         },
                                         "processingFee":{

@@ -17,6 +17,7 @@ define({
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 // model.branch = branch;
+				model.branch = SessionStore.getCurrentBranch().branchId;
                 $log.info("search-list sample got initialized");
                 // var centres = SessionStore.getCentres();
                 // if (_.isArray(centres) && centres.length > 0) {
@@ -42,14 +43,14 @@ define({
                             "title": "BUSINESS_NAME",
                             "type": "string"
                         },
-                        'branch': {
+	                    'branch': {
 	                    	'title': "BRANCH",
-	                    	"type": ["string", "null"],
-	                    	"enumCode": "branch",
-							"x-schema-form": {
-								"type": "select",
-								"screenFilter": true
-							}
+                            "type": ["string", "null"],
+                            "x-schema-form": {
+                                "type": "userbranch",
+                                "screenFilter": true
+                            },
+                            "readonly": true
 	                    },
                         "centre": {
 							"title": "CENTRE",
@@ -57,10 +58,11 @@ define({
 							"x-schema-form": {
 								"type": "select",
 								"enumCode": "centre",
-								"parentEnumCode": "branch",
+                                "parentEnumCode": "branch",
+                                "parentValueExpr": "model.branch",
 								"screenFilter": true
 							}
-                        },
+						},
                         "customerId": {
                             "title": "CUSTOMER_ID",
                             "type": "string"
@@ -89,7 +91,7 @@ define({
                     }
                     return IndividualLoan.search({
                         'stage': 'FieldInvestigation2',
-                        'branchName': searchOptions.branch,
+                        'branchId': searchOptions.branch,
                         'enterprisePincode': searchOptions.pincode,
                         'enterprisePincode': searchOptions.pincode,
                         'applicantName': searchOptions.applicantName,
@@ -99,7 +101,7 @@ define({
                         'customerName': searchOptions.businessName,
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage,
-                        'centreCode': searchOptions.centreCode
+                        'centreCode': searchOptions.centre
 
                     }).$promise;
                 },

@@ -17,6 +17,7 @@ define({
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 // model.branch = branch;
+                model.branch = SessionStore.getCurrentBranch().branchId;
                 $log.info("search-list sample got initialized");
 
             },
@@ -38,25 +39,26 @@ define({
                             "title": "BUSINESS_NAME",
                             "type": "string"
                         },
-                        'branch': {
-                            'title': "BRANCH",
+	                    'branch': {
+	                    	'title': "BRANCH",
                             "type": ["string", "null"],
-                            "enumCode": "branch",
                             "x-schema-form": {
-                                "type": "select",
+                                "type": "userbranch",
                                 "screenFilter": true
-                            }
-                        },
+                            },
+                            "readonly": true
+	                    },
                         "centre": {
-                            "title": "CENTRE",
-                            "type": ["integer", "null"],
-                            "x-schema-form": {
-                                "type": "select",
-                                "enumCode": "centre",
+							"title": "CENTRE",
+							"type": ["integer", "null"],
+							"x-schema-form": {
+								"type": "select",
+								"enumCode": "centre",
                                 "parentEnumCode": "branch",
-                                "screenFilter": true
-                            }
-                        },
+                                "parentValueExpr": "model.branch",
+								"screenFilter": true
+							}
+						},
                         "customerId": {
                             "title": "CUSTOMER_ID",
                             "type": "string"
@@ -84,7 +86,7 @@ define({
                         searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
                     }
                     return IndividualLoan.search({
-                        'branchName':searchOptions.branch,
+                        'branchId':searchOptions.branch,
                         'stage': 'CreditApproval1',
                         'enterprisePincode':searchOptions.pincode,
                         'applicantName':searchOptions.applicantName,
