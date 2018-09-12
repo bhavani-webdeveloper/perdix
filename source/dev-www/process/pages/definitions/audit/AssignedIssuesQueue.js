@@ -29,7 +29,7 @@ irf.pageCollection.factory(irf.page("audit.AssignedIssuesQueue"), ["$log", "Page
                             "type": "number",
                             "enumCode": "branch_id",
                             "x-schema-form": {
-                                "type": "select"
+                                "type": "userbranch"
                             }
                         }
                     },

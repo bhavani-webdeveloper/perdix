@@ -28,7 +28,7 @@ irf.pageCollection.factory(irf.page("audit.AssignedIssuesViewQueue"), ["$log", "
                             "type": "number",
                             "enumCode": "branch_id",
                             "x-schema-form": {
-                                "type": "select"
+                                "type": "userbranch"
                             }
                         },
                         "user_name": {

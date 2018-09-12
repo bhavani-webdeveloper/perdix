@@ -123,7 +123,7 @@ irf.pageCollection.factory(irf.page("audit.AuditDumpsQueue"), ["$log","Queries",
                             "type": ["null", "integer"],
                             "enumCode": "branch_id",
                             "x-schema-form": {
-                                "type": "select"
+                                "type": "userbranch"
                             }
                         },
                         "start_date": {

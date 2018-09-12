@@ -107,7 +107,7 @@ irf.pageCollection.factory(irf.page("audit.RejectedAuditsQueue"), ["$log", "Quer
                             "type": "number",
                             "enumCode": "branch_id",
                             "x-schema-form": {
-                                "type": "select"
+                                "type": "userbranch"
                             }
                         },
                         "audit_type": {
