@@ -158,7 +158,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.DoPartnerReview"
                     }, {
                         key: "review.proceedButton",
                         type: "button",
-                        title: "PROCEED",
+                        title: "SEND_BACK",
                         onClick: "actions.sendBack(model, formCtrl, form, $event)"
                     }]
                 }, ]
@@ -184,7 +184,10 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.DoPartnerReview"
                 }
             },
             actions: {
-                proceed: function(model, form, formName) {
+                proceed: function(model, formCtrl, form, $event) {
+                    if(PageHelper.isFormInvalid(formCtrl)) {
+                            return false;
+                    }
                     Utils.confirm("Are you sure?").then(function() {
                         // var loanAccounts = model.review;
                         PageHelper.showLoader();
@@ -228,6 +231,9 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.DoPartnerReview"
                 },
                 reject: function(model, formCtrl, form, $event) {
                     $log.info("Inside reject()");
+                    if(PageHelper.isFormInvalid(formCtrl)) {
+                            return false;
+                    }
                     Utils.confirm("Are you sure?").then(function() {
                         // var loanAccounts = model.review;
                         PageHelper.showLoader();
@@ -273,6 +279,9 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.DoPartnerReview"
                 },
                 sendBack: function(model, formCtrl, form, $event) {
                     $log.info("rejecting");
+                    if(PageHelper.isFormInvalid(formCtrl)) {
+                            return false;
+                    }
                     Utils.confirm("Are you sure?").then(function() {
                         // var loanAccounts = model.review;
                         PageHelper.showLoader();
