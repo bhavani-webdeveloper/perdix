@@ -23,7 +23,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.LoanOriginationQ
 						"stage": {
 							"title": "STAGE",
 							"type": ["string", "null"],
-							"enumCode": "origination_stage_witfin",
+							"enumCode": "origination_stage",
 							"x-schema-form": {
 								"type": "select",
 
@@ -99,7 +99,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.LoanOriginationQ
 	                    'applicantName':searchOptions.applicantName,
 	                    'accountNumber':searchOptions.accountNumber,
 	                    'area':searchOptions.area,
-	                    'villageName':searchOptions.villageName,	                    
+	                    'villageName':searchOptions.villageName,
 	                    'customerName': searchOptions.businessName,
 	                    'page': pageOpts.pageNo,
 	                    'per_page': pageOpts.itemsPerPage,
