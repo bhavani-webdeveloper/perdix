@@ -257,11 +257,9 @@ define({
                     PageHelper.clearErrors();
                     model.groupAction = "SAVE";
                     model.group.groupStatus=false;
-                    if(model.group.groupCategory=="Perdix7"){
                     	var reqData={};
-                    	reqData.groupId=model.group.id;
-                    	reqData.remarks=model.group.remarks;
-                    	GroupProcess.closeLegacyGroup(reqData,function(res){
+						var reqData = _.cloneDeep(model);
+                    	GroupProcess.closeGroup(reqData,function(res){
                     		PageHelper.hideLoader();
 	                        irfProgressMessage.pop('Close-proceed', 'Operation Succeeded.', 5000);
 	                        irfNavigator.goBack();
@@ -269,19 +267,7 @@ define({
 	                        PageHelper.hideLoader();
 	                        irfProgressMessage.pop('Close-proceed', 'Oops. Some error.', 2000);
 	                        PageHelper.showErrors(res);
-	                    });	
-                    }else{
-                    	var reqData = _.cloneDeep(model);
-	                    GroupProcess.updateGroup(reqData, function(res) {
-	                        PageHelper.hideLoader();
-	                        irfProgressMessage.pop('Close-proceed', 'Operation Succeeded.', 5000);
-	                        irfNavigator.goBack();
-	                    }, function(res) {
-	                        PageHelper.hideLoader();
-	                        irfProgressMessage.pop('Close-proceed', 'Oops. Some error.', 2000);
-	                        PageHelper.showErrors(res);
-	                    });	
-                    }   
+	                    });
 				},
 				goBack: function(model, form) {
 					irfNavigator.goBack();
