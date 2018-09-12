@@ -216,6 +216,7 @@ irf.pageCollection.controller(irf.controller("pahal.loans.LoanOriginationDashboa
                     'customerName': '',
                     'page': 1,
                     'per_page': 1,
+                    'branchName': currentBranch.branchName
                 }).$promise.then(function(response, headerGetter) {
                     srqMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
@@ -270,6 +271,8 @@ irf.pageCollection.controller(irf.controller("pahal.loans.LoanOriginationDashboa
                     'customerName': '',
                     'page': 1,
                     'per_page': 1,
+                    'branchName': currentBranch.branchName,
+                    'centreCode': centre.centreCode
                 }).$promise.then(function(response, headerGetter) {
                     appMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
@@ -288,6 +291,7 @@ irf.pageCollection.controller(irf.controller("pahal.loans.LoanOriginationDashboa
                     'customerName': '',
                     'page': 1,
                     'per_page': 1,
+                    'branchName': currentBranch.branchName
                 }).$promise.then(function(response, headerGetter) {
                     apprMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
@@ -343,6 +347,7 @@ irf.pageCollection.controller(irf.controller("pahal.loans.LoanOriginationDashboa
                     'customerName': '',
                     'page': 1,
                     'per_page': 1,
+                    'branchName': currentBranch.branchName
                 }).$promise.then(function(response, headerGetter) {
                     fiq1Menu.data = Number(response.headers['x-total-count']);
                 }, function() {
@@ -361,6 +366,7 @@ irf.pageCollection.controller(irf.controller("pahal.loans.LoanOriginationDashboa
                     'customerName': '',
                     'page': 1,
                     'per_page': 1,
+                    'branchName': currentBranch.branchName
                 }).$promise.then(function(response, headerGetter) {
                     fiq2Menu.data = Number(response.headers['x-total-count']);
                 }, function() {

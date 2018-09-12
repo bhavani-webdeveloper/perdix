@@ -30,6 +30,25 @@ define({
                             "title": "BUSINESS_NAME",
                             "type": "string"
                         },
+                        'branch': {
+                            'title': "BRANCH",
+                            "type": ["string", "null"],
+                            "enumCode": "branch",
+                            "x-schema-form": {
+                                "type": "select",
+                                "screenFilter": true
+                            }
+                        },
+                        "centre": {
+                            "title": "CENTRE",
+                            "type": ["integer", "null"],
+                            "x-schema-form": {
+                                "type": "select",
+                                "enumCode": "centre",
+                                "parentEnumCode": "branch",
+                                "screenFilter": true
+                            }
+                        },
                         "customerId": {
                             "title": "CUSTOMER_ID",
                             "type": "string"
@@ -95,6 +114,8 @@ define({
                             item.area,
                             item.villageName,
                             item.enterprisePincode,
+                            item.branchName,
+                            item.centreName
 
                         ]
                     },
@@ -127,6 +148,12 @@ define({
                         }, {
                             title: 'PIN_CODE',
                             data: 'enterprisePincode'
+                        }, {
+                            title: 'BRANCH_NAME',
+                            data: 'branchName'
+                        }, {
+                            title: 'CENTRE_NAME',
+                            data: 'centreName'
                         }]
                     },
                     getActions: function() {

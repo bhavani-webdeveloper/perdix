@@ -30,7 +30,16 @@ define({
 					"type": 'object',
 					"title": 'SEARCH_OPTIONS',
 					"properties": {
-						"centre": {
+						'branch': {
+                            'title': "BRANCH",
+                            "type": ["string", "null"],
+                            "enumCode": "branch",
+                            "x-schema-form": {
+                                "type": "select",
+                                "screenFilter": true
+                            }
+                        },
+                        "centre": {
 							"title": "CENTRE",
 							"type": ["integer", "null"],
 							"x-schema-form": {
@@ -115,7 +124,9 @@ define({
 							item.customerName,
 							item.area,
 							item.villageName,
-							item.enterprisePincode
+							item.enterprisePincode,
+							item.branchName,
+                            item.centreName
 						]
 					},
 					getTableConfig: function() {
@@ -136,7 +147,13 @@ define({
 						},{
 							title: 'BUSINESS_NAME',
 							data: 'customerName'
-						}]
+						}, {
+                            title: 'BRANCH_NAME',
+                            data: 'branchName'
+                        }, {
+                            title: 'CENTRE_NAME',
+                            data: 'centreName'
+                        }]
 					},
 					getActions: function() {
 						return [{

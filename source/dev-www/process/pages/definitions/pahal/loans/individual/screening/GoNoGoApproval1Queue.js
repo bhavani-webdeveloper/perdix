@@ -30,6 +30,15 @@ define({
                             "title": "BUSINESS_NAME",
                             "type": "string"
                         },
+                        'branch': {
+                            'title': "BRANCH",
+                            "type": ["string", "null"],
+                            "enumCode": "branch",
+                            "x-schema-form": {
+                                "type": "userbranch",
+                                "screenFilter": true
+                            }
+                        },
                         "customerId": {
                             "title": "CUSTOMER_ID",
                             "type": "string"
@@ -92,6 +101,7 @@ define({
                             item.screeningDate,
                             item.applicantName,
                             item.customerName,
+                            item.branchName,
                             item.area,
                             item.villageName,
                             item.enterprisePincode,
@@ -119,6 +129,9 @@ define({
                             title: 'BUSINESS_NAME',
                             data: 'customerName'
                         }, {
+                            title: 'BRANCH_NAME',
+                            data: 'branchName'
+                        },{
                             title: 'AREA',
                             data: 'area'
                         }, {
