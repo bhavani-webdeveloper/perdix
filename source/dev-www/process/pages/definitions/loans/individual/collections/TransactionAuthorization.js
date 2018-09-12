@@ -81,30 +81,44 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                                     model.transAuth.amountCollected = model._transAuth.repaymentAmount;
                                     model.loanCollection = _.cloneDeep(model._transAuth);
 
+                                    /* Resetting the dues based on Current Loan Account Details */
+                                    var principalDue = parseFloat(data.totalPrincipalDue);
+                                    var normalInterestDue = parseFloat(data.totalNormalInterestDue);
+                                    var penalInterestDue = parseFloat(data.totalPenalInterestDue);
+                                    var feeDue = parseFloat(data.totalFeeDue);
+
                                     model._transAuth.penalInterestWaiverAmount = 0;
                                     model._transAuth.feeWaiverAmount = 0;
                                     model._transAuth.feeAmount = 0;
                                     model._transAuth.scheduleDemandAmount = 0;
                                     model._transAuth.securityEmiAmount = 0;
-                                    model._transAuth.bookedNotDuePenalInterest=0;
+                                    model._transAuth.bookedNotDuePenalInterest = 0;
 
                                     /* Amount Allocation */
                                     if (model._transAuth.transactionName == 'Scheduled Demand') {
                                         var amountAvailable = model._transAuth.repaymentAmount;
 
                                         /* Allocating Security EMI Demand */
-                                        model._transAuth.securityEmiAmount = model.loanAccount.totalSecurityDepositDue;
-                                        amountAvailable = amountAvailable - model._transAuth.securityEmiAmount;
+                                        if(amountAvailable>0 && model.loanAccount.totalSecurityDepositDue>0){
+                                            if(amountAvailable>model.loanAccount.totalSecurityDepositDue) {
+                                                model._transAuth.securityEmiAmount = model.loanAccount.totalSecurityDepositDue;
+                                                amountAvailable = amountAvailable - model._transAuth.securityEmiAmount;
+                                            }
+                                            else{
+                                                model._transAuth.securityEmiAmount = amountAvailable;
+                                                amountAvailable = amountAvailable - model._transAuth.securityEmiAmount;
+                                            }
+                                        }
 
                                         /* Allocating Demand */
 
                                         if (amountAvailable > 0) {
                                             if (model.EMIAllocation && !model._transAuth.penalInterestDue) {
-                                                model._transAuth.scheduleDemandAmount = Utils.roundToDecimal(Math.min((model._transAuth.principalDue + model._transAuth.interestAmount), amountAvailable));
+                                                model._transAuth.scheduleDemandAmount = Utils.roundToDecimal(Math.min((principalDue + normalInterestDue), amountAvailable));
                                                 amountAvailable = Utils.roundToDecimal(amountAvailable - model._transAuth.scheduleDemandAmount);
                                                 model._transAuth.penalInterestWaiverAmount = 0;
                                             } else {
-                                                model._transAuth.scheduleDemandAmount = Utils.roundToDecimal(Math.min((model._transAuth.principalDue + model._transAuth.interestAmount + model._transAuth.penalInterestDue), amountAvailable));
+                                                model._transAuth.scheduleDemandAmount = Utils.roundToDecimal(Math.min((principalDue + normalInterestDue + penalInterestDue), amountAvailable));
                                                 amountAvailable = Utils.roundToDecimal(amountAvailable - model._transAuth.scheduleDemandAmount);
                                                 model._transAuth.penalInterestWaiverAmount = 0;
                                             }
@@ -116,7 +130,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                                         }
                                         /* Allocating Fee */
                                         if (amountAvailable > 0) {
-                                            model._transAuth.feeAmount = Utils.roundToDecimal(Math.min(amountAvailable, model._transAuth.feeDue));
+                                            model._transAuth.feeAmount = Utils.roundToDecimal(Math.min(amountAvailable, feeDue));
                                             amountAvailable = Utils.roundToDecimal(amountAvailable - model._transAuth.feeAmount);
                                         }
                                         /* Allocating Future Principal */
