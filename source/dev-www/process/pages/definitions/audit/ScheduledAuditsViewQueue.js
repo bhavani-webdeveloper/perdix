@@ -72,7 +72,7 @@ irf.pageCollection.factory(irf.page("audit.ScheduledAuditsViewQueue"), ["$log", 
                             "type": "number",
                             "enumCode": "branch_id",
                             "x-schema-form": {
-                                "type": "select"
+                                "type": "userbranch"
                             }
                         },
                         "start_date": {
