@@ -956,6 +956,16 @@
               "Completed"
             ]
           },
+		   "yearsOfExperience": {
+            "title": "yearsOfExperience",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
           "accomodationType": {
             "title": "accomodationType",
             "type": "string",
@@ -2746,6 +2756,16 @@
           },
           "designation": {
             "title": "designation",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+		  "yearsOfExperience": {
+            "title": "yearsOfExperience",
             "type": "string",
             "minLength": 1,
             "maxLength": 100,
