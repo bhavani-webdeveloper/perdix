@@ -12,13 +12,93 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter, Utils){
 	var masterUpdateRegistry = {};
 
 	var retrieveItem = function(key) {
-		return LZString.decompress(localStorage.getItem(key));
+		if (MSIE.FileSystem) {
+			try {
+				var fp = MSIE.FileSystem.OpenTextFile(MSIE.FileSystemDirectory + key, 1, true);
+				var fc = LZString.decompress(fp.ReadAll());
+				fp.Close();
+				return fc;
+			} catch (e) {
+				if (e.number == MSIE.FileSystemErrorCode) {
+					Utils.alert(MSIE.FileSystemErrorMessage);
+				} else {
+					Utils.alert("FATAL ERROR: Reading from storage failed for " + key);
+					$log.error(e);
+				}
+			}
+		} else {
+			try {
+				return LZString.decompress(localStorage.getItem(key));
+			} catch (e) {
+				Utils.alert("FATAL ERROR: Reading from local storage failed for " + key);
+				$log.error(e);
+			}
+		}
 	};
 	var storeItem = function(key, value) {
-		localStorage.setItem(key, LZString.compress(value));
+		if (MSIE.FileSystem) {
+			try {
+				var fp = MSIE.FileSystem.CreateTextFile(MSIE.FileSystemDirectory + key, 1, true);
+				fp.WriteLine(LZString.compress(value));
+				fp.Close();
+			} catch (e) {
+				if (e.number == MSIE.FileSystemErrorCode) {
+					Utils.alert(MSIE.FileSystemErrorMessage);
+				} else {
+					Utils.alert("FATAL ERROR: Writing into storage failed for " + key);
+					$log.error(e);
+				}
+			}
+		} else {
+			try {
+				localStorage.setItem(key, LZString.compress(value));
+			} catch (e) {
+				Utils.alert("FATAL ERROR: Writing into local storage failed for " + key);
+				$log.error(e);
+			}
+		}
 	};
 	var removeItem = function(key) {
-		localStorage.removeItem(key);
+		if (MSIE.FileSystem) {
+			try {
+				 MSIE.FileSystem.DeleteFile(MSIE.FileSystemDirectory + key, true);
+			} catch (e) {
+				if (e.number == MSIE.FileSystemErrorCode) {
+					alert(MSIE.FileSystemErrorMessage);
+				} else {
+					Utils.alert("FATAL ERROR: Deleting storage failed for " + key);
+					$log.error(e);
+				}
+			}
+		} else {
+			try {
+				localStorage.removeItem(key);
+			} catch (e) {
+				Utils.alert("FATAL ERROR: Deleting local storage failed for " + key);
+				$log.error(e);
+			}
+		}
+	};
+	var clear = function() {
+		if (MSIE.FileSystem) {
+			try {
+				 MSIE.FileSystem.DeleteFolder(MSIE.FileSystemDirectory, true);
+				 MSIE.FileSystem.CreateFolder(MSIE.FileSystemDirectory, true);
+			} catch (e) {
+				if (e.number == MSIE.FileSystemErrorCode) {
+					alert(MSIE.FileSystemErrorMessage);
+				} else {
+					Utils.alert("FATAL ERROR: Clearing storage failed");
+					$log.error(e);
+				}
+			}
+		}
+		try {
+			localStorage.clear();
+		} catch (e) {
+			Utils.alert("FATAL ERROR: Clearing local storage failed");
+			$log.error(e);
+		}
 	};
 	var masters = {};
 	var processMasters = function(codes) {
@@ -93,6 +173,7 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter, Utils){
 		removeJSON: function(key){
 			removeItem(key);
 		},
+		clear: clear,
 		getMasterJSON: function(key, cb) {
 			var master = retrieveItem(key);
 			try {
@@ -273,7 +354,7 @@ irf.commons.provider("formHelper", function() {
 			userBranchTree.branchMap = branches.reduce((map, current) => {map[current[id]] = current; return map}, {});
 			userBranchTree.branchMap[chooseBranch[id]] = chooseBranch;
 			return userBranchTree;
-		},
+			},
 		save: function(model, formCtrl, formName, actions) {
 			var pageName = formName.substring(6).replace(/\_/g, '.').replace(/\.\./g, '__');
 			var promise = true;
