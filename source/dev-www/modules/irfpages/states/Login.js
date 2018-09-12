@@ -62,14 +62,14 @@ function($scope, authService, $log, $state, $stateParams, $timeout, irfStorageSe
 		if (userData && userData.login && username.toLowerCase() !== userData.login.toLowerCase()) {
 			if (autoLogin) {
 				$log.info('auto login - clearing all offline records');
-				localStorage.clear();
+				irfStorageService.clear();
 				SessionStore.clear();
 				successLogin(true);
 			} else {
 				Utils.confirm('User is different. This will clear all data saved by previous user ('+
 					userData.login+'). Do you want to proceed?', 'User Data Clear Alert').then(function() {
 					$log.info('clearing all offline records');
-					localStorage.clear();
+					irfStorageService.clear();
 					SessionStore.clear();
 					$timeout(function() {
 						doLogin(username, password, true);
