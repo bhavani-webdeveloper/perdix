@@ -160,7 +160,6 @@ irf.pageCollection.controller(irf.controller("pahal.loans.LoanOriginationDashboa
             _.forEach(centres, function(centre) {
                 if (rfqMenu) {
                     Lead.search({
-                        'branchName': branchName,
                         'currentStage': "ReadyForScreening",
                         'leadName': '',
                         'area': '',
@@ -195,7 +194,6 @@ irf.pageCollection.controller(irf.controller("pahal.loans.LoanOriginationDashboa
                         'customerName': '',
                         'page': 1,
                         'per_page': 1,
-                        'branchName': currentBranch.branchName,
                         'centreCode': centre.centreCode
                     }).$promise.then(function(response, headerGetter) {
                         sqMenu.data = sqMenu.data + Number(response.headers['x-total-count']);
@@ -207,6 +205,7 @@ irf.pageCollection.controller(irf.controller("pahal.loans.LoanOriginationDashboa
 
             var srqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.ScreeningReviewQueue"];
             if (srqMenu) {
+                srqMenu.data = 0;
                 IndividualLoan.search({
                     'stage': 'ScreeningReview',
                     'enterprisePincode': '',
@@ -218,7 +217,7 @@ irf.pageCollection.controller(irf.controller("pahal.loans.LoanOriginationDashboa
                     'per_page': 1,
                     'branchName': currentBranch.branchName
                 }).$promise.then(function(response, headerGetter) {
-                    srqMenu.data = Number(response.headers['x-total-count']);
+                    srqMenu.data = srqMenu.data + Number(response.headers['x-total-count']);
                 }, function() {
                     srqMenu.data = '-';
                 });
@@ -226,6 +225,7 @@ irf.pageCollection.controller(irf.controller("pahal.loans.LoanOriginationDashboa
 
             var gng1Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.GoNoGoApproval1Queue"];
             if (gng1Menu) {
+                gng1Menu.data = 0;
                 IndividualLoan.search({
                     'stage': 'GoNoGoApproval1',
                     'enterprisePincode': '',
@@ -236,7 +236,7 @@ irf.pageCollection.controller(irf.controller("pahal.loans.LoanOriginationDashboa
                     'page': 1,
                     'per_page': 1,
                 }).$promise.then(function(response, headerGetter) {
-                    gng1Menu.data = Number(response.headers['x-total-count']);
+                    gng1Menu.data = gng1Menu.data + Number(response.headers['x-total-count']);
                 }, function() {
                     gng1Menu.data = '-';
                 });
@@ -244,6 +244,7 @@ irf.pageCollection.controller(irf.controller("pahal.loans.LoanOriginationDashboa
 
             var gng2Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.GoNoGoApproval2Queue"];
             if (gng2Menu) {
+                gng2Menu.data = 0;
                 IndividualLoan.search({
                     'stage': 'GoNoGoApproval2',
                     'enterprisePincode': '',
@@ -254,7 +255,7 @@ irf.pageCollection.controller(irf.controller("pahal.loans.LoanOriginationDashboa
                     'page': 1,
                     'per_page': 1,
                 }).$promise.then(function(response, headerGetter) {
-                    gng2Menu.data = Number(response.headers['x-total-count']);
+                    gng2Menu.data = gng2Menu.data + Number(response.headers['x-total-count']);
                 }, function() {
                     gng2Menu.data = '-';
                 });
@@ -262,26 +263,29 @@ irf.pageCollection.controller(irf.controller("pahal.loans.LoanOriginationDashboa
 
             var appMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.ApplicationQueue"];
             if (appMenu) {
-                IndividualLoan.search({
-                    'stage': 'Application',
-                    'enterprisePincode': '',
-                    'applicantName': '',
-                    'area': '',
-                    'villageName': '',
-                    'customerName': '',
-                    'page': 1,
-                    'per_page': 1,
-                    'branchName': currentBranch.branchName,
-                    'centreCode': centre.centreCode
-                }).$promise.then(function(response, headerGetter) {
-                    appMenu.data = Number(response.headers['x-total-count']);
-                }, function() {
-                    appMenu.data = '-';
-                });
+                appMenu.data = 0;
+                _.forEach(centres, function(centre) {    
+                        IndividualLoan.search({
+                            'stage': 'Application',
+                            'enterprisePincode': '',
+                            'applicantName': '',
+                            'area': '',
+                            'villageName': '',
+                            'customerName': '',
+                            'page': 1,
+                            'per_page': 1,
+                            'centreCode': centre.centreCode
+                        }).$promise.then(function(response, headerGetter) {
+                            appMenu.data = appMenu.data + Number(response.headers['x-total-count']);
+                        }, function() {
+                            appMenu.data = '-';
+                        });
+                    });      
             }
 
             var apprMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.ApplicationReviewQueue"];
             if (apprMenu) {
+                apprMenu.data = 0;
                 IndividualLoan.search({
                     'stage': 'ApplicationReview',
                     'enterprisePincode': '',
@@ -293,7 +297,7 @@ irf.pageCollection.controller(irf.controller("pahal.loans.LoanOriginationDashboa
                     'per_page': 1,
                     'branchName': currentBranch.branchName
                 }).$promise.then(function(response, headerGetter) {
-                    apprMenu.data = Number(response.headers['x-total-count']);
+                    apprMenu.data = apprMenu.data + Number(response.headers['x-total-count']);
                 }, function() {
                     apprMenu.data = '-';
                 });
@@ -301,6 +305,7 @@ irf.pageCollection.controller(irf.controller("pahal.loans.LoanOriginationDashboa
 
             var tvq1Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.TeleVerificationQueue"];
             if (tvq1Menu) {
+                tvq1Menu.data = 0;
                 IndividualLoan.search({
                     'stage': 'TeleVerification',
                     'enterprisePincode': '',
@@ -311,7 +316,7 @@ irf.pageCollection.controller(irf.controller("pahal.loans.LoanOriginationDashboa
                     'page': 1,
                     'per_page': 1,
                 }).$promise.then(function(response, headerGetter) {
-                    tvq1Menu.data = Number(response.headers['x-total-count']);
+                    tvq1Menu.data = tvq1Menu.data + Number(response.headers['x-total-count']);
                 }, function() {
                     tvq1Menu.data = '-';
                 });
@@ -320,6 +325,7 @@ irf.pageCollection.controller(irf.controller("pahal.loans.LoanOriginationDashboa
 
             var prqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.VehicleValuationQueue"];
             if (prqMenu) {
+                prqMenu.data = 0;
                 IndividualLoan.search({
                     'stage': 'VehicleValuation',
                     'enterprisePincode': '',
@@ -330,7 +336,7 @@ irf.pageCollection.controller(irf.controller("pahal.loans.LoanOriginationDashboa
                     'page': 1,
                     'per_page': 1,
                 }).$promise.then(function(response, headerGetter) {
-                    prqMenu.data = Number(response.headers['x-total-count']);
+                    prqMenu.data = prqMenu.data + Number(response.headers['x-total-count']);
                 }, function() {
                     prqMenu.data = '-';
                 });
@@ -338,6 +344,7 @@ irf.pageCollection.controller(irf.controller("pahal.loans.LoanOriginationDashboa
 
             var fiq1Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.FieldInvestigation1Queue"];
             if (fiq1Menu) {
+                fiq1Menu.data = 0 ;
                 IndividualLoan.search({
                     'stage': 'FieldInvestigation1',
                     'enterprisePincode': '',
@@ -349,7 +356,7 @@ irf.pageCollection.controller(irf.controller("pahal.loans.LoanOriginationDashboa
                     'per_page': 1,
                     'branchName': currentBranch.branchName
                 }).$promise.then(function(response, headerGetter) {
-                    fiq1Menu.data = Number(response.headers['x-total-count']);
+                    fiq1Menu.data = fiq1Menu.data + Number(response.headers['x-total-count']);
                 }, function() {
                     fiq1Menu.data = '-';
                 });
@@ -357,6 +364,7 @@ irf.pageCollection.controller(irf.controller("pahal.loans.LoanOriginationDashboa
 
             var fiq2Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.FieldInvestigation2Queue"];
             if (fiq2Menu) {
+                fiq2Menu.data = 0;
                 IndividualLoan.search({
                     'stage': 'FieldInvestigation2',
                     'enterprisePincode': '',
@@ -368,7 +376,7 @@ irf.pageCollection.controller(irf.controller("pahal.loans.LoanOriginationDashboa
                     'per_page': 1,
                     'branchName': currentBranch.branchName
                 }).$promise.then(function(response, headerGetter) {
-                    fiq2Menu.data = Number(response.headers['x-total-count']);
+                    fiq2Menu.data = fiq2Menu.data +Number(response.headers['x-total-count']);
                 }, function() {
                     fiq2Menu.data = '-';
                 });
@@ -376,6 +384,7 @@ irf.pageCollection.controller(irf.controller("pahal.loans.LoanOriginationDashboa
 
             var fiq3Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.FieldInvestigation3Queue"];
             if (fiq3Menu) {
+                fiq3Menu.data = 0;
                 IndividualLoan.search({
                     'stage': 'FieldInvestigation3',
                     'enterprisePincode': '',
@@ -386,7 +395,7 @@ irf.pageCollection.controller(irf.controller("pahal.loans.LoanOriginationDashboa
                     'page': 1,
                     'per_page': 1,
                 }).$promise.then(function(response, headerGetter) {
-                    fiq3Menu.data = Number(response.headers['x-total-count']);
+                    fiq3Menu.data = fiq3Menu.data + Number(response.headers['x-total-count']);
                 }, function() {
                     fiq3Menu.data = '-';
                 });
@@ -395,6 +404,7 @@ irf.pageCollection.controller(irf.controller("pahal.loans.LoanOriginationDashboa
 
             var caqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.CreditAppraisalQueue"];
             if (caqMenu) {
+                caqMenu.data = 0;
                 IndividualLoan.search({
                     'stage': 'CreditAppraisal',
                     'enterprisePincode': '',
@@ -405,7 +415,7 @@ irf.pageCollection.controller(irf.controller("pahal.loans.LoanOriginationDashboa
                     'page': 1,
                     'per_page': 1,
                 }).$promise.then(function(response, headerGetter) {
-                    caqMenu.data = Number(response.headers['x-total-count']);
+                    caqMenu.data = caqMenu.data + Number(response.headers['x-total-count']);
                 }, function() {
                     caqMenu.data = '-';
                 });
@@ -414,6 +424,7 @@ irf.pageCollection.controller(irf.controller("pahal.loans.LoanOriginationDashboa
 
             var daq1Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.DeviationApprovalQueue"];
             if (daq1Menu) {
+                daq1Menu.data = 0;
                 IndividualLoan.search({
                     'stage': 'DeviationApproval',
                     'enterprisePincode': '',
@@ -424,7 +435,7 @@ irf.pageCollection.controller(irf.controller("pahal.loans.LoanOriginationDashboa
                     'page': 1,
                     'per_page': 1,
                 }).$promise.then(function(response, headerGetter) {
-                    daq1Menu.data = Number(response.headers['x-total-count']);
+                    daq1Menu.data = daq1Menu.data + Number(response.headers['x-total-count']);
                 }, function() {
                     daq1Menu.data = '-';
                 });
@@ -433,6 +444,7 @@ irf.pageCollection.controller(irf.controller("pahal.loans.LoanOriginationDashboa
             var caq1Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.CreditApproval1Queue"];
 
             if (caq1Menu) {
+                caq1Menu.data = 0;
                 IndividualLoan.search({
                     'stage': 'CreditApproval1',
                     'enterprisePincode': '',
@@ -443,7 +455,7 @@ irf.pageCollection.controller(irf.controller("pahal.loans.LoanOriginationDashboa
                     'page': 1,
                     'per_page': 1,
                 }).$promise.then(function(response, headerGetter) {
-                    caq1Menu.data = Number(response.headers['x-total-count']);
+                    caq1Menu.data = caq1Menu.data + Number(response.headers['x-total-count']);
                 }, function() {
                     caq1Menu.data = '-';
                 });
@@ -452,6 +464,7 @@ irf.pageCollection.controller(irf.controller("pahal.loans.LoanOriginationDashboa
             var caq2Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.CreditApproval2Queue"];
 
             if (caq2Menu) {
+                caq2Menu.data = 0;
                 IndividualLoan.search({
                     'stage': 'CreditApproval2',
                     'enterprisePincode': '',
@@ -462,7 +475,7 @@ irf.pageCollection.controller(irf.controller("pahal.loans.LoanOriginationDashboa
                     'page': 1,
                     'per_page': 1,
                 }).$promise.then(function(response, headerGetter) {
-                    caq2Menu.data = Number(response.headers['x-total-count']);
+                    caq2Menu.data = caq2Menu.data + Number(response.headers['x-total-count']);
                 }, function() {
                     caq2Menu.data = '-';
                 });
@@ -470,6 +483,7 @@ irf.pageCollection.controller(irf.controller("pahal.loans.LoanOriginationDashboa
 
             var rjqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.RejectedQueue"];
             if (rjqMenu) {
+                rjqMenu.data = 0;
                 IndividualLoan.search({
                     'stage': 'Rejected',
                     'enterprisePincode': '',
@@ -480,7 +494,7 @@ irf.pageCollection.controller(irf.controller("pahal.loans.LoanOriginationDashboa
                     'page': 1,
                     'per_page': 1,
                 }).$promise.then(function(response, headerGetter) {
-                    rjqMenu.data = Number(response.headers['x-total-count']);
+                    rjqMenu.data = rjqMenu.data + Number(response.headers['x-total-count']);
                 }, function() {
                     rjqMenu.data = '-';
                 });

@@ -30,6 +30,15 @@ define({
                             "title": "BUSINESS_NAME",
                             "type": "string"
                         },
+                        'branch': {
+                            'title': "BRANCH",
+                            "type": ["string", "null"],
+                            "enumCode": "branch",
+                            "x-schema-form": {
+                                "type": "select",
+                                "screenFilter": true
+                            }
+                        },
                         "customerId": {
                             "title": "CUSTOMER_ID",
                             "type": "string"
@@ -55,7 +64,7 @@ define({
                 getResultsPromise: function(searchOptions, pageOpts) {
                     return IndividualLoan.search({
                         'stage': 'GoNoGoApproval2',
-                        'branchName': branch,
+                        'branchName': searchOptions.branch,
                         'enterprisePincode': searchOptions.pincode,
                         'enterprisePincode': searchOptions.pincode,
                         'applicantName': searchOptions.applicantName,
@@ -118,6 +127,9 @@ define({
                         }, {
                             title: 'BUSINESS_NAME',
                             data: 'customerName'
+                        }, {
+                            title: 'BRANCH_NAME',
+                            data: 'branchName'
                         }, {
                             title: 'AREA',
                             data: 'area'

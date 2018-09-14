@@ -16,7 +16,8 @@ define({
 			"title": "SCREENING_REVIEW_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
-				// model.branch = branch;
+				model.branch = SessionStore.getCurrentBranch().branchName;
+                model.branchId = SessionStore.getCurrentBranch().branchId;
 				$log.info("search-list sample got initialized");
 
 			},
@@ -38,12 +39,12 @@ define({
 	                        "title": "BUSINESS_NAME",
 	                        "type": "string"
 	                    },
-	                    'branch': {
+	                    'branchName': {
 	                    	'title': "BRANCH",
 	                    	"type": ["string", "null"],
+	                    	"readonly": true,
 	                    	"enumCode": "branch",
 							"x-schema-form": {
-								"type": "userbranch",
 								"screenFilter": true
 							}
 	                    },
@@ -54,6 +55,7 @@ define({
 								"type": "select",
 								"enumCode": "centre",
 								"parentEnumCode": "branch",
+								"parentValueExpr": "model.branchId",
 								"screenFilter": true
 							}
 						},
@@ -80,11 +82,11 @@ define({
 					return formHelper;
 				},
 				getResultsPromise: function(searchOptions, pageOpts) {
-					if (_.hasIn(searchOptions, 'centreCode')){
-	                    searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
-	                }
+					// if (_.hasIn(searchOptions, 'centreCode')){
+	    //                 searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
+	    //             }
 					return IndividualLoan.search({
-	                    'branchName':searchOptions.branch,
+	                    'branchName':searchOptions.branchName,
 	                    'stage': 'ScreeningReview',
 	                    'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,

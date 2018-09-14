@@ -17,12 +17,12 @@ define({
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 model.branch = branch;
-                $log.info("search-list sample got initialized");
-                var centres = SessionStore.getCentres();
-                if (_.isArray(centres) && centres.length > 0) {
-                    model.centre = centres[0].centreName;
-                    model.centreCode = centres[0].centreCode;
-                }
+                // $log.info("search-list sample got initialized");
+                // var centres = SessionStore.getCentres();
+                // if (_.isArray(centres) && centres.length > 0) {
+                //     model.centre = centres[0].centreName;
+                //     model.centreCode = centres[0].centreCode;
+                // }
             },
             definition: {
                 title: "SEARCH_LOAN",

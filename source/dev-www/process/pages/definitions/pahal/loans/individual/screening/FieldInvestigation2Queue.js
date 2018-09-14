@@ -9,13 +9,14 @@ define({
             "title": "FIELD_INVESTIGATION_QUEUE",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
-                model.branch = branch;
+                model.branch = SessionStore.getCurrentBranch().branchName;
+                model.branchId = SessionStore.getCurrentBranch().branchId;
                 $log.info("search-list sample got initialized");
                 var centres = SessionStore.getCentres();
-                if (_.isArray(centres) && centres.length > 0) {
-                    model.centre = centres[0].centreName;
-                    model.centreCode = centres[0].centreCode;
-                }
+                // if (_.isArray(centres) && centres.length > 0) {
+                //     model.centre = centres[0].centreName;
+                //     model.centreCode = centres[0].centreCode;
+                // }
             },
             definition: {
                 title: "SEARCH_LOAN",
@@ -39,8 +40,8 @@ define({
                             'title': "BRANCH",
                             "type": ["string", "null"],
                             "enumCode": "branch",
+                            "readonly": true,
                             "x-schema-form": {
-                                "type": "select",
                                 "screenFilter": true
                             }
                         },
@@ -51,6 +52,7 @@ define({
                                 "type": "select",
                                 "enumCode": "centre",
                                 "parentEnumCode": "branch",
+                                "parentValueExpr": "model.branchId",
                                 "screenFilter": true
                             }
                         },
@@ -79,7 +81,7 @@ define({
                 getResultsPromise: function(searchOptions, pageOpts) {
                     return IndividualLoan.search({
                         'stage': 'FieldInvestigation2',
-                        'branchName': branch,
+                        'branchName': searchOptions.branch,
                         'enterprisePincode': searchOptions.pincode,
                         'enterprisePincode': searchOptions.pincode,
                         'applicantName': searchOptions.applicantName,
@@ -88,7 +90,8 @@ define({
                         'villageName': searchOptions.villageName,
                         'customerName': searchOptions.businessName,
                         'page': pageOpts.pageNo,
-                        'per_page': pageOpts.itemsPerPage
+                        'per_page': pageOpts.itemsPerPage,
+                        'centreCode': searchOptions.centre
 
                     }).$promise;
                 },

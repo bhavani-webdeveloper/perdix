@@ -35,7 +35,7 @@ define({
                             "type": ["string", "null"],
                             "enumCode": "branch",
                             "x-schema-form": {
-                                "type": "userbranch",
+                                "type": "select",
                                 "screenFilter": true
                             }
                         },
@@ -64,7 +64,7 @@ define({
                 getResultsPromise: function(searchOptions, pageOpts) {
                     return IndividualLoan.search({
                         'stage': 'GoNoGoApproval1',
-                        'branchName': branch,
+                        'branchName': searchOptions.branch,
                         'enterprisePincode': searchOptions.pincode,
                         'enterprisePincode': searchOptions.pincode,
                         'applicantName': searchOptions.applicantName,

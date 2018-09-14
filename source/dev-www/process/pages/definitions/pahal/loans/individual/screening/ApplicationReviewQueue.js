@@ -34,9 +34,9 @@ define({
                             'title': "BRANCH",
                             "type": ["string", "null"],
                             "enumCode": "branch",
+                            "readonly": true,
                             "x-schema-form": {
-                                "type": "select",
-                                "screenFilter": true
+								"screenFilter": true
                             }
                         },
                         "centre": {
