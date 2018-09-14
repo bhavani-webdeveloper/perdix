@@ -131,10 +131,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     message: "Penal Interest Due Waiver Payment should not be greater then" +" " + model.loanAccount.precloseurePenalInterest
                 });
                 return false;
-            }else if(parseFloat(model.loanAccount.disbursementSchedules[0].feeAmountPayment)>parseFloat(model.loanAccount.precloseureTotalFee)){
+            }else if(parseFloat(model.loanAccount.disbursementSchedules[0].feeAmountPayment)>parseFloat(model.loanAccount.preTotalFee)){
                 PageHelper.clearErrors();
                 PageHelper.setError({
-                    message: "Fee Amount Waiver Payment should not be greater then" +" " + model.loanAccount.precloseureTotalFee
+                    message: "Fee Amount Waiver Payment should not be greater then" +" " + model.loanAccount.preTotalFee
                 });
                 return false;
             }
@@ -907,11 +907,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         "readonly": true
                     }, {
                         "key": "loanAccount.precloseureTotalFee",
-                        "title": "TOTAL_FEE_DUE",
+                        "title": "FEE_DUE",
                         "readonly": true,
                     },{
                         "key": "loanAccount.precloseureTotalPreclosureFee",
-                        "title": "TOTAL_PRECLOSURE_FEE_DUE",
+                        "title": "PRECLOSURE_FEE_DUE",
                         "readonly": true,
                     }
                     ]

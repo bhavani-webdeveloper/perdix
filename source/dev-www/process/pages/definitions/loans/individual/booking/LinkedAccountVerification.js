@@ -202,16 +202,16 @@ define({
                                 return;
                             }
 
-                            if(model.loanAccount.disbursementSchedules[0].linkedAccountTotalFeeDue && model.loanAccount.disbursementSchedules[0].linkedAccountPreclosureFee){
-                                model.loanAccount.disbursementSchedules[0].linkedAccountTotalFeeDue = (model.loanAccount.disbursementSchedules[0].linkedAccountTotalFeeDue - model.loanAccount.disbursementSchedules[0].linkedAccountPreclosureFee);
-                            }
-
                             model.scheduledDisbursementAllowedDate= moment(SessionStore.getCBSDate()).add("days", model.disbursementRestrictionDays);
                             if (model.disbursementCutOffTime ) {
                                 populateDisbursementScheduledDate(model);
                             }
 
                             model.loanAccount = res;
+
+                            if(model.loanAccount.disbursementSchedules[0].linkedAccountTotalFeeDue && model.loanAccount.disbursementSchedules[0].linkedAccountPreclosureFee){
+                                model.loanAccount.disbursementSchedules[0].linkedAccountTotalFeeDue = (model.loanAccount.disbursementSchedules[0].linkedAccountTotalFeeDue - model.loanAccount.disbursementSchedules[0].linkedAccountPreclosureFee);
+                            }
 
                             if (model.loanAccount.disbursementSchedules.length >= 0 && _.isNumber(model.loanAccount.disbursementSchedules[0].moratoriumPeriodInDays) && !model.loanAccount.scheduleStartDate && _.isNumber(model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate)) {
                                 model.loanAccount.scheduleStartDate = moment(model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate, "YYYY-MM-DD").add(model.loanAccount.disbursementSchedules[0].moratoriumPeriodInDays, 'days').format("YYYY-MM-DD");
