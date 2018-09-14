@@ -33,12 +33,13 @@ define({
                         "readonly":true
                     },
                     {
-                        "key": "depositDetails.collectionDetail.totalAmount",
+                        "key": "depositDetails.repaymentAmount",
                         "title": "AMOUNT_DEPOSITED",
                         "readonly":true
                     },
                     {
                         "key":"depositDetails.collectionDetail.reference",
+                        "required":true,
                         "title": "Refrence"
                     },
                     {
@@ -66,8 +67,12 @@ define({
                     },
                     {
                         key: "depositDetails.collectionDetail.ifscCode",
+                        "required":true,
                         type: "lov",
                         "title": "CASH_DEPOSIT_IFSC_CODE",
+                        "schema":{
+                            "type":["string","null"]
+                        },
                         lovonly: true,
                         inputMap: {
                             "ifscCode": {
@@ -122,10 +127,12 @@ define({
                 "condition":"model.depositDetails && model.depositDetails.instrumentType.toLowerCase()=='chq'",
                 items: [{
                     "key":"depositDetails.collectionDetail.demandAmount",
+                    "readonly":true,
                     "title": "TOTAL_TO_BE_DEPOSITED"
                 },
                 {
                     "key": "depositDetails.collectionDetail.repaymentAmount",
+                    "readonly":true,
                     "title": "AMOUNT_DEPOSITED"
                 },
                 {
@@ -220,11 +227,11 @@ define({
                                     },
                                     "depositBank": {
                                         "type": "string",
-                                        "title": "DEPOSITE_BANK"
+                                        "title": "DEPOSIT_BANK"
                                     },
                                     "depositBranch": {
                                         "type": "string",
-                                        "title": "DEPOSITE_BRANCH"
+                                        "title": "DEPOSIT_BRANCH"
                                     }
                                 }
                             }

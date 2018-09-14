@@ -417,6 +417,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             },
                             {
                                 key: "repayment.amount",
+                                "required":true,
                                 type: "number",
                                 condition:"!model.repayment.chequeNumber"
                             },

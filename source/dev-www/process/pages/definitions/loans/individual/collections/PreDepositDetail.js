@@ -29,7 +29,7 @@ define({
                 "readonly": true,
                 "items":[{
                     "type":"tableview",
-                    "title": "CASH_COLLECTED_CONSOLIDATED",
+                    "title": "CONSOLIDATION",
                     "selectable": true,
                     "expandable": true,
                     "key":"collectionDetails",
