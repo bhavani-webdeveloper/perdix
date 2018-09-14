@@ -158,6 +158,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             if(res.minInterestRate == res.maxInterestRate){
                                 model.loanAccount.interestRate = res.minInterestRate;
                             }
+                            else{
+                                model.loanAccount.interestRate = res.minInterestRate;
+                            }
                         }
                         model.additional.product.interestBracket = res.minInterestRate + '% - ' + res.maxInterestRate + '%';
                         model.additional.product.amountBracket = model.additional.product.amountFrom + ' - ' + model.additional.product.amountTo;
@@ -1046,7 +1049,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                    return Queries.getLoanProductCode(model.loanAccount.productCategory,model.loanAccount.frequency,model.loanAccount.partnerCode);
                                 },
                                 onSelect: function(valueObj, model, context) {
-                                    model.loanAccount.productCode = valueObj.productCode;
+                                    model.loanAccount.productCode = valueObj.productCode;z
                                 },
                                 getListDisplayItem: function(item, index) {
                                     return [
