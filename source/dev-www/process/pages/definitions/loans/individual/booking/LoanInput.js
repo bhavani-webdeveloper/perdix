@@ -154,8 +154,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             console.error(err);
                         }
                         model.additional.product = res;
-                        if(res.minInterestRate == res.maxInterestRate){
-                            model.loanAccount.interestRate = res.minInterestRate;
+                        if(!model.loanAccount.interestRate){
+                            if(res.minInterestRate == res.maxInterestRate){
+                                model.loanAccount.interestRate = res.minInterestRate;
+                            }
                         }
                         model.additional.product.interestBracket = res.minInterestRate + '% - ' + res.maxInterestRate + '%';
                         model.additional.product.amountBracket = model.additional.product.amountFrom + ' - ' + model.additional.product.amountTo;
@@ -269,7 +271,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         model.loanAccount.processingFeePercentage = 1.75;
                         model.loanAccount.securityEmiRequired = 'No';
                         model.loanAccount.otherFee = 0;
-                        model.loanAccount.interestRate = 26;
                     }
                     PagesDefinition.getPageConfig("Page/Engine/loans.individual.booking.LoanInput").then(function(data){
                         $log.info(data);
@@ -3266,6 +3267,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 return false;
                             }
                         }
+
                         if (!_.isNaN(model.additional.product.minInterestRate) && model.additional.product.minInterestRate > 0){
                             if (model.loanAccount.interestRate < model.additional.product.minInterestRate){
                                 PageHelper.showProgress("loan-create","Interest Rate should be in the range [" + model.additional.product.minInterestRate + "% - " + model.additional.product.maxInterestRate + "%]",5000);
