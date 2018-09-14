@@ -62,7 +62,7 @@ define({
                             'depositId': searchOptions.depositId,
                             'instrumentType': "CASH"
                         }, function(res, headers) {
-                            _.each(res,function(data){
+                            _.each(res.body,function(data){
                                 out.push({
                                     repaymentAmount : data.totalAmount,
                                     depositId : data.depositId,
@@ -116,13 +116,13 @@ define({
                             });
                         }, function(res, headers){
                             PageHelper.hideLoader();
-                            PageHelper.showProgress("Deposit-queue", "Error in getting data", 5000);		
+                            PageHelper.showProgress("Deposit-queue", "Error in getting data", 5000);
                             PageHelper.showErrors(res);
                             deferred.reject(res);
                         });
 
                     }
-                    
+
 
                     return deferred.promise;
                 },

@@ -3,7 +3,7 @@ irf.models.factory('LoanCollection',[
 function($resource,$httpParamSerializer,BASE_URL,searchResource, Upload, $q, PageHelper){
     var endpoint = BASE_URL + '/api/loanCollection';
 
-    var biEndPoint= irf.MANAGEMENT_BASE_URL; 
+    var biEndPoint= irf.MANAGEMENT_BASE_URL;
     /*
     * GET /api/loanaccounts/reverse/{transactionId}/{transactionName} will translate into
     * {action:'reverse',param1:'<tid>',param2:'<tname>'}
@@ -59,11 +59,10 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource, Upload, $q, Pag
                 return response;
             }
         }),
-        fetchDepositSummary: {
+        fetchDepositSummary: searchResource({
             method: "GET",
             url: endpoint + '/fetchBankDepositSummaries',
-            isArray: true
-        },
+        }),
         getDepositSummary:{
             method:'GET',
             url:endpoint+'/depositSummary'
@@ -89,19 +88,10 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource, Upload, $q, Pag
             method: 'PUT',
             url:endpoint + '/updateDeposiSummary'
         },
-        findDepositSummaries: {
+        findDepositSummaries: searchResource({
             method: "GET",
-            url: endpoint + "/findDepositSummaries",
-            transformResponse: function(data, headersGetter, status){
-                data = JSON.parse(data);
-                var headers = headersGetter();
-                var response = {
-                    body: data,
-                    headers: headers
-                }
-                return response;
-            }
-        },
+            url: endpoint + "/findDepositSummaries"
+        }),
         collectionRemainder:{
             method:'GET',
             //isArray: true,
@@ -127,6 +117,6 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource, Upload, $q, Pag
             }, progress);
             return deferred.promise;
         };
-    
+
     return resource;
 }]);
