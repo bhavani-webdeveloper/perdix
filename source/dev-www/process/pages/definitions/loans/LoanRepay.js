@@ -797,9 +797,17 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             PageHelper.showProgress("loan-repay","Advance Repayment is not allowed for an outstanding Loan",5000);
                             return false;
                         }
-
+                    
                         if (model.repayment.transactionName == 'Pre-closure' && model.repayment.totalDemandDue > 0){
                             PageHelper.showProgress("loan-repay", "Preclosure not allowed. Demand of " + model.repayment.totalDemandDue + " is due.", 5000);
+                        }
+
+                        if (model.repayment.transactionName == 'PenalInterestPayment' && (model.repayment.amount > model.repayment.bookedNotDuePenalInterest)){
+                            PageHelper.clearErrors();
+                            PageHelper.setError({
+                                message: "Repayment amount should not be greater then " +" " + model.repayment.bookedNotDuePenalInterest
+                            });
+                            return false;
                         }
 
                         if (Utils.compareDates(model.repayment.repaymentDate, model.workingDate) == 1){
