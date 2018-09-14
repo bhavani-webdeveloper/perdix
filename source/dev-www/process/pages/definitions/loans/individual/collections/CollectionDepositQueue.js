@@ -58,7 +58,7 @@ define({
                     if(searchOptions.instrument && searchOptions.instrument.toLowerCase() == 'cash'){
                         LoanCollection.fetchDepositSummary({
                             'currentStage': "Deposit",
-                            'branchName' : searchOptions.branchName,
+                            'branchName' : branchName,
                             'depositId': searchOptions.depositId,
                             'instrumentType': "CASH"
                         }, function(res, headers) {
