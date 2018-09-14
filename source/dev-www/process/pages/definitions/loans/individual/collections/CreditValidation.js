@@ -302,6 +302,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidati
                     }, {
                         key: "creditValidation.reject_remarks",
                         title: "REJECT_REMARKS",
+                        required:true,
                         readonly: false,
                         type: "textarea",
                         condition: "model.creditValidation.notPaid"
