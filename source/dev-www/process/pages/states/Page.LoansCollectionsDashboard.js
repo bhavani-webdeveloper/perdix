@@ -3,7 +3,7 @@ irf.pages.controller("LoansCollectionsDashboardCtrl",
 function($log, $scope, PagesDefinition,formHelper, SessionStore, LoanProcess,RepaymentReminder, LoanCollection) {
     $log.info("Page.LoansCollectionsDashboard.html loaded");
 
-    var currentBranchId = SessionStore.getCurrentBranch().branchId;
+
 
     var fullDefinition = {
         "title": "Collections Dashboard",
@@ -42,30 +42,31 @@ function($log, $scope, PagesDefinition,formHelper, SessionStore, LoanProcess,Rep
             }
         }
 
+        var currentBranchId = SessionStore.getCurrentBranch().branchId;
         var rrqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.collections.RepaymentReminderQueue"];
         if (rrqMenu) {
             var centres = SessionStore.getCentres();
             rrqMenu.data = 0;
-            
+
                 RepaymentReminder.query({'branchName':branchName}).$promise.then(function(response,headerGetter){
                     rrqMenu.data = response.headers['x-total-count'];
                 }, function() {
                     rrqMenu.data = '-';
                 });
-            
+
         }
 
         var rfqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.collections.ReminderFollowUpQueue"];
         if (rfqMenu) {
             var centres = SessionStore.getCentres();
             rfqMenu.data = 0;
-     
+
                 RepaymentReminder.query({'branchName':branchName}).$promise.then(function(response,headerGetter){
                     rfqMenu.data = response.headers['x-total-count'];
                 }, function() {
                     rfqMenu.data = '-';
                 });
-        }        
+        }
 
         var bqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.collections.BounceQueue"];
         if (bqMenu) {
@@ -109,27 +110,36 @@ function($log, $scope, PagesDefinition,formHelper, SessionStore, LoanProcess,Rep
 
         var brdep=$scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.collections.BranchDepositQueue"];
         if(brdep) {
-            LoanCollection.query({
-                'currentStage': "BranchDeposit",
-                //'accountBranchId': currentBranchId,
-            }).$promise.then(function(response, headerGetter){
-                brdep.data = response.headers['x-total-count'];
+            brdep.data = 0;
+            var centres = SessionStore.getCentres();
+            _.forEach(centres, function(centreId){
+                LoanCollection.query({
+                    'currentStage': "BranchDeposit",
+                    'accountBranchId': currentBranchId,
+                    'accountCentreId': centreId,
+                }).$promise.then(function(response, headerGetter){
+                    brdep.data = brdep.data + response.headers['x-total-count'];
+                })
             })
+
         }
 
         var predep=$scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.collections.PreDepositQueue"];
         if(predep) {
             LoanCollection.query({
-                'currentStage': "PreDeposit"
-            }).$promise.then(function(response, headerGetter){
+                'currentStage':"PreDeposit",
+                'accountBranchId': currentBranchId
+            }).$promise.then(function(response, headerGetter) {
                 predep.data = response.headers['x-total-count'];
             })
         }
 
         var dep=$scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.collections.CollectionDepositQueue"];
         if(dep) {
-            LoanCollection.query({
-                'currentStage': "Deposit"
+            LoanCollection.fetchDepositSummary({
+                'currentStage': "Deposit",
+                'branchName' : branchName,
+                'instrumentType': "CASH"
             }).$promise.then(function(response, headerGetter){
                 dep.data = response.headers['x-total-count'];
             })
