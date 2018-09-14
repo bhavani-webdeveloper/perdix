@@ -284,7 +284,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidati
 
                     {
                         key: "creditValidation.notPaid",
-                        title: "NOT_PAID",
+                        title: "REJECT",
                         type: "checkbox",
                         "schema": {
                             "default": false
@@ -292,6 +292,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidati
                     }, {
                         key: "creditValidation.reject_reason",
                         title: "REJECT_REASON",
+                        required : true,
                         type: "select",
                         titleMap: [{
                             "name": "Amount not credited in account",
