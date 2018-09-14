@@ -153,12 +153,14 @@ define({
                             desc: "",
                             icon: "fa fa-edit",
                             fn: function(item, model) {
+                                PageHelper.showLoader();
                                 var reqData = {
                                     "loanCollection":item,
                                     "repaymentProcessAction": "PROCEED",
                                     "stage": "RejectedProcess" 
                                 };
                                 LoanCollection.update(reqData,function(resp, header){
+                                    PageHelper.showProgress('RejectedQueue', 'successfully changed to REJECTED-PROCESS', 5000);
                                     PageHelper.hideLoader();
                                     irfNavigator.goBack();
                                 },function(resp){
