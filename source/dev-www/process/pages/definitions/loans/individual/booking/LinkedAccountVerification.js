@@ -202,6 +202,26 @@ define({
                                 return;
                             }
 
+                            if(model.loanAccount.disbursementSchedules[0].linkedAccountTotalFeeDue && model.loanAccount.disbursementSchedules[0].linkedAccountPreclosureFee){
+                                model.loanAccount.disbursementSchedules[0].linkedAccountTotalFeeDue = (model.loanAccount.disbursementSchedules[0].linkedAccountTotalFeeDue - model.loanAccount.disbursementSchedules[0].linkedAccountPreclosureFee);
+                            }
+
+                            if (_.has(res, 'disbursementSchedules') &&
+                                _.isArray(res.disbursementSchedules) &&
+                                res.disbursementSchedules.length > 0 ){
+                                    if(res.disbursementSchedules[i].
+                                model._currentDisbursement = res.disbursementSchedules[res.numberOfDisbursed];
+                                {
+                                    "key": "loanAccount.disbursementSchedules[0].linkedAccountTotalFeeDue",
+                                    "title": "TOTAL_FEE_DUE",
+                                    "readonly": true
+                                },{
+                                    "key": "loanAccount.disbursementSchedules[0].linkedAccountPreclosureFee",
+                                    "title": "TOTAL_PRECLOSURE_FEE_DUE",
+                                    "readonly": true
+                                }
+                            } 
+
                             model.scheduledDisbursementAllowedDate= moment(SessionStore.getCBSDate()).add("days", model.disbursementRestrictionDays);
                             if (model.disbursementCutOffTime ) {
                                 populateDisbursementScheduledDate(model);
