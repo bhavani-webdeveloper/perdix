@@ -146,7 +146,7 @@ define({
 
         return {
             "type": "schema-form",
-            "title": "CAPTURE_DATES",
+            "title": "INTERNAL_FORECLOSURE_OR_RENEWAL_ACCOUNT_VERIFICATION",
             initialize: function (model, form, formCtrl) {
                 $log.info("Individual Loan Booking Page got initialized");
                 model.siteCode = SessionStore.getGlobalSetting("siteCode");
@@ -851,42 +851,39 @@ define({
                 "title": "INTERNAL_FORE_CLOSURE_DETAILS", 
                 "condition": "model.siteCode == 'kinara' && model.loanAccount.linkedAccountNumber",
                 "items": [{
-                    "key": "loanAccount.linkedAccountNumber",
-                    "title":"LINKED_ACCOUNT_NUMBER",
-                    "readonly":true
-                }, {
                     "key": "loanAccount.transactionType",
                     "required":false,
                     "title":"TRANSACTION_TYPE",
                     "readonly":true,
-                },{
-                    "type":"fieldset",
-                    "items":[
-                    /*{
-                        "key": "loanAccount.precloseurePayOffAmount",
-                        "title": "PAYOFF_AMOUNT",
-                        "readonly": true
-                    },*/ {
-                        "key": "loanAccount.precloseurePayOffAmountWithDue",
-                        "title": "PAYOFF_AMOUNT_WITH_DUE",
-                        "readonly": true,
-                    },{
-                        "key": "loanAccount.precloseurePrincipal",
-                        "title": "TOTAL_PRINCIPAL_DUE",
-                        "readonly": true
-                    }, {
-                        "key": "loanAccount.precloseureNormalInterest",
-                        "title": "TOTAL_INTEREST_DUE",
-                        "readonly": true,
-                    },{
-                        "key": "loanAccount.precloseurePenalInterest",
-                        "title": "TOTAL_PENAL_INTEREST_DUE",
-                        "readonly": true
-                    }, {
-                        "key": "loanAccount.precloseureTotalFee",
-                        "title": "TOTAL_FEE_DUE",
-                        "readonly": true,
-                    }
+                },
+                {
+                    "type": "fieldset",
+                    "title": "Linked Account Outstanding Loan Details",
+                    "items": [{
+                            "key": "loanAccount.linkedAccountNumber",
+                            "title": "LINKED_ACCOUNT_NUMBER",
+                            "readonly": true
+                        }, {
+                            "key": "loanAccount.disbursementSchedules[0].linkedAccountTotalPrincipalDue",
+                            "title": "TOTAL_PRINCIPAL_DUE",
+                            "readonly": true
+                        }, {
+                            "key": "loanAccount.disbursementSchedules[0].linkedAccountNormalInterestDue",
+                            "title": "TOTAL_INTEREST_DUE",
+                            "readonly": true
+                        }, {
+                            "key": "loanAccount.disbursementSchedules[0].linkedAccountPenalInterestDue",
+                            "title": "TOTAL_PENAL_INTEREST_DUE",
+                            "readonly": true
+                        }, {
+                            "key": "loanAccount.disbursementSchedules[0].linkedAccountTotalFeeDue",
+                            "title": "TOTAL_FEE_DUE",
+                            "readonly": true
+                        },{
+                            "key": "loanAccount.disbursementSchedules[0].linkedAccountPreclosureFee",
+                            "title": "TOTAL_PRECLOSURE_FEE_DUE",
+                            "readonly": true
+                        }
                     ]
                 },
                 {
