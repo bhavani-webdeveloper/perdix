@@ -20,7 +20,7 @@ define(
 
                 var overridesFields = function (bundlePageObj) {
                 return {
-                    "VehiclePastValuations": {
+                    "VehiclePastValuations.vehiclePastValuations": {
                         "startEmpty": true
                     },
                     "VehicleRegistrationDetails.cubicCapacity":{
@@ -1576,8 +1576,8 @@ define(
                                    return false;
                             }
 
-                            if (_.isArray(model.loanAccount.vehicleLoanDetails.vehiclePastValuations) && !model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[0]) {
-                                 PageHelper.showProgress("update-loan", "Please Fill Past Valuation Section", 3000);
+                            if (_.isArray(model.loanAccount.vehicleLoanDetails.vehiclePastValuations) && model.loanAccount.vehicleLoanDetails.vehiclePastValuations.length > 0 && !model.loanAccount.vehicleLoanDetails.vehiclePastValuations[0]) {
+                                 PageHelper.showProgress("update-loan", "Please Fill Past Valuation Mandatory fields or Close it.", 3000);
                                  PageHelper.hideLoader();
                                 return false;   
                             }

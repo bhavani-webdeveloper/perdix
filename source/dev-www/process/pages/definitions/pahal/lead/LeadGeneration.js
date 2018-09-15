@@ -85,8 +85,10 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                      "productDetails.productRejectionReason.productRejectAdditinalRemarks":{
                         "condition" : "model.lead.interestedInProduct == 'NO' || model.lead.eligibleForProduct == 'NO' "
 
+                    },
+                    "sourceDetails.leadSource": {
+                        'required': true
                     }
-
                 }
             }
             var getIncludes = function (model) {
@@ -333,6 +335,12 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                     submit: function(model, form, formName) {
                         $log.info("Inside submit()");
                         PageHelper.showLoader();
+
+                        if ((model.lead.leadSource.toUpperCase() == 'EMPLOYEE REFERRAL' || model.lead.leadSource.toUpperCase() == 'EXISTING CUSTOMER REFERRAL' || model.lead.leadSource.toUpperCase() == 'DEALER(NEW VEHICLE)') && !model.lead.referredBy) {
+                            PageHelper.showProgress("update-loan", "Please Fill Referred By Field", 3000);
+                            PageHelper.hideLoader();
+                            return false;
+                        }
 
                         var reqData = _.cloneDeep(model);
                         var centres = formHelper.enum('centre').data;
