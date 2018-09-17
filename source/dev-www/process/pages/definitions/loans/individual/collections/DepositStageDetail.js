@@ -38,8 +38,9 @@ define({
                         "readonly":true
                     },
                     {
-                        "key":"depositDetails.collectionDetail.reference",
+                        "key":"depositDetails.collectionDetail.depositId",
                         "required":true,
+                        "readonly":true,
                         "title": "Refrence"
                     },
                     {
