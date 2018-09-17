@@ -157,10 +157,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         if(!model.loanAccount.interestRate){
                             if(res.minInterestRate == res.maxInterestRate){
                                 model.loanAccount.interestRate = res.minInterestRate;
-                            }
-                            else{
-                                model.loanAccount.interestRate = res.minInterestRate;
-                            }
+                            }                            
                         }
                         model.additional.product.interestBracket = res.minInterestRate + '% - ' + res.maxInterestRate + '%';
                         model.additional.product.amountBracket = model.additional.product.amountFrom + ' - ' + model.additional.product.amountTo;
