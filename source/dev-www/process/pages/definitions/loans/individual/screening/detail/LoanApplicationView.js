@@ -883,6 +883,7 @@ var navigateToQueue = function(model) {
 
                     model.additional = {};
                 }
+                
             },
             actions: {
                 /*submit: function(model) {
