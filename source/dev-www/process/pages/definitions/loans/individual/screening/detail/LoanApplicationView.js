@@ -15,7 +15,7 @@ define({
 
             return irfElementsConfig.currency.iconHtml+irfCurrencyFilter(data, null, null, "decimal");
         }
-var navigateToQueue = function(model) {
+        var navigateToQueue = function(model) {
                     // Considering this as the success callback
                     // Deleting offline record on success submission
                     BundleManager.deleteOffline().then(function() {
@@ -23,7 +23,9 @@ var navigateToQueue = function(model) {
                     });
 
 
-                    
+                    model.customerHistoryFinancials={
+                        'tableData': []
+                    }
 
                     if (model.currentStage == 'Screening')
                         $state.go('Page.Engine', {
@@ -675,7 +677,60 @@ var navigateToQueue = function(model) {
                         }]
                     }]
                 }]
-            }, {
+            },{
+                    "type": "box",
+                    "title": "Customer Loan History",
+                    "readOnly": true,
+                    "colClass": "col-sm-12",
+                    "items":[{
+                            "type": "tableview",
+                            "key": "customerHistoryFinancials.tableData",
+                            "transpose" : true,
+                            "title": "",
+                            "selectable": "false",
+                            "editable": "false",
+                            "tableConfig":{
+                                "searching": false,
+                                "paginate": false,
+                                "pageLength": 10,
+                            },
+                            getColumns: function() {
+                                return [{
+                                    "title": "Category",
+                                    "data": "Category",
+                                    "render": self.strongRender
+                                },{
+                                    "title": "Outstanding",
+                                    "data": "Outstanding",
+                                    "render": self.strongRender
+                                },
+                                {
+                                    "title": "disbursement_amount",
+                                    "data": "disbursement_amount",
+                                    "render": self.strongRender
+                                },
+                                {
+                                    "title": "loan_product",
+                                    "data": "loan_product",
+                                    "render": self.strongRender
+                                },
+                                {
+                                    "title": "loan_status",
+                                    "data": "loan_status",
+                                    "render": self.strongRender
+                                },
+                                {
+                                    "title": "tenure",
+                                    "data": "tenure",
+                                    "render": self.strongRender
+                                }
+                            ];
+                            },
+                            getActions: function() {
+                                return [];
+                            }                            
+                        }]
+            },{
                 "type": "box",
                 "title": "Post Review Decision",
                 "colClass": "col-sm-12",
@@ -882,6 +937,24 @@ var navigateToQueue = function(model) {
                     }
 
                     model.additional = {};
+                },
+                 "customer-history-fin-snap": function(bundleModel, model, params){
+                    let prepareFinancialData={
+                        'tableData':[],
+                        'financialsGraph':{}
+                        };
+                    if(params){
+                       _.forEach(params, function(params){
+                            prepareFinancialData['tableData'].push(params[5].data[0]);
+                        });
+                    };
+                    prepareFinancialData['tableData']=$filter("orderBy") (prepareFinancialData['tableData'], ['loanId']);
+                    //older accounts should not be greater then 3
+                    /* if(prepareFinancialData['tableData'].length>3) prepareFinancialData['tableData']=prepareFinancialData['tableData'].slice(-3); */
+                    _.forEach(prepareFinancialData['tableData'], function(histData){
+                        model.customerHistoryFinancials['tableData'].push(histData);
+                        });
+                     //model.renderReady('customer-history-fin-snap');
                 }
                 
             },
