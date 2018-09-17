@@ -53,16 +53,18 @@ define({
                     model._bundlePageObj = _.cloneDeep(bundlePageObj);
                 }
                 model.financialGraphValues={
-                'totalAssetGraphValues' :[],
-                'totalLiabilitiesGraphValues' :[],
-                'netIncomeGraphValues' :[],
-                'ownCapitalGraphValues' :[],
-                'invoiceGraphValues' :[],
-                'cashGraphValues' :[]
+                    'totalAssetGraphValues' :[],
+                    'totalLiabilitiesGraphValues' :[],
+                    'netIncomeGraphValues' :[],
+                    'ownCapitalGraphValues' :[],
+                    'invoiceGraphValues' :[],
+                    'cashGraphValues' :[]
                 };
 
                 model.customerHistoryFinancials={
                     'tableData': [],
+                    'tableData1': [],
+                    'tableData2': [],
                     'graphOptions':{'multiBar' :{
                         "chart": {
                             "type": "multiBarChart",
@@ -381,6 +383,116 @@ define({
                             }]
                         }
                     ]
+                },
+                {
+                    "type": "box",
+                    "title": "Bank Behaviour",
+                    "readOnly": true,
+                    "colClass": "col-sm-12",
+                    "items":[{
+                            "type": "tableview",
+                            "key": "customerHistoryFinancials.tableData1",
+                            "transpose" : true,
+                            "title": "",
+                            "selectable": "false",
+                            "editable": "false",
+                            "tableConfig":{
+                                "searching": false,
+                                "paginate": false,
+                                "pageLength": 10,
+                            },
+                            getColumns: function() {
+                                return [{
+                                    "title": "Category",
+                                    "data": "BankBehaviourCategory",
+                                    "render": self.strongRender
+                                }, 
+                                {
+                                    "title": "Average Bank Deposits",
+                                    "data": "Average_Bank_Deposits",
+                                    "render": self.currencyRightRender
+                                },
+                                {
+                                    "title": "Average Bank Balance",
+                                    "data": "Average_Bank_Balance",
+                                    "render": self.currencyRightRender
+                                },
+                                {
+                                    "title": "# of Check Bounces",
+                                    "data": "no_of_cheque_bounced"
+                                }, 
+                                {
+                                    "title": "# of KINARA Check Bounces",
+                                    "data": "no_of_kinara_cheque_bounces"
+                                },                                
+                                {
+                                    "title": "ABB to Kinara EMI",
+                                    "data": "ABB_to_Kinara_EMI",
+                                    "render": self.currencyRightRender
+                                },
+                                {
+                                    "title": "Average Bank Deposit: Average Revenue",
+                                    "data": "Average Bank Deposit : Average Revenue",
+                                    "render": self.currencyRightRender
+                                }
+                            ];
+                            },
+                            getActions: function() {
+                                return [];
+                            }                            
+                        }
+                    ]
+                },
+                {
+                    "type": "box",
+                    "title": "Demographic Data Compare",
+                    "readOnly": true,
+                    "colClass": "col-sm-12",
+                    "items":[{
+                            "type": "tableview",
+                            "key": "customerHistoryFinancials.tableData2",
+                            "transpose" : true,
+                            "title": "",
+                            "selectable": "false",
+                            "editable": "false",
+                            "tableConfig":{
+                                "searching": false,
+                                "paginate": false,
+                                "pageLength": 10,
+                            },
+                            getColumns: function() {
+                                return [{
+                                    "title": "Category",
+                                    "data": "Category",
+                                    "render": self.strongRender
+                                }, 
+                                {
+                                    "title": "Psychometric Score(For Applicant)",
+                                    "data": "PsychometricScore"
+                                },
+                                {
+                                    "title": "Business Premises Status",
+                                    "data": "business_premises_status"
+                                },
+                                {
+                                    "title": "Formality of Business",
+                                    "data": "formality_of_business"
+                                }, 
+                                {
+                                    "title": "Housing Status",
+                                    "data": "housing_status"
+                                },                                
+                                {
+                                    "title": "Years of Business in Current Area",
+                                    "data": "years_of_business_in_current_area"
+                                }
+                            ];
+                            },
+                            getActions: function() {
+                                return [];
+                            }                            
+                        }
+                    ]
                 }
             
         ],
@@ -392,11 +504,17 @@ define({
                 "customer-history-fin-snap": function(bundleModel, model, params){
                     let prepareFinancialData={
                         'tableData':[],
+                        'tableData1':[],
+                        'tableData2':[],
                         'financialsGraph':{}
                         };
                     if(params){
                        _.forEach(params, function(params){
                             prepareFinancialData['tableData'].push(params[3].tableData[0]);
+                            prepareFinancialData['tableData1'].push(params[4].data[0]);
+                            prepareFinancialData['tableData2'].push(params[6].data[0]);
+
+
                         });
                     };
                     prepareFinancialData['tableData']=$filter("orderBy") (prepareFinancialData['tableData'], ['loanId']);
@@ -442,6 +560,10 @@ define({
                         });
 
                     });
+                     _.forEach(prepareFinancialData['tableData1'], function(histData){
+                        model.customerHistoryFinancials['tableData1'].push(histData);});
+                        _.forEach(prepareFinancialData['tableData2'], function(histData){
+                        model.customerHistoryFinancials['tableData2'].push(histData);});
                      model.renderReady('customer-history-fin-snap');
                 },                
                 "financial-summary": function(bundleModel, model, params){
