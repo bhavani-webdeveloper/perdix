@@ -28,20 +28,29 @@
       outline: none;
       font-size: 14px;
     }
+    div.schema-form-section .form-group {
+      float: left;
+    }
+    div.schema-form-section .form-group .col-sm-12 {
+      padding-left: 3px;
+      padding-right: 3px;
+    }
   </style>
   <section class="content-header">
     <h1>
-      <span><a href style="color:#333">Reports Dashboard</a></span> <!-- <small>{{filterUsername}}</small> -->
-      <div
-        ng-show="currentUserAccessLevel <= filterAccessLevels[filterAccessLevels.length-1] || currentUserAccessLevel == 40"
-        class="filter-form pull-right">
-        <select
-          ng-repeat="fal in filterAccessLevels"
-          ng-options="node.name for node in fNodes[$index] track by node.id"
-          ng-model="fSelect[$index]"
-          ng-change="listNextAccessLevelItems(filterAccessLevels[$index + 1], fSelect[$index].id, $index + 1)"></select>
-        <button ng-click="applyFilter()" class="btn btn-default btn-xs"><i class="fa fa-filter">&nbsp;</i>Apply Filter</button>
-        <button ng-click="resetFilter()" class="btn btn-default btn-xs"><i class="fa fa-rotate-left">&nbsp;</i>Reset</button>
+      <span><a href style="color:#333">Reports Dashboard</a></span>
+      <div class="filter-form pull-right">
+          <irf-sf
+          initialize="initFilterForm(model, form , formCtrl)"
+          irf-schema="filterSchema"
+          irf-form="filterForm"
+          irf-actions="filterActions"
+          irf-model="filterModel"
+          irf-helper="formHelper"
+          irf-form-name="filterFormName"
+          irf-form-options="filterFormOptions"
+          class="page-form">
+        </irf-sf>
       </div>
     </h1>
   </section>
