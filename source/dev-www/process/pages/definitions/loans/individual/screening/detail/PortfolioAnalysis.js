@@ -122,7 +122,6 @@ define({
                         }
                     }
                 };
-
                 /* --Utility function for showing loader till the event loaded - 
                 rendering on financial summary atleast not snapshot because they may be empty 
                 so possibility that it never get fired*/
@@ -331,6 +330,7 @@ define({
                                     options="model.customerHistoryFinancials.graphOptions.multiBar"
                                     config="model.customerHistoryFinancials.graphConfig"
                                     ></nvd3>
+                                    <svg style="padding-left=15px"></svg>
                                     </div></div>`
                             }]
                         },
