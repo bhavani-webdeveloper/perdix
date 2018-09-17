@@ -617,6 +617,8 @@ define(
                     "VehicleExpensesInformation1.VehicleExpenses1.expenseAmount1",
                     "NewVehicleDetails",
                     "NewVehicleDetails.vehicleType",
+                    "NewVehicleDetails.vehicleType1",
+                    "NewVehicleDetails.vehicleType2",
                     "NewVehicleDetails.endUse",
                     "NewVehicleDetails.usedFor",
                     "NewVehicleDetails.segment",

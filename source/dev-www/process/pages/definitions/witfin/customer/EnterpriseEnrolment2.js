@@ -156,14 +156,17 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseAssets.enterpriseAssets.endUse",
                     "EnterpriseAssets.enterpriseAssets.natureOfUse",
                     "EnterpriseAssets.enterpriseAssets.manufacturer",
-                    "EnterpriseAssets.enterpriseAssets.make",
-                    "EnterpriseAssets.enterpriseAssets.assetCategory",
+                    //"EnterpriseAssets.enterpriseAssets.make",
+                    //"EnterpriseAssets.enterpriseAssets.assetCategory",
                     "EnterpriseAssets.enterpriseAssets.vehicleMakeModel",
                     "EnterpriseAssets.enterpriseAssets.manufactureDate",
-                    "EnterpriseAssets.enterpriseAssets.details",
-                    "EnterpriseAssets.enterpriseAssets.subDetails",
+                    //"EnterpriseAssets.enterpriseAssets.details",
+                    //"EnterpriseAssets.enterpriseAssets.subDetails",
                     "EnterpriseAssets.enterpriseAssets.assetregistrationNumber",
                     "EnterpriseAssets.enterpriseAssets.valueOfAsset",
+                    "EnterpriseAssets.enterpriseAssets.rc",
+                    "EnterpriseAssets.enterpriseAssets.insurance",
+                    "EnterpriseAssets.enterpriseAssets.soa",
                     "TangibleNetWorth",
                     "TangibleNetWorth.enterpriseNetworth",
                     "TangibleNetWorth.enterpriseNetworth.tangibleNetworth",
@@ -1166,6 +1169,57 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                                 }
                                             }
                                         }  
+                                    },
+                                    "EnterpriseAssets": {
+                                            "type": "box",
+                                            "title": "EXISTING_VEHICLE_DETAILS",
+                                            "orderNo": 400,
+                                            "items": {
+                                                "enterpriseAssets": {
+                                                    "key": "customer.enterpriseAssets",
+                                                    "type": "array",
+                                                    "startEmpty": true,
+                                                    "title": "EXISTING_VEHICLE_DETAILS",
+                                                    "items": {
+                                                        "natureOfUse": {
+                                                            "orderNo": 20
+                                                        },
+                                                        "endUse": {
+                                                            "orderNo": 30,
+                                                            "condition":"model.customer.enterpriseAssets[arrayIndex].natureOfUse == 'Commmercial'"
+                                                        },
+                                                        "status":{
+                                                            "orderNo": 130,
+                                                            "title":"STATUS"    
+                                                        },
+                                                        "rc":{
+                                                            "orderNo": 130,
+                                                            "title":"RC",
+                                                            "type": "file",
+                                                            "category": "CustomerEnrollment",
+                                                            "subCategory": "PHOTO",
+                                                            "key":"customer.enterpriseAssets[].udf1"
+                                                        },
+                                                        "insurance":{
+                                                            "orderNo": 140,
+                                                            "title":"INSURANCE",
+                                                            "type": "file",
+                                                            "category": "CustomerEnrollment",
+                                                            "subCategory": "PHOTO",
+                                                            "key":"customer.enterpriseAssets[].udf2"
+                                                        },
+                                                        "soa":{
+                                                            "orderNo": 150,
+                                                            "title":"SOA",
+                                                            "type": "file",
+                                                            "category": "CustomerEnrollment",
+                                                            "subCategory": "PHOTO",
+                                                            "key":"customer.enterpriseAssets[].udf3"
+                                                        }
+
+                                                }
+                                            }
+                                        }
                                     },
                                     "Liabilities": {
                                         "items": {
