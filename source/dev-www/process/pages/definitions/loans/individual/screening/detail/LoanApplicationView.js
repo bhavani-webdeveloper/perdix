@@ -935,6 +935,18 @@ define({
                     }
 
                     model.additional = {};
+                    let prepareFinancialData={};
+                    if(params){
+                        prepareFinancialData={
+                            'Category': 'Current Application',
+                            'Outstanding': 'NA',
+                            'disbursement_amount': 'NA',
+                            'loan_product': params[0].data[0]['Loan Product'],
+                            'loan_status': 'NA',
+                            'tenure': params[0].data[0]['Tenure'] 
+                        }
+                    }
+                    model.customerHistoryFinancials['tableData'].push(prepareFinancialData);
                 },
                  "customer-history-fin-snap": function(bundleModel, model, params){
                     let prepareFinancialData={

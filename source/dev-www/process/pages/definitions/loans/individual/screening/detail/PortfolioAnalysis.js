@@ -404,7 +404,7 @@ define({
                             getColumns: function() {
                                 return [{
                                     "title": "Category",
-                                    "data": "BankBehaviourCategory",
+                                    "data": "Category",
                                     "render": self.strongRender
                                 }, 
                                 {
@@ -578,6 +578,8 @@ define({
                     };                    
 
                     let prepareFinancialData={};
+                    let prepareFinancialData1={};
+                    let prepareFinancialData2={};
                         if(params){
                             let balancesheet=params[9].data[0];
                             let businessPL=params[8].data[0];
@@ -603,14 +605,39 @@ define({
                                 'Total_long-term_liabilities': balancesheet['Total long-term liabilities'],
                                 'Total_Liabilities': balancesheet['Total Liabilities'],
                                 'Own_capital': balancesheet['Own capital'],
-                                'DSCR': params[3].data[3]["Actual Value"],
-                                'DSONonTrading':params[3].data[4]["Actual Value"],
+                                
+
+                                // 'DSCR': params[3].data[3]["Actual Value"],
+                                // 'DSONonTrading':params[3].data[4]["Actual Value"],
                                 'CurrentRatio':"",
                                 'LoanAmount':"",
                                 'luc_status':""
-                            }
+                            };
+                            prepareFinancialData1 = {
+                                'Category': 'Current Application',
+                                'ABB_to_Kinara_EMI': params[3].data[0]['Actual Value'],
+                                'Average Bank Deposit : Average Revenue': params[3].data[1]['Actual Value'],
+                                'no_of_cheque_bounced': params[3].data[2]['Actual Value'],
+                                'Average_Bank_Balance': params[10].BankAccounts[0]['Average Bank Balance'],
+                                'Average_Bank_Deposits': params[10].BankAccounts[0]['Average Bank Deposit'],
+                                'no_of_kinara_cheque_bounces': params[3].data[7]['Actual Value']
+
+                            };
+                            prepareFinancialData2 = {
+                                'Category': 'Current Application',
+                                'PsychometricScore': params[1].sections[0].data[7]['Applicant'],
+                                'business_premises_status': params[2].data[1]['Actual Value'],
+                                'formality_of_business': params[2].data[4]['Actual Value'],
+                                'housing_status': params[1].sections[0].data[2]['Applicant'],
+                                'years_of_business_in_current_area': params[2].data[6]['Actual Value'] 
+
+                            };
+
+
                         }
                     model.customerHistoryFinancials['tableData'].push(prepareFinancialData);
+                    model.customerHistoryFinancials['tableData1'].push(prepareFinancialData1);
+                    model.customerHistoryFinancials['tableData2'].push(prepareFinancialData2);
                     model.financialGraphValues['totalAssetGraphValues'].push({
                         'x' : prepareFinancialData['Category'],
                         'y' : prepareFinancialData['Total Assets'],
