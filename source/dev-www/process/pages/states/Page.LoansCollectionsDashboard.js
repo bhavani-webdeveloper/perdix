@@ -112,15 +112,13 @@ function($log, $scope, PagesDefinition,formHelper, SessionStore, LoanProcess,Rep
         if(brdep) {
             brdep.data = 0;
             var centres = SessionStore.getCentres();
-            _.forEach(centres, function(centreId){
                 LoanCollection.query({
                     'currentStage': "BranchDeposit",
-                    'accountBranchId': currentBranchId,
-                    'accountCentreId': centreId,
+                    'accountBranchId': currentBranchId
                 }).$promise.then(function(response, headerGetter){
-                    brdep.data = brdep.data + response.headers['x-total-count'];
+                    brdep.data = brdep.data + parseFloat(response.headers['x-total-count']);
                 })
-            })
+            
 
         }
 
