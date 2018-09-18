@@ -323,7 +323,7 @@ define({
 
                         } else if (model.depositDetails && (model.depositDetails.instrumentType.toLowerCase()=='chq' || model.depositDetails.instrumentType.toLowerCase() == 'cheque')) {
                             collectionData['loanCollectionSummaryDTOs'].push({
-                                depositId_loanAccountNumber: model.depositDetails.id
+                                loanCollectionId: model.depositDetails.id
                             });
 
                         }
