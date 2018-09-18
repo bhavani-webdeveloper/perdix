@@ -230,6 +230,15 @@ define({
                                 urns.push(model.loanAccount.portfolioInsuranceUrn);
                             }
 
+                            if(model.loanAccount.loanDocuments && model.loanAccount.loanDocuments.length>0){
+                                for(documents of model.loanAccount.loanDocuments){
+                                    if(documents.document=='WAIVERAPPROVAL'){
+                                        model.loanAccount.waiverdocumentId= documents.documentId;
+                                        model.loanAccount.waiverdocumentstatus= documents.documentStatus;
+                                    }
+                                }
+                            }
+
                             
                             model.loanAccount.loanCustomerRelations = model.loanAccount.loanCustomerRelations || [];
                             model.loanAccount.loan_coBorrowers = [];
@@ -851,17 +860,18 @@ define({
             ]},
             {
                 "type": "box",
-                "readonly":true,
                 "title": "INTERNAL_FORE_CLOSURE_DETAILS", 
                 "condition": "model.siteCode == 'kinara' && model.loanAccount.linkedAccountNumber",
                 "items": [{
                     "key": "loanAccount.transactionType",
+                    "readonly":true,
                     "required":false,
                     "title":"TRANSACTION_TYPE",
                     "readonly":true,
                 },
                 {
                     "type": "fieldset",
+                    "readonly":true,
                     "title": "Linked Account Outstanding Loan Details",
                     "items": [{
                             "key": "loanAccount.linkedAccountNumber",
@@ -910,7 +920,49 @@ define({
                         //"type": "amount",
                         "onChange": "actions.validateWaiverAmount(model.loanAccount.disbursementSchedules[0].feeAmountPayment,model.loanAccount.precloseureTotalFee,modelValue)"
                     }]
-                }
+                },
+                {
+                    "type": "fieldset",
+                    "title": "WAIVER_APPROVAL_DOCUMENT",
+                    "readonly":false,
+                    "items":[
+                        {
+                            title: "Upload",
+                            "readonly":true,
+                            "key": "loanAccount.waiverdocumentId",
+                            type: "file",
+                            fileType: "application/pdf",
+                            category: "Loan",
+                            subCategory: "DOC1",
+                            title:"WAIVER_APPROVAL_DOCUMENT",
+                            using: "scanner"
+                        },
+                        {
+                            "key": "loanAccount.waiverdocumentstatus",
+                            title:"WAIVER_APPROVAL_STATUS",
+                            "required":true,
+                            "type": "select",
+                            "titleMap": [{
+                                value: "REJECTED",
+                                name: "Rejected"
+                            }, {
+                                value: "APPROVED",
+                                name: "Approved"
+                            }]
+                        },
+                        {
+                            "key": "loanAccount.waiverdocumentrejectReason",
+                            "required":true,
+                            "condition":"model.loanAccount.waiverdocumentstatus=='REJECTED'",
+                            title: "Reason"
+                        },
+                        {
+                            "key": "loanAccount.waiverdocumentremarks",
+                            "required":true,
+                            title: "Remarks"
+                        }
+                    ]
+                },
                 ]
             },
 
@@ -921,14 +973,24 @@ define({
                 "items": [
                     {
                         key: "review.action",
+                        condition:"model.loanAccount.waiverdocumentstatus !='APPROVED'",
                         type: "radios",
                         titleMap: {
-                            //"REJECT": "REJECT",
+                            "SEND_BACK": "SEND_BACK",
+                            "HOLD": "HOLD"
+                        }
+                    },
+                    {
+                        key: "review.action",
+                        condition:"model.loanAccount.waiverdocumentstatus=='APPROVED'",
+                        type: "radios",
+                        titleMap: {
                             "SEND_BACK": "SEND_BACK",
                             "PROCEED": "PROCEED",
                             "HOLD": "HOLD"
                         }
                     },
+                    
                     {
                         type: "section",
                         condition: "model.review.action=='REJECT'",
@@ -1081,6 +1143,16 @@ define({
                     Utils.confirm("Are You Sure?")
                         .then(
                             function(){
+                                if(model.loanAccount.loanDocuments && model.loanAccount.loanDocuments.length>0){
+                                    for(documents of model.loanAccount.loanDocuments){
+                                        if(documents.document=='WAIVERAPPROVAL'){
+                                            documents.documentId=model.loanAccount.waiverdocumentId;
+                                            documents.documentStatus=model.loanAccount.waiverdocumentstatus;
+                                            documents.rejectReason=model.loanAccount.waiverdocumentrejectReason;
+                                            documents.remarks=model.loanAccount.waiverdocumentremarks; 
+                                        }
+                                    }
+                                }
                                 var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                                 reqData.loanAccount.status = 'HOLD';
                                 reqData.loanProcessAction = "SAVE";
@@ -1106,6 +1178,16 @@ define({
                         return false;
                     }
                     Utils.confirm("Are You Sure?").then(function(){
+                        if(model.loanAccount.loanDocuments && model.loanAccount.loanDocuments.length>0){
+                            for(documents of model.loanAccount.loanDocuments){
+                                if(documents.document=='WAIVERAPPROVAL'){
+                                    documents.documentId=model.loanAccount.waiverdocumentId;
+                                    documents.documentStatus=model.loanAccount.waiverdocumentstatus;
+                                    documents.rejectReason=model.loanAccount.waiverdocumentrejectReason;
+                                    documents.remarks=model.loanAccount.waiverdocumentremarks; 
+                                }
+                            }
+                        }
                         var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                         reqData.loanAccount.status = '';
                         reqData.loanProcessAction = "PROCEED";
@@ -1133,6 +1215,17 @@ define({
 
                     if (PageHelper.isFormInvalid(form)){
                         return false;
+                    }
+
+                    if(model.loanAccount.loanDocuments && model.loanAccount.loanDocuments.length>0){
+                        for(documents of model.loanAccount.loanDocuments){
+                            if(documents.document=='WAIVERAPPROVAL'){
+                                documents.documentId=model.loanAccount.waiverdocumentId;
+                                documents.documentStatus=model.loanAccount.waiverdocumentstatus;
+                                documents.rejectReason=model.loanAccount.waiverdocumentrejectReason;
+                                documents.remarks=model.loanAccount.waiverdocumentremarks; 
+                            }
+                        }
                     }
 
                     var reqData = {

@@ -3814,7 +3814,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "DocumentVerification", "Completed","DocumentUpload", "Screening", "ScreeningReview", "Application", "ApplicationReview", "FieldAppraisal", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "LoanInitiation"
+                        "DocumentVerification","LoanBooking", "Completed","DocumentUpload", "Screening", "ScreeningReview", "Application", "ApplicationReview", "FieldAppraisal", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "LoanInitiation"
                      ]
                   },
                   "document":{
@@ -3823,7 +3823,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "DocumentVerification", "Completed","DocumentUpload", "Screening", "ScreeningReview", "Application", "ApplicationReview", "FieldAppraisal", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "LoanInitiation"
+                        "DocumentVerification", "LoanBooking","Completed","DocumentUpload", "Screening", "ScreeningReview", "Application", "ApplicationReview", "FieldAppraisal", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "LoanInitiation"
                      ]
                   },
                   "remarks":{
@@ -3832,8 +3832,26 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "DocumentVerification","Completed"
+                        "DocumentVerification","LoanBooking","Completed","LinkedAccountVerification"
                      ]
+                  },
+                  "documentStatus":{
+                    "title":"Remarks",
+                    "type":"string",
+                    "minLength":1,
+                    "maxLength":100,
+                    "captureStages":[
+                       "LoanBooking","LinkedAccountVerification"
+                    ]
+                  },
+                  "rejectReason":{
+                    "title":"Remarks",
+                    "type":"string",
+                    "minLength":1,
+                    "maxLength":100,
+                    "captureStages":[
+                       "LoanBooking","LinkedAccountVerification"
+                    ]
                   }
                }
             }

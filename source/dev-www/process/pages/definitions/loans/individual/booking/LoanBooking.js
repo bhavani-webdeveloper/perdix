@@ -223,7 +223,17 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                                 urns.push(model.loanAccount.portfolioInsuranceUrn);
                             }
 
-                            
+                            if(model.loanAccount.loanDocuments && model.loanAccount.loanDocuments.length>0){
+                                for(documents of model.loanAccount.loanDocuments){
+                                    if(documents.document=='WAIVERAPPROVAL'){
+                                        model.loanAccount.waiverdocumentId= documents.documentId;
+                                        model.loanAccount.waiverdocumentstatus= documents.documentStatus;
+                                        model.loanAccount.waiverdocumentrejectReason=documents.rejectReason;
+                                        model.loanAccount.waiverdocumentremarks=documents.remarks;
+                                    }
+                                }
+                            }
+
                             model.loanAccount.loanCustomerRelations = model.loanAccount.loanCustomerRelations || [];
                             model.loanAccount.loan_coBorrowers = [];
                             model.loanAccount.loan_guarantors = [];
@@ -952,7 +962,39 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                             subCategory: "DOC1",
                             title:"WAIVER_APPROVAL_DOCUMENT",
                             using: "scanner"
+                        },
+                        {
+                            "type": "fieldset",
+                            "readonly":true,
+                            "condition": "model.loanAccount.waiverdocumentstatus =='APPROVED'||model.loanAccount.waiverdocumentstatus =='REJECTED'",
+                            "items":[
+                                {
+                                    "key": "loanAccount.waiverdocumentstatus",
+                                    title:"WAIVER_APPROVAL_STATUS",
+                                    "required":true,
+                                    "type": "select",
+                                    "titleMap": [{
+                                        value: "REJECTED",
+                                        name: "Rejected"
+                                    }, {
+                                        value: "APPROVED",
+                                        name: "Approved"
+                                    }]
+                                },
+                                {
+                                    "key": "loanAccount.waiverdocumentrejectReason",
+                                    "required":true,
+                                    "condition":"model.loanAccount.waiverdocumentstatus=='REJECTED'",
+                                    title: "Reason"
+                                },
+                                {
+                                    "key": "loanAccount.waiverdocumentremarks",
+                                    "required":true,
+                                    title: "Remarks"
+                                }
+                            ]
                         }
+                        
                     ]
                 },
                 ]
@@ -1066,13 +1108,27 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                            return;
                         }
                         if(model.loanAccount.waiverdocumentId){
-                            model.loanAccount.loanDocuments.push({
-                                loanId:model.loanAccount.id,
-                                documentId:model.loanAccount.waiverdocumentId,
-                                document:"Waiver Approval",
-                                accountNumber:model.loanAccount.accountNumber,
-                                documentStatus:"PENDING",
-                            });
+                            if(model.loanAccount.waiverdocumentstatus){
+                                if(model.loanAccount.loanDocuments && model.loanAccount.loanDocuments.length>0){
+                                    for(documents of model.loanAccount.loanDocuments){
+                                        if(documents.document=='WAIVERAPPROVAL'){
+                                            documents.documentId=model.loanAccount.waiverdocumentId;
+                                            documents.documentStatus=model.loanAccount.waiverdocumentstatus;
+                                            documents.rejectReason=model.loanAccount.waiverdocumentrejectReason;
+                                            documents.remarks=model.loanAccount.waiverdocumentremarks; 
+                                        }
+                                    }
+                                }
+                            }else{
+                                model.loanAccount.loanDocuments.push({
+                                    loanId:model.loanAccount.id,
+                                    documentId:model.loanAccount.waiverdocumentId,
+                                    document:"WAIVERAPPROVAL",
+                                    accountNumber:model.loanAccount.accountNumber,
+                                    documentStatus:"PENDING",
+                                });
+
+                            }
                         }
                     }
 
@@ -1202,7 +1258,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                             message: "Amount should not be greater then" +" " + amount2
                         });
                         return 
-                    }  
+                    }
                 },
                 reject: function (model, form, formName) {
 
