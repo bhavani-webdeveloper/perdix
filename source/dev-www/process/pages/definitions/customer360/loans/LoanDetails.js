@@ -2092,12 +2092,29 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
 
                                 }]
                             },
-                    {
-                        "type": "button",
-                        "title": "Update",
-                        "notitle": true,
-                        "onClick": "actions.update(model, formCtrl, form, $event)"
-                    },{
+                            {
+                                "type": "grid",
+                                "orientation": "horizontal",
+                                "items": [{
+                                        "type": "button",
+                                        "title": "Update",
+                                        "notitle": true,
+                                        "onClick": "actions.update(model, formCtrl, form, $event)"
+                                    },
+                                    {
+                                        "type": "button",
+                                        "title": "DOWNLOAD_ALL_FORMS",
+                                        "condition":"model.loanDocuments != null && model.loanDocuments.existingDocuments != null && model.loanDocuments.existingDocuments.length !=0",
+                                        "fieldHtmlClass": "pull-right",
+                                        "onClick": function (model, form, schemaForm, event) {
+                                            // Utils.downloadFile(irf.MANAGEMENT_BASE_URL + "/forms/AllFormsDownload.php?record_id=" + model.loanAccount.id);
+
+                                            var fileUrl = IndividualLoan.getAllDocumentsUrl(model.loanAccount.id);
+                                            Utils.downloadFile(fileUrl);
+                                        }
+                                    }
+                                ]
+                            },{
                         "title": "Loan Doument Download",
                         "key": "loanAccount.applicationFileId",
                         "condition": "model.loanAccount.loanType == 'JLG'",
