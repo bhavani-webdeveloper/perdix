@@ -35,12 +35,20 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.Application'),
                         order:30
                     },
                     {
-                        pageName: 'customer.EnterpriseEnrolment2',
+                        pageName: 'customer.EnterpriseEnrolment2BusinessBasic',
                         title: 'BUSINESS',
-                        pageClass: 'business',
+                        pageClass: 'businessBasic',
                         minimum: 1,
                         maximum: 1,
                         order:40
+                    },
+                    {
+                        pageName: 'customer.EnterpriseEnrolment2BusinessFinancial',
+                        title: 'Business Financials',
+                        pageClass: 'businessFinancial',
+                        minimum: 1,
+                        maximum: 1,
+                        order:50
                     },
                     {
                         pageName: 'loans.individual.screening.LoanRequest',
@@ -48,7 +56,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.Application'),
                         pageClass: 'loan-request',
                         minimum: 1,
                         maximum: 1,
-                        order:50
+                        order:60
                     },
                     {
                         pageName: 'loans.individual.screening.CreditBureauView',
@@ -64,7 +72,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.Application'),
                         pageClass: 'loan-review',
                         minimum: 1,
                         maximum: 1,
-                        order:60
+                        order:80
                     }
                 ],
         		"bundlePages": [],
@@ -156,13 +164,20 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.Application'),
                                         });
                                     }
 
+                                    var businessModel = {
+                                        loanRelation: {customerId: loanCustomerId}
+                                    };
+                                    
                                     $this.bundlePages.push({
-                                        pageClass: 'business',
-                                        model: {
-                                            loanRelation: {customerId: loanCustomerId}
-                                        }
-                                    })
-
+                                        pageClass: 'businessBasic',
+                                        model: businessModel
+                                    });
+                                    
+                                    $this.bundlePages.push({
+                                        pageClass: 'businessFinancial',
+                                        model: businessModel
+                                    });
+                                    
                                     $this.bundlePages.push({
                                         pageClass: 'loan-request',
                                         model: {
@@ -228,7 +243,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.Application'),
                                 }
                                 bundleModel.guarantors.push(params.guarantor);
                                 break;
-                            case 'business':
+                            case 'businessBasic':
                                 $log.info("New Business Enrolment");
                                 bundleModel.business = params.customer;
                                 BundleManager.broadcastEvent("new-business", params);
