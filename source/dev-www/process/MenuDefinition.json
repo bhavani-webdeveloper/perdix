@@ -26,7 +26,8 @@
                 "Page/Engine/EnrollmentHouseVerificationQueue",
                 "Page/EngineOffline/AssetsLiabilitiesAndHealth",
                 "Page/Engine/CustomerFormDownloads",
-                "Page/Engine/customer360.RecaptureQueue"
+                "Page/Engine/customer360.RecaptureQueue",
+                "Page/Adhoc/workflow.CustomerApprovalDashboard"
             ]
         },
         "Page/Adhoc/sambandh.customer.EnrollmentDashboard",
