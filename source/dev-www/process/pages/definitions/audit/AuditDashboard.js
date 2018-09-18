@@ -95,7 +95,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
 
                 if (saqMenu) {
                     $q.all([
-                        Audit.online.findAuditInfo({
+                        Audit.online.getAuditList({
                             'auditor_id': auditor_id,
                             'current_stage': 'scheduled',
                         }).$promise
@@ -106,7 +106,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
 
                 if (savqMenu) {
                     $q.all([
-                        Audit.online.findAuditInfo({
+                        Audit.online.getAuditList({
                             'current_stage': 'scheduled'
                         }).$promise
                     ]).then(function(data) {
@@ -116,10 +116,10 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
 
                 if (daq) {
                     $q.all([
-                        Audit.online.findAuditInfo({
+                        Audit.online.getAuditList({
                             'current_stage': 'postpone'
                         }).$promise,
-                        Audit.online.findAuditInfo({
+                        Audit.online.getAuditList({
                             'current_stage': 'cancel'
                         }).$promise
                     ]).then(function(data) {
@@ -127,7 +127,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                     });
                 }
                 if (oraq) {
-                    Audit.online.findAuditInfo({
+                    Audit.online.getAuditList({
                         'auditor_id': auditor_id,
                         'status': 'O',
                         'audit_type': 1
@@ -136,7 +136,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                     });
                 }
                 if (osaq) {
-                    Audit.online.findAuditInfo({
+                    Audit.online.getAuditList({
                         'auditor_id': auditor_id,
                         'audit_type': 0,
                         'status': 'O'
@@ -165,7 +165,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 }
 
                 if (pavq || paq) {
-                    Audit.online.findAuditInfo({
+                    Audit.online.getAuditList({
                         'current_stage': 'publish'
                     }).$promise.then(function(data) {
                         if (pavq) {
@@ -178,7 +178,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 }
 
                 if (raq || ravq) {
-                    Audit.online.findAuditInfo({
+                    Audit.online.getAuditList({
                         'current_stage': 'L1-approve'
                     }).$promise.then(function(data) {
                         if (raq) {
@@ -191,7 +191,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 }
 
                 if (aaq || aavq) {
-                    Audit.online.findAuditInfo({
+                    Audit.online.getAuditList({
                         'current_stage': 'approve'
                     }).$promise.then(function(data) {
                         if (aaq) {
@@ -204,7 +204,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 }
 
                 if (reaq) {
-                    Audit.online.findAuditInfo({
+                    Audit.online.getAuditList({
                         'current_stage': 'reject'
                     }).$promise.then(function(data) {
                         reaq.data = data.body.length;
@@ -212,13 +212,13 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 }
 
                 if (adq) {
-                    Audit.online.findAuditInfo({}).$promise.then(function(data) {
+                    Audit.online.getAuditList({}).$promise.then(function(data) {
                         adq.data = data.body.length;
                     });
                 }
 
                 if (asq) {
-                    Audit.online.findAuditScores({
+                    Audit.online.getAuditScores({
                         'page': 1,
                         'per_page': 100
                     }).$promise.then(function(data) {
@@ -227,54 +227,86 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 }
 
                 if (avq) {
-                    Audit.online.findAuditInfo({}).$promise.then(function(data) {
+                    Audit.online.getAuditList({}).$promise.then(function(data) {
                         avq.data = data.body.length;
                     });
                 }
 
                 if (aiq) {
-                    Audit.online.findIssues({
-                        'current_stage': "assign",
-                        "assignee_designation_id": role_id
-                    }).$promise.then(function(data) {
-                        aiq.data = Number(data.headers['x-total-count']) || data.body.length;
+                    $q.all([
+                        Audit.online.getIssuesList({
+                            'issue_status': "A",
+                            'page': 1,
+                            'per_page': 100
+                        }).$promise,
+                        Audit.online.getIssuesList({
+                            'issue_status': "P",
+                            'page': 1,
+                            'per_page': 100
+                        }).$promise
+                    ]).then(function(data) {
+                        aiq.data = data[0].body.length + data[1].body.length;
                     });
                 }
-
+                
                 if (aivq) {
-                    Audit.online.findIssues({
-                        'current_stage': "assign"
-                    }).$promise.then(function(data) {
-                        aivq.data = Number(data.headers['x-total-count']) || data.body.length;
+                    $q.all([
+                        Audit.online.getIssuesList({
+                            'issue_status': "A",
+                            'page': 1,
+                            'per_page': 100
+                        }).$promise,
+                        Audit.online.getIssuesList({
+                            'issue_status': "P",
+                            'page': 1,
+                            'per_page': 100
+                        }).$promise
+                    ]).then(function(data) {
+                        aivq.data = data[0].body.length + data[1].body.length;
                     });
                 }
-
+ 
                 if (oiq || oivq) {
-                    Audit.online.findIssues({
-                        'current_stage': 'close',
+                    Audit.online.getIssuesList({
+                        'confirmity_status': "NULL",
+                        'issue_status': 'X',
                     }).$promise.then(function(data) {
                         if (oiq) {
-                            oiq.data = Number(data.headers['x-total-count']) || data.body.length;
+                            oiq.data = data.body.length;
                         }
                         if (oivq) {
-                            oivq.data = Number(data.headers['x-total-count']) || data.body.length;
+                            oivq.data = data.body.length;
                         }
                     });
                 }
-
+ 
                 if (ciq) {
-                    Audit.online.findIssues({
-                        'current_stage': "confirm",
+                    Audit.online.getIssuesList({
+                        'confirmity_status': "1",
+                        'issue_status': "X",
                     }).$promise.then(function(data) {
-                        ciq.data = Number(data.headers['x-total-count']) || data.body.length;
+                        var returnObj = {
+                            headers: {
+                                'x-total-count': data.headers['x-total-count']
+                            },
+                            body: data.body
+                        };
+                        ciq.data = data.body.length;
                     });
                 }
-
+ 
                 if (uciq) {
-                    Audit.online.findIssues({
-                        'current_stage': "unconfirm",
+                    Audit.online.getIssuesList({
+                        'confirmity_status': "2",
+                        'issue_status': "P",
                     }).$promise.then(function(data) {
-                        uciq.data = Number(data.headers['x-total-count']) || data.body.length;
+                        var returnObj = {
+                            headers: {
+                                'x-total-count': data.headers['x-total-count']
+                            },
+                            body: data.body
+                        };
+                        uciq.data = data.body.length;
                     });
                 }
             }
