@@ -102,6 +102,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                                                     $downloadRequired: docsForProduct[i].downloadRequired,
                                                     $title: docsForProduct[i].docTitle,
                                                     $formsKey: docsForProduct[i].formsKey,
+                                                    $mandatory: docsForProduct[i].mandatory,
                                                     disbursementId: model.loanAccount.disbursementSchedules[0].id,
                                                     isHidden: false
                                                 })
