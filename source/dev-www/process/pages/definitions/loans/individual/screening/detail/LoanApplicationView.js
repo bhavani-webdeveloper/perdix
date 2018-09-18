@@ -15,17 +15,13 @@ define({
 
             return irfElementsConfig.currency.iconHtml+irfCurrencyFilter(data, null, null, "decimal");
         }
+       
         var navigateToQueue = function(model) {
                     // Considering this as the success callback
                     // Deleting offline record on success submission
                     BundleManager.deleteOffline().then(function() {
                         PageHelper.showProgress("loan-offline", "Offline record cleared", 5000);
                     });
-
-
-                    model.customerHistoryFinancials={
-                        'tableData': []
-                    }
 
                     if (model.currentStage == 'Screening')
                         $state.go('Page.Engine', {
@@ -244,7 +240,9 @@ define({
                 model.mitigantsChanged=0;
                 model.loanMitigants= model.loanAccount.loanMitigants;
 
-                
+                 model.customerHistoryFinancials={
+                        'tableData': []
+                    }
 
             /*Asset details*/
                 if (model.loanAccount.collateral.length != 0) {
