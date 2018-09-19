@@ -1982,7 +1982,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                     "remove": null,
                                     "notitle": true,
                                     "condition": "!(!_.isUndefined(model.pageConfig.readonly) && model.pageConfig.readonly==false)",
-                                   
+                                    "readonly": true,
                                     "view": "fixed",
                                     "items": [{
                                         "type": "section",
