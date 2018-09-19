@@ -93,11 +93,11 @@ define({
                     return formHelper;
                 },
                 getResultsPromise: function(searchOptions, pageOpts) {
-                    var branches = formHelper.enum('branch').data;
+                    var branches = formHelper.enum('branch_id').data;
                     var branchName = null;
                     for (var i = 0; i < branches.length; i++) {
                         var branch = branches[i];
-                        if (branch.code == searchOptions.branchName) {
+                        if (branch.code == searchOptions.branch) {
                             branchName = branch.name;
                         }
                     }
@@ -112,7 +112,7 @@ define({
 
                     var promise = RepaymentReminder.query({
                         'customerUrn': searchOptions.customerUrn,
-                        'branchName': searchOptions.branch,
+                        'branchName': branchName,
                         'centreName': centreName,
                         'businessName': searchOptions.businessName,
                         'applicantName': searchOptions.applicantName,
