@@ -4488,7 +4488,7 @@
             "assetType": {
               "title": "Asset Type",
               "type": "string",
-              "refCodeCategory": "enterprice_asset_types",
+              "refCodeCategory": "vehicle_type",
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"

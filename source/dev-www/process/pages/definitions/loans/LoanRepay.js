@@ -135,6 +135,8 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             .then(function (resp){
                                 if(resp.body && resp.body.length > 0)
                                     model.repayment.id = resp.body[0].id;
+                                    model.repayment.latitude = resp.body[0].latitude;
+                                    model.repayment.longitude = resp.body[0].longitude;
                             }, function(httperr){});
 
                     var p4 = Queries.getUnApprovedPaymentsForAccount(loanAccountNo)
@@ -251,6 +253,12 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 key: "loanAccount.applicantName",
                                 title: "APPLICANT_NAME",
                                 readonly: true
+                            },{
+                                key: "repayment.latitude",
+                                title: "LOCATION",
+                                type: "geotag",
+                                latitude: "repayment.latitude",
+                                longitude: "repayment.longitude"
                             },
                             {
                                 "type": "fieldset",
@@ -884,6 +892,8 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                     postData.loanCollection.principalDue = model.cbsLoanData.totalPrincipalDue;
                                     postData.loanCollection.reference = model.repayment.reference;
                                     postData.loanCollection.remarks = model.repayment.remarks;
+                                    postData.loanCollection.latitude = model.repayment.latitude;
+                                    postData.loanCollection.longitude = model.repayment.longitude;
                                     postData.loanCollection.repaymentAmount = model.repayment.amount;
                                     postData.loanCollection.repaymentDate = model.repayment.repaymentDate;
                                     postData.loanCollection.repaymentType = model.repayment.transactionName;

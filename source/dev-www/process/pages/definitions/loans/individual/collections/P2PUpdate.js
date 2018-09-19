@@ -38,6 +38,9 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                     function(response){
                         if (response.body.length){
                         model.previousPromise = response.body[0]; 
+                        
+                model.promise.latitude = response.body[0].latitude;                
+                model.promise.longitude = response.body[0].longitude;
                     }
                 });
                 irfProgressMessage.pop('loading P2PUpdate', 'Loaded.', 2000);
@@ -207,6 +210,12 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                         title:"CONTACTABLE",
                         "type":"select",
                         "enumCode":"decisionmaker"
+                    }, {
+                        key: "promise.latitude",
+                        title: "LOCATION",
+                        type: "geotag",
+                        latitude: "promise.latitude",
+                        longitude: "promise.longitude"
                     },
                     {
                      "type": "fieldset",
@@ -290,8 +299,44 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
             },
 			submit: function(model, form, formName){
 				$log.info("Inside submit()");
-				console.warn(model);
-				PageHelper.showLoader();
+                console.warn(model);
+                var siteCode = SessionStore.getGlobalSetting("siteCode");
+
+                if(siteCode == "witfin"){
+
+                    var selecteddate = model.promise.promiseToPayDate;
+                    var currentdate = moment(new Date()).format("YYYY-MM-DD");                
+                    var fivedays = moment(new Date(new Date().getTime()+(5*24*60*60*1000))).format("YYYY-MM-DD");  
+                    var fivedaysvalidate = moment(new Date(new Date().getTime()+(5*24*60*60*1000))).format("DD-MM-YYYY");               
+                    var oneday = moment(new Date(new Date().getTime()+(1*24*60*60*1000))).format("DD-MM-YYYY");
+                    var currentmonth = moment(new Date()).format("MM");  
+                    var selectedmonth = moment(new Date(selecteddate)).format("MM");
+                    var date = new Date();                
+                    var currentday = moment(new Date()).format("DD"); 
+                    var lastday =  moment(new Date(date.getFullYear(), date.getMonth() + 1, 0)).format("DD");                
+                    var lastfullday =  moment(new Date(date.getFullYear(), date.getMonth() + 1, 0)).format("DD-MM-YYYY");
+                    var daydiff = lastday - currentday;
+
+                    if(daydiff < 4 && daydiff > 1){
+                        var remain = "Only Select Date Between "+ oneday +" To "+ lastfullday;                    
+                    }                    
+                    if(daydiff == 1){
+                        var remain = "You have To select "+ lastfullday +" From This Month";
+                    }
+                    if(daydiff == 0){
+                        var remain = "No Days Left For Select From Current Month";
+                    }
+                    if(daydiff > 5){
+                        var remain = "Only Select Date Between "+ oneday +" To "+ fivedaysvalidate;                    
+                    }
+
+                    if(selecteddate <= currentdate ||  selecteddate > fivedays || currentmonth != selectedmonth){
+                        PageHelper.showProgress("Date Error", "Your Next Action Date "+ remain , 5000);
+                        return false;
+                    }
+                }
+
+                PageHelper.showLoader();
                 if (model.additional.reason && model.additional.reason == "Others")
                     model.promise.overdueReasons = model.additional.overdueReasons;
                 else
