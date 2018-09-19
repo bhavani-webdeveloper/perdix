@@ -36,6 +36,7 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                         model.customer.isDateOfBirthChanged="NO";
                     }else {
                         model.customer.isDateOfBirthChanged="YES";
+                        model.customer.ageProofImageId =model.UpdatedWorkflow.customer.ageProofImageId ;
                         model.customer.newDateOfBirth=model.UpdatedWorkflow.customer.dateOfBirth;
                     }
 
@@ -44,6 +45,7 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                     }else {
                         model.customer.isMobileChanged="YES";
                         model.customer.newMobilePhone=model.UpdatedWorkflow.customer.mobilePhone;
+                        model.customer.mobileProofImageId=model.UpdatedWorkflow.proof.mobileProofImageId;
                     }
 
                     if(model.customer.ownership == model.UpdatedWorkflow.customer.ownership) {
@@ -52,7 +54,6 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                         model.customer.isOwnershipChanged="YES";
                         model.customer.newOwnership=model.UpdatedWorkflow.customer.ownership;
                     }
-
                     if(model.customer.gender == model.UpdatedWorkflow.customer.gender) {
                         model.customer.isGenderChanged="NO";
                     }else {
@@ -74,6 +75,7 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                     }
                     else {
                         model.customer.isAddressChanged="YES";
+                        model.customer.addressProofImageId =model.UpdatedWorkflow.customer.addressProofImageId ;
                         model.customer.doorNo =model.UpdatedWorkflow.customer.doorNo ;
                         model.customer.street = model.UpdatedWorkflow.customer.street ;
                         model.customer.locality = model.UpdatedWorkflow.customer.locality ;
@@ -123,9 +125,16 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                         items: [
                             {
                                 key: "customer.id",
+                                title: "CUSTOMER_ID",
+                                readonly: true,
+                                condition: "model.workflow"
+                            },
+                            {
+                                key: "customer.id",
                                 type: "lov",
                                 lovonly: true,
                                 title: "CUSTOMER_ID",
+                                condition: "!model.workflow",
                                 inputMap: {
                                     "customerId": {
                                         "key": "customer.id"
@@ -177,7 +186,7 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                             },
                             {
                                 key: "customer.fullAddress",
-                                title: "ADREESS",
+                                title: "ADDRESS",
                                 type : "html",
                                 readonly: true
                             },
@@ -215,9 +224,9 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                                     condition: "model.customer.isDateOfBirthChanged=='YES'"
                                 },
                                 {
-                                    key: "customer.dateOfBirthProofImageId",
+                                    key: "customer.ageProofImageId",
                                     type: "file",
-                                    title: "DATAEPROOF",
+                                    title: "AGE_PROOF",
                                     fileType: "file/*",
                                     "category": "Customer",
                                     "subCategory": "AGEPROOF",
@@ -228,10 +237,10 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                             },
                             {
                                 type: "fieldset",
-                                title: "MOBILE",
+                                title: "MOBILE_PHONE",
                                 "items": [{
                                     key: "customer.mobilePhone",
-                                    title: "MOBILE",
+                                    title: "MOBILE_PHONE",
                                     readonly: true
                                 },
                                 {
@@ -245,7 +254,7 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                                 },
                                 {
                                     key: "customer.newMobilePhone",
-                                    title: "UPDATE_MOBILE",
+                                    title: "UPDATE_MOBILE_PHONE",
                                     condition: "model.customer.isMobileChanged=='YES'"
                                 },
                                 {
@@ -280,7 +289,7 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                                 {
                                     key: "customer.newGender",
                                     type: "radios",
-                                    title: "UPDATE",
+                                    title: "UPDATE_GENDER",
                                     "titleMap": {
                                         "MALE": "MALE",
                                         "FEMALE": "FEMALE",
@@ -348,7 +357,7 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                             {
                                 key: "customer.addressProofImageId",
                                 type: "file",
-                                title: "ADDRESSPROOF",
+                                title: "ADDRESS_PROOF",
                                 fileType: "file/*",
                                 "category": "Customer",
                                 "subCategory": "ADDRESSPROOF",
@@ -387,7 +396,7 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                     },
                     "branchName": {
                         "type": "string",
-                        "title": "BRANCHNAME"
+                        "title": "BRANCH_NAME"
                     },
                     "customerType": {
                         "type": "string",
@@ -530,20 +539,18 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                 irfProgressMessage.pop('workflow-update', 'Working...');
                 model.customer.title=String(model.customer.addressProofSameAsIdProof);
                 $log.info(model);
-                console.log("------------------------------------------------------")
-                console.log(model);
                 var updatedModel= _.cloneDeep(model);
                 var proof ={};
                 if(model.customer.isAddressChanged=='YES'){
-                    proof["addressProofImageId"]=model.addressProofImageId;
+                    proof["addressProofImageId"]=model.customer.addressProofImageId;
                 }
                 if(model.customer.isDateOfBirthChanged=='YES'){
                     updatedModel.customer.dateOfBirth=updatedModel.customer.newDateOfBirth;
-                    proof["dateOfBirthProofImageId"]=model.customer.dateOfBirthProofImageId;
+                    proof["ageProofImageId"]=model.customer.ageProofImageId;
                 }
                 if(model.customer.isMobileChanged=='YES'){
                     updatedModel.customer.mobilePhone=updatedModel.customer.newMobilePhone;
-                    proof["mobileProofReverseImageId"]=model.customer.mobileProofReverseImageId;
+                    proof["mobileProofImageId"]=model.customer.mobileProofImageId;
                 }
                 if(model.customer.isGenderChanged=='YES'){
                     updatedModel.customer.gender=updatedModel.customer.newGender;

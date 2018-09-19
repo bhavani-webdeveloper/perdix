@@ -33,13 +33,13 @@ function($log,$stateParams, formHelper,filterFilter, Enrollment,Workflow,Queries
 			});
 		},
 		definition: {
-			title: "Search Workflow",
+			title: "WORKFLOW_SEARCH",
 			searchForm: [
 				{
                 	"type": "section",
                 	items: [
                 	{
-                		key: "first_name",
+                		key: "firstName",
                 	},
                 	{
                 		key: "lastName",
@@ -79,7 +79,7 @@ function($log,$stateParams, formHelper,filterFilter, Enrollment,Workflow,Queries
 				"type": 'object',
 				"title": 'SearchOptions',
 				"properties": {
-					"first_name": {
+					"firstName": {
 						"title": "CUSTOMER_NAME",
 						"type": "string"
 					},
@@ -200,7 +200,7 @@ function($log,$stateParams, formHelper,filterFilter, Enrollment,Workflow,Queries
 							data: 'id'
 						},
 						{
-							title:'FIRSTNAME',
+							title:'FIRST_NAME',
 							data: 'firstName'
 							// type: 'html',
 						},

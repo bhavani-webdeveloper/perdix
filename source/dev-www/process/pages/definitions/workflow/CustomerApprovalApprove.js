@@ -36,9 +36,7 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalApprove"),
                     model.workflow = _.cloneDeep(resp);
                     model.UpdatedWorkflow = JSON.parse(model.workflow.temporary);
 
-                    console.log(model.UpdatedWorkflow);
                     model.customer = model.workflow.customer;
-
                     model.customer.fullAddress = model.customer.doorNo + " ," + model.customer.street + "  ," + model.customer.locality + "  ," + model.customer.villageName + " ,"+model.customer.pincode+" ,"+model.customer.district+" ,"+ model.customer.state+" - "+model.customer.pincode
                     //model.customer : NEW
                     //model.workflow.customer : updated
@@ -46,6 +44,7 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalApprove"),
                         model.customer.isDateOfBirthChanged="NO";
                     }else {
                         model.customer.isDateOfBirthChanged="YES";
+                        model.customer.ageProofImageId =model.UpdatedWorkflow.customer.ageProofImageId ;
                         model.customer.newDateOfBirth=model.UpdatedWorkflow.customer.dateOfBirth;
                     }
 
@@ -54,6 +53,7 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalApprove"),
                     }else {
                         model.customer.isMobileChanged="YES";
                         model.customer.newMobilePhone=model.UpdatedWorkflow.customer.mobilePhone;
+                        model.customer.mobileProofImageId=model.UpdatedWorkflow.proof.mobileProofImageId;
                     }
 
                     if(model.customer.ownership == model.UpdatedWorkflow.customer.ownership) {
@@ -62,7 +62,6 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalApprove"),
                         model.customer.isOwnershipChanged="YES";
                         model.customer.newOwnership=model.UpdatedWorkflow.customer.ownership;
                     }
-
                     if(model.customer.gender == model.UpdatedWorkflow.customer.gender) {
                         model.customer.isGenderChanged="NO";
                     }else {
@@ -84,6 +83,7 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalApprove"),
                     }
                     else {
                         model.customer.isAddressChanged="YES";
+                        model.customer.addressProofImageId =model.UpdatedWorkflow.customer.addressProofImageId ;
                         model.customer.doorNo =model.UpdatedWorkflow.customer.doorNo ;
                         model.customer.street = model.UpdatedWorkflow.customer.street ;
                         model.customer.locality = model.UpdatedWorkflow.customer.locality ;
@@ -96,10 +96,11 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalApprove"),
                         model.customer.landLineNo = model.UpdatedWorkflow.customer.landLineNo ;
                     }
 
-
                     irfProgressMessage.pop("cust-load", "Load Complete", 2000);
+                    PageHelper.hideLoader();
                 }, function (resp) {
                     irfProgressMessage.pop("cust-load", "An Error Occurred. Failed to fetch Data", 5000);
+                    PageHelper.hideLoader();
                 });
             }
 
@@ -138,7 +139,7 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalApprove"),
                             },
                             {
                                 key: "customer.fullAddress",
-                                title: "ADREESS",
+                                title: "ADDRESS",
                                 type : "html",
                                 readonly: true
                             },
@@ -179,9 +180,9 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalApprove"),
                                         readonly: true
                                     },
                                     {
-                                        key: "customer.dateOfBirthProofImageId",
+                                        key: "customer.ageProofImageId",
                                         type: "file",
-                                        title: "DATAEPROOF",
+                                        title: "AGE_PROOF",
                                         fileType: "file/*",
                                         "category": "Customer",
                                         "subCategory": "AGEPROOF",
@@ -192,10 +193,10 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalApprove"),
                             },
                             {
                                 type: "fieldset",
-                                title: "MOBILE",
+                                title: "MOBILE_PHONE",
                                 "items": [{
                                     key: "customer.mobilePhone",
-                                    title: "MOBILE",
+                                    title: "MOBILE_PHONE",
                                     readonly: true
                                 },
                                     {
@@ -210,12 +211,12 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalApprove"),
                                     },
                                     {
                                         key: "customer.newMobilePhone",
-                                        title: "UPDATE_MOBILE",
+                                        title: "UPDATE_MOBILE_PHONE",
                                         condition: "model.customer.isMobileChanged=='YES'",
                                         readonly: true
                                     },
                                     {
-                                        key: "customer.mobileProofReverseImageId",
+                                        key: "customer.mobileProofImageId",
                                         type: "file",
                                         title: "MOBILE_PROOF",
                                         fileType: "file/*",
@@ -248,7 +249,7 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalApprove"),
                                     {
                                         key: "customer.newGender",
                                         type: "radios",
-                                        title: "UPDATE",
+                                        title: "UPDATE_GENDER",
                                         "titleMap": {
                                             "MALE": "MALE",
                                             "FEMALE": "FEMALE",
@@ -315,15 +316,13 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalApprove"),
                                         key: "customer.state",
                                         type: "select"
                                     },
-                                    "customer.stdCode",
                                     "customer.landLineNo",
-                                    "customer.mobilePhone"
                                 ]
                             },
                             {
                                 key: "customer.addressProofImageId",
                                 type: "file",
-                                title: "ADDRESSPROOF",
+                                title: "ADDRESS_PROOF",
                                 fileType: "file/*",
                                 "category": "Customer",
                                 "subCategory": "ADDRESSPROOF",
@@ -528,27 +527,13 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalApprove"),
                             var updatedModel= _.cloneDeep(model);
 
                             updatedModel.workflow.action=updatedModel.action
-                            updatedModel.workflow.sendbackStage="Init"
-
-
-                           /* var requestData = {
-                                "id": updatedModel.id,
-                                "sendbackStage" : "Init",
-                                "processType": "Customer",
-                                "processName": "Approval",
-                                "currentStage": "Approve",
-                                "customer": updatedModel.customer,
-                                "action" :  updatedModel.action,
-                                "referenceKey" : updatedModel.customer.id
-                            };
-                          /!*  if(updatedModel.currentStage)
-                                requestData.currentStage=updatedModel.currentStage;*!/*/
+                            if(updatedModel.action=="SENDBACK")
+                                updatedModel.workflow.sendbackStage="Init"
 
                             Workflow.save(updatedModel.workflow, function (res, headers) {
                                 PageHelper.hideLoader();
                                 irfProgressMessage.pop('cust-update', 'Done. Customer Updated, ID : ' + res.customer.id, 2000);
-
-                                console.log(res);
+                                irfNavigator.goBack();
                             }, function (res, headers) {
                                 PageHelper.hideLoader();
                                 irfProgressMessage.pop('cust-update', 'Oops. Some error.', 2000);
