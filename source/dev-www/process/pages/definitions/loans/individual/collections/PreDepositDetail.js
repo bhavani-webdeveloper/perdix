@@ -156,6 +156,16 @@ define({
                             PageHelper.showProgress("loan", "Your form have errors. Please fix them.", 5000);
                             return false;
                     }
+                    var count = 0;
+                    _.forEach( model.collectionDetails, function(collectionDetail){
+                        if(collectionDetail.$selected == true){
+                            count++;
+                        }
+                    })
+                    if(count == 0){
+                        PageHelper.showProgress("bulk-selected", "Atleast one Deposit detail should be selected", 5000);
+						return false;
+                    }
                     Utils.confirm("Are you sure ? ")
                         .then(function () {
                             $log.info("Inside proceed()");
@@ -228,6 +238,7 @@ define({
                             1) sending to reject stage , calling loancollection/batchRepay 
                             2) cheque have validation that it will always come in this branch as single unit
                     */
+                   
                     if (PageHelper.isFormInvalid(formCtrl)) {
                             return false;
                         }
@@ -236,6 +247,16 @@ define({
                         if (formCtrl && formCtrl.$invalid) {
                             PageHelper.showProgress("loan", "Your form have errors. Please fix them.", 5000);
                             return false;
+                    }
+                    var count = 0;
+                    _.forEach( model.collectionDetails, function(collectionDetail){
+                        if(collectionDetail.$selected == true){
+                            count++;
+                        }
+                    })
+                    if(count == 0){
+                        PageHelper.showProgress("bulk-selected", "Atleast one Deposit detail should be selected", 5000);
+						return false;
                     }
                     Utils.confirm("Are you sure ? ")
                         .then(function () {
@@ -247,7 +268,7 @@ define({
                                 "repaymentProcessAction": "PROCEED",
                                 "stage": "BranchDeposit"
                             }
-                            model.collectionDetailsCopy = model.collectionDetails;
+                            model.collectionDetailsCopy = _.cloneDeep(model.collectionDetails);
                             model.collectionDetails =[];
                             _.forEach( model.collectionDetailsCopy, function(collectionDetail){
                                     if(collectionDetail.$selected == true){
