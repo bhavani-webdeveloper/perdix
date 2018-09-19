@@ -1086,6 +1086,16 @@
               "Completed"
             ]
           },
+          "yearsOfExperience": {
+            "title": "YEARS_OF_EXPERIENCE",
+            "type": "number",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },          
           "weddingDate": {
             "title": "weddingDate",
             "type": "date",

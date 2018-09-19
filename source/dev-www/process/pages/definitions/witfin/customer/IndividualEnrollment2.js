@@ -1238,6 +1238,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "IndividualInformation.spouseFirstName",
                     "IndividualInformation.spouseDateOfBirth",
                     "IndividualInformation.weddingDate",
+                    "IndividualInformation.yearsOfExperience",
                     "IndividualInformation.state",
                     "ContactInformation",
                     "ContactInformation.mobilePhone",
@@ -1663,6 +1664,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         },
                                         "state": {
                                             "title": "STATE"
+                                        },
+                                        "yearsOfExperience": {
+                                            "key": "customer.yearsOfExperience",
+                                            "title": "YEARS_OF_EXPERIENCE",
+                                            "type": "number",
+                                            "required":true
                                         }
 
                                     }

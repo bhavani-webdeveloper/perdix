@@ -778,10 +778,11 @@ define(
                             "NewVehicleDetails.vehicleType": {
                                 "orderNo": 10,
                                 "enumCode": "new_vehicle_category",
-                                "required": true
+                                "required": true,
+                                "condition": "model.loanAccount.loanPurpose1 == 'Refinance'"
                             },
                             "NewVehicleDetails.endUse": {
-                                "orderNo": 20,
+                                "orderNo": 30,
                                 "required": true
                             },
                             "NewVehicleDetails.usedFor": {
@@ -978,6 +979,16 @@ define(
                             "repositoryAdditions": {
                                 "NewVehicleDetails": {
                                     "items": {
+                                        "vehicleType1": {
+                                            "orderNo": 20,
+                                            "key": "loanAccount.vehicleLoanDetails.vehicleType",
+                                            "type": "select",
+                                            "enumCode": "new_vehicle_category",
+                                            "title": "VEHICLE_TYPE",
+                                            "required": true,
+                                            "readonly": true,
+                                            "condition": "model.loanAccount.loanPurpose1 == 'Purchase - New Vehicle' || model.loanAccount.loanPurpose1 == 'Purchase - Used Vehicle'",
+                                        },
                                         "udf1": {
                                             "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1",
                                             "title": "MODEL_NOT_LISTED",
