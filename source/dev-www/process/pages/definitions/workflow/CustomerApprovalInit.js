@@ -164,7 +164,10 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                                 search: function (inputModel, form, model) {
                                     return Enrollment.search({
                                         id: inputModel.customerId,
-                                        branchName: inputModel.branchName
+                                        branchName: inputModel.branchName,
+                                        urnNo : inputModel.urnNo ,
+                                        firstName : inputModel.firstName,
+                                        customerType : inputModel.customerType
                                     }).$promise;
                                 },
                                 getListDisplayItem: function (item, index) {
