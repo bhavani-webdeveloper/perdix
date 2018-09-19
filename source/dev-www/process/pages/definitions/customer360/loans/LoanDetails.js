@@ -2107,10 +2107,10 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                         "condition":"model.loanDocuments != null && model.loanDocuments.existingDocuments != null && model.loanDocuments.existingDocuments.length !=0",
                                         "fieldHtmlClass": "pull-right",
                                         "onClick": function (model, form, schemaForm, event) {
-                                            // Utils.downloadFile(irf.MANAGEMENT_BASE_URL + "/forms/AllFormsDownload.php?record_id=" + model.loanAccount.id);
+                                            Utils.downloadFile(irf.MANAGEMENT_BASE_URL + "/forms/AllFormsDownload.php?record_id=" + model.loanAccount.id);
 
-                                            var fileUrl = IndividualLoan.getAllDocumentsUrl(model.loanAccount.id);
-                                            Utils.downloadFile(fileUrl);
+                                           // var fileUrl = IndividualLoan.getAllDocumentsUrl(model.loanAccount.id);
+                                            //Utils.downloadFile(fileUrl);
                                         }
                                     }
                                 ]
