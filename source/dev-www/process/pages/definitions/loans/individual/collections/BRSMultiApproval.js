@@ -237,7 +237,7 @@ define({
 
                                     var reqData = { "loanCollectionSummaryDTOs": temp };
 
-                                    if (instrument == 'CASH') {
+                                    if (instrument == 'CASH'|| instrument == 'CHQ') {
                                         reqData.stage = 'Deposit';
                                     } else {
                                         reqData.stage = 'Rejected';
