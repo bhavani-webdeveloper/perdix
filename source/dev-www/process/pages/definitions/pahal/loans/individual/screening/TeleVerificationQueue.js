@@ -9,7 +9,8 @@ define({
             "title": "TELE_VERIFICATION_QUEUE",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
-                model.branch = branch;
+                // model.branch = branch;
+                model.branchId = SessionStore.getCurrentBranch().branchId;
                 $log.info("search-list sample got initialized");
             },
             definition: {
@@ -46,6 +47,7 @@ define({
                                 "type": "select",
                                 "enumCode": "centre",
                                 "parentEnumCode": "branch",
+                                "parentValueExpr": "model.branchId",
                                 "screenFilter": true
                             }
                         },
@@ -77,7 +79,7 @@ define({
                     }
                     return IndividualLoan.search({
                         'stage': 'TeleVerification',
-                        'branchName': branch,
+                        'branchName': searchOptions.branch,
                         'enterprisePincode': searchOptions.pincode,
                         'enterprisePincode': searchOptions.pincode,
                         'applicantName': searchOptions.applicantName,
@@ -86,7 +88,8 @@ define({
                         'villageName': searchOptions.villageName,
                         'customerName': searchOptions.businessName,
                         'page': pageOpts.pageNo,
-                        'per_page': pageOpts.itemsPerPage
+                        'per_page': pageOpts.itemsPerPage,
+                        'centreCode': searchOptions.centre
 
                     }).$promise;
                 },

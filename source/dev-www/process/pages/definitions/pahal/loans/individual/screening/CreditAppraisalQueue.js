@@ -9,7 +9,8 @@ define({
             "title": "CREDIT_APPRAISAL_QUEUE",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
-                model.branch = branch;
+                // model.branch = branch;
+                model.branchId = SessionStore.getCurrentBranch().branchId;
                 $log.info("search-list sample got initialized");
             },
             definition: {
@@ -46,6 +47,7 @@ define({
                                 "type": "select",
                                 "enumCode": "centre",
                                 "parentEnumCode": "branch",
+                                "parentValueExpr": "model.branchId",
                                 "screenFilter": true
                             }
                         },
@@ -83,7 +85,8 @@ define({
                         'villageName': searchOptions.villageName,
                         'customerName': searchOptions.businessName,
                         'page': pageOpts.pageNo,
-                        'per_page': pageOpts.itemsPerPage
+                        'per_page': pageOpts.itemsPerPage,
+                        'centreCode': searchOptions.centre
 
                     }).$promise;
                 },

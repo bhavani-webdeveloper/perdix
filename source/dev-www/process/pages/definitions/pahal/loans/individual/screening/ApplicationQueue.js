@@ -29,7 +29,7 @@ define({
 				searchForm: [
 					"*"
 				],
-				autoSearch: true,
+				//`autoSearch: true,
 				searchSchema: {
 					"type": 'object',
 					"title": 'SEARCH_OPTIONS',

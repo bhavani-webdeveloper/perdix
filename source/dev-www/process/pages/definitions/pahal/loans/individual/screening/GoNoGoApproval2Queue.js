@@ -9,7 +9,8 @@ define({
             "title": "GO_NO_GO_APPROVAL_QUEUE",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
-                model.branch = branch;
+                // model.branch = branch;
+                model.branchId = SessionStore.getCurrentBranch().branchId;
                 $log.info("search-list sample got initialized");
             },
             definition: {
@@ -36,6 +37,17 @@ define({
                             "enumCode": "branch",
                             "x-schema-form": {
                                 "type": "select",
+                                "screenFilter": true
+                            }
+                        },
+                        "centre": {
+                            "title": "CENTRE",
+                            "type": ["integer", "null"],
+                            "x-schema-form": {
+                                "type": "select",
+                                "enumCode": "centre",
+                                "parentEnumCode": "branch",
+                                "parentValueExpr": "model.branchId",
                                 "screenFilter": true
                             }
                         },
@@ -73,7 +85,8 @@ define({
                         'villageName': searchOptions.villageName,
                         'customerName': searchOptions.businessName,
                         'page': pageOpts.pageNo,
-                        'per_page': pageOpts.itemsPerPage
+                        'per_page': pageOpts.itemsPerPage,
+                        'centreCode': searchOptions.centre
 
                     }).$promise;
                 },
