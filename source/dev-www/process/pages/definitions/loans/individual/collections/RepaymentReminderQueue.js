@@ -112,7 +112,7 @@ define({
 
                     var promise = RepaymentReminder.query({
                         'customerUrn': searchOptions.customerUrn,
-                        'branchName': branchName,
+                        'branchId': searchOptions.branch,
                         'centreName': centreName,
                         'businessName': searchOptions.businessName,
                         'applicantName': searchOptions.applicantName,
