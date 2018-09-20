@@ -518,6 +518,8 @@ define({
                         });
                     };
                     prepareFinancialData['tableData']=$filter("orderBy") (prepareFinancialData['tableData'], ['loanId']);
+                    prepareFinancialData['tableData1']=$filter("orderBy") (prepareFinancialData['tableData1'], ['loanId']);
+                    prepareFinancialData['tableData2']=$filter("orderBy") (prepareFinancialData['tableData2'], ['loanId']);
                     //older accounts should not be greater then 3
                     /* if(prepareFinancialData['tableData'].length>3) prepareFinancialData['tableData']=prepareFinancialData['tableData'].slice(-3); */
                     _.forEach(prepareFinancialData['tableData'], function(histData){
@@ -615,21 +617,21 @@ define({
                             };
                             prepareFinancialData1 = {
                                 'Category': 'Current Application',
-                                'ABB_to_Kinara_EMI': params[3].data[0]['Actual Value'],
-                                'Average Bank Deposit : Average Revenue': params[3].data[1]['Actual Value'],
-                                'no_of_cheque_bounced': params[3].data[2]['Actual Value'],
-                                'Average_Bank_Balance': params[10].BankAccounts[0]['Average Bank Balance'],
-                                'Average_Bank_Deposits': params[10].BankAccounts[0]['Average Bank Deposit'],
-                                'no_of_kinara_cheque_bounces': params[3].data[7]['Actual Value']
+                                'ABB_to_Kinara_EMI': (params[3].data[0]) ? params[3].data[0]['Actual Value'] : null,
+                                'Average Bank Deposit : Average Revenue': (params[3].data[1]) ? params[3].data[1]['Actual Value'] : null,
+                                'no_of_cheque_bounced': (params[3].data[2]) ? params[3].data[2]['Actual Value'] : null,
+                                'Average_Bank_Balance': (params[10].BankAccounts[0])? params[10].BankAccounts[0]['Average Bank Balance'] : null ,
+                                'Average_Bank_Deposits': (params[10].BankAccounts[0]) ? params[10].BankAccounts[0]['Average Bank Deposit'] : null,
+                                'no_of_kinara_cheque_bounces': (params[3].data[7]) ? params[3].data[7]['Actual Value'] : null
 
                             };
                             prepareFinancialData2 = {
                                 'Category': 'Current Application',
-                                'PsychometricScore': params[1].sections[0].data[7]['Applicant'],
-                                'business_premises_status': params[2].data[1]['Actual Value'],
-                                'formality_of_business': params[2].data[4]['Actual Value'],
-                                'housing_status': params[1].sections[0].data[2]['Applicant'],
-                                'years_of_business_in_current_area': params[2].data[6]['Actual Value'] 
+                                'PsychometricScore': (params[1].sections[0].data[7]) ? params[1].sections[0].data[7]['Applicant'] : null,
+                                'business_premises_status': (params[2].data[1]) ? params[2].data[1]['Actual Value']: null,
+                                'formality_of_business': (params[2].data[4])? params[2].data[4]['Actual Value'] : null,
+                                'housing_status': (params[1].sections[0].data[2]) ? params[1].sections[0].data[2]['Applicant'] : null,
+                                'years_of_business_in_current_area': (params[2].data[6]) ? params[2].data[6]['Actual Value'] : null
 
                             };
 

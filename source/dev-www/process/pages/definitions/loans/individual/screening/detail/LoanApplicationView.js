@@ -12,8 +12,10 @@ define({
         var currencyRightRender = function(data) {
             if(data<0)
                 return '-'+irfElementsConfig.currency.iconHtml+irfCurrencyFilter(Math.abs(data), null, null, "decimal");
-
+            if(data != "NA")
             return irfElementsConfig.currency.iconHtml+irfCurrencyFilter(data, null, null, "decimal");
+            else
+            return "NA";
         }
         var navigateToQueue = function(model) {
                     // Considering this as the success callback
@@ -680,7 +682,7 @@ define({
             }, 
             {
                     "type": "box",
-                    "title": "Customer Loan History",
+                    "title": "CUSTOMER_LOAN_HISTORY",
                     "readOnly": true,
                     "colClass": "col-sm-12",
                     "items":[{
@@ -697,31 +699,31 @@ define({
                             },
                             getColumns: function() {
                                 return [{
-                                    "title": "Category",
+                                    "title": "CATEGORY",
                                     "data": "Category",
                                     "render": self.strongRender
                                 },{
-                                    "title": "Outstanding",
+                                    "title": "OUTSTANDING",
                                     "data": "Outstanding",
-                                    "render": self.strongRender
+                                    "render": currencyRightRender
                                 },
                                 {
-                                    "title": "disbursement_amount",
+                                    "title": "DISBURSEMENT_AMOUNT",
                                     "data": "disbursement_amount",
-                                    "render": self.strongRender
+                                    "render": currencyRightRender
                                 },
                                 {
-                                    "title": "loan_product",
+                                    "title": "LOAN_PRODUCT",
                                     "data": "loan_product",
                                     "render": self.strongRender
                                 },
                                 {
-                                    "title": "loan_status",
+                                    "title": "LOAN_STATUS",
                                     "data": "loan_status",
                                     "render": self.strongRender
                                 },
                                 {
-                                    "title": "tenure",
+                                    "title": "TENURE",
                                     "data": "tenure",
                                     "render": self.strongRender
                                 }
@@ -951,8 +953,8 @@ define({
                     "financial-summary": function(bundleModel, model, params) {
                     model._scores = params;
                     model._deviationDetails = model._scores[12].data;
-                    model.expectedTurnoverObj['loanAmountRecommended']= Number((params[0].data[0]['Recommended Loan Amount']).replace(/,/g, ''));
-                    var monthTurnover =  Number((params[0].data[0]['Monthly Turnover']).replace(/,/g, ''));
+                    model.expectedTurnoverObj['loanAmountRecommended']=  (params[0].data[0]['Recommended Loan Amount'] != null) ? Number((params[0].data[0]['Recommended Loan Amount']).replace(/,/g, '')) : null;
+                    var monthTurnover =  (params[0].data[0]['Monthly Turnover'] != null) ? Number((params[0].data[0]['Monthly Turnover']).replace(/,/g, '')) : null;
                     model.expectedTurnoverObj['annualTurnover']=  ( monthTurnover * 12);
                     model.deviationDetails = [];
                     var allMitigants = {};
@@ -1013,15 +1015,18 @@ define({
                         });
                     };
                     model.expectedTurnoverObj['totalOutstandingAmount'] = oustandingAmount;
-
-                    var kinaraExposureToAnnualTurovr = Math.round((oustandingAmount + model.expectedTurnoverObj['loanAmountRecommended'])/model.expectedTurnoverObj['annualTurnover']);
-                    var kinaraExposureToAnnualTurnover = kinaraExposureToAnnualTurovr+"%";
-                    model.expectedTurnoverObj['kinaraExposureToAnnualTurover'] = kinaraExposureToAnnualTurnover;
+                    if(model.expectedTurnoverObj['annualTurnover'] && model.expectedTurnoverObj['annualTurnover'] != 0){
+                        var kinaraExposureToAnnualTurovr = ((oustandingAmount + model.expectedTurnoverObj['loanAmountRecommended'])/model.expectedTurnoverObj['annualTurnover']).toFixed(2);
+                        var kinaraExposureToAnnualTurnover = kinaraExposureToAnnualTurovr+"%";
+                        model.expectedTurnoverObj['kinaraExposureToAnnualTurover'] = kinaraExposureToAnnualTurnover;
+                    }
+                    else{
+                        model.expectedTurnoverObj['kinaraExposureToAnnualTurover']  = 0+'%'; 
+                    }
+                   
                     model.expectedTurnoverObj['actualValue'] = "ActualValue";
                     prepareFinancialData['tableData']=$filter("orderBy") (prepareFinancialData['tableData'], ['loanId']);
                     model.customerHistoryFinancials['tableData1'].push(model.expectedTurnoverObj);
-                    //older accounts should not be greater then 3
-                    /* if(prepareFinancialData['tableData'].length>3) prepareFinancialData['tableData']=prepareFinancialData['tableData'].slice(-3); */
                     _.forEach(prepareFinancialData['tableData'], function(histData){
                         model.customerHistoryFinancials['tableData'].push(histData);
                         });
