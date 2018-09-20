@@ -146,13 +146,48 @@ define({
                     readonly: true
                 },
                 {
-                    "key":"depositDetails.collectionDetail.chequeDepositedBankIfscCode",
+                    key: "depositDetails.collectionDetail.chequeDepositedBankIfscCode",
+                    "required":true,
+                    type: "lov",
                     "title": "CHEQUE_DEPOSIT_IFSC_CODE",
-                    "readonly": true,
-                    "condition": "model.depositDetails && model.depositDetails.instrumentType.toLowerCase()=='chq'"
-                },
+                    "schema":{
+                        "type":["string","null"]
+                    },
+                    lovonly: true,
+                    inputMap: {
+                        "ifscCode": {
+                            "key": "depositDetails.collectionDetail.chequeDepositedBankIfscCode"
+                        },
+                        "depositBank": {
+                            "key": "depositDetails.collectionDetail.depositBank"
+                        },
+                        "depositBranch": {
+                            "key": "depositDetails.collectionDetail.depositBranch"
+                        }
+
+                    },
+                    onSelect: function(results, model, context) {
+                        model.depositDetails.collectionDetail.chequeDepositedBankIfscCode = results.ifscCode;
+                        model.depositDetails.collectionDetail.bankBranchDetails = results.branchName;
+                    },
+                    searchHelper: formHelper,
+                    search: function(inputModel, form) {
+                        $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                        var promise = CustomerBankBranch.search({
+                            'ifscCode': inputModel.ifscCode,
+                            'branchName': inputModel.depositBranch
+                        }).$promise;
+                        return promise;
+                    },
+                    getListDisplayItem: function(data, index) {
+                        return [
+                            data.ifscCode,
+                            data.branchName
+                        ];
+                    },
+                },    
                 {
-                    "key": "depositDetails.collectionDetail.accountBranchId",
+                    "key": "depositDetails.collectionDetail.bankBranchDetails",
                     "title": "CHEQUE_DEPOSIT_BRANCH",
                     "readonly": true,
                     "condition":"model.depositDetails && model.depositDetails.instrumentType.toLowerCase()=='chq'"
@@ -233,7 +268,10 @@ define({
                                     "depositBranch": {
                                         "type": "string",
                                         "title": "DEPOSIT_BRANCH"
-                                    }
+                                    },
+                                    "chequeDepositedBankIfscCode":{
+                                        "type": "string",
+                                        "title":  "IFSC_CODE"                                   }
                                 }
                             }
                         }
