@@ -41,6 +41,7 @@
         "Page/Adhoc/witfin.loans.LoanOriginationDashboard",
         "Page/Adhoc/witfin.loans.VehicleValuationDashboard",
         "Page/Adhoc/pahal.loans.LoanOriginationDashboard",
+        "Page/Adhoc/kgfs.loans.LoanBookingDashboard",
         "Page/DocumentTrackingDashboard", {
             "title": "INDIVIDUAL_LOANS",
             "iconClass": "fa fa-female",
