@@ -618,7 +618,6 @@ define(
                     "NewVehicleDetails",
                     "NewVehicleDetails.vehicleType",
                     "NewVehicleDetails.vehicleType1",
-                    "NewVehicleDetails.vehicleType2",
                     "NewVehicleDetails.endUse",
                     "NewVehicleDetails.usedFor",
                     "NewVehicleDetails.segment",

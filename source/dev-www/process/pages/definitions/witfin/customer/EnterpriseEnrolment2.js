@@ -1476,7 +1476,17 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
 
                     },
                     proceed: function(model, form){
-
+                        if( model.customer.vehiclesOwned >= model.customer.vehiclesFinanced){
+                            model.customer.vehiclesFree = model.customer.vehiclesOwned - model.customer.vehiclesFinanced;
+                        }
+                        else {
+                            PageHelper.showErrors({
+                                data: {
+                                    error: "No of vehicle financed cannot be greater than no of vehicle owned."
+                                }
+                            });
+                            return false;
+                        }
                         PageHelper.clearErrors();
                         if(PageHelper.isFormInvalid(form)) {
                             return false;
