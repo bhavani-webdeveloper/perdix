@@ -97,7 +97,7 @@ define({
                         }
                     }
                     var promise = SecurityEMIRefundResource.search({
-                        'branches': brancharray,
+                        'branchId': searchOptions.branch,
                         'accountIds': accountIdarray,
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage,
