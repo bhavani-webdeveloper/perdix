@@ -3,7 +3,6 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalApprove"),
         function ($window, $log, formHelper, filterFilter, Enrollment,Workflow, Queries, $q, $state, SessionStore, Utils, PagesDefinition, irfNavigator, User, SchemaResource, $stateParams, PageHelper, irfProgressMessage) {
             var branch = SessionStore.getBranch();
             var getCustomer = function (result, model){
-                //-------------------------------------------------------------------------------------
                 Enrollment.EnrollmentById({ id: result.id }, function (resp, header) {
                     PageHelper.hideLoader();
                     model.customer = _.cloneDeep(resp);
@@ -13,20 +12,13 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalApprove"),
                     model.customer.isGenderChanged = "NO";
                     model.customer.isOwnershipChanged = "NO";
                     model.customer.isAddressChanged = "NO";
-                    //model = fixData(model);
 
-                    $window.scrollTo(0, 0);
                     irfProgressMessage.pop("cust-load", "Load Complete", 2000);
                 }, function (resp) {
                     PageHelper.hideLoader();
                     irfProgressMessage.pop("cust-load", "An Error Occurred. Failed to fetch Data", 5000);
-                    /* $state.go("Page.Engine", {
-                         pageName: "CustomerSearch",
-                         pageId: null
-                     });*/
-                });
-                //-------------------------------------------------------------------------------------
 
+                });
             }
 
 
@@ -525,12 +517,42 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalApprove"),
                             irfProgressMessage.pop('cust-update', 'Working...');
 
                             var updatedModel= _.cloneDeep(model);
+                            var proof ={};
+                            if(model.customer.isAddressChanged=='YES'){
+                                proof["addressProofImageId"]=model.customer.addressProofImageId;
+                            }
+                            if(model.customer.isDateOfBirthChanged=='YES'){
+                                updatedModel.customer.dateOfBirth=updatedModel.customer.newDateOfBirth;
+                                proof["ageProofImageId"]=model.customer.ageProofImageId;
+                            }
+                            if(model.customer.isMobileChanged=='YES'){
+                                updatedModel.customer.mobilePhone=updatedModel.customer.newMobilePhone;
+                                proof["mobileProofImageId"]=model.customer.mobileProofImageId;
+                            }
+                            if(model.customer.isGenderChanged=='YES'){
+                                updatedModel.customer.gender=updatedModel.customer.newGender;
+                            }
+                            if(model.customer.isOwnershipChanged=='YES'){
+                                updatedModel.customer.ownership=updatedModel.customer.newOwnership;
+                            }
 
-                            updatedModel.workflow.action=updatedModel.action
+                            var requestData = {
+                                "id" : updatedModel.workflow.id,
+                                "version" : updatedModel.workflow.version,
+                                "processType": updatedModel.workflow.processType,
+                                "processName": updatedModel.workflow.processName,
+                                "currentStage": updatedModel.workflow.currentStage,
+                                "customer": updatedModel.customer,
+                                "proof" : proof,
+                                "action" :  updatedModel.workflow.action,
+                                "referenceKey" : updatedModel.workflow.customer.id,
+
+                            };
+
                             if(updatedModel.action=="SENDBACK")
-                                updatedModel.workflow.sendbackStage="Init"
+                                requestData.sendbackStage="Init"
 
-                            Workflow.save(updatedModel.workflow, function (res, headers) {
+                            Workflow.save(requestData, function (res, headers) {
                                 PageHelper.hideLoader();
                                 irfProgressMessage.pop('cust-update', 'Done. Customer Updated, ID : ' + res.customer.id, 2000);
                                 irfNavigator.goBack();
