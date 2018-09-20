@@ -21,18 +21,10 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter, Utils){
 			} catch (e) {
 				if (e.number == MSIE.FileSystemErrorCode) {
 					Utils.alert(MSIE.FileSystemErrorMessage);
-				} else {
-					Utils.alert("FATAL ERROR: Reading from storage failed for " + key);
-					$log.error(e);
 				}
 			}
 		} else {
-			try {
-				return LZString.decompress(localStorage.getItem(key));
-			} catch (e) {
-				Utils.alert("FATAL ERROR: Reading from local storage failed for " + key);
-				$log.error(e);
-			}
+			return LZString.decompress(localStorage.getItem(key));
 		}
 	};
 	var storeItem = function(key, value) {
@@ -44,18 +36,10 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter, Utils){
 			} catch (e) {
 				if (e.number == MSIE.FileSystemErrorCode) {
 					Utils.alert(MSIE.FileSystemErrorMessage);
-				} else {
-					Utils.alert("FATAL ERROR: Writing into storage failed for " + key);
-					$log.error(e);
 				}
 			}
 		} else {
-			try {
-				localStorage.setItem(key, LZString.compress(value));
-			} catch (e) {
-				Utils.alert("FATAL ERROR: Writing into local storage failed for " + key);
-				$log.error(e);
-			}
+			localStorage.setItem(key, LZString.compress(value));
 		}
 	};
 	var removeItem = function(key) {
@@ -65,18 +49,10 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter, Utils){
 			} catch (e) {
 				if (e.number == MSIE.FileSystemErrorCode) {
 					alert(MSIE.FileSystemErrorMessage);
-				} else {
-					Utils.alert("FATAL ERROR: Deleting storage failed for " + key);
-					$log.error(e);
 				}
 			}
 		} else {
-			try {
-				localStorage.removeItem(key);
-			} catch (e) {
-				Utils.alert("FATAL ERROR: Deleting local storage failed for " + key);
-				$log.error(e);
-			}
+			localStorage.removeItem(key);
 		}
 	};
 	var clear = function() {
@@ -87,18 +63,10 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter, Utils){
 			} catch (e) {
 				if (e.number == MSIE.FileSystemErrorCode) {
 					alert(MSIE.FileSystemErrorMessage);
-				} else {
-					Utils.alert("FATAL ERROR: Clearing storage failed");
-					$log.error(e);
 				}
 			}
 		}
-		try {
-			localStorage.clear();
-		} catch (e) {
-			Utils.alert("FATAL ERROR: Clearing local storage failed");
-			$log.error(e);
-		}
+		localStorage.clear();
 	};
 	var masters = {};
 	var processMasters = function(codes) {
