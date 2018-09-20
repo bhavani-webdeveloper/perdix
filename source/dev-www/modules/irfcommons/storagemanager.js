@@ -16,7 +16,7 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter, Utils){
 		if (MSIE.FileSystem) {
 			try {
 				var fp = MSIE.FileSystem.OpenTextFile(MSIE.FileSystemDirectory + key, 1, true);
-				var fc = LZString.decompress(fp.ReadAll());
+				var fc = fp.ReadAll();
 				fp.Close();
 				return fc;
 			} catch (e) {
@@ -32,7 +32,7 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter, Utils){
 		if (MSIE.FileSystem) {
 			try {
 				var fp = MSIE.FileSystem.CreateTextFile(MSIE.FileSystemDirectory + key, 1, true);
-				fp.WriteLine(LZString.compress(value));
+				fp.WriteLine(value);
 				fp.Close();
 			} catch (e) {
 				if (e.number == MSIE.FileSystemErrorCode) {
