@@ -223,6 +223,7 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                                 {
                                     key: "customer.newDateOfBirth",
                                     type: "date",
+                                    required: true,
                                     title: "UPDATE_DATE_OF_BIRTH",
                                     condition: "model.customer.isDateOfBirthChanged=='YES'"
                                 },
@@ -258,6 +259,7 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                                 {
                                     key: "customer.newMobilePhone",
                                     title: "UPDATE_MOBILE_PHONE",
+                                    required: true,
                                     condition: "model.customer.isMobileChanged=='YES'"
                                 },
                                 {
@@ -292,6 +294,7 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                                 {
                                     key: "customer.newGender",
                                     type: "radios",
+                                    required: true,
                                     title: "UPDATE_GENDER",
                                     "titleMap": {
                                         "MALE": "MALE",
@@ -320,6 +323,7 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                                 {
                                     key: "customer.newOwnership",
                                     title: "UPDATE_OWNERSHIP",
+                                    required: true,
                                     condition: "model.customer.isOwnershipChanged=='YES'"
                                 }]
                             }
