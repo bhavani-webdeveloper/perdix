@@ -1326,6 +1326,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "ResidenceVerification.localityType",
                     "ResidenceVerification.typeOfAccomodation",
                     "ResidenceVerification.areaSQFT",
+                    "ResidenceVerification.personMet",
                     "ResidenceVerification.HouseVerificationPhoto",
                     "ResidenceVerification.remarksOnBusiness",
                     "PhysicalAssets",
@@ -1556,6 +1557,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "schema": {
                                                 "type": "string"
                                             }
+                                        },                                        
+                                        "personMet": { 
+                                            "key": "customer.fieldInvestigationDetails[0].category",
+                                            "orderNo": 145,
+                                            "type": "select",
+                                            "title": "PERSON_MET",
+                                            "enumCode": "applicant_person_met"
                                         },
                                         "HouseVerificationPhoto": {
                                             "key": "customer.houseVerificationPhoto",
@@ -1564,39 +1572,21 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "type": "file",
                                             "category": "CustomerEnrollment",
                                             "subCategory": "PHOTO",
+                                            "using": "scanner",
                                             "onChange": function(){
                                                 console.log("INSIDE ONCHANGE1");
                                             },
                                             "viewParams" : function(modelValue, form, model) {
-                                                    getLocation().then((pos)=>{
-                                                        console.log("successful");
-                                                        model.customer.latitude = pos.coords.latitude;
-                                                        model.customer.longitude = pos.coords.longitude;
-                                                    });
-                                                    getLocation().catch((err)=>{
-                                                        console.log(err);
-                                                    });
-                                                }
-
-                                            //     "title": "HOUSE_VERIFICATION_PHOTO",
-                                            //     "category": "CustomerEnrollment",
-                                            //     "subCategory": "PHOTO",
-                                            //     "onChange": function(){
-                                            //         console.log("INSIDE ONCHANGE1");
-                                            //     },
-                                            //     "viewParams" : function(modelValue, form, model) {
-                                            //         getLocation().then((pos)=>{
-                                            //             console.log("successful");
-                                            //             model.customer.latitude = pos.coords.latitude;
-                                            //             model.customer.longitude = pos.coords.longitude;
-                                            //         });
-                                            //         getLocation().catch((err)=>{
-                                            //             console.log(err);
-                                            //         });
-                                            //     }
-
+                                                getLocation().then((pos)=>{
+                                                    console.log("successful");
+                                                    model.customer.latitude = pos.coords.latitude;
+                                                    model.customer.longitude = pos.coords.longitude;
+                                                });
+                                                getLocation().catch((err)=>{
+                                                    console.log(err);
+                                                });
+                                            }
                                         },
-
                                         "remarksOnBusiness": {
                                             "key": "customer.udf.userDefinedFieldValues.udf9",
                                             "title": "REMAKRS_ON_BUISNESS",
