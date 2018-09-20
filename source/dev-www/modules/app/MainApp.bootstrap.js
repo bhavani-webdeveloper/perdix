@@ -13,19 +13,15 @@ var MSIE = {
 		+' and change it to "Enable" or "Prompt"'
 };
 if (MSIE.isIE) {
-	if (!ActiveXObject) {
-		alert("FATAL ERROR: ActiveX not available. Storage will fail");
-	} else {
-		try {
-			MSIE.FileSystem = new ActiveXObject("Scripting.FileSystemObject");
-		} catch (e) {
-			alert(">>> " + MSIE.FileSystemErrorMessage);
-			console.log(e);
-		}
-		try {
-			MSIE.FileSystem.CreateFolder(MSIE.FileSystemDirectory);
-		} catch (e) {}
+	try {
+		MSIE.FileSystem = new ActiveXObject("Scripting.FileSystemObject");
+	} catch (e) {
+		alert(">>> " + MSIE.FileSystemErrorMessage);
+		console.log(e);
 	}
+	try {
+		MSIE.FileSystem.CreateFolder(MSIE.FileSystemDirectory);
+	} catch (e) {}
 }
 
 $(document).ready(function(){
