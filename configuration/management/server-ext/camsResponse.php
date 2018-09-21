@@ -11,7 +11,7 @@
     $customer_id = $GET['customer_id'];
     $status = false;
     if ($ekyc === 'Y') {
-        $affected = DB::update('update customer set is_ekyc_done = ?, pekrn = ? where id = ?', [true, $pekrn, $customer_id]);
+        $affected = DB::update('update customer set is_ekyc_done = ?, pekrn = ? where id = ?', [1, $pekrn, $customer_id]);
         $status = true;
         $statusHead = "eKYC is completed successfullly";
         $statusMessage = "Proceed with mutual fund application";
