@@ -534,10 +534,6 @@
         "items": {
           "type": "object",
           "required": [
-            "loanType",
-            "sanctionDate",
-            "tenure",
-            "instituteName"
           ],
           "properties": {
             "loanType": {
