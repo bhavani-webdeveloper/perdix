@@ -59,6 +59,16 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                         model.loanAccount = res;
                         model.loanAccount.processingFee = model.loanAccount.processingFeeInPaisa ? model.loanAccount.processingFeeInPaisa/100 : 0;
                         var promiseArray = [];
+                        if(model.loanAccount.loanDocuments && model.loanAccount.loanDocuments.length>0){
+                            for(documents of model.loanAccount.loanDocuments){
+                                if(documents.document=='WAIVERAPPROVAL'){
+                                    model.loanAccount.waiverdocumentId= documents.documentId;
+                                    model.loanAccount.waiverdocumentstatus= documents.documentStatus;
+                                    model.loanAccount.waiverdocumentrejectReason=documents.rejectReason;
+                                    model.loanAccount.waiverdocumentremarks=documents.remarks;
+                                }
+                            }
+                        }
                         if (_.hasIn(model.loanAccount, 'accountNumber') && !_.isNull(model.loanAccount.accountNumber)) {
                             var loanpromise = LoanAccount.get({
                                     accountId: model.loanAccount.accountNumber
@@ -840,7 +850,17 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                         "title": "LAST_PROVISIONING_DATE",
                         "required":false,
                         "type": "number"
-                    }
+                    },
+                    {
+                        "key": "loanAccount.waiverdocumentId",
+                        type: "file",
+                        "readonly":true,
+                        fileType: "application/pdf",
+                        category: "Loan",
+                        subCategory: "DOC1",
+                        title:"WAIVER_APPROVAL_DOCUMENT",
+                        using: "scanner"
+                    },
                 ]
             },
             {
@@ -1905,7 +1925,8 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                             }]
                         }]
                     }]
-                }, {
+                }, 
+                {
                     "type": "box",
                     "title": "LOAN_DOCUMENTS",
                     "condition": 'model.loanAccount.loanType != "JLG"',
@@ -2088,7 +2109,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                                 }]
                                             }
                                         ]
-                                    }]
+                                    } ]
 
                                 }]
                             },
@@ -2324,7 +2345,6 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
 
                             reqData.loanAccount.loanDocuments.push(model.loanDocuments.newLoanDocuments[i]);
                         }
-
                     }
                     PageHelper.showLoader();
                     IndividualLoan.update(reqData).$promise.then(function(response) {
@@ -2360,7 +2380,6 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
 
                             model.reqData.loanAccount.loanDocuments.push(model.loanDocuments.newLoanDocuments[i]);
                         }
-
                     }
                     PageHelper.showLoader();
                     IndividualLoan.update(model.reqData).$promise.then(function(response) {

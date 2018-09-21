@@ -144,6 +144,16 @@ define({
             return true;
         };
 
+        var iswaiverApplicable= function(model){
+            if((model.loanAccount.disbursementSchedules[0].normalInterestDuePayment && model.loanAccount.disbursementSchedules[0].normalInterestDuePayment>0)||
+            (model.loanAccount.disbursementSchedules[0].penalInterestDuePayment && model.loanAccount.disbursementSchedules[0].penalInterestDuePayment>0)||
+            (model.loanAccount.disbursementSchedules[0].feeAmountPayment && model.loanAccount.disbursementSchedules[0].feeAmountPayment >0)){
+                model.iswaiverApplicable=true;
+            }else{
+                model.iswaiverApplicable=false;
+            }
+        }
+
         return {
             "type": "schema-form",
             "title": "INTERNAL_FORECLOSURE_OR_RENEWAL_ACCOUNT_VERIFICATION",
@@ -230,15 +240,19 @@ define({
                                 urns.push(model.loanAccount.portfolioInsuranceUrn);
                             }
 
+                            iswaiverApplicable(model);
                             if(model.loanAccount.loanDocuments && model.loanAccount.loanDocuments.length>0){
                                 for(documents of model.loanAccount.loanDocuments){
                                     if(documents.document=='WAIVERAPPROVAL'){
                                         model.loanAccount.waiverdocumentId= documents.documentId;
                                         model.loanAccount.waiverdocumentstatus= documents.documentStatus;
+                                        if(!documents.documentId){
+                                            model.iswaiverApplicable=false;
+                                        }
+                                        break;
                                     }
                                 }
                             }
-
                             
                             model.loanAccount.loanCustomerRelations = model.loanAccount.loanCustomerRelations || [];
                             model.loanAccount.loan_coBorrowers = [];
@@ -923,6 +937,7 @@ define({
                 },
                 {
                     "type": "fieldset",
+                    "condition":"model.iswaiverApplicable",
                     "title": "WAIVER_APPROVAL_DOCUMENT",
                     "readonly":false,
                     "items":[
@@ -973,7 +988,7 @@ define({
                 "items": [
                     {
                         key: "review.action",
-                        condition:"model.loanAccount.waiverdocumentstatus !='APPROVED'",
+                        condition:"model.iswaiverApplicable && model.loanAccount.waiverdocumentstatus !='APPROVED'",
                         type: "radios",
                         titleMap: {
                             "SEND_BACK": "SEND_BACK",
@@ -982,7 +997,7 @@ define({
                     },
                     {
                         key: "review.action",
-                        condition:"model.loanAccount.waiverdocumentstatus=='APPROVED'",
+                        condition:"!model.iswaiverApplicable || model.loanAccount.waiverdocumentstatus=='APPROVED'",
                         type: "radios",
                         titleMap: {
                             "SEND_BACK": "SEND_BACK",

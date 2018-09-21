@@ -141,6 +141,16 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
             return true;
         };
 
+        var iswaiverApplicable= function(model){
+            if((model.loanAccount.disbursementSchedules[0].normalInterestDuePayment && model.loanAccount.disbursementSchedules[0].normalInterestDuePayment>0)||
+            (model.loanAccount.disbursementSchedules[0].penalInterestDuePayment && model.loanAccount.disbursementSchedules[0].penalInterestDuePayment>0)||
+            (model.loanAccount.disbursementSchedules[0].feeAmountPayment && model.loanAccount.disbursementSchedules[0].feeAmountPayment >0)){
+                model.iswaiverApplicable=true;
+            }else{
+                model.iswaiverApplicable=false;
+            }
+        }
+
         return {
             "type": "schema-form",
             "title": "CAPTURE_DATES",
@@ -233,6 +243,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                                     }
                                 }
                             }
+                            iswaiverApplicable(model);
 
                             model.loanAccount.loanCustomerRelations = model.loanAccount.loanCustomerRelations || [];
                             model.loanAccount.loan_coBorrowers = [];
@@ -441,10 +452,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     },
                     {
                         "key": "loanAccount.loanPurpose1",
+                        "required":false,
                         "readonly": true
                     },
                     {
                         "key": "loanAccount.loanPurpose2",
+                        "required":false,
                         "readonly": true,
                         "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
                     },
@@ -933,28 +946,25 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     "items": [{
                         "key": "loanAccount.disbursementSchedules[0].normalInterestDuePayment",
                         "title": "TOTAL_INTEREST_DUE",
-                        //"type": "amount",
-                        "onChange": "actions.validateWaiverAmount(model.loanAccount.disbursementSchedules[0].normalInterestDuePayment,model.loanAccount.precloseureNormalInterest,modelValue)"
+                        "onChange": "actions.validateWaiverAmount(model.loanAccount.disbursementSchedules[0].normalInterestDuePayment,model.loanAccount.precloseureNormalInterest,model)"
                     }, {
                         "key": "loanAccount.disbursementSchedules[0].penalInterestDuePayment",
                         "title": "TOTAL_PENAL_INTEREST_DUE",
-                        //"type": "amount",
-                        "onChange": "actions.validateWaiverAmount(model.loanAccount.disbursementSchedules[0].penalInterestDuePayment,model.loanAccount.precloseurePenalInterest,modelValue)"
+                        "onChange": "actions.validateWaiverAmount(model.loanAccount.disbursementSchedules[0].penalInterestDuePayment,model.loanAccount.precloseurePenalInterest,model)"
                     }, {
                         "key": "loanAccount.disbursementSchedules[0].feeAmountPayment",
                         "title": "TOTAL_FEE_DUE",
-                        //"type": "amount",
-                        "onChange": "actions.validateWaiverAmount(model.loanAccount.disbursementSchedules[0].feeAmountPayment,model.loanAccount.preTotalFee,modelValue)"
+                        "onChange": "actions.validateWaiverAmount(model.loanAccount.disbursementSchedules[0].feeAmountPayment,model.loanAccount.preTotalFee,model)"
                     }]
                 },
                 {
                     "type": "fieldset",
-                    "condition": "model.loanAccount.precloseuredetails",
+                    "condition": "model.loanAccount.precloseuredetails && model.iswaiverApplicable",
                     "title": "WAIVER_APPROVAL_DOCUMENT",
                     "items":[
                         {
                             title: "Upload",
-                            "required":true,
+                           // "required":true,
                             "key": "loanAccount.waiverdocumentId",
                             type: "file",
                             fileType: "application/pdf",
@@ -1107,7 +1117,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                             });
                            return;
                         }
-                        if(model.loanAccount.waiverdocumentId){
+    
                             if(model.loanAccount.waiverdocumentstatus){
                                 if(model.loanAccount.loanDocuments && model.loanAccount.loanDocuments.length>0){
                                     for(documents of model.loanAccount.loanDocuments){
@@ -1127,9 +1137,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                                     accountNumber:model.loanAccount.accountNumber,
                                     documentStatus:"PENDING",
                                 });
-
                             }
-                        }
+                         
                     }
 
                     if(model.siteCode != 'sambandh' && model.siteCode != 'saija'){
@@ -1249,7 +1258,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         PageHelper.hideLoader();
                     });
                 },
-                validateWaiverAmount: function(amount1,amount2) {
+                validateWaiverAmount: function(amount1,amount2,model) {
+                    model.loanAccount.waiverdocumentId='';
+                    iswaiverApplicable(model);
                     PageHelper.clearErrors();
                     amount2= parseFloat(amount2);
                     if (amount1> parseFloat(amount2)) {
@@ -1257,11 +1268,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         PageHelper.setError({
                             message: "Amount should not be greater then" +" " + amount2
                         });
-                        return 
+                        return
                     }
                 },
                 reject: function (model, form, formName) {
-
                     $log.info("rejecting");
 
                     Utils.confirm("Are you sure you want to send back to Loan Input?")
