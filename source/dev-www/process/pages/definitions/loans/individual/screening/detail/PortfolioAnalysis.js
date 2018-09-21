@@ -748,9 +748,9 @@ define({
                                     },{
                                         'DSONonTrading':params[3].data[4]?((params[3].data[4]["Actual Value"])*100):"NA"
                                     },{
-                                        'CurrentRatio':params[13].data[0]['Current Ratio'],
+                                        'CurrentRatio':(params[13].data[0] && params[13].data[0]['Current Ratio'])?params[13].data[0]['Current Ratio']:"NA"
                                     },{
-                                        'HypothecationValue:LoanAmount':params[13].data[0]['HypothecationValue:LoanAmount'],
+                                        'HypothecationValue:LoanAmount':(params[13].data[0] && params[13].data[0]['HypothecationValue:LoanAmount'])?params[13].data[0]['HypothecationValue:LoanAmount']:"NA"
                                     }
                                 ]
                             };
