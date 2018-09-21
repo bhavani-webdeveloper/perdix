@@ -4496,7 +4496,7 @@
             "assetType": {
               "title": "Asset Type",
               "type": "string",
-              "refCodeCategory": "vehicle_type",
+              "refCodeCategory": "type_of_vehicle",
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"
@@ -4635,6 +4635,14 @@
               "type": "string",
               "minLength": 1,
               "maxLength": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "yearOfManufacture":{
+              "title": "manufactureDate",
+              "type": "date",
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"

@@ -987,7 +987,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 },
                                 "EnterpriseAssets.enterpriseAssets.assetType": {
                                     "required": true,
-                                    "enumCode": "vehicle_type"
+                                    "enumCode": "type_of_vehicle"
+                                },
+                                "EnterpriseAssets.enterpriseAssets.manufactureDate":{
+                                    "key":"customer.enterpriseAssets[].yearOfManufacture",
+                                    "title":"YEAR_AND_MONTH_OF_MANUFACTURE"
                                 },
                                 "EnterpriseAssets.enterpriseAssets.valueOfAsset": {
                                     "required": true
@@ -1216,7 +1220,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                                             "subCategory": "PHOTO",
                                                             "key":"customer.enterpriseAssets[].udf3"
                                                         }
-
                                                 }
                                             }
                                         }

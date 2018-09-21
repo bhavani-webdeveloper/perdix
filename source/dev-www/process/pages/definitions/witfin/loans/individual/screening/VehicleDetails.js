@@ -708,10 +708,15 @@ define(
                     /* Setting data recieved from Bundle */
                     model.loanAccount = model.loanProcess.loanAccount;
 
+                    if(model.loanAccount.loanPurpose1 == 'Purchase - New Vehicle'){
+                        model.loanAccount.vehicleLoanDetails.vehicleType = 'New';
+                    }else if (model.loanAccount.loanPurpose1 == 'Purchase - Used Vehicle'){
+                        model.loanAccount.vehicleLoanDetails.vehicleType = 'Used';
+                    }
+
                     var self = this;
                     var formRequest = {
-                        "overrides": {
-                            "VehiclePhotoCaptures": {
+                        "overrides": {                            "VehiclePhotoCaptures": {
                                 "condition": "model.loanAccount.loanPurpose1 == 'Purchase - New Vehicle' || model.loanAccount.loanPurpose1 == 'Purchase - Used Vehicle' || model.loanAccount.loanPurpose1 == 'Refinance'"
                             },
                             "VehicleViability1": {

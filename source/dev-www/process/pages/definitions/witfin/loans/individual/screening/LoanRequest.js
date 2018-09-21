@@ -669,7 +669,6 @@ define([], function() {
                 "subTitle": "BUSINESS",
                 initialize: function(model, form, formCtrl, bundlePageObj, bundleModel) {
                     // AngularResourceService.getInstance().setInjector($injector);
-
                     /* Setting data recieved from Bundle */
                     model.loanAccount = model.loanProcess.loanAccount;
 
@@ -684,7 +683,27 @@ define([], function() {
                     model.loanAccount.processingFee = (model.loanAccount.expectedProcessingFeePercentage / 100) * model.loanAccount.loanAmountRequested;
                     model.loanAccount.dsaPayoutFee = (model.loanAccount.dsaPayout / 100) * model.loanAccount.loanAmountRequested;
                     // model.loanAccount.accountUserDefinedFields = model.loanAccount.accountUserDefinedFields || {};
-
+                    if (_.hasIn(model, 'loanAccount.loanCustomerRelations') &&
+                        model.loanAccount.loanCustomerRelations!=null &&
+                        model.loanAccount.loanCustomerRelations.length > 0) {
+                        var lcr = model.loanAccount.loanCustomerRelations;
+                        var idArr = [];
+                        for (var i=0;i<lcr.length;i++){
+                            idArr.push(lcr[i].customerId);
+                        }
+                        Queries.getCustomerBasicDetails({'ids': idArr})
+                            .then(function(result){
+                                if (result && result.ids){
+                                    for (var i = 0; i < lcr.length; i++) {
+                                        var cust = result.ids[lcr[i].customerId];
+                                        if (cust) {
+                                            lcr[i].name = cust.first_name;
+                                        }
+                                    }
+                                }
+                            });
+                    }
+                    
                     var self = this;
                     var formRequest = {
                         "overrides": {
@@ -1236,6 +1255,34 @@ define([], function() {
                     ]
                 },
                 eventListeners: {
+                    "new-applicant": function(bundleModel, model, params){
+
+                        $log.info(model.loanAccount.loanCustomerRelations);
+        
+                        $log.info("Inside new-applicant of LoanRequest");
+                        var addToRelation = true;
+                        for (var i=0;i<model.loanAccount.loanCustomerRelations.length; i++){
+                            if (model.loanAccount.loanCustomerRelations[i].customerId == params.customer.id) {
+                                addToRelation = false;
+                                if (params.customer.urnNo)
+                                    model.loanAccount.loanCustomerRelations[i].urn =params.customer.urnNo;
+                                    model.loanAccount.loanCustomerRelations[i].name =params.customer.firstName;
+                                break;
+                            }
+                        }
+        
+                        if (addToRelation){
+                            model.loanAccount.loanCustomerRelations.push({
+                                'customerId': params.customer.id,
+                                'relation': "Applicant",
+                                'urn':params.customer.urnNo,
+                                'name':params.customer.firstName
+                            });
+                            model.loanAccount.applicant = params.customer.urnNo;
+                        }
+                        model.applicant = params.customer;
+                        model.applicant.age1 = moment().diff(moment(model.applicant.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                    },
                     "lead-loaded": function(bundleModel, model, obj) {
                         model.lead = obj;
                         model.loanAccount.loanAmountRequested = obj.loanAmountRequested;
@@ -1244,6 +1291,113 @@ define([], function() {
                         model.loanAccount.vehicleLoanDetails.registrationNumber = obj.vehicleRegistrationNumber;
                         model.loanAccount.screeningDate = obj.screeningDate || moment().format("YYYY-MM-DD");
                         model.loanAccount.parentLoanAccount = obj.parentLoanAccount;
+                    },
+                    "new-co-applicant": function(bundleModel, model, params){
+                        $log.info("Insdie new-co-applicant of LoanRequest");
+                        // model.loanAccount.coApplicant = params.customer.id;
+                        var addToRelation = true;
+                        for (var i=0;i<model.loanAccount.loanCustomerRelations.length; i++){
+                            if (model.loanAccount.loanCustomerRelations[i].customerId == params.customer.id) {
+                                addToRelation = false;
+                                if (params.customer.urnNo)
+                                    model.loanAccount.loanCustomerRelations[i].urn =params.customer.urnNo;
+                                    model.loanAccount.loanCustomerRelations[i].name =params.customer.firstName;
+                                break;
+                            }
+                        }
+        
+                        if (addToRelation) {
+                            model.loanAccount.loanCustomerRelations.push({
+                                'customerId': params.customer.id,
+                                'relation': "Co-Applicant",
+                                'urn':params.customer.urnNo,
+                                'name':params.customer.firstName
+                            })
+                        }
+                    },
+                    "new-guarantor": function(bundleModel, model, params){
+                        $log.info("Insdie guarantor of LoanRequest");
+                        // model.loanAccount.coApplicant = params.customer.id;
+                        var addToRelation = true;
+                        for (var i=0;i<model.loanAccount.loanCustomerRelations.length; i++){
+                            if (model.loanAccount.loanCustomerRelations[i].customerId == params.customer.id) {
+                                addToRelation = false;
+                                if (params.customer.urnNo)
+                                    model.loanAccount.loanCustomerRelations[i].urn =params.customer.urnNo;
+                                    model.loanAccount.loanCustomerRelations[i].name =params.customer.firstName;
+                                break;
+                            }
+                        }
+        
+                        if (addToRelation) {
+                            model.loanAccount.loanCustomerRelations.push({
+                                'customerId': params.customer.id,
+                                'relation': "Guarantor",
+                                'urn': params.customer.urnNo,
+                                'name':params.customer.firstName
+                            })
+                        };
+        
+                        model.loanAccount.guarantors = model.loanAccount.guarantors || [];
+        
+                        var existingGuarantorIndex = _.findIndex(model.loanAccount.guarantors, function(g){
+                            if (g.guaUrnNo == params.customer.urnNo || g.guaCustomerId == params.customer.id)
+                                return true;
+                        })
+        
+                        if (existingGuarantorIndex<0){
+                            model.loanAccount.guarantors.push({
+                                'guaCustomerId': params.customer.id,
+                                'guaUrnNo': params.customer.urnNo
+                            });
+                        } else {
+                            if (!model.loanAccount.guarantors[existingGuarantorIndex].guaUrnNo){
+                                model.loanAccount.guarantors[existingGuarantorIndex].guaUrnNo = params.customer.urnNo;
+                            }
+                        }
+        
+        
+                    },
+                    "remove-customer-relation": function(bundleModel, model, enrolmentDetails){
+                        $log.info("Inside enrolment-removed");
+                        /**
+                         * Following should happen
+                         *
+                         * 1. Remove customer from Loan Customer Relations
+                         * 2. Remove custoemr from the placeholders. If Applicant, remove from applicant. If Guarantor, remove from guarantors.
+                         */
+        
+                        // 1.
+                        _.remove(model.loanAccount.loanCustomerRelations, function(customer){
+                            return (customer.customerId==enrolmentDetails.customerId && customer.relation == getRelationFromClass(enrolmentDetails.customerClass)) ;
+                        })
+        
+                        // 2.
+                        switch(enrolmentDetails.customerClass){
+                            case 'guarantor':
+                                _.remove(model.loanAccount.guarantors, function(guarantor){
+                                    return (guarantor.guaCustomerId == enrolmentDetails.customerId)
+                                })
+                                break;
+                            case 'applicant':
+        
+                                break;
+                            case 'co-applicant':
+        
+                                break;
+        
+                        }
+                    },
+                    "cb-check-update": function(bundleModel, model, params){
+                        $log.info("Inside cb-check-update of LoanRequest");
+                        for (var i=0;i<model.loanAccount.loanCustomerRelations.length; i++){
+                            if (model.loanAccount.loanCustomerRelations[i].customerId == params.customerId) {
+                                if(params.cbType == 'BASE')
+                                    model.loanAccount.loanCustomerRelations[i].highmarkCompleted = true;
+                                else if(params.cbType == 'CIBIL')
+                                    model.loanAccount.loanCustomerRelations[i].cibilCompleted = true;
+                            }
+                        }
                     }
                 },
                 form: [],
@@ -1281,6 +1435,29 @@ define([], function() {
                             })
                             .subscribe(function(value) {
                              BundleManager.pushEvent('new-loan', model._bundlePageObj, {loanAccount: value.loanAccount});
+
+
+                             if (_.hasIn(model, 'loanAccount.loanCustomerRelations') &&
+                             model.loanAccount.loanCustomerRelations!=null &&
+                             model.loanAccount.loanCustomerRelations.length > 0) {
+                             var lcr = model.loanAccount.loanCustomerRelations;
+                             var idArr = [];
+                             for (var i=0;i<lcr.length;i++){
+                                 idArr.push(lcr[i].customerId);
+                             }
+                             Queries.getCustomerBasicDetails({'ids': idArr})
+                                 .then(function(result){
+                                     if (result && result.ids){
+                                         for (var i = 0; i < lcr.length; i++) {
+                                             var cust = result.ids[lcr[i].customerId];
+                                             if (cust) {
+                                                 lcr[i].name = cust.first_name;
+                                             }
+                                         }
+                                     }
+                                 });
+                         }
+
                                 PageHelper.showProgress('loan-process', 'Loan Saved.', 5000);
                             }, function(err) {
                                 PageHelper.showProgress('loan-process', 'Oops. Some error.', 5000);
@@ -1324,7 +1501,6 @@ define([], function() {
                         if (PageHelper.isFormInvalid(formCtrl)) {
                             return false;
                         }
-
                         model.loanProcess.proceed()
                             .finally(function() {
                                 PageHelper.hideLoader();
@@ -1332,17 +1508,17 @@ define([], function() {
                             .subscribe(function(value) {
 
                                 Utils.removeNulls(value, true);
-                                PageHelper.showProgress('enrolment', 'Done.', 5000);
+                                PageHelper.showProgress('loan-process', 'Done.', 5000);
                                 irfNavigator.goBack();
                             }, function(err) {
-                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                PageHelper.showProgress('loan-process', 'Oops. Some error.', 5000);
                                 PageHelper.showErrors(err);
                                 PageHelper.hideLoader();
                             });
 
-                        PageHelper.clearErrors();
-                        PageHelper.showLoader();
-                        PageHelper.showProgress('enrolment', 'Updating Loan');
+                        // PageHelper.clearErrors();
+                        // PageHelper.showLoader();
+                        // PageHelper.showProgress('loan-process', 'Updating Loan');
 
                     },
                     reject: function(model, formCtrl, form, $event) {
@@ -1353,10 +1529,10 @@ define([], function() {
                             })
                             .subscribe(function(value) {
                                 Utils.removeNulls(value, true);
-                                PageHelper.showProgress('enrolment', 'Done.', 5000);
+                                PageHelper.showProgress('loan-process', 'Done.', 5000);
                                 irfNavigator.goBack();
                             }, function(err) {
-                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                PageHelper.showProgress('loan-process', 'Oops. Some error.', 5000);
                                 PageHelper.showErrors(err);
                                 PageHelper.hideLoader();
                             });

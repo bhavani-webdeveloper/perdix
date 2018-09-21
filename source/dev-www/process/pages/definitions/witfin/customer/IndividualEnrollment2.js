@@ -1658,7 +1658,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         "yearsOfExperience": {
                                             "key": "customer.yearsOfExperience",
                                             "title": "YEARS_OF_EXPERIENCE",
-                                            "type": "number",
+                                            "type": "string",
+                                             fieldType: "number",
                                             "required":true
                                         }
 
