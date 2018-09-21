@@ -2658,6 +2658,16 @@
               "BasicEnrolment",
               "Completed"
             ]
+          }
+,"localityType": {
+            "title": "localityType",
+            "type": "number",
+            "minimum": 1,
+            "maximum": 100,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
           },
           "landLineNo": {
             "title": "landLineNo",
