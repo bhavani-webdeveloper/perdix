@@ -134,12 +134,20 @@ function($log, $scope, PagesDefinition,formHelper, SessionStore, LoanProcess,Rep
 
         var dep=$scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.collections.CollectionDepositQueue"];
         if(dep) {
+            dep.data = 0;
             LoanCollection.fetchDepositSummary({
                 'currentStage': "Deposit",
                 'branchName' : branchName,
                 'instrumentType': "CASH"
             }).$promise.then(function(response, headerGetter){
-                dep.data = response.headers['x-total-count'];
+                dep.data = dep.data + parseFloat(response.headers['x-total-count']);
+            })
+            LoanCollection.query({
+                'currentStage': "Deposit",
+                'branchName' : branchName,
+                'instrumentType': "CHQ"
+            }).$promise.then(function(response, headerGetter){
+                dep.data = dep.data + parseFloat(response.headers['x-total-count']);
             })
         }
 
