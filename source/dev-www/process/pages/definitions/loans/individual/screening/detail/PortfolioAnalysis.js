@@ -63,6 +63,7 @@ define({
 
                 model.customerHistoryFinancials={
                     'tableData': [],
+                    'tableRatios':[],
                     'tableData1': [],
                     'tableData2': [],
                     'graphOptions':{'multiBar' :{
@@ -175,58 +176,107 @@ define({
                                 return [{
                                     "title": "Category",
                                     "data": "Category",
-                                    "render": self.strongRender
+                                    render: function(data, type, full, meta) {
+                                        
+                                        data = full['data'][0].Category;
+                                        return self.strongRender(data)
+                                    }
                                 }, 
                                 {
                                     "title": "Disbursement Date",
-                                    "data": "disbursement_date"
+                                    "data": "disbursement_date",
+                                    render: function(data, type, full, meta) {
+                                        
+                                        data = full['data'][0].disbursement_date;
+                                        return self.strongRender(data)
+                                    }
                                 },
                                 {
                                     "title": "Monthly Turnover",
-                                    "data": "monthly_turnover"
+                                    "data": "monthly_turnover",
+                                    render: function(data, type, full, meta) {
+                                        
+                                        data = full['data'][0].monthly_turnover;
+                                        return self.strongRender(data)
+                                    }
                                 },
                                 {
                                     "title": "Purchases",
                                     "data": "Purchases",
-                                    "render": self.currencyRightRender
+                                    render: function(data, type, full, meta) {
+                                        
+                                        data = full['data'][0].Purchases;
+                                        return self.strongRender(data)
+                                    }
                                 }, 
                                 {
                                     "title": "Opex",
                                     "data": "Opex",
-                                    "render": self.currencyRightRender
+                                    render: function(data, type, full, meta) {
+                                        
+                                        data = full['data'][0].Opex;
+                                        return self.strongRender(data)
+                                    }
                                 },                                
                                 {
                                     "title": "Net business income",
                                     "data": "net_business_income",
-                                    "render": self.currencyRightRender
+                                    render: function(data, type, full, meta) {
+                                        
+                                        data = full['data'][0].net_business_income;
+                                        return self.strongRender(data)
+                                    }
                                 }, 
                                 {
                                     "title": "Net business income pct",
-                                    "data": "net_business_income_pct"
+                                    "data": "net_business_income_pct",
+                                    render: function(data, type, full, meta) {
+                                        
+                                        data = full['data'][0].net_business_income_pct;
+                                        return data;
+                                    }
                                 },
                                 {
                                     "title": "Business liabilities",
                                     "data": "business_liabilities",
-                                    "render": self.currencyRightRender
+                                    render: function(data, type, full, meta) {
+                                        
+                                        data = full['data'][0].business_liabilities;
+                                        return self.strongRender(data);
+                                    }
                                 },
                                 {
                                     "title": "Net income",
                                     "data": "net_income",
-                                    "render": self.currencyRightRender
+                                    render: function(data, type, full, meta) {
+                                        
+                                        data = full['data'][0].net_income;
+                                        return self.strongRender(data);
+                                    }
                                 },
                                 {
                                     "title": "Kinara emi",
                                     "data": "kinara_emi",
-                                    "render": self.currencyRightRender
+                                    render: function(data, type, full, meta) {
+                                        
+                                        data = full['data'][0].kinara_emi;
+                                        return self.strongRender(data);
+                                    }
                                 },
                                 {
                                     "title": "Kinara emi pct",
-                                    "data": "kinara_emi_pct"
+                                    "data": "kinara_emi_pct",
+                                    render: function(data, type, full, meta) {
+                                        
+                                        data = full['data'][0].kinara_emi_pct;
+                                        return data;
+                                    }
                                 },                                
                                 {
                                     "title": "Total current assets",
                                     "data": "Total_current_assets",
                                     "render": function(data, type, full, meta){
+                                        data = full['data'][0].Total_current_assets;
                                         return '<strong>'+self.currencyRightRender(data)+'</strong>';
                                     }
                                 },                                
@@ -235,6 +285,7 @@ define({
                                     "data": "Total_fixed_assets",
                                     "render": self.strongRender,
                                     "render": function(data, type, full, meta){
+                                        data = full['data'][0].Total_fixed_assets;
                                         return '<strong>'+self.currencyRightRender(data)+'</strong>';
                                     }
                                 },
@@ -242,30 +293,41 @@ define({
                                     "title": "Total Assets",
                                     "data": "Total Assets",
                                     "render": function(data, type, full, meta){
+                                        data = full['data'][0]['Total Assets'];
                                         return '<strong>'+self.currencyRightRender(data)+'</strong>';
                                     }
                                 },
                                 {
                                     "title": "Total current liabilities",
                                     "data": "Total_current_liabilities",
-                                    "render": self.currencyRightRender
+                                    "render": function(data, type, full, meta){
+                                        data = full['data'][0]['Total_current_liabilities'];
+                                        return self.currencyRightRender(data)
+                                    }
                                 },                                
                                 {
                                     "title": "Total long term liabilities",
                                     "data": "Total_long-term_liabilities",
-                                    "render": self.currencyRightRender
+                                    "render": function(data, type, full, meta){
+                                        data = full['data'][0]['Total_long-term_liabilities'];
+                                        return self.currencyRightRender(data)
+                                    }
                                 },                               
                                 {
                                     "title": "Total Liabilities",
                                     "data": "Total_Liabilities",
                                     "render": function(data, type, full, meta){
+                                        data = full['data'][0].Total_Liabilities;
                                         return '<strong>'+self.currencyRightRender(data)+'</strong>';
                                     }
                                 },
                                 {
                                     "title": "Own capital",
                                     "data": "Own_capital",
-                                    "render": self.currencyRightRender
+                                    "render": function(data, type, full, meta){
+                                        data = full['data'][0].Own_capital;
+                                        return self.currencyRightRender(data)
+                                    }
                                 }
                             ];
                             },
@@ -276,7 +338,7 @@ define({
                             "type": "tableview",
                             "key": "customerHistoryFinancials.tableData",
                             "transpose" : true,
-                            "title": "Other Data Points",
+                            "title": "Other Data Points(in %)",
                             "selectable": "false",
                             "editable": "false",
                             "tableConfig":{
@@ -288,27 +350,92 @@ define({
                                 return [{
                                     "title": "Category",
                                     "data": "Category",
-                                    "render": self.strongRender
+                                    "render": function(data, type, full, meta){
+                                        data = full['data'][0].Category;
+                                        return self.strongRender(data)
+                                    }
                                 },
                                 {
                                     "title": "DSCR",
-                                    "data": "DSCR"
+                                    "data": "DSCR",
+                                    render: function(data, type, full, meta) {
+                                        if(full.ratios[0]==undefined)
+                                            data= "NA"
+                                        else {
+                                            data= full.ratios[0]['DSCR'];
+                                            if(data==0)
+                                                data = "0";
+                                            if(data == null)
+                                                data = "NA"
+                                            
+                                        }
+                                            return data;
+                                    }
                                 },
                                 {
                                     "title": "DSO",
-                                    "data": "DSONonTrading"
+                                    "data": "DSONonTrading",
+                                    render: function(data, type, full, meta) {
+                                        if(full.ratios[1]==undefined)
+                                            data= "NA"
+                                        else {
+                                            data = full.ratios[1]['DSONonTrading'];
+                                            if(data == 0)
+                                                 data = "0"
+                                            if(data == null)
+                                                data = "NA"
+
+                                        }
+                                            
+                                            return data;
+                                    }
                                 },
                                 {
                                     "title": "Current Ratio",
-                                    "data": "CurrentRatio"
+                                    "data": "CurrentRatio",
+                                    render: function(data, type, full, meta) {
+                                        if(full.ratios[2]==undefined)
+                                        data= "NA"
+                                    else {
+                                        data= full.ratios[2]['CurrentRatio'];
+                                        if(data == 0)
+                                            data = "0"
+                                        if(data == null)
+                                            data = "NA"
+                                    }
+                                        
+                                        return data;
+                                    }
                                 },
                                 {
                                     "title": "Hypothecation Value- Loan Amount",
-                                    "data": "LoanAmount"
+                                    "data": "HypothecationValue",
+                                    render: function(data, type, full, meta) {
+                                        if(full.ratios[3]==undefined)
+                                            data= "NA"
+                                        else {
+                                            data= full.ratios[3]['HypothecationValue:LoanAmount'];
+                                                if(data == 0)
+                                                    data = "0"
+                                                if(data == null)
+                                                    data = "NA"
+                                    }
+                                        
+                                        return data;
+                                        
+                                    }
                                 },
                                 {
                                     "title": "LUC Status",
-                                    "data": "luc_status"
+                                    "data": "luc_status",
+                                    render: function(data, type, full, meta) {
+                                        if(full.data[0].luc_status)
+                                            data= full.data[0].luc_status;
+                                        else
+                                            data= "NA";
+                                            return data;
+                                    }
+
                                 }
 
                             ];
@@ -324,13 +451,12 @@ define({
                                 "type": "section",
                                 "html": `
                                 <div class="chart-title"><h4>{{model.customerHistoryFinancials.financialsGraph.invoiceCash.title}}</h4>
-                                <div class="">
+                                <div >
                                     <nvd3
                                     data="model.customerHistoryFinancials.financialsGraph.invoiceCash.graphData"
                                     options="model.customerHistoryFinancials.graphOptions.multiBar"
                                     config="model.customerHistoryFinancials.graphConfig"
                                     ></nvd3>
-                                    <svg style="padding-left=15px"></svg>
                                     </div></div>`
                             }]
                         },
@@ -504,13 +630,16 @@ define({
                 "customer-history-fin-snap": function(bundleModel, model, params){
                     let prepareFinancialData={
                         'tableData':[],
+                        'tableRatios':[],
                         'tableData1':[],
                         'tableData2':[],
                         'financialsGraph':{}
                         };
+                        var ratios={};
                     if(params){
                        _.forEach(params, function(params){
-                            prepareFinancialData['tableData'].push(params[3].tableData[0]);
+                            prepareFinancialData['tableData'].push(params[3].tableData);
+                            prepareFinancialData['tableRatios'].push(params[3].tableData['ratios']);
                             prepareFinancialData['tableData1'].push(params[4].data[0]);
                             prepareFinancialData['tableData2'].push(params[6].data[0]);
 
@@ -562,6 +691,8 @@ define({
                         });
 
                     });
+                    _.forEach(prepareFinancialData['tableRatios'], function(histData){
+                        model.customerHistoryFinancials['tableRatios'].push(histData);});
                      _.forEach(prepareFinancialData['tableData1'], function(histData){
                         model.customerHistoryFinancials['tableData1'].push(histData);});
                         _.forEach(prepareFinancialData['tableData2'], function(histData){
@@ -607,14 +738,23 @@ define({
                                 'Total_long-term_liabilities': balancesheet['Total long-term liabilities'],
                                 'Total_Liabilities': balancesheet['Total Liabilities'],
                                 'Own_capital': balancesheet['Own capital'],
-                                
-
-                                // 'DSCR': params[3].data[3]["Actual Value"],
-                                // 'DSONonTrading':params[3].data[4]["Actual Value"],
-                                'CurrentRatio':"",
-                                'LoanAmount':"",
-                                'luc_status':""
+                                'luc_status': params[13].data[0]['luc_status']?params[13].data[0]['luc_status']:"NA",
                             };
+                            var data={
+                                "data":[],
+                                "ratios":[
+                                    {
+                                        'DSCR': params[3].data[3]?((params[3].data[3]["Actual Value"])*100):"NA"
+                                    },{
+                                        'DSONonTrading':params[3].data[4]?((params[3].data[4]["Actual Value"])*100):"NA"
+                                    },{
+                                        'CurrentRatio':params[13].data[0]['Current Ratio'],
+                                    },{
+                                        'HypothecationValue:LoanAmount':params[13].data[0]['HypothecationValue:LoanAmount'],
+                                    }
+                                ]
+                            };
+                            data['data'].push(prepareFinancialData);
                             prepareFinancialData1 = {
                                 'Category': 'Current Application',
                                 'ABB_to_Kinara_EMI': (params[3].data[0]) ? params[3].data[0]['Actual Value'] : null,
@@ -637,7 +777,7 @@ define({
 
 
                         }
-                    model.customerHistoryFinancials['tableData'].push(prepareFinancialData);
+                    model.customerHistoryFinancials['tableData'].push(data);
                     model.customerHistoryFinancials['tableData1'].push(prepareFinancialData1);
                     model.customerHistoryFinancials['tableData2'].push(prepareFinancialData2);
                     model.financialGraphValues['totalAssetGraphValues'].push({
