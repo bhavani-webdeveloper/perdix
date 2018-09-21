@@ -149,6 +149,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
             }else{
                 model.iswaiverApplicable=false;
             }
+            model.loanAccount.disbursementSchedules[0].normalInterestDuePayment =model.loanAccount.disbursementSchedules[0].normalInterestDuePayment||0;
+            model.loanAccount.disbursementSchedules[0].penalInterestDuePayment = model.loanAccount.disbursementSchedules[0].penalInterestDuePayment||0;
+            model.loanAccount.disbursementSchedules[0].feeAmountPayment = model.loanAccount.disbursementSchedules[0].feeAmountPayment||0;
         }
 
         return {
@@ -946,15 +949,15 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     "items": [{
                         "key": "loanAccount.disbursementSchedules[0].normalInterestDuePayment",
                         "title": "TOTAL_INTEREST_DUE",
-                        "onChange": "actions.validateWaiverAmount(model.loanAccount.disbursementSchedules[0].normalInterestDuePayment,model.loanAccount.precloseureNormalInterest,model)"
+                        "onChange": "actions.validateWaiverAmount(model.loanAccount.disbursementSchedules[0].normalInterestDuePayment,model.loanAccount.precloseureNormalInterest,model,modelvalue)"
                     }, {
                         "key": "loanAccount.disbursementSchedules[0].penalInterestDuePayment",
                         "title": "TOTAL_PENAL_INTEREST_DUE",
-                        "onChange": "actions.validateWaiverAmount(model.loanAccount.disbursementSchedules[0].penalInterestDuePayment,model.loanAccount.precloseurePenalInterest,model)"
+                        "onChange": "actions.validateWaiverAmount(model.loanAccount.disbursementSchedules[0].penalInterestDuePayment,model.loanAccount.precloseurePenalInterest,model,modelvalue)"
                     }, {
                         "key": "loanAccount.disbursementSchedules[0].feeAmountPayment",
                         "title": "TOTAL_FEE_DUE",
-                        "onChange": "actions.validateWaiverAmount(model.loanAccount.disbursementSchedules[0].feeAmountPayment,model.loanAccount.preTotalFee,model)"
+                        "onChange": "actions.validateWaiverAmount(model.loanAccount.disbursementSchedules[0].feeAmountPayment,model.loanAccount.preTotalFee,model,modelvalue)"
                     }]
                 },
                 {
