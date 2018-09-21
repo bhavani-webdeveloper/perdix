@@ -198,29 +198,25 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 });
 
-                                if(_.hasIn(loanAccount, 'coApplicantsEnrolmentProcesses')) {
-                                    for (var i=0;i<loanAccount.coApplicantsEnrolmentProcesses.length; i++){
-                                        $this.bundlePages.push({
-                                            pageClass: 'co-applicant',
-                                            model: {
-                                                enrolmentProcess: loanAccount.coApplicantsEnrolmentProcesses[i],
-                                                loanProcess: loanProcess
-                                            }
-                                        });
-                                    }
+                              
+                                for (i in customerIds.coApplicants) {
+                                    $this.bundlePages.push({
+                                        pageClass: 'co-applicant',
+                                        model: {
+                                            customerId: customerIds.coApplicants[i]
+                                        }
+                                    });
                                 }
 
-                                if(_.hasIn(loanAccount, 'guarantorsEnrolmentProcesses')) {
-                                    for (var i=0;i<loanAccount.guarantorsEnrolmentProcesses.length; i++){
-                                        $this.bundlePages.push({
-                                            pageClass: 'guarantor',
-                                            model: {
-                                                enrolmentProcess: loanAccount.guarantorsEnrolmentProcesses[i],
-                                                loanProcess: loanProcess
-                                            }
-                                        });
-                                    }
+                                for (i in customerIds.guarantors) {
+                                    $this.bundlePages.push({
+                                        pageClass: 'guarantor',
+                                        model: {
+                                            customerId: customerIds.guarantors[i]
+                                        }
+                                    });
                                 }
+
 
                                 if(SessionStore.getGlobalSetting('siteCode') != 'IREPDhan' || SessionStore.getGlobalSetting('siteCode') == 'IREPDhan') {
                                     $this.bundlePages.push({
