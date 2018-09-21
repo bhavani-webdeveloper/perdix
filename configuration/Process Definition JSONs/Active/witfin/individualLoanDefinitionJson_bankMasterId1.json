@@ -936,7 +936,8 @@
                     "FieldInvestigation2",
                     "FieldInvestigation3",
                     "TeleVerification",
-                    "LoanInitiation"
+                    "LoanInitiation",
+                    "DocumentUpload"
                  ]
               },
               "customerBankIfscCode":{
@@ -951,7 +952,8 @@
                     "FieldInvestigation2",
                     "FieldInvestigation3",
                     "TeleVerification",
-                    "LoanInitiation"
+                    "LoanInitiation",
+                    "DocumentUpload"
                  ]
               },
               "customerBank":{
@@ -966,7 +968,8 @@
                     "FieldInvestigation2",
                     "FieldInvestigation3",
                     "TeleVerification",
-                    "LoanInitiation"
+                    "LoanInitiation",
+                    "DocumentUpload"
                  ]
               },
               "customerBranch":{
@@ -981,7 +984,8 @@
                     "FieldInvestigation2",
                     "FieldInvestigation3",
                     "TeleVerification",
-                    "LoanInitiation"
+                    "LoanInitiation",
+                    "DocumentUpload"
                  ]
               },
               "oldAccountNO":{
@@ -1680,7 +1684,8 @@
                     "FieldInvestigation2",
                     "FieldInvestigation3",
                     "TeleVerification",
-                    "LoanInitiation"
+                    "LoanInitiation",
+                    "DocumentUpload"
                  ]
               },
               "collectionBankBranchName":{
@@ -1693,7 +1698,8 @@
                     "FieldInvestigation2",
                     "FieldInvestigation3",
                     "TeleVerification",
-                    "LoanInitiation"
+                    "LoanInitiation",
+                    "DocumentUpload"
                  ]
               },
               "collectionIfscCode":{
@@ -1706,7 +1712,8 @@
                     "FieldInvestigation2",
                     "FieldInvestigation3",
                     "TeleVerification",
-                    "LoanInitiation"
+                    "LoanInitiation",
+                    "DocumentUpload"
                  ]
               },
               "collectionAccountNumber":{
@@ -1719,7 +1726,8 @@
                     "FieldInvestigation2",
                     "FieldInvestigation3",
                     "TeleVerification",
-                    "LoanInitiation"
+                    "LoanInitiation",
+                    "DocumentUpload"
                  ]
               },
               "collectionAccountType":{
@@ -1732,7 +1740,8 @@
                     "FieldInvestigation2",
                     "FieldInvestigation3",
                     "TeleVerification",
-                    "LoanInitiation"
+                    "LoanInitiation",
+                    "DocumentUpload"
                  ]
               },
               "collectionCustomerNameAsInBank":{
@@ -1745,7 +1754,8 @@
                     "FieldInvestigation2",
                     "FieldInvestigation3",
                     "TeleVerification",
-                    "LoanInitiation"
+                    "LoanInitiation",
+                    "DocumentUpload"
                  ]
               },
               "collectionPaymentType":{
@@ -5697,7 +5707,8 @@
                        "FieldInvestigation2",
                        "FieldInvestigation3",
                        "TeleVerification",
-                       "LoanInitiation"
+                       "LoanInitiation",
+                       "DocumentUpload"
                     ]
                  },
                  "document":{
@@ -5712,7 +5723,8 @@
                        "FieldInvestigation2",
                        "FieldInvestigation3",
                        "TeleVerification",
-                       "LoanInitiation"
+                       "LoanInitiation",
+                       "DocumentUpload"
                     ]
                  },
                  "remarks":{
@@ -5727,7 +5739,8 @@
                        "FieldInvestigation2",
                        "FieldInvestigation3",
                        "TeleVerification",
-                       "LoanInitiation"
+                       "LoanInitiation",
+                       "DocumentUpload"
                     ]
                  }
               }
@@ -5868,7 +5881,8 @@
                        "FieldInvestigation2",
                        "FieldInvestigation3",
                        "TeleVerification",
-                       "LoanInitiation"
+                       "LoanInitiation",
+                       "DocumentUpload"
                     ]
                  },
                  "ifscCode":{
@@ -5920,7 +5934,8 @@
                        "FieldInvestigation2",
                        "FieldInvestigation3",
                        "TeleVerification",
-                       "LoanInitiation"
+                       "LoanInitiation",
+                       "DocumentUpload"
                     ]
                  }
               }
