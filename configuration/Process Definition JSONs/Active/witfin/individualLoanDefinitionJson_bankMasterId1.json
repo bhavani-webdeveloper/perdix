@@ -1380,7 +1380,8 @@
                     "FieldInvestigation2",
                     "FieldInvestigation3",
                     "TeleVerification",
-                    "LoanInitiation"
+                    "LoanInitiation",
+                    "LoanBooking"
                  ]
               },
               "frequency":{
@@ -5753,7 +5754,8 @@
                        "FieldInvestigation2",
                        "FieldInvestigation3",
                        "TeleVerification",
-                       "LoanInitiation"
+                       "LoanInitiation",
+                       "LoanBooking"
                     ]
                  },
                  "moratoriumPeriodInDays":{
@@ -5807,7 +5809,8 @@
                        "FieldInvestigation2",
                        "FieldInvestigation3",
                        "TeleVerification",
-                       "LoanInitiation"
+                       "LoanInitiation",
+                       "LoanBooking"
                     ]
                  },
                  "trancheNumber":{
