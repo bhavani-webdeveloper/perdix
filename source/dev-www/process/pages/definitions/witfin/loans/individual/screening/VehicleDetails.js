@@ -1490,6 +1490,27 @@ define(
                                 PageHelper.hideLoader();
                             })
                             .subscribe(function (value) {
+                               
+                                if (_.hasIn(model, 'loanAccount.loanCustomerRelations') &&
+                                model.loanAccount.loanCustomerRelations!=null &&
+                                model.loanAccount.loanCustomerRelations.length > 0) {
+                                var lcr = model.loanAccount.loanCustomerRelations;
+                                var idArr = [];
+                                for (var i=0;i<lcr.length;i++){
+                                    idArr.push(lcr[i].customerId);
+                                }
+                                Queries.getCustomerBasicDetails({'ids': idArr})
+                                    .then(function(result){
+                                        if (result && result.ids){
+                                            for (var i = 0; i < lcr.length; i++) {
+                                                var cust = result.ids[lcr[i].customerId];
+                                                if (cust) {
+                                                    lcr[i].name = cust.first_name;
+                                                }
+                                            }
+                                        }
+                                    });
+                            }
 
                                 PageHelper.showProgress('loan-process', 'Loan Saved.', 5000);
                             }, function (err) {
