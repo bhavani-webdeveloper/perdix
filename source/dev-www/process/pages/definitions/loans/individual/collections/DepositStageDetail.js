@@ -351,7 +351,7 @@ define({
                         var collectionData = {
                             "loanCollectionSummaryDTOs": [],
                             "remarks": model.review.remarks,
-                            "repaymentProcessAction": "PROCEED",
+                            "repaymentProcessAction": "SENDBACK",
                             "stage": "PreDeposit"
                         }
                         if (model.depositDetails && model.depositDetails.instrumentType.toLowerCase()=='cash') {
