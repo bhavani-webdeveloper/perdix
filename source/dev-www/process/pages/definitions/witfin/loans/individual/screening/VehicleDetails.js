@@ -1467,6 +1467,7 @@ define(
                 actions: {
                     // preSave: function(model, form, formName) {
                     //     var deferred = $q.defer();
+                    //
                     //     if (model.customer.firstName) {
                     //         deferred.resolve();
                     //     } else {
