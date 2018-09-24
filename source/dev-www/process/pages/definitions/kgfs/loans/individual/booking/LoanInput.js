@@ -19,7 +19,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                 "bundleDefinitionPromise": function() {
                     return $q.resolve([
                         {
-                            pageName: 'irep.customer.IndividualEnrolment2',
+                            pageName: 'kgfs.customer.IndividualEnrollment',
                             title: 'APPLICANT',
                             pageClass: 'applicant',
                             minimum: 1,
@@ -27,7 +27,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:10
                         },
                         {
-                            pageName: 'irep.customer.IndividualEnrolment2',
+                            pageName: 'kgfs.customer.IndividualEnrollment',
                             title: 'CO_APPLICANT',
                             pageClass: 'co-applicant',
                             minimum: 0,
@@ -35,7 +35,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:20
                         },
                         {
-                            pageName: 'irep.customer.IndividualEnrolment2',
+                            pageName: 'kgfs.customer.IndividualEnrollment',
                             title: 'GUARANTOR',
                             pageClass: 'guarantor',
                             minimum: 0,
@@ -75,7 +75,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:70
                         },
                         {
-                            pageName: 'loans.individual.screening.CBCheck',
+                            pageName: 'kgfs.customer.CBCheck',
                             title: 'CB_CHECK',
                             pageClass: 'cb-check',
                             minimum: 1,
