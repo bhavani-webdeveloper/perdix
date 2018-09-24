@@ -3,12 +3,13 @@
 	include_once("bootload.php");
 	use Illuminate\Database\Capsule\Manager as DB;
 
-    $result = $_POST["result"];
+    $result = $_REQUEST['resullt'];
     $resultArray= explode('|', $result);
     $ekyc =  $resultArray[0];
     $pekrn = $resultArray[1];
     $url = $_GET['url'];
-    $customer_id = $GET['customer_id'];
+    $customer_id = $_REQUEST['customer_id'];
+    
     $status = false;
     if ($ekyc === 'Y') {
         $affected = DB::update('update customer set is_ekyc_done = ?, pekrn = ? where id = ?', [1, $pekrn, $customer_id]);
