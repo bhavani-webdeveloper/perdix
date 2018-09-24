@@ -3,18 +3,19 @@
 	include_once("bootload.php");
 	use Illuminate\Database\Capsule\Manager as DB;
 
-    $result = $_POST["result"];
+    $result = $_REQUEST['resullt'];
     $resultArray= explode('|', $result);
     $ekyc =  $resultArray[0];
     $pekrn = $resultArray[1];
     $url = $_GET['url'];
-    $customer_id = $GET['customer_id'];
+    $customer_id = $_REQUEST['customer_id'];
+    
     $status = false;
     if ($ekyc === 'Y') {
         $affected = DB::update('update customer set is_ekyc_done = ?, pekrn = ? where id = ?', [1, $pekrn, $customer_id]);
         $status = true;
         $statusHead = "eKYC is completed successfullly";
-        $statusMessage = "Procced with mutual fund application";
+        $statusMessage = "Proceed with mutual fund application";
     } else if ($ekyc ==='N' && substr($resultArray[2], 0, 2) ==='KS') {
         $status = true;
         $statusHead =  'eKYC Aleady done.';
@@ -23,7 +24,8 @@
         $status = false;
         $statusHead =  "eKYC is Failed";
         $statusMessage = $resultArray[3];
-    }
+	}
+	header("Content-Type: text/html");
 ?><html lang="en">
 <head>
 	<title>Perdix - CAMS</title>
