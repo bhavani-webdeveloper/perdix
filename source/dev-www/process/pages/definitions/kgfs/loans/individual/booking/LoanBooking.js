@@ -188,7 +188,7 @@ define([],function(){
                                 "LoanMitigants",
                                 "DeductionsFromLoan",
                                 "LoanMitigants",
-                    "LoanMitigants.deviationParameter",                                
+                                "LoanMitigants.deviationParameter",                                
                                 "AdditionalLoanInformation",
                                 "NomineeDetails",
                                 "ProposedUtilizationPlan",
@@ -821,7 +821,6 @@ define([],function(){
             }
             var getIncludes = function(model){
                 return [
-                    "LoanDetails",
                     "LoanDetails.loanType",
                     "LoanDetails.partner",
                     "LoanDetails.frequency",
