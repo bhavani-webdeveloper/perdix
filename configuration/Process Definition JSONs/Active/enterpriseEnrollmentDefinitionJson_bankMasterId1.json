@@ -3150,8 +3150,7 @@
         "required": [
           "corporateName",
           "businessName",
-          "businessConstitution",
-          "registrationType"
+          "businessConstitution"
         ],
         "properties": {
           "customerNumber": {

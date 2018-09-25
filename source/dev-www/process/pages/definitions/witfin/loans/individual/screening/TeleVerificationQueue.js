@@ -4,18 +4,13 @@ define({
     dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager", "IndividualLoan", "LoanBookingCommons"],
     $pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
         var branch = SessionStore.getBranch();
-        var centres = SessionStore.getCentres();
-        var centreId = [];
-        if (centres && centres.length) {
-            for (var i = 0; i < centres.length; i++) {
-                centreId.push(centres[i].centreId);
-            }
-        }
+        
         return {
             "type": "search-list",
             "title": "TELE_VERIFICATION_QUEUE",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
+                model.branch = SessionStore.getCurrentBranch().branchId;
                 $log.info("search-list sample got initialized");
             },
             definition: {
@@ -38,23 +33,24 @@ define({
                         },
 	                    'branch': {
 	                    	'title': "BRANCH",
-	                    	"type": ["string", "null"],
-	                    	"enumCode": "branch",
-							"x-schema-form": {
-								"type": "select",
-								"screenFilter": true
-							}
+                            "type": ["string", "null"],
+                            "x-schema-form": {
+                                "type": "userbranch",
+                                "screenFilter": true
+                            },
+                            "readonly": true
 	                    },
                         "centre": {
 							"title": "CENTRE",
 							"type": ["integer", "null"],
 							"x-schema-form": {
 								"type": "select",
-								"enumCode": "centre",
-								"parentEnumCode": "branch",
+                                "enumCode": "centre",
+                                "parentEnumCode": "branch",
+                                "parentValueExpr": "model.branch",
 								"screenFilter": true
 							}
-                        },
+						},
                         "customerId": {
                             "title": "CUSTOMER_ID",
                             "type": "string"
@@ -83,7 +79,7 @@ define({
                     }
                     return IndividualLoan.search({
                         'stage': 'TeleVerification',
-                        'branchName': searchOptions.branch,
+                        'branchId': searchOptions.branch,
                         'enterprisePincode': searchOptions.pincode,
                         'enterprisePincode': searchOptions.pincode,
                         'applicantName': searchOptions.applicantName,
@@ -93,8 +89,7 @@ define({
                         'customerName': searchOptions.businessName,
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage,
-                        //'centreCode': searchOptions.centreCode
-
+                        'centreCode': searchOptions.centre
                     }).$promise;
                 },
                 paginationOptions: {
