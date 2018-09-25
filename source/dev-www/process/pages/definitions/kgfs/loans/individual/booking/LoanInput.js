@@ -19,7 +19,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                 "bundleDefinitionPromise": function() {
                     return $q.resolve([
                         {
-                            pageName: 'irep.customer.IndividualEnrolment2',
+                            pageName: 'kgfs.customer.IndividualEnrollment',
                             title: 'APPLICANT',
                             pageClass: 'applicant',
                             minimum: 1,
@@ -27,15 +27,15 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:10
                         },
                         {
-                            pageName: 'irep.customer.IndividualEnrolment2',
+                            pageName: 'kgfs.customer.IndividualEnrollment',
                             title: 'CO_APPLICANT',
                             pageClass: 'co-applicant',
                             minimum: 0,
-                            maximum: 4,
+                            maximum: 5,
                             order:20
                         },
                         {
-                            pageName: 'irep.customer.IndividualEnrolment2',
+                            pageName: 'kgfs.customer.IndividualEnrollment',
                             title: 'GUARANTOR',
                             pageClass: 'guarantor',
                             minimum: 0,
@@ -56,15 +56,31 @@ define(["perdix/domain/model/loan/LoanProcess",
                             pageClass: 'loan-request',
                             minimum: 1,
                             maximum: 1,
+                            order:60
+                        },
+                        {
+                            pageName: 'kgfs.loans.individual.booking.LoanBooking',
+                            title: 'LOAN_BOOKING',
+                            pageClass: 'loan-booking',
+                            minimum: 1,
+                            maximum: 1,
                             order:50
                         },
                         {
-                            pageName: 'loans.individual.screening.CBCheck',
+                            pageName: 'kgfs.loans.individual.booking.DocumentUpload',
+                            title: 'DOCUMENT_UPLOAD',
+                            pageClass: 'document-upload',
+                            minimum: 1,
+                            maximum: 1,
+                            order:70
+                        },
+                        {
+                            pageName: 'kgfs.customer.CBCheck',
                             title: 'CB_CHECK',
                             pageClass: 'cb-check',
                             minimum: 1,
                             maximum: 1,
-                            order:60
+                            order:70
                         },
                         {
                             pageName: 'irep.loans.individual.origination.Review',
@@ -195,11 +211,26 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 });
 
                                 $this.bundlePages.push({
+                                    pageClass: 'loan-booking',
+                                    model:{
+                                        loanProcess: loanProcess
+                                    }
+                                });
+                                $this.bundlePages.push({
+                                    pageClass: 'document-upload',
+                                    model:{
+                                        loanProcess: loanProcess
+                                    }
+                                });
+                                
+                                $this.bundlePages.push({
                                     pageClass: 'cb-check',
                                     model: {
                                         loanAccount: loanProcess.loanAccount
                                     }
                                 });
+
+                               
 
                                $this.bundlePages.push({
                                         pageClass: 'loan-review',
@@ -207,10 +238,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                             loanAccount: loanProcess.loanAccount,
                                         }
                                     });
-
-
                                 deferred.resolve();
-
                             });
 
                     } else {
@@ -247,6 +275,19 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 $this.bundlePages.push({
                                     pageClass: 'loan-request',
                                     model: {
+                                        loanProcess: loanProcess
+                                    }
+                                });
+
+                                $this.bundlePages.push({
+                                    pageClass: 'loan-booking',
+                                    model:{
+                                        loanProcess: loanProcess
+                                    }
+                                });
+                                $this.bundlePages.push({
+                                    pageClass: 'document-upload',
+                                    model:{
                                         loanProcess: loanProcess
                                     }
                                 });

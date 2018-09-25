@@ -1291,6 +1291,13 @@ define([], function() {
                         model.loanAccount.vehicleLoanDetails.registrationNumber = obj.vehicleRegistrationNumber;
                         model.loanAccount.screeningDate = obj.screeningDate || moment().format("YYYY-MM-DD");
                         model.loanAccount.parentLoanAccount = obj.parentLoanAccount;
+
+                        if(model.loanAccount.loanPurpose1 == 'Purchase - New Vehicle'){
+                            model.loanAccount.vehicleLoanDetails.vehicleType = 'New';
+                        }else if (model.loanAccount.loanPurpose1 == 'Purchase - Used Vehicle'){
+                            model.loanAccount.vehicleLoanDetails.vehicleType = 'Used';
+                        }
+                        
                     },
                     "new-co-applicant": function(bundleModel, model, params){
                         $log.info("Insdie new-co-applicant of LoanRequest");

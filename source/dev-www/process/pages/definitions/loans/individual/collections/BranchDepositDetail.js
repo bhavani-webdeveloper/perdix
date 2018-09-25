@@ -243,7 +243,7 @@
                                 var collectionData = {
                                     "loanCollectionSummaryDTOs": [],
                                     "remarks": model.review.remarks,
-                                    "repaymentProcessAction": "PROCEED",
+                                    "repaymentProcessAction": "SENDBACK",
                                     "stage": "Rejected"
                                 }
                                 if (model.branchCollectionDetail && model.branchCollectionDetail[0]['instrumentType'] == 'CASH') {

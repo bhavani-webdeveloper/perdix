@@ -156,6 +156,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseAssets.enterpriseAssets.endUse",
                     "EnterpriseAssets.enterpriseAssets.natureOfUse",
                     "EnterpriseAssets.enterpriseAssets.manufacturer",
+                    "EnterpriseAssets.enterpriseAssets.status",
                     //"EnterpriseAssets.enterpriseAssets.make",
                     //"EnterpriseAssets.enterpriseAssets.assetCategory",
                     "EnterpriseAssets.enterpriseAssets.vehicleMakeModel",
@@ -1116,6 +1117,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "orderNo": 130,
                                         "items": {
                                             "businessVerification": {
+                                                "key": "customer.fieldInvestigationDetails",
                                                 "type": "array",
                                                 "add": null,
                                                 "remove": null,
@@ -1193,11 +1195,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                                             "condition":"model.customer.enterpriseAssets[arrayIndex].natureOfUse == 'Commmercial'"
                                                         },
                                                         "status":{
-                                                            "orderNo": 130,
-                                                            "title":"STATUS"    
+                                                            "orderNo": 140,
+                                                            "title":"STATUS",
+                                                            "type": "select",
+                                                            "enumCode": "existing_vehicle_status",
+                                                            "key":"customer.enterpriseAssets[].isHypothecated"   
                                                         },
                                                         "rc":{
-                                                            "orderNo": 130,
+                                                            "orderNo": 150,
                                                             "title":"RC",
                                                             "type": "file",
                                                             "category": "CustomerEnrollment",
@@ -1205,7 +1210,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                                             "key":"customer.enterpriseAssets[].udf1"
                                                         },
                                                         "insurance":{
-                                                            "orderNo": 140,
+                                                            "orderNo": 160,
                                                             "title":"INSURANCE",
                                                             "type": "file",
                                                             "category": "CustomerEnrollment",
@@ -1213,7 +1218,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                                             "key":"customer.enterpriseAssets[].udf2"
                                                         },
                                                         "soa":{
-                                                            "orderNo": 150,
+                                                            "orderNo": 170,
                                                             "title":"SOA",
                                                             "type": "file",
                                                             "category": "CustomerEnrollment",

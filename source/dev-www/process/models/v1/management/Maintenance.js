@@ -2,6 +2,7 @@ irf.models.factory('Maintenance', ["$resource", "$httpParamSerializer", "BASE_UR
     function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q, PageHelper) {
         var endpoint = BASE_URL + '/api/maintenance';
         var biEndPoint= irf.BI_BASE_URL;
+        
 
         var res = $resource(endpoint, null, {
             updateSpoke: {

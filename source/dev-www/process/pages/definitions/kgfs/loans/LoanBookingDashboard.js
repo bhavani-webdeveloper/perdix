@@ -11,12 +11,14 @@ irf.pageCollection.controller(irf.controller("kgfs.loans.LoanBookingDashboard"),
             "iconClass": "fa fa-users",
             "items": [
                 "Page/Bundle/kgfs.loans.individual.booking.LoanInput",
+                "Page/Engine/kgfs.loans.individual.booking.InitiationQueue"
             ]
         };
 
 
        
         PagesDefinition.getUserAllowedDefinition(loanDefinition).then(function(resp) {
+            console.log(resp);
             $scope.dashboardDefinition = _.cloneDeep(resp);
            
         });
