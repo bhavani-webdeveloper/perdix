@@ -37,8 +37,7 @@ let config = {
                 "overrides": [
                     {
                         "type": "expr",
-                        "expr": "this.loanAccount.currentStage=='CreditAppraisal'",
-                        "add": [
+                        "expr": "this.loanAccount.currentStage=='ScreeningReview' ||  this.loanAccount.currentStage=='FieldInvestigation1' || this.loanAccount.currentStage=='FieldInvestigation2' || this.loanAccount.currentStage=='FieldInvestigation3' || this.loanAccount.currentStage=='TeleVerification' || this.loanAccount.currentStage=='BusinessApproval1'|| this.loanAccount.currentStage=='BusinessApproval2'||  this.loanAccount.currentStage=='CreditApproval1' || this.loanAccount.currentStage=='CreditApproval2'",                        "add": [
                             {
                                 "name": "CalculateVehicleViabilityPolicy",
                                 "arguments": {
