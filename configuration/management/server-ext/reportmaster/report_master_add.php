@@ -66,16 +66,11 @@ $ub->is_ui_editable = 1;
 
 $response = get_response_obj();
 
-if (stripos($query, "select") !== false && stripos($query, "from") !== false) {
-    if ($ub->save()){
-        return $response->setStatusCode(200)->json($ub->toArray());
-    } else {
-        return $response->setStatusCode(500);
-    }
-}else{
-    return $response->setStatusCode(400);
+if ($ub->save()){
+    return $response->setStatusCode(200)->json($ub->toArray());
+} else {
+    return $response->setStatusCode(500);
 }
-
 
 } catch (Exception $e) {
 	$response = get_response_obj();
