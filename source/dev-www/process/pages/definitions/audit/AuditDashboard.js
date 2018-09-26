@@ -236,11 +236,13 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                     $q.all([
                         Audit.online.getIssuesList({
                             'issue_status': "A",
+                            'assignee_designation_id': role_id,
                             'page': 1,
                             'per_page': 100
                         }).$promise,
                         Audit.online.getIssuesList({
                             'issue_status': "P",
+                            'assignee_designation_id': role_id,
                             'page': 1,
                             'per_page': 100
                         }).$promise
@@ -253,11 +255,13 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                     $q.all([
                         Audit.online.getIssuesList({
                             'issue_status': "A",
+                            'assignee_designation_id': role_id,
                             'page': 1,
                             'per_page': 100
                         }).$promise,
                         Audit.online.getIssuesList({
                             'issue_status': "P",
+                            'assignee_designation_id': role_id,
                             'page': 1,
                             'per_page': 100
                         }).$promise
