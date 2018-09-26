@@ -4984,6 +4984,15 @@
                 "Completed"
               ]
             
+            },
+            "documentNumber": {
+              "title": "CHECK_NUMBER",
+             "type": "number",
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            
             }
           }
         }

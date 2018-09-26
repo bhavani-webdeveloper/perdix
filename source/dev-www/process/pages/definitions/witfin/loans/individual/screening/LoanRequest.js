@@ -1047,7 +1047,7 @@ define([], function() {
                                             "type": "button",
                                             onClick: function(model, formCtrl) {
                                                 var frequencyRequested;
-                                                if (model.loanAccount.frequencyRequested && model.loanAccount.tenure && model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5) {
+                                                if (model.loanAccount.frequencyRequested && model.loanAccount.loanAmount && model.loanAccount.tenure && model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5) {
                                                     switch (model.loanAccount.frequencyRequested) {
                                                         case 'Daily':
                                                             frequencyRequested = 365;
@@ -1068,6 +1068,13 @@ define([], function() {
                                                             frequencyRequested = 1;
                                                     }
                                                     model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = Math.round((((Math.pow((((2 * parseFloat((model.loanAccount.interestRate)/100) * parseFloat(model.loanAccount.tenure)) / (parseFloat(model.loanAccount.tenure) + 1)) + 1), 1 / frequencyRequested) - 1) * frequencyRequested)*100)*100)/100;
+                                                } else {
+                                                    PageHelper.showErrors({
+                                                        data: {
+                                                            error: "Please Enter Required Values for calculating Nominal Rate"
+                                                        }
+                                                    });
+                                                    return false;
                                                 }
                                             }
                                         }
