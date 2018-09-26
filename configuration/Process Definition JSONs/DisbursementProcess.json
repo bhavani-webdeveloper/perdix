@@ -75,6 +75,8 @@
       "code": "DisbursementConfirmation",
       "name": "Disbursement Confirmation",
       "stageType": "CAPTURE",
+      "sendSms":"Yes",
+      "smsCategory":"LoanDisbursement",
       "allowedRoles": [
         "WM"
       ],
