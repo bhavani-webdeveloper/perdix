@@ -74,7 +74,7 @@ irf.ANALYTICS_API_URL = 'http://34.202.113.237:1337';
 // irf.FORM_DOWNLOAD_URL = 'http://34.205.103.97:8080/forms/formPrint.jsp';
 // irf.BI_BASE_URL = "http://34.205.103.97:8081/bi";
 // irf.PSYCHOMETRIC_BASE_URL = "http://34.205.103.97:8080/psychometric";
- 
+
 //  var irf = irf || {};
 // irf.BASE_URL = 'http://34.231.204.132:8080/perdix-server_sit';
 // irf.MANAGEMENT_BASE_URL = 'http://34.231.204.132:8081/management_sit';

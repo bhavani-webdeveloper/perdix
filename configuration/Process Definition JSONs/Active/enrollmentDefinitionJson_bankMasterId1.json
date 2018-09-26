@@ -95,8 +95,7 @@
         "items": {
           "type": "object",
           "required": [
-            "educationStatus",
-            "maritalStatus"
+            "educationStatus"
           ],
           "properties": {
             "familyMemberFirstName": {

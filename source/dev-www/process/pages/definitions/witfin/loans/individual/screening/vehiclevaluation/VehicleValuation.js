@@ -384,6 +384,11 @@ define(
 
                         if(_.hasIn(model, 'loanProcess.loanAccount')) {
                             model.loanAccount = model.loanProcess.loanAccount;
+
+                            if (_.hasIn(model, 'loanAccount.vehicleLoanDetails.category') &&
+                        model.loanAccount.vehicleLoanDetails.category !=null ) {
+                                    model.loanAccount.vehicleLoanDetails.vehicleClass = model.loanAccount.vehicleLoanDetails.category;
+                        }
                             var p1 = UIRepository.getLoanProcessUIRepository().$promise;;
                             p1.then(function(repo) {
                                 self.form = IrfFormRequestProcessor.getFormDefinition(repo, formRequest, configFile(), model);
@@ -397,6 +402,11 @@ define(
                             .subscribe(function(data) {
                                 model.loanProcess = data;
                                 model.loanAccount = data.loanAccount;
+
+                                if (_.hasIn(model, 'loanAccount.vehicleLoanDetails.category') &&
+                                model.loanAccount.vehicleLoanDetails.category !=null ) {
+                                            model.loanAccount.vehicleLoanDetails.vehicleClass = model.loanAccount.vehicleLoanDetails.category;
+                                }
 
                                 var p1 = UIRepository.getLoanProcessUIRepository().$promise;;
                                 p1.then(function(repo) {
