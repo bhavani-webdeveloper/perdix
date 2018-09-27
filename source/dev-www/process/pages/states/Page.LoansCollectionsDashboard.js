@@ -137,14 +137,14 @@ function($log, $scope, PagesDefinition,formHelper, SessionStore, LoanProcess,Rep
             dep.data = 0;
             LoanCollection.fetchDepositSummary({
                 'currentStage': "Deposit",
-                'branchName' : branchName,
+                'loanBranchName' : branchName,
                 'instrumentType': "CASH"
             }).$promise.then(function(response, headerGetter){
                 dep.data = dep.data + parseFloat(response.headers['x-total-count']);
             })
             LoanCollection.query({
                 'currentStage': "Deposit",
-                'branchName' : branchName,
+                'accountBranchId' : branchId,
                 'instrumentType': "CHQ"
             }).$promise.then(function(response, headerGetter){
                 dep.data = dep.data + parseFloat(response.headers['x-total-count']);
