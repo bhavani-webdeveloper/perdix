@@ -67,6 +67,7 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                     irfNavigator.goBack();
                     return;
                 }
+                model.bankName = SessionStore.getBankName();
                 $stateParams.pageData = $stateParams.pageData || {};
                 if (typeof($stateParams.pageData.readonly) == 'undefined') {
                     $stateParams.pageData.readonly = true;
@@ -234,6 +235,7 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                                     'login': inputModel.login,
                                     'userName': inputModel.userName,
                                     'roleId': inputModel.role_id,
+                                    'bankName': model.bankName,
                                     'branchName': inputModel.branch_id,
                                 }).$promise;
                             },
@@ -273,6 +275,7 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                                     'login': inputModel.login,
                                     'userName': inputModel.userName,
                                     'roleId': inputModel.role_id,
+                                    'bankName': model.bankName,
                                     'branchName': inputModel.branch_id,
                                 }).$promise;
                             },
@@ -328,7 +331,8 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                                     return User.query({
                                         'login': inputModel.login,
                                         'userName': inputModel.userName,
-                                        'roleId': inputModel.role_id,
+                                        'roleId': inputModel.role_id,                                        
+                                        'bankName': model.bankName,
                                         'branchName': inputModel.branch_id,
                                     }).$promise;
                                 },
