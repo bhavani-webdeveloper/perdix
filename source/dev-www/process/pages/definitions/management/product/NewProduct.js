@@ -46,6 +46,8 @@ define({
                 }, function(err) {
                     $log.info("allPurposeValues are not available");
                 });
+                // model.product.moduleConfigMasters[0].moduleStatus = true;
+                // model.product.moduleConfigMasters[0].smsEnabled = true;
             },
             form: [{
                 "type": "box",
@@ -211,8 +213,6 @@ define({
                     "key": "product.insuranceRateCode",
                     "type": "select",
                     "enumCode":"insurance_rate_codes"
-                }, {
-                    "key": "product.insuranceRequired",
                 },
                 {
                     "key": "product.insuranceType",
@@ -722,10 +722,6 @@ define({
                                         },
                                     }
                                 }
-                            },
-                            "insuranceRequired": {
-                                "type": "boolean",
-                                "title": "INSURANCE_REQUIRED"
                             },
                             "insuranceType": {
                                 "type": ["string", 'null'],
