@@ -30,7 +30,7 @@ define({
                     "category": "ACH",
                     "subCategory": "cat2",
                     "type": "file",
-                    "fileType": "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    "fileType": "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/dbf",
                     customHandle: function(file, progress, modelValue, form, model) {
                         MutualFund.navFileUpload(file, progress).then(function(res){
                             $state.go('Page.MutualFund.MutualFundSummary', null);
@@ -49,7 +49,7 @@ define({
                     "category": "ACH",
                     "subCategory": "cat2",
                     "type": "file",
-                    "fileType": "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    "fileType": "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/dbf",
                     customHandle: function(file, progress, modelValue, form, model) {
                         MutualFund.reverseFeedUpload(file, progress).then(function(res){
                             $state.go('Page.MutualFund.MutualFundSummary', null);
