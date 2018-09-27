@@ -14,7 +14,7 @@ irf.pages.controller("ReportsCtrl",
 
 	PageHelper.showLoader();
 
-	var allAccessLevels = [10, 20, 30]; // filtering not available for 40
+	var allAccessLevels = [5,10, 20, 30]; // filtering not available for 40
 
 	$scope.filterAccessLevels = allAccessLevels.slice(allAccessLevels.indexOf($scope.currentUserAccessLevel));
 	$scope.fSelect = Array($scope.filterAccessLevels.length);
