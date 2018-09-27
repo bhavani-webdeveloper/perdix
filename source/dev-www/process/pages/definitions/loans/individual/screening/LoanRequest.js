@@ -3140,6 +3140,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         return;
                     }
                     if (!_.hasIn(model.enterprise, 'verification') || _.isNull(model.enterprise.verifications[0].relationship)) {
+                        PageHelper.showProgress('enrolment', 'References are not input. Please check.')
                         return;
                     }
 
