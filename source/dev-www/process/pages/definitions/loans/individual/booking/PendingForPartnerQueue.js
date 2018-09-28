@@ -15,8 +15,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.PendingForPartnerQ
                 model.DoPartnerView = true;
                 PageHelper.showLoader();
                 PagesDefinition.getRolePageConfig("Page/Engine/loans.individual.booking.PendingForPartnerQueue").then(function(data) {
-                    $log.info(data);
-                    $log.info(data.DOPartnerView);
                     if (data) {
                         model.DoPartnerView = data.DOPartnerView;
                     }

@@ -316,6 +316,8 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                         model.repayment.amount = Utils.ceil(model.repayment.totalDue);
                                     }else if(value == 'PenalInterestPayment'){
                                         model.repayment.amount = model.repayment.bookedNotDuePenalInterest;
+                                    }else if(value == 'Fee Payment'){
+                                        model.repayment.amount = model.repayment.feeDue;
                                     } else {
                                         model.repayment.amount = null;
                                     }
@@ -878,6 +880,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                         postData.loanCollection.demandAmount = model.repayment.totalPayoffAmountToBePaid;
                                     } else if (model.repayment.transactionName == 'Fee Payment') {
                                         postData.loanCollection.demandAmount = model.repayment.totalFeeDue;
+                                        postData.loanCollection.feeAmount = model.repayment.amount;
                                     }
 
                                     postData.loanCollection.demandDate = "";

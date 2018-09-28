@@ -587,7 +587,6 @@ define([], function() {
 
                 return [
                     "PreliminaryInformation",
-                    "PreliminaryInformation.linkedAccountNumber",
                     "PreliminaryInformation.loan",
                     "PreliminaryInformation.loanPurpose1",
                     "PreliminaryInformation.loanPurpose2",

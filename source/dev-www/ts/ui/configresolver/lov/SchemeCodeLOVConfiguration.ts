@@ -24,6 +24,13 @@ export class SchemeCodeLOVConfiguration extends LOVElementConfiguration {
         }
         model.loanAccount.loanAmountRequested=valueObj.default_loan_amount;
         model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5=(Math.round(valueObj.default_interest_rate*10000)/100).toString();
+        model.loanAccount.frequencyRequested = valueObj.frequency;
+        model.loanAccount.tenureRequested = valueObj.default_tenure;
+        if (valueObj.pf_type.toLowerCase() == 'flat')  {
+            model.loanAccount.expectedProcessingFeePercentage = parseFloat(((valueObj.processing_fee/valueObj.default_loan_amount)*100).toString()).toFixed(2);
+        } else {
+            model.loanAccount.expectedProcessingFeePercentage = valueObj.processing_fee;    
+        }
     };
     getListDisplayItem: Function= function(item, index) {
         return [

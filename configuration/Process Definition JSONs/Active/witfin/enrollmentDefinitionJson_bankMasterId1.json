@@ -4610,7 +4610,7 @@
                 "Completed"
               ]
             },
-            "status": {
+            "isHypothecated": {
               "title": "STATUS",
               "type": "string",
               "minLength": 1,

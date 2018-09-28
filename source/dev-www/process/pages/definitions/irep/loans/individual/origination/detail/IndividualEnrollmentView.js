@@ -280,7 +280,7 @@ define({
                         // model.UIUDF.highmark.report = '<a href="" class="color-theme">Download</a>';
                     }
                     if (res.equifax != null) {
-                        model.UIUDF.equifax.score = res.equifax.equifaxScore;
+                        model.UIUDF.equifax.score = res.equifax?res.equifax.equifaxScore:null;
                         var equifaxFields = $(res.equifax.reportHtml).find('.subHeader1').parent().parent().children(':last').find('.AccValue');
                         model.UIUDF.equifax.active_accounts = equifaxFields[1].innerText.trim();
                         model.UIUDF.equifax.overdue_accounts = equifaxFields[2].innerText.trim();

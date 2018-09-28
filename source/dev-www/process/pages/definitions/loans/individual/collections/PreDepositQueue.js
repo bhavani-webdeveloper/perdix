@@ -10,6 +10,9 @@ define({
             initialize: function(model, form, formCtrl) {
                 $log.info("Branch Deposit queue is initialised");
                 model.branchName = SessionStore.getCurrentBranch().branchId;
+                var centres = SessionStore.getCentres();
+                model.centreName = Number(centres[0].centreCode);
+                              
             },
             definition: {
                 title: "SEARCH",
