@@ -144,7 +144,37 @@ if (isset($_GET)) {
         $non_negotiable++;
     }
 
+    $partiesSql = "select * from financialForms.global_settings where name = 'IndividualScoringParties'";
+    $relations = [];
+	try {
+		$db = ConnectDb();
+		$ExecuteSql = $db->query($partiesSql);  
+        $results = $ExecuteSql->fetchAll(PDO::FETCH_ASSOC);
+        foreach($results as $row) {
+            $name = $row['name'];
+            $value = $row['value'];
+        }
+        $db = null;
+        $partiesArray=explode(",",$value);
+        if(!is_null($value)){
+            if (in_array('Applicant', $partiesArray)) {
+                array_push($relations,'applicant','sole proprieter');
+            }
+            if (in_array('Co-Applicant', $partiesArray)) {
+                array_push($relations,'coapplicant','Co-Applicant');
+            }
+            if (in_array('Guarantor', $partiesArray)) {
+                array_push($relations,'Guarantor');
+            }
 
+        }else 
+            array_push($relations,"Applicant","Co-Applicant");
+    
+	} catch(PDOException $e) {
+        array_push($relations,"Applicant","Co-Applicant");
+	}
+    $relationsStr = implode(',', $relations);
+    echo $relationsStr;
     //get all applicant and co-applicant details
 	if($guarantor_is_required) {	
 		$ApplicantDetails = "
@@ -162,7 +192,8 @@ if (isset($_GET)) {
 		AND l.id = :CustomerLoanId
 		GROUP BY c.id
 		";
-	} else {		
+	} else {	
+
 		$ApplicantDetails = "
 		SELECT 
 		CONCAT_WS(' ', c.first_name, c.middle_name, c.last_name) AS 'relation_name',
@@ -174,7 +205,7 @@ if (isset($_GET)) {
 		LEFT JOIN $perdix_db.customer c ON lcr.customer_id=c.id
 		LEFT JOIN $perdix_db.enterprise_customer_relations ecr ON (lcr.customer_id=ecr.linked_to_customer_id and ecr.customer_id = l.customer_id)
 		WHERE
-		LOWER(lcr.relation) in ('co-applicant', 'coapplicant', 'sole proprieter', 'applicant') 
+		LOWER(lcr.relation) in ( $relationsStr ) 
 		AND l.id = :CustomerLoanId
 		GROUP BY c.id
 		";
