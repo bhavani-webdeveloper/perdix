@@ -137,7 +137,7 @@ function($log, $scope, PagesDefinition,formHelper, SessionStore, LoanProcess,Rep
             dep.data = 0;
             LoanCollection.fetchDepositSummary({
                 'currentStage': "Deposit",
-                'loanBranchName' : branchName,
+                'branchName' : branchName,
                 'instrumentType': "CASH"
             }).$promise.then(function(response, headerGetter){
                 dep.data = dep.data + parseFloat(response.headers['x-total-count']);
