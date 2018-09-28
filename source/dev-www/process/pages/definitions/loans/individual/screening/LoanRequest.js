@@ -3144,7 +3144,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         return;
                     }
                     if (!_.hasIn(model.enterprise, 'verifications') || model.enterprise.verifications.length < 2) {
-                        PageHelper.showProgress('enrolment', 'please entre two refernces.')
+                        PageHelper.showProgress('enrolment', 'please entre two refernces')
                         return;
                     }
 
