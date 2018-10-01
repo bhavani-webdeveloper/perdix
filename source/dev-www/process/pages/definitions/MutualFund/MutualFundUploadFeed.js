@@ -1,22 +1,14 @@
 define({
     pageUID: "MutualFund.MutualFundUploadFeed",
     pageType: "Engine",
-    dependencies: ["$log", "$q", "Enrollment", 'EnrollmentHelper', 'PageHelper', 'formHelper', "elementsUtils","Files",
+    dependencies: ["$log", "Enrollment", 'PageHelper', 'irfProgressMessage', "irfNavigator", 'MutualFund'],
+    $pageFn: function($log, Enrollment, PageHelper, irfProgressMessage, irfNavigator, MutualFund) {
 
-        'irfProgressMessage', 'SessionStore', "$state", "$stateParams", "irfNavigator", "CustomerBankBranch",'MutualFund',"Utils","BASE_URL"
-    ],
-
-    $pageFn: function($log, $q, Enrollment, EnrollmentHelper, PageHelper, formHelper, elementsUtils,Files,
-        irfProgressMessage, SessionStore, $state, $stateParams, irfNavigator, CustomerBankBranch,MutualFund,Utils,BASE_URL) {
-
-        var endpoint = BASE_URL + '/api/mutualFund';
         return {
             "id": "MutualFundFeeds",
             "type": "schema-form",
             "title": "MUTUAL_FUND_FEEDS",
             initialize: function(model, form, formCtrl) {
-                model.customer = model.customer || {};               
-                var customerId = $stateParams.pageId;                         
             },
             form: [
                  {
@@ -33,8 +25,8 @@ define({
                     "fileType": "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/dbf",
                     customHandle: function(file, progress, modelValue, form, model) {
                         MutualFund.navFileUpload(file, progress).then(function(res){
-                            $state.go('Page.MutualFund.MutualFundSummary', null);
-                        });
+                            irfProgressMessage.pop('MutualFundUploadFeed', 'NAV uploaded successfully', 5000);
+                        }, PageHelper.showErrors);
                     }
                 }]
                 },   
@@ -51,9 +43,9 @@ define({
                     "type": "file",
                     "fileType": "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/dbf",
                     customHandle: function(file, progress, modelValue, form, model) {
-                        MutualFund.reverseFeedUpload(file, progress).then(function(res){
-                            $state.go('Page.MutualFund.MutualFundSummary', null);
-                        });
+                        MutualFund.reverseFeedUpload(file, progress).then(function(res) {
+                            irfProgressMessage.pop('MutualFundUploadFeed', 'Reverse feed uploaded successfully', 5000);
+                        }, PageHelper.showErrors);
                     }
                 }]
                 },
@@ -62,23 +54,6 @@ define({
                 return Enrollment.getSchema().$promise;
             },
             actions: {
-                downloadFeed: function(model){
-                $log.info("Inside download()");                
-                PageHelper.clearErrors();
-                PageHelper.showLoader();
-                var reqData = _.cloneDeep(model); 
-                PageHelper.hideLoader();
-                MutualFund.getFileId({
-                    transactionType : model.customer.transactionType,
-                    fromDate : model.customer.fromDate,
-                    toDate : model.customer.toDate
-                    },function(res) {
-                        console.log( res);
-                        var fileId = res.fileId;
-                        Utils.downloadFile(Files.getFileDownloadURL(fileId));            
-                        }
-                )                       
-                }
             }  
         };
     }
