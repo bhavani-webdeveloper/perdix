@@ -1509,9 +1509,75 @@
                         "key": "loanAccount.nominees[].nomineeRelationship",
                         "type": "select",
                         "title": "RELATIONSHIP"
+                    },
+                    "nomineeMinor":{
+                            "key": "loanAccount.nominees[].nomineeMinor",
+                            "title": "NOMINEE_MINOR",
+                            "type": "checkbox",
+                            "schema": {
+                                "type": ["boolean", "null"]
+                            }
+                        
+                    },
+                    "nomineeGuardian":{
+                        "type": "array",
+                        "title": "GUARDIAN_DETAILS",
+                        "condition":"model.loanAccount.nominees[arrayIndex].nomineeMinor==true",
+                        "add": null,
+                        "view":"fixed",
+                        "remove": null,
+                        "items": {
+                            "nomineeGuardianFirstName": {
+                                "key": "loanAccount.nominees[].GuardianFirstName",
+                                "title": "NAME",
+                                "type": "lov"
+                            },
+                            "nomineeGuardianGender": {
+                                "key": "loanAccount.nominees[].GuardianGender",
+                                "type": "select",
+                                "title": "GENDER"
+                            },
+                            "nomineeGuardianDOB": {
+                                "key": "loanAccount.nominees[].GuardianDOB",
+                                "type": "date",
+                                "title": "DATE_OF_BIRTH"
+                            },
+                            "nomineeGuardianDoorNo": {
+                                "key": "loanAccount.nominees[].GuardianDoorNo",
+                                "title": "DOOR_NO"
+                            },
+                            "nomineeGuardianLocality": {
+                                "key": "loanAccount.nominees[].GuardianLocality",
+                                "title": "LOCALITY"
+                            },
+                            "nomineeGuardianStreet": {
+                                "key": "loanAccount.nominees[].GuardianStreet",
+                                "title": "STREET"
+                            },
+                            "nomineeGuardianincode": {
+                                "key": "loanAccount.nominees[].GuardianPincode",
+                                "title": "PIN_CODE",
+                                "type": "lov"
+                            },
+                            "nomineeGuardainDistrict": {
+                                "key": "loanAccount.nominees[].GuardianDistrict",
+                                "type": "text",
+                                "title": "DISTRICT"
+                            },
+                            "nomineeGuardianState": {
+                                "key": "loanAccount.nominees[].GuardianState",
+                                "title": "STATE"
+                            },
+                            "nomineeGuardianRelationship": {
+                                "key": "loanAccount.nominees[].GuardianRelationship",
+                                "type": "select",
+                                "title": "RELATIONSHIP"
+                            }
+                        }
                     }
                 }
             }
+           
         }
     },
     "PayerDetails": {
@@ -1649,58 +1715,86 @@
             },
             "partner": {
                 "title": "PARTNER",
-                "type": "select"
+                "type": "select",
+                "key": "loanAccount.partnerCode"
             },
             "frequency": {
                 "title": "FREQUENCY",
-                "type": "select"
+                "type": "select",
+                "key": "loanAccount.frequency"
 
             },
             "loanProducts": {
                 "title": "LOAN_PRODUCTS",
-                "type": "select"
+                "type": "select",
+                "key": "loanAccount.productCategory"
             },
             "loanApplicationDate": {
                 "title": "LOAN_APPLICATION_DATE",
-                "type": "date"
+                "type": "date",
+                "key": "loanAccount.loanApplicationDate"
             },
             "loanAmountRequested": {
                 "title": "LOAN_AMOUNT_REQUESTED",
-                "type": "numeric"
+                "type": "numeric",
+                "key": "loanAccount.loanAmount"
             },
             "requestedTenure": {
                 "title": "REQUESTED_TENURE",
-                "type": "numeric"
+                "type": "numeric",
+                "key": "loanAccount.test"
             },
             "loanPurpose1": {
                 "title": "LOAN_PURPOSE_1",
-                "type": "select"
+                "type": "select",
+                "key": "loanAccount.loanPurpose1"
             },
             "loanPurpose2": {
                 "title": "LOAN_PURPOSE_2",
-                "type": "select"
+                "type": "select",
+                "key": "loanAccount.loanPurpose2"
             },
             "loanPurpose3": {
                 "title": "LOAN_PURPOSE_3",
-                "type": "select"
+                "type": "select",
+                "key": "loanAccount.loanPurpose3"
             },
             "centreName": {
                 "title": "CENTRE_NAME",
                 "type": "select"
             },
-            "borrowers": {
-                "title": "BORROWER'S",
-                "type": "radio"
-            },
             "witnessDetails": {
                 "title": "WITNESS_DETAILS",
-                "type": "select"
+                "type": "array",
+                "add": null,
+                "remove": null,
+                "view":"fixed",
+                "key": "loanAccount.witnessDetails",
+                "items":{
+                    "witnessFirstName":{
+                        "key": "loanAccount.witnessFirstName",
+                        "type":"lov",
+                        "title":"FIRST_NAME"
+                    },
+                    "witnessAge":{
+                        "key": "loanAccount.witnessAge",
+                        "type":"number",
+                        "title": "AGE",
+                        "readonly":true
+                    },
+                    "witnessRelationship":{
+                        "key": "loanAccount.witnessRelationship",
+                        "type":"text",
+                        "title": "RELATIONSHIP",
+                        "readonly": true                    
+                    }
+                }
             }
         }
     },
     "actionbox": {
         "type": "actionbox",
-        "items": {
+        "items": {  
             "save": {
                 "type": "button",
                 "title": "SAVE",
