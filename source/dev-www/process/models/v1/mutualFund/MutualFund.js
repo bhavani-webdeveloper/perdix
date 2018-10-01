@@ -1,5 +1,5 @@
-irf.models.factory('MutualFund', ["$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "Upload", "$q", "PageHelper",
-    function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q, PageHelper) {
+irf.models.factory('MutualFund', ["$resource","PrinterData", "$httpParamSerializer", "BASE_URL", "searchResource", "Upload", "$q", "PageHelper",
+    function($resource,PrinterData,$httpParamSerializer, BASE_URL, searchResource, Upload, $q, PageHelper) {
 
 
 
@@ -82,6 +82,102 @@ irf.models.factory('MutualFund', ["$resource", "$httpParamSerializer", "BASE_URL
             }, progress);
             return deferred.promise;
         };
+
+        resource.getPrintReceipt = function(repaymentInfo, opts) {
+            PrinterData.lines=[];
+            opts['duplicate'] = opts['duplicate'] || false;
+            if (opts['duplicate']) {
+                PrinterData.addLine('DUPLICATE', {
+                    'center': true,
+                    font: PrinterData.FONT_SMALL_BOLD
+                });
+            } else {
+                PrinterData.addLine('RECEIPT', {
+                    'center': true,
+                    font: PrinterData.FONT_SMALL_BOLD
+                });
+            }
+
+           var curTime = moment();
+            var curTimeStr = curTime.local().format("DD-MM-YYYY HH:MM:SS");
+            PrinterData.addLine(opts['entity_name'], {
+                    'center': true,
+                    font: PrinterData.FONT_SMALL_BOLD
+                })
+                .addLine(opts['branch'], {
+                    'center': true,
+                    font: PrinterData.FONT_SMALL_NORMAL
+                }).addLine("Date : " + curTimeStr, {
+                    'center': false,
+                    font: PrinterData.FONT_SMALL_NORMAL
+                })
+                .addLine("ICICI Mutual Fund Deposit", {
+                    'center': true,
+                    font: PrinterData.FONT_LARGE_BOLD
+                })
+                .addLine("", {
+                    'center': true,
+                    font: PrinterData.FONT_SMALL_NORMAL
+                })
+                .addKeyValueLine("Branch Id", repaymentInfo['branchId'], {
+                    font: PrinterData.FONT_SMALL_NORMAL
+                })
+                .addKeyValueLine("Customer URN", repaymentInfo['customerURN'], {
+                    font: PrinterData.FONT_SMALL_NORMAL
+                })
+                .addKeyValueLine("Customer Name", repaymentInfo['customerName'], {
+                    font: PrinterData.FONT_SMALL_NORMAL
+                }).addKeyValueLine("Folio Number", repaymentInfo['folioNo'], {
+                    font: PrinterData.FONT_SMALL_NORMAL
+                }).addKeyValueLine("Transaction Type", repaymentInfo['transactionType'], {
+                    font: PrinterData.FONT_SMALL_NORMAL
+                }).addKeyValueLine("Amount Paid", repaymentInfo['repaymentAmount'], {
+                    font: PrinterData.FONT_SMALL_NORMAL
+                });
+            PrinterData
+                .addStrRepeatingLine("-", {
+                    font: PrinterData.FONT_LARGE_BOLD
+                })
+                .addLine(opts['company_name'], {
+                    'center': true,
+                    font: PrinterData.FONT_SMALL_NORMAL
+                })
+                .addLine("CIN :" + opts['cin'], {
+                    'center': true,
+                    font: PrinterData.FONT_SMALL_NORMAL
+                })
+                .addLine(opts['address1'], {
+                    'center': true,
+                    font: PrinterData.FONT_SMALL_NORMAL
+                })
+                .addLine(opts['address2'], {
+                    'center': true,
+                    font: PrinterData.FONT_SMALL_NORMAL
+                })
+                .addLine(opts['address3'], {
+                    'center': true,
+                    font: PrinterData.FONT_SMALL_NORMAL
+                })
+                .addLine("Website :" + opts['website'], {
+                    'center': true,
+                    font: PrinterData.FONT_SMALL_NORMAL
+                })
+                .addLine("Helpline No :" + opts['helpline'], {
+                    'center': true,
+                    font: PrinterData.FONT_SMALL_NORMAL
+                })
+                .addLine("", {})
+                .addLine("", {})
+                .addLine("Signature not required as this is an", {
+                    'center': true,
+                    font: PrinterData.FONT_SMALL_NORMAL
+                })
+                .addLine("electronically generated receipt.", {
+                    'center': true,
+                    font: PrinterData.FONT_SMALL_NORMAL
+                });
+            return PrinterData;
+        }
 
         resource.reverseFeedUpload = function(file, progress) {
             var deferred = $q.defer();

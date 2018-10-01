@@ -569,3 +569,72 @@ irf.commons.factory("irfLazyLoader", ["$state", "$log", "$timeout", function($st
 		} 
 	}
 }])
+
+
+irf.commons.service("PrinterData", ["$state", "$log", "$timeout", function($state, $log, $timeout){
+		this.FONT_LARGE_BOLD =2,
+		this.FONT_LARGE_NORMAL =1,
+		this.FONT_SMALL_NORMAL =3,
+		this.FONT_SMALL_BOLD =4,
+		this.lines =[],
+
+		this.getLineLength =function(font) {
+			if (font == this.FONT_LARGE_BOLD || font == this.FONT_LARGE_NORMAL) {
+				return 24;
+			} else {
+				return 42;
+			}
+		},
+
+		this.addLine =function(text, opts) {
+			opts['font'] = opts['font'] || this.FONT_SMALL_NORMAL;
+			opts['center'] = _.has(opts, 'center') && _.isBoolean(opts['center']) ? opts['center'] : false;
+			var obj = {
+				"bFont": opts['font'],
+				"text": text,
+				"style": {
+					"center": opts['center']
+				}
+			};
+			this.lines.push(obj);
+			return this;
+		},
+
+		this.addKeyValueLine =function(key, value, opts) {
+			opts['font'] = opts['font'] || this.FONT_SMALL_NORMAL;
+			var keyLength = parseInt(this.getLineLength(opts['font']) / 2) - 1;
+			var line = _.padEnd(key, keyLength, ' ') + ': ' + value;
+			var obj = {
+				"bFont": opts['font'],
+				"text": line,
+				"style": {
+					"center": false
+				}
+			};
+			this.lines.push(obj);
+			return this;
+		},
+
+		this.addStrRepeatingLine =function(str, opts) {
+			opts['font'] = opts['font'] || this.FONT_SMALL_NORMAL;
+			var lineLength = this.getLineLength(opts['font']);
+			var line = _.padEnd("", lineLength, '-')
+			var obj = {
+				"bFont": opts['font'],
+				"text": line,
+				"style": {
+					"center": false
+				}
+			};
+			this.lines.push(obj);
+			return this;
+		},
+
+		this.addLines =function(lines) {
+			this.lines = this.lines.concat(lines);
+		},
+
+		this.getLines =function() {
+			return this.lines;
+		}
+}])
