@@ -86,7 +86,7 @@
          "name":"Credit Committee Review",
          "stageType":"CAPTURE",
          "sendSms":"Yes",
-         "smsCategory":"Approval",
+         "smsCategory":"LoanApprovalInformation",
          "isAccountOpening":false,
          "allowedRoles":[
             "WM"

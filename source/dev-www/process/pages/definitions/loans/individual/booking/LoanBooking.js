@@ -338,7 +338,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     {
                         "key": "_currentDisbursement.customerSignatureDate",
                         "title": "CUSTOMER_SIGNATURE_DATE",
-                        "condition":"!model.disbursementCutOffTime",
+                        "condition":"!model.disbursementCutOffTime && model.siteCode != 'witfin'",
                         "type": "date",
                         "required": true,
                         "onChange":function(modelValue,form,model){
@@ -348,7 +348,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     {
                         "key": "_currentDisbursement.customerSignatureDate",
                         "title": "CUSTOMER_SIGNATURE_DATE",
-                        "condition":"model.disbursementCutOffTime",
+                        "condition":"model.disbursementCutOffTime && model.siteCode != 'witfin'",
                         "type": "date",
                         "required": false,
                         "readonly":true,
@@ -1146,10 +1146,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
 
                     if(model.siteCode != 'sambandh' && model.siteCode != 'saija'){
 
-                        if(model.postDatedTransactionNotAllowed) {
-                            if (customerSignatureDate.diff(cbsdate, "days") <0) {
-                                PageHelper.showProgress("loan-create", "Customer signature date should be greater than or equal to system date", 5000);
-                                return false;
+                        if(model.siteCode != 'witfin') {
+                            if(model.postDatedTransactionNotAllowed) {
+                                if (customerSignatureDate.diff(cbsdate, "days") <0) {
+                                    PageHelper.showProgress("loan-create", "Customer signature date should be greater than or equal to system date", 5000);
+                                    return false;
+                                }
                             }
                         }
 
@@ -1170,10 +1172,14 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                             PageHelper.showProgress("loan-create", "Difference between Loan sanction date and disbursement date is greater than " + pendingDisbursementDays + " days", 5000);
                             return false;
                         }
-                        if (customerSignatureDate.isBefore(sanctionDate)) {
-                            PageHelper.showProgress("loan-create", "Customer sign date should be greater than the Loan sanction date", 5000);
-                            return false;
-                           }
+                        
+                        if(model.siteCode != 'witfin'){
+                            if (customerSignatureDate.isBefore(sanctionDate)) {
+                                PageHelper.showProgress("loan-create", "Customer sign date should be greater than the Loan sanction date", 5000);
+                                return false;
+                            }
+                        }
+
                         if (model.loanAccount.firstRepaymentDate) {
                             if (firstRepaymentDate.diff(scheduledDisbursementDate, "days") <= 0) {
                                 PageHelper.showProgress("loan-create", "Repayment date should be greater than sanction date", 5000);
@@ -1189,9 +1195,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         }
                     }
                     else  {
-                        if (scheduledDisbursementDate.diff(customerSignatureDate,"days") <= 0){
-                            PageHelper.showProgress("loan-create","Scheduled disbursement date should be greater than Customer sign date",5000);
-                            return false;
+                        if(model.siteCode != 'witfin'){
+                            if (scheduledDisbursementDate.diff(customerSignatureDate,"days") <= 0){
+                                PageHelper.showProgress("loan-create","Scheduled disbursement date should be greater than Customer sign date",5000);
+                                return false;
+                            }
                         }
                     }
                     

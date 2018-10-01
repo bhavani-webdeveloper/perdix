@@ -3139,6 +3139,14 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         PageHelper.showProgress('enrolment', 'Proxy Indicators are not input. Please check.')
                         return;
                     }
+                    if (!_.hasIn(model.enterprise, 'verifications') || _.isNull(model.enterprise.verifications[0].relationship)) {
+                        PageHelper.showProgress('enrolment', 'References are not input. Please check.')
+                        return;
+                    }
+                    if (!_.hasIn(model.enterprise, 'verifications') || model.enterprise.verifications.length < 2) {
+                        PageHelper.showProgress('enrolment', 'please entre two refernces')
+                        return;
+                    }
 
                     /**
                      * Move to Rejected if some proxy indicators are set as YES

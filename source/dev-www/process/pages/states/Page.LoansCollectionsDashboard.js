@@ -144,7 +144,7 @@ function($log, $scope, PagesDefinition,formHelper, SessionStore, LoanProcess,Rep
             })
             LoanCollection.query({
                 'currentStage': "Deposit",
-                'branchName' : branchName,
+                'accountBranchId' : branchId,
                 'instrumentType': "CHQ"
             }).$promise.then(function(response, headerGetter){
                 dep.data = dep.data + parseFloat(response.headers['x-total-count']);
