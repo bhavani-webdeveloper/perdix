@@ -55,7 +55,7 @@ define({
                     var deferred = $q.defer();
                     var branchName=SessionStore.getCurrentBranch().branchName;
                     var out=[];
-                    if((searchOptions.instrument && searchOptions.instrument.toLowerCase() == 'cash') || (searchOptions.instrument == null) ){
+                    if(searchOptions.instrument && searchOptions.instrument.toLowerCase() == 'cash'){
                         LoanCollection.fetchDepositSummary({
                             'currentStage': "Deposit",
                             'branchName' : branchName,
@@ -121,6 +121,8 @@ define({
                             deferred.reject(res);
                         });
 
+                    } else {
+                        deferred.reject();
                     }
 
 
