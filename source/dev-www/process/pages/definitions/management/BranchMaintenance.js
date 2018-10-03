@@ -133,7 +133,6 @@ define({
                     "title": "PIN_CODE",
                     type: "lov",
                     fieldType: "number",
-                    autolov: true,
                     inputMap: {
                         "pincode": "lead.pincode",
                         "district": {
@@ -142,6 +141,11 @@ define({
                         "state": {
                             key: "lead.state"
                         }
+                    },
+                    outputMap: {
+                        "pincode": "lead.pincode",
+                        "district": "lead.district",
+                        "state": "lead.state",
                     },
                     searchHelper: formHelper,
                     search: function(inputModel, form, model) {
