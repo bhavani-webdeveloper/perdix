@@ -1736,7 +1736,6 @@
             },
             "loanAmountRequested": {
                 "title": "LOAN_AMOUNT_REQUESTED",
-                "type": "numeric",
                 "key": "loanAccount.loanAmount"
             },
             "requestedTenure": {
