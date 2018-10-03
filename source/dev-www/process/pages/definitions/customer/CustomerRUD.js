@@ -889,11 +889,14 @@ irf.pageCollection.factory("Pages__CustomerRUD", ["$log", "$q", "Enrollment", "Q
                         key: "customer.customerBankAccounts[].customerNameAsInBank"
                     }, {
                         key: "customer.customerBankAccounts[].accountNumber",
+                        "required":true,
                         type: "password",
                         inputmode: "number",
                         numberType: "tel"
                     }, {
                         key: "customer.customerBankAccounts[].confirmedAccountNumber",
+                        "required":true,
+                        "title": "CONFIRMED_ACCOUNT_NUMBER",
                         inputmode: "number",
                         numberType: "tel"
                     }, {
@@ -1443,6 +1446,11 @@ irf.pageCollection.factory("Pages__CustomerRUD", ["$log", "$q", "Enrollment", "Q
                         irfProgressMessage.pop('cust-update', 'Working...');
                         model.customer.title = String(model.customer.addressProofSameAsIdProof);
                         $log.info(model);
+                        if (!EnrollmentHelper.validateBankAccounts(model)) {
+                            $log.warn("Invalid Data, returning false");
+                            PageHelper.hideLoader();
+                            return false;
+                        }
                         if (!(EnrollmentHelper.validateDate(model))) {
                             return false;
                         }
