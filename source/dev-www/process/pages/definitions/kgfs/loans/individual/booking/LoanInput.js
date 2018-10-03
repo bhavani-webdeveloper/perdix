@@ -14,7 +14,7 @@ define(["perdix/domain/model/loan/LoanProcess",
         $pageFn: function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, Lead, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries, Utils, IndividualLoan, BundleManager, irfNavigator) {
             return {
                 "type": "page-bundle",
-                "title": "LOAN_BOOKING_INITIATION",
+                "title": "IREP_KYC_CB_INITIATION",
                 "subTitle": "LOAN_BOOKING_BUNDLE_SUB_TITLE",
                 "bundleDefinitionPromise": function() {
                     $log.info("inside thee bundle");
@@ -52,14 +52,6 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:50
                         },
                         {
-                            pageName : 'kgfs.loans.individual.booking.Dsc',
-                            title : 'DSC',
-                            pageClass : 'dsc-check',
-                            minimum : 1 ,
-                            maximum : 1,
-                            order : 60
-                        },
-                        {
                             pageName: 'kgfs.loans.individual.booking.DocumentUpload',
                             title: 'DOCUMENT_UPLOAD',
                             pageClass: 'document-upload',
@@ -67,14 +59,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                             maximum: 1,
                             order:70
                         },
-                        {
-                            pageName: 'kgfs.customer.CBCheck',
-                            title: 'CB_CHECK',
-                            pageClass: 'cb-check',
-                            minimum: 1,
-                            maximum: 1,
-                            order:80
-                        }
+                        // {
+                        //     pageName: 'kgfs.customer.CBCheck',
+                        //     title: 'CB_CHECK',
+                        //     pageClass: 'cb-check',
+                        //     minimum: 1,
+                        //     maximum: 1,
+                        //     order:70
+                        // }
                     ]);
                 },
                 "bundlePages": [],
@@ -85,7 +77,9 @@ define(["perdix/domain/model/loan/LoanProcess",
                         var page = value.bundlePages[i];
                         if (page.pageClass == "applicant"){
                             out[0] = page.model.customer.firstName;
-                         }
+                        } else if (page.pageClass == "business"){
+                            out[1] = page.model.customer.firstName;
+                        }
                     }
                     return out;
                 },
@@ -192,12 +186,12 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 });
                                 
-                                $this.bundlePages.push({
-                                    pageClass: 'cb-check',
-                                    model: {
-                                        loanAccount: loanProcess.loanAccount
-                                    }
-                                });
+                                // $this.bundlePages.push({
+                                //     pageClass: 'cb-check',
+                                //     model: {
+                                //         loanAccount: loanProcess.loanAccount
+                                //     }
+                                // });
                                $this.bundlePages.push({
                                         pageClass: 'loan-review',
                                         model: {
@@ -219,11 +213,6 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     loanProcess.loanAccount.leadId = _leadId;
 
                                     }
-                                var customer = {
-                                    customer:{},
-                                    enrolmentProcess: loanProcess.applicantEnrolmentProcess,
-                                    loanProcess: loanProcess,
-                                }
                                 if (loanProcess.applicantEnrolmentProcess){
                                     $this.bundlePages.push({
                                         pageClass: "applicant",
@@ -235,29 +224,24 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 }
 
                                 $this.bundlePages.push({
-                                    pageClass: 'document-upload',
-                                    model:{
-                                        loanProcess: loanProcess
-                                    }
-                                });
-                                $this.bundlePages.push({
                                     pageClass: 'loan-booking',
                                     model:{
                                         loanProcess: loanProcess
                                     }
                                 });
                                 $this.bundlePages.push({
-                                    pageClass: 'dsc-check',
+                                    pageClass: 'document-upload',
                                     model:{
                                         loanProcess: loanProcess
                                     }
                                 });
-                                $this.bundlePages.push({
-                                    pageClass: 'cb-check',
-                                    model: {
-                                        loanAccount: loanProcess.loanAccount
-                                    }
-                                });
+
+                                // $this.bundlePages.push({
+                                //     pageClass: 'cb-check',
+                                //     model: {
+                                //         loanAccount: loanProcess.loanAccount
+                                //     }
+                                // });
 
                                 deferred.resolve();
                             });
@@ -296,7 +280,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                         BundleManager.broadcastEvent("test-listener", {name: "SHAHAL AGAIN"});
                     },
                     "customer-loaded": function(pageObj, bundleModel, params){
-                        console.log("customer reloaded :: " + params.customer.firstName);
+                        console.log("custome rloaded :: " + params.customer.firstName);
                         if (pageObj.pageClass =='applicant'){
                             BundleManager.broadcastEvent("applicant-updated", params.customer);
                         }
@@ -322,7 +306,12 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     bundleModel.guarantors = [];
                                 }
                                 bundleModel.guarantors.push(params.guarantor);
-                                break;    
+                                break;
+                            case 'business':
+                                $log.info("New Business Enrolment");
+                                bundleModel.business = params.customer;
+                                BundleManager.broadcastEvent("new-business", params);
+                                break;
                             default:
                                 $log.info("Unknown page class");
                                 break;

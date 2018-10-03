@@ -702,11 +702,14 @@ irf.pageCollection.factory("Pages__ProfileInformation", ["$log", "Lead", "LeadHe
                         key: "customer.customerBankAccounts[].customerNameAsInBank"
                     }, {
                         key: "customer.customerBankAccounts[].accountNumber",
+                        "required":true,
                         type: "password",
                         inputmode: "number",
                         numberType: "tel"
                     }, {
                         key: "customer.customerBankAccounts[].confirmedAccountNumber",
+                        "required":true,
+                        "title": "CONFIRMED_ACCOUNT_NUMBER",
                         inputmode: "number",
                         numberType: "tel"
                     }, {
@@ -858,6 +861,10 @@ irf.pageCollection.factory("Pages__ProfileInformation", ["$log", "Lead", "LeadHe
                         $log.warn("Invalid Data, returning false");
                         return false;
                     }
+                    if (!EnrollmentHelper.validateBankAccounts(model)) {
+                        $log.warn("Invalid Data, returning false");
+                        return false;
+                    }
                     var sortFn = function(unordered) {
                         var out = {};
                         Object.keys(unordered).sort().forEach(function(key) {
@@ -905,6 +912,10 @@ irf.pageCollection.factory("Pages__ProfileInformation", ["$log", "Lead", "LeadHe
                     model.customer.ageProof = model.customer.addressProofSameAsIdProof;
                     model.customer.customerType = "Individual";
                     if (!(EnrollmentHelper.validateDate(model))) {
+                        return false;
+                    }
+                    if (!EnrollmentHelper.validateBankAccounts(model)) {
+                        $log.warn("Invalid Data, returning false");
                         return false;
                     }
                     var reqData = _.cloneDeep(model);
