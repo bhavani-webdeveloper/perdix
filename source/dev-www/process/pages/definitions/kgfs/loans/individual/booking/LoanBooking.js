@@ -1160,14 +1160,14 @@ define([], function () {
                     ]
                 },
                 eventListeners: {
-                    "new-applicant": function (bundleModel, model, obj) {
-                        model.loanAccount.customerId = obj.customer.customerId;
-                        $q.when(Enrollment.get({
-                            'id': params.customer.customerId
-                        })).then(function (resp) {
-                            model.customer = resp;
-                        })
-                    },
+                    // "new-applicant": function (bundleModel, model, obj) {
+                    //     model.loanAccount.customerId = obj.customer.customerId;
+                    //     $q.when(Enrollment.get({
+                    //         'id': params.customer.customerId
+                    //     })).then(function (resp) {
+                    //         model.customer = resp;
+                    //     })
+                    // },
                     "lead-loaded": function (bundleModel, model, obj) {
                         model.lead = obj;
                         model.loanAccount.loanAmountRequested = obj.loanAmountRequested;

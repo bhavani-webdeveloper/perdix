@@ -43,14 +43,6 @@ define(["perdix/domain/model/loan/LoanProcess",
                             maximum: 3,
                             order:30
                         },
-                        // {
-                        //     pageName: 'irep.customer.EnterpriseEnrolment2',
-                        //     title: 'BUSINESS',
-                        //     pageClass: 'business',
-                        //     minimum: 0,
-                        //     maximum: 0,
-                        //     order:40
-                        // },
                         {
                             pageName: 'kgfs.loans.individual.booking.LoanBooking',
                             title: 'LOAN_BOOKING',
@@ -67,21 +59,13 @@ define(["perdix/domain/model/loan/LoanProcess",
                             maximum : 1,
                             order : 60
                         },
-                        // {   
-                        //     pageName : 'kgfs.loans.individual.booking.Checker',
-                        //     title : 'CHECKER_1',
-                        //     pageClass : 'checker-1',
-                        //     minimum : 1 ,
-                        //     maximum : 1,
-                        //     order : 60
-                        // },
                         {
                             pageName: 'kgfs.loans.individual.booking.DocumentUpload',
                             title: 'DOCUMENT_UPLOAD',
                             pageClass: 'document-upload',
                             minimum: 1,
                             maximum: 1,
-                            order:60
+                            order:70
                         },
                         {
                             pageName: 'kgfs.customer.CBCheck',
@@ -89,7 +73,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             pageClass: 'cb-check',
                             minimum: 1,
                             maximum: 1,
-                            order:70
+                            order:80
                         }
                     ]);
                 },
@@ -250,17 +234,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     });
                                 }
 
-                                // if (loanProcess.loanCustomerEnrolmentProcess) {
-                                //     $this.bundlePages.push({
-                                //         pageClass: "business",
-                                //         model: {
-                                //             enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
-                                //             loanProcess: loanProcess
-                                //         }
-                                //     });
-                                // }
                                 $this.bundlePages.push({
                                     pageClass: 'document-upload',
+                                    model:{
+                                        loanProcess: loanProcess
+                                    }
+                                });
+                                $this.bundlePages.push({
+                                    pageClass: 'loan-booking',
                                     model:{
                                         loanProcess: loanProcess
                                     }
@@ -271,11 +252,6 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         loanProcess: loanProcess
                                     }
                                 });
-                            //     $this.bundlePages.push({
-                            //         pageClass : 'checker-1',
-                            //         model : customer
-                            //    });
-
                                 $this.bundlePages.push({
                                     pageClass: 'cb-check',
                                     model: {
