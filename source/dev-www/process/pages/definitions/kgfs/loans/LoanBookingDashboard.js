@@ -13,7 +13,10 @@ irf.pageCollection.controller(irf.controller("kgfs.loans.LoanBookingDashboard"),
                 "Page/Bundle/kgfs.loans.individual.booking.LoanInput",
                 "Page/Engine/kgfs.loans.individual.booking.InitiationQueue",
                 "Page/Engine/kgfs.loans.individual.booking.Checker1",
-                "Page/Engine/kgfs.loans.individual.booking.Checker2"
+                "Page/Engine/kgfs.loans.individual.booking.Checker2",
+               "Page/Engine/kgfs.loans.individual.booking.Checker2Queue",
+               "Page/Engine/kgfs.loans.individual.booking.Checker1Queue"
+
 
             ]
         };
