@@ -532,7 +532,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                             model._transAuth.bookedNotDuePenalInterest= model.loanAccount.bookedNotDuePenalInterest ||0;
                         }
 
-                        if(model._transAuth.transactionName == 'Fee Payment'&& model._transAuth.instrumentType=='SECURITY_DEPOSIT'){
+                        if(model._transAuth.transactionName == 'Fee Payment'){
                             model._transAuth.feeAmount= model._transAuth.repaymentAmount ||0;
                         }
 

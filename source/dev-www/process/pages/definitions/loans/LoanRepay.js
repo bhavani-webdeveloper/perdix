@@ -1,8 +1,8 @@
 irf.pageCollection.factory(irf.page('loans.LoanRepay'),
     ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager","formHelper", "$stateParams", "Enrollment"
         ,"LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
-        "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch","Queries", "Utils", "IndividualLoan","LoanCollection","PagesDefinition",
-        function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch,Queries, Utils, IndividualLoan,LoanCollection,PagesDefinition) {
+        "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch","Queries", "Utils", "IndividualLoan","LoanCollection","PagesDefinition","irfNavigator",
+        function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch,Queries, Utils, IndividualLoan,LoanCollection,PagesDefinition,irfNavigator) {
 
             function backToLoansList(){
                 try {
@@ -128,7 +128,8 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                     }, function (resData) {
                         irfProgressMessage.pop('loading-loan-details', 'Error loading Loan details.', 4000);
                         PageHelper.showErrors(resData);
-                        backToLoansList();
+                        irfNavigator.goBack();
+                        //backToLoansList();
                     });
 
                     var p3 = LoanCollection.query({"currentStage":"Initiation","accountNumber":loanAccountNo}).$promise
@@ -316,6 +317,8 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                         model.repayment.amount = Utils.ceil(model.repayment.totalDue);
                                     }else if(value == 'PenalInterestPayment'){
                                         model.repayment.amount = model.repayment.bookedNotDuePenalInterest;
+                                    }else if(value == 'Fee Payment'){
+                                        model.repayment.amount = model.repayment.feeDue;
                                     } else {
                                         model.repayment.amount = null;
                                     }
@@ -427,12 +430,14 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 key: "repayment.amount",
                                 "required":true,
                                 type: "number",
+
                                 condition:"!model.repayment.chequeNumber"
                             },
                             {
                                 key: "repayment.amount",
                                 type: "number",
                                 "readonly":true,
+                                
                                 condition:"model.repayment.chequeNumber"
                             },
                             {
@@ -878,6 +883,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                         postData.loanCollection.demandAmount = model.repayment.totalPayoffAmountToBePaid;
                                     } else if (model.repayment.transactionName == 'Fee Payment') {
                                         postData.loanCollection.demandAmount = model.repayment.totalFeeDue;
+                                        postData.loanCollection.feeAmount = model.repayment.amount;
                                     }
 
                                     postData.loanCollection.demandDate = "";

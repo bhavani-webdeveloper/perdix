@@ -1,7 +1,9 @@
 .idea/
 
-node_modules/
 
+node_modules/
+tsjs/
+dev-www/process/config/
 /vendor
 /node_modules
 Homestead.yaml

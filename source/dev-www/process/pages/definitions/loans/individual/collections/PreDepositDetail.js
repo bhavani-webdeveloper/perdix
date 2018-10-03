@@ -265,7 +265,7 @@ define({
                             var collectionData = {
                                 "loanCollectionSummaryDTOs": [],
                                 "remarks": model.review.remarks,
-                                "repaymentProcessAction": "PROCEED",
+                                "repaymentProcessAction": "SENDBACK",
                                 "stage": "BranchDeposit"
                             }
                             model.collectionDetailsCopy = _.cloneDeep(model.collectionDetails);
