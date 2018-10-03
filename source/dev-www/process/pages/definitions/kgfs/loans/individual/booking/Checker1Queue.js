@@ -134,7 +134,7 @@ define({
 							data: 'accountNumber'
 						}, {
                             title: 'PRODUCT_TYPE',
-                            data: 'productName'
+                            data: 'productCode'
                         }, {
 							title: 'APPLICATION_DATE',
 							data: 'applicationDate'
