@@ -1711,6 +1711,53 @@
                         "type": "number"
                     }
                 }
+            },
+            "financialAssets" :{
+                "key": "customer.financialAssets",
+                "type": "array",
+                "startEmpty": true,
+                "title": "FINANCIAL_ASSETS",
+                "items":{
+                    "instrumentType" :{
+                        "key": "customer.financialAssets[].instrumentType",
+                        "title": "INSTRUMENT_TYPE",
+                        "type": "select",
+                        "enumCode": "financialAssetInstrumentType"
+                    },
+                    "nameOfInstitution": {
+                        "key": "customer.financialAssets[].nameOfInstitution",
+                        "title": "INSTITUTION_NAME",
+                        "type": "string"
+                    },
+                    "instituteType":{
+                        "key": "customer.financialAssets[].instituteType",
+                        "title": "INSTITUTE_TYPE",
+                        "type": "select",
+                        "enumCode": "finanical_asset"
+                    },
+                    "amount":{
+                        "key": "customer.financialAssets[].amountInPaisa",
+                        "title": "ASSET_VALUE",
+                        "type": "amount"
+
+                    },
+                    "frequencyOfDeposite":{
+                        "key": "customer.financialAssets[].frequencyOfDeposite",
+                        "title": "DEPOSIT_FREQUENCY",
+                        "type": "select",
+                        "enumCode": "frequency"
+                    },
+                    "startDate":{
+                        "key": "customer.financialAssets[].startDate",
+                        "title": "START_DATE",
+                        "type": "date"
+                    },
+                    "maturityDate":{
+                      "key": "customer.financialAssets[].maturityDate",
+                      "title": "MATURITY_DATE",
+                      "type": "date"
+                    }
+                }
             }
         }
     },
