@@ -925,7 +925,6 @@ define([], function () {
                     },
                     "LoanDetails.loanAmountRequested": {
                         "orderNo": 5,
-                        "placeholderExpr": "'From - To'",
                     },
                     "LoanDetials.witnessDetails": {
                         "type": "array",
@@ -937,15 +936,15 @@ define([], function () {
                         searchHelper: formHelper,
                         search: function (inputModel, form, model, context) {
                             var out = [];
-                            if (!model.customer.familyDetails.familyMembers) {
+                            if (!model.customer.familyMembers) {
                                 return out;
                             }
 
-                            for (var i = 0; i < model.customer.familyDetails.familyMembers.length; i++) {
+                            for (var i = 0; i < model.customer.familyMembers.length; i++) {
                                 out.push({
-                                    name: model.customer.familyDetails.familyMembers[i].familyMemberFirstName,
+                                    name: model.customer.familyMembers[i].familyMemberFirstName,
                                     // value: model.customer.familyDetails[i].value,
-                                    relationship: model.customer.familyDetails.familyMembers[i].relationShip
+                                    relationship: model.customer.familyMembers[i].relationShip
                                 })
                             }
                             return $q.resolve({
@@ -990,11 +989,11 @@ define([], function () {
                     var familyDetails = [];
                     model.customer = {};
                     model.loanAccount = model.loanProcess.loanAccount;
-                    $q.when(Enrollment.get({
-                        'id': model.loanAccount.customerId
-                    })).then(function (resp) {
-                        model.customer.familyDetails = resp;
-                    });
+                    // $q.when(Enrollment.get({
+                    //     'id': model.loanAccount.customerId
+                    // })).then(function (resp) {
+                    //     model.customer.familyDetails = resp;
+                    // });
 
                     // model.loanAccount.witnessFirstName="Harish";
                     // model.loanAccount.witnessRelationship="Tester";
@@ -1161,12 +1160,12 @@ define([], function () {
                 },
                 eventListeners: {
                     "new-applicant": function (bundleModel, model, obj) {
-                        model.loanAccount.customerId = obj.customer.customerId;
-                        $q.when(Enrollment.get({
-                            'id': params.customer.customerId
-                        })).then(function (resp) {
-                            model.customer = resp;
-                        })
+                        model.customer = obj.customer;
+                        // $q.when(Enrollment.get({
+                        //     'id': model.loanAccount.customerId
+                        // })).then(function (resp) {
+                        //     model.customer = resp;
+                        // })
                     },
                     "lead-loaded": function (bundleModel, model, obj) {
                         model.lead = obj;
