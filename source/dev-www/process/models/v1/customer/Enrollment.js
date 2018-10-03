@@ -192,8 +192,8 @@ irf.models.factory('Enrollment',function($resource,$httpParamSerializer,BASE_URL
 
 
 irf.pageCollection.factory("EnrollmentHelper",
-["$log", "$q","Enrollment", 'PageHelper', 'irfProgressMessage', 'Utils', 'SessionStore',
-function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionStore){
+["$log", "$q","Enrollment",'formHelper', 'PageHelper', 'irfProgressMessage', 'Utils', 'SessionStore',
+function($log, $q, Enrollment,formHelper, PageHelper, irfProgressMessage, Utils, SessionStore){
 
     var validatePanCard = function(str, form){
         const panRegex = /^[A-Za-z]{5}[0-9]{4}[A-Za-z]$/g;
@@ -204,6 +204,21 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
         }
     }
 
+    var checkBiometricQuality= function(model){
+        var myObj = model.customer.$fingerprint;
+        var BiometricQuality = SessionStore.getGlobalSetting("BiometricQuality");
+        var quality= true;
+        for (i = 0; i < 10; i++) {
+            var obj = myObj[Object.keys(myObj)[i]];
+            if (obj.quality < BiometricQuality) {
+                PageHelper.showProgress('validate-error', obj.fingerId +" "+ ' quality is less than the required quality' +" "+ BiometricQuality, 5000);
+                quality= false;
+                break;
+            }
+        }
+        return quality;
+    }
+
     var fixData = function(model){
         /* TODO Validations */
 
@@ -211,7 +226,7 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
         //reqData['customer']['additionalKYCs'] = [reqData['customer']['additionalKYCs']];
 
         /* Fix to add atleast one fingerprint */
-        model['customer']['leftHandIndexImageId'] = "232";
+        //model['customer']['leftHandIndexImageId'] = "232";
 
         if (model.customer.dateOfBirth) {
             model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
@@ -227,21 +242,6 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
             model['customer']['mailingState'] = model['customer']['state'];
         }
 
-        if (SessionStore.getGlobalSetting('siteCode') == 'saija') {
-            model.customer.mailSameAsResidence = false;
-            if(model.customer.udf && model.customer.udf.userDefinedFieldValues
-            && model.customer.udf.userDefinedFieldValues.udf37 == true) {
-                model['customer']['doorNo'] = model['customer']['mailingDoorNo']; 
-                model['customer']['street'] = model['customer']['mailingStreet'];
-                model['customer']['locality'] = model['customer']['mailingLocality'];
-                model['customer']['postOffice'] = model['customer']['mailingPostoffice'];
-                model['customer']['district'] = model['customer']['mailingDistrict'];
-                model['customer']['pincode'] = model['customer']['mailingPincode'];
-                model['customer']['state'] = model['customer']['mailingState'];
-                model['customer']['villageName'] = model['customer']['mailingVillageName'];
-            }
-        }
-
         if(model.customer.addressProofSameAsIdProof){
 
             model.customer.addressProof=_.clone(model.customer.identityProof);
@@ -251,22 +251,184 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
             model.customer.addressProofValidUptoDate=_.clone(model.customer.idProofValidUptoDate);
             model.customer.addressProofReverseImageId = _.clone(model.customer.identityProofReverseImageId);
         }
-        if (model.customer.udf && model.customer.udf.userDefinedFieldValues
-            && model.customer.udf.userDefinedFieldValues.udf1) {
-            model.customer.udf.userDefinedFieldValues.udf1 =
-                model.customer.udf.userDefinedFieldValues.udf1 === true
-                || model.customer.udf.userDefinedFieldValues.udf1 === 'true';
-        }
 
-        Utils.removeNulls(model,true);
+        if (_.has(model.customer, 'udf.userDefinedFieldValues')) {
+            var fields = model.customer.udf.userDefinedFieldValues;
+            $log.info(fields);
+            if(fields['udf17']){
+              fields['udf17'] = Number(fields['udf17']);  
+            }
+            if(fields['udf10']){
+               fields['udf10'] = Number(fields['udf10']); 
+            }
+            if(fields['udf11']){
+                fields['udf11'] = Number(fields['udf11']);
+            }
+            if(fields['udf28']){
+               fields['udf28'] = Number(fields['udf28']); 
+            }
+            if(fields['udf32']){
+                fields['udf32'] = Number(fields['udf32']);
+            }
+            if(fields['udf1']){
+                if(typeof(fields['udf1']) === "boolean"){
 
-        if(model.siteCode == 'sambandh' || model.siteCode == 'saija') {
-            if(model.customer.mobilePhone == '') {
-                delete model.customer.mobilePhone;
+                }else{
+                   fields['udf1'] = (fields['udf1'] == "true") ? true : false; 
+                }   
+            }
+            if(fields['udf6']){
+                if(typeof(fields['udf6']) === "boolean"){
+
+                }else{
+                   fields['udf6'] = (fields['udf6'] == "true") ? true : false; 
+                }    
+            }
+            if(fields['udf4']){
+                fields['udf4'] = Number(fields['udf4']);
+            }
+            if(fields['udf26']){
+                if(typeof(fields['udf26']) === "boolean"){
+
+                }else{
+                   fields['udf26'] = (fields['udf26'] == "true") ? true : false; 
+                }  
+            }
+            
+            for (var i = 1; i <= 40; i++) {
+                if (!_.has(model.customer.udf.userDefinedFieldValues, 'udf' + i)) {
+                    model.customer.udf.userDefinedFieldValues['udf' + i] = '';
+                }
             }
         }
+
+/*        if (model.customer.udf && model.customer.udf.userDefinedFieldValues &&
+            model.customer.udf.userDefinedFieldValues.udf1) {
+            model.customer.udf.userDefinedFieldValues.udf1 =
+                model.customer.udf.userDefinedFieldValues.udf1 === true ||
+                model.customer.udf.userDefinedFieldValues.udf1 === 'true';
+        }*/
+        if (model.customer.verifications && model.customer.verifications.length) {
+            for (i in model.customer.verifications) {
+                if (model.customer.verifications[i].houseNoIsVerified) {
+                    model.customer.verifications[i].houseNoIsVerified1= (model.customer.verifications[i].houseNoIsVerified == 1) ? true : false;
+                }
+            }
+        }
+
+      
+
+        if (model.customer.physicalAssets && model.customer.physicalAssets.length && model.customer.physicalAssets.length > 0) {
+            for (i = 0; i < model.customer.physicalAssets.length; i++) {
+                    if(model.customer.physicalAssets[i].nameOfOwnedAsset && (model.customer.physicalAssets[i].assetType == null)){
+                        model.customer.physicalAssets[i].assetType=model.customer.physicalAssets[i].nameOfOwnedAsset;
+                    }
+
+                    if (model.customer.physicalAssets[i].assetType) {
+                        var ownedAssetDetails1 = formHelper.enum('asset_Details').data;
+                        var assetunit1 = formHelper.enum('asset_unit').data;
+                        var ownedAssetDetails = [];
+                        var assetunit = [];
+                        if (ownedAssetDetails1 && ownedAssetDetails1.length) {
+                            for (j in ownedAssetDetails1) {
+                                if (ownedAssetDetails1[j] && ownedAssetDetails1[j].parentCode && ((ownedAssetDetails1[j].parentCode).toUpperCase() == (model.customer.physicalAssets[i].assetType).toUpperCase())) {
+                                    ownedAssetDetails.push({
+                                        name: ownedAssetDetails1[j].name,
+                                        id: ownedAssetDetails1[j].value
+                                    })
+                                    break;
+                                }
+                            }
+                        }
+                        if (ownedAssetDetails.length && ownedAssetDetails.length > 0) {
+                            model.customer.physicalAssets[i].ownedAssetallowed = true;
+                            continue;
+                        }
+                        if (assetunit1 && assetunit1.length) {
+                            for (k in assetunit1) {
+                                if (assetunit1[k] && assetunit1[k].parentCode && ((assetunit1[k].parentCode).toUpperCase() == (model.customer.physicalAssets[i].assetType).toUpperCase())) {
+                                    assetunit.push({
+                                        name: assetunit1[k].name,
+                                    })
+                                    break;
+                                }
+                            }
+                        }
+                        if (assetunit.length && assetunit.length > 0) {
+                            model.customer.physicalAssets[i].assetunitallowed = true;
+                        }
+                    }   
+            }
+        }
+
+        
+
+        if(model.customer.familyMembers && model.customer.familyMembers.length){
+            for(i in model.customer.familyMembers){
+                if(model.customer.maritalStatus && ((model.customer.familyMembers[i].relationShip).toLowerCase() === 'self')){
+                    if(!model.customer.familyMembers[i].maritalStatus){
+                       model.customer.familyMembers[i].maritalStatus= model.customer.maritalStatus;
+                    }
+                }
+                if(model.customer.familyMembers[i].dateOfBirth){
+                    model.customer.familyMembers[i].age = moment().diff(moment(model.customer.familyMembers[i].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                }
+                var family= model.customer.familyMembers[i];
+                family.familyMemberFullName=Utils.getFullName(family.familyMemberFirstName,family.familyMemberMiddleName,family.familyMemberLastName);
+            }
+        }
+
+       
+        model.customer.idAndBcCustId = model.customer.id + ' / ' + model.customer.bcCustId;
+        model.customer.firstName = Utils.getFullName(model.customer.firstName, model.customer.middleName, model.customer.lastName);
+        model.customer.middleName = "";
+        model.customer.lastName = "";
+        model.customer.fatherFirstName = Utils.getFullName(model.customer.fatherFirstName, model.customer.fatherMiddleName, model.customer.fatherLastName);
+        model.customer.fatherMiddleName = "";
+        model.customer.fatherLastName = "";
+        model.customer.spouseFirstName = Utils.getFullName(model.customer.spouseFirstName, model.customer.spouseMiddleName, model.customer.spouseLastName);
+        model.customer.spouseMiddleName = "";
+        model.customer.spouseLastName = "";
+        
+
+        Utils.removeNulls(model,true);
+        model.customer.ownedAssetDetails = [];
+        model.customer.assetunit = [];
         return model;
     };
+
+    var validateDate = function(model) {
+        var today = moment(new Date()).format("YYYY-MM-DD");
+        if (model.customer && model.customer.idProofIssueDate) {
+            if (model.customer.idProofIssueDate > today) {
+                $log.info("bad date");
+                PageHelper.showProgress('validate-error', 'Id Proof Issued Date should not be a Future Date', 5000);
+                return false;
+            }
+        }
+        if (model.customer && model.customer.idProofValidUptoDate) {
+            if (model.customer.idProofValidUptoDate <= today) {
+                $log.info("bad date");
+                PageHelper.showProgress('validate-error', 'Id Proof Valid Up to Date must be a Future Date', 5000);
+                return false;
+            }
+        }
+        if (model.customer && model.customer.addressProofIssueDate) {
+            if (model.customer.addressProofIssueDate > today) {
+                $log.info("bad date");
+                PageHelper.showProgress('validate-error', 'Address Proof Issued Date should not be a Future Date', 5000);
+                return false;
+            }
+        }
+        if (model.customer && model.customer.addressProofValidUptoDate) {
+            if (model.customer.addressProofValidUptoDate <= today) {
+                $log.info("bad date");
+                PageHelper.showProgress('validate-error', 'Address Proof Valid Up to Date must be a Future Date', 5000);
+                return false;
+            }
+        }
+        return true;
+    }
 
     var validateData = function(model) {
         PageHelper.clearErrors();
@@ -284,6 +446,21 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
         if (model.customer.spouseDateOfBirth && !model.customer.spouseFirstName) {
             PageHelper.setError({message:'Spouse Name is required when Spouse Date of birth is entered'});
             return false;
+        }
+        return true;
+    };
+
+    var validateBankAccounts = function(model) {
+        PageHelper.clearErrors();
+        if (model.customer && model.customer.customerBankAccounts) {
+            for (var i=0; i<model.customer.customerBankAccounts.length; i++){
+                var bankAccount = model.customer.customerBankAccounts[i];
+                if (bankAccount.accountNumber!=bankAccount.confirmedAccountNumber){
+                    //PageHelper.showProgress('validate-error', 'Bank Accounts: Account Number doesnt match with Confirmed Account Number', 5000);
+                    PageHelper.setError({message:'Bank Accounts: Account Number doesnt match with Confirmed Account Number'});
+                    return false;
+                }
+            }
         }
         return true;
     };
@@ -313,12 +490,6 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
         }*/
         var action = reqData.customer.id ? 'update' : 'save';
         Enrollment[action](reqData, function (res, headers) {
-            if (res.customer.dateOfBirth) {
-                res.customer.age = moment().diff(moment(res.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-            }
-            if (res.customer.spouseDateOfBirth) {
-                res.customer.spouseAge = moment().diff(moment(res.customer.spouseDateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-            }
             $log.info(res);
             PageHelper.hideLoader();
             deferred.resolve(res);
@@ -328,6 +499,7 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
             deferred.reject(res);
         });
         return deferred.promise;
+
     };
     /*
     * fn proceedData:
@@ -398,91 +570,51 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
         // "co":""
         // "lm":"" landmark
         var aadhaarData = parseAadhaar(result.text);
-
-        if(SessionStore.getGlobalSetting('siteCode') != 'saija') {
-
-            $log.info(aadhaarData);
-            // model.customer.aadhaarNo = aadhaarData.uid;
-            model.customer.firstName = aadhaarData.name;
-            model.customer.gender = aadhaarData.gender;
-            model.customer.doorNo = aadhaarData.house;
-            model.customer.street = aadhaarData.street;
-            model.customer.locality = aadhaarData.loc;
-            model.customer.villageName = aadhaarData.vtc;
-            model.customer.district = aadhaarData.dist;
-            model.customer.state = aadhaarData.state;
-            model.customer.pincode = aadhaarData.pc;
-            model.customer.postOffice = aadhaarData.po;
-            if (aadhaarData.dob) {
-                $log.debug('aadhaarData dob: ' + aadhaarData.dob);
-                if (!isNaN(aadhaarData.dob.substring(2, 3))) {
-                    model.customer.dateOfBirth = aadhaarData.dob;
-                } else {
-                    model.customer.dateOfBirth = moment(aadhaarData.dob, 'DD/MM/YYYY').format(SessionStore.getSystemDateFormat());
-                }
-                $log.debug('customer dateOfBirth: ' + model.customer.dateOfBirth);
-                model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-            } else if (aadhaarData.yob) {
-                $log.debug('aadhaarData yob: ' + aadhaarData.yob);
+        $log.info(aadhaarData);
+        // model.customer.aadhaarNo = aadhaarData.uid;
+        model.customer.firstName = aadhaarData.name;
+        model.customer.gender = aadhaarData.gender;
+        model.customer.doorNo = aadhaarData.house;
+        model.customer.street = aadhaarData.street;
+        model.customer.locality = aadhaarData.loc;
+        model.customer.villageName = aadhaarData.vtc;
+        //model.customer.district = aadhaarData.dist;
+        //model.customer.state = aadhaarData.state;
+        model.customer.pincode = aadhaarData.pc;
+        model.customer.postOffice = aadhaarData.po;
+        if (aadhaarData.dob) {
+            $log.debug('aadhaarData dob: ' + aadhaarData.dob);
+            if (!isNaN(aadhaarData.dob.substring(2, 3))) {
+                model.customer.dateOfBirth = aadhaarData.dob;
+            } else {
+                model.customer.dateOfBirth = moment(aadhaarData.dob, 'DD/MM/YYYY').format(SessionStore.getSystemDateFormat());
+            }
+            $log.debug('customer dateOfBirth: ' + model.customer.dateOfBirth);
+            model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+        } else if (aadhaarData.yob) {
+            $log.debug('aadhaarData yob: ' + aadhaarData.yob);
+            if (model.customer.dateOfBirth) {
+                var dateOfBirth = moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat());
+                var month = dateOfBirth.format('M');
+                var day = dateOfBirth.format('D');
+                var year = dateOfBirth.format('YYYY');
+                model.customer.dateOfBirth = aadhaarData.yob + '-' + month + '-' + day;
+            } else {
                 model.customer.dateOfBirth = aadhaarData.yob + '-01-01';
-                model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
             }
-            if (!model.customer.identityProof && !model.customer.identityProofNo
-                && !model.customer.addressProof && !model.customer.addressProofNo) {
-                model.customer.addressProofSameAsIdProof = true;
-            }
-            if (!model.customer.identityProof && !model.customer.identityProofNo) {
-                model.customer.identityProof = 'Aadhar card';
-                model.customer.identityProofNo = aadhaarData.uid;
-            }
-            if (!model.customer.addressProof && model.customer.addressProof && !model.customer.addressProofNo) {
-                model.customer.addressProof = 'Aadhar card';
-                model.customer.addressProofNo = aadhaarData.uid;
-            }
-        } else {
-
-            $log.info(aadhaarData);
-            // model.customer.aadhaarNo = aadhaarData.uid;
-            model.customer.firstName = aadhaarData.name;
-            model.customer.gender = aadhaarData.gender;
-            // model.customer.doorNo = aadhaarData.house;//
-            // model.customer.street = aadhaarData.street;//
-            // model.customer.locality = aadhaarData.loc;//
-            // model.customer.villageName = aadhaarData.vtc;
-            // model.customer.district = aadhaarData.dist;//
-            // model.customer.state = aadhaarData.state;//
-            // model.customer.pincode = aadhaarData.pc;//
-            // model.customer.postOffice = aadhaarData.po;//
-
-            model['customer']['mailingDoorNo'] = aadhaarData.house;
-            model['customer']['mailingStreet'] = aadhaarData.street;
-            model['customer']['mailingLocality'] = aadhaarData.loc;
-            model['customer']['mailingPostoffice'] = aadhaarData.po;
-            model['customer']['mailingDistrict'] = aadhaarData.dist;
-            model['customer']['mailingPincode'] = aadhaarData.pc;
-            model['customer']['mailingState'] = aadhaarData.state;
-
-            model.customer.mailingVillageName = aadhaarData.vtc;
-
-            if (aadhaarData.dob) {
-                $log.debug('aadhaarData dob: ' + aadhaarData.dob);
-                if (!isNaN(aadhaarData.dob.substring(2, 3))) {
-                    model.customer.dateOfBirth = aadhaarData.dob;
-                } else {
-                    model.customer.dateOfBirth = moment(aadhaarData.dob, 'DD/MM/YYYY').format(SessionStore.getSystemDateFormat());
-                }
-                $log.debug('customer dateOfBirth: ' + model.customer.dateOfBirth);
-                model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-            } else if (aadhaarData.yob) {
-                $log.debug('aadhaarData yob: ' + aadhaarData.yob);
-                model.customer.dateOfBirth = aadhaarData.yob + '-01-01';
-                model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-            }
-            
-            if (!model.customer.addressProof && !model.customer.addressProofNo) {
-                model.customer.addressProof = 'Aadhar Card';
-                model.customer.addressProofNo = aadhaarData.uid;
-            }
+            model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+        }
+        if (!model.customer.identityProof && !model.customer.identityProofNo
+            && !model.customer.addressProof && !model.customer.addressProofNo) {
+            model.customer.addressProofSameAsIdProof = true;
+        }
+        if (!model.customer.identityProof && !model.customer.identityProofNo) {
+            model.customer.identityProof = 'Aadhar card';
+            model.customer.identityProofNo = aadhaarData.uid;
+        }
+        if (!model.customer.addressProof && !model.customer.addressProofNo) {
+            model.customer.addressProof = 'Aadhar card';
+            model.customer.addressProofNo = aadhaarData.uid;
         }
         return aadhaarData;
     };
@@ -492,8 +624,11 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
         saveData: saveData,
         proceedData: proceedData,
         validateData: validateData,
+        validateDate:validateDate,
+        validateBankAccounts:validateBankAccounts,
         parseAadhaar: parseAadhaar,
         customerAadhaarOnCapture: customerAadhaarOnCapture,
-        validatePanCard: validatePanCard
+        validatePanCard: validatePanCard,
+        checkBiometricQuality:checkBiometricQuality
     };
 }]);
