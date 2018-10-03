@@ -174,22 +174,28 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 });
 
-                                if(_.hasIn(loanAccount, 'coApplicantCustomers')) {
-                                    for (var i=0;i<loanAccount.coApplicantCustomers.length; i++){
+                                if(_.hasIn(loanAccount, 'coApplicantCustomers') || _.hasIn(loanAccount,'coApplicantsEnrolmentProcesses')) {
+                                    var coApplicant=loanAccount.coApplicantCustomers?loanAccount.coApplicantCustomers:loanAccount.coApplicantsEnrolmentProcesses;
+                                    for (var i=0;i<coApplicant.length; i++){
                                         $this.bundlePages.push({
                                             pageClass: 'co-applicant',
                                             model: {
-                                                loanRelation: loanAccount.coApplicantCustomers[i]
+                                                loanRelation: coApplicant[i],
+                                                enrolmentProcess: coApplicant[i],
+                                                loanProcess: loanAccount
                                             }
                                         });
                                     }
                                 }
-                                if(_.hasIn(loanAccount, 'guarantorCustomers')) {
-                                    for (var i=0;i<loanAccount.guarantorCustomers.length; i++){
+                                if(_.hasIn(loanAccount, 'guarantorCustomers') || _.hasIn(loanAccount,'guarantorsEnrolmentProcesses')) {
+                                    var guarantor = loanAccount.guarantorCustomers?loanAccount.guarantorCustomers:loanAccount.guarantorsEnrolmentProcesses;
+                                    for (var i=0;i< guarantor.length; i++){
                                         $this.bundlePages.push({
                                             pageClass: 'guarantor',
                                             model: {
-                                                loanRelation: loanAccount.guarantorCustomers[i]
+                                                loanRelation: guarantor[i],
+                                                enrolmentProcess:guarantor[i],
+                                                loanProcess: loanAccount
                                             }
                                         });
                                     }
@@ -223,11 +229,6 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         loanProcess: loanProcess
                                     }
                                 });
-
-
-
-                                
-
 
                                 deferred.resolve();
 
