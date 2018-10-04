@@ -896,7 +896,7 @@ define([], function () {
                     },
                     "LoanDetails.frequency": {
                         "orderNo": 3,
-                        "enumCode": "frequency"
+                        "enumCode": "loan_product_frequency"
                     },
                     "LoanDetails.loanProducts": {
                         "orderNo": 4,
@@ -956,12 +956,11 @@ define([], function () {
                         },
                         onSelect: function (valueObj, model, context) {
                             //add to the witnees array.
-                            // if (_.isUndefined(model.loanAccount.witnessDetails[context.arrayIndex])) {
-                            //     model.loanAccount.witnessDetails[context.arrayIndex] = {};
-                            // }
-                            model.loanAccount.test = 55;
-                            model.loanAccount.witnessFirstName = valueObj.name;
-                            model.loanAccount.witnessRelationship = valueObj.relationship;
+                            if (_.isUndefined(model.loanAccount.witnessDetails[0])) {
+                                 model.loanAccount.witnessDetails[0] = [];
+                             }
+                            model.loanAccount.witnessDetails[0].witnessFirstName = valueObj.name;
+                            model.loanAccount.witnessDetails[0].witnessRelationship = valueObj.relationship;
                         },
                         getListDisplayItem: function (item, index) {
                             return [
@@ -1012,28 +1011,28 @@ define([], function () {
                     //     }
                     // ];
 
-                    if (_.hasIn(model, 'loanAccount.loanCustomerRelations') &&
-                        model.loanAccount.loanCustomerRelations != null &&
-                        model.loanAccount.loanCustomerRelations.length > 0) {
-                        var lcr = model.loanAccount.loanCustomerRelations;
-                        var idArr = [];
-                        for (var i = 0; i < lcr.length; i++) {
-                            idArr.push(lcr[i].customerId);
-                        }
-                        Queries.getCustomerBasicDetails({
-                                'ids': idArr
-                            })
-                            .then(function (result) {
-                                if (result && result.ids) {
-                                    for (var i = 0; i < lcr.length; i++) {
-                                        var cust = result.ids[lcr[i].customerId];
-                                        if (cust) {
-                                            lcr[i].name = cust.first_name;
-                                        }
-                                    }
-                                }
-                            });
-                    }
+                    // if (_.hasIn(model, 'loanAccount.loanCustomerRelations') &&
+                    //     model.loanAccount.loanCustomerRelations != null &&
+                    //     model.loanAccount.loanCustomerRelations.length > 0) {
+                    //     var lcr = model.loanAccount.loanCustomerRelations;
+                    //     var idArr = [];
+                    //     for (var i = 0; i < lcr.length; i++) {
+                    //         idArr.push(lcr[i].customerId);
+                    //     }
+                    //     Queries.getCustomerBasicDetails({
+                    //             'ids': idArr
+                    //         })
+                    //         .then(function (result) {
+                    //             if (result && result.ids) {
+                    //                 for (var i = 0; i < lcr.length; i++) {
+                    //                     var cust = result.ids[lcr[i].customerId];
+                    //                     if (cust) {
+                    //                         lcr[i].name = cust.first_name;
+                    //                     }
+                    //                 }
+                    //             }
+                    //         });
+                    // }
 
                     BundleManager.broadcastEvent('loan-account-loaded', {
                         loanAccount: model.loanAccount
@@ -1161,6 +1160,7 @@ define([], function () {
                 eventListeners: {
                     "new-applicant": function (bundleModel, model, obj) {
                         model.customer = obj.customer;
+                        model.loanAccount.customerId = model.customer.id;
                         // $q.when(Enrollment.get({
                         //     'id': model.loanAccount.customerId
                         // })).then(function (resp) {

@@ -127,7 +127,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                 "pre_pages_initialize": function(bundleModel){
                     console.log("After That this will get execute");
                     $log.info("Inside pre_page_initialize");
-                    bundleModel.currentStage = "KYC";
+                    bundleModel.currentStage = "LoanInitiation";
                     var deferred = $q.defer();
 
                     var $this = this;
@@ -146,7 +146,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         loanProcess.loanAccount.leadId = _leadId;
 
                                     }
-                                if (loanAccount.loanAccount.currentStage != 'KYC'){
+                                if (loanAccount.loanAccount.currentStage != 'LoanInitiation'){
                                     PageHelper.showProgress('load-loan', 'Loan Application is in different Stage', 2000);
                                     irfNavigator.goBack();
                                     return;
@@ -213,7 +213,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                         LoanProcess.createNewProcess()
                             .subscribe(function(loanProcess){
                                 console.log(loanProcess);
-                                loanProcess.loanAccount.currentStage = 'KYC';
+                                loanProcess.loanAccount.currentStage = 'LoanInitiation';
                                 bundleModel.loanProcess = loanProcess;
                                  if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
 
