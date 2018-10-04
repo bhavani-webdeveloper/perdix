@@ -1771,7 +1771,7 @@
                 "key": "loanAccount.witnessDetails",
                 "items":{
                     "witnessFirstName":{
-                        "key": "loanAccount.witnessFirstName",
+                        "key": "loanAccount.witnessDetails[].witnessFirstName",
                         "type":"lov",
                         "title":"FIRST_NAME"
                     },
@@ -1782,7 +1782,7 @@
                         "readonly":true
                     },
                     "witnessRelationship":{
-                        "key": "loanAccount.witnessRelationship",
+                        "key": "loanAccount.witnessDetails[].witnessRelationship",
                         "type":"text",
                         "title": "RELATIONSHIP",
                         "readonly": true                    

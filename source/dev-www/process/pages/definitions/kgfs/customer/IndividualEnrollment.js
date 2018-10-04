@@ -173,6 +173,136 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                                     }
                                 }
                             },
+                            "LoanInitiation": {
+                                "excludes": [
+                                    "IndividualFinancials",
+                                    "HouseVerification.latitude",
+                                    "HouseVerification.houseVerificationPhoto",
+                                    "HouseVerification.date",
+                                    "IndividualReferences"
+                                ],
+                                "overrides": {
+                                    "KYC": {
+                                        "orderNo": 1,
+                                    },
+                                    "HouseVerification.place": {
+                                        "condition": "model.customer.ownership == 'Rented but own house in different place'",
+                                        "required": true
+                                    },
+                                    "IndividualInformation": {
+                                        "orderNo": 2
+                                    },
+                                    "ContactInformation": {
+                                        "orderNo": 3
+                                    },
+                                    "FamilyDetails": {
+                                        "orderNo": 4
+                                    },
+                                    "Liabilities": {
+                                        "orderNo": 5
+                                    },
+                                    "HouseVerification": {
+                                        "orderNo": 6
+                                    },
+                                    "BankAccounts": {
+                                        "orderNo": 7
+                                    },
+                                    "KYC.customerId": {
+                                        "resolver": "IndividualCustomerIDLOVConfiguration"
+                                    },
+                                    "KYC.identityProof": {
+                                        "required": true
+                                    },
+                                    "KYC.identityProofImageId": {
+                                        "required": true
+                                    },
+                                    "KYC.identityProofNo": {
+                                        "required": true
+                                    },
+                                    "KYC.addressProofImageId": {
+                                        "required": true
+                                    },
+                                    "KYC.addressProofNo": {
+                                        "required": true
+                                    },
+                                    "KYC.additionalKYCs.kyc1ImagePath": {
+                                        "required": true
+                                    },
+                                    "IndividualInformation.customerBranchId": {
+                                        "readonly": true
+                                    },
+                                    "ContactInformation.locality": {
+                                        "readonly": true
+                                    },
+                                    "ContactInformation.villageName": {
+                                        "readonly": true
+                                    },
+                                    "ContactInformation.district": {
+                                        "readonly": true
+                                    },
+                                    "ContactInformation.state": {
+                                        "readonly": true
+                                    },
+                                    "IndividualInformation.customerId": {
+                                        "readonly": true
+                                    },
+                                    "IndividualInformation.urnNo": {
+                                        "readonly": true
+                                    },
+                                    "IndividualInformation.existingLoan": {
+                                        "required": true
+                                    },
+                                    "IndividualInformation.dateOfBirth": {
+                                        "required": true
+                                    },
+                                    "IndividualInformation.maritalStatus": {
+                                        "required": true
+                                    },
+                                    "IndividualInformation.spouseFirstName": {
+                                        "condition": "model.customer.maritalStatus==='MARRIED'"
+                                    },
+                                    "IndividualInformation.spouseDateOfBirth": {
+                                        "condition": "model.customer.maritalStatus==='MARRIED'"
+                                    },
+                                    "FamilyDetails.familyMembers.relationShip": {
+                                        "readonly": true
+                                    },
+                                    "HouseVerification.ownership": {
+                                        "required": true
+                                    },
+                                    "HouseVerification.udf30": {
+                                        "required": true
+                                    },
+                                    "BankAccounts.customerBankAccounts.ifscCode": {
+                                        "required": true,
+                                        "resolver": "IFSCCodeLOVConfiguration"
+                                    },
+                                    "BankAccounts.customerBankAccounts.customerBankName": {
+                                        "readonly": true
+                                    },
+                                    "BankAccounts.customerBankAccounts.customerBankBranchName": {
+                                        "readonly": true
+                                    },
+                                    "BankAccounts.customerBankAccounts.bankStatements.totalDeposits": {
+                                        "required": true
+                                    },
+                                    "BankAccounts.customerBankAccounts.bankStatements.noOfChequeBounced": {
+                                        "required": true
+                                    },
+                                    "BankAccounts.customerBankAccounts.bankStatements.noOfEmiChequeBounced": {
+                                        "required": true
+                                    },
+                                    "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto": {
+                                        "required": true
+                                    },
+                                    "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto": {
+                                        "required": true
+                                    },
+                                    "FamilyDetails.familyMembers": {
+                                        "view": "fixed"
+                                    }
+                                }
+                            },
                             "KYCReview": {
                                 "overrides": {
                                     "KYC": {
@@ -1440,14 +1570,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                         "PhysicalAssets.physicalAssets.registeredOwner",
                         "PhysicalAssets.physicalAssets.ownedAssetValue",
                         "PhysicalAssets.physicalAssets.unit",
-                        // "PhysicalAssets.financialAssets",
-                        // "PhysicalAssets.financialAssets.instrumentType",
-                        // "PhysicalAssets.financialAssets.nameOfInstitution",
-                        // "PhysicalAssets.financialAssets.instituteType",
-                        // "PhysicalAssets.financialAssets.amount",
-                        // "PhysicalAssets.financialAssets.frequencyOfDeposite",
-                        // "PhysicalAssets.financialAssets.startDate",
-                        // "PhysicalAssets.financialAssets.maturityDate",
+                        "PhysicalAssets.financialAssets",
+                        "PhysicalAssets.financialAssets.instrumentType",
+                        "PhysicalAssets.financialAssets.nameOfInstitution",
+                        "PhysicalAssets.financialAssets.instituteType",
+                        "PhysicalAssets.financialAssets.amount",
+                        "PhysicalAssets.financialAssets.frequencyOfDeposite",
+                        "PhysicalAssets.financialAssets.startDate",
+                        "PhysicalAssets.financialAssets.maturityDate",
 
                         "IndividualReferences",
                         "IndividualReferences.verifications",
