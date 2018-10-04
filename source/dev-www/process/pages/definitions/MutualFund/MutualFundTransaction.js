@@ -188,7 +188,7 @@ define({
                 },  {
                     "type": "actionbox",
                    // condition: " (!model.customerSummary.accountClosed && model.isSubmitApllicable)  && model.customer.isBiometricValidated ",
-                   // condition: " (!model.customerSummary.accountClosed && model.isSubmitApllicable) && !model.transaction.submissionDone",
+                    condition: " (!model.customerSummary.accountClosed && model.isSubmitApllicable) && !model.transaction.submissionDone",
                     "items": [{
                         "type": "submit",
                         "title": "SUBMIT"
@@ -229,9 +229,7 @@ define({
                             };
 
                             var pData = MutualFund.getPrintReceipt(repaymentInfo, opts);
-                            //var wData = MutualFund.getWebReceipt(repaymentInfo, opts);
                             $log.info(pData.getLines());
-
                             try {
                                 if (cordova) {
                                     cordova.plugins.irfBluetooth.print(function() {
