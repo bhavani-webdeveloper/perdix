@@ -297,7 +297,8 @@ define(
                             "excludes": [
                                 "VehicleRegistrationDetails.engineNo",
                                 "VehicleInsuranceDetails.taxPaid",
-                                "VehiclePermitAndTaxDetails.taxPaid"
+                                "VehiclePermitAndTaxDetails.taxPaid",
+                                "VehiclePastValuations"
                             ],
                             "options": {
                             "repositoryAdditions": {

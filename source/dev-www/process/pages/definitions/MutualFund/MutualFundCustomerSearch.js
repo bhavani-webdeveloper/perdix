@@ -110,7 +110,7 @@ define({
 						}
 
 					},
-					"required": ["branch", 'bankId']
+					"required": ["branch"]
 				},
 				getSearchFormHelper: function() {
 					return formHelper;

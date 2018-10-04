@@ -177,6 +177,16 @@ function($log, $scope, PagesDefinition,formHelper, SessionStore, LoanProcess,Rep
                     taqMenu.data = response.headers['x-total-count'];
                 })
         }
+
+        var rejctMenu =$scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.collections.RejectedQueue"];
+        if(rejctMenu) {
+            LoanCollection.query({
+                'currentStage':"Rejected",
+                'accountBranchId': currentBranchId
+            }).$promise.then(function(response, headerGetter) {
+                rejctMenu.data = response.headers['x-total-count'];
+            })
+        }
     });
 
 }]);

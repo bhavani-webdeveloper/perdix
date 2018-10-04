@@ -1,46 +1,9 @@
 irf.pageCollection.factory("Pages__AssetsLiabilitiesAndHealth",
-["$log","formHelper","Enrollment", '$state','$stateParams',"elementsUtils","entityManager", '$q', 'irfProgressMessage', 'PageHelper',
+["$log","formHelper","Enrollment","EnrollmentHelper", '$state','$stateParams',"elementsUtils","entityManager", '$q', 'irfProgressMessage', 'PageHelper',
     'SessionStore','Utils','authService', 'BiometricService', 'Files', 'irfNavigator',"CustomerBankBranch",
-function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityManager, $q, irfProgressMessage, PageHelper,
+function($log,formHelper,Enrollment,EnrollmentHelper,$state, $stateParams,elementsUtils,entityManager, $q, irfProgressMessage, PageHelper,
          SessionStore,Utils,authService, BiometricService, Files, irfNavigator,CustomerBankBranch) {
-    var fixData = function(model) {
-        $log.info("Before fixData");
-        Utils.removeNulls(model, true);
-        if (_.has(model.customer, 'udf.userDefinedFieldValues')) {
-            var fields = model.customer.udf.userDefinedFieldValues;
-            $log.info(fields);
-            fields['udf17'] = Number(fields['udf17']);
-            fields['udf10'] = Number(fields['udf10']);
-            fields['udf11'] = Number(fields['udf11']);
-            fields['udf28'] = Number(fields['udf28']);
-            fields['udf32'] = Number(fields['udf32']);
-            fields['udf1'] = Boolean(fields['udf1']);
-            fields['udf6'] = Boolean(fields['udf6']);
-            fields['udf4'] = Number(fields['udf4']);
-
-            for (var i = 1; i <= 40; i++) {
-                if (!_.has(model.customer.udf.userDefinedFieldValues, 'udf' + i)) {
-                    model.customer.udf.userDefinedFieldValues['udf' + i] = '';
-                }
-            }
-        }
-        if (model.customer.dateOfBirth) {
-            model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-        }
-        if(model.customer.udf.userDefinedFieldValues.udf26 !="" && model.customer.udf.userDefinedFieldValues.udf26 != null ){
-            if(model.customer.udf.userDefinedFieldValues.udf26 === "true"){
-                    model.customer.udf.userDefinedFieldValues.udf26 = true;
-            }
-            if(model.customer.udf.userDefinedFieldValues.udf26 === "false"){
-                    model.customer.udf.userDefinedFieldValues.udf26 = false;
-            }
-
-         }
-        $log.info("After fixData");
-        $log.info(model);
-        return model;
-    };
-
+    
     return {
         "id": "AssetsAndLiabilities",
         "type": "schema-form",
@@ -65,7 +28,8 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                 Enrollment.get({id: customerId},
                     function(res){
                         _.assign(model.customer, res);
-                        model = fixData(model);
+                        model.customer.addressProofSameAsIdProof = (model.customer.title=="true")?true:false;
+                        model = EnrollmentHelper.fixData(model);
                         model.customer.date = model.customer.date || Utils.getCurrentDate();
                         model.customer.familyMembers = model.customer.familyMembers || [];
 
@@ -137,6 +101,51 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                                 }
                             ];
                         }
+
+                        if(model.customer.parentCustomerId)
+                        {
+                            if(!model.customer.houseVerificationPhoto){
+                                Enrollment.get({
+                                        id: model.customer.parentCustomerId
+                                    },
+                                    function(res1) {
+                                    model.customer.latitude = model.customer.latitude||res1.latitude;
+                                    model.customer.longitude = model.customer.longitude||res1.longitude;
+                                    model.customer.houseVerificationPhoto = model.customer.houseVerificationPhoto||res1.houseVerificationPhoto;
+                                    model.customer.expenditures =model.customer.expenditures|| res1.expenditures;
+                                    model.customer.financialAssets=model.customer.financialAssets||res1.financialAssets;
+                                    model.customer.physicalAssets=model.customer.physicalAssets||res1.physicalAssets;
+                                    model.customer.liabilities=model.customer.liabilities||res1.liabilities;
+                                    model.customer.verifications=res1.verifications;
+                                    model.customer.addressInLocalLanguage=model.customer.addressInLocalLanguage||res1.addressInLocalLanguage;
+                                    model.customer.religion=model.customer.religion||res1.religion;
+                                    model.customer.caste=model.customer.caste||res1.caste;
+                                    model.customer.language=model.customer.language||res1.language;
+                                    model.customer.udf.userDefinedFieldValues.udf3=model.customer.udf.userDefinedFieldValues.udf3||res1.udf.userDefinedFieldValues.udf3;
+                                    model.customer.udf.userDefinedFieldValues.udf2=model.customer.udf.userDefinedFieldValues.udf2||res1.udf.userDefinedFieldValues.udf2;
+                                    model.customer.udf.userDefinedFieldValues.udf4=model.customer.udf.userDefinedFieldValues.udf4||res1.udf.userDefinedFieldValues.udf4;
+                                    model.customer.udf.userDefinedFieldValues.udf5=model.customer.udf.userDefinedFieldValues.udf5||res1.udf.userDefinedFieldValues.udf5;
+                                    model.customer.udf.userDefinedFieldValues.udf31=model.customer.udf.userDefinedFieldValues.udf31||res1.udf.userDefinedFieldValues.udf31;
+                                    model.customer.udf.userDefinedFieldValues.udf32=model.customer.udf.userDefinedFieldValues.udf32||res1.udf.userDefinedFieldValues.udf32;
+                                    model.customer.udf.userDefinedFieldValues.udf6=model.customer.udf.userDefinedFieldValues.udf6||res1.udf.userDefinedFieldValues.udf6;
+
+
+                                    for(i in res1.familyMembers){
+                                        for(j in model.customer.familyMembers){
+                                             var family=model.customer.familyMembers[j]
+                                            if(res1.familyMembers[i].familyMemberFirstName==family.familyMemberFirstName){
+                                                if(!family.incomes)
+                                                {
+                                                   family.incomes=res1.familyMembers[i].incomes;
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    });
+
+                            }
+                        }
                         model = Utils.removeNulls(model,true);
 
                         PageHelper.hideLoader();
@@ -155,10 +164,9 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                     }
                 );
             }
-
-            model.isFPEnrolled = function(fingerId){
+            model.isFPEnrolled = function(fingerId) {
                 //$log.info("Inside isFPEnrolled: " + BiometricService.getFingerTF(fingerId) + " :"  + fingerId);
-                if (model.customer[BiometricService.getFingerTF(fingerId)]!=null || (typeof(model.customer.$fingerprint)!='undefined' && typeof(model.customer.$fingerprint[fingerId])!='undefined' && model.customer.$fingerprint[fingerId].data!=null )) {
+                if (model.customer[BiometricService.getFingerTF(fingerId)] != null || (typeof(model.customer.$fingerprint) != 'undefined' && typeof(model.customer.$fingerprint[fingerId]) != 'undefined' && model.customer.$fingerprint[fingerId].data != null)) {
                     //$log.info("Inside isFPEnrolled: :true");
                     return "fa-check text-success";
                 }
@@ -166,9 +174,9 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                 return "fa-close text-danger";
             }
 
-            model.getFingerLabel = function(fingerId){
+            model.getFingerLabel = function(fingerId) {
                 return BiometricService.getLabel(fingerId);
-            }
+            }    
         },
         offline: true,
         getOfflineDisplayItem: function(item, index){
@@ -185,7 +193,6 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
         //    return deferred.promise;
         //},
         form: [
-
             {
                 "type": "box",
                 "title": "T_FAMILY_DETAILS",
@@ -247,8 +254,7 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                                 }, function (resp) {
                                     PageHelper.hideLoader();
                                     irfProgressMessage.pop("cust-load", "An Error Occurred. Failed to fetch Data", 5000)           
-                                });
-                                    
+                                });      
                             },
                             getListDisplayItem: function(data, index) {
                                 return [
@@ -268,6 +274,42 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                         },
                         {
                             key: "customer.familyMembers[].gender",
+                            condition:"(model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() === 'self'",
+                            type: "radios",
+                            readonly:true,
+                            title: "T_GENDER"
+                        },
+                        {
+                            key:"customer.familyMembers[].age",
+                            condition:"(model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() === 'self'",
+                            title: "AGE",
+                            type:"number",
+                            readonly:true,
+                            "onChange": function(modelValue, form, model, formCtrl, event) {
+                                if (model.customer.familyMembers[form.arrayIndex].age > 0) {
+                                    if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
+                                        model.customer.familyMembers[form.arrayIndex].dateOfBirth = moment(new Date()).subtract(model.customer.familyMembers[form.arrayIndex].age, 'years').format('YYYY-') + moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, 'YYYY-MM-DD').format('MM-DD');
+                                    } else {
+                                        model.customer.familyMembers[form.arrayIndex].dateOfBirth = moment(new Date()).subtract(model.customer.familyMembers[form.arrayIndex].age, 'years').format('YYYY-MM-DD');
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            key: "customer.familyMembers[].dateOfBirth",
+                            condition:"(model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() === 'self'",
+                            type:"date",
+                            readonly:true,
+                            title: "T_DATEOFBIRTH",
+                            "onChange": function(modelValue, form, model, formCtrl, event) {
+                                if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
+                                    model.customer.familyMembers[form.arrayIndex].age = moment().diff(moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                                }
+                            }
+                        },
+                        {
+                            key: "customer.familyMembers[].gender",
+                            condition:"(model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() != 'self'",
                             type: "radios",
                             title: "T_GENDER"
                         },
@@ -275,6 +317,7 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                             key:"customer.familyMembers[].age",
                             title: "AGE",
                             type:"number",
+                            condition:"(model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() != 'self'",
                             "onChange": function(modelValue, form, model, formCtrl, event) {
                                 if (model.customer.familyMembers[form.arrayIndex].age > 0) {
                                     if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
@@ -288,6 +331,7 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                         {
                             key: "customer.familyMembers[].dateOfBirth",
                             type:"date",
+                            condition:"(model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() != 'self'",
                             title: "T_DATEOFBIRTH",
                             "onChange": function(modelValue, form, model, formCtrl, event) {
                                 if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
@@ -303,6 +347,14 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                         {
                             key:"customer.familyMembers[].maritalStatus",
                             type:"select",
+                            readonly:true,
+                            condition:"(model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() === 'self'",
+                            title: "T_MARITAL_STATUS"
+                        },
+                        {
+                            key:"customer.familyMembers[].maritalStatus",
+                            type:"select",
+                            condition:"(model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() != 'self'",
                             title: "T_MARITAL_STATUS"
                         },
                         "customer.familyMembers[].mobilePhone",
@@ -329,7 +381,11 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                                     type: "select"
                                 },
                                 {
-                                    key: "customer.familyMembers[].incomes[].monthsPerYear"
+                                    key: "customer.familyMembers[].incomes[].monthsPerYear",
+                                    "schema":{
+                                        "minimum": 1,
+                                        "maximum": 12,
+                                    }
                                 }
                             ]
                         }
@@ -407,11 +463,14 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                             key: "customer.customerBankAccounts[].customerNameAsInBank"
                         }, {
                             key: "customer.customerBankAccounts[].accountNumber",
+                            "required":true,
                             type: "password",
                             inputmode: "number",
                             numberType: "tel"
                         }, {
                             key: "customer.customerBankAccounts[].confirmedAccountNumber",
+                            "required":true,
+                            "title": "CONFIRMED_ACCOUNT_NUMBER",
                             inputmode: "number",
                             numberType: "tel"
                         }, {
@@ -478,7 +537,7 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                                 required: true,
                                 //maximum:99,
                                 title: "NO_OF_EMI_CHEQUE_BOUNCED"
-                            }, {
+                            },{
                                 key: "customer.customerBankAccounts[].bankStatements[].bankStatementPhoto",
                                 type: "file",
                                 required: true,
@@ -486,17 +545,8 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                                 fileType: "application/pdf",
                                 "category": "CustomerEnrollment",
                                 "subCategory": "IDENTITYPROOF",
-                                using: "scanner"
-                            }, ]
-                        }, {
-                            key: "customer.customerBankAccounts[].isDisbersementAccount",
-                            type: "radios",
-                            titleMap: [{
-                                value: true,
-                                name: "Yes"
-                            }, {
-                                value: false,
-                                name: "No"
+                                using: "scanner",
+                                offline:true
                             }]
                         }]
                     }]
@@ -628,14 +678,21 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                                 key:"customer.udf.userDefinedFieldValues.udf15"
                             },
                             {
-                                key:"customer.udf.userDefinedFieldValues.udf26"
+                                key:"customer.udf.userDefinedFieldValues.udf26",
+                                type:"checkbox",
+                                "schema":{
+                                    "default":false
+                                }
                             },
                             {
                                 key:"customer.udf.userDefinedFieldValues.udf27",
                                 type:"select"
                             },
                             {
-                                key:"customer.udf.userDefinedFieldValues.udf28"
+                                key:"customer.udf.userDefinedFieldValues.udf28",
+                                "schema": {
+                                    "type": "number"
+                                }
                             }
                         ]
                     }
@@ -648,46 +705,105 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                     {
                         key: "customer.physicalAssets",
                         type: "array",
+                        titleExpr: "model.customer.physicalAssets[arrayIndex].assetType",
                         startEmpty: true,
                         items: [
                                {
                                    key: "customer.physicalAssets[].assetType",
                                    "title": "ASSET_TYPE",
-                                   "enumCode": "asset_type",
-                                   type: "select"
-                               }, {
-                                   key: "customer.physicalAssets[].ownedAssetDetails",
                                    type: "lov",
                                    autolov: true,
                                    lovonly:true,
                                    bindMap: {},
                                    searchHelper: formHelper,
                                    search: function(inputModel, form, model, context) {
-                                       var assetType = model.customer.physicalAssets[context.arrayIndex].assetType;
-                                       var ownedAssetDetails = formHelper.enum('asset_Details').data;
-                                       var out = [];
-                                       if (ownedAssetDetails && ownedAssetDetails.length) {
-                                           for (var i = 0; i < ownedAssetDetails.length; i++) {
-                                               
-                                                   if ((ownedAssetDetails[i].parentCode).toUpperCase() == (assetType).toUpperCase()) {
-                                                       out.push({
-                                                           name: ownedAssetDetails[i].name,
-                                                           id: ownedAssetDetails[i].value
-                                                       })
-                                                   }
-                                           }
-                                       }
-                                       if(!out.length)
+                                       var assetDetails =[];
+                                       assetDetails = formHelper.enum('asset_type').data;
+                                       if(!assetDetails.length)
                                        {
-                                            out.push({
+                                            assetDetails.push({
                                                 name: "No Records",
                                             })
                                        }
                                        return $q.resolve({
                                            headers: {
-                                               "x-total-count": out.length
+                                               "x-total-count": assetDetails.length
                                            },
-                                           body: out
+                                           body: assetDetails
+                                       });
+                                   },
+                                    onSelect: function(valueObj, model, context) {
+                                        if (valueObj.name == "No Records") {
+                                            model.customer.physicalAssets[context.arrayIndex].assetType = '';
+                                            model.customer.physicalAssets[context.arrayIndex].ownedAssetDetails = '';
+                                            model.customer.physicalAssets[context.arrayIndex].unit = '';
+                                            model.customer.ownedAssetDetails = [];
+                                            model.customer.assetunit = [];
+                                        } else {
+                                            var assetType = model.customer.physicalAssets[context.arrayIndex].assetType = valueObj.name;
+                                            model.customer.physicalAssets[context.arrayIndex].ownedAssetDetails = '';
+                                            model.customer.physicalAssets[context.arrayIndex].unit = '';
+                                            var ownedAssetDetails = formHelper.enum('asset_Details').data;
+                                            var assetunit = formHelper.enum('asset_unit').data;
+                                            model.customer.ownedAssetDetails = [];
+                                            model.customer.assetunit = [];
+                                            if (ownedAssetDetails && ownedAssetDetails.length) {
+                                                for (var i = 0; i < ownedAssetDetails.length; i++) {
+
+                                                    if ((ownedAssetDetails[i].parentCode).toUpperCase() == (assetType).toUpperCase()) {
+                                                        model.customer.ownedAssetDetails.push({
+                                                            name: ownedAssetDetails[i].name,
+                                                            id: ownedAssetDetails[i].value
+                                                        })
+                                                    }
+                                                }
+                                            }
+                                            if (assetunit && assetunit.length) {
+                                                for (var i = 0; i < assetunit.length; i++) {
+                                                    if ((assetunit[i].parentCode).toUpperCase() == (assetType).toUpperCase()) {
+                                                        model.customer.assetunit.push({
+                                                            name: assetunit[i].name,
+                                                        })
+                                                    }
+                                                }
+                                            }
+                                            if (model.customer.ownedAssetDetails.length && model.customer.ownedAssetDetails.length > 0) {
+                                                model.customer.physicalAssets[context.arrayIndex].ownedAssetallowed = true;
+                                                model.customer.physicalAssets[context.arrayIndex].assetunitallowed = false;
+
+                                            }
+                                            if (model.customer.assetunit.length && model.customer.assetunit.length > 0) {
+                                                model.customer.physicalAssets[context.arrayIndex].assetunitallowed = true;
+                                                model.customer.physicalAssets[context.arrayIndex].ownedAssetallowed = false;
+                                            }
+                                        }
+                                    },
+                                   getListDisplayItem: function(item, index) {
+                                        return [
+                                            item.name
+                                        ];
+                                   }
+                               }, {
+                                   key: "customer.physicalAssets[].ownedAssetDetails",
+                                   condition: "model.customer.physicalAssets[arrayIndex].ownedAssetallowed",
+                                   "required":true,
+                                   type: "lov",
+                                   autolov: true,
+                                   lovonly:true,
+                                   bindMap: {},
+                                   searchHelper: formHelper,
+                                   search: function(inputModel, form, model, context) {
+                                       if(!model.customer.ownedAssetDetails.length)
+                                       {
+                                            model.customer.ownedAssetDetails.push({
+                                                name: "No Records",
+                                            })
+                                       }
+                                       return $q.resolve({
+                                           headers: {
+                                               "x-total-count": model.customer.ownedAssetDetails.length
+                                           },
+                                           body: model.customer.ownedAssetDetails
                                        });
                                    },
                                    onSelect: function(valueObj, model, context) {
@@ -706,43 +822,32 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                                }, {
                                    key: "customer.physicalAssets[].unit",
                                    "title": "UNIT",
+                                   condition: "model.customer.physicalAssets[arrayIndex].assetunitallowed",
+                                   "required":true,
                                    type: "lov",
                                    autolov: true,
                                    lovonly:true,
                                    bindMap: {},
                                    searchHelper: formHelper,
                                    search: function(inputModel, form, model, context) {
-                                       var assetType = model.customer.physicalAssets[context.arrayIndex].assetType;
-                                       var assetunit = formHelper.enum('asset_unit').data;
-                                       var out = [];
-                                       if (assetunit && assetunit.length) {
-                                           for (var i = 0; i < assetunit.length; i++) {
-                                               
-                                                   if ((assetunit[i].parentCode).toUpperCase() == (assetType).toUpperCase() ){
-                                                       out.push({
-                                                           name: assetunit[i].name,
-                                                       })
-                                                   }
-                                           }
-                                       }
-                                       if(!out.length)
+                                       if(!model.customer.assetunit.length)
                                        {
-                                            out.push({
+                                            model.customer.assetunit.push({
                                                 name: "No Records",
                                             })
                                        }
                                        return $q.resolve({
                                            headers: {
-                                               "x-total-count": out.length
+                                               "x-total-count": model.customer.assetunit.length
                                            },
-                                           body: out
+                                           body: model.customer.assetunit
                                        });
                                    },
                                    onSelect: function(valueObj, model, context) {
-                                   if(valueObj.name=="No Records")
-                                   {
+                                    if(valueObj.name=="No Records")
+                                    {
                                         model.customer.physicalAssets[context.arrayIndex].unit = ''; 
-                                   }else{
+                                    }else{
                                         model.customer.physicalAssets[context.arrayIndex].unit = valueObj.name;
                                     }
                                    },
@@ -856,7 +961,9 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                             var promise = BiometricService.capture(model);
                             promise.then(function(data){
                                 model.customer.$fingerprint = data;
+                                //model.customer.$fingerprintquality = EnrollmentHelper.checkBiometricQuality(model);
                                 // console.log(data[0]);
+                                $log.info(data);
                             }, function(reason){
                                 console.log(reason);
                             })
@@ -885,7 +992,7 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                 "title": "T_HOUSE_VERIFICATION",
                 "items": [
                     {
-                        "key": "customer.firstName",
+                        "key": "customer.fullName",
                         "title": "CUSTOMER_NAME",
                         "readonly": true
                     },
@@ -903,10 +1010,12 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                     },
                     {
                         key:"customer.caste",
+                        "required":true,
                         type:"select"
                     },
                     {
                         key:"customer.language",
+                        "required":true,
                         type:"select"
                     },
                     {
@@ -924,7 +1033,10 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                             },
                             {
                                 key:"customer.udf.userDefinedFieldValues.udf4",
-
+                                "type":"number",
+                                "schema":{
+                                    "type":"number"
+                                }
                             },
                             {
                                 key:"customer.udf.userDefinedFieldValues.udf5",
@@ -939,14 +1051,25 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                                             "CONCRETE":"CONCRETE",
                                             "MUD":"MUD",
                                             "BRICK":"BRICK"
+                                },
+                                "schema":{
+                                    "type":"string"
                                 }
                             },
                             {
                                 key:"customer.udf.userDefinedFieldValues.udf32",
                                 title:"NUMBER_OF_ROOMS",
+                                "type":"number",
+                                "schema":{
+                                    "type":"number"
+                                }
                             },
                             {
-                                key:"customer.udf.userDefinedFieldValues.udf6"
+                                key:"customer.udf.userDefinedFieldValues.udf6",
+                                type:"checkbox",
+                                "schema":{
+                                    "default":false
+                                }
                             }
                         ]
                     },
@@ -955,6 +1078,7 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                         "title": "HOUSE_LOCATION",
                         "type": "geotag",
                         //readonly: true,
+                        "required":false,
                         "latitude": "customer.latitude",
                         "longitude": "customer.longitude",
                         "onChange": "fillGeolocation(modelValue, form)"
@@ -962,9 +1086,15 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                     "customer.nameOfRo",
                     {
                         key:"customer.houseVerificationPhoto",
-                        offline: true,
+                        //offline: true,
+                        "required":true,
                         type:"file",
-                        fileType:"image/*"
+                        fileType:"image/*",
+                        "viewParams": function(modelValue, form, model) {
+                            return {
+                                customerId: model.customer.id
+                            };
+                        },
                     },
                     {
                         "key":"customer.verifications",
@@ -973,16 +1103,30 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                         "remove":null,
                         "items":[
                             {
-                                key:"customer.verifications[].houseNo"
+                                key:"customer.verifications[].houseNo",
+                                "required":true,
                             },
                             {
-                                key:"customer.verifications[].houseNoIsVerified"
+                                key:"customer.verifications[].houseNoIsVerified1",
+                                "required":true,
+                                "type": "checkbox",
+                                "title": "HOUSE_NO_IS_VERIFIED",
+                                "required": true,
+                                "schema": {
+                                    "default": false
+                                }
                             },
                             {
-                                key:"customer.verifications[].referenceFirstName"
+                                key:"customer.verifications[].referenceFirstName",
+                                "required":true,
+                            },
+                            {
+                                key: "customer.verifications[].referenceLastName",
+                                "condition": "model.customer.verifications[arrayIndex].referenceLastName"
                             },
                             {
                                 key:"customer.verifications[].relationship",
+                                "required":true,
                                 type:"select"
                             }
 
@@ -992,7 +1136,11 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                         key: "customer.date",
                         type:"date"
                     },
-                    "customer.place"
+                    {
+                        key:"customer.place",
+                        required:true
+                    }
+                    
                 ]
             },
             {
@@ -1054,7 +1202,7 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
             },
             {
                 "type": "actionbox",
-                // "condition":"model.customer.currentStage=='Stage02'",
+                "condition":"model.customer.currentStage=='Stage02'",
                 "items": [{
                     "type": "save",
                     "title": "Save Offline",
@@ -1097,6 +1245,13 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                 if (model.customer.isBiometricValidated == true) {
                     model.customer.biometricEnrollment = "AUTHENTICATED";
                 }
+                if (model.customer.verifications && model.customer.verifications.length) {
+                    for (i in model.customer.verifications) {
+                        if (model.customer.verifications[i].houseNoIsVerified1) {
+                            model.customer.verifications[i].houseNoIsVerified = (model.customer.verifications[i].houseNoIsVerified1 == true) ? 1 : 0;
+                        }
+                    }
+                }
 
                 $log.info("Inside submit()");
                 $log.info(model);
@@ -1125,6 +1280,21 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                 PageHelper.showLoader();
 
                 var out = model.customer.$fingerprint;
+                //var BiometricQuality = SessionStore.getGlobalSetting("BiometricQuality");
+                if (!EnrollmentHelper.validateBankAccounts(model)) {
+                    $log.warn("Invalid Data, returning false");
+                    PageHelper.hideLoader();
+                    return false;
+                }
+
+                if (model.customer.verifications && model.customer.verifications.length) {
+                    for (i in model.customer.verifications) {
+                        if (model.customer.verifications[i].houseNoIsVerified1) {
+                            model.customer.verifications[i].houseNoIsVerified = (model.customer.verifications[i].houseNoIsVerified1 == true) ? 1 : 0;
+                        }
+                    }
+                }
+
                 var fpPromisesArr = [];
                 for (var key in out) {
                     if (out.hasOwnProperty(key) && out[key].data!=null) {
@@ -1167,6 +1337,11 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
 
                         return;
                     }
+
+                    /*if(!model.customer.$fingerprintquality) {
+                        elementsUtils.alert('Fingerprint quality is less than the required percentage' +" "+ BiometricQuality);
+                        return;
+                    }*/
 
                     if (reqData['customer']['miscellaneous']){
                         var misc = reqData['customer']['miscellaneous'];
@@ -1267,9 +1442,7 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                         })
                     $log.info(reqData);
                 })
-
             }
-
         }
     }
 }]);

@@ -1,13 +1,13 @@
 define({
     pageUID: "MutualFund.MutualFundTransaction",
     pageType: "Engine",
-    dependencies: ["$log", "$q", "Enrollment", 'EnrollmentHelper', 'PageHelper', 'formHelper', "elementsUtils",
+    dependencies: ["$log", "$q", "Enrollment", "Utils",'EnrollmentHelper', 'PageHelper', 'formHelper', "elementsUtils",
 
-        'irfProgressMessage', 'SessionStore', "$state", "$stateParams", "irfNavigator", "CustomerBankBranch", "MutualFund",
+        'irfProgressMessage', 'SessionStore', "$state", "$stateParams", "irfNavigator", "CustomerBankBranch", "MutualFund","BiometricService","PrinterData"
     ],
 
-    $pageFn: function($log, $q, Enrollment, EnrollmentHelper, PageHelper, formHelper, elementsUtils,
-        irfProgressMessage, SessionStore, $state, $stateParams, irfNavigator, CustomerBankBranch, MutualFund) {
+    $pageFn: function($log, $q, Enrollment,Utils, EnrollmentHelper, PageHelper, formHelper, elementsUtils,
+        irfProgressMessage, SessionStore, $state, $stateParams, irfNavigator, CustomerBankBranch, MutualFund,BiometricService,PrinterData) {
 
         var branch = SessionStore.getBranch();
         return {
@@ -20,7 +20,9 @@ define({
                 } 
                 model.isSubmitApllicable = true;
                 model.pageType = $stateParams.pageData.type;
+                model.customer=model.customer||{};
                 model.transaction = { customerId: $stateParams.pageId};
+                model.transaction.submissionDone=false;
                 model.customerSummary = {
                     customerId: $stateParams.pageId
                 };
@@ -29,17 +31,37 @@ define({
                 } else if (model.pageType == 'redemption') {
                     model.transaction.mfTransactionType = 'REDEMPTION';
                 }
-                PageHelper.showLoader();                
+
+                PageHelper.showLoader();               
                 MutualFund.summary({
                     id: $stateParams.pageId
                 }).$promise.then(function(resp) {
                     model.customerSummary = resp[0];
                     model.transaction.mutualFundAccountProfileId = model.customerSummary.id;
-                    PageHelper.hideLoader();
                     if (model.customerSummary.folioNo == null) {
                         model.isSubmitApllicable = false;
                         PageHelper.setError({message: "Folio number is not assigned for given mutualfundaccountprofile id"});
                     }
+                        Enrollment.get({
+                            id: $stateParams.pageId,
+                        },
+                        function(res) {
+                            _.assign(model.customer, res);
+                            $log.info(model.customer);
+                            if (typeof(cordova) !== 'undefined' && cordova && cordova.plugins && cordova.plugins.irfBluetooth && _.isFunction(cordova.plugins.irfBluetooth.enroll)) {
+                                model.customer.iscordova = true;
+                            } else {
+                                model.customer.iscordova = false;
+                            }
+                            model = Utils.removeNulls(model, true);
+                            PageHelper.hideLoader();
+                            PageHelper.showProgress("page-init", "Done.", 2000);
+                        },
+                        function(res) {
+                            PageHelper.hideLoader();
+                            PageHelper.showProgress("page-init", "Error in loading customer.", 2000);
+                            PageHelper.showErrors(res);
+                        });
                 }, function(err) {
                     model.isSubmitApllicable = false;
                     PageHelper.setError({message:"First purchase is not completed"});
@@ -85,15 +107,142 @@ define({
                     }, {
                         title: "AMOUNT",
                         key: "transaction.amount",
-                        type: "amount",                          
-                        
-                    }]
+                        "readonly":true,
+                        "condition":"model.transaction.submissionDone",
+                        type: "amount"                        
+                    },{
+                        title: "AMOUNT",
+                        key: "transaction.amount",
+                        type: "amount", 
+                        "condition":"!model.transaction.submissionDone"                        
+                    },
+                    
+                    {
+                        type: "fieldset",
+                        condition: "model.customer.iscordova",
+                        title: "VALIDATE_BIOMETRIC",
+                        items: [{
+                            key: "customer.isBiometricValidated",
+                            "title": "CHOOSE_A_FINGER_TO_VALIDATE",
+                            type: "validatebiometric",
+                            category: 'CustomerEnrollment',
+                            subCategory: 'FINGERPRINT',
+                            helper: formHelper,
+                            biometricMap: {
+                                leftThumb: "model.customer.leftHandThumpImageId",
+                                leftIndex: "model.customer.leftHandIndexImageId",
+                                leftMiddle: "model.customer.leftHandMiddleImageId",
+                                leftRing: "model.customer.leftHandRingImageId",
+                                leftLittle: "model.customer.leftHandSmallImageId",
+                                rightThumb: "model.customer.rightHandThumpImageId",
+                                rightIndex: "model.customer.rightHandIndexImageId",
+                                rightMiddle: "model.customer.rightHandMiddleImageId",
+                                rightRing: "model.customer.rightHandRingImageId",
+                                rightLittle: "model.customer.rightHandSmallImageId"
+                            },
+                            viewParams: function(modelValue, form, model) {
+                                return {
+                                    customerId: model.customer.id
+                                };
+                            },
+                        }]
+                    },
+                    {
+                        type: "button",
+                        condition: "!model.customer.iscordova",
+                        title: "VALIDATE_BIOMETRIC",
+                        notitle: true,
+                        fieldHtmlClass: "btn-block",
+                        onClick: function(model, form, formName) {
+                            var fingerprintObj = {
+                                'LeftThumb': model.customer.leftHandThumpImageId,
+                                'LeftIndex': model.customer.leftHandIndexImageId,
+                                'LeftMiddle': model.customer.leftHandMiddleImageId,
+                                'LeftRing': model.customer.leftHandRingImageId,
+                                'LeftLittle': model.customer.leftHandSmallImageId,
+                                'RightThumb': model.customer.rightHandThumpImageId,
+                                'RightIndex': model.customer.rightHandIndexImageId,
+                                'RightMiddle': model.customer.rightHandMiddleImageId,
+                                'RightRing': model.customer.rightHandRingImageId,
+                                'RightLittle': model.customer.rightHandSmallImageId
+                            };
+
+                            BiometricService.validate(fingerprintObj).then(function(data) {
+                                model.customer.isBiometricMatched = data;
+                                if (data == "Match found") {
+                                    model.customer.isBiometricValidated = true;
+                                } else {
+                                    model.customer.isBiometricValidated = false;
+                                }
+                            }, function(reason) {
+                                console.log(reason);
+                            });
+                        }
+                    }, {
+                        "key": "customer.isBiometricMatched",
+                        condition: "(!model.additional.override_fp && model.siteCode=='KGFS') && !model.customer.iscordova",
+                        "title": "Is Biometric Matched",
+                        "readonly": true
+                    }
+                ]
                 },  {
                     "type": "actionbox",
-                    condition: " !model.customerSummary.accountClosed && model.isSubmitApllicable",
+                   // condition: " (!model.customerSummary.accountClosed && model.isSubmitApllicable)  && model.customer.isBiometricValidated ",
+                    condition: " (!model.customerSummary.accountClosed && model.isSubmitApllicable) && !model.transaction.submissionDone",
                     "items": [{
                         "type": "submit",
                         "title": "SUBMIT"
+                    }]
+                },
+                {
+                    "type": "actionbox",
+                    "condition": "model.transaction.submissionDone",
+                    "items": [{
+                        "type": "button",
+                        "style": "btn-theme",
+                        "title": "PRINT",
+                        "onClick": function(model, formCtrl, formName) {
+                            var repaymentInfo={
+                                'customerName':model.customer.firstName,
+                                'customerURN':model.customer.urnNo,
+                                'branchId':model.customer.customerBranchId,
+                                'repaymentAmount':model.repaymentresponse.amount,
+                                'transactionType':model.repaymentresponse.mfTransactionType
+                            };
+
+                            if(model.customerSummary.folioNo == null){
+                                repaymentInfo.folioNo='NEW';
+                            }else{
+                                repaymentInfo.folioNo=model.customerSummary.folioNo;
+                            }
+
+                            var opts = {
+                                'branch': model.customer.kgfsName,
+                                'entity_name': model.customer.kgfsBankName+ " KGFS",
+                                'company_name': "IFMR Rural Channels and Services Pvt. Ltd.",
+                                'cin': 'U74990TN2011PTC081729',
+                                'address1': 'IITM Research Park, Phase 1, 10th Floor',
+                                'address2': 'Kanagam Village, Taramani',
+                                'address3': 'Chennai - 600113, Phone: 91 44 66687000',
+                                'website': "http://ruralchannels.kgfs.co.in",
+                                'helpline': '18001029370',
+                            };
+
+                            var pData = MutualFund.getPrintReceipt(repaymentInfo, opts);
+                            $log.info(pData.getLines());
+                            try {
+                                if (cordova) {
+                                    cordova.plugins.irfBluetooth.print(function() {
+                                        console.log("succc callback");
+                                    }, function(err) {
+                                        console.error(err);
+                                        console.log("errr collback");
+                                    }, pData.getLines());
+                                }
+                            } catch (err) {
+                                var webdata= MutualFund.getWebReceipt(repaymentInfo, opts);
+                            }
+                        }
                     }]
                 }
             ],
@@ -106,13 +255,16 @@ define({
                     PageHelper.showLoader();              
                     var reqData = _.cloneDeep(model.transaction);
                     MutualFund.purchaseOrRedemption(reqData).$promise.then(function(res) {
+                        model.transaction.submissionDone=true;
+                        model.repaymentresponse=_.cloneDeep(res);
                         irfProgressMessage.pop("  ","transaction successful", 5000);
                     }, function(errResp) {
+                        model.repay.submissionDone=true;
+                        delete model.repaymentresponse;
                         PageHelper.setError({message: "MutualFundNavHistory does not exist for given mutualfund scheme master id 1"});
                         PageHelper.hideLoader();
                         model.isSubmitApllicable = false;
                     }).finally(PageHelper.hideLoader);
-
                 },
                 proceed: function(model, formCtrl, form, $event) {
                     PageHelper.showLoader();
