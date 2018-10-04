@@ -154,6 +154,12 @@ define(
                             },
                             "vehicleClass":{
                                 "readonly":  true
+                            },
+                            "bodyType":{
+                                "enumCode": "business_asset_description"
+                            },
+                            "unladenWeight":{
+                                "title": "UNLADEN_WEIGHT"
                             }
                         }
                     } 
@@ -291,7 +297,8 @@ define(
                             "excludes": [
                                 "VehicleRegistrationDetails.engineNo",
                                 "VehicleInsuranceDetails.taxPaid",
-                                "VehiclePermitAndTaxDetails.taxPaid"
+                                "VehiclePermitAndTaxDetails.taxPaid",
+                                "VehicleRegistrationDetails.registeredownersname"
                             ],
                             "options": {
                             "repositoryAdditions": {
