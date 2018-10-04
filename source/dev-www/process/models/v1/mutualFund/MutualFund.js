@@ -179,6 +179,40 @@ irf.models.factory('MutualFund', ["$resource","PrinterData", "$httpParamSerializ
             return PrinterData;
         }
 
+        resource.getWebReceipt = function(repaymentInfo, opts) {
+            var mywindow = window.open('', 'my div', 'height=400,width=600');
+            var curTime = moment();
+            var curTimeStr = curTime.local().format("DD-MM-YYYY HH:MM:SS");
+            mywindow.document.write('</body>' + '<div style="text-align : center">' + '<h3><b>' + "RECEIPT" + '</b></h3>' + '</div>' + '</html>');
+            mywindow.document.write('</body>' + '<div style="text-align : center">' + '<h4><b>' + opts.entity_name + '</b></p>' + '</div>' + '</html>');
+            mywindow.document.write('</body>' + '<div style="text-align : center">' + '<h4><b>' + opts.branch + '</b></h4>' + '</div>' + '</html>');
+            mywindow.document.write('</body>' + '<div style="text-align : center">' + '<p>' + "Date:" + curTimeStr + '</p>' + '</div>' + '</html>');
+            mywindow.document.write('</body>' + '<div style="text-align : center">' + '<p><b>' + "ICICI Mutual Fund Deposit" + '</b></p>' + '</div>' + '</html>');
+            mywindow.document.write('</body>' + '<div style="text-align : center">' + '<p>' + "" + '</p>' + '</div>' + '</html>');
+            mywindow.document.write('</body>' + '<div style="font-size:17px;margin-left:11em;">' + '<p>' + "Branch Id :" + '<span style= "margin-left : 40px">' + repaymentInfo.branchId+ '</span>'+ '</p>' + '</div>' + '</html>');
+            mywindow.document.write('</body>' + '<div style="font-size:17px;margin-left:11em">' + '<p>' + "Customer URN :"  + '<span style= "margin-left : 28px">'+ repaymentInfo.customerURN + '</span>'+'</p>' + '</div>' + '</html>');
+            mywindow.document.write('</body>' + '<div style="font-size:17px;margin-left:11em">' + '<p>' + "Customer Name :" + '<span style= "margin-left : 28px">' + repaymentInfo.customerName + '</span>'+'</p>' + '</div>' + '</html>');
+            mywindow.document.write('</body>' + '<div style="font-size:17px;margin-left:11em">' + '<p>' + "Folio Number:"  + '<span style= "margin-left : 44px">'+ repaymentInfo.folioNo + '</span>'+'</p>' + '</div>' + '</html>');
+            mywindow.document.write('</body>' + '<div style="font-size:17px;margin-left:11em">' + '<p>' + "Transaction Type :"  + '<span style= "margin-left : 27px">'+ repaymentInfo.transactionType + '</span>'+'</p>' + '</div>' + '</html>');
+            mywindow.document.write('</body>' + '<div style="font-size:17px;margin-left:11em">' + '<p>' + "Amount Paid :"  + '<span style= "margin-left : 45px">'+ repaymentInfo.repaymentAmount + '</span>'+'</p>' + '</div>' + '</html>');
+            mywindow.document.write('</body>' + '<div style="text-align : center">' + '<p>' + "------------------------" + '</p>' + '</div>' + '</html>');
+            mywindow.document.write('</body>' + '<div style="text-align : center">' + '<p>' + opts.company_name + '</p>' + '</div>' + '</html>');
+            mywindow.document.write('</body>' + '<div style="text-align : center">' + '<p>' + "CIN :"+ opts.cin + '</p>' + '</div>' + '</html>');
+            mywindow.document.write('</body>' + '<div style="text-align : center">' + '<p>' + "Address :"+ opts.address1 + '</p>' + '</div>' + '</html>');
+            mywindow.document.write('</body>' + '<div style="text-align : center">' + '<p>' + opts.address2 + '</p>' + '</div>' + '</html>');
+            mywindow.document.write('</body>' + '<div style="text-align : center">' + '<p>' + opts.address3 + '</p>' + '</div>' + '</html>');
+            mywindow.document.write('</body>' + '<div style="text-align : center">' + '<p>' + "Website :"+ opts.website + '</p>' + '</div>' + '</html>');
+            mywindow.document.write('</body>' + '<div style="text-align : center">' + '<p>' + "HelpLine No"+ opts.helpline + '</p>' + '</div>' + '</html>');
+            mywindow.document.write('</body>' + '<div style="text-align : center">' + '<p>'  + "" + '</p>' + '</div>' + '</html>');
+            mywindow.document.write('</body>' + '<div style="text-align : center">' + '<p>'  + "" + '</p>' + '</div>' + '</html>');
+            mywindow.document.write('</body>' + '<div style="text-align : center">' + '<p>'  + "Signature not required as this is an" + '</p>' + '</div>' + '</html>');
+            mywindow.document.write('</body>' + '<div style="text-align : center">' + '<p>'  + "electronically generated receipt." + '</p>' + '</div>' + '</html>');
+            mywindow.document.write('</body>' + '<div style="text-align : center">' + '<p>'  + "------------------------------------" + '</p>' + '</div>' + '</html>');
+            mywindow.print();
+            mywindow.close();
+            return true;
+        }
+
         resource.reverseFeedUpload = function(file, progress) {
             var deferred = $q.defer();
             Upload.upload({
