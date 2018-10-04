@@ -1,5 +1,5 @@
-irf.models.factory('MutualFund', ["$resource","PrinterData", "$httpParamSerializer", "BASE_URL", "searchResource", "Upload", "$q", "PageHelper",
-    function($resource,PrinterData,$httpParamSerializer, BASE_URL, searchResource, Upload, $q, PageHelper) {
+irf.models.factory('MutualFund', ["$resource","PrinterData", "$httpParamSerializer", "BASE_URL", "searchResource", "Upload", "$q", "PageHelper","$timeout",
+    function($resource,PrinterData,$httpParamSerializer, BASE_URL, searchResource, Upload, $q, PageHelper,$timeout) {
 
 
 
@@ -208,8 +208,12 @@ irf.models.factory('MutualFund', ["$resource","PrinterData", "$httpParamSerializ
             mywindow.document.write('</body>' + '<div style="text-align : center">' + '<p>'  + "Signature not required as this is an" + '</p>' + '</div>' + '</html>');
             mywindow.document.write('</body>' + '<div style="text-align : center">' + '<p>'  + "electronically generated receipt." + '</p>' + '</div>' + '</html>');
             mywindow.document.write('</body>' + '<div style="text-align : center">' + '<p>'  + "------------------------------------" + '</p>' + '</div>' + '</html>');
-            mywindow.print();
-            mywindow.close();
+            $timeout(function() {
+                mywindow.print();
+            }, 0);
+            $timeout(function() {
+                mywindow.close();
+            }, 0);
             return true;
         }
 
