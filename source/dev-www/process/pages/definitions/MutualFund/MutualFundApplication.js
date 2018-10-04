@@ -10,6 +10,7 @@
             irfProgressMessage, SessionStore, $state, $stateParams, irfNavigator, CustomerBankBranch, MutualFund,BiometricService) {
 
             var branch = SessionStore.getBranch();
+
             return {
                 "type": "schema-form",
                 "title": "MUTUAL_FUND_APPLICATION",
@@ -515,12 +516,18 @@
 
                             var pData = MutualFund.getPrintReceipt(repaymentInfo, opts);
                             $log.info(pData.getLines());
-                            cordova.plugins.irfBluetooth.print(function() {
-                                console.log("succc callback");
-                            }, function(err) {
-                                console.error(err);
-                                console.log("errr collback");
-                            }, pData.getLines());
+                            try {
+                                if (cordova) {
+                                    cordova.plugins.irfBluetooth.print(function() {
+                                        console.log("succc callback");
+                                    }, function(err) {
+                                        console.error(err);
+                                        console.log("errr collback");
+                                    }, pData.getLines());
+                                }
+                            } catch (err) {
+                                var webdata= MutualFund.getWebReceipt(repaymentInfo, opts);
+                            }
                         }
                     }]
                 }],
