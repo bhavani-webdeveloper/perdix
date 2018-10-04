@@ -1121,7 +1121,7 @@ define(
                                         "price":{
                                             "orderNo":140,
                                             "key":"loanAccount.vehicleLoanDetails.price",
-                                            "title": "PRICE"
+                                            "title": "PURCHASE_PRICE"
                                         }
                                     }
                                 },
