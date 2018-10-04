@@ -1131,9 +1131,131 @@ define([], function () {
 
                                         }
                                     },
-                                    "additions": [{
+                                    "additions": [
+                                        {
+                                            "type": "box",
+                                            "title": "POST_REVIEW",
+                                            "items": [
+                                                {
+                                                    key: "action",
+                                                    type: "radios",
+                                                    titleMap: {
+                                                        "PROCEED": "PROCEED",
+                                                        "REJECT": "REJECT",
+                                                        "SEND_BACK": "SEND_BACK",
+                                                    },
+                                                    onChange: function(modelValue, form, model, formCtrl, event) {
+                                                        if(model.action == 'PROCEED') {
+                                                            return;
+                                                        }
+                                                        var stage1 = model.customer.currentStage;
+                                                        var targetstage = formHelper.enum('groupLoanBackStages').data;
+                                                        var out = [];
+                                                        for (var i = 0; i < targetstage.length; i++) {
+                                                            var t = targetstage[i];
+                                                            if (t.name == stage1 && 'default' == t.field2) {
+                                                                model.review.targetStage = t.field1;
+                                                                model.review.rejectStage = "Rejected";
+                                                                break;
+                                                            }
+                                                        }
+                                                    }
+                                                },
+                                                {
+                                                    type: "section",
+                                                    condition:"model.action",
+                                                    items: [
+                                                    {
+                                                        title: "REMARKS",
+                                                        key: "group.groupRemarks",
+                                                        type: "textarea",
+                                                        required: true
+                                                    }, 
+                                                    {
+                                                        key: "review.targetStage",
+                                                        required: true,
+                                                        condition:"model.action == 'SEND_BACK'",
+                                                        type: "lov",
+                                                        autolov: true,
+                                                        lovonly: true,
+                                                        title: "SEND_BACK_TO_STAGE",
+                                                        bindMap: {},
+                                                        searchHelper: formHelper,
+                                                        search: function(inputModel, form, model, context) {
+                                                            var stage1 = model.customer.currentStage;
+                                                            var targetstage = formHelper.enum('groupLoanBackStages').data;
+                                                            var out = [];
+                                                            for (var i = 0; i < targetstage.length; i++) {
+                                                                var t = targetstage[i];
+                                                                if (t.name == stage1 && 'reject' != t.field2) {
+                                                                    out.push({
+                                                                        name: t.field1,
+                                                                    })
+                                                                }
+                                                            }
+                                                            return $q.resolve({
+                                                                headers: {
+                                                                    "x-total-count": out.length
+                                                                },
+                                                                body: out
+                                                            });
+                                                        },
+                                                        onSelect: function(valueObj, model, context) {
+                                                            model.review.targetStage = valueObj.name;
+                                                        },
+                                                        getListDisplayItem: function(item, index) {
+                                                            return [
+                                                                item.name
+                                                            ];
+                                                        }
+                                                    }, {
+                                                        key: "review.sendBackButton",
+                                                        condition:"model.action == 'SEND_BACK'",
+                                                        type: "button",
+                                                        title: "SEND_BACK",
+                                                        onClick: "actions.sendBack(model, formCtrl, form, $event)"
+                                                    }, {
+                                                            key: "review.rejectStage",
+                                                            condition:"model.action == 'REJECT'",
+                                                            type: "lov",
+                                                            autolov: true,
+                                                            lovonly: true,
+                                                            title: "SEND_BACK_TO_STAGE",
+                                                            bindMap: {},
+                                                            searchHelper: formHelper,
+                                                            search: function(inputModel, form, model, context) {
+                                                                var out = [{name: "Rejected"}];
+                                                                return $q.resolve({
+                                                                    headers: {
+                                                                        "x-total-count": out.length
+                                                                    },
+                                                                    body: out
+                                                                });
+                                                            },
+                                                            onSelect: function(valueObj, model, context) {
+                                                                model.review.rejectStage = valueObj.name;
+                                                            },
+                                                            getListDisplayItem: function(item, index) {
+                                                                return [
+                                                                    item.name
+                                                                ];
+                                                            }
+                                                        }, {
+                                                            key: "review.reject",
+                                                            condition:"model.action == 'REJECT'",
+                                                            type: "button",
+                                                            title: "REJECT",
+                                                            onClick: "actions.reject(model, formCtrl, form, $event)"
+                                                        }, {
+                                                        "type": "submit",
+                                                        condition:"model.action == 'PROCEED'",
+                                                        "title": "PROCEED"
+                                                    }]
+                                                }
+                                            ]
+                                        }, 
+                                        {
                                         "type": "actionbox",
-                                        "orderNo": 1000,
                                         "items": [{
                                             "type": "submit",
                                             "title": "SAVE"
