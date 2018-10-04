@@ -37,17 +37,16 @@ irf.models.factory('MutualFund', ["$resource","PrinterData", "$httpParamSerializ
             schemeDetails: {
                 method: 'GET',
                 url: endpoint + '/schemeMaster'
-
             },
             summary: {
                 method: 'GET',
                 url: endpoint + '/summary/:id',
                 isArray: true
             },
-            transaction: {
+            transaction: searchResource({
                 method: 'GET',
-                url: endpoint + '/transaction'
-            },
+                url: endpoint + '/transaction',
+            }),
             getFileId: {
                 method: 'GET',
                 url: endpoint + '/mutualFundFileExchangeLog',
