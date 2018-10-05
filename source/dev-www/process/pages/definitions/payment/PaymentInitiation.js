@@ -300,13 +300,31 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                         }
                     },
                     "BeneficiaryDetails.creditAccountNo":{
-                        "orderNo":50
+                        "orderNo":50,
+                        "condition" : "model.pageConfig.BeneficiaryDetailsIsEditable"
                     },
                     "BeneficiaryDetails.beneficiaryBankName":{
-                        "orderNo":80
+                        "orderNo":80,
+                        "condition" : "model.pageConfig.BeneficiaryDetailsIsEditable"
                     },
                     "BeneficiaryDetails.beneficiaryBankBranch":{
-                        "orderNo":90
+                        "orderNo":90,
+                        "condition" : "model.pageConfig.BeneficiaryDetailsIsEditable"
+                    },
+                    "BeneficiaryDetails.creditAccountNo":{
+                        "orderNo":50,
+                        "condition" : "!model.pageConfig.BeneficiaryDetailsIsEditable",
+                        "readonly": true,
+                    },
+                    "BeneficiaryDetails.beneficiaryBankName":{
+                        "orderNo":80,
+                        "condition" : "!model.pageConfig.BeneficiaryDetailsIsEditable",
+                        "readonly": true,
+                    },
+                    "BeneficiaryDetails.beneficiaryBankBranch":{
+                        "orderNo":90,
+                        "condition" : "!model.pageConfig.BeneficiaryDetailsIsEditable",
+                        "readonly": true,
                     },
                     "BeneficiaryDetails.beneficiaryTransactionParticulars":{
                         "orderNo":100
