@@ -287,28 +287,38 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalApprove"),
                             {
                                 type: "fieldset",
                                 title: "CUSTOMER_RESIDENTIAL_ADDRESS",
+                                condition: "model.customer.isAddressChanged=='YES'",
                                 items: [
+                                    {
+                                        key:"customer.careOf",
+                                        //required:true,
+                                        title:"C/O",
+                                    },
                                     "customer.doorNo",
                                     "customer.street",
-                                    "customer.locality",
+                                    "customer.postOffice",
+                                    "customer.landmark",
+                                    {
+                                        key: "customer.pincode",
+                                        type: "striing",
+                                        fieldType: "number"
+                                    },
+                                    {
+                                        key: "customer.locality",
+                                        readonly: true
+                                    },
                                     {
                                         key: "customer.villageName",
-                                        type: "select",
-                                        filter: {
-                                            'parentCode as branch': 'model.customer.kgfsName'
-                                        }
+                                        readonly: true
                                     },
-                                    "customer.postOffice",
                                     {
                                         key: "customer.district",
-                                        type: "select"
+                                        readonly: true
                                     },
-                                    "customer.pincode",
                                     {
                                         key: "customer.state",
-                                        type: "select"
-                                    },
-                                    "customer.landLineNo",
+                                        readonly: true,
+                                    }
                                 ]
                             },
                             {
@@ -544,7 +554,7 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalApprove"),
                                 "currentStage": updatedModel.workflow.currentStage,
                                 "customer": updatedModel.customer,
                                 "proof" : proof,
-                                "action" :  updatedModel.workflow.action,
+                                "action" :  updatedModel.action,
                                 "referenceKey" : updatedModel.workflow.customer.id,
 
                             };

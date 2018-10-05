@@ -1,5 +1,5 @@
 define({
-    pageUID: "kgfs.loans.individual.booking.InitiationQueue",
+    pageUID: "kgfs.loans.individual.booking.LoanInitiationQueue",
     pageType: "Engine",
     dependencies: ["$log", "irfNavigator", "formHelper", "entityManager", "IndividualLoan", "$state", "SessionStore", "Utils"],
     $pageFn: function ($log, irfNavigator, formHelper, EntityManager, IndividualLoan, $state, SessionStore, Utils) {
@@ -84,6 +84,7 @@ define({
 
                 listOptions: {
                     expandable: true,
+                    listStyle: "table",
                     itemCallback: function (item, index) {},
                     getItems: function (response, headers) {
                         if (response != null && response.length && response.length != 0) {
@@ -111,7 +112,7 @@ define({
                             fn: function (item, index) {
                                 irfNavigator.go({
                                     'state': 'Page.Engine',
-                                    'pageName': 'loans.individual.booking.LoanInput',
+                                    'pageName': 'kgfs.loans.individual.booking.LoanInput',
                                     'pageId': item.loanId,
                                     'pageData': item
                                 });
@@ -119,14 +120,15 @@ define({
                             isApplicable: function (item, model) {
                                 return model.searchOptions.siteCode != 'sambandh';
                             }
-                        }, {
+                        }, 
+                        {
                             name: "LOAN_INPUT",
                             desc: "",
                             icon: "fa fa-book",
                             fn: function (item, index) {
                                 irfNavigator.go({
                                     'state': 'Page.Engine',
-                                    'pageName': 'loans.individual.booking.SimpleLoanInput',
+                                    'pageName': 'kgfs.loans.individual.booking.LoanInput',
                                     'pageId': item.loanId,
                                     'pageData': item
                                 });

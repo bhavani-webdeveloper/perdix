@@ -3179,8 +3179,7 @@
           "pincode",
           "companyOperatingSince",
           "ownership",
-          "creditRating",
-          "registrationDate"
+          "creditRating"
         ],
         "properties": {
           "customerNumber": {
@@ -4125,7 +4124,6 @@
         "items": {
           "type": "object",
           "required": [
-            "registrationType",
             "registrationNumber",
             "registeredDate",
             "documentId"
