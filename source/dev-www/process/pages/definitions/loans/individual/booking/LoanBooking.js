@@ -967,7 +967,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     "items":[
                         {
                             title: "Upload",
-                           // "required":true,
+                            "required":true,
                             "key": "loanAccount.waiverdocumentId",
                             type: "file",
                             fileType: "application/pdf",

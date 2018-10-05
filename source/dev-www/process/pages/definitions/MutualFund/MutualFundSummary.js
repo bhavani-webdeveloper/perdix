@@ -17,14 +17,31 @@ define({
             "title": "MUTUAL_FUND_SUMMARY",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
-                model.customer = model.customer || {};             
+                model.customer = model.customer || {};
+                model.transactions=model.transactions ||{};          
                 var customerId = $stateParams.pageId;
+                PageHelper.showLoader();
                 MutualFund.summary({
                     id: customerId
                     },function(res) {
                         model.customer = res[0];
-                        console.log(model.customer)
-                        }
+                        console.log(model.customer);
+                        MutualFund.transaction(
+                            {
+                                mutualFundAccountProfileNewId:model.customer.id
+                            }).$promise.then(function(response){
+                                model.transactions= response.body;
+                                PageHelper.hideLoader();
+                            },function(err){
+                                PageHelper.hideLoader();
+                                irfProgressMessage.pop("summary-get", "An Error Occurred. Failed to fetch Data", 5000);
+                            });
+                        
+                    },function(err){
+                        console.log(err);
+                        PageHelper.hideLoader();
+                        irfProgressMessage.pop("summary-get", "An Error Occurred. Failed to fetch Data", 5000);
+                    }
                 )
             },          
             form: [                
@@ -46,18 +63,6 @@ define({
                                     key: "customer.currentValue"                                    
                                 },
                                 {
-                                    title: "INITIAL_INVESTMENT",
-                                    key: "customer.intialInvestment"                                    
-                                },
-                                {
-                                    title: "SIP_REGISTRATION_NUMBER",
-                                    key: "customer.sipRegistrationNumber"                                    
-                                },
-                                {
-                                    title: "SIP_REGISTRATION_DATE",
-                                    key: "customer.sipRegistrationDate"                                    
-                                },
-                                {
                                     title: "FOLIO_NO",
                                     key: "customer.folioNo"                                    
                                 },
@@ -72,8 +77,58 @@ define({
                             ]
                         },               
                     ]
-                },  
-           ],
+                },
+                {
+                    type: "box",
+                    "readonly": true,
+                    "condition":"model.transactions.length",
+                    title: "Mutual Fund Transactions",
+                    items: [
+                        {
+                            type: "tableview",
+                            listStyle: "table",
+                            key: "transactions",
+                            title: "Mutual Fund Transactions",
+                            paginate: false,
+                            searching: false,
+                            getColumns: function() {
+                                return [{
+                                    title: 'Transaction Number',
+                                    data: 'userTrxnNumber',
+                                }, {
+                                    title: 'Transaction Type',
+                                    data: 'transactionType'
+                                },{
+                                    title: 'Transaction Amount',
+                                    data: 'transactionAmount'
+                                }, {
+                                    title: 'Transaction Date',
+                                    data: 'transactionDate',
+                                    render: function(data, type, full, meta) {
+                                        return (moment(data).format("DD-MM-YYYY"));
+                                    }
+                                },{
+                                    title: 'First Purchase',
+                                    data: 'firstInvest',
+                                    render: function(data, type, full, meta) {
+                                        if(full.firstInvest){
+                                            return date='YES'
+                                        }else if(!full.firstInvest){
+                                            return date='NO'
+                                        }
+                                    }
+                                },{
+                                    title: 'Processing Status',
+                                    data: 'processingStatus'
+                                }]
+                            },
+                            getActions: function(item) {
+                                return [];
+                            }
+                        },  
+                    ]
+                },     
+            ],
             schema: function() {
                 return Enrollment.getSchema().$promise;
             },           
