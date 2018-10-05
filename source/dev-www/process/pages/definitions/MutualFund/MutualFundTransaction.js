@@ -259,9 +259,10 @@ define({
                         model.repaymentresponse=_.cloneDeep(res);
                         irfProgressMessage.pop("  ","transaction successful", 5000);
                     }, function(errResp) {
-                        model.repay.submissionDone=true;
+                        model.transaction.submissionDone=true;
                         delete model.repaymentresponse;
-                        PageHelper.setError({message: "MutualFundNavHistory does not exist for given mutualfund scheme master id 1"});
+                        PageHelper.clearErrors();
+                        PageHelper.setError({message: errResp.data.errors[Object.keys(errResp.data.errors)[0]]});
                         PageHelper.hideLoader();
                         model.isSubmitApllicable = false;
                     }).finally(PageHelper.hideLoader);

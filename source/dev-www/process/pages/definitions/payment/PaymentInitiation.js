@@ -16,6 +16,15 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                         "payment.currentStage": {
                             "PaymentInitiation":{
                                 "overrides": {
+                                    "PaymentDetails.paymentPurpose":{
+                                        "orderNo": 1
+                                    },
+                                    "PaymentDetails.customerId": {
+                                        "orderNo": 2,
+                                    },                 
+                                    "PaymentDetails.accountNumber":{
+                                        "orderNo": 3,                    
+                                    }
                                 },
                                 "excludes": [
                                     "PaymentDetails.paymentDate"
@@ -37,23 +46,23 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                                     },
                                      "PaymentDetails.modeOfPayment":{
                                         "readonly":true,
-                                        "orderNo": 1
+                                        "orderNo": 4
                                     },
                                     "PaymentDetails.amount":{
                                         "readonly":true,
-                                        "orderNo": 2
+                                        "orderNo": 5
                                     },
                                     "PaymentDetails.fileId":{
                                         "readonly":true,
-                                        "orderNo": 3
+                                        "orderNo": 6
                                     },
                                     "PaymentDetails.paymentPurpose":{
                                         "readonly":true,
-                                        "orderNo": 4
+                                        "orderNo": 1
                                     },
                                     "PaymentDetails.transactionType":{
                                         "readonly":true,
-                                        "orderNo": 6
+                                        "orderNo": 7
                                     },
                                     "BeneficiaryDetails.beneficiaryName":{
                                         "type": "lov",
@@ -118,12 +127,12 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                                     }, 
                                     "PaymentDetails.customerId": {
                                         "readonly": true,
-                                        "orderNo": 5
+                                        "orderNo": 2
                                     },                 
                                     "PaymentDetails.accountNumber":{
                                         "resolver": "LoanAccountsLOVConfiguration",
                                         "readonly":true,
-                                        "orderNo": 5,                    
+                                        "orderNo": 3,                    
                                     }
                                     
     
@@ -166,23 +175,23 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                                     },
                                     "PaymentDetails.modeOfPayment":{
                                         "readonly":true,
-                                        "orderNo": 1
+                                        "orderNo": 4
                                     },
                                     "PaymentDetails.amount":{
                                         "readonly":true,
-                                        "orderNo": 2
+                                        "orderNo": 5
                                     },
                                     "PaymentDetails.fileId":{
                                         "readonly":true,
-                                        "orderNo": 3
+                                        "orderNo": 6
                                     },
                                     "PaymentDetails.paymentPurpose":{
                                         "readonly":true,
-                                        "orderNo": 4
+                                        "orderNo": 1
                                     },
                                     "PaymentDetails.transactionType":{
                                         "readonly":true,
-                                        "orderNo": 6
+                                        "orderNo": 7
                                     },
                                     "BeneficiaryDetails.beneficiaryName":{
                                         "readonly":true,
@@ -238,12 +247,12 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                                     }, 
                                     "PaymentDetails.customerId": {
                                         "readonly": true,
-                                        "orderNo": 5
+                                        "orderNo": 2
                                     },
                                     "PaymentDetails.accountNumber":{
                                         "resolver": "LoanAccountsLOVConfiguration",
                                         "readonly":true,
-                                        "orderNo": 5                      
+                                        "orderNo": 3                     
                                     },                                
                                     "BeneficiaryDetails.beneficiaryTransactionParticulars": {
                                         "readonly": true
@@ -279,12 +288,6 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                     },
                     "PaymentDetails.transactionType":{
                         "readonly":true
-                    },
-                    "BeneficiaryDetails.beneficiaryName": {
-                        "orderNo":1
-                    },
-                    "BeneficiaryDetails.beneficiaryAccountName":{
-                        "orderNo":20
                     },
                     "BeneficiaryDetails.beneficiaryEmailId":{
                         "orderNo":30
@@ -346,9 +349,28 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                         "readonly": true,
                         "orderNo":70
                     },
-                    "BeneficiaryDetails.beneficiaryName":{
+                    "BeneficiaryDetails.beneficiaryName": {
+                        "orderNo":1,
+                        "condition" : "model.pageConfig.BeneficiaryDetailsIsEditable",
                         "type": "lov",
-                        "resolver": "CustomerBankAccountsLOVConfiguration"                                            
+                        "resolver": "LoanAccountsLOVConfiguration"  
+                    },
+                    "BeneficiaryDetails.beneficiaryName": {
+                       "orderNo":2,
+                        "condition" : "!model.pageConfig.BeneficiaryDetailsIsEditable",
+                        "readonly": true,
+                        "type": "lov",
+                        "resolver": "LoanAccountsLOVConfiguration"  
+                    },
+                    "BeneficiaryDetails.beneficiaryAccountName":{
+                        "orderNo":20,
+                        //"readonly": true,
+                        "condition" : "model.pageConfig.BeneficiaryDetailsIsEditable"
+                    },
+                    "BeneficiaryDetails.beneficiaryAccountName":{
+                        "orderNo":20,
+                        "condition" : "!model.pageConfig.BeneficiaryDetailsIsEditable",
+                        "readonly": true
                     },
                     "PostReviewDecision":{
                         "condition":"model.payment.currentStage == 'PaymentApproval'"  
@@ -365,12 +387,12 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
             var getIncludes = function(model) {
                 return [
                     "PaymentDetails",
-                    "PaymentDetails.modeOfPayment",
-                    "PaymentDetails.amount",
-                    "PaymentDetails.fileId",
                     "PaymentDetails.paymentPurpose",
                     "PaymentDetails.customerId",
                     "PaymentDetails.accountNumber",
+                    "PaymentDetails.modeOfPayment",
+                    "PaymentDetails.amount",
+                    "PaymentDetails.fileId",
                     "PaymentDetails.transactionType",
                     "PaymentDetails.paymentDate",
                     "BeneficiaryDetails",
@@ -429,6 +451,10 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                     });               
 
                         });
+                    PagesDefinition.getPageConfig("Page/Engine/payment.PaymentInitiation")
+                        .then(function(data){
+                            model.pageConfig  = data;     
+                    });
                        
                     } else {
                         var obs = PaymentProcess.get($stateParams.pageId);

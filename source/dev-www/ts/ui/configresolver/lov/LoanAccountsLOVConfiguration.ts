@@ -46,7 +46,8 @@ export class LoanAccountsLOVConfiguration extends LOVElementConfiguration {
                     model.payment.beneficiaryBankName = res.disbursementSchedules[0].customerBankName;
                     model.payment.beneficiaryBankBranch = res.disbursementSchedules[0].customerBankBranchName;
                     model.payment.beneficiaryAccountName = (res.disbursementSchedules[0].customerNameInBank!=null && res.disbursementSchedules[0].customerNameInBank!='') ? res.disbursementSchedules[0].customerNameInBank : model.payment.beneficiaryName;
-                } else {
+                } 
+                else if (model.pageConfig.DefaultBeneficaryParty == 'NONE'){
                     model.payment.beneficiaryAccountNumber = null;
                     model.payment.beneficiaryIfsc = null;
                     model.payment.beneficiaryBankName = null;
