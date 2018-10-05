@@ -11,6 +11,7 @@ irf.pageCollection.controller(irf.controller("kgfs.loans.LoanBookingDashboard"),
             "iconClass": "fa fa-users",
             "items": [
                 "Page/Bundle/kgfs.loans.individual.booking.LoanInput",
+                "Page/Engine/kgfs.loans.individual.booking.LoanInitiationQueue",
                 "Page/Engine/kgfs.loans.individual.booking.DscOverrideQueue",
                "Page/Engine/kgfs.loans.individual.booking.DocumentUploadQueue",
                "Page/Engine/kgfs.loans.individual.booking.Checker1Queue",
