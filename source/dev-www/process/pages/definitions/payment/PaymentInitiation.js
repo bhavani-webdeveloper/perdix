@@ -361,7 +361,14 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                     "BeneficiaryDetails.beneficiaryIfsc":{
                         // "resolver": "PaymentBankIFSCLOVConfiguration",
                         "type": "string",
-                        "orderNo":70
+                        "orderNo":70,
+                        "condition" : "model.pageConfig.BeneficiaryDetailsIsEditable"
+                    },
+                    "BeneficiaryDetails.beneficiaryIfsc":{
+                        "type": "string",
+                        "orderNo":70,
+                        "condition" : "!model.pageConfig.BeneficiaryDetailsIsEditable",
+                        "readonly": true,
                     },
                     "BeneficiaryDetails.beneficiaryName": {
                         "orderNo":1,
