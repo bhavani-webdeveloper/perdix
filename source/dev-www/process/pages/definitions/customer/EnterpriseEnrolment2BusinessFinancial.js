@@ -3,6 +3,13 @@ irf.pageCollection.factory(irf.page("customer.EnterpriseEnrolment2BusinessFinanc
         'irfProgressMessage', 'SessionStore', "$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch", "BundleManager", "Dedupe", "$filter",
         function ($log, $q, Enrollment, EnrollmentHelper, PageHelper, formHelper, elementsUtils,
             irfProgressMessage, SessionStore, $state, $stateParams, Queries, Utils, CustomerBankBranch, BundleManager, Dedupe, $filter) {
+
+            function validate(model, array) {
+                var thisErrorMsg = _.findIndex(array, function (arr) {
+
+                })
+            }
+
             return {
                 "type": "schema-form",
                 "title": "ENTITY_ENROLLMENT",
@@ -255,7 +262,7 @@ irf.pageCollection.factory(irf.page("customer.EnterpriseEnrolment2BusinessFinanc
                                     ]
                                 }]
                             }
-                            
+
                         ]
                     },
                     {
@@ -276,10 +283,10 @@ irf.pageCollection.factory(irf.page("customer.EnterpriseEnrolment2BusinessFinanc
                                                 isTypeaheadSelect: true,
                                                 exprValue: "buyerName",
                                                 typeaheadEditable: true,
-                                                getListOptions: function(model){
-                                                    return $q.when(model.customer.buyerDetails).then(function(value){
+                                                getListOptions: function (model) {
+                                                    return $q.when(model.customer.buyerDetails).then(function (value) {
                                                         var options = [];
-                                                        for(i=0;i<value.length;i++){
+                                                        for (i = 0; i < value.length; i++) {
                                                             options.push(value[i].buyerName);
                                                         }
                                                         return options;
@@ -293,27 +300,27 @@ irf.pageCollection.factory(irf.page("customer.EnterpriseEnrolment2BusinessFinanc
                                                 exprValue: "value",
                                                 enumCode: "salesincome_income_type",
                                                 getListOptions: function (model) {
-                                                    return $q.when(formHelper.enum("salesincome_income_type")).then(function(value){
-                                                        var options= [];
-                                                        for(i=0;i<value.data.length;i++){
+                                                    return $q.when(formHelper.enum("salesincome_income_type")).then(function (value) {
+                                                        var options = [];
+                                                        for (i = 0; i < value.data.length; i++) {
                                                             options.push(value.data[i].value);
                                                         }
                                                         return options;
                                                     });
-                                               },
+                                                },
                                             },
                                             {
                                                 prop: "invoiceType",
                                                 name: "INVOICE_TYPE",
-                                                exprValue:"value",
+                                                exprValue: "value",
                                                 type: "select",
                                                 enumCode: "salesincome_invoice_type",
-                                                getListOptions: function(model){
-                                                    return $q.when(formHelper.enum("salesincome_invoice_type")).then(function(value){
+                                                getListOptions: function (model) {
+                                                    return $q.when(formHelper.enum("salesincome_invoice_type")).then(function (value) {
                                                         var options = [];
                                                         console.log(value);
-                                                        for(i=0;i<value.data.length;i++){
-                                                            if(value.data[i].parentCode == model.customer.enterprise.businessType){
+                                                        for (i = 0; i < value.data.length; i++) {
+                                                            if (value.data[i].parentCode == model.customer.enterprise.businessType) {
                                                                 options.push(value.data[i].value);
                                                             }
                                                         }
@@ -377,11 +384,11 @@ irf.pageCollection.factory(irf.page("customer.EnterpriseEnrolment2BusinessFinanc
                                                     prop: "expenditureSource",
                                                     name: "EXPENDITURE_SOURCE",
                                                     type: "select",
-                                                    getListOptions: function(model){
-                                                        return $q.when(formHelper.enum("business_expense")).then(function(value){
+                                                    getListOptions: function (model) {
+                                                        return $q.when(formHelper.enum("business_expense")).then(function (value) {
                                                             var options = [];
-                                                            for(i=0;i<value.data.length;i++){
-                                                            
+                                                            for (i = 0; i < value.data.length; i++) {
+
                                                                 options.push(value.data[i].value);
                                                             }
                                                             return options;
@@ -398,10 +405,10 @@ irf.pageCollection.factory(irf.page("customer.EnterpriseEnrolment2BusinessFinanc
                                                     prop: "frequency",
                                                     name: "FREQUENCY",
                                                     type: "select",
-                                                    getListOptions: function(model){
-                                                        return $q.when(formHelper.enum("frequency")).then(function(value){
+                                                    getListOptions: function (model) {
+                                                        return $q.when(formHelper.enum("frequency")).then(function (value) {
                                                             var options = [];
-                                                            for(i=0;i<value.data.length;i++){
+                                                            for (i = 0; i < value.data.length; i++) {
                                                                 options.push(value.data[i].value);
                                                             }
                                                             return options;
@@ -442,12 +449,12 @@ irf.pageCollection.factory(irf.page("customer.EnterpriseEnrolment2BusinessFinanc
                                                 prop: "vendorName",
                                                 type: "select-typeahead",
                                                 isTypeaheadSelect: true,
-                                                typeaheadExpr:"supplierName",
+                                                typeaheadExpr: "supplierName",
                                                 name: "VENDOR_NAME",
-                                                getListOptions: function(model){
-                                                    return $q.when(model.customer.supplierDetails).then(function(value){
+                                                getListOptions: function (model) {
+                                                    return $q.when(model.customer.supplierDetails).then(function (value) {
                                                         var options = [];
-                                                        for(i=0;i<value.length;i++){
+                                                        for (i = 0; i < value.length; i++) {
                                                             options.push(value[i].supplierName);
                                                         }
                                                         return options;
@@ -458,10 +465,10 @@ irf.pageCollection.factory(irf.page("customer.EnterpriseEnrolment2BusinessFinanc
                                                 prop: "rawMaterialType",
                                                 name: "TYPE",
                                                 type: "select",
-                                                getListOptions: function(model){
-                                                    return $q.when(formHelper.enum("salesincome_income_type")).then(function(value){
+                                                getListOptions: function (model) {
+                                                    return $q.when(formHelper.enum("salesincome_income_type")).then(function (value) {
                                                         var options = [];
-                                                        for(i=0;i<value.data.length;i++){
+                                                        for (i = 0; i < value.data.length; i++) {
                                                             options.push(value.data[i].value);
                                                         }
                                                         return options;
@@ -542,6 +549,108 @@ irf.pageCollection.factory(irf.page("customer.EnterpriseEnrolment2BusinessFinanc
                         BundleManager.broadcastEvent('new-financial', financialModelObject);
                     },
                     submit: function (model, form, formName) {
+                        var mandatoryIncomeThroughSale = [{
+                                "key": model.customer.incomeThroughSales.buyerName,
+                                "isCondition": false
+                            },
+                            {
+                                "key": model.customer.incomeThroughSales.incomeType,
+                                "isCondition": false
+                            },
+                            {
+                                "key": model.customer.incomeThroughSales.amount,
+                                "isCondition": false
+                            }
+                        ];
+                        // var errorMsg = validate(model,mandatoryIncomeThroughSale);
+                        var mandatoryPurchases = null;
+                        var temp;
+                        var isError = false;
+                        var errorMsg = "Error ";
+                        var mandatoryExpenses = null;
+                        var mandatoryBankStatements = null;
+                        var mandatoryIncomeThroughSales = null;
+                        if (model.customer.customerBankAccounts.length > 0 && isError == false) {
+                            mandatoryBankStatements = _.findIndex(model.customer.customerBankAccounts, function (arr) {
+                                if (arr.bankStatements.length < 6) {
+                                    isError = true;
+                                    errorMsg = errorMsg + "atleast 6 Statement Details are required in ";
+                                    return arr;
+                                }
+                            })
+                            if (isError == false) {
+                                mandatoryBankStatements = _.findIndex(model.customer.customerBankAccounts, function (arr) {
+                                    var temp = null;
+                                    temp = _.findIndex(arr.bankStatements, function (subArr) {
+                                        if (subArr.noOfChequeBounced != null && subArr.noOfEmiChequeBounced != null && subArr.bankStatementPhoto != null) {
+
+                                        } else {
+                                            isError = true;
+                                            return subArr;
+                                        }
+                                    })
+                                    if (temp != null && temp != -1) {
+                                        errorMsg = errorMsg + "Total Bounces,No of Emi Bounces and Bankstatementupload are Mandatory for Statement Detaisl " + (temp + 1) + " in ";
+                                        isError = true;
+                                        return arr;
+                                    }
+                                })
+                            }
+                        }
+                        if (model.customer.incomeThroughSales.length > 0 && isError == false) {
+                            mandatoryIncomeThroughSales = _.findIndex(model.customer.incomeThroughSales, function (arr) {
+                                if (arr.buyerName != null && arr.incomeType != null && arr.invoiceType != null) {
+                                    if (arr.incomeType === "Invoice") {
+                                        if (arr.invoiceDocId == null) {
+                                            errorMsg = errorMsg + "Document Upload is require for ";
+                                            isError = true;
+                                            return arr;
+                                        }
+                                    }
+
+                                } else {
+                                    errorMsg = errorMsg + "Buyer Name,Income Type, Amount is require in ";
+                                    isError = true;
+                                    return arr;
+                                }
+                            })
+                        };
+                        if (model.customer.rawMaterialExpenses.length > 0 && isError == false) {
+                            mandatoryPurchases = _.findIndex(model.customer.rawMaterialExpenses, function (arr) {
+                                if (arr.vendorName != null && arr.rawMaterialType != null && arr.amount != null) {
+                                    if (arr.rawMaterialType === "Invoice") {
+                                        if (arr.invoiceDocId == null) {
+                                            errorMsg = errorMsg + "Document Upload is require for ";
+                                            isError = true;
+                                            return arr;
+                                        } 
+                                    }
+
+                                } else {
+                                    errorMsg = errorMsg + "Vendor Name,Income Type, Amount is require in ";
+                                    isError = true;
+                                    return arr;
+                                }
+                            })
+                        };
+
+
+                        if (mandatoryIncomeThroughSales != null && mandatoryIncomeThroughSales != -1) {
+                            errorMsg = errorMsg + "Incomethrough sales " + (mandatoryIncomeThroughSales + 1);
+                            isError = true;
+                        }
+                        if (mandatoryPurchases != null && mandatoryPurchases != -1) {
+                            errorMsg = errorMsg + "Purchases " + (mandatoryPurchases + 1) + "\n";
+                            isError = true;
+                        }
+                        if (mandatoryBankStatements != null && mandatoryBankStatements != -1) {
+                            errorMsg = errorMsg + " BankAccount " + (mandatoryBankStatements + 1);
+                            isError = true;
+                        }
+                        if (isError) {
+                            PageHelper.showProgress("enrollment", errorMsg, 7000);
+                            return false;
+                        }
                         var financialModelObject = {
                             'customerId': model.customer.id,
                             model: model,
