@@ -178,7 +178,7 @@ irf.models.factory('MutualFund', ["$resource","PrinterData", "$httpParamSerializ
             return PrinterData;
         }
 
-        resource.getWebReceipt = function(repaymentInfo, opts) {
+        resource.getWebReceipt1 = function(repaymentInfo, opts) {
             var mywindow = window.open('', 'my div', 'height=400,width=600');
             var curTime = moment();
             var curTimeStr = curTime.local().format("DD-MM-YYYY HH:MM:SS");
@@ -214,6 +214,42 @@ irf.models.factory('MutualFund', ["$resource","PrinterData", "$httpParamSerializ
                 mywindow.close();
             }, 0);
             return true;
+        }
+
+        resource.getWebReceipt = function(repaymentInfo, opts) {
+            var curTime = moment();
+            var curTimeStr = curTime.local().format("DD-MM-YYYY HH:MM:SS");
+            var printHtml=
+            '<div style="border-style: dashed ; padding:27px">' + 
+            '<div style="text-align : center">' + '<h4><b>' + "RECEIPT" + '</b></h4>' + '</div>' + 
+            '<div style="text-align : center">' + '<h5><b>' + opts.entity_name + '</b></h4>' + '</div>' + 
+            '<div style="text-align : center">' + '<h6><b>' + opts.branch + '</b></h6>' + '</div>' + 
+            '<div style="text-align : center">' + '<p>' + "Date:" + curTimeStr + '</p>' + '</div>' + 
+            '<div style="text-align : center">' + '<p><b>' + "ICICI Mutual Fund Deposit" + '</b></p>' + '</div>' + 
+            '<div style="text-align : center">' + '<p>' + "" + '</p>' + '</div>' + 
+            
+            '<div style="font-size:13px; width:95%; margin:auto">' + '<p>' + "Branch Id :" +'<span style="border-bottom: 1px solid black; width: 100%;">'+  repaymentInfo.branchId+ '</span>' + '</p>' + '</div>' + 
+            '<div style="font-size:13px;width:95%; margin:auto">' + '<p>' + "Customer URN :"  + '<span style="border-bottom: 1px solid black;">'+repaymentInfo.customerURN + '</span>'+'</p>' + '</div>' + 
+            '<div style="font-size:13px;width:95%; margin:auto">' + '<p>' + "Customer Name :"  + '<span style="border-bottom: 1px solid black;">'+repaymentInfo.customerName + '</span>'+'</p>' + '</div>' + 
+            '<div style="font-size:13px;width:95%; margin:auto">' + '<p>' + "Folio Number:"  + '<span style="border-bottom: 1px solid black;">'+repaymentInfo.folioNo + '</span>'+'</p>' + '</div>' + 
+            '<div style="font-size:13px;width:95%; margin:auto">' + '<p>' + "Transaction Type :"  + '<span style="border-bottom: 1px solid black;">'+repaymentInfo.transactionType + '</span>'+'</p>' + '</div>' + 
+            '<div style="font-size:13px;width:95%; margin:auto">' + '<p>' + "Amount Paid :"  + '<span style="border-bottom: 1px solid black;">'+repaymentInfo.repaymentAmount + '</span>'+'</p>' + '</div>' + 
+            '<br>'+
+
+            '<div style="font-size:12px;">' + '<p>' + opts.company_name + '</p>' + '</div>' + 
+            '<div style="font-size:12px;">' + '<p>' + "CIN :"+ opts.cin + '</p>' + '</div>' + 
+            '<div style="font-size:12px;">' + '<p>' + "Address :"+ opts.address1 + '</p>' + '</div>' + 
+            '<div style="font-size:12px;">' + '<p>' + opts.address2 + '</p>' + '</div>' + 
+            '<div style="font-size:12px;">' + '<p>' + opts.address3 + '</p>' + '</div>' + 
+            '<div style="font-size:12px;">' + '<p>' + "Website :"+ '<a href='+ opts.website +' target="_blank">'+opts.website +'</a>'+ '</p>' + '</div>' + 
+            '<div style="font-size:12px;">' + '<p>' + "HelpLine No"+ opts.helpline + '</p>' + '</div>' + 
+            '<div style="font-size:12px;">' + '<p>'  + "" + '</p>' + '</div>' + 
+            '<div style="font-size:12px;">' + '<p>'  + "" + '</p>' + '</div>' + 
+            '<br>'+
+            '<div style="font-size:12px;text-align : center">' + '<p>'  + "Signature not required as this is an" + '</p>' + '</div>' + 
+            '<div style="font-size:12px;text-align : center">' + '<p>'  + "electronically generated receipt." + '</p>' + '</div>' + 
+            '</div>'
+            return printHtml;
         }
 
         resource.reverseFeedUpload = function(file, progress) {

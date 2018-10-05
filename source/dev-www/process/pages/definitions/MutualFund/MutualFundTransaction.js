@@ -243,6 +243,47 @@ define({
                                 var webdata= MutualFund.getWebReceipt(repaymentInfo, opts);
                             }
                         }
+                    },{
+                        "type": "button",
+                        "style": "btn-theme",
+                        "title": "Print preview",
+                        "onClick": function(model, formCtrl, formName) {
+                            var print={};
+                            var repaymentInfo={
+                                'customerName':model.customer.firstName,
+                                'customerURN':model.customer.urnNo,
+                                'branchId':model.customer.customerBranchId,
+                                'repaymentAmount':model.repaymentresponse.amount,
+                                'transactionType':model.repaymentresponse.mfTransactionType
+                            };
+
+                            if(model.customerSummary.folioNo == null){
+                                repaymentInfo.folioNo='NEW';
+                            }else{
+                                repaymentInfo.folioNo=model.customerSummary.folioNo;
+                            }
+
+                            var opts = {
+                                'branch': model.customer.kgfsName,
+                                'entity_name': model.customer.kgfsBankName+ " KGFS",
+                                'company_name': "IFMR Rural Channels and Services Pvt. Ltd.",
+                                'cin': 'U74990TN2011PTC081729',
+                                'address1': 'IITM Research Park, Phase 1, 10th Floor',
+                                'address2': 'Kanagam Village, Taramani',
+                                'address3': 'Chennai - 600113, Phone: 91 44 66687000',
+                                'website': "http://ruralchannels.ifmr.co.in/",
+                                'helpline': '18001029370',
+                            };
+
+                            print.thermalReceipt= MutualFund.getPrintReceipt(repaymentInfo, opts);
+                            print.paperReceipt= MutualFund.getWebReceipt(repaymentInfo, opts);
+                        
+                            irfNavigator.go({
+                                state: "Page.Engine",
+                                pageName: "management.ReceiptPrint",
+                                pageData: print
+                            });
+                        }
                     }]
                 }
             ],
