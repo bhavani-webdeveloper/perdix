@@ -185,6 +185,8 @@ define({
         model.pl.business.finalKinaraEmi = model.businessPL.data[0]['Final Kinara EMI'];
         model.pl.business.finalKinaraEmiPCT = model.businessPL.data[0]['Final Kinara EMI pct'];
 
+
+
         /* Scoring Sections */
 
         /* Populate seperate scoring section for ScreeningReview screen */
@@ -964,21 +966,8 @@ define({
             var $this = this;
             var deferred = $q.defer();
 
-            scoreName = null;
-            switch(model.currentStage){
-                case "ScreeningReview":
-                    scoreName = "RiskScore1";
-                    break;
-                case "ApplicationReview":
-                    scoreName = "RiskScore2";
-                    break;
-                case "FieldAppraisalReview":
-                    scoreName = "RiskScore3";
-                    break;
-                default:
-                    scoreName = "ConsolidatedScore";
-                    break;
-            }
+            scoreName = 'RiskScore1';
+
 
             if (bundlePageObj) {
                 model._bundlePageObj = _.cloneDeep(bundlePageObj);
