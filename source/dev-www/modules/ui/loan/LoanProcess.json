@@ -1736,7 +1736,7 @@
             },
             "loanAmountRequested": {
                 "title": "LOAN_AMOUNT_REQUESTED",
-                "key": "loanAccount.loanAmountRequested"
+                "key": "loanAccount.loanAmount"
             },
             "requestedTenure": {
                 "title": "REQUESTED_TENURE",
