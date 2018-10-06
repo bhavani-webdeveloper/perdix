@@ -171,6 +171,14 @@
                 "Completed"
               ]
             },
+            "duplicateCustomerId": {
+              "title": "duplicateCustomerId",
+              "type": "integer",
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
             "noOfDependents": {
               "title": "noOfDependents",
               "type": "string",
@@ -1056,6 +1064,14 @@
             "type": "string",
             "minLength": 10,
             "maxLength": 10,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "duplicateCustomerId": {
+            "title": "duplicateCustomerId",
+            "type": "integer",
             "captureStages": [
               "BasicEnrolment",
               "Completed"
