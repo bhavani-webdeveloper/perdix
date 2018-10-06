@@ -185,9 +185,9 @@ define({
                         "readonly": true
                     }
                 ]
-                },  {
+                },{
                     "type": "actionbox",
-                   // condition: " (!model.customerSummary.accountClosed && model.isSubmitApllicable)  && model.customer.isBiometricValidated ",
+                    //condition: " (!model.customerSummary.accountClosed && model.isSubmitApllicable)  && model.customer.isBiometricValidated ",
                     condition: " (!model.customerSummary.accountClosed && model.isSubmitApllicable) && !model.transaction.submissionDone",
                     "items": [{
                         "type": "submit",
@@ -197,56 +197,11 @@ define({
                 {
                     "type": "actionbox",
                     "condition": "model.transaction.submissionDone",
-                    "items": [{
+                    "items": [
+                    {
                         "type": "button",
                         "style": "btn-theme",
-                        "title": "PRINT",
-                        "onClick": function(model, formCtrl, formName) {
-                            var repaymentInfo={
-                                'customerName':model.customer.firstName,
-                                'customerURN':model.customer.urnNo,
-                                'branchId':model.customer.customerBranchId,
-                                'repaymentAmount':model.repaymentresponse.amount,
-                                'transactionType':model.repaymentresponse.mfTransactionType
-                            };
-
-                            if(model.customerSummary.folioNo == null){
-                                repaymentInfo.folioNo='NEW';
-                            }else{
-                                repaymentInfo.folioNo=model.customerSummary.folioNo;
-                            }
-
-                            var opts = {
-                                'branch': model.customer.kgfsName,
-                                'entity_name': model.customer.kgfsBankName+ " KGFS",
-                                'company_name': "IFMR Rural Channels and Services Pvt. Ltd.",
-                                'cin': 'U74990TN2011PTC081729',
-                                'address1': 'IITM Research Park, Phase 1, 10th Floor',
-                                'address2': 'Kanagam Village, Taramani',
-                                'address3': 'Chennai - 600113, Phone: 91 44 66687000',
-                                'website': "http://ruralchannels.kgfs.co.in",
-                                'helpline': '18001029370',
-                            };
-
-                            var pData = MutualFund.getPrintReceipt(repaymentInfo, opts);
-                            $log.info(pData.getLines());
-                            try {
-                                if (cordova) {
-                                    cordova.plugins.irfBluetooth.print(function() {
-                                        console.log("succc callback");
-                                    }, function(err) {
-                                        console.error(err);
-                                        console.log("errr collback");
-                                    }, pData.getLines());
-                                }
-                            } catch (err) {
-                                var webdata= MutualFund.getWebReceipt(repaymentInfo, opts);
-                            }
-                        }
-                    },{
-                        "type": "button",
-                        "style": "btn-theme",
-                        "title": "Print preview",
+                        "title": "Print",
                         "onClick": function(model, formCtrl, formName) {
                             var print={};
                             var repaymentInfo={
