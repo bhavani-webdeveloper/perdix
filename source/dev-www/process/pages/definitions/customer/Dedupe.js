@@ -6,7 +6,22 @@ function(IndividualLoan, $log, $state, Enrollment, EnrollmentHelper, SessionStor
        return {
             "type": "schema-form",
             "title": "Dedupe",
-             initialize: function (model, form, formCtrl) {
+            "eventListeners": {
+                "customer-loaded": function(bundleModel, model, obj){
+                    if (!model.customers) {
+                        model.customers = {};
+                    }
+                    model.customers[obj.id] = obj;
+                },
+                "business-loaded": function(bundleModel, model, obj){
+                    if (!model.customers) {
+                        model.customers = {};
+                    }
+                    model.customers[obj.id] = obj;
+                }
+            },
+            initialize: function (model, form, formCtrl) {
+                model.customers = [];
                 var dedupeCustomerIdArray = [];
                 $log.info("Dedupe View Details initialize");
                 $log.info(model);
@@ -18,6 +33,9 @@ function(IndividualLoan, $log, $state, Enrollment, EnrollmentHelper, SessionStor
                 var dedupeIds;
 
                 model.allMarkedAsNotDuplicate = false;
+                model.areThereAnyDuplicates = false;
+
+
 
                 var p1 = $q.when()
                     .then(function(){
@@ -44,6 +62,36 @@ function(IndividualLoan, $log, $state, Enrollment, EnrollmentHelper, SessionStor
                             for (var i=0;i<data.length;i++){
                                 if (data[i].duplicateAboveThresholdCount > 0){
                                     model.dedupeData.push(data[i]);
+
+                                    if (_.hasIn(data[i], 'dedupeRequestDeatils') && _.isArray(data[i].dedupeRequestDeatils)) {
+                                        _.forEach(data[i].dedupeRequestDeatils, function(i){
+                                            i.matchDetailsDef = {
+                                                'columns': [
+                                                    {
+                                                        'data': 'fieldName',
+                                                        'title': "FIELD_NAME"
+                                                    },
+                                                    {
+                                                        'data': 'matchFieldValue',
+                                                        'title': 'MATCHED_CUSTOMER_FIELD_VALUE'
+                                                    },
+                                                    {
+                                                        'data': 'requestFieldValue',
+                                                        'title': 'CUSTOMER_FIELD_VALUE'
+                                                    },
+                                                    {
+                                                        'data': 'matchFieldValue',
+                                                        'title': 'MATCHED_CUSTOMER_FIELD_VALUE'
+                                                    },
+                                                    {
+                                                        'data': 'score',
+                                                        'title': 'SCORE'
+                                                    }
+                                                ],
+                                                'data': i.dedupeMatchDetails
+                                            }
+                                        })
+                                    }
                                 }
                             }
                         })
@@ -52,14 +100,15 @@ function(IndividualLoan, $log, $state, Enrollment, EnrollmentHelper, SessionStor
             form: [
                 {
                     "type": "box",
-                    "title": "CUSTOMER_INFORMATION",
+                    "title": "DEDUPE_DETAILS",
+                    "colClass": "col-sm-12",
                     "items": [
                         {
                             "key": "dedupeData",
                             "type": "array",
                             "add": null,
                             "remove":null,
-                            "view": "fixed",
+                            "titleExpr": "model.dedupeData[arrayIndexes[0]].customerName + ' - ' + model.dedupeData[arrayIndexes[0]].customerType",
                             "items": [
                                 {
                                     "key": "dedupeData[].customerId",
@@ -83,6 +132,7 @@ function(IndividualLoan, $log, $state, Enrollment, EnrollmentHelper, SessionStor
                                     "add": null,
                                     "remove": null,
                                     "view": "fixed",
+                                    "titleExpr":"'Matched Customer: ' + model.dedupeData[arrayIndexes[0]].dedupeRequestDeatils[arrayIndexes[1]].customerName",
                                     "items": [
                                         {
                                             "key": "dedupeData[].dedupeRequestDeatils[].dedupeCustomerId",
@@ -95,8 +145,8 @@ function(IndividualLoan, $log, $state, Enrollment, EnrollmentHelper, SessionStor
                                             "readonly": true
                                         },
                                         {
-                                            "key": "dedupeData[].dedupeRequestDeatils[].markAsNotDuplicate",
-                                            "title": "MARK_AS_NOT_DUPLICATE",
+                                            "key": "dedupeData[].dedupeRequestDeatils[].markAsDuplicate",
+                                            "title": "MARK_AS_DUPLICATE",
                                             "schema":{
                                                 "default": false
                                             },
@@ -104,54 +154,65 @@ function(IndividualLoan, $log, $state, Enrollment, EnrollmentHelper, SessionStor
                                             "readonly": false,
                                             "type": "checkbox",
                                             "onChange": function(modelValue, form, model, formCtrl, event) {
-                                                var allNonDuplicates = true;
-
-                                                outerloop:
-                                                for (var i=0;i<model.dedupeData.length;i++){
-                                                    var d = model.dedupeData[i];
-                                                    for (var j=0;j<d.dedupeRequestDeatils.length;j++){
-                                                        var e = d.dedupeRequestDeatils[j];
-                                                        if (e.markAsNotDuplicate == false) {
-                                                            allNonDuplicates = false;
-                                                            break outerloop;
-                                                        }
+                                                var requestedCustomer = model.dedupeData[form.arrayIndexes[0]];
+                                                var selectedCustomer = model.dedupeData[form.arrayIndexes[0]].dedupeRequestDeatils[form.arrayIndexes[1]];
+                                                _.forEach(requestedCustomer.dedupeRequestDeatils, function(i){
+                                                    if (i.dedupeCustomerId != selectedCustomer.dedupeCustomerId && i.markAsDuplicate){
+                                                        PageHelper.showProgress("enrolment","You can only select one customer as duplicate. Please unselect customer id :" + i.dedupeCustomerId, 5000);
+                                                        selectedCustomer.markAsDuplicate = false;
+                                                        return false;
                                                     }
-                                                }
+                                                })
 
-                                                model.allMarkedAsNotDuplicate = allNonDuplicates;
+                                                model.areThereAnyDuplicates = false;
+                                                _.forEach(model.dedupeData, function(i){
+                                                    if (model.areThereAnyDuplicates == false){
+                                                        _.forEach(i.dedupeRequestDeatils, function(j){
+                                                            if (j.markAsDuplicate==true){
+                                                                model.areThereAnyDuplicates = true;
+                                                                return false;
+                                                            }
+                                                        })
+                                                    }
+                                                })
                                             }
                                         },
                                         {
-                                            "key": "dedupeData[].dedupeRequestDeatils[].dedupeMatchDetails",
-                                            "title": "MATCHING_FIELDS",
-                                            "type": "array",
-                                            "view": "fixed",
-                                            "add": null,
-                                            "remove": null,
-                                            "titleExpr":  "model.dedupeData[arrayIndexes[0]].dedupeRequestDeatils[arrayIndexes[1]].dedupeMatchDetails[arrayIndexes[2]].fieldName",
-                                            "items": [
-                                                {
-                                                    "key": "dedupeData[].dedupeRequestDeatils[].dedupeMatchDetails[].fieldName",
-                                                    "title": "FIELD_NAME",
-                                                    "readonly": true
-                                                },
-                                                {
-                                                    "key": "dedupeData[].dedupeRequestDeatils[].dedupeMatchDetails[].score",
-                                                    "title": "SCORE",
-                                                    "readonly": true
-                                                },
-                                                {
-                                                    "key": "dedupeData[].dedupeRequestDeatils[].dedupeMatchDetails[].matchFieldValue",
-                                                    "title": "MATCHED_CUSTOMER_FIELD_VALUE", // Matched Customer Value
-                                                    "readonly": true
-                                                },
-                                                {
-                                                    "key": "dedupeData[].dedupeRequestDeatils[].dedupeMatchDetails[].requestFieldValue",
-                                                    "title": "CUSTOMER_FIELD_VALUE", // Customer Value
-                                                    "readonly": true
-                                                }
-                                            ]
+                                            type: "section",
+                                            colClass: "col-sm-12",
+                                            html: "<irf-simple-summary-table irf-table-def='model.dedupeData[arrayIndexes[0]].dedupeRequestDeatils[arrayIndexes[1]].matchDetailsDef'></irf-simple-summary-table>"
                                         }
+                                        // {
+                                        //     "key": "dedupeData[].dedupeRequestDeatils[].dedupeMatchDetails",
+                                        //     "title": "MATCHING_FIELDS",
+                                        //     "type": "array",
+                                        //     "view": "fixed",
+                                        //     "add": null,
+                                        //     "remove": null,
+                                        //     "titleExpr":  "model.dedupeData[arrayIndexes[0]].dedupeRequestDeatils[arrayIndexes[1]].dedupeMatchDetails[arrayIndexes[2]].fieldName",
+                                        //     "items": [
+                                        //         {
+                                        //             "key": "dedupeData[].dedupeRequestDeatils[].dedupeMatchDetails[].fieldName",
+                                        //             "title": "FIELD_NAME",
+                                        //             "readonly": true
+                                        //         },
+                                        //         {
+                                        //             "key": "dedupeData[].dedupeRequestDeatils[].dedupeMatchDetails[].score",
+                                        //             "title": "SCORE",
+                                        //             "readonly": true
+                                        //         },
+                                        //         {
+                                        //             "key": "dedupeData[].dedupeRequestDeatils[].dedupeMatchDetails[].matchFieldValue",
+                                        //             "title": "MATCHED_CUSTOMER_FIELD_VALUE", // Matched Customer Value
+                                        //             "readonly": true
+                                        //         },
+                                        //         {
+                                        //             "key": "dedupeData[].dedupeRequestDeatils[].dedupeMatchDetails[].requestFieldValue",
+                                        //             "title": "CUSTOMER_FIELD_VALUE", // Customer Value
+                                        //             "readonly": true
+                                        //         }
+                                        //     ]
+                                        // }
                                     ]
                                 }
                             ]
@@ -160,7 +221,7 @@ function(IndividualLoan, $log, $state, Enrollment, EnrollmentHelper, SessionStor
                     {
                         "type": "box",
                         "title": "REMARKS",
-                        "condition": "model.allMarkedAsNotDuplicate==true",
+                        "condition": "model.areThereAnyDuplicates==false",
                         "items": [
                             {
                                 "key": "dedupeData.remarks",
@@ -173,7 +234,7 @@ function(IndividualLoan, $log, $state, Enrollment, EnrollmentHelper, SessionStor
                     {
                         "type": "box",
                         "title": "REMARKS",
-                        "condition": "model.allMarkedAsNotDuplicate==false",
+                        "condition": "model.areThereAnyDuplicates==true",
                         "items": [
                             {
                                 "key": "dedupeData.remarks",
@@ -185,7 +246,18 @@ function(IndividualLoan, $log, $state, Enrollment, EnrollmentHelper, SessionStor
                     },
                     {
                         "type": "actionbox",
-                        "condition": "model.allMarkedAsNotDuplicate==false",
+                        "condition": "model.areThereAnyDuplicates==false",
+                        "items": [
+                            {
+                                "type": "button",
+                                "icon": "fa fa-circle-o",
+                                "title": "PROCEED",
+                                "onClick": "actions.proceed(model, formCtrl, form, $event)"
+                            }]
+                    },
+                    {
+                        "type": "actionbox",
+                        "condition": "model.areThereAnyDuplicates==true",
                         "items": [
                             {
                                 "type": "button",
@@ -194,17 +266,7 @@ function(IndividualLoan, $log, $state, Enrollment, EnrollmentHelper, SessionStor
                                 "onClick": "actions.sendback(model, formCtrl, form, $event)"
                             }]
                     },
-                    {
-                        "type": "actionbox",
-                        "condition": "model.allMarkedAsNotDuplicate==true",
-                        "items": [
-                            {
-                                "type": "button",
-                                "icon": "fa fa-circle-o",
-                                "title": "PROCEED",
-                                "onClick": "actions.proceed(model, formCtrl, form, $event)"
-                            }]
-                    }
+
                 ]
             ,
             schema: function(){
@@ -218,24 +280,64 @@ function(IndividualLoan, $log, $state, Enrollment, EnrollmentHelper, SessionStor
                         return;
                     }
                     Utils.confirm("Are You Sure?").then(function(){
-                        var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
-                        reqData.loanProcessAction = "PROCEED";
-                        reqData.stage = "Screening";
-                        reqData.remarks = model.dedupeData.remarks;
 
-                        PageHelper.showProgress("update-loan", "Working...");
-                        IndividualLoan.update(reqData)
-                        .$promise
+                        var customersToUpdate = [];
+
+                        PageHelper.showProgress("marking-duplicates", "Marking selected customer(s)/entites(s) as duplicates...");
+                        _.forEach(model.dedupeData, function(i){
+                            var originalCustomerDetail = _.find(i.dedupeRequestDeatils, function(j){
+                                return j.markAsDuplicate;
+                            });
+                            if (originalCustomerDetail){
+                                model.customers[i.customerId].duplicateCustomerId = originalCustomerDetail.dedupeCustomerId;
+                                customersToUpdate.push(model.customers[i.customerId]);
+                            }
+                        });
+
+                        var promisesForDuplicateCustomerUpdate = [];
+
+                        _.forEach(customersToUpdate, function(i){
+                            var requestObj = {
+                                customer: i,
+                                enrollmentAction: "PROCEED"
+                            };
+                            var p = Enrollment.updateEnrollment(requestObj).$promise;
+                            promisesForDuplicateCustomerUpdate.push(p);
+                        })
+
+                        PageHelper.showLoader();
+
+                        $q.all(promisesForDuplicateCustomerUpdate)
                         .then(function(res){
-                            PageHelper.showProgress("update-loan", "Done.", 3000);
-                            return $state.go('Page.Engine', {pageName: 'loans.individual.screening.DedupeQueue', pageId:null});
+                            var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
+                            reqData.loanProcessAction = "PROCEED";
+                            reqData.stage = "Screening";
+                            reqData.remarks = model.dedupeData.remarks;
+
+                            PageHelper.showProgress("marking-duplicates", "Marking duplicates completed.", 3000);
+
+                            PageHelper.showProgress("update-loan", "Sending Loan back...");
+                            IndividualLoan.update(reqData).$promise
+                            .then(function(res){
+                                PageHelper.showProgress("update-loan", "Done.", 3000);
+                                return $state.go('Page.Engine', {pageName: 'loans.individual.screening.DedupeQueue', pageId:null});
+                            }, function(httpRes){
+                                PageHelper.showProgress("update-loan", "Oops. Some error occured.", 3000);
+                                PageHelper.showErrors(httpRes);
+                            })
+                            .finally(function(){
+                                PageHelper.hideLoader();
+                            })
+
                         }, function(httpRes){
-                            PageHelper.showProgress("update-loan", "Oops. Some error occured.", 3000);
+                            PageHelper.showProgress("marking-duplicates", "Oops. Some error occured.", 3000);
                             PageHelper.showErrors(httpRes);
+                            return false;
                         })
                         .finally(function(){
                             PageHelper.hideLoader();
                         })
+
                     })
                 },
                 proceed: function(model){
