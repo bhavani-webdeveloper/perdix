@@ -11,11 +11,11 @@ define(
             pageType: "Engine",
             dependencies: ["$log", "$q", "LoanAccount", 'Scoring', 'Enrollment', 'EnrollmentHelper', 'AuthTokenHelper', 'SchemaResource', 'PageHelper', 'formHelper', "elementsUtils",
                 'irfProgressMessage', 'SessionStore', "$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch", "IndividualLoan",
-                "BundleManager", "PsychometricTestService", "LeadHelper", "Message", "$filter", "Psychometric", "IrfFormRequestProcessor", "UIRepository", "irfNavigator"],
+                "BundleManager", "PsychometricTestService", "LeadHelper", "Message", "$filter", "Psychometric", "IrfFormRequestProcessor", "UIRepository", "irfNavigator","User"],
 
             $pageFn: function ($log, $q, LoanAccount, Scoring, Enrollment, EnrollmentHelper, AuthTokenHelper, SchemaResource, PageHelper, formHelper, elementsUtils,
                                irfProgressMessage, SessionStore, $state, $stateParams, Queries, Utils, CustomerBankBranch, IndividualLoan,
-                               BundleManager, PsychometricTestService, LeadHelper, Message, $filter, Psychometric, IrfFormRequestProcessor, UIRepository, irfNavigator) {
+                               BundleManager, PsychometricTestService, LeadHelper, Message, $filter, Psychometric, IrfFormRequestProcessor, UIRepository, irfNavigator,User) {
                 var self;
 
                 var overridesFields = function (bundlePageObj) {
@@ -348,9 +348,33 @@ define(
                                             "title": "STATE"
                                         },
                                         "VehicleValuator": {
-                                            "key": "loanProcess.loanCustomerEnrolmentProcess.customer.valuator",
+                                            "key": "loanAccount.valuator",
                                             "type": "lov",
-                                            "resolver": "VehicleValuatorLOVConfiguration",
+                                           inputMap: {
+                                            "userName": {
+                                                 "key": "loanAccount.user_name",
+                                                 "title":"User Name",
+                                                 type:"string"
+                                             }
+                                         },
+                                         outputMap: {
+                                             "userName": "loanAccount.user_name"
+                                         },
+                                         searchHelper: formHelper,
+                                         search: function(inputModel, form, model) {
+                                            return User.query({roleId:
+                                                 SessionStore.getGlobalSetting("vehicleValuatorRoleId"),
+                                                 userName:inputModel.userName}).$promise;
+                                         },
+                                         getListDisplayItem: function(item, index) {
+                                             return [
+                                                 item.userName
+                                             ];
+                                         },
+                                         onSelect: function(result, model, context) {
+                                             model.loanAccount.valuator = result.userName;
+                                             model.loanProcess.valuator = result.login;
+                                         } ,
                                             "title": "VALUATOR",
                                             "required": true                                           
                                         }
