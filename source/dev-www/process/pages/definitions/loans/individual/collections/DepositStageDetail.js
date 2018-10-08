@@ -46,7 +46,7 @@ define({
                     {
                         key: "depositDetails.collectionDetail.bankAccountNumber",
                         type: "lov",
-                        lovonly: true,
+                        autolov: true,
                         title: "DEPOSITED_IN_ACCOUNT",
                         required: true,
                         bindMap: {},
