@@ -70,7 +70,8 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalApprove"),
                         model.customer.state == model.UpdatedWorkflow.customer.state &&
                         model.customer.district == model.UpdatedWorkflow.customer.district &&
                         model.customer.stdCode == model.UpdatedWorkflow.customer.stdCode &&
-                        model.customer.landLineNo == model.UpdatedWorkflow.customer.landLineNo ){
+                        model.customer.landLineNo == model.UpdatedWorkflow.customer.landLineNo &&
+                        model.customer.landmark == model.UpdatedWorkflow.customer.landmark){
                         model.customer.isAddressChanged="NO";
                     }
                     else {
@@ -86,6 +87,7 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalApprove"),
                         model.customer.district = model.UpdatedWorkflow.customer.district ;
                         model.customer.stdCode = model.UpdatedWorkflow.customer.doorNo ;
                         model.customer.landLineNo = model.UpdatedWorkflow.customer.landLineNo ;
+                        model.customer.landmark = model.UpdatedWorkflow.customer.landmark ;
                     }
 
                     irfProgressMessage.pop("cust-load", "Load Complete", 2000);
@@ -289,11 +291,6 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalApprove"),
                                 title: "CUSTOMER_RESIDENTIAL_ADDRESS",
                                 condition: "model.customer.isAddressChanged=='YES'",
                                 items: [
-                                    {
-                                        key:"customer.careOf",
-                                        //required:true,
-                                        title:"C/O",
-                                    },
                                     "customer.doorNo",
                                     "customer.street",
                                     "customer.postOffice",

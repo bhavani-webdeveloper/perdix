@@ -26,7 +26,18 @@ irf.pageCollection.factory(irf.page("customer.EnterpriseEnrolment2BusinessFinanc
                     ]
                 },
                 eventListeners: {
-
+                    "new-business": function(bundleModel,model,obj){
+                        model.customer = obj.customer;
+                        if(typeof model.customer.incomeThroughSales == "undefined"){
+                            model.customer.incomeThroughSales = [];
+                        }   
+                        if(typeof model.customer.rawMaterialExpenses == "undefined"){
+                            model.customer.rawMaterialExpenses = [];
+                        }
+                        if(typeof model.customer.expenditures == "undefined"){
+                            model.customer.expenditures = [];
+                        }
+                    }
                 },
                 form: [{
                         type: "box",

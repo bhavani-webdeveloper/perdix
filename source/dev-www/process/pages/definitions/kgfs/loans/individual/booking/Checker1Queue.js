@@ -8,13 +8,10 @@ define({
             "type": "search-list",
             "title": "CHECKER1_QUEUE",
             "subTitle": "",
-
             initialize: function (model, form, formCtrl) {
-                // model.branch = branch;
                 model.siteCode = SessionStore.getGlobalSetting("siteCode");
                 model.branch = SessionStore.getCurrentBranch().branchId;
             },
-
             definition: {
                 title: "SEARCH_LOANS",
                 autoSearch: true,
@@ -72,11 +69,9 @@ define({
                     },
                     "required": []
                 },
-
                 getSearchFormHelper: function () {
                     return formHelper;
                 },
-
                 getResultsPromise: function (searchOptions, pageOpts) {
                     var promise = IndividualLoan.search({
                         'stage': 'LoanInitiation',
@@ -89,7 +84,6 @@ define({
                     }).$promise;
                     return promise;
                 },
-
                 paginationOptions: {
                     "getItemsPerPage": function (response, headers) {
                         return 20;
@@ -98,7 +92,6 @@ define({
                         return headers['x-total-count']
                     }
                 },
-
                 listOptions: {
                     expandable: true,
 					listStyle: "table",
@@ -111,14 +104,12 @@ define({
                     },
                     getListItem: function (item) {
                         return [
-
                             "{{'ACCOUNT_NUMBER'|translate}} : " + item.accountNumber,
                             "{{'ENTITY_NAME'|translate}} : " + item.customerName,
                             "{{'LOAN_AMOUNT'|translate}} : " + item.loanAmount,
                             "{{'LOAN_TYPE'|translate}} : " + item.loanType,
                             "{{'PARTNER_CODE'|translate}} : " + item.partnerCode,
                             "{{'PROCESS_TYPE'|translate}} : " + item.processType
-
                         ]
                     },
                     getTableConfig: function() {
@@ -138,20 +129,20 @@ define({
                         }, {
 							title: 'APPLICATION_DATE',
 							data: 'applicationDate'
-						}, 
+                        },
                     ]
 					},
                     getActions: function () {
                         return [
                             {
-                            name: "LOAN_INPUT",
+                            name: "CHECKER1_DETAILS",
                             desc: "",
                             icon: "fa fa-book",
                             fn: function (item, index) 
                             {
                                 irfNavigator.go({
-                                    'state': 'Page.Engine',
-                                    'pageName': 'loans.individual.booking.LoanInput',
+                                    'state': 'Page.Bundle',
+                                    'pageName': 'kgfs.loans.individual.booking.Checker1',
                                     'pageId': item.loanId,
                                     'pageData': item
                                 });

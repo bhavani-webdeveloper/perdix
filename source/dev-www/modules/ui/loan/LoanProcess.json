@@ -1510,21 +1510,21 @@
                         "type": "select",
                         "title": "RELATIONSHIP"
                     },
-                    "nomineeMinor":{
-                            "key": "loanAccount.nominees[].nomineeMinor",
-                            "title": "NOMINEE_MINOR",
-                            "type": "checkbox",
-                            "schema": {
-                                "type": ["boolean", "null"]
-                            }
-                        
+                    "nomineeMinor": {
+                        "key": "loanAccount.nominees[].nomineeMinor",
+                        "title": "NOMINEE_MINOR",
+                        "type": "checkbox",
+                        "schema": {
+                            "type": ["boolean", "null"]
+                        }
+
                     },
-                    "nomineeGuardian":{
+                    "nomineeGuardian": {
                         "type": "array",
                         "title": "GUARDIAN_DETAILS",
-                        "condition":"model.loanAccount.nominees[arrayIndex].nomineeMinor==true",
+                        "condition": "model.loanAccount.nominees[arrayIndex].nomineeMinor==true",
                         "add": null,
-                        "view":"fixed",
+                        "view": "fixed",
                         "remove": null,
                         "items": {
                             "nomineeGuardianFirstName": {
@@ -1577,7 +1577,7 @@
                     }
                 }
             }
-           
+
         }
     },
     "PayerDetails": {
@@ -1711,7 +1711,8 @@
         "items": {
             "loanType": {
                 "title": "LOAN_TYPE",
-                "type": "select"
+                "type": "select",
+                "key": "loanAccount.loanType"
             },
             "partner": {
                 "title": "PARTNER",
@@ -1767,25 +1768,88 @@
                 "type": "array",
                 "add": null,
                 "remove": null,
-                "view":"fixed",
+                "view": "fixed",
                 "key": "loanAccount.witnessDetails",
-                "items":{
-                    "witnessFirstName":{
+                "items": {
+                    "witnessFirstName": {
                         "key": "loanAccount.witnessDetails[].witnessFirstName",
-                        "type":"lov",
-                        "title":"FIRST_NAME"
+                        "type": "lov",
+                        "title": "FIRST_NAME"
                     },
-                    "witnessAge":{
+                    "witnessAge": {
                         "key": "loanAccount.witnessAge",
-                        "type":"number",
+                        "type": "number",
                         "title": "AGE",
-                        "readonly":true
+                        "readonly": true
                     },
-                    "witnessRelationship":{
+                    "witnessRelationship": {
                         "key": "loanAccount.witnessDetails[].witnessRelationship",
-                        "type":"text",
+                        "type": "text",
                         "title": "RELATIONSHIP",
-                        "readonly": true                    
+                        "readonly": true
+                    }
+                }
+            }
+        }
+
+
+    },
+    "JewelDetails": {
+        "type": "box",
+        "title": "JEWEL_DETAILS",
+        "items": {
+            "jewelPouchNo": {
+                "type": "numeric",
+                "title": "POUCH_NO",
+                "key": "loanAccount.jewelLoanDetails.jewelPouchNo"
+            },
+            "ornamentDetails": {
+                "type": "array",
+                "title": "ORNAMENT_DETAILS",
+                "key": "loanAccount.ornamentAppraisal",
+                "items": {
+                    "ornamentDescription": {
+                        "title": "ORNAMENT_DESCRIPTION",
+                        "type": "text",
+                        "key": "loanAccount.ornamentAppraisal[].ornamentDescription"
+                    },
+                    "stoneDescription": {
+                        "title": "STONE_DESCRIPTION",
+                        "type": "text",
+                        "key": "loanAccount.ornamentAppraisal[].stoneDescription"
+                    },
+                    "jewelDefects": {
+                        "title": "JEWEL_DEFECTS",
+                        "type": "text",
+                        "key": "loanAccount.ornamentAppraisal[].jewelDefects"
+                    },
+                    "noOfArticles": {
+                        "title": "NO_OF_ARTICLES",
+                        "type": "numeric",
+                        "key": "loanAccount.ornamentAppraisal[].noOfArticles"
+                    },
+                    "grossWeight": {
+                        "title": "GROSS_WEIGHT",
+                        "type": "numeric",
+                        "key": "loanAccount.ornamentAppraisal[].grossWeightInGrams"
+                    },
+                    "netWeight": {
+                        "title": "NET_WEIGHT",
+                        "type": "numeric",
+                        "key": "loanAccount.ornamentAppraisal[].netWeightInGrams"
+                    },
+                    "carat": {
+                        "title": "CARAT",
+                        "type": "numeric",
+                        "key": "loanAccount.ornamentAppraisal[].qualityInCarats"
+                    },
+                    "rate": {
+                        "title": "RATE",
+                        "type": "numeric"
+                    },
+                    "marketValue": {
+                        "title": "MARKET_VALUE",
+                        "type": "numeric"
                     }
                 }
             }
@@ -1793,7 +1857,7 @@
     },
     "actionbox": {
         "type": "actionbox",
-        "items": {  
+        "items": {
             "save": {
                 "type": "button",
                 "title": "SAVE",
@@ -1801,5 +1865,5 @@
             }
         }
     }
-   
+
 }
