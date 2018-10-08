@@ -1,8 +1,8 @@
 define({
     pageUID: "kgfs.loans.individual.booking.DocumentUploadQueue",
     pageType: "Engine",
-    dependencies: ["$log", "formHelper", "SessionStore", "PageHelper", "Groups", "$state", "irfProgressMessage", "irfNavigator"],
-    $pageFn: function($log, formHelper, SessionStore, PageHelper, Groups, $state, irfProgressMessage, irfNavigator) {
+    dependencies: ["$log", "formHelper","IndividualLoan", "SessionStore", "PageHelper", "Groups", "$state", "irfProgressMessage", "irfNavigator"],
+    $pageFn: function($log, formHelper, IndividualLoan,SessionStore, PageHelper, Groups, $state, irfProgressMessage, irfNavigator) {
 
         var branchId = SessionStore.getBranchId();
         var branchName = SessionStore.getBranch();
@@ -10,167 +10,185 @@ define({
 
         return {
             "type": "search-list",
-            "title": "DSC Override Queue",
+            "title": "DOCUMENT_EXECUTION",
             "subTitle": "",
-            initialize: function(model, form, formCtrl) {
-                $log.info("DSC Queue got initialized");
+            // "uri":"Loan Booking/Stage 3",
+            initialize: function (model, form, formCtrl) {
+                $log.info("search-list sample got initialized");
+                model.branchName = SessionStore.getBranch();
+                model.branchId = SessionStore.getBranchId();
+                siteCode = SessionStore.getGlobalSetting('siteCode');
             },
+    
             definition: {
-                title: "DOCUMENT UPLOAD QUEUE",
-
+                title: "LOAN_TYPE",
+                autoSearch: true,
+                sorting:true,
+                sortByColumns:{
+                    "customer name":"Customer Name",
+                    "centre id":"Centre",
+                    "sanction_date":"Sanction Date"
+                },
+                searchForm: [
+                    "*"
+                ],
+                searchSchema: {
+                    "type": 'object',
+                    "title": "VIEW_LOANS",
+                    "required":["branch"],
+                    "properties": {
+                        // "branchName": {
+                        //     "title": "BRANCH_NAME",
+                        //     "type": ["string", "null"],
+                        //     "enumCode": "branch",
+                        //     "x-schema-form": {
+                        //         "type": "select"
+                        //     }
+    
+                        // },
+                        "centreCode": {
+                            "title": "CENTER_NAME",
+                            "type": ["number", "null"],
+                            "enumCode": "centre",
+                            "x-schema-form": {
+                                "type": "select",
+                                "parentValueExpr": "model.branchId"
+                            }
+                        },
+                        "partner_code": {
+                            "title": "PARTNER_CODE",
+                            "type":["string","null"],
+                            "x-schema-form": {
+                                "type":"select",
+                                "enumCode": "partner"
+                            }
+                        },
+                        "loan_product": {
+                            "title": "Loan Product",
+                            "type": "string",
+    
+                            "x-schema-form": {
+                                "type": "lov",
+                                "lovonly": true,
+                                search: function (inputModel, form, model, context) {
+                                    var loanProduct = formHelper.enum('loan_product').data;
+                                    var products = $filter('filter')(loanProduct, {parentCode: model.partner_code ? model.partner_code : undefined}, true);
+    
+                                    return $q.resolve({
+                                        headers: {
+                                            "x-total-count": products.length
+                                        },
+                                        body: products
+                                    });
+                                },
+                                onSelect: function (valueObj, model, context) {
+                                    model.loan_product = valueObj.field1;
+                                },
+                                getListDisplayItem: function (item, index) {
+                                    return [
+                                        item.name
+                                    ];
+                                },
+                            }
+                        },
+                        // "customer_name": {
+                        //     "title": "CUSTOMER_NAME",
+                        //     "type": "string",
+                        //     "x-schema-form": {
+                        //         "type": "select"
+                        //     }
+                        // },
+                        // "entity_name": {
+                        //     "title": "ENTITY_NAME",
+                        //     "type": "string",
+                        //     "x-schema-form": {
+                        //         "type": "select"
+                        //     }
+                        // },
+                        // "sanction_date": {
+                        //     "title": "SANCTION_DATE",
+                        //     "type": "string",
+                        //     "x-schema-form": {
+                        //         "type": "date"
+                        //     }
+                        // }
+                    }
+                },
                 getSearchFormHelper: function() {
                     return formHelper;
                 },
-                getResultsPromise: function(searchOptions, pageOpts) {
-                    return Groups.getDscOverrideList({
+                getResultsPromise: function(searchOptions, pageOpts){
+                    if (_.hasIn(searchOptions, 'centreCode')){
+                        searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
+                    }
+                    return IndividualLoan.search({
+                        'stage': 'DocumentUpload',
+                        'branchName': searchOptions.branchName,
+                        'centreCode': searchOptions.centreCodeForSearch,
+                        'customerId': searchOptions.customerId,
                         'page': pageOpts.pageNo,
-                        'per_page': pageOpts.itemsPerPage
+                        'per_page': pageOpts.itemsPerPage,
                     }).$promise;
                 },
                 paginationOptions: {
-                    "getItemsPerPage": function(response, headers) {
-                        return 100;
+                    "viewMode": "page",
+                    "getItemsPerPage": function(response, headers){
+                        return 20;
                     },
-                    "getTotalItemsCount": function(response, headers) {
+                    "getTotalItemsCount": function(response, headers){
                         return headers['x-total-count']
                     }
                 },
                 listOptions: {
-                    selectable: false,
-                    expandable: true,
-                    listStyle: "table",
-                    itemCallback: function(item, index) {},
-                    getItems: function(response, headers) {
-                        if (response != null && response.length && response.length != 0) {
+                    itemCallback: function(item, index) {
+                        $log.info(item);
+                    },
+                    getItems: function(response, headers){
+                        if (response!=null && response.length && response.length!=0){
                             return response;
                         }
                         return [];
                     },
-                    getListItem: function(item) {
-                        return []
+                    getListItem: function(item){
+                        return [
+                            item.customerName ,
+                            "<em>Loan Amount: Rs."+item.loanAmount+", Sanction Date: "+item.sanctionDate + "</em>",
+                        ]
                     },
-                    getTableConfig: function() {
-                        return {
-                            "serverPaginate": true,
-                            "paginate": true,
-                            "pageLength": 10
-                        };
-                    },
-                    getColumns: function() {
-                        var branchList = formHelper.enum('branch_id').data;
-                        var branches = {}
-                        for (var i = 0; i < branchList.length; i++) {
-                            branches[branchList[i].value] = branchList[i].name;
-                        }
-                        var centreList = formHelper.enum('centre').data;
-                        var centres = {}
-                        for (var i = 0; i < centreList.length; i++) {
-                            centres[centreList[i].field3] = centreList[i].name;
-                        }
-                        return [{
-                            title: 'URN',
-                            data: 'jlgGroupMember.urnNo'
-                        }, 
-                        // {
-                        //     title: 'GROUP_MEMBER_NAME',
-                        //     data: 'jlgGroupMember.urnNo'
-                        // }, 
-                        {
-                            title: 'Group ID',
-                            data: 'jlgGroup.id'
-                        }, {
-                            title: 'GROUP_CODE',
-                            data: 'jlgGroup.groupCode'
-                        }, {
-                            title: 'Group Name',
-                            data: 'jlgGroup.groupName'
-                        }, {
-                            title: 'BRANCH_NAME',
-                            data: 'jlgGroup.branchId',
-                            render: function(data, type, full, meta) {
-                                if(data){
-                                    return branches[data];
-                                }
-                                else{
-                                   return data; 
+                    getActions: function(){
+                        return [
+                            {
+                                name: "View / Upload Documents",
+                                desc: "",
+                                fn: function(item, index){
+                                    if (siteCode == 'pahal') {
+                                        //     irfNavigator.go({
+                                        //     state: 'Page.Engine',
+                                        //     pageName: 'pahal.loans.individual.booking.DocumentUpload',
+                                        //     pageData: item,
+                                        //     pageId: item.loanId
+                                        // }, {
+                                        //     state: 'Page.Engine',
+                                        //     pageName: "loans.individual.booking.DocumentUploadQueue"
+                                        // });
+                                    } else {
+                                        // irfNavigator.go({
+                                        //     state: 'Page.Engine',
+                                        //     pageName: 'loans.individual.booking.DocumentUpload',
+                                        //     pageData: item,
+                                        //     pageId: item.loanId
+                                        // }, {
+                                        //     state: 'Page.Engine',
+                                        //     pageName: "loans.individual.booking.DocumentUploadQueue"
+                                        // });
+                                    }
+    
+                                },
+                                isApplicable: function(item, index){
+                                    return true;
                                 }
                             }
-                        }, {
-                            title: 'CENTRE_CODE',
-                            data: 'jlgGroupMember.centreCode',
-                            render: function(data, type, full, meta) {
-                                if(data){
-                                    return centres[data];
-                                }
-                                else{
-                                   return data; 
-                                }
-                            }
-                        }]
-                    },
-                    getActions: function() {
-                        return [{
-                            name: "Do DSC Override",
-                            desc: "",
-                            fn: function(item, index) {
-                                PageHelper.showLoader();
-
-                                // var remarks = window.prompt("Enter Remarks", "");
-                                // if (remarks) {
-                                //     irfProgressMessage.pop("dsc-override", "Performing DSC Override");
-                                //     Groups.post({
-                                //         service: "overridedsc",
-                                //         urnNo: item.jlgGroupMember.urnNo,
-                                //         groupCode: item.jlgGroup.groupCode,
-                                //         productCode: item.jlgGroup.productCode,
-                                //         remarks: remarks
-                                //     }, {}, function(resp, headers) {
-                                //         $log.info(resp);
-                                //         PageHelper.hideLoader();
-                                //         irfProgressMessage.pop("dsc-override", "Override Succeeded", 2000);
-                                //         $state.go('Page.Engine', {
-                                //             pageName: "loans.group.DscOverrideQueue"
-                                //         },{
-                                //             reload: true,
-                                //             inherit: false,
-                                //             notify: true
-                                //         });
-                                //     }, function(resp) {
-                                //         $log.error(resp);
-                                //         PageHelper.hideLoader();
-                                //         irfProgressMessage.pop("dsc-override", "An error occurred. Please Try Again", 2000);
-                                //         PageHelper.showErrors(resp);
-                                //     });
-                                // } else {
-                                //     PageHelper.hideLoader();
-                                // }
-                                irfNavigator.go({
-                                    state: "Page.Engine",
-                                    pageName: "loans.group.DscOverride",
-                                    pageId: item.dscIntegration.id,
-                                    pageData: {
-                                        jlgGroup: item.jlgGroup,
-                                        jlgGroupMember: item.jlgGroupMember,
-                                    }, 
-                                }, {
-                                    state: "Page.Engine",
-                                    pageName: "loans.group.DscOverrideQueue",
-                                });
-
-                            },
-                            isApplicable: function(item, index) {
-                                return true;
-                            }
-                        }, {
-                            name: "View DSC Response",
-                            desc: "",
-                            fn: function(item, index) {
-                                Groups.showDscDataPopup(item.jlgGroupMember.dscId);
-                            },
-                            isApplicable: function(item, index) {
-                                return true;
-                            }
-                        }];
+                        ];
                     }
                 }
             }

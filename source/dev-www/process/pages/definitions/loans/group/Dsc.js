@@ -285,7 +285,7 @@ define({
                             items: [{
                                 "key": "group.jlgGroupMembers[].dscStatus",
                                 "title": "DSC_STATUS",
-                                "readonly": true,
+                                "readonly": true,   
                                 "condition": "model.group.jlgGroupMembers[arrayIndex].dscStatus"
                             }, {
                                 "key": "group.jlgGroupMembers[].dscOverrideRemarks",

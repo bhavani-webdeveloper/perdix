@@ -26,7 +26,18 @@ irf.pageCollection.factory(irf.page("customer.EnterpriseEnrolment2BusinessFinanc
                     ]
                 },
                 eventListeners: {
-
+                    "new-business": function(bundleModel,model,obj){
+                        model.customer = obj.customer;
+                        if(typeof model.customer.incomeThroughSales == "undefined"){
+                            model.customer.incomeThroughSales = [];
+                        }   
+                        if(typeof model.customer.rawMaterialExpenses == "undefined"){
+                            model.customer.rawMaterialExpenses = [];
+                        }
+                        if(typeof model.customer.expenditures == "undefined"){
+                            model.customer.expenditures = [];
+                        }
+                    }
                 },
                 form: [{
                         type: "box",
@@ -570,7 +581,8 @@ irf.pageCollection.factory(irf.page("customer.EnterpriseEnrolment2BusinessFinanc
                         var mandatoryExpenses = null;
                         var mandatoryBankStatements = null;
                         var mandatoryIncomeThroughSales = null;
-                        if (model.customer.customerBankAccounts.length > 0 && isError == false) {
+                        if(typeof model.customer.customerBankAccounts !="undefined"){
+                        if (model.customer.customerBankAccounts.length > 0 && isError == false  ) {
                             mandatoryBankStatements = _.findIndex(model.customer.customerBankAccounts, function (arr) {
                                 if (arr.bankStatements.length < 6) {
                                     isError = true;
@@ -597,7 +609,9 @@ irf.pageCollection.factory(irf.page("customer.EnterpriseEnrolment2BusinessFinanc
                                 })
                             }
                         }
-                        if (model.customer.incomeThroughSales.length > 0 && isError == false) {
+                    }
+                    if(typeof model.customer.incomeThroughSales !="undefined"){
+                        if (model.customer.incomeThroughSales.length > 0 && isError == false ) {
                             mandatoryIncomeThroughSales = _.findIndex(model.customer.incomeThroughSales, function (arr) {
                                 if (arr.buyerName != null && arr.incomeType != null && arr.invoiceType != null) {
                                     if (arr.incomeType === "Invoice") {
@@ -615,7 +629,9 @@ irf.pageCollection.factory(irf.page("customer.EnterpriseEnrolment2BusinessFinanc
                                 }
                             })
                         };
-                        if (model.customer.rawMaterialExpenses.length > 0 && isError == false) {
+                    }
+                    if(typeof model.customer.rawMaterialExpenses !="undefined"){
+                        if (model.customer.rawMaterialExpenses.length > 0 && isError == false ) {
                             mandatoryPurchases = _.findIndex(model.customer.rawMaterialExpenses, function (arr) {
                                 if (arr.vendorName != null && arr.rawMaterialType != null && arr.amount != null) {
                                     if (arr.rawMaterialType === "Invoice") {
@@ -633,6 +649,7 @@ irf.pageCollection.factory(irf.page("customer.EnterpriseEnrolment2BusinessFinanc
                                 }
                             })
                         };
+                    }
 
 
                         if (mandatoryIncomeThroughSales != null && mandatoryIncomeThroughSales != -1) {

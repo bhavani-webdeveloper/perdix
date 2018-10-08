@@ -10,13 +10,13 @@ define({
 
         return {
             "type": "search-list",
-            "title": "DSC Override Queue",
+            "title": "DSC_OVERRIDE_QUEUE",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 $log.info("DSC Queue got initialized");
             },
             definition: {
-                title: "DSC QUEUE",
+                title: "DSC_QUEUE",
 
                 getSearchFormHelper: function() {
                     return formHelper;
@@ -76,13 +76,13 @@ define({
                         //     data: 'jlgGroupMember.urnNo'
                         // }, 
                         {
-                            title: 'Group ID',
+                            title: 'GROUP_ID',
                             data: 'jlgGroup.id'
                         }, {
                             title: 'GROUP_CODE',
                             data: 'jlgGroup.groupCode'
                         }, {
-                            title: 'Group Name',
+                            title: 'GROUP_NAME',
                             data: 'jlgGroup.groupName'
                         }, {
                             title: 'BRANCH_NAME',
@@ -162,7 +162,7 @@ define({
                                 return true;
                             }
                         }, {
-                            name: "View DSC Response",
+                            name: "ViewDSC Response",
                             desc: "",
                             fn: function(item, index) {
                                 Groups.showDscDataPopup(item.jlgGroupMember.dscId);
