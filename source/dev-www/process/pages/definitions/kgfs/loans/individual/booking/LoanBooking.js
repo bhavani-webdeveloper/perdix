@@ -840,6 +840,7 @@ define([], function () {
                     "LoanDetails.witnessDetails",
                     "LoanDetails.witnessDetails.witnessFirstName",
                     "LoanDetails.witnessDetails.witnessRelationship",
+                   
 
                     "NomineeDetails",
                     "NomineeDetails.nominees",
@@ -868,6 +869,19 @@ define([], function () {
                     "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianState",
                     "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianRelationship",
 
+                    "JewelDetails",
+                    "JewelDetails.jewelPouchNo",
+                    "JewelDetails.ornamentDetails",
+                    "JewelDetails.ornamentDetails.ornamentDescription",
+                    "JewelDetails.ornamentDetails.stonDescription",
+                    "JewelDetails.ornamentDetails.jewelDefects",
+                    "JewelDetails.ornamentDetails.noOfArticles",
+                    "JewelDetails.ornamentDetails.grossWeight",
+                    "JewelDetails.ornamentDetails.netWeight",
+                    "JewelDetails.ornamentDetails.carat",
+                    "JewelDetails.ornamentDetails.rate",
+                    "JewelDetails.ornamentDetails.marketValue",
+
 
 
 
@@ -888,7 +902,20 @@ define([], function () {
                     },
                     "LoanDetails.loanType": {
                         "orderNo": 1,
-                        "enumCode": "loan_type"
+                        "titleMap":[
+                            {
+                                value: "JLG",
+                                name: "Jewel Loan"
+                            },
+                            {
+                                value: "consumerLoan",
+                                name: "Consumer Loan"
+                            },
+                            {
+                                value: "individualLoan",
+                                name: "Individual Loan"
+                            }
+                        ]
                     },
                     "LoanDetails.partner": {
                         "orderNo": 2,
@@ -969,7 +996,11 @@ define([], function () {
                         }
                     },
                     "NomineeDetails": {
-                        "orderNo": 2
+                        "orderNo": 3
+                    },
+                    "JewelDetails":{
+                        "orderNo": 2,
+                        "condition": "model.loanAccount.loanType == 'JLG'"
                     },
                     "NomineeDetails.nominees.nomineeFirstName":{
                     },
