@@ -1991,6 +1991,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 PageHelper.clearErrors();
                                 BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
+                                BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
                             }, function (err) {
                                 PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                 PageHelper.showErrors(err);
@@ -2013,6 +2014,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 PageHelper.clearErrors();
                                 BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
+                                BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
                                 model.enrolmentProcess.proceed()
                                 .subscribe(function(enrolmentProcess) {
                                     PageHelper.showProgress('enrolment', 'Done.', 5000);
