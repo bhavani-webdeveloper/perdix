@@ -60,6 +60,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:60
                         },
                         {
+                            pageName: 'kgfs.loans.individual.booking.JewelDetails',
+                            title: 'JEWEL_DETAILS',
+                            pageClass: 'jewel-details',
+                            minimum: 1,
+                            maximum: 1,
+                            order:60
+                        },
+                        {
                             pageName: 'kgfs.customer.CBCheck',
                             title: 'CB_CHECK',
                             pageClass: 'cb-check',
@@ -247,6 +255,13 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         loanAccount: loanProcess.loanAccount
                                     }
                                 });
+                                $this.bundlePages.push({
+                                    pageClass: 'jewel-details',
+                                    model: {
+                                        loanProcess: loanProcess
+                                    }
+                                });
+
                                 $this.bundlePages.push({
                                     pageClass: 'document-upload',
                                     model:{

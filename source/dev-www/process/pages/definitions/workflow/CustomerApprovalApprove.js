@@ -70,7 +70,8 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalApprove"),
                         model.customer.state == model.UpdatedWorkflow.customer.state &&
                         model.customer.district == model.UpdatedWorkflow.customer.district &&
                         model.customer.stdCode == model.UpdatedWorkflow.customer.stdCode &&
-                        model.customer.landLineNo == model.UpdatedWorkflow.customer.landLineNo ){
+                        model.customer.landLineNo == model.UpdatedWorkflow.customer.landLineNo &&
+                        model.customer.landmark == model.UpdatedWorkflow.customer.landmark){
                         model.customer.isAddressChanged="NO";
                     }
                     else {
@@ -86,6 +87,7 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalApprove"),
                         model.customer.district = model.UpdatedWorkflow.customer.district ;
                         model.customer.stdCode = model.UpdatedWorkflow.customer.doorNo ;
                         model.customer.landLineNo = model.UpdatedWorkflow.customer.landLineNo ;
+                        model.customer.landmark = model.UpdatedWorkflow.customer.landmark ;
                     }
 
                     irfProgressMessage.pop("cust-load", "Load Complete", 2000);
@@ -287,28 +289,33 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalApprove"),
                             {
                                 type: "fieldset",
                                 title: "CUSTOMER_RESIDENTIAL_ADDRESS",
+                                condition: "model.customer.isAddressChanged=='YES'",
                                 items: [
                                     "customer.doorNo",
                                     "customer.street",
-                                    "customer.locality",
+                                    "customer.postOffice",
+                                    "customer.landmark",
+                                    {
+                                        key: "customer.pincode",
+                                        type: "striing",
+                                        fieldType: "number"
+                                    },
+                                    {
+                                        key: "customer.locality",
+                                        readonly: true
+                                    },
                                     {
                                         key: "customer.villageName",
-                                        type: "select",
-                                        filter: {
-                                            'parentCode as branch': 'model.customer.kgfsName'
-                                        }
+                                        readonly: true
                                     },
-                                    "customer.postOffice",
                                     {
                                         key: "customer.district",
-                                        type: "select"
+                                        readonly: true
                                     },
-                                    "customer.pincode",
                                     {
                                         key: "customer.state",
-                                        type: "select"
-                                    },
-                                    "customer.landLineNo",
+                                        readonly: true,
+                                    }
                                 ]
                             },
                             {
@@ -544,7 +551,7 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalApprove"),
                                 "currentStage": updatedModel.workflow.currentStage,
                                 "customer": updatedModel.customer,
                                 "proof" : proof,
-                                "action" :  updatedModel.workflow.action,
+                                "action" :  updatedModel.action,
                                 "referenceKey" : updatedModel.workflow.customer.id,
 
                             };
