@@ -22,14 +22,14 @@ define({
                 model.siteCode = SessionStore.getGlobalSetting("siteCode");
                 model.loanView = SessionStore.getGlobalSetting("LoanViewPageName");
                 model._queue = $stateParams.pageData;
-                if (!model._queue) {
-                    $log.info("Screen directly launched hence redirecting to queue screen");
-                    // $state.go('Page.Engine', {
-                    //     pageName: 'loans.individual.booking.DocumentUploadQueue',
-                    //     pageId: null
-                    // });
-                    return;
-                }
+                // if (!model._queue) {
+                //     $log.info("Screen directly launched hence redirecting to queue screen");
+                //     $state.go('Page.Engine', {
+                //         pageName: 'loans.individual.booking.DocumentUploadQueue',
+                //         pageId: null
+                //     });
+                //     return;
+                // }
 
                 var loanId = $stateParams['pageId'];
                 PageHelper.showProgress('loan-load', 'Loading loan details...');
@@ -104,7 +104,7 @@ define({
                                                     $title: docsForProduct[i].docTitle,
                                                     $formsKey: docsForProduct[i].formsKey,
                                                     $mandatory: docsForProduct[i].mandatory,
-                                                    disbursementId: model.loanAccount.disbursementSchedules[0].id,
+                                                    // disbursementId: model.loanAccount.disbursementSchedules[0].id,
                                                     isHidden: false
                                                 })
                                             }
