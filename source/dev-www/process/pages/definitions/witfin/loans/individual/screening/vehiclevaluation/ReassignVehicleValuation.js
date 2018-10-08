@@ -177,10 +177,6 @@ define(
                         "VehiclePrimaryInfo.state",
                         "VehiclePrimaryInfo.VehicleValuator",
                         "VehicleValuationPriliminaryInformation",
-                        "VehicleValuationPriliminaryInformation.valuationPurpose",
-                        "VehicleValuationPriliminaryInformation.valuationDate",
-                        "VehicleValuationPriliminaryInformation.valuationPlace",
-                        "VehicleValuationPriliminaryInformation.registeredOwnerName",
                         "VehicleValuationPriliminaryInformation.proposedOwnerName",
                         "VehicleValuationPriliminaryInformation.bankReferenceNumber",
                         "VehicleInspectionDetails",
@@ -198,10 +194,11 @@ define(
                         "VehicleIdentityDetails.chasisNo",
                         "VehicleIdentityDetails.engineNo",
                         "VehicleIdentityDetails.odometerReading",
-                        "VehicleIdentityDetails.estimatedReading",
                         "VehicleIdentityDetails.transmission",
                         "VehicleIdentityDetails.odometer",
                         "VehicleIdentityDetails.usedFor",
+                        "VehicleIdentityDetails.vehicleModel",
+                        "VehicleIdentityDetails.yearOfManufacture",                     
                         "VehicleRegistrationDetails",
                         "VehicleRegistrationDetails.reRegistered",
                         "VehicleRegistrationDetails.previousRegistrationNumber",
@@ -222,6 +219,9 @@ define(
                         "VehicleRegistrationDetails.unladenWeight",
                         "VehicleRegistrationDetails.hypothecatedTo",
                         "VehicleRegistrationDetails.fitnesscertifiedUpto",
+                        "VehicleRegistrationDetails.noOfCylinders",
+                        "VehicleRegistrationDetails.grossVehicleWeight",
+                        "VehicleRegistrationDetails.noOfAxles",
                         "VehiclePermitAndTaxDetails",
                         "VehiclePermitAndTaxDetails.permitStatus",
                         "VehiclePermitAndTaxDetails.permitValidUpto",
@@ -244,11 +244,6 @@ define(
                         "VehicleOtherRemarks.majorRepair",
                         "VehicleOtherRemarks.currentInvoiceValue",
                         "VehicleOtherRemarks.rcbookStatus",
-                        "VehiclePastValuations",
-                        "VehiclePastValuations.vehiclePastValuations",
-                        "VehiclePastValuations.vehiclePastValuations.financier",
-                        "VehiclePastValuations.vehiclePastValuations.valuationDate",
-                        "VehiclePastValuations.vehiclePastValuations.valuation",
                         "VehicleAsset",
                         "VehicleAsset.vehicleAssetConditions",
                         "VehicleAsset.vehicleAssetConditions.make",
@@ -298,7 +293,7 @@ define(
                                 "VehicleRegistrationDetails.engineNo",
                                 "VehicleInsuranceDetails.taxPaid",
                                 "VehiclePermitAndTaxDetails.taxPaid",
-                                "VehiclePastValuations"
+                                "VehicleRegistrationDetails.registeredownersname"
                             ],
                             "options": {
                             "repositoryAdditions": {
@@ -422,6 +417,11 @@ define(
 
                         if(_.hasIn(model, 'loanProcess.loanAccount')) {
                             model.loanAccount = model.loanProcess.loanAccount;
+
+                            if (_.hasIn(model, 'loanAccount.vehicleLoanDetails.category') &&
+                        model.loanAccount.vehicleLoanDetails.category !=null ) {
+                                    model.loanAccount.vehicleLoanDetails.vehicleClass = model.loanAccount.vehicleLoanDetails.category;
+                        }
                             var p1 = UIRepository.getLoanProcessUIRepository().$promise;;
                             p1.then(function(repo) {
                                 self.form = IrfFormRequestProcessor.getFormDefinition(repo, formRequest, configFile(), model);
@@ -435,6 +435,11 @@ define(
                             .subscribe(function(data) {
                                 model.loanProcess = data;
                                 model.loanAccount = data.loanAccount;
+
+                                if (_.hasIn(model, 'loanAccount.vehicleLoanDetails.category') &&
+                                model.loanAccount.vehicleLoanDetails.category !=null ) {
+                                            model.loanAccount.vehicleLoanDetails.vehicleClass = model.loanAccount.vehicleLoanDetails.category;
+                                }
 
                                 var p1 = UIRepository.getLoanProcessUIRepository().$promise;;
                                 p1.then(function(repo) {
