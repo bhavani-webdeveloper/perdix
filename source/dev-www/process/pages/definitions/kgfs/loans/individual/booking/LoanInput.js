@@ -138,7 +138,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                         LoanProcess.get(bundleModel.loanId)
                             .subscribe(function(loanProcess){
                                 bundleModel.loanProcess = loanProcess;
-                                var loanAccount = loanProcess;
+                                var loanAccount = loanProcess;  
                                 loanAccount.applicantEnrolmentProcess.customer.customerId = loanAccount.loanAccount.customerId;
                                     if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
                                         var _leadId = $stateParams.pageData['lead_id'];
@@ -201,7 +201,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 $this.bundlePages.push({
                                     pageClass: 'dsc-check',
                                     model: {
-                                        loanAccount: loanProcess
+                                        loanAccount: loanProcess.loanAccount
                                     }
                                 });
                                 
@@ -211,7 +211,6 @@ define(["perdix/domain/model/loan/LoanProcess",
                     } else {
                         LoanProcess.createNewProcess()
                             .subscribe(function(loanProcess){
-                                console.log(loanProcess);
                                 loanProcess.loanAccount.currentStage = 'LoanInitiation';
                                 bundleModel.loanProcess = loanProcess;
                                  if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
@@ -245,7 +244,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 $this.bundlePages.push({
                                     pageClass: 'dsc-check',
                                     model: {
-                                        loanProcess: loanProcess
+                                        loanAccount: loanProcess.loanAccount
                                     }
                                 });
                                 $this.bundlePages.push({
@@ -317,12 +316,8 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 if (!_.hasIn(bundleModel, 'guarantors')){
                                     bundleModel.guarantors = [];
                                 }
+                                BundleManager.broadcastEvent("new-guarantor" , params);
                                 bundleModel.guarantors.push(params.guarantor);
-                                break;
-                            case 'business':
-                                $log.info("New Business Enrolment");
-                                bundleModel.business = params.customer;
-                                BundleManager.broadcastEvent("new-business", params);
                                 break;
                             default:
                                 $log.info("Unknown page class");

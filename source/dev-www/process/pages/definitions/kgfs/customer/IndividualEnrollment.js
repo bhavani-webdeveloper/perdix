@@ -1708,29 +1708,29 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                                     }
                                 },
                                 "additions": [
-                                    {
-                                        "type": "actionbox",
-                                        "condition": "!model.customer.currentStage",
-                                        "orderNo": 1000,
-                                        "items": [
-                                            {
-                                                "type": "submit",
-                                                "title": "SUBMIT"
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "type": "actionbox",
-                                        "condition": "model.customer.currentStage && (model.currentStage=='KYC' || model.currentStage=='Appraisal' || (model.currentStage=='GuarantorAddition' && model.pageClass=='guarantor'))",
-                                        "orderNo": 1200,
-                                        "items": [
-                                            {
-                                                "type": "button",
-                                                "title": "UPDATE_ENROLMENT",
-                                                "onClick": "actions.proceed(model, formCtrl, form, $event)"
-                                            }
-                                        ]
-                                    }
+                                    // {
+                                    //     "type": "actionbox",
+                                    //     "condition": "!model.customer.currentStage",
+                                    //     "orderNo": 1000,
+                                    //     "items": [
+                                    //         {
+                                    //             "type": "submit",
+                                    //             "title": "SUBMIT"
+                                    //         }
+                                    //     ]
+                                    // },
+                                    // {
+                                    //     "type": "actionbox",
+                                    //     "condition": "model.customer.currentStage && (model.currentStage=='KYC' || model.currentStage=='Appraisal' || (model.currentStage=='GuarantorAddition' && model.pageClass=='guarantor'))",
+                                    //     "orderNo": 1200,
+                                    //     "items": [
+                                    //         {
+                                    //             "type": "button",
+                                    //             "title": "UPDATE_ENROLMENT",
+                                    //             "onClick": "actions.proceed(model, formCtrl, form, $event)"
+                                    //         }
+                                    //     ]
+                                    // }
                                 ]
                             }
                         };

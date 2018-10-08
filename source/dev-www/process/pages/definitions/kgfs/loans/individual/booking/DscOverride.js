@@ -1,7 +1,7 @@
 define([], function () {
 
     return {
-        pageUID: "kgfs.loans.individual.booking.Dsc",
+        pageUID: "kgfs.loans.individual.booking.DscOverride",
         pageType: "Engine",
         dependencies: ["$log", "$q", "LoanAccount", "LoanProcess", 'Scoring', 'Enrollment', 'EnrollmentHelper', 'AuthTokenHelper', 'SchemaResource', 'PageHelper', 'formHelper', "elementsUtils",
             'irfProgressMessage', 'SessionStore', "$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch", "IndividualLoan",
@@ -24,6 +24,24 @@ define([], function () {
                 }
                 return true;
             };
+            function showDscData(dscId) {
+                PageHelper.showLoader();
+                Groups.getDSCData({
+                    dscId: dscId
+                }, function(resp, headers) {
+                    PageHelper.hideLoader();
+                    /*var dataHtml = "<table class='table table-striped table-bordered table-responsive'>";
+                    dataHtml += "<tr><td>Response : </td><td>" + resp.response + "</td></tr>";
+                    dataHtml += "<tr><td>Response Message: </td><td>" + resp.responseMessage + "</td></tr>";
+                    dataHtml += "<tr><td>Stop Response: </td><td>" + resp.stopResponse + "</td></tr>";
+                    dataHtml += "</table>"*/
+                    irfSimpleModal('DSC Response', resp.responseMessage);
+                }, function(res) {
+                    PageHelper.showErrors(res);
+                    PageHelper.hideLoader();
+                });
+            };
+    
             var getIncludes = function (model) {
                 return [];
             }
@@ -36,7 +54,7 @@ define([], function () {
 
             return {
                 "type": "schema-form",
-                "title": "DSC",
+                "title": "DSC_OVERRIDE",
                 "subTitle": "",
                 initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
 
@@ -229,64 +247,48 @@ define([], function () {
                         "items": [
                             {
                                 "type": "fieldset",
-                                "title": "DSC_CHECK",
+                                "title": "DSC_STATUS",
                                 "items": [
                                     {
-                                        key: "customer.applicantname",
-                                        title: "ApplicantName",
+                                        title: "DSC_STATUS",
                                         readonly: true,
                                         type: "string",
-
                                     },
                                     {
                                         "type": "button",
-                                        "condition": "model.customer.loanSaved",
-                                        "title": "DSC_REQUEST"
+                                        "title": "DSC_OVERRIDE_REQUEST"
                                     },
                                     {
-                                        key: "customer.coapplicants",
-                                        type: "array",
-                                        title: ".",
-                                        view: "fixed",
-                                        notitle: true,
-                                        "startEmpty": true,
-                                        "add": null,
-                                        "remove": null,
-                                        items: [{
-                                            key: "customer.coapplicants[].coapplicantname",
-                                            title: "Co ApplicantName",
-                                            readonly: true,
-                                            type: "string"
-                                        },
-                                        {
-                                            "type": "button",
-                                            "condition": "model.customer.loanSaved",
-                                            "title": "DSC_REQUEST"
-                                        },
+                                        "type" : "section", 
+                                        items: [
+                                            {
+                                               title: "REMARKS",
+                                               key: "group.groupRemarks",
+                                               type: "textarea",
+                                               required: true
+                                           }, 
+                                           {
+                                               "title" : "DSC_OVERRIDE",
+                                               "type" : "button"
+                                           }
                                         ]
                                     },
                                     {
-                                        key: "customer.guarantors",
-                                        type: "array",
-                                        title: ".",
-                                        view: "fixed",
-                                        notitle: true,
-                                        "startEmpty": true,
-                                        "add": null,
-                                        "remove": null,
-                                        items: [{
-                                            key: "customer.guarantors[].guarantorname",
-                                            title: "Guarantor Name",
-                                            readonly: true,
-                                            type: "string"
-                                        },
-                                        {
-                                            "type": "button",
-                                            "condition": "model.customer.loanSaved",
-                                            "title": "DSC_REQUEST"
-                                        },
-                                        ]
-                                    }
+                                        "key": "group.jlgGroupMembers[].getDSCData",
+                                        "type": "button",
+                                        "title": "VIEW_DSC_RESPONSE",
+                                        "icon": "fa fa-eye",
+                                        "style": "btn-primary",
+                                        // "condition": "model.group.jlgGroupMembers[arrayIndex].dscStatus=='DSC_OVERRIDE_REQUIRED'",
+                                        "onClick": function(model, formCtrl, form, event) {
+                                            console.log(form);
+                                            console.warn(event);
+                                            //var i = event['arrayIndex'];
+                                            //console.warn("dscid :" + model.group.jlgGroupMembers[i].dscId);
+                                            var dscId = model.group.jlgGroupMembers[i].dscId;
+                                            showDscData(dscId);
+                                        }
+                                    },
                                 ]
                             }
                         ]

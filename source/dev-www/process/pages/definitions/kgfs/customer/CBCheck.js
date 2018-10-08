@@ -260,6 +260,8 @@ define({
             if (bundlePageObj){
                 model._bundlePageObj = _.cloneDeep(bundlePageObj);
             }
+            console.log("Model from CBCHECK");
+                    console.log(model);
 
             model.customer = model.customer || {};
             model.customer.coapplicants = model.customer.coapplicants || [];
@@ -268,10 +270,10 @@ define({
 
             if (_.hasIn(model, "loanProcess")){
                 /* Loan process data is available. derive applicant / coapplicant / guarantors data from it */
-                var lp = model.loanProcess;
-                model.customer.applicantid = lp.applicantEnrolmentProcess.customer.id;
-                model.customer.applicantname = lp.applicantEnrolmentProcess.customer.firstName;
-
+                    var lp = model.loanProcess;
+                    model.customer.applicantid = lp.applicantEnrolmentProcess.customer.id;
+                    model.customer.applicantname = lp.applicantEnrolmentProcess.customer.firstName;
+                    
                 model.coapplicants = [];
                 _.forEach(lp.coApplicantsEnrolmentProcesses, function(ep){
                     model.coapplicants.push({
@@ -439,7 +441,7 @@ define({
                 /* Assign more customer information to show */
             },
             "new-co-applicant": function(bundleModel, model, params){
-                $log.info("Insdie new-co-applicant of CBCheck");
+                $log.info("Inside new-co-applicant of CBCheck");
                 var recordExists = false;
                 for (var i = model.customer.coapplicants.length - 1; i >= 0; i--) {
                     if(model.customer.coapplicants[i].coapplicantid == params.customer.id)
@@ -452,7 +454,7 @@ define({
                 }
             },
             "new-guarantor": function(bundleModel, model, params){
-                $log.info("Insdie new-new-guarantor of CBCheck");
+                $log.info("Inside new-guarantor of CBCheck");
                 var recordExists = false;
                 for (var i = model.customer.guarantors.length - 1; i >= 0; i--) {
                     if(model.customer.guarantors[i].guarantorid == params.customer.id)
