@@ -138,20 +138,15 @@ define([],function(){
                                 "LoanSanction",
                                 "DeductionsFromLoan",
                                 "LoanMitigants",
-                    "LoanMitigants.deviationParameter",
+                                "LoanMitigants.deviationParameter",
                                 "NomineeDetails.nominees.nomineeButton",
                                 "PreliminaryInformation.actualAmountRequired",
-                                "PreliminaryInformation.fundsFromDifferentSources",                  
+                                "PreliminaryInformation.fundsFromDifferentSources", 
+                                "LoanRecommendation"           
                             ],
                             "overrides": {
                                 "PreliminaryInformation": {
                                     "orderNo": 1,
-                                    "readonly": true
-                                },
-                                "LoanRecommendation.udf8":{
-                                    "readonly": true
-                                },
-                                "LoanRecommendation.udf3":{
                                     "readonly": true
                                 },
                                 "LoanCustomerRelations": {
@@ -556,9 +551,9 @@ define([],function(){
                                 "ProposedUtilizationPlan",
                                 "DeductionsFromLoan",
                                 "LoanMitigants",
-                    "LoanMitigants.deviationParameter",
+                                "LoanMitigants.deviationParameter",
                                 "PreliminaryInformation.actualAmountRequired",
-                    "PreliminaryInformation.fundsFromDifferentSources",
+                                "PreliminaryInformation.fundsFromDifferentSources",
                                 "NomineeDetails.nominees.nomineeButton"                   
                             ],
                             "overrides": {

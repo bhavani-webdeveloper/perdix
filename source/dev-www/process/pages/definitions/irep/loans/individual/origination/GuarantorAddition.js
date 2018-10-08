@@ -59,14 +59,6 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:50
                         },                        
                         {
-                            pageName: 'loans.individual.screening.CreditBureauView',
-                            title: 'CREDIT_BUREAU',
-                            pageClass: 'cbview',
-                            minimum: 1,
-                            maximum: 1,
-                            order:70
-                        },
-                        {
                             pageName: 'irep.loans.individual.origination.Review',
                             title: 'REVIEW',
                             pageClass: 'loan-review',
@@ -151,7 +143,8 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         $this.bundlePages.push({
                                             pageClass: 'co-applicant',
                                             model: {
-                                                loanRelation: loanAccount.coApplicantsEnrolmentProcesses[i]
+                                                enrolmentProcess: loanAccount.coApplicantsEnrolmentProcesses[i],
+                                                loanProcess: loanProcess
                                             }
                                         });
                                     }
@@ -162,7 +155,8 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         $this.bundlePages.push({
                                             pageClass: 'guarantor',
                                             model: {
-                                                loanRelation: loanAccount.guarantorsEnrolmentProcesses[i]
+                                                enrolmentProcess: loanAccount.guarantorsEnrolmentProcesses[i],
+                                                loanProcess: loanProcess
                                             }
                                         });
                                     }
@@ -184,14 +178,12 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 });
 
-
-
-                                 $this.bundlePages.push({
-                                    pageClass: 'cbview',
-                                    model: {
-                                        loanAccount: loanProcess.loanAccount
-                                    }
-                                });
+                                //  $this.bundlePages.push({
+                                //     pageClass: 'cbview',
+                                //     model: {
+                                //         loanAccount: loanProcess.loanAccount
+                                //     }
+                                // });
 
                                $this.bundlePages.push({
                                         pageClass: 'loan-review',
