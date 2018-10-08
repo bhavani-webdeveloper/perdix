@@ -35,6 +35,8 @@ define({
             model.liabilitiesSummary = res[19];
             model.opexDetails = res[21];
             model._opex = res[21].data;
+            model.ScoringDetails = res[26].data;
+
 
             /* Populate values for Balance Sheet */
             model.assetsAndLiabilities = {};
@@ -104,6 +106,8 @@ define({
             model.pl.business.finalKinaraEmiPCT = model.businessPL.data[0]['Final Kinara EMI pct'];
             model.enterpriseDetailsData = model.enterpriseDetails.data[0];
 
+
+
         }; // END OF prepareData()
 
 
@@ -150,6 +154,10 @@ define({
                     bsRight.push(item)
                 }
             });
+
+
+
+
             form.push({
                 "type": "section",
                 "html": `
@@ -159,6 +167,77 @@ define({
 <div class="col-sm-3">{{'BRANCH'|translate}}: <strong>{{model.business.kgfsName}}</strong></div>
 <div class="col-sm-3">{{'CENTRE'|translate}}: <strong>{{model.business.centreName}}</strong></div>
 `
+            })
+
+            form.push({
+                type: "box",
+                colClass: "col-sm-12 table-box",
+                title: "SCORES",
+                items: [
+                    {
+                        type: "section",
+                        htmlClass: "row",
+                        html: '<div class="col-sm-3"><div class="stat-container" ><dd class="stat-key"> Total Score</dd><dt class="stat-value"> {{ model.ScoringDetails.SubscoreDetails.BusinessStability[0].OverallWeightedScore }}</dt></div></div><div class="col-sm-3"><div class="stat-container" ><dd class="stat-key"> Status</dd><dt class="stat-value" ng-class="{\'text-a-green\': model.ScoreDetails.BusinessStability[0].OverallPassStatus==\'PASS\', \'text-a-red\': model.ScoreDetails[0].OverallPassStatus==\'FAIL\'}"> {{ model.ScoreDetails[0].OverallPassStatus }}</dt></div></div><div class="clearfix"></div><hr>'
+                    },
+                    {
+                        type: "section",
+                        htmlClass: "row",
+                        items: [
+                            {
+                                type: "section",
+                                htmlClass: "col-sm-12",
+                                title: "MANAGEMENT_SCORE",
+                                html:
+    '<div ng-init="_score=model.ScoringDetails.SubscoreDetails.ManagementScore">'+
+        // '<h3 ng-if="model.currentStage!=\'ScreeningReview\'">{{_score.title}} ({{model.totalScores.data[0][_score.title]}})</h3>'+
+        '<table class="table">'+
+            // '<colgroup>'+
+                // '<col width="25%">'+
+                // '<col width="{{_score.colorPct}}%" ng-repeat-start="i in _score.values">'+
+                // '<col width="{{_score.valuePct}}%" ng-repeat-end>'+
+            // '</colgroup>'+
+            '<tbody>'+
+                // '<tr>'+
+                //     '<th>Parameter Name</th>'+
+                //     '' +
+                //     '<th colspan="2" ng-repeat="(k,j) in _score"> {{ j | json }}</th>'+
+                // '</tr>'+
+                '<tr>'+
+                    '<th>Parameter Name</th>'+
+                    '<th colspan="2" ng-repeat="(k,j) in _score">{{j.CustomerDetails.Name}} - {{ j.CustomerDetails.Relation}}</th>'+
+                '</tr>'+
+                '<tr ng-repeat="j in _score[_score.CustomerIds[0]].data" ng-init="parameterIndex=$index">'+
+                    '<td>{{j.Parameter}}</td>'+
+                    '<td ng-repeat-start="customerId in _score.CustomerIds"> <span class="square-color-box" style="background:{{_score[customerId].data[parameterIndex].color_hexadecimal}}"> </span></td>'+
+                '<td ng-repeat-end>{{_score[customerId].data[parameterIndex]["Actual Value"]}}</td></tr>'+
+            '</tbody>'+
+        '</table>'+
+    '</div>'
+                            }
+                        ]
+                    },
+                    {
+                        type: "section",
+                        htmlClass: "row",
+                        items: [
+                            {
+                                type: "section",
+                                htmlClass: "col-sm-6",
+                                condition: "model.currentStage!='ScreeningReview'",
+                                title: "FINANCIAL_SCORE",
+                                html: '<h3>{{ "FINANCIAL_SCORE" | translate  }}</h3><table class="table"><colgroup><col width="50%"><col width="10%"><col width="40%"></colgroup><tbody><tr><th>Parameter</th><th></th><th>Actual Value</th></tr><tr ng-repeat="data in model.ScoringDetails.SubscoreDetails.FinancialScore"><td>{{ data.Parameter }}</td><td> <span class="square-color-box" style="background: {{ data.color_hexadecimal }}"> </span></td><td>{{ data["Actual Value"] }}</td></tr></tbody></table>'
+                            },
+                            {
+                                type: "section",
+                                htmlClass: "col-sm-6",
+                                condition: "model.currentStage!='ScreeningReview'",
+                                title: "BUSINESS_STABILITY",
+                                html: '<h3>{{ "BUSINESS_STABILITY" | translate }}</h3><table class="table"><colgroup><col width="50%"><col width="10%"><col width="40%"></colgroup><tbody><tr><th>Parameter</th><th></th><th>Actual Value</th></tr><tr ng-repeat="data in model.ScoringDetails.SubscoreDetails.BusinessStability"><td>{{ data.Parameter }}</td><td> <span class="square-color-box" style="background: {{ data.color_hexadecimal }}"> </span></td><td>{{ data["Actual Value"] }}</td></tr></tbody></table>'
+                            },
+                        ]
+                    }
+
+                ]
             })
 
             form.push({
@@ -384,21 +463,7 @@ define({
                 var $this = this;
                 var deferred = $q.defer();
 
-                scoreName = null;
-                switch (model.currentStage) {
-                    case "Televerification":
-                        scoreName = "RiskScore1";
-                        break;
-                    case "ApplicationReview":
-                        scoreName = "RiskScore2";
-                        break;
-                    case "Evaluation":
-                        scoreName = "RiskScore3";
-                        break;
-                    default:
-                        scoreName = "ConsolidatedScore";
-                        break;
-                }
+                scoreName = 'RiskScore1';
 
                 if (bundlePageObj) {
                     model._bundlePageObj = _.cloneDeep(bundlePageObj);

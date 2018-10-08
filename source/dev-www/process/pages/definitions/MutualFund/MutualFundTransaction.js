@@ -185,9 +185,9 @@ define({
                         "readonly": true
                     }
                 ]
-                },  {
+                },{
                     "type": "actionbox",
-                   // condition: " (!model.customerSummary.accountClosed && model.isSubmitApllicable)  && model.customer.isBiometricValidated ",
+                    //condition: " (!model.customerSummary.accountClosed && model.isSubmitApllicable)  && model.customer.isBiometricValidated ",
                     condition: " (!model.customerSummary.accountClosed && model.isSubmitApllicable) && !model.transaction.submissionDone",
                     "items": [{
                         "type": "submit",
@@ -197,11 +197,13 @@ define({
                 {
                     "type": "actionbox",
                     "condition": "model.transaction.submissionDone",
-                    "items": [{
+                    "items": [
+                    {
                         "type": "button",
                         "style": "btn-theme",
-                        "title": "PRINT",
+                        "title": "Print",
                         "onClick": function(model, formCtrl, formName) {
+                            var print={};
                             var repaymentInfo={
                                 'customerName':model.customer.firstName,
                                 'customerURN':model.customer.urnNo,
@@ -224,24 +226,18 @@ define({
                                 'address1': 'IITM Research Park, Phase 1, 10th Floor',
                                 'address2': 'Kanagam Village, Taramani',
                                 'address3': 'Chennai - 600113, Phone: 91 44 66687000',
-                                'website': "http://ruralchannels.kgfs.co.in",
+                                'website': "http://ruralchannels.ifmr.co.in/",
                                 'helpline': '18001029370',
                             };
 
-                            var pData = MutualFund.getPrintReceipt(repaymentInfo, opts);
-                            $log.info(pData.getLines());
-                            try {
-                                if (cordova) {
-                                    cordova.plugins.irfBluetooth.print(function() {
-                                        console.log("succc callback");
-                                    }, function(err) {
-                                        console.error(err);
-                                        console.log("errr collback");
-                                    }, pData.getLines());
-                                }
-                            } catch (err) {
-                                var webdata= MutualFund.getWebReceipt(repaymentInfo, opts);
-                            }
+                            print.thermalReceipt= MutualFund.getPrintReceipt(repaymentInfo, opts);
+                            print.paperReceipt= MutualFund.getWebReceipt(repaymentInfo, opts);
+                        
+                            irfNavigator.go({
+                                state: "Page.Engine",
+                                pageName: "management.ReceiptPrint",
+                                pageData: print
+                            });
                         }
                     }]
                 }

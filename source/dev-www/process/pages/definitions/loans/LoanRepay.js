@@ -846,6 +846,14 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             //     return;
                             // }
                         }
+                        
+                        if (model.siteCode == 'witfin' && model.repayment.amount >=199999){
+                            PageHelper.clearErrors();
+                            PageHelper.setError({
+                                message: "please enter amount less than 199999"
+                            });
+                            return false;
+                        }
 
                         // if (model._screen && model._screen =='BounceQueue'){
                         //     if (model.repayment.amount > model.repayment.totalDue){

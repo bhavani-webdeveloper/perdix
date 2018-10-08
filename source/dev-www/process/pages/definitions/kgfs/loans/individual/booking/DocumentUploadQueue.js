@@ -10,7 +10,7 @@ define({
 
         return {
             "type": "search-list",
-            "title": "DSC Override Queue",
+            "title": "DOCUMENT_UPLOAD_QUEUE",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 $log.info("DSC Queue got initialized");
@@ -82,7 +82,7 @@ define({
                             title: 'GROUP_CODE',
                             data: 'jlgGroup.groupCode'
                         }, {
-                            title: 'Group Name',
+                            title: 'GROUP_NAME',
                             data: 'jlgGroup.groupName'
                         }, {
                             title: 'BRANCH_NAME',

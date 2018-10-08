@@ -514,20 +514,16 @@
                                 'helpline': '18001029370',
                             };
 
-                            var pData = MutualFund.getPrintReceipt(repaymentInfo, opts);
-                            $log.info(pData.getLines());
-                            try {
-                                if (cordova) {
-                                    cordova.plugins.irfBluetooth.print(function() {
-                                        console.log("succc callback");
-                                    }, function(err) {
-                                        console.error(err);
-                                        console.log("errr collback");
-                                    }, pData.getLines());
-                                }
-                            } catch (err) {
-                                var webdata= MutualFund.getWebReceipt(repaymentInfo, opts);
-                            }
+                            var print={};
+
+                            print.thermalReceipt= MutualFund.getPrintReceipt(repaymentInfo, opts);
+                            print.paperReceipt= MutualFund.getWebReceipt(repaymentInfo, opts);
+                        
+                            irfNavigator.go({
+                                state: "Page.Engine",
+                                pageName: "management.ReceiptPrint",
+                                pageData: print
+                            });
                         }
                     }]
                 }],

@@ -21,7 +21,6 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                 });
             }
 
-
             var update = function(model, workflowId) {
                 Workflow.getByID({ id: workflowId }, function (resp, header) {
 
@@ -339,11 +338,6 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                                 title: "CUSTOMER_RESIDENTIAL_ADDRESS",
                                 condition: "model.customer.isAddressChanged=='YES'",
                                 items: [
-                                    {
-                                        key:"customer.careOf",
-                                        //required:true,
-                                        title:"C/O",
-                                    },
                                     "customer.doorNo",
                                     "customer.street",
                                     "customer.postOffice",
