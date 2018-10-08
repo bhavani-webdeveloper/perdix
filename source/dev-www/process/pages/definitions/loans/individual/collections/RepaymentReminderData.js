@@ -45,6 +45,9 @@ define({
                                 model.reminder.repaymentReminderDTO.centreName = centre.name;
                             }
                         }
+                },function(err){
+                    PageHelper.showErrors(err);
+                    PageHelper.hideLoader();
                 })
                 .then(function(){
                         var promises = [];
