@@ -104,14 +104,12 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                     var workflowId = $stateParams.pageId;
                     $log.info("Loading data for Cust ID " + workflowId);
 
-
                     model._screenMode = 'VIEW';
                     PageHelper.showLoader();
                     irfProgressMessage.pop("cust-load", "Loading Customer Data...");
 
                     if (workflowId != undefined || workflowId != null) {
                         update(model, workflowId);
-
                     }else {
                         PageHelper.hideLoader();
                     }
@@ -135,20 +133,21 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                                 title: "CUSTOMER_ID",
                                 condition: "!model.workflow",
                                 inputMap: {
-                                    "customerId": {
-                                        "key": "customer.id"
+                                    "firstName": {
+                                        "key": "customer.firstName"
                                     },
                                     "urnNo": {
                                         "key": "customer.urnNo"
                                     },
-                                    "firstName": {
-                                        "key": "customer.firstName"
-                                    },
-                                    "branchName": {
-                                        "key": "customer.branchName"
+                                    "customerBranchId": {
+                                        "key": "customer.customerBranchId",
+                                        "type": "select",
+                                        "screenFilter": true,
                                     },
                                     "customerType": {
-                                        "key": "customer.customerType"
+                                        "key": "customer.customerType",
+                                        "type": "select",
+                                        "screenFilter": true,
                                     }
                                 },
                                 outputMap: {
@@ -161,9 +160,14 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                                 },
                                 searchHelper: formHelper,
                                 search: function (inputModel, form, model) {
+                                    var branches = formHelper.enum('branch_id').data;
+                                    var branchName;
+                                    for (var i=0; i<branches.length;i++){
+                                        if(branches[i].code==inputModel.customerBranchId)
+                                            branchName = branches[i].name;
+                                    }
                                     return Enrollment.search({
-                                        id: inputModel.customerId,
-                                        branchName: inputModel.branchName,
+                                        branchName: branchName ||SessionStore.getBranch(),
                                         urnNo : inputModel.urnNo ,
                                         firstName : inputModel.firstName,
                                         customerType : inputModel.customerType
@@ -222,8 +226,8 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                                 {
                                     key: "customer.newDateOfBirth",
                                     type: "date",
-                                    required: true,
                                     title: "UPDATE_DATE_OF_BIRTH",
+                                    required: true,
                                     condition: "model.customer.isDateOfBirthChanged=='YES'"
                                 },
                                 {
@@ -258,6 +262,8 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                                 {
                                     key: "customer.newMobilePhone",
                                     title: "UPDATE_MOBILE_PHONE",
+                                    inputmode: "number",
+                                    numberType: "tel",
                                     required: true,
                                     condition: "model.customer.isMobileChanged=='YES'"
                                 },
@@ -269,6 +275,7 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                                     "category": "Customer",
                                     "subCategory": "ADDRESSPROOF",
                                     "offline": true,
+                                    required: true,
                                     condition: "model.customer.isMobileChanged=='YES'"
                                 }]
                             },
@@ -293,8 +300,8 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                                 {
                                     key: "customer.newGender",
                                     type: "radios",
-                                    required: true,
                                     title: "UPDATE_GENDER",
+                                    required: true,
                                     "titleMap": {
                                         "MALE": "MALE",
                                         "FEMALE": "FEMALE",
@@ -322,6 +329,8 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                                 {
                                     key: "customer.newOwnership",
                                     title: "UPDATE_OWNERSHIP",
+                                    "type": "select",
+                                    "screenFilter": true,
                                     required: true,
                                     condition: "model.customer.isOwnershipChanged=='YES'"
                                 }]
@@ -453,11 +462,21 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                     },
                     "customerType": {
                         "type": "string",
-                        "title": "CUSTOMER_TYPE"
+                        "title": "CUSTOMER_TYPE",
+                        "enumCode": "customer_type"
                     },
                     "lastName": {
                         "type": "string",
                         "title": "LAST_NAME"
+                    },
+                    "place": {
+                        "type": ["string","null"],
+                        "title": "PLACE"
+                    },
+                    "customerBranchId": {
+                        "type": ["integer","null"],
+                        "title": "BRANCH_NAME",
+                        "enumCode": "branch_id"
                     },
                     "doorNo": {
                         "type": ["string","null"],
@@ -573,6 +592,12 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                         "captureStages": ["Init"]
                     },
                     "ownership": {
+                        "type": ["string","null"],
+                        "title": "OWNERSHIP",
+                        "enumCode": "ownership",
+                        "captureStages": ["Init"]
+                    },
+                    "newOwnership": {
                         "type": ["string","null"],
                         "title": "OWNERSHIP",
                         "enumCode": "ownership",
