@@ -1,9 +1,9 @@
 define({
     pageUID: "kgfs.loans.individual.booking.DocumentUpload",
     pageType: "Engine",
-    dependencies:  ["$log", "Enrollment", "SessionStore", "$state", '$stateParams', 'PageHelper', 'IndividualLoan', 'Queries', 'Utils', 'formHelper', "LoanProcess", "CustomerBankBranch", "SchemaResource", "LoanAccount", "irfNavigator", "PagesDefinition",
+    dependencies:  ["$log", "Enrollment","IndividualLoan","SessionStore", "$state", '$stateParams', 'PageHelper', 'IndividualLoan', 'Queries', 'Utils', 'formHelper', "LoanProcess", "CustomerBankBranch", "SchemaResource", "LoanAccount", "irfNavigator", "PagesDefinition",
     "PageHelper", "Utils", "PagesDefinition", "Queries", "$stateParams", "Queries", "DeathMarking"],
-    $pageFn:function($log, Enrollment, SessionStore, $state, $stateParams, PageHelper, IndividualLoan, Queries, Utils, formHelper, LoanProcess, CustomerBankBranch, SchemaResource, LoanAccount, irfNavigator, PagesDefinition) {
+    $pageFn:function($log, Enrollment, IndividualLoan,SessionStore, $state, $stateParams, PageHelper, IndividualLoan, Queries, Utils, formHelper, LoanProcess, CustomerBankBranch, SchemaResource, LoanAccount, irfNavigator, PagesDefinition) {
             var getDocument = function(docsArr, docCode) {
             var i = 0;
             for (i = 0; i < docsArr.length; i++) {
@@ -18,20 +18,18 @@ define({
             "title": "LOAN_DOCUMENT_UPLOAD_QUEUE",
             "subTitle": " ",
             initialize: function(model, form, formCtrl) {
-                console.log($stateParams);
                 $log.info("Demo Customer Page got initialized");
                 model.siteCode = SessionStore.getGlobalSetting("siteCode");
                 model.loanView = SessionStore.getGlobalSetting("LoanViewPageName");
                 model._queue = $stateParams.pageData;
-                // if (!model._queue) {
-                //     $log.info("Screen directly launched hence redirecting to queue screen");
-                //     $state.go('Page.Engine', {
-                //         pageName: 'loans.individual.booking.DocumentUploadQueue',
-                //         pageId: null
-                //     });
-                //     return;cm
-
-                // }
+                if (!model._queue) {
+                    $log.info("Screen directly launched hence redirecting to queue screen");
+                    // $state.go('Page.Engine', {
+                    //     pageName: 'loans.individual.booking.DocumentUploadQueue',
+                    //     pageId: null
+                    // });
+                    return;
+                }
 
                 var loanId = $stateParams['pageId'];
                 PageHelper.showProgress('loan-load', 'Loading loan details...');
@@ -76,7 +74,6 @@ define({
                                             availableDocCodes.push(loanDocuments[i].document);
                                             var documentObj = getDocument(docsForProduct, loanDocuments[i].document);
                                             /* To add flag whether to show or not */
-                                            loanDocuments[i].isDocs = false;
                                             loanDocuments[i].isHidden = false;
                                             if (loanDocuments[i].documentStatus == 'APPROVED'){
                                                 loanDocuments[i].isHidden = true;
@@ -89,7 +86,6 @@ define({
                                                 loanDocuments[i].$formsKey = documentObj.formsKey;
                                                 loanDocuments[i].$downloadRequired = documentObj.downloadRequired;
                                                 loanDocuments[i].$mandatory = documentObj.mandatory;
-                                                loanDocuments[i].isDocs = true;
 
 
                                             } else {
@@ -107,10 +103,9 @@ define({
                                                     $downloadRequired: docsForProduct[i].downloadRequired,
                                                     $title: docsForProduct[i].docTitle,
                                                     $formsKey: docsForProduct[i].formsKey,
+                                                    $mandatory: docsForProduct[i].mandatory,
                                                     disbursementId: model.loanAccount.disbursementSchedules[0].id,
-                                                    isHidden: false,
-                                                    isDocs:true,
-                                                    $mandatory: docsForProduct[i].mandatory
+                                                    isHidden: false
                                                 })
                                             }
                                         }
@@ -192,8 +187,29 @@ define({
                             model.loanAccount.customerBank = '';
                             model.loanAccount.customerBranch = '';
                             model.loanAccount.disbursementSchedules[0].customerNameInBank = '';
-                        }
-                    }, {
+                        },
+                        condition:"model.siteCode != 'witfin'"
+                    },
+                    {
+                        "key": "loanAccount.disbursementSchedules[0].party",
+                        "type": "radios",
+                        "titleMap": [{
+                            "name": "Customer",
+                            "value": "CUSTOMER"
+                        }, {
+                            "name": "Third Party",
+                            "value": "VENDOR"
+                        }],
+                        onChange: function(value, form, model) {
+                            model.loanAccount.customerBankAccountNumber = '';
+                            model.loanAccount.customerBankIfscCode = '';
+                            model.loanAccount.customerBank = '';
+                            model.loanAccount.customerBranch = '';
+                            model.loanAccount.disbursementSchedules[0].customerNameInBank = '';
+                        },
+                        condition:"model.siteCode == 'witfin'"
+                    }
+                    , {
                         key: "loanAccount.disbursementSchedules[0].customerNameInBank",
                         title: "CUSTOMER_NAME_IN_BANK"
                     }, {
@@ -201,6 +217,7 @@ define({
                         type: "lov",
                         autolov: true,
                         title: "CUSTOMER_BANK_ACC_NO",
+                        "condition": "model.loanAccount.disbursementSchedules[0].party=='CUSTOMER'",
                         bindMap: {
                             "customerId": "loanAccount.customerId"
                         },
@@ -243,21 +260,19 @@ define({
 
                             ];
                         }
-                     },
-                     // {
-                     //    key: "loanAccount.customerBankAccountNumber",
-                     //    title: "CUSTOMER_BANK_ACC_NO",
-                     //    "condition": "model.loanAccount.disbursementSchedules[0].party=='VENDOR'"
-                     // },
-                     // {
-                     //    key: "loanAccount.customerBankIfscCode",
-                     //    title: "CUSTOMER_BANK_IFSC",
-                     //    "condition": "model.loanAccount.disbursementSchedules[0].party=='CUSTOMER'"
-                     // },
-                     {
+                    }, {
+                        key: "loanAccount.customerBankAccountNumber",
+                        title: "CUSTOMER_BANK_ACC_NO",
+                        "condition": "model.loanAccount.disbursementSchedules[0].party=='VENDOR'"
+                    }, {
+                        key: "loanAccount.customerBankIfscCode",
+                        title: "CUSTOMER_BANK_IFSC",
+                        "condition": "model.loanAccount.disbursementSchedules[0].party=='CUSTOMER'"
+                    }, {
                         key: "loanAccount.customerBankIfscCode",
                         type: "lov",
                         lovonly: true,
+                        "condition": "model.loanAccount.disbursementSchedules[0].party=='VENDOR'",
                         inputMap: {
                             "ifscCode": {
                                 "key": "loanAccount.customerBankIfscCode"
@@ -407,11 +422,11 @@ define({
                             {
                                 "type": "section",
                                 "htmlClass": "row",
-                                "condition": "model.loanAccount.loanDocuments[arrayIndex].isHidden === false && model.loanAccount.loanDocuments[arrayIndex].isDocs === true " ,
+                                "condition": "model.loanAccount.loanDocuments[arrayIndex].isHidden === false",
                                 "items": [
                                 {
                                     "type": "section",
-                                    "htmlClass": "col-sm-2",
+                                    "htmlClass": "col-sm-3",
                                     "items": [{
                                         "key": "loanAccount.loanDocuments[].$title",
                                         "notitle": true,
@@ -455,26 +470,6 @@ define({
                                     }]
                                 }, {
                                     "type": "section",
-                                    "htmlClass": "col-sm-2",
-                                    "key": "loanAccount.loanDocuments[].rejectReason",
-                                    "condition": "!model.loanAccount.loanDocuments[arrayIndex].documentStatus",
-                                    "items": [{
-                                        "notitle": true,
-                                        "key": "loanAccount.loanDocuments[].rejectReason",
-                                        "readonly": true
-                                    }]
-                                }, {
-                                    "type": "section",
-                                    "htmlClass": "col-sm-2",
-                                    "key": "loanAccount.loanDocuments[].remarks",
-                                    "condition": "!model.loanAccount.loanDocuments[arrayIndex].documentStatus",
-                                    "items": [{
-                                        "notitle": true,
-                                        "key": "loanAccount.loanDocuments[].remarks",
-                                        "readonly": true
-                                    }]
-                                }, {
-                                    "type": "section",
                                     "htmlClass": "col-sm-4",
                                     "key": "loanAccount.loanDocuments[].documentStatus",
                                     "condition": "model.loanAccount.loanDocuments[arrayIndex].documentStatus === 'REJECTED' && !model.loanAccount.loanDocuments[arrayIndex].remarks",
@@ -508,26 +503,10 @@ define({
                                     "htmlClass": "col-sm-4",
                                     "key": "loanAccount.loanDocuments[].documentStatus",
                                     "condition": "model.loanAccount.loanDocuments[arrayIndex].documentStatus !== 'REJECTED' && model.loanAccount.loanDocuments[arrayIndex].documentStatus !== 'APPROVED'"
-                                },
-                                {
-                                    "type": "section",
-                                     "condition": "model.loanAccount.loanDocuments[arrayIndex].documentStatus == 'APPROVED'",
-                                     readonly: true,
-                                    "htmlClass": "col-sm-3",
-                                    "items": [{
-                                        title: "Upload",
-                                        key: "loanAccount.loanDocuments[].documentId",
-                                        type: "file",
-                                        fileType: "application/pdf",
-                                        category: "Loan",
-                                        subCategory: "DOC1",
-                                        "notitle": true,
-                                        using: "scanner"
-                                    }]
                                 }, 
                                 {
                                     "type": "section",
-                                     "condition": "model.loanAccount.loanDocuments[arrayIndex].documentStatus !== 'APPROVED' && model.loanAccount.loanDocuments[arrayIndex].$mandatory == 'NO' && model.loanAccount.loanDocuments[arrayIndex].isDocs === true",
+                                     "condition": "model.loanAccount.loanDocuments[arrayIndex].documentStatus !== 'APPROVED' && model.loanAccount.loanDocuments[arrayIndex].$mandatory == 'NO' ",
                                      
                                     "htmlClass": "col-sm-3",
                                     "items": [{
@@ -544,7 +523,7 @@ define({
                                 },
                                 {
                                     "type": "section",
-                                     "condition": "model.loanAccount.loanDocuments[arrayIndex].documentStatus !== 'APPROVED' && model.loanAccount.loanDocuments[arrayIndex].$mandatory == 'YES' && model.loanAccount.loanDocuments[arrayIndex].isDocs === true ",
+                                     "condition": "model.loanAccount.loanDocuments[arrayIndex].documentStatus !== 'APPROVED' && model.loanAccount.loanDocuments[arrayIndex].$mandatory == 'YES' ",
                                      
                                     "htmlClass": "col-sm-3",
                                     "items": [{
@@ -558,6 +537,21 @@ define({
                                         using: "scanner",
                                         required: true
                                         
+                                    }]
+                                }, {
+                                    "type": "section",
+                                     "condition": "model.loanAccount.loanDocuments[arrayIndex].documentStatus == 'APPROVED'",
+                                     readonly: true,
+                                    "htmlClass": "col-sm-3",
+                                    "items": [{
+                                        title: "Upload",
+                                        key: "loanAccount.loanDocuments[].documentId",
+                                        type: "file",
+                                        fileType: "application/pdf",
+                                        category: "Loan",
+                                        subCategory: "DOC1",
+                                        "notitle": true,
+                                        using: "scanner"
                                     }]
                                 }]
                             }] // END of array items
@@ -763,7 +757,11 @@ define({
                 reject: function(model, formCtrl, form, $event){
                     $log.info("Inside reject()");
                     Utils.confirm("Are You Sure?").then(function(){
-                        var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
+                        var reqData = {
+                        'loanAccount': _.cloneDeep(model.loanAccount),
+                        'loanProcessAction': 'PROCEED',
+                        'remarks': model.review.remarks
+                        };
                         reqData.loanAccount.status = '';
                         reqData.loanProcessAction = "PROCEED";
                         reqData.stage = "Rejected";
@@ -898,7 +896,7 @@ define({
                 viewLoan: function(model, formCtrl, form, $event){
                     Utils.confirm("Save the data before proceed").then(function(){
                         $log.info("Inside ViewLoan()");
-                            
+                        	
                         if(model.loanView) {
                             irfNavigator.go({
                                 state: "Page.Bundle",
@@ -979,7 +977,8 @@ define({
                     }
                     var reqData = {
                         'loanAccount': _.cloneDeep(model.loanAccount),
-                        'loanProcessAction': 'PROCEED'
+                        'loanProcessAction': 'PROCEED',
+                        'remarks': model.review.remarks
                     };
                     PageHelper.showProgress('update-loan', 'Working...');
                     PageHelper.showLoader();
