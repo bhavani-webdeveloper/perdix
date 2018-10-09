@@ -8,7 +8,7 @@ define(["perdix/domain/model/loan/LoanProcess",
     var LoanCustomerRelationTypes = LoanCustomerRelation["LoanCustomerRelationTypes"];
 
     return {
-        pageUID: "kgfs.loans.individual.booking.LoanInput",
+        pageUID: "kgfs.loans.individual.booking.LoanDocument",
         pageType: "Bundle",
         dependencies: ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "Enrollment", "LoanAccount", "Lead", "PageHelper", "irfStorageService", "$filter", "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch", "Queries", "Utils", "IndividualLoan", "BundleManager", "irfNavigator"],
         $pageFn: function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, Lead, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries, Utils, IndividualLoan, BundleManager, irfNavigator) {
@@ -75,14 +75,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                             maximum: 1,
                             order:70
                         },
-                        // {
-                        //     pageName: 'kgfs.loans.individual.booking.DocumentUpload',
-                        //     title: 'DOCUMENT_UPLOAD',
-                        //     pageClass: 'document-upload',
-                        //     minimum: 1,
-                        //     maximum: 1,
-                        //     order:80
-                        // }
+                        {
+                            pageName: 'kgfs.loans.individual.booking.DocumentUpload',
+                            title: 'DOCUMENT_UPLOAD',
+                            pageClass: 'document-upload',
+                            minimum: 1,
+                            maximum: 1,
+                            order:80
+                        }
                         
                         
                     ]);
@@ -134,7 +134,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                 },
                 "pre_pages_initialize": function(bundleModel){
                     $log.info("Inside pre_page_initialize");
-                    bundleModel.currentStage = "LoanInitiation";
+                    bundleModel.currentStage = "DocumentUpload";
                     var deferred = $q.defer();
 
                     var $this = this;
@@ -194,12 +194,6 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         loanProcess: loanProcess
                                     }
                                 });
-                                // $this.bundlePages.push({
-                                //     pageClass: 'document-upload',
-                                //     model:{
-                                //         loanProcess: loanProcess
-                                //     }
-                                // });
                                 $this.bundlePages.push({
                                     pageClass: 'cb-check',
                                     model: {
@@ -218,6 +212,12 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         loanAccount: loanProcess.loanAccount
                                     }
                                 });
+                                $this.bundlePages.push({
+                                    pageClass: 'document-upload',
+                                    model:{
+                                        loanProcess: loanProcess
+                                    }
+                                });
                                 
                                 deferred.resolve();
                             });
@@ -225,7 +225,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                     } else {
                         LoanProcess.createNewProcess()
                             .subscribe(function(loanProcess){
-                                loanProcess.loanAccount.currentStage = 'LoanInitiation';
+                                loanProcess.loanAccount.currentStage = 'DocumentUpload';
                                 bundleModel.loanProcess = loanProcess;
                                  if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
 
@@ -269,12 +269,12 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 });
                                
 
-                                    // $this.bundlePages.push({
-                                    //     pageClass: 'document-upload',
-                                    //     model:{
-                                    //         loanProcess: loanProcess
-                                    //     }
-                                    // }); 
+                                    $this.bundlePages.push({
+                                        pageClass: 'document-upload',
+                                        model:{
+                                            loanProcess: loanProcess
+                                        }
+                                    }); 
 
                                 deferred.resolve();
                             });

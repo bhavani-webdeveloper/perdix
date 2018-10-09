@@ -194,15 +194,15 @@ define({
                                         //     pageName: "loans.individual.booking.DocumentUploadQueue"
                                         // });
                                     } else {
-                                        // irfNavigator.go({
-                                        //     state: 'Page.Engine',
-                                        //     pageName: 'loans.individual.booking.DocumentUpload',
-                                        //     pageData: item,
-                                        //     pageId: item.loanId
-                                        // }, {
-                                        //     state: 'Page.Engine',
-                                        //     pageName: "loans.individual.booking.DocumentUploadQueue"
-                                        // });
+                                        irfNavigator.go({
+                                            state: 'Page.Bundle',
+                                            pageName: 'kgfs.loans.individual.booking.LoanDocument',
+                                            pageData: item,
+                                            pageId: item.loanId
+                                        }, {
+                                            state: 'Page.Engine',
+                                            pageName: "kgfs.loans.individual.booking.DocumentUploadQueue"
+                                        });
                                     }
     
                                 },
