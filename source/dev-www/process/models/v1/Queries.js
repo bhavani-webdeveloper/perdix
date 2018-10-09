@@ -981,23 +981,63 @@ irf.models.factory('Queries', [
         return deferred.promise;
     }
     resource.getBankAccountByPartnerForLoanRepay = function(partnerCode) {
-            var deferred = $q.defer();
-            request = {};
-            request.partner_code = (_.isNull(partnerCode) || _.isUndefined(partnerCode)) ? "%" : ("%" + partnerCode + "%");
-            resource.getResult("LoanRepayBankAccountByPartnerCode.list", request, 10).then(function(records) {
-                if (records && records.results) {
-                    var result = {
-                        headers: {
-                            "x-total-count": records.results.length
-                        },
-                        body: records.results
-                    };
-                    deferred.resolve(result);
-                }
-            }, deferred.reject);
-            return deferred.promise;
-        }
+        var deferred = $q.defer();
+        request = {};
+        request.partner_code = (_.isNull(partnerCode) || _.isUndefined(partnerCode)) ? "%" : ("%" + partnerCode + "%");
+        resource.getResult("LoanRepayBankAccountByPartnerCode.list", request, 10).then(function(records) {
+            if (records && records.results) {
+                var result = {
+                    headers: {
+                        "x-total-count": records.results.length
+                    },
+                    body: records.results
+                };
+                deferred.resolve(result);
+            }
+        }, deferred.reject);
+        return deferred.promise;
+    }
 
+    resource.questionnaireDetails = function(moduleCode, process, stage) {
+        var deferred = $q.defer();
+        resource.getResult('questionnaireDetails.list', {
+            module_code: moduleCode,
+            process: process,
+            stage: stage
+        }).then(
+            function(res) {
+                if (res && res.results && res.results.length) {
+
+                    var selectType = _.filter(res.results, function(obj) {
+                        return obj.input_type == 'select';     
+                    });
+
+                    var nonSelectType = _.filter(res.results, function(obj) {
+                        return obj.input_type !== 'select';     
+                    });
+
+                    _.forEach(selectType, function(obj) {
+                        var key = _.findIndex(nonSelectType, {'party_type':obj.party_type, 'question':obj.question});
+                        if(key!==-1) {
+                            nonSelectType[key].select = _.merge(nonSelectType[key].select, {[obj.value]:obj.value});
+                        } else {
+                            obj.select = {[obj.value]:obj.value};
+                            nonSelectType.push(obj);
+                        }
+                    });
+
+                    deferred.resolve(nonSelectType);
+                } else {
+                    deferred.reject(res);
+                }
+            },
+            function(res) {
+                deferred.reject(res.data);
+            }
+        )
+        return deferred.promise;
+    }
     return resource;
+    
     }
 ]);
