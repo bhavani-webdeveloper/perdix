@@ -1009,7 +1009,7 @@ define([], function () {
                     },
                     "LoanDetails.requestedTenure":{
                         "orderNo" : 6,
-                        "placeholderExpr": "FROM - To"
+                        "placeholderExpr": "model.additions.tenurePlaceHolder",
                     },
                     "LoanDetials.witnessDetails": {
                         "type": "array",
