@@ -953,6 +953,7 @@ define([], function () {
                            },
                            onSelect: function(valueObj, model, context) {
                                model.loanAccount.productCode = valueObj.productCode;
+                               model.additions.tenurePlaceHolder = valueObj.tenure_from + '-' + valueObj.tenure_to;
                            },
                            getListDisplayItem: function(item, index) {
                                return [
@@ -1005,6 +1006,10 @@ define([], function () {
                     },
                     "LoanDetails.loanAmountRequested": {
                         "orderNo": 5,
+                    },
+                    "LoanDetails.requestedTenure":{
+                        "orderNo" : 6,
+                        "placeholderExpr": "FROM - To"
                     },
                     "LoanDetials.witnessDetails": {
                         "type": "array",
@@ -1169,6 +1174,7 @@ define([], function () {
                     console.log(model);
                     var familyDetails = [];
                     model.customer = {};
+                    model.additions = {};
                     model.loanAccount = model.loanProcess.loanAccount;
                     model.loanAccount.bcAccount = {};
                     model.loanAccount.processType = "1";
