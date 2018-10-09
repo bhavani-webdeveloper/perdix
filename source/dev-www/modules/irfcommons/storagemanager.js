@@ -128,6 +128,61 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter, Utils){
 		return classifiers;
 	};
 	var factoryObj = {
+		storeMaster: function(value) {
+			if (fileSystem.root) {
+				var deferred = $q.defer();
+				try {
+					fileSystem.root.getFile('irfMasters', {create: true}, function(fileEntry) {
+						fileEntry.createWriter(function(fileWriter) {
+							fileWriter.onwriteend = function() {
+								deferred.resolve();
+							};
+							fileWriter.onerror = function() {
+								fileSystem.errorHandler(e);
+								deferred.reject(e);
+							};
+							var blob = new Blob([JSON.stringify(value)], {type: 'application/json'});
+							fileWriter.write(blob);
+						}, function(e) {
+							fileSystem.errorHandler(e);
+							deferred.reject(e);
+						});
+					}, function(e) {
+						fileSystem.errorHandler(e);
+						deferred.reject(e);
+					});
+				} catch (e) {
+					deferred.reject(e);
+				}
+				return deferred.promise;
+			} else {
+				$q.resolve(factoryObj.storeJSON('irfMasters', value));
+			}
+		},
+		retrieveMaster: function() {
+			if (fileSystem.root) {
+				var deferred = $q.defer();
+				try {
+					fileSystem.root.getFile('irfMasters', {}, function(fileEntry) {
+						fileEntry.file(function(file) {
+							var reader = new FileReader();
+							reader.onloadend = function(e) {
+								deferred.resolve(JSON.parse(this.result));
+							};
+							reader.readAsText(file);
+						});
+					}, function(e) {
+						fileSystem.errorHandler(e);
+						deferred.reject(e);
+					});
+				} catch (e) {
+					deferred.reject(e);
+				}
+				return deferred.promise;
+			} else {
+				return $q.resolve(factoryObj.retrieveJSON('irfMasters'));
+			}
+		},
 		storeJSON: function(key, value){
 			try {
 				storeItem(key, JSON.stringify(value));
@@ -202,47 +257,52 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter, Utils){
 			}
 		},
 		cacheAllMaster: function(isServer, forceFetch) {
-			if (!masters || _.isEmpty(masters)) {
-				masters = factoryObj.retrieveJSON('irfMasters');
-			} else {
+			if (masters && !_.isEmpty(masters)) {
 				$log.info('masters already in memory');
+				return $q.resolve();
 			}
-			if (isServer) {
-				$log.info('masters isServer');
-				var deferred = $q.defer();
-				try {
-					var isSameDay = false;
-					if (masters && masters._timestamp) {
-						isSameDay = moment(masters._timestamp).startOf('day').isSame(moment(new Date().getTime()).startOf('day'));
-					}
-					if (forceFetch || !isSameDay) {
-						rcResource.findAll(null).$promise.then(function(codes) {
-							var _start = new Date().getTime();
-
-							masters = processMasters(codes);
-							masters._timestamp = new Date().getTime();
-							factoryObj.storeJSON('irfMasters', masters);
-
-							$log.info(masters);
-							$log.info("Time taken to process masters (ms):" + (new Date().getTime() - _start));
-							var masterUpdatePromises = [];
-							_.forOwn(masterUpdateRegistry, function(v, k) {
-								masterUpdatePromises.push(v.callback());
+			var deferred = $q.defer();
+			factoryObj.retrieveMaster().then(function(value) {
+				masters = value;
+			}).finally(function() {
+				if (isServer) {
+					$log.info('masters isServer');
+					try {
+						var isSameDay = false;
+						if (masters && masters._timestamp) {
+							isSameDay = moment(masters._timestamp).startOf('day').isSame(moment(new Date().getTime()).startOf('day'));
+						}
+						if (forceFetch || !isSameDay) {
+							rcResource.findAll(null).$promise.then(function(codes) {
+								var _start = new Date().getTime();
+	
+								masters = processMasters(codes);
+								masters._timestamp = new Date().getTime();
+								factoryObj.storeMaster(masters).then(function() {
+									$log.info("Time taken to process masters (ms):" + (new Date().getTime() - _start));
+									var masterUpdatePromises = [];
+									_.forOwn(masterUpdateRegistry, function(v, k) {
+										masterUpdatePromises.push(v.callback());
+									});
+									$q.all(masterUpdatePromises).then(function() {
+										deferred.resolve("masters download complete");
+									}, function(err) {
+										deferred.reject(err);
+									});
+								}, function(e) {
+									deferred.reject(e);
+								});
+	
 							});
-							$q.all(masterUpdatePromises).then(function() {
-								deferred.resolve("masters download complete");
-							}, function(err) {
-								deferred.reject(err);
-							});
-						});
-					} else {
-						deferred.resolve("It's the same day for Masters/ not downloading");
+						} else {
+							deferred.resolve("It's the same day for Masters/ not downloading");
+						}
+					} catch (e) {
+						deferred.reject(e);
 					}
-				} catch (e) {
-					deferred.reject(e);
 				}
-				return deferred.promise;
-			}
+			});
+			return deferred.promise;
 		},
 		getMaster: function(classifier) {
 			return masters[classifier];
@@ -250,7 +310,7 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter, Utils){
 		setMaster: function(classifier, master) {
 			if (classifier && master) {
 				masters[classifier] = master;
-				factoryObj.storeJSON('irfMasters', masters);
+				factoryObj.storeMaster(masters);
 			}
 		},
 		onMasterUpdate: function(callback) {
