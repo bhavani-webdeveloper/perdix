@@ -105,12 +105,12 @@ define([], function () {
                                             name: "Jewel Loan"
                                         },
                                         {
-                                            value: "consumerLoan",
-                                            name: "Consumer Loan"
+                                            value: "SECURED",
+                                            name: "SECURED"
                                         },
                                         {
-                                            value: "individualLoan",
-                                            name: "Individual Loan"
+                                            value: "UNSECURED",
+                                            name: "UNSECURED"
                                         }
                                     ]
                                 },
@@ -137,15 +137,16 @@ define([], function () {
                                     "orderNo": 4,
                                     bindMap: {
                                         "Partner": "loanAccount.partnerCode",
-                                        "ProductCategory": "loanAccount.productCategory",
+                                        // "ProductCategory": "loanAccount.productCategory",
                                         "Frequency": "loanAccount.frequency",
+                                        "loanType": "loanAccount.loanType"
                                        },
                                        autolov: true,
                                        required: true,
                                        searchHelper: formHelper,
                                        search: function(inputModel, form, model, context) {
             
-                                          return Queries.getLoanProductCode(model.loanAccount.productCategory,model.loanAccount.frequency,model.loanAccount.partnerCode);
+                                          return Queries.getLoanProductCodeByLoanType(model.loanAccount.productCategory,model.loanAccount.frequency,model.loanAccount.partnerCode,model.loanAccount.loanType);
                                        },
                                        onSelect: function(valueObj, model, context) {
                                            model.loanAccount.productCode = valueObj.productCode;
@@ -183,22 +184,56 @@ define([], function () {
                                                 ];
                                         },
                                     onSelect: function(result, model, context) {
-                                                // model.loanAccount.loanPurpose2 = '';
+                                             model.loanAccount.loanPurpose2 = '';
                                     }
                                 },
                                 "LoanDetails.loanPurpose2": {
                                     "orderNo": 7,
                                     "title": "LOAN_PURPOSE_2",
-                                    "enumCode": "loan_purpose_2",
-                                    "parentEnumCode": "loan_purpose_1",
-                                    "parentValueExpr": "model.loanAccount.loanPurpose1"
+                                    // title:"LOAN_PURPOSE_2",
+                                    "type": "lov",
+                                    bindMap: {
+                                    },
+                                    outputMap: {
+                                        "purpose2": "loanAccount.loanPurpose2"
+                                    },
+                                    searchHelper: formHelper,
+                                    search: function(inputModel, form, model) {
+                                        if(model.loanAccount.productCode != null)
+                                            return Queries.getLoanPurpose2(model.loanAccount.productCode, model.loanAccount.loanPurpose1);
+                                        else
+                                            return Queries.getAllLoanPurpose2(model.loanAccount.loanPurpose1);
+                                    },
+                                    getListDisplayItem: function(item, index) {
+                                        return [
+                                            item.purpose2
+                                        ];
+                                    },
+                                    onSelect: function(result, model, context) {
+                                        model.loanAccount.loanPurpose3 = '';
+                               }
                                     
                                 },
                                 "LoanDetails.loanPurpose3": {
                                     "orderNo": 8,
-                                    "enumCode": "loan_purpose_3",
-                                    "parentEnumCode": "loan_purpose_2",
-                                    "parentValueExpr": "model.loanAccount.loanPurpose2"
+                                    "type": "lov",
+                                    bindMap: {
+                                    },
+                                    outputMap: {
+                                        "purpose3": "loanAccount.loanPurpose3"
+                                    },
+                                    searchHelper: formHelper,
+                                    search: function(inputModel, form, model) {
+                                        if(model.loanAccount.productCode != null)
+                                            return Queries.getLoanPurpose3(model.loanAccount.productCode, model.loanAccount.loanPurpose1,model.loanAccount.loanPurpose2);
+                                        else
+                                            return Queries.getAllLoanPurpose3(model.loanAccount.loanPurpose1);
+                                    },
+                                    getListDisplayItem: function(item, index) {
+                                        return [
+                                            item.purpose3
+                                        ];
+                                    }
                                 },
                                 "LoanDetails.loanAmountRequested": {
                                     "orderNo": 5,
