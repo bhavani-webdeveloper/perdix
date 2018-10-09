@@ -48,7 +48,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "EnterpriseReferences",
                                 "IndividualReferences",
                                 "PhysicalAssets",
-                                "ResidenceVerification"
+                                "ResidenceVerification",
+                                "Liabilities",
                             ]
                         },
                         "ScreeningReview": {
@@ -86,7 +87,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "EnterpriseReferences",
                                 "IndividualReferences",
                                 "PhysicalAssets",
-                                "ResidenceVerification"
+                                "ResidenceVerification",
+                                "Liabilities",
                             ]
                         },
                         "GoNoGoApproval1": {
@@ -175,7 +177,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
                             },
                             "excludes": [
-                                "ContactInformation.location"
+                                "ContactInformation.location",
+                                "Liabilities",
                             ]
                         },
                         "FieldInvestigation2": {
@@ -188,7 +191,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
                             },
                             "excludes": [
-                                "ContactInformation.location"
+                                "ContactInformation.location",
+                                "Liabilities",
                             ]
                         },
                         "FieldInvestigation3": {
@@ -201,7 +205,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
                             },
                             "excludes": [
-                                "ContactInformation.location"
+                                "ContactInformation.location",
+                                "Liabilities",
                             ]
                         },
                         "TeleVerification": {
@@ -1706,7 +1711,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                 "checkNumber": {
                                                     "key": "customer.customerDocuments[].documentNumber",
                                                     "title": "CHECK_NUMBER",
-                                                    "type": "number",
+                                                    "type": "string",
+                                                    fieldType: "number",
                                                     "condition":"model.customer.customerDocuments[arrayIndex].fileType=='Bank Signature Verification'",
                                                 }
                                             }
@@ -1991,7 +1997,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 PageHelper.clearErrors();
                                 BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
-                                BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
                             }, function (err) {
                                 PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                 PageHelper.showErrors(err);
@@ -2014,7 +2019,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 PageHelper.clearErrors();
                                 BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
-                                BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
                                 model.enrolmentProcess.proceed()
                                 .subscribe(function(enrolmentProcess) {
                                     PageHelper.showProgress('enrolment', 'Done.', 5000);

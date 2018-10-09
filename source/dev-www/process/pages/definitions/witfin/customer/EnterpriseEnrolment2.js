@@ -1060,6 +1060,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 "TrackDetails.vehiclesFree": {
                                     "readonly": true
                                 },
+                                "TrackDetails.vehiclesOwned": {
+                                        "onChange": calculateVehiclesFree
+                                },
+                                "TrackDetails.vehiclesFinanced": {
+                                        "onChange": calculateVehiclesFree
+                                },
                                 "IndividualReferences.verifications": {
                                     "view":"fixed",
                                     "titleExpr": "model.customer.verifications[arrayIndexes[0]].relationship",
