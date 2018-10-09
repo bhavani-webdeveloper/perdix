@@ -542,6 +542,9 @@ define([], function() {
                         };
                     }
 
+                    model.loanAccount.collectionPaymentType = model.loanAccount.collectionPaymentType || 'ACH';
+                    model.loanAccount.securityEmiRequired = model.loanAccount.securityEmiRequired || 'NO';
+
                     // model.loanAccount.accountUserDefinedFields = model.loanAccount.accountUserDefinedFields || {};
 
                     var self = this;

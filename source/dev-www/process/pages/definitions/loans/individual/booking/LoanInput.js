@@ -869,7 +869,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             },
                             {
                                 key:"loanAccount.fee5",
-                                title: "FEE5",
+                                title: "OTHER_FEE_CHARGES",
                                 type:"amount",
                                 condition: "model.siteCode=='pahal'"
                             },
