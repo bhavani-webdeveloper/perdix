@@ -451,7 +451,7 @@ define({
                                 "type": "section",
                                 "html": `
                                 <div class="chart-title"><h4>{{model.customerHistoryFinancials.financialsGraph.invoiceCash.title}}</h4>
-                                <div >
+                                <div ><style type="text/css">.nvd3-svg{padding-left:15px;}</style>
                                     <nvd3
                                     data="model.customerHistoryFinancials.financialsGraph.invoiceCash.graphData"
                                     options="model.customerHistoryFinancials.graphOptions.multiBar"
@@ -467,7 +467,7 @@ define({
                                 "type": "section",
                                 "html": `
                                 <div class="chart-title"><h4>{{model.customerHistoryFinancials.financialsGraph.ownCapital.title}}</h4>                                
-                                <div class="">
+                                <div class=""><style type="text/css">.nvd3-svg{padding-left:15px;}</style>
                                     <nvd3
                                     data="model.customerHistoryFinancials.financialsGraph.ownCapital.graphData"
                                     options="model.customerHistoryFinancials.graphOptions.multiBar"
@@ -483,7 +483,7 @@ define({
                                 "type": "section",
                                 "html": `
                                 <div class="chart-title"><h4>{{model.customerHistoryFinancials.financialsGraph.netIncome.title}}</h4>
-                                <div class="">
+                                <div class=""><style type="text/css">.nvd3-svg{padding-left:15px;}</style>
                                     <nvd3
                                     data="model.customerHistoryFinancials.financialsGraph.netIncome.graphData"
                                     options="model.customerHistoryFinancials.graphOptions.multiBar"
@@ -499,7 +499,7 @@ define({
                                 "type": "section",
                                 "html": `
                                 <div class="chart-title"><h4>{{model.customerHistoryFinancials.financialsGraph.assetLiabilities.title}}</h4>
-                                <div class="">
+                                <div class=""><style type="text/css">.nvd3-svg{padding-left:15px;}</style>
                                     <nvd3
                                     data="model.customerHistoryFinancials.financialsGraph.assetLiabilities.graphData"
                                     options="model.customerHistoryFinancials.graphOptions.multiBar"
