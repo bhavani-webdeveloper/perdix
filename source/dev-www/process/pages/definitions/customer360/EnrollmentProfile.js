@@ -1,7 +1,7 @@
 irf.pageCollection.factory(irf.page("customer360.EnrollmentProfile"),
-["$log", "Enrollment", "EnrollmentHelper", "SessionStore","$state", "formHelper", "$q", "irfProgressMessage",
+["$log", "Enrollment","Queries","EnrollmentHelper","PagesDefinition", "SessionStore","$state","$stateParams", "formHelper", "$q", "irfProgressMessage",
 "PageHelper", "Utils", "BiometricService","CustomerBankBranch",
-function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q, irfProgressMessage,
+function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStore,$state,$stateParams, formHelper, $q, irfProgressMessage,
     PageHelper, Utils, BiometricService,CustomerBankBranch){
 
     var branch = SessionStore.getBranch();
@@ -19,50 +19,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
         if (_.isArray(centres) && centres.length > 0){
             model.customer.centreId = model.customer.centreId || centres[0].centreId;
         }
-        model.customer.idAndBcCustId = model.customer.id + ' / ' + model.customer.bcCustId;
-        model.customer.fullName = Utils.getFullName(model.customer.firstName, model.customer.middleName, model.customer.lastName);
-        model.customer.fatherFullName = Utils.getFullName(model.customer.fatherFirstName, model.customer.fatherMiddleName, model.customer.fatherLastName);
-        model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
     };
-
-    var fixData = function(model) {
-        $log.info("Before fixData");
-        Utils.removeNulls(model, true);
-        if (_.has(model.customer, 'udf.userDefinedFieldValues')) {
-            var fields = model.customer.udf.userDefinedFieldValues;
-            $log.info(fields);
-            fields['udf17'] = Number(fields['udf17']);
-            fields['udf10'] = Number(fields['udf10']);
-            fields['udf11'] = Number(fields['udf11']);
-            fields['udf28'] = Number(fields['udf28']);
-            //fields['udf32'] = Number(fields['udf32']);
-            fields['udf1'] = Boolean(fields['udf1']);
-            fields['udf6'] = Boolean(fields['udf6']);
-            //fields['udf4'] = Number(fields['udf4']);
-
-            for (var i = 1; i <= 40; i++) {
-                if (!_.has(model.customer.udf.userDefinedFieldValues, 'udf' + i)) {
-                    model.customer.udf.userDefinedFieldValues['udf' + i] = '';
-                }
-            }
-        }
-        if (model.customer.dateOfBirth) {
-            model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-        }
-        if (model.customer.udf.userDefinedFieldValues.udf26 != "" && model.customer.udf.userDefinedFieldValues.udf26 != null) {
-            if (model.customer.udf.userDefinedFieldValues.udf26 === "true") {
-                model.customer.udf.userDefinedFieldValues.udf26 = true;
-            }
-            if (model.customer.udf.userDefinedFieldValues.udf26 === "false") {
-                model.customer.udf.userDefinedFieldValues.udf26 = false;
-            }
-        }
-        model.customer.addressProofSameAsIdProof=Boolean(model.customer.title);
-        $log.info("After fixData");
-        $log.info(model);
-        return model;
-    };
-
     return {
         "id": "ProfileBasic",
         "type": "schema-form",
@@ -72,49 +29,18 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
         initialize: function (model, form, formCtrl) {
             $log.info("Profile Page got initialized");
             initData(model);
-            fixData(model);
-        },
-        modelPromise: function(pageId, _model) {
-            if (!_model || !_model.customer || _model.customer.id != pageId) {
-                $log.info("data not there, loading...");
-
-                var deferred = $q.defer();
-                PageHelper.showLoader();
-                Enrollment.EnrollmentById({id:pageId},function(resp,header){
-                    var model = {$$OFFLINE_FILES$$:_model.$$OFFLINE_FILES$$};
-                    model.customer = resp;
-                    model =fixData(model);
-                    if (model.customer.currentStage==='Stage01') {
-                        irfProgressMessage.pop("enrollment-save","Customer "+model.customer.id+" not enrolled yet", 5000);
-                        $state.go("Page.Engine", {pageName:'ProfileInformation', pageId:pageId});
-                    } else {
-                        irfProgressMessage.pop("enrollment-save","Load Complete", 2000);
-                        initData(model);
-                        //$log.info(model);
-                        deferred.resolve(model);
-                    }
-                    PageHelper.hideLoader();
-                },function(resp){
-                    PageHelper.hideLoader();
-                    irfProgressMessage.pop("enrollment-save","An Error Occurred. Failed to fetch Data",5000);
-                    $state.go("Page.Engine",{
-                        pageName:"CustomerSearch",
-                        pageId:null
-                    });
-                });
-                return deferred.promise;
+            var enabletrue= false;
+            if($stateParams.pageData){
+                if($stateParams.pageData.enabletrue){
+                    enabletrue= $stateParams.pageData.enabletrue;
+                }  
             }
-        },
-        offline: true,
-        getOfflineDisplayItem: function(item, index){
-            return [
-                item["customer"]["urnNo"],
-                item["customer"]["firstName"],
-                item["customer"]["villageName"]
-            ]
-        },
-        form: [{
+
+            var self = this;
+            self.form = [];
+            self.form = [{
             "type": "box",
+            "readonly":enabletrue,
             "title": "CUSTOMER_INFORMATION",
             "items": [
                 {
@@ -129,9 +55,15 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                     readonly: true
                 },
                 {
-                    key: "customer.fullName",
+                    key: "customer.firstName",
                     title: "FULL_NAME",
-                    readonly: true
+                    condition:"!model.EditBasicCustomerInfo",
+                },
+                {
+                    key: "customer.firstName",
+                    title: "FULL_NAME",
+                    readonly:true,
+                    condition:"model.EditBasicCustomerInfo",
                 },
                 {
                     key:"customer.photoImageId",
@@ -153,12 +85,12 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                 {
                     key:"customer.enrolledAs",
                     type:"radios",
-                    readonly: true
+                    //readonly: true
                 },
                 {
                     key:"customer.gender",
                     type:"radios",
-                    readonly: true
+                    //readonly: true
                 },
                 {
                     key:"customer.age",
@@ -168,18 +100,30 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                 },
                 {
                     key:"customer.dateOfBirth",
+                    condition:"model.EditBasicCustomerInfo",
                     type:"date",
-                    /*onChange: function(modelValue, form, model) {
-                        if (model.customer.dateOfBirth) {
-                            model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-                        }
-                    },*/
                     readonly: true
                 },
                 {
-                    key: "customer.fatherFullName",
+                    key:"customer.dateOfBirth",
+                    onChange: function(modelValue, form, model) {
+                        if (model.customer.dateOfBirth) {
+                            model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                        }
+                    },
+                    condition:"!model.EditBasicCustomerInfo",
+                    type:"date",
+                },
+                {
+                    key: "customer.fatherFirstName",
+                    condition:"model.EditBasicCustomerInfo",
                     title: "FATHER_FULL_NAME",
                     readonly: true
+                },
+                {
+                    key: "customer.fatherFirstName",
+                    condition:"!model.EditBasicCustomerInfo",
+                    title: "FATHER_FULL_NAME",
                 },
                 {
                     key:"customer.maritalStatus",
@@ -187,7 +131,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                 },
                 {
                     key: "customer.spouseFirstName",
-                    title: "SPOUSE_FULL_NAME",
+                    title: "Spouse Full Name",
                     condition:"model.customer.maritalStatus==='MARRIED'",
                     type:"qrcode",
                     onCapture: function(result, model, form) {
@@ -214,7 +158,11 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                 {
                     key:"customer.udf.userDefinedFieldValues.udf1",
                     condition:"model.customer.maritalStatus==='MARRIED'",
-                    title:"SPOUSE_LOAN_CONSENT"
+                    title:"SPOUSE_LOAN_CONSENT",
+                    type:"checkbox",
+                    "schema":{
+                        "default":false
+                    }
                 },
                 {
                     key:"customer.isBiometricValidated",
@@ -244,6 +192,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
             ]
         },{
             "type": "box",
+            "readonly":enabletrue,
             "title": "CONTACT_INFORMATION",
             "items":[{
                 type: "fieldset",
@@ -277,8 +226,14 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                         "customer.landLineNo",
                         {
                             "key": "customer.mobilePhone",
-                            "readonly": true
+                             condition:"model.EditBasicCustomerInfo",
+                            "readonly": true,    
                         },
+                        {
+                            "key": "customer.mobilePhone",
+                             condition:"!model.EditBasicCustomerInfo",   
+                        },
+                        
                         "customer.mailSameAsResidence"
                     ]
                 },{
@@ -306,13 +261,28 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
             ]
         },{
             type:"box",
+            "readonly":enabletrue,
             title:"KYC",
             items:[
                 {
                     "key": "customer.aadhaarNo",
                     type:"qrcode",
                     onChange:"actions.setProofs(model)",
-                    onCapture: EnrollmentHelper.customerAadhaarOnCapture
+                    onCapture: function(result, model, form) {
+                        PageHelper.showLoader();
+                        var aadhaarData = EnrollmentHelper.customerAadhaarOnCapture(result, model, form);
+                        Queries.searchPincodes(
+                            aadhaarData.pc
+                        ).then(function(response) {
+                            $log.info(response);
+                            if (response.body && response.body.length) {
+                                model.customer.district = response.body[0].district;
+                                model.customer.state = response.body[0].state;
+                            }
+                            PageHelper.hideLoader();
+                        });
+                    }
+                    //onCapture: EnrollmentHelper.customerAadhaarOnCapture
                 },
                 {
                     type:"fieldset",
@@ -331,7 +301,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                                     customerId: model.customer.id
                                 };
                             },
-                            "offline": true
+                           // "offline": true
                         },
                         {
                             key:"customer.identityProofReverseImageId",
@@ -342,7 +312,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                                     customerId: model.customer.id
                                 };
                             },
-                            "offline": true
+                            //"offline": true
                         },
                         {
                             key:"customer.identityProofNo",
@@ -386,7 +356,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                                     customerId: model.customer.id
                                 };
                             },
-                            "offline": true
+                            //"offline": true
                         },
                         {
                             key:"customer.udf.userDefinedFieldValues.udf35",
@@ -397,7 +367,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                                     customerId: model.customer.id
                                 };
                             },
-                            "offline": true
+                            //"offline": true
                         },
                         {
                             key:"customer.udf.userDefinedFieldValues.udf36",
@@ -443,7 +413,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                                     customerId: model.customer.id
                                 };
                             },
-                            "offline": true
+                            //"offline": true
                         },
                         {
                             key:"customer.addressProofReverseImageId",
@@ -454,7 +424,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                                     customerId: model.customer.id
                                 };
                             },
-                            "offline": true
+                            //"offline": true
                         },
                         {
                             key:"customer.addressProofNo",
@@ -478,11 +448,11 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                         },
                     ]
                 }
-
             ]
         },
         {
             "type":"box",
+            "readonly":enabletrue,
             "title":"ADDITIONAL_KYC",
             "items":[
                 {
@@ -513,14 +483,23 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                             required: true,
                             type:"file",
                             fileType:"image/*",
-                            "offline": true
+                            "viewParams": function(modelValue, form, model) {
+                                return {
+                                    customerId: model.customer.id
+                                };
+                            },
+                            //"offline": true
                         },
                         {
                             key:"customer.additionalKYCs[].kyc1ReverseImagePath",
-                            required: true,
                             type:"file",
                             fileType:"image/*",
-                            "offline": true
+                            "viewParams": function(modelValue, form, model) {
+                                return {
+                                    customerId: model.customer.id
+                                };
+                            },
+                            //"offline": true
                         },
                         {
                             key:"customer.additionalKYCs[].kyc1IssueDate",
@@ -546,13 +525,23 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                             key:"customer.additionalKYCs[].kyc2ImagePath",
                             type:"file",
                             fileType:"image/*",
-                            "offline": true
+                            "viewParams": function(modelValue, form, model) {
+                                return {
+                                    customerId: model.customer.id
+                                };
+                            },
+                            //"offline": true
                         },
                         {
                             key:"customer.additionalKYCs[].kyc2ReverseImagePath",
                             type:"file",
                             fileType:"image/*",
-                            "offline": true
+                            "viewParams": function(modelValue, form, model) {
+                                return {
+                                    customerId: model.customer.id
+                                };
+                            },
+                            //"offline": true
                         },
                         {
                             key:"customer.additionalKYCs[].kyc2IssueDate",
@@ -568,6 +557,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
         },
         {
             "type": "box",
+            "readonly":enabletrue,
             "title": "T_FAMILY_DETAILS",
             "items": [{
                 key:"customer.familyMembers",
@@ -619,6 +609,10 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                         //readonly: true
                     },
                     {
+                        key:"customer.familyMembers[].familyMemberLastName",
+                        title:"FAMILY_MEMBER_LAST_NAME"
+                    },
+                    {
                         key:"customer.familyMembers[].relationShip",
                         type:"select",
                         title: "T_RELATIONSHIP"
@@ -633,6 +627,16 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                         key: "customer.familyMembers[].dateOfBirth",
                         type:"date",
                         title: "T_DATEOFBIRTH",
+                        onChange: function(modelValue, form, model) {
+                        if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
+                            model.customer.familyMembers[form.arrayIndex].age = moment().diff(moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                        }
+                        },
+                    },
+                    {
+                        key: "customer.familyMembers[].age",
+                        title: "AGE",
+                        "readonly":true
                         //readonly: true
                     },
                     {
@@ -669,24 +673,31 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                                 type: "select"
                             },
                             {
-                                key: "customer.familyMembers[].incomes[].monthsPerYear"
+                                key: "customer.familyMembers[].incomes[].monthsPerYear",
+                                "schema": {
+                                    "minimum": 1,
+                                    "maximum": 12,
+                                }
                             }
                         ]
                     },
-                    {
-                        key:"customer.familyMembers[].enroll",
-                        type:"button",
-                        condition:"model.customer.currentStage=='Completed'&& model.customer.familyMembers[arrayIndex].enrolled== 0",
-                        title:"ENROLL_AS_CUSTOMER",
-                        onClick: function(model, formCtrl,context) {
-                            //pageId:model.customer.familyMembers[context.arrayIndex].enrollmentId,
-                                $state.go("Page.Engine", {
-                                    pageName: "ProfileInformation",
-                                    pageId:undefined,
-                                    pageData:model.customer.familyMembers[context.arrayIndex]
-                                });
-                        }
-                    },
+                    // {
+                    //     key:"customer.familyMembers[].enroll",
+                    //     type:"button",
+                    //     condition:"model.customer.currentStage=='Completed'&& !model.customer.familyMembers[arrayIndex].enrolled && ((model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() != 'self' && (model.customer.familyMembers[arrayIndex].age >= 18) ) ",
+                    //     title:"ENROLL_AS_CUSTOMER",
+                    //     onClick: function(model, formCtrl,context) {
+                    //         model.family={};
+                    //         model.family=model.customer;
+                    //         model.family.familydata=model.customer.familyMembers[context.arrayIndex];
+                    //             $state.go("Page.Engine", {
+                    //                 pageName: "ProfileInformation",
+                    //                 pageId:undefined,
+                    //                 pageData:model.family
+                    //                 //pageData:model.customer.familyMembers[context.arrayIndex]
+                    //             });
+                    //     }
+                    // },
                 ]
             }]
         },
@@ -761,11 +772,14 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                             key: "customer.customerBankAccounts[].customerNameAsInBank"
                         }, {
                             key: "customer.customerBankAccounts[].accountNumber",
+                            "required":true,
                             type: "password",
                             inputmode: "number",
                             numberType: "tel"
                         }, {
                             key: "customer.customerBankAccounts[].confirmedAccountNumber",
+                            "required":true,
+                            "title": "CONFIRMED_ACCOUNT_NUMBER",
                             inputmode: "number",
                             numberType: "tel"
                         }, {
@@ -832,7 +846,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                                 required: true,
                                 //maximum:99,
                                 title: "NO_OF_EMI_CHEQUE_BOUNCED"
-                            }, {
+                            },{
                                 key: "customer.customerBankAccounts[].bankStatements[].bankStatementPhoto",
                                 type: "file",
                                 required: true,
@@ -840,23 +854,15 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                                 fileType: "application/pdf",
                                 "category": "CustomerEnrollment",
                                 "subCategory": "IDENTITYPROOF",
-                                using: "scanner"
-                            }, ]
-                        }, {
-                            key: "customer.customerBankAccounts[].isDisbersementAccount",
-                            type: "radios",
-                            titleMap: [{
-                                value: true,
-                                name: "Yes"
-                            }, {
-                                value: false,
-                                name: "No"
+                                using: "scanner",
+                                offline:true
                             }]
                         }]
                     }]
         },
         {
             "type": "box",
+            "readonly":enabletrue,
             "title": "EXPENDITURES",
             "items": [{
                 key: "customer.expenditures",
@@ -900,6 +906,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
         },
         {
             "type":"box",
+            "readonly":enabletrue,
             "title":"BUSINESS_OCCUPATION_DETAILS",
             "items":[
                 {
@@ -981,14 +988,21 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                             key:"customer.udf.userDefinedFieldValues.udf15"
                         },
                         {
-                            key:"customer.udf.userDefinedFieldValues.udf26"
+                            key:"customer.udf.userDefinedFieldValues.udf26",
+                            type:"checkbox",
+                            "schema":{
+                                "default":false
+                            }
                         },
                         {
                             key:"customer.udf.userDefinedFieldValues.udf27",
                             type:"select"
                         },
                         {
-                            key:"customer.udf.userDefinedFieldValues.udf28"
+                            key:"customer.udf.userDefinedFieldValues.udf28",
+                            "schema":{
+                                "type":"number"
+                            }
                         }
                     ]
                 }
@@ -996,47 +1010,107 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
         },
         {
             "type": "box",
+            "readonly":enabletrue,
             "title": "T_ASSETS",
             "items": [{
                 key: "customer.physicalAssets",
+                titleExpr: "model.customer.physicalAssets[arrayIndex].assetType",
                 type: "array",
-                items: [{
+                startEmpty: true,
+                items: [
+                {
                     key: "customer.physicalAssets[].assetType",
                     "title": "ASSET_TYPE",
-                    "enumCode": "asset_type",
-                    type: "select"
-                }, {
-                    key: "customer.physicalAssets[].ownedAssetDetails",
                     type: "lov",
                     autolov: true,
                     lovonly: true,
                     bindMap: {},
                     searchHelper: formHelper,
                     search: function(inputModel, form, model, context) {
-                        var assetType = model.customer.physicalAssets[context.arrayIndex].assetType;
-                        var ownedAssetDetails = formHelper.enum('asset_Details').data;
-                        var out = [];
-                        if (ownedAssetDetails && ownedAssetDetails.length) {
-                            for (var i = 0; i < ownedAssetDetails.length; i++) {
-
-                                if ((ownedAssetDetails[i].parentCode).toUpperCase() == (assetType).toUpperCase()) {
-                                    out.push({
-                                        name: ownedAssetDetails[i].name,
-                                        id: ownedAssetDetails[i].value
-                                    })
-                                }
-                            }
-                        }
-                        if (!out.length) {
-                            out.push({
+                        var assetDetails = [];
+                        assetDetails = formHelper.enum('asset_type').data;
+                        if (!assetDetails.length) {
+                            assetDetails.push({
                                 name: "No Records",
                             })
                         }
                         return $q.resolve({
                             headers: {
-                                "x-total-count": out.length
+                                "x-total-count": assetDetails.length
                             },
-                            body: out
+                            body: assetDetails
+                        });
+                    },
+                    onSelect: function(valueObj, model, context) {
+                        if (valueObj.name == "No Records") {
+                            model.customer.physicalAssets[context.arrayIndex].assetType = '';
+                            model.customer.physicalAssets[context.arrayIndex].ownedAssetDetails = '';
+                            model.customer.physicalAssets[context.arrayIndex].unit = '';
+                            model.customer.ownedAssetDetails = [];
+                            model.customer.assetunit = [];
+                        } else {
+                            var assetType = model.customer.physicalAssets[context.arrayIndex].assetType = valueObj.name;
+                            model.customer.physicalAssets[context.arrayIndex].ownedAssetDetails = '';
+                            model.customer.physicalAssets[context.arrayIndex].unit = '';
+                            var ownedAssetDetails = formHelper.enum('asset_Details').data;
+                            var assetunit = formHelper.enum('asset_unit').data;
+                            model.customer.ownedAssetDetails = [];
+                            model.customer.assetunit = [];
+                            if (ownedAssetDetails && ownedAssetDetails.length) {
+                                for (var i = 0; i < ownedAssetDetails.length; i++) {
+
+                                    if ((ownedAssetDetails[i].parentCode).toUpperCase() == (assetType).toUpperCase()) {
+                                        model.customer.ownedAssetDetails.push({
+                                            name: ownedAssetDetails[i].name,
+                                            id: ownedAssetDetails[i].value
+                                        })
+                                    }
+                                }
+                            }
+                            if (assetunit && assetunit.length) {
+                                for (var i = 0; i < assetunit.length; i++) {
+                                    if ((assetunit[i].parentCode).toUpperCase() == (assetType).toUpperCase()) {
+                                        model.customer.assetunit.push({
+                                            name: assetunit[i].name,
+                                        })
+                                    }
+                                }
+                            }
+                            if (model.customer.ownedAssetDetails.length && model.customer.ownedAssetDetails.length > 0) {
+                                model.customer.physicalAssets[context.arrayIndex].ownedAssetallowed = true;
+                                model.customer.physicalAssets[context.arrayIndex].assetunitallowed = false;
+                            }
+                            if (model.customer.assetunit.length && model.customer.assetunit.length > 0) {
+                                model.customer.physicalAssets[context.arrayIndex].assetunitallowed = true;
+                                model.customer.physicalAssets[context.arrayIndex].ownedAssetallowed = false;
+                            }
+                        }
+                    },
+                    getListDisplayItem: function(item, index) {
+                        return [
+                            item.name
+                        ];
+                    }
+                }, {
+                    key: "customer.physicalAssets[].ownedAssetDetails",
+                    condition: "model.customer.physicalAssets[arrayIndex].ownedAssetallowed",
+                    "required": true,
+                    type: "lov",
+                    autolov: true,
+                    lovonly: true,
+                    bindMap: {},
+                    searchHelper: formHelper,
+                    search: function(inputModel, form, model, context) {
+                        if (!model.customer.ownedAssetDetails.length) {
+                            model.customer.ownedAssetDetails.push({
+                                name: "No Records",
+                            })
+                        }
+                        return $q.resolve({
+                            headers: {
+                                "x-total-count": model.customer.ownedAssetDetails.length
+                            },
+                            body: model.customer.ownedAssetDetails
                         });
                     },
                     onSelect: function(valueObj, model, context) {
@@ -1054,35 +1128,24 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                 }, {
                     key: "customer.physicalAssets[].unit",
                     "title": "UNIT",
+                    condition: "model.customer.physicalAssets[arrayIndex].assetunitallowed",
+                    "required": true,
                     type: "lov",
                     autolov: true,
                     lovonly: true,
                     bindMap: {},
                     searchHelper: formHelper,
                     search: function(inputModel, form, model, context) {
-                        var assetType = model.customer.physicalAssets[context.arrayIndex].assetType;
-                        var assetunit = formHelper.enum('asset_unit').data;
-                        var out = [];
-                        if (assetunit && assetunit.length) {
-                            for (var i = 0; i < assetunit.length; i++) {
-
-                                if ((assetunit[i].parentCode).toUpperCase() == (assetType).toUpperCase()) {
-                                    out.push({
-                                        name: assetunit[i].name,
-                                    })
-                                }
-                            }
-                        }
-                        if (!out.length) {
-                            out.push({
+                        if (!model.customer.assetunit.length) {
+                            model.customer.assetunit.push({
                                 name: "No Records",
                             })
                         }
                         return $q.resolve({
                             headers: {
-                                "x-total-count": out.length
+                                "x-total-count": model.customer.assetunit.length
                             },
-                            body: out
+                            body: model.customer.assetunit
                         });
                     },
                     onSelect: function(valueObj, model, context) {
@@ -1097,7 +1160,8 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                             item.name
                         ];
                     }
-                }, {
+                },
+                {
                     key: "customer.physicalAssets[].numberOfOwnedAsset",
                     "title": "NUMBER_OF_OWNED_ASSET",
                 }, {
@@ -1134,6 +1198,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
         },
         {
             type:"box",
+            "readonly":enabletrue,
             title:"T_LIABILITIES",
             items:[
                 {
@@ -1181,6 +1246,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
         },
         {
             "type": "box",
+            "readonly":enabletrue,
             "title": "T_HOUSE_VERIFICATION",
             "items": [
                 {
@@ -1201,10 +1267,12 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                 },
                 {
                     key:"customer.caste",
+                    "required":true,
                     type:"select"
                 },
                 {
                     key:"customer.language",
+                    "required":true,
                     type:"select"
                 },
                 {
@@ -1222,9 +1290,9 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                             },
                             {
                                 key:"customer.udf.userDefinedFieldValues.udf4",
-                                type: "string",
+                                "type":"number",
                                 "schema":{
-                                    "type":"string"
+                                    "type":"number"
                                 }
                             },
                             {
@@ -1234,24 +1302,31 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                             },
                             {
                                 key:"customer.udf.userDefinedFieldValues.udf31",
-                                title:"BUILD_TYPE",
+                                "title":"BUILD_TYPE",
                                 "type":"select",
                                 "titleMap":{
                                             "CONCRETE":"CONCRETE",
                                             "MUD":"MUD",
                                             "BRICK":"BRICK"
-                                }
-                            },
-                            {
-                                key:"customer.udf.userDefinedFieldValues.udf32",
-                                title:"NUMBER_OF_ROOMS",
-                                "type":"string",
+                                },
                                 "schema":{
                                     "type":"string"
                                 }
                             },
                             {
-                                key:"customer.udf.userDefinedFieldValues.udf6"
+                                key:"customer.udf.userDefinedFieldValues.udf32",
+                                title:"NUMBER_OF_ROOMS",
+                                "type":"number",
+                                "schema":{
+                                    "type":"number"
+                                }
+                            },
+                            {
+                                key:"customer.udf.userDefinedFieldValues.udf6",
+                                type:"checkbox",
+                                "schema":{
+                                    "default":false
+                                }
                             }
                         ]
                     },
@@ -1269,7 +1344,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                 },
                 {
                     key:"customer.houseVerificationPhoto",
-                    offline: true,
+                    //offline: true,
                     type:"file",
                     fileType:"image/*",
                     "viewParams": function(modelValue, form, model) {
@@ -1290,16 +1365,25 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                             key:"customer.verifications[].houseNo"
                         },
                         {
-                            key:"customer.verifications[].houseNoIsVerified"
+                            key:"customer.verifications[].houseNoIsVerified1",
+                            "type": "checkbox",
+                            "title": "HOUSE_NO_IS_VERIFIED",
+                            "required": true,
+                            "schema": {
+                                "default": false
+                            }
                         },
                         {
                             key:"customer.verifications[].referenceFirstName"
                         },
                         {
+                            key:"customer.verifications[].referenceLastName",
+                            "condition":"model.customer.verifications[arrayIndex].referenceLastName"
+                        },
+                        {
                             key:"customer.verifications[].relationship",
                             type:"select"
                         }
-
                     ]
                 },
                 {
@@ -1314,11 +1398,65 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
             ]
         },{
             "type": "actionbox",
+            "readonly":enabletrue,
             "items": [{
                 "type": "submit",
                 "title": "SUBMIT"
             }]
-        }],
+        }];
+        },
+        modelPromise: function(pageId, _model) {
+            if (!_model || !_model.customer || _model.customer.id != pageId) {
+                $log.info("data not there, loading...");
+
+                var deferred = $q.defer();
+                PageHelper.showLoader();
+                Enrollment.EnrollmentById({id:pageId},function(resp,header){
+                    var model = {$$OFFLINE_FILES$$:_model.$$OFFLINE_FILES$$};
+                    model.customer = resp;
+                    model.customer.addressProofSameAsIdProof = (model.customer.title == "true") ? true : false;
+
+                    model = EnrollmentHelper.fixData(model);
+                    PagesDefinition.getRolePageConfig("Page/Engine/customer360.EnrollmentProfile").then(function(data){
+                        $log.info(data);
+                        $log.info(data.EditBasicCustomerInfo);
+                        if(data){
+                            model.EditBasicCustomerInfo= !data.EditBasicCustomerInfo;
+                        }
+                    },function(err){
+                        model.EditBasicCustomerInfo= true;
+                    });
+
+                    if (model.customer.currentStage==='Stage01') {
+                        irfProgressMessage.pop("enrollment-save","Customer "+model.customer.id+" not enrolled yet", 5000);
+                        $state.go("Page.Engine", {pageName:'ProfileInformation', pageId:pageId});
+                    } else {
+                        irfProgressMessage.pop("enrollment-save","Load Complete", 2000);
+                        initData(model);
+                        //$log.info(model);
+                        deferred.resolve(model);
+                    }
+                    PageHelper.hideLoader();
+                },function(resp){
+                    PageHelper.hideLoader();
+                    irfProgressMessage.pop("enrollment-save","An Error Occurred. Failed to fetch Data",5000);
+                    $state.go("Page.Engine",{
+                        pageName:"CustomerSearch",
+                        pageId:null
+                    });
+                });
+                return deferred.promise;
+            }
+        },
+        offline: true,
+        getOfflineDisplayItem: function(item, index){
+            return [
+                item["customer"]["urnNo"],
+                item["customer"]["firstName"],
+                item["customer"]["villageName"]
+            ]
+        },
+        form: [],
         schema: function() {
             return Enrollment.getSchema().$promise;
         },
@@ -1329,7 +1467,23 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                     irfProgressMessage.pop('PROFILE', 'Working...');
                     model.customer.title=String(model.customer.addressProofSameAsIdProof);
                     $log.info(model);
+                    if (!EnrollmentHelper.validateBankAccounts(model)) {
+                        $log.warn("Invalid Data, returning false");
+                        PageHelper.hideLoader();
+                        return false;
+                    }
+                    if (!( EnrollmentHelper.validateDate(model))) {
+                        return false;
+                    }
+                    if(model.customer.latitude == "0") {
+                        delete model.customer.latitude;
+                    }
+                    if(model.customer.longitude == "0") {
+                        delete model.customer.longitude;
+                    }
                     var reqData = _.cloneDeep(model);
+                    EnrollmentHelper.fixData(reqData);
+
                     if (reqData.customer.currentStage == 'Completed'){ 
                         reqData['enrollmentAction'] = 'PROCEED';
                     } else {
@@ -1337,12 +1491,9 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                     };
                     Enrollment.updateCustomer(reqData, function (res, headers) {
                         if (res.customer) {
-                            fixData(res);
                             model.customer = res.customer;
-                            model.customer.idAndBcCustId = model.customer.id + ' / ' + model.customer.bcCustId;
-                            model.customer.fullName = Utils.getFullName(model.customer.firstName, model.customer.middleName, model.customer.lastName);
-                            model.customer.fatherFullName = Utils.getFullName(model.customer.fatherFirstName, model.customer.fatherMiddleName, model.customer.fatherLastName);
-        
+                            model.customer.addressProofSameAsIdProof = (model.customer.title=="true")?true:false;
+                            model = EnrollmentHelper.fixData(model);
                         }
                         PageHelper.hideLoader();
                         irfProgressMessage.pop('PROFILE', 'Done. Customer Updated, ID : ' + res.customer.id, 2000);
@@ -1352,7 +1503,6 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                         window.scrollTo(0, 0);
                         PageHelper.showErrors(res);
                     })
-
                 });
             }
         }

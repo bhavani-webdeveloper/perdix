@@ -146,7 +146,6 @@ define([], function() {
                                 "LoanRecommendation"
                             ],
                             "overrides": {
-
                             }
                         },
                         "ScreeningReview": {
@@ -174,8 +173,7 @@ define([], function() {
                             "excludes": [
                                 "PreliminaryInformation.calculateEmi",
                                 "TeleVerification",
-                                "FieldInvestigationDetails",
-                                "LoanRecommendation"
+                                "FieldInvestigationDetails"
                             ],
                             "overrides": {
                                 "PreliminaryInformation": {
@@ -188,6 +186,9 @@ define([], function() {
                                     "readonly": true
                                 },
                                 "PayerDetails": {
+                                    "readonly": true
+                                },
+                                "LoanRecommendation": {
                                     "readonly": true
                                 }
                             }
@@ -196,8 +197,7 @@ define([], function() {
                             "excludes": [
                                 "PreliminaryInformation.calculateEmi",
                                 "TeleVerification",
-                                "FieldInvestigationDetails",
-                                "LoanRecommendation"
+                                "FieldInvestigationDetails"
                             ],
                             "overrides": {
                                 "PreliminaryInformation": {
@@ -211,17 +211,22 @@ define([], function() {
                                 },
                                 "PayerDetails": {
                                     "readonly": true
+                                },
+                                "LoanRecommendation": {
+                                    "readonly": true
                                 }
+                               
                             }
                         },
                         "Application": {
                             "excludes": [
                                 "TeleVerification",
-                                "FieldInvestigationDetails",
-                                "LoanRecommendation"
+                                "FieldInvestigationDetails"
                             ],
                             "overrides": {
-
+                                "LoanRecommendation": {
+                                    "readonly": true
+                                }
                             }
                         },
                         "ApplicationReview": {
@@ -247,42 +252,46 @@ define([], function() {
                         },
                         "TeleVerification": {
                             "excludes": [
-                                "LoanRecommendation",
                                 "FieldInvestigationDetails"
                             ],
                             "overrides": {
                                 "FieldInvestigationDetails": {
+                                    "readonly": true
+                                },
+                                "LoanRecommendation": {
                                     "readonly": true
                                 }
                             }
                         },
                         "FieldInvestigation1": {
                             "excludes": [
-                                "LoanRecommendation",
                             ],
                             "overrides": {
-
+                                "LoanRecommendation": {
+                                    "readonly": true
+                                }
                             }
                         },
                         "FieldInvestigation2": {
                             "excludes": [
-                                "LoanRecommendation",
                             ],
                             "overrides": {
-
+                                "LoanRecommendation": {
+                                    "readonly": true
+                                }
                             }
                         },
                         "FieldInvestigation3": {
                             "excludes": [
-                                "LoanRecommendation",
                             ],
                             "overrides": {
-
+                                "LoanRecommendation": {
+                                    "readonly": true
+                                }
                             }
                         },
                         "CreditAppraisal":  {
                             "excludes": [
-                                "LoanRecommendation",
                                 "VehicleRouteDetails",
                                 "VehicleAssetViability",
                                 "VehiclePhotoCaptures"
@@ -368,8 +377,7 @@ define([], function() {
                         },
                         "REJECTED": {
                             "excludes": [
-                                "PreliminaryInformation.calculateEmi",
-                                "LoanRecommendation"
+                                "PreliminaryInformation.calculateEmi"
                             ],
                             "overrides": {
                                 "PreliminaryInformation": {
@@ -533,6 +541,9 @@ define([], function() {
                             }
                         };
                     }
+
+                    model.loanAccount.collectionPaymentType = model.loanAccount.collectionPaymentType || 'ACH';
+                    model.loanAccount.securityEmiRequired = model.loanAccount.securityEmiRequired || 'NO';
 
                     // model.loanAccount.accountUserDefinedFields = model.loanAccount.accountUserDefinedFields || {};
 

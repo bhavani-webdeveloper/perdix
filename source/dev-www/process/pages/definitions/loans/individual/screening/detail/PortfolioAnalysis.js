@@ -451,7 +451,7 @@ define({
                                 "type": "section",
                                 "html": `
                                 <div class="chart-title"><h4>{{model.customerHistoryFinancials.financialsGraph.invoiceCash.title}}</h4>
-                                <div >
+                                <div ><style type="text/css">.nvd3-svg{padding-left:15px;}</style>
                                     <nvd3
                                     data="model.customerHistoryFinancials.financialsGraph.invoiceCash.graphData"
                                     options="model.customerHistoryFinancials.graphOptions.multiBar"
@@ -467,7 +467,7 @@ define({
                                 "type": "section",
                                 "html": `
                                 <div class="chart-title"><h4>{{model.customerHistoryFinancials.financialsGraph.ownCapital.title}}</h4>                                
-                                <div class="">
+                                <div class=""><style type="text/css">.nvd3-svg{padding-left:15px;}</style>
                                     <nvd3
                                     data="model.customerHistoryFinancials.financialsGraph.ownCapital.graphData"
                                     options="model.customerHistoryFinancials.graphOptions.multiBar"
@@ -483,7 +483,7 @@ define({
                                 "type": "section",
                                 "html": `
                                 <div class="chart-title"><h4>{{model.customerHistoryFinancials.financialsGraph.netIncome.title}}</h4>
-                                <div class="">
+                                <div class=""><style type="text/css">.nvd3-svg{padding-left:15px;}</style>
                                     <nvd3
                                     data="model.customerHistoryFinancials.financialsGraph.netIncome.graphData"
                                     options="model.customerHistoryFinancials.graphOptions.multiBar"
@@ -499,7 +499,7 @@ define({
                                 "type": "section",
                                 "html": `
                                 <div class="chart-title"><h4>{{model.customerHistoryFinancials.financialsGraph.assetLiabilities.title}}</h4>
-                                <div class="">
+                                <div class=""><style type="text/css">.nvd3-svg{padding-left:15px;}</style>
                                     <nvd3
                                     data="model.customerHistoryFinancials.financialsGraph.assetLiabilities.graphData"
                                     options="model.customerHistoryFinancials.graphOptions.multiBar"
@@ -654,38 +654,38 @@ define({
                     _.forEach(prepareFinancialData['tableData'], function(histData){
                         model.customerHistoryFinancials['tableData'].push(histData);
                         model.financialGraphValues['totalAssetGraphValues'].push({
-                            'x' : histData['Category'],
+                            'x' : histData.data[0]['Category'],
 	                        'y' : histData['Total Assets'],
 	                        'series': 0,
 	                        'key' : 'Total Assets'
                         });
                         model.financialGraphValues['totalLiabilitiesGraphValues'].push({
-                            'x' : histData['Category'],
-	                        'y' : histData['Total_Liabilities'],
+                            'x' : histData.data[0]['Category'],
+	                        'y' : histData.data[0]['Total_Liabilities'],
 	                        'series' :1,
 	                        'key' : 'Total Liabilities'
                         });
                         model.financialGraphValues['netIncomeGraphValues'].push({
-                            'x' : histData['Category'],
-	                        'y' : histData['net_income'],
+                            'x' : histData.data[0]['Category'],
+	                        'y' : histData.data[0]['net_income'],
 	                        'series' : 0,
 	                        'key' : 'Net Income'
                         });
                         model.financialGraphValues['ownCapitalGraphValues'].push({
-                            'x' : histData['Category'],
-                            'y' : histData['Own_capital'],
+                            'x' : histData.data[0]['Category'],
+                            'y' : histData.data[0]['Own_capital'],
                             'series' : 0,
 	                        'key' : 'Own Capital'
                         });
                         model.financialGraphValues['invoiceGraphValues'].push({
-                            'x' : histData['Category'],
-                            'y' : histData['Invoice'],
+                            'x' : histData.data[0]['Category'],
+                            'y' : histData.data[0]['Invoice'],
                             'series' : 0,
 	                        'key' : 'Own Capital'
                         });
                         model.financialGraphValues['cashGraphValues'].push({
-                            'x' : histData['Category'],
-                            'y' : histData['Cash'],
+                            'x' : histData.data[0]['Category'],
+                            'y' : histData.data[0]['Cash'],
                             'series' : 1,
 	                        'key' : 'Own Capital'
                         });
@@ -744,9 +744,9 @@ define({
                                 "data":[],
                                 "ratios":[
                                     {
-                                        'DSCR': params[3].data[3]?((params[3].data[3]["Actual Value"])*100):"NA"
+                                        'DSCR': params[3].data[3]?((params[3].data[3]["Actual Value"])):"NA"
                                     },{
-                                        'DSONonTrading':params[3].data[4]?((params[3].data[4]["Actual Value"])*100):"NA"
+                                        'DSONonTrading':params[3].data[4]?((params[3].data[4]["Actual Value"])):"NA"
                                     },{
                                         'CurrentRatio':(params[13].data[0] && params[13].data[0]['Current Ratio'])?params[13].data[0]['Current Ratio']:"NA"
                                     },{

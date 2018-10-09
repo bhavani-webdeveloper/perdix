@@ -4984,7 +4984,15 @@
                 "Completed"
               ]
             
-            }
+            },
+            "documentNumber":{
+              "title":"documentNumber",
+              "type":"string",
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+           }
           }
         }
       },

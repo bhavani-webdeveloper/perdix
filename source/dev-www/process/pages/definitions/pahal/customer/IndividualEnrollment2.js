@@ -1313,7 +1313,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "type": "array",
                                             "title": "DOCUMENT_UPLOAD",
                                             "key": "customer.customerDocuments",
-                                            "view": "fixed",
+                                            "startEmpty": true,
                                             "items": {
                                                 "fileType": {
                                                     "type": "select",

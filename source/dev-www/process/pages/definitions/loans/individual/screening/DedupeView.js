@@ -257,6 +257,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.DedupeView'),
                     },
                     "customer-loaded": function(pageObj, bundleModel, params){
                         console.log("custome rloaded :: " + params.customer.firstName);
+                        BundleManager.broadcastEvent("customer-loaded", params.customer);
                         if (pageObj.pageClass =='applicant'){
                             BundleManager.broadcastEvent("applicant-updated", params.customer);
                         }

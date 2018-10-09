@@ -29,17 +29,42 @@ export class PaymentCustomerIDLOVConfiguration extends LOVElementConfiguration {
     };
 
     onSelect: Function = function(valueObj, model, context){
-        model.payment.accountNumber = null;
-        model.payment.loanId = null;
-        model.payment.beneficiaryName = null;
-        model.payment.beneficiaryMobileNumber = null;
-        model.payment.beneficiaryEmailI = null;
-        model.payment.amount = null;
-        model.payment.beneficiaryAccountNumber = null;
-        model.payment.beneficiaryIfsc = null;
-        model.payment.beneficiaryBankName = null;
-        model.payment.beneficiaryBankBranch = null;
-        model.payment.beneficiaryAccountName = null;
+        //let Queries = AngularResourceService.getInstance().getNGService("Queries");
+        let Enrollment = AngularResourceService.getInstance().getNGService("Enrollment");
+        let PageHelper = AngularResourceService.getInstance().getNGService("PageHelper");
+        Enrollment.get({id:valueObj.id}).$promise.then(function(response){
+            var resp = response;
+            if(model.pageConfig.DefaultBeneficiaryParty == 'CUSTOMER' && response.customerBankAccounts.length > 0){
+           // model.payment.accountNumber = response.customerBankAccounts["0"].accountNumber;
+                model.payment.loanId = response.customerBankAccounts["0"].id;
+                model.payment.beneficiaryName = (response.firstName)?response.firstName : ''+ (response.middleName)?response.middleName : ''+ (response.middleName)?response.lastName : '';
+                model.payment.beneficiaryMobileNumber = null;
+                model.payment.beneficiaryEmailI = null;
+                model.payment.beneficiaryAccountNumber = response.customerBankAccounts["0"].accountNumber;
+                model.payment.beneficiaryIfsc = response.customerBankAccounts["0"].ifscCode;
+                model.payment.beneficiaryBankName = response.customerBankAccounts["0"].customerBankName;
+                model.payment.beneficiaryBankBranch = response.customerBankAccounts["0"].customerBankBranchName;
+                model.payment.beneficiaryAccountName = response.customerBankAccounts["0"].customerNameAsInBank
+            }
+            else if(model.pageConfig.DefaultBeneficiaryParty == 'CUSTOMER' && response.customerBankAccounts.length == 0){
+                model.payment['flag'] = true;
+                model.payment.loanId = null;
+                model.payment.beneficiaryName = null;
+                model.payment.beneficiaryMobileNumber = null;
+                model.payment.beneficiaryEmailI = null;
+                model.payment.beneficiaryAccountNumber = null;
+                model.payment.beneficiaryIfsc = null;
+                model.payment.beneficiaryBankName = null;
+                model.payment.beneficiaryBankBranch = null;
+                model.payment.beneficiaryAccountName = null;
+                PageHelper.showErrors({'data':{
+                    'error':'Bank Details are missing'
+                }})
+                return;
+            }
+        },function(error){
+            console.log(error);
+        });
     };
 
     initialize: Function = function(model, form, parentModel, context) {

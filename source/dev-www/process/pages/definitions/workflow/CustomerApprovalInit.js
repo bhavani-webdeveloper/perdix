@@ -21,7 +21,6 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                 });
             }
 
-
             var update = function(model, workflowId) {
                 Workflow.getByID({ id: workflowId }, function (resp, header) {
 
@@ -149,7 +148,14 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                                         "key": "customer.branchName"
                                     },
                                     "customerType": {
-                                        "key": "customer.customerType"
+                                        "key": "customer.customerType",
+                                        "type": "select",
+                                        "screenFilter": true,
+                                        "titleMap": {
+                                            "Individual": "Individual",
+                                            "Enterprise": "Enterprise"
+                                        }
+
                                     }
                                 },
                                 outputMap: {
@@ -337,28 +343,75 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                             {
                                 type: "fieldset",
                                 title: "CUSTOMER_RESIDENTIAL_ADDRESS",
+                                condition: "model.customer.isAddressChanged=='YES'",
                                 items: [
                                     "customer.doorNo",
                                     "customer.street",
-                                    "customer.locality",
+                                    "customer.postOffice",
+                                    "customer.landmark",
                                     {
-                                        key: "customer.villageName",
-                                        type: "select",
-                                        filter: {
-                                            'parentCode as branch': 'model.customer.kgfsName'
+                                        key: "customer.pincode",
+                                        type: "lov",
+                                        fieldType: "number",
+                                        autolov: true,
+                                        inputMap: {
+                                            "pincode": "customer.pincode",
+                                            "district": {
+                                                key: "customer.district"
+                                            },
+                                            "state": {
+                                                key: "customer.state"
+                                            }
+                                        },
+                                        outputMap: {
+                                            "division": "customer.locality",
+                                            "region": "customer.villageName",
+                                            "pincode": "customer.pincode",
+                                            "district": "customer.district",
+                                            "state": "customer.state",
+                                        },
+                                        searchHelper: formHelper,
+                                        initialize: function(inputModel) {
+                                            $log.warn('in pincode initialize');
+                                            $log.info(inputModel);
+                                        },
+                                        search: function(inputModel, form, model) {
+                                            if (!inputModel.pincode) {
+                                                return $q.reject();
+                                            }
+                                            return Queries.searchPincodes(
+                                                inputModel.pincode,
+                                                inputModel.district,
+                                                inputModel.state
+                                            );
+                                        },
+                                        getListDisplayItem: function(item, index) {
+                                            return [
+                                                item.division + ', ' + item.region,
+                                                item.pincode,
+                                                item.district + ', ' + item.state,
+                                            ];
+                                        },
+                                        onSelect: function(result, model, context) {
+                                            $log.info(result);
                                         }
                                     },
-                                    "customer.postOffice",
+                                    {
+                                        key: "customer.locality",
+                                        readonly: true
+                                    },
+                                    {
+                                        key: "customer.villageName",
+                                        readonly: true
+                                    },
                                     {
                                         key: "customer.district",
-                                        type: "select"
+                                        readonly: true
                                     },
-                                    "customer.pincode",
                                     {
                                         key: "customer.state",
-                                        type: "select"
-                                    },
-                                    "customer.landLineNo",
+                                        readonly: true,
+                                    }
                                 ]
                             },
                             {

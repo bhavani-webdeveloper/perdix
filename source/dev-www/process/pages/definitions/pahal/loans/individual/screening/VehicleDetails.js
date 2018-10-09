@@ -724,7 +724,6 @@ define(
                                 "condition": "model.loanAccount.loanPurpose1 == 'Purchase - New Vehicle' || model.loanAccount.loanPurpose1 == 'Purchase - Used Vehicle' || model.loanAccount.loanPurpose1 == 'Refinance'"
                             },
                             "vehicleLoanDocuments.vehicleLoanDocuments": {
-                                "view": "fixed",
                                 "titleExpr": "model.loanAccount.vehicleLoanDetails.vehicleLoanDocuments[arrayIndexes[0]].docType",
                                 "add": null,
                                 "remove": null

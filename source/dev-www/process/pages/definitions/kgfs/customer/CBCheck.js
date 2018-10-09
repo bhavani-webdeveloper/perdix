@@ -10,6 +10,8 @@ define({
     var branch = SessionStore.getBranch();
 
     var fnPost = function(model, customerType, CBType, index){
+        console.log(model);
+        console.log("Model form CBCHECK");
         var customerId;
         var CBType;
         var loanAmount;
@@ -182,7 +184,9 @@ define({
             }
             if(response.status == 'SUCCESS' || response.status == 'PROCESSED'){
                 PageHelper.showProgress("cb-check", "Credit Bureau Request Placed..", 5000);
-                BundleManager.pushEvent('cb-check-done', model._bundlePageObj, {customerId: customerId, cbType:CBType})
+                BundleManager.pushEvent('cb-check-done', model._bundlePageObj, {customerId: customerId, cbType:CBType});
+                model.customer.cbcheckdone = true;
+                BundleManager.broadcastEvent('cb-check-done',model);    
             }
             else if(response.status == 'ERROR' || response.status == 'Error'){
                 PageHelper.showProgress("Idencheck", "Error while placing Idencheck Resuest Request", 5000);
@@ -260,18 +264,18 @@ define({
             if (bundlePageObj){
                 model._bundlePageObj = _.cloneDeep(bundlePageObj);
             }
-
             model.customer = model.customer || {};
             model.customer.coapplicants = model.customer.coapplicants || [];
             model.customer.guarantors = model.customer.guarantors || [];
             model.customer.loanSaved = false;
+            model.customer.cbcheckdone = false;
 
             if (_.hasIn(model, "loanProcess")){
                 /* Loan process data is available. derive applicant / coapplicant / guarantors data from it */
-                var lp = model.loanProcess;
-                model.customer.applicantid = lp.applicantEnrolmentProcess.customer.id;
-                model.customer.applicantname = lp.applicantEnrolmentProcess.customer.firstName;
-
+                    var lp = model.loanProcess;
+                    model.customer.applicantid = lp.applicantEnrolmentProcess.customer.id;
+                    model.customer.applicantname = lp.applicantEnrolmentProcess.customer.firstName;
+                    
                 model.coapplicants = [];
                 _.forEach(lp.coApplicantsEnrolmentProcesses, function(ep){
                     model.coapplicants.push({
@@ -439,7 +443,7 @@ define({
                 /* Assign more customer information to show */
             },
             "new-co-applicant": function(bundleModel, model, params){
-                $log.info("Insdie new-co-applicant of CBCheck");
+                $log.info("Inside new-co-applicant of CBCheck");
                 var recordExists = false;
                 for (var i = model.customer.coapplicants.length - 1; i >= 0; i--) {
                     if(model.customer.coapplicants[i].coapplicantid == params.customer.id)
@@ -452,7 +456,7 @@ define({
                 }
             },
             "new-guarantor": function(bundleModel, model, params){
-                $log.info("Insdie new-new-guarantor of CBCheck");
+                $log.info("Inside new-guarantor of CBCheck");
                 var recordExists = false;
                 for (var i = model.customer.guarantors.length - 1; i >= 0; i--) {
                     if(model.customer.guarantors[i].guarantorid == params.customer.id)

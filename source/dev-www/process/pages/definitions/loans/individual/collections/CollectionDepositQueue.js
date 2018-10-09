@@ -121,6 +121,8 @@ define({
                             deferred.reject(res);
                         });
 
+                    } else {
+                        deferred.reject();
                     }
 
 

@@ -186,8 +186,29 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                             model.loanAccount.customerBank = '';
                             model.loanAccount.customerBranch = '';
                             model.loanAccount.disbursementSchedules[0].customerNameInBank = '';
-                        }
-                    }, {
+                        },
+                        condition:"model.siteCode != 'witfin'"
+                    },
+                    {
+                        "key": "loanAccount.disbursementSchedules[0].party",
+                        "type": "radios",
+                        "titleMap": [{
+                            "name": "Customer",
+                            "value": "CUSTOMER"
+                        }, {
+                            "name": "Third Party",
+                            "value": "VENDOR"
+                        }],
+                        onChange: function(value, form, model) {
+                            model.loanAccount.customerBankAccountNumber = '';
+                            model.loanAccount.customerBankIfscCode = '';
+                            model.loanAccount.customerBank = '';
+                            model.loanAccount.customerBranch = '';
+                            model.loanAccount.disbursementSchedules[0].customerNameInBank = '';
+                        },
+                        condition:"model.siteCode == 'witfin'"
+                    }
+                    , {
                         key: "loanAccount.disbursementSchedules[0].customerNameInBank",
                         title: "CUSTOMER_NAME_IN_BANK"
                     }, {
@@ -854,6 +875,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                                                     })
                                                 }
                                             }
+                                            console.log(model.loanAccount.loanDocuments)
                                             PageHelper.hideLoader();
                                         },
                                         function(httpRes) {

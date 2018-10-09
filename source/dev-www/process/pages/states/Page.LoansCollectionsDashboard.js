@@ -137,7 +137,7 @@ function($log, $scope, PagesDefinition,formHelper, SessionStore, LoanProcess,Rep
             dep.data = 0;
             LoanCollection.fetchDepositSummary({
                 'currentStage': "Deposit",
-                'loanBranchName' : branchName,
+                'branchName' : branchName,
                 'instrumentType': "CASH"
             }).$promise.then(function(response, headerGetter){
                 dep.data = dep.data + parseFloat(response.headers['x-total-count']);
@@ -176,6 +176,16 @@ function($log, $scope, PagesDefinition,formHelper, SessionStore, LoanProcess,Rep
                 }).$promise.then(function(response, headerGetter){
                     taqMenu.data = response.headers['x-total-count'];
                 })
+        }
+
+        var rejctMenu =$scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.collections.RejectedQueue"];
+        if(rejctMenu) {
+            LoanCollection.query({
+                'currentStage':"Rejected",
+                'accountBranchId': currentBranchId
+            }).$promise.then(function(response, headerGetter) {
+                rejctMenu.data = response.headers['x-total-count'];
+            })
         }
     });
 

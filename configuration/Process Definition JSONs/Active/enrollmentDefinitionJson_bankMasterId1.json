@@ -1068,6 +1068,14 @@
               "Completed"
             ]
           },
+          "duplicateCustomerId": {
+            "title": "duplicateCustomerId",
+            "type": "integer",
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
           "whatsAppMobileNo": {
             "title": "Whatsapp Mobile No",
             "type": "string",
@@ -2809,6 +2817,14 @@
               "Completed"
             ]
           },
+          "duplicateCustomerId": {
+            "title": "duplicateCustomerId",
+            "type": "integer",
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
           "stdCode": {
             "title": "stdCode",
             "type": "string",
@@ -3179,8 +3195,7 @@
           "pincode",
           "companyOperatingSince",
           "ownership",
-          "creditRating",
-          "registrationDate"
+          "creditRating"
         ],
         "properties": {
           "customerNumber": {
@@ -4125,7 +4140,6 @@
         "items": {
           "type": "object",
           "required": [
-            "registrationType",
             "registrationNumber",
             "registeredDate",
             "documentId"
