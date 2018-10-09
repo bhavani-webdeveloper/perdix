@@ -1528,48 +1528,48 @@
                         "remove": null,
                         "items": {
                             "nomineeGuardianFirstName": {
-                                "key": "loanAccount.nominees[].GuardianFirstName",
+                                "key": "loanAccount.nominees[].guardianFirstName",
                                 "title": "NAME",
                                 "type": "lov"
                             },
                             "nomineeGuardianGender": {
-                                "key": "loanAccount.nominees[].GuardianGender",
+                                "key": "loanAccount.nominees[].guardianGender",
                                 "type": "select",
                                 "title": "GENDER"
                             },
                             "nomineeGuardianDOB": {
-                                "key": "loanAccount.nominees[].GuardianDOB",
+                                "key": "loanAccount.nominees[].guardianDOB",
                                 "type": "date",
                                 "title": "DATE_OF_BIRTH"
                             },
                             "nomineeGuardianDoorNo": {
-                                "key": "loanAccount.nominees[].GuardianDoorNo",
+                                "key": "loanAccount.nominees[].guardianDoorNo",
                                 "title": "DOOR_NO"
                             },
                             "nomineeGuardianLocality": {
-                                "key": "loanAccount.nominees[].GuardianLocality",
+                                "key": "loanAccount.nominees[].guardianLocality",
                                 "title": "LOCALITY"
                             },
                             "nomineeGuardianStreet": {
-                                "key": "loanAccount.nominees[].GuardianStreet",
+                                "key": "loanAccount.nominees[].guardianStreet",
                                 "title": "STREET"
                             },
                             "nomineeGuardianincode": {
-                                "key": "loanAccount.nominees[].GuardianPincode",
+                                "key": "loanAccount.nominees[].guardianPincode",
                                 "title": "PIN_CODE",
                                 "type": "lov"
                             },
                             "nomineeGuardainDistrict": {
-                                "key": "loanAccount.nominees[].GuardianDistrict",
+                                "key": "loanAccount.nominees[].guardianDistrict",
                                 "type": "text",
                                 "title": "DISTRICT"
                             },
                             "nomineeGuardianState": {
-                                "key": "loanAccount.nominees[].GuardianState",
+                                "key": "loanAccount.nominees[].guardianState",
                                 "title": "STATE"
                             },
                             "nomineeGuardianRelationship": {
-                                "key": "loanAccount.nominees[].GuardianRelationship",
+                                "key": "loanAccount.nominees[].guardianRelationship",
                                 "type": "select",
                                 "title": "RELATIONSHIP"
                             }

@@ -826,7 +826,8 @@ define([], function () {
                     "LoanDetails.loanType",
                     "LoanDetails.partner",
                     "LoanDetails.frequency",
-                    "LoanDetails.loanProducts",
+                    "LoanDetails.loanProductCategory",
+                    "LoanDetails.loanProductCode",
                     "LoanDetails.loanApplicationDate",
                     "LoanDetails.loanAmountRequested",
                     "LoanDetails.requestedTenure",
@@ -925,9 +926,9 @@ define([], function () {
                         "orderNo": 3,
                         "enumCode": "loan_product_frequency"
                     },
-                    "LoanDetails.loanProducts": {
+                    "LoanDetails.loanProductCategory": {
                         "orderNo": 4,
-                        "enumCode": "loan_product",
+                        "enumCode": "loan_product_category",
                         onChange: function (valueObj, model, context) {
                             console.log("Its time for place Holder");
                             console.log(valueObj);
@@ -936,19 +937,71 @@ define([], function () {
                         }
 
                     },
+                    "LoanDetails.loanProductCode":{
+                        "orderNo": 4,
+                        bindMap: {
+                            "Partner": "loanAccount.partnerCode",
+                            "ProductCategory": "loanAccount.productCategory",
+                            "Frequency": "loanAccount.frequency",
+                           },
+                           autolov: true,
+                           required: true,
+                           searchHelper: formHelper,
+                           search: function(inputModel, form, model, context) {
+
+                              return Queries.getLoanProductCode(model.loanAccount.productCategory,model.loanAccount.frequency,model.loanAccount.partnerCode);
+                           },
+                           onSelect: function(valueObj, model, context) {
+                               model.loanAccount.productCode = valueObj.productCode;
+                           },
+                           getListDisplayItem: function(item, index) {
+                               return [
+                                   item.productCode
+                               ];
+                           },
+                           onChange: function(value, form, model) {
+                           getProductDetails(value, model);
+                           },
+                    },
                     "LoanDetails.loanPurpose1": {
                         "orderNo": 6,
-                        "enumCode": "loan_purpose_1"
+                        "type": "lov",
+                        "autolov": true,
+                        "title":"LOAN_PURPOSE_1",
+                        bindMap: {
+                                },
+                        outputMap: {
+                                    "purpose1": "loanAccount.loanPurpose1"
+                                },
+                        searchHelper: formHelper,
+                        search: function(inputModel, form, model) {
+                        if(model.loanAccount.productCode != null && model.siteCode != 'witfin')
+                            return Queries.getLoanPurpose1(model.loanAccount.productCode);
+                        else
+                            return Queries.getAllLoanPurpose1();
+                        },
+                        getListDisplayItem: function(item, index) {
+                            return [
+                                        item.purpose1
+                                    ];
+                            },
+                        onSelect: function(result, model, context) {
+                                    // model.loanAccount.loanPurpose2 = '';
+                        }
                     },
                     "LoanDetails.loanPurpose2": {
                         "orderNo": 7,
+                        "title": "LOAN_PURPOSE_2",
                         "enumCode": "loan_purpose_2",
-                        "parentEnumCode": "loan_purpose_1"
+                        "parentEnumCode": "loan_purpose_1",
+                        "parentValueExpr": "model.loanAccount.loanPurpose1"
+                        
                     },
                     "LoanDetails.loanPurpose3": {
                         "orderNo": 8,
                         "enumCode": "loan_purpose_3",
-                        "parentEnumCode": "loan_purpose_2"
+                        "parentEnumCode": "loan_purpose_2",
+                        "parentValueExpr": "model.loanAccount.loanPurpose2"
                     },
                     "LoanDetails.loanAmountRequested": {
                         "orderNo": 5,
@@ -983,11 +1036,11 @@ define([], function () {
                         },
                         onSelect: function (valueObj, model, context) {
                             //add to the witnees array.
-                            if (_.isUndefined(model.loanAccount.witnessDetails[0])) {
-                                 model.loanAccount.witnessDetails[0] = [];
+                            if (_.isUndefined(model.loanAccount.witnessDetails[context.arrayIndex])) {
+                                 model.loanAccount.witnessDetails[context.arrayIndex] = [];
                              }
-                            model.loanAccount.witnessDetails[0].witnessFirstName = valueObj.name;
-                            model.loanAccount.witnessDetails[0].witnessRelationship = valueObj.relationship;
+                            model.loanAccount.witnessDetails[context.arrayIndex].witnessFirstName = valueObj.name;
+                            model.loanAccount.witnessDetails[context.arrayIndex].witnessRelationship = valueObj.relationship;
                         },
                         getListDisplayItem: function (item, index) {
                             return [
@@ -1003,9 +1056,105 @@ define([], function () {
                         "condition": "model.loanAccount.loanType == 'JLG'"
                     },
                     "NomineeDetails.nominees.nomineeFirstName":{
+                        "type": "lov",
+                        "title": "NAME",
+                        searchHelper: formHelper,
+                        search: function (inputModel, form, model, context) {
+                            var out = [];
+                            if (!model.customer.familyMembers) {
+                                return out;
+                            }
+
+                            for (var i = 0; i < model.customer.familyMembers.length; i++) {
+                                out.push({
+                                    name: model.customer.familyMembers[i].familyMemberFirstName,
+                                    // value: model.customer.familyDetails[i].value,
+                                    relationship: model.customer.familyMembers[i].relationShip,
+                                    gender:model.customer.familyMembers[i].gender 
+                                })
+                            }
+                            return $q.resolve({
+                                headers: {
+                                    "x-total-count": out.length
+                                },
+                                body: out
+                            });
+                        },
+                        onSelect: function (valueObj, model, context) {
+                            //add to the witnees array.
+                            if (_.isUndefined(model.loanAccount.nominees[context.arrayIndex])) {
+                                 model.loanAccount.nominees[context.arrayIndex] = [];
+                             }
+                            model.loanAccount.nominees[context.arrayIndex].nomineeFirstName = valueObj.name;
+                            model.loanAccount.nominees[context.arrayIndex].nomineeRelationship = valueObj.relationship;
+                            model.loanAccount.nominees[context.arrayIndex].nomineeGender = valueObj.gender;
+                        },
+                        getListDisplayItem: function (item, index) {
+                            return [
+                                item.name
+                            ];
+                        }
+
                     },
+                    "NomineeDetails.nominees.nomineeRelationship": {
+                        "readonly": true,
+                        "type": "text"
+                    },
+                    "NomineeDetails.nominees.nomineeGender": {
+                        "readonly": true,
+                        "type": "text"
+                    },
+                    
                     "NomineeDetails.nominees.nomineeGuardian": {
 
+                    },
+                    "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianFirstName":{
+                        "type": "lov",
+                        "title": "NAME",
+                        searchHelper: formHelper,
+                        search: function (inputModel, form, model, context) {
+                            var out = [];
+                            if (!model.customer.familyMembers) {
+                                return out;
+                            }
+
+                            for (var i = 0; i < model.customer.familyMembers.length; i++) {
+                                out.push({
+                                    name: model.customer.familyMembers[i].familyMemberFirstName,
+                                    // value: model.customer.familyDetails[i].value,
+                                    relationship: model.customer.familyMembers[i].relationShip,
+                                    gender:model.customer.familyMembers[i].gender 
+                                })
+                            }
+                            return $q.resolve({
+                                headers: {
+                                    "x-total-count": out.length
+                                },
+                                body: out
+                            });
+                        },
+                        onSelect: function (valueObj, model, context) {
+                            //add to the witnees array.
+                            if (_.isUndefined(model.loanAccount.nominees[context.arrayIndex])) {
+                                 model.loanAccount.nominees[context.arrayIndex] = [];
+                             }
+                            model.loanAccount.nominees[context.arrayIndex].guardianFirstName = valueObj.name;
+                            model.loanAccount.nominees[context.arrayIndex].guardianRelationship = valueObj.relationship;
+                            model.loanAccount.nominees[context.arrayIndex].guardianGender = valueObj.gender;
+                        },
+                        getListDisplayItem: function (item, index) {
+                            return [
+                                item.name
+                            ];
+                        }
+                    },
+                    "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianGender":{
+                        "readonly": true,
+                        "type": "text"
+                    },
+                    "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianRelationship":{
+                        "readonly": true,
+                        "type": "text"
                     }
                 }
             }
