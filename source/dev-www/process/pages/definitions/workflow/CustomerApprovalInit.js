@@ -148,7 +148,14 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                                         "key": "customer.branchName"
                                     },
                                     "customerType": {
-                                        "key": "customer.customerType"
+                                        "key": "customer.customerType",
+                                        "type": "select",
+                                        "screenFilter": true,
+                                        "titleMap": {
+                                            "Individual": "Individual",
+                                            "Enterprise": "Enterprise"
+                                        }
+
                                     }
                                 },
                                 outputMap: {

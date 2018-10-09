@@ -196,14 +196,13 @@ define({
                 },
                 {
                     "type": "actionbox",
-                    "condition": "model.transaction.submissionDone",
+                    "condition": "model.transaction.submissionDone && model.transaction.mfTransactionType != 'REDEMPTION'",
                     "items": [
                     {
                         "type": "button",
                         "style": "btn-theme",
                         "title": "Print",
                         "onClick": function(model, formCtrl, formName) {
-                            var print={};
                             var repaymentInfo={
                                 'customerName':model.customer.firstName,
                                 'customerURN':model.customer.urnNo,
@@ -230,6 +229,8 @@ define({
                                 'helpline': '18001029370',
                             };
 
+                            var print={};
+
                             print.thermalReceipt= MutualFund.getPrintReceipt(repaymentInfo, opts);
                             print.paperReceipt= MutualFund.getWebReceipt(repaymentInfo, opts);
                         
@@ -239,7 +240,8 @@ define({
                                 pageData: print
                             });
                         }
-                    }]
+                    }
+                ]
                 }
             ],
             schema: function() {
