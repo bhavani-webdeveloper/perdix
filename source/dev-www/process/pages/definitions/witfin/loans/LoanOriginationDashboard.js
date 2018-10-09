@@ -303,7 +303,7 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
                     'page': 1,
                     'per_page': 1,
                 }).$promise.then(function(response, headerGetter) {
-                    fiq1Menu.data = Number(response.headers['x-total-count']);
+                    fiq2Menu.data = Number(response.headers['x-total-count']);
                 }, function() {
                     fiq1Menu.data = '-';
                 });
@@ -321,7 +321,7 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
                     'page': 1,
                     'per_page': 1,
                 }).$promise.then(function(response, headerGetter) {
-                    fiq1Menu.data = Number(response.headers['x-total-count']);
+                    fiq3Menu.data = Number(response.headers['x-total-count']);
                 }, function() {
                     fiq1Menu.data = '-';
                 });

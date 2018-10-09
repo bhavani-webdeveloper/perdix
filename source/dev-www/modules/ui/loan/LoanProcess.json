@@ -1725,10 +1725,15 @@
                 "key": "loanAccount.frequency"
 
             },
-            "loanProducts": {
+            "loanProductCategory": {
                 "title": "LOAN_PRODUCTS",
                 "type": "select",
                 "key": "loanAccount.productCategory"
+            },
+            "loanProductCode":{
+                "title": "LOAN_PRODUCT_CODE",
+                "type": "lov",
+                "key": "loanAccount.productCode"
             },
             "loanApplicationDate": {
                 "title": "LOAN_APPLICATION_DATE",
