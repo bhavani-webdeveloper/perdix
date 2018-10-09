@@ -10,6 +10,16 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource,Upload,$q,PageHe
             method:'POST',
             url:endpoint
         },
+        individualLoanDsc : {
+            method : 'POST',
+            url : endpoint + '/individualloandsc',
+            isArray:true
+        },
+        overrideDsc:{
+            method : 'POST',
+            url : endpoint + '/overridedsc',
+            isArray : true
+        },
         update:{
             method:'PUT',
             url:endpoint

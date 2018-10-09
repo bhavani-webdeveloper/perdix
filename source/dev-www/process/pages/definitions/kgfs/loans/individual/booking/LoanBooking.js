@@ -1446,6 +1446,8 @@ define([], function () {
                 actions: {
                     submit: function (model, formCtrl, form) {
                         /* Loan SAVE */
+                        console.log("Model from Submit from LoanBooking ");
+                        console.log(model);
                         if (!model.loanAccount.id) {
                             model.loanAccount.isRestructure = false;
                             model.loanAccount.documentTracking = "PENDING";

@@ -60,9 +60,9 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:60
                         },
                         {
-                            pageName: 'kgfs.loans.individual.booking.JewelDetails',
-                            title: 'JEWEL_DETAILS',
-                            pageClass: 'jewel-details',
+                            pageName: 'kgfs.loans.individual.booking.DscOverride',
+                            title: 'DSC_OVERRIDE',
+                            pageClass: 'dsc-override',
                             minimum: 1,
                             maximum: 1,
                             order:60
@@ -212,6 +212,12 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         loanAccount: loanProcess.loanAccount
                                     }
                                 });
+                                $this.bundlePages.push({
+                                    pageClass: 'dsc-override',
+                                    model:{
+                                        loanAccount: loanProcess.loanAccount
+                                    }
+                                });
                                 
                                 deferred.resolve();
                             });
@@ -256,11 +262,12 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 });
                                 $this.bundlePages.push({
-                                    pageClass: 'jewel-details',
-                                    model: {
-                                        loanProcess: loanProcess
+                                    pageClass: 'dsc-override',
+                                    model:{
+                                        loanAccount: loanProcess.loanAccount
                                     }
                                 });
+                               
 
                                 $this.bundlePages.push({
                                     pageClass: 'document-upload',

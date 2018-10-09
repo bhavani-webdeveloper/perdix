@@ -131,7 +131,6 @@ define({
                     }).$promise;
                 },
                 paginationOptions: {
-                    "viewMode": "page",
                     "getItemsPerPage": function(response, headers){
                         return 20;
                     },
@@ -140,6 +139,7 @@ define({
                     }
                 },
                 listOptions: {
+					listStyle: "table",
                     itemCallback: function(item, index) {
                         $log.info(item);
                     },
@@ -155,6 +155,28 @@ define({
                             "<em>Loan Amount: Rs."+item.loanAmount+", Sanction Date: "+item.sanctionDate + "</em>",
                         ]
                     },
+                    getTableConfig: function() {
+						return {
+							"serverPaginate": true,
+							"paginate": true,
+							"pageLength": 10
+						};
+                    },
+                    getColumns: function() {
+						return [{
+							title: 'ENTITY_NAME',
+							data: 'customerName'
+                        },
+                            {
+
+							title: 'LOAN_AMOUNT',
+							data: 'loanAmount'
+						}, {
+                            title: 'SANCTION_DATE',
+                            data: 'sanctionDate'
+                        }
+                    ]
+					},
                     getActions: function(){
                         return [
                             {

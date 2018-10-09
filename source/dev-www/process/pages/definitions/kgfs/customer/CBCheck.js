@@ -10,6 +10,8 @@ define({
     var branch = SessionStore.getBranch();
 
     var fnPost = function(model, customerType, CBType, index){
+        console.log(model);
+        console.log("Model form CBCHECK");
         var customerId;
         var CBType;
         var loanAmount;
@@ -182,7 +184,9 @@ define({
             }
             if(response.status == 'SUCCESS' || response.status == 'PROCESSED'){
                 PageHelper.showProgress("cb-check", "Credit Bureau Request Placed..", 5000);
-                BundleManager.pushEvent('cb-check-done', model._bundlePageObj, {customerId: customerId, cbType:CBType})
+                BundleManager.pushEvent('cb-check-done', model._bundlePageObj, {customerId: customerId, cbType:CBType});
+                model.customer.cbcheckdone = true;
+                BundleManager.broadcastEvent('cb-check-done',model);    
             }
             else if(response.status == 'ERROR' || response.status == 'Error'){
                 PageHelper.showProgress("Idencheck", "Error while placing Idencheck Resuest Request", 5000);
@@ -260,13 +264,11 @@ define({
             if (bundlePageObj){
                 model._bundlePageObj = _.cloneDeep(bundlePageObj);
             }
-            console.log("Model from CBCHECK");
-                    console.log(model);
-
             model.customer = model.customer || {};
             model.customer.coapplicants = model.customer.coapplicants || [];
             model.customer.guarantors = model.customer.guarantors || [];
             model.customer.loanSaved = false;
+            model.customer.cbcheckdone = false;
 
             if (_.hasIn(model, "loanProcess")){
                 /* Loan process data is available. derive applicant / coapplicant / guarantors data from it */

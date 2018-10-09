@@ -73,7 +73,6 @@ define({
                 },
 
                 paginationOptions: {
-                    "viewMode": "page",
                     "getItemsPerPage": function (response, headers) {
                         return 20;
                     },
@@ -104,6 +103,40 @@ define({
 
                         ]
                     },
+                    getTableConfig: function() {
+						return {
+							"serverPaginate": true,
+							"paginate": true,
+							"pageLength": 10
+						};
+                    },
+                    getColumns: function() {
+						return [{
+							title: 'LOAN_ID',
+							data: 'id'
+                        }, {
+							title: 'ACCOUNT_NUMBER',
+							data: 'accountNumber'
+                        }, 
+                        {
+                            title: 'ENTITY_NAME',
+                            data: 'customerName'
+                        }, {
+							title: 'LOAN_AMOUNT',
+							data: 'loanAmount'
+                        },{
+							title: 'LOAN_TYPE',
+							data: 'loanType'
+                        },
+                        {
+							title: 'PARTNER_CODE',
+							data: 'partnerCode'
+                        },{
+							title: 'PROCESS_TYPE',
+							data: 'processType'
+                        },
+                    ]
+					},
                     getActions: function () {
                         return [{
                             name: "LOAN_INPUT",
@@ -118,7 +151,7 @@ define({
                                 });
                             },
                             isApplicable: function (item, model) {
-                                return model.searchOptions.siteCode != 'sambandh';
+                                return true;
                             }
                         }, 
                         {
@@ -134,7 +167,7 @@ define({
                                 });
                             },
                             isApplicable: function (item, model) {
-                                return model.searchOptions.siteCode == 'sambandh';
+                                return true;
                             }
                         }];
                     }

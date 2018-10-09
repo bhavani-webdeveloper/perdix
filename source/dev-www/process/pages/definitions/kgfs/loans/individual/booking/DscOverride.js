@@ -28,7 +28,7 @@ define([], function () {
                 PageHelper.showLoader();
                 Groups.getDSCData({
                     dscId: dscId
-                }, function(resp, headers) {
+                }, function (resp, headers) {
                     PageHelper.hideLoader();
                     /*var dataHtml = "<table class='table table-striped table-bordered table-responsive'>";
                     dataHtml += "<tr><td>Response : </td><td>" + resp.response + "</td></tr>";
@@ -36,12 +36,12 @@ define([], function () {
                     dataHtml += "<tr><td>Stop Response: </td><td>" + resp.stopResponse + "</td></tr>";
                     dataHtml += "</table>"*/
                     irfSimpleModal('DSC Response', resp.responseMessage);
-                }, function(res) {
+                }, function (res) {
                     PageHelper.showErrors(res);
                     PageHelper.hideLoader();
                 });
             };
-    
+
             var getIncludes = function (model) {
                 return [];
             }
@@ -67,6 +67,7 @@ define([], function () {
                     model.customer.guarantors = model.customer.guarantors || [];
                     model.customer.loanSaved = false;
                     model.customer.cbcheckdone = false;
+                    model.customer.dscOverrideRemarks = null;
 
                     if (_.hasIn(model, "loanProcess")) {
                         var lp = model.loanProcess;
@@ -170,7 +171,7 @@ define([], function () {
                 },
                 eventListeners: {
                     "new-applicant": function (bundleModel, model, params) {
-                        $log.info("Inside new-applicant of DscCheck");
+                        $log.info("Inside new-applicant of DscOverride");
                         model.customer.applicantname = params.customer.firstName;
                         model.customer.applicantid = params.customer.id;
                         model.customer.loanAmount = '';
@@ -178,7 +179,7 @@ define([], function () {
                         /* Assign more customer information to show */
                     },
                     "new-co-applicant": function (bundleModel, model, params) {
-                        $log.info("Insdie new-co-applicant of DscCheck");
+                        $log.info("Insdie new-co-applicant of DscOverride");
                         var recordExists = false;
                         for (var i = model.customer.coapplicants.length - 1; i >= 0; i--) {
                             if (model.customer.coapplicants[i].coapplicantid == params.customer.id)
@@ -192,7 +193,7 @@ define([], function () {
                         }
                     },
                     "new-guarantor": function (bundleModel, model, params) {
-                        $log.info("Insdie new-guarantor of DscCheck");
+                        $log.info("Insdie new-guarantor of DscOverride");
                         var recordExists = false;
                         for (var i = model.customer.guarantors.length - 1; i >= 0; i--) {
                             if (model.customer.guarantors[i].guarantorid == params.customer.id)
@@ -206,7 +207,7 @@ define([], function () {
                         }
                     },
                     "new-loan": function (bundleModel, model, params) {
-                        $log.info("Inside new-loan of CBCheck");
+                        $log.info("Inside new-loan of DscOverride");
                         model.customer.loanSaved = true;
                         model.customer.loanAmount = params.loanAccount.loanAmountRequested;
                         model.customer.loanPurpose1 = params.loanAccount.loanPurpose1;
@@ -220,7 +221,7 @@ define([], function () {
                         }
                     },
                     "remove-customer-relation": function (bundleModel, model, enrolmentDetails) {
-                        $log.info("Inside remove-customer-relation of CBCheck");
+                        $log.info("Inside remove-customer-relation of DscOverride");
                         if (enrolmentDetails.customerClass == 'co-applicant') {
                             _.remove(model.customer.coapplicants, function (g) {
                                 if (g.coapplicantid == enrolmentDetails.customerId) {
@@ -251,6 +252,7 @@ define([], function () {
                                 "items": [
                                     {
                                         title: "DSC_STATUS",
+                                        key: "model.customer.dscStatus",
                                         readonly: true,
                                         type: "string",
                                     },
@@ -259,18 +261,19 @@ define([], function () {
                                         "title": "DSC_OVERRIDE_REQUEST"
                                     },
                                     {
-                                        "type" : "section", 
+                                        "type": "section",
                                         items: [
                                             {
-                                               title: "REMARKS",
-                                               key: "group.groupRemarks",
-                                               type: "textarea",
-                                               required: true
-                                           }, 
-                                           {
-                                               "title" : "DSC_OVERRIDE",
-                                               "type" : "button"
-                                           }
+                                                title: "REMARKS",
+                                                key: "customer.dscOverrideRemarks",
+                                                type: "textarea",
+                                                required: true
+                                            },
+                                            {
+                                                "title": "DSC_OVERRIDE",
+                                                "type": "button",
+                                                "onClick": "actions.doDscOverride(model)"
+                                            }
                                         ]
                                     },
                                     {
@@ -280,7 +283,7 @@ define([], function () {
                                         "icon": "fa fa-eye",
                                         "style": "btn-primary",
                                         // "condition": "model.group.jlgGroupMembers[arrayIndex].dscStatus=='DSC_OVERRIDE_REQUIRED'",
-                                        "onClick": function(model, formCtrl, form, event) {
+                                        "onClick": function (model, formCtrl, form, event) {
                                             console.log(form);
                                             console.warn(event);
                                             //var i = event['arrayIndex'];
@@ -298,7 +301,34 @@ define([], function () {
                     console.log("First thing to excecute I guess");
                     return SchemaResource.getLoanAccountSchema().$promise;
                 },
-                actions: {},
+                actions: {
+                    doDscOverride: function (model) {
+                        console.log("Model from doDScOverride");
+                        console.log(model);
+                        if (model.customer.dscOverrideRemarks) {
+                            irfProgressMessage.pop("dsc-override", "Performing DSC Override");
+                            IndividualLoan.overrideDsc({
+                                customerId: model.loanAccount.customerId,
+                                loanId: model.loanAccount.id,
+                                remarks: model.customer.dscOverrideRemarks,
+                                action: 'approve'
+                            }, {}, function (resp, headers) {
+                                $log.info(resp);
+                                PageHelper.hideLoader();
+                                irfProgressMessage.pop("dsc-override", "Override Succeeded", 2000);
+                                //irfNavigator.goBack();
+                            }, function (resp) {
+                                $log.error(resp);
+                                PageHelper.hideLoader();
+                                irfProgressMessage.pop("dsc-override", "An error occurred. Please Try Again", 2000);
+                                PageHelper.showErrors(resp);
+                            });
+                        } else {
+                            PageHelper.hideLoader();
+                        }
+                    }
+
+                },
             };
 
         }

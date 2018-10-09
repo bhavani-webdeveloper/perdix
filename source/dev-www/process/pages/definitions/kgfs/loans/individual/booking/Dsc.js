@@ -39,7 +39,6 @@ define([], function () {
                 "title": "DSC",
                 "subTitle": "",
                 initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
-
                     if (bundlePageObj) {
                         model._bundlePageObj = _.cloneDeep(bundlePageObj);
                     }
@@ -137,10 +136,6 @@ define([], function () {
                             }
                         }
                     }
-                    console.log("Model from DSC");
-                    console.log(model);
-                    console.log(bundleModel);
-
                 },
                 offline: false,
                 getOfflineDisplayItem: function (item, index) {
@@ -158,6 +153,9 @@ define([], function () {
                         model.customer.loanAmount = '';
                         model.customer.loanPurpose1 = '';
                         /* Assign more customer information to show */
+                    },
+                    "cb-check-done": function(model){
+                        $log.info("for cb-check-done");
                     },
                     "new-co-applicant": function (bundleModel, model, params) {
                         $log.info("Insdie new-co-applicant of DscCheck");
@@ -188,10 +186,11 @@ define([], function () {
                         }
                     },
                     "new-loan": function (bundleModel, model, params) {
-                        $log.info("Inside new-loan of CBCheck");
+                        $log.info("Inside new-loan of DSC handled");
                         model.customer.loanSaved = true;
                         model.customer.loanAmount = params.loanAccount.loanAmountRequested;
                         model.customer.loanPurpose1 = params.loanAccount.loanPurpose1;
+                        model.customer.loanId = params.loanAccount.id;
                         for (var i = model.customer.coapplicants.length - 1; i >= 0; i--) {
                             model.customer.coapplicants[i].loanAmount = params.loanAccount.loanAmountRequested;
                             model.customer.coapplicants[i].loanPurpose1 = params.loanAccount.loanPurpose1;
@@ -240,8 +239,9 @@ define([], function () {
                                     },
                                     {
                                         "type": "button",
-                                        "condition": "model.customer.loanSaved",
-                                        "title": "DSC_REQUEST"
+                                        "condition" : "model.customer.loanId",  
+                                        "title": "DSC_REQUEST",
+                                        "onClick": "actions.getDscDetails(model)"
                                     },
                                     {
                                         key: "customer.coapplicants",
@@ -261,7 +261,9 @@ define([], function () {
                                         {
                                             "type": "button",
                                             "condition": "model.customer.loanSaved",
-                                            "title": "DSC_REQUEST"
+                                            "title": "DSC_REQUEST",
+                                            "onClick": "action.getDscDetails(model)"
+
                                         },
                                         ]
                                     },
@@ -283,7 +285,7 @@ define([], function () {
                                         {
                                             "type": "button",
                                             "condition": "model.customer.loanSaved",
-                                            "title": "DSC_REQUEST"
+                                            "title": "DSC_REQUESTs"
                                         },
                                         ]
                                     }
@@ -296,7 +298,25 @@ define([], function () {
                     console.log("First thing to excecute I guess");
                     return SchemaResource.getLoanAccountSchema().$promise;
                 },
-                actions: {},
+                actions: {
+                    getDscDetails: function (model) {
+                        PageHelper.showLoader();
+                        PageHelper.clearErrors();
+                        IndividualLoan.individualLoanDsc({ loanId: model.loanAccount.id 
+                        },{},function(res) {
+                            $log.info(res);
+                            PageHelper.hideLoader();
+                            model.customer = _cloneDeep(res);       
+                            irfProgressMessage.pop("dsc-check", "Dsccheck Succeeded", 2000);
+
+                        },function(res) {
+                            $log.error(res);
+                            PageHelper.hideLoader();
+                            irfProgressMessage.pop("dsc-check", "An error occurred. Please Try Again", 2000);
+                            PageHelper.showErrors(res);
+                        });
+                    },
+                },
             };
 
         }
