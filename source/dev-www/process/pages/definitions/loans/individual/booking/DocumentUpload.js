@@ -834,7 +834,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                                                     docTitle: doc.document_name,
                                                     docCode: doc.document_code,
                                                     formsKey: doc.forms_key,
-                                                    downloadRequired: doc.download_required
+                                                    downloadRequired: doc.download_required,
+                                                    mandatory:doc.mandatory
                                                 })
                                             }
                                             var loanDocuments = model.loanAccount.loanDocuments;
@@ -855,6 +856,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                                                     loanDocuments[i].$key = documentObj.formsKey;
                                                     loanDocuments[i].$formsKey = documentObj.formsKey;
                                                     loanDocuments[i].$downloadRequired = documentObj.downloadRequired;
+                                                    loanDocuments[i].$mandatory = documentObj.mandatory;
                                                 } else {
                                                     if (_.hasIn(loanDocuments[i],'document') && _.isString(loanDocuments[i].document)){
                                                         loanDocuments[i].$title = loanDocuments[i].document;
@@ -871,7 +873,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                                                         $title: docsForProduct[i].docTitle,
                                                         $formsKey: docsForProduct[i].formsKey,
                                                         disbursementId: model.loanAccount.disbursementSchedules[0].id,
-                                                        isHidden: false
+                                                        isHidden : false,
+                                                        $mandatory: docsForProduct[i].mandatory,
                                                     })
                                                 }
                                             }
