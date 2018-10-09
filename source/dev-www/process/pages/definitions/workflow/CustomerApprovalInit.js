@@ -148,6 +148,10 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                                         "key": "customer.customerType",
                                         "type": "select",
                                         "screenFilter": true,
+                                        "titleMap": {
+                                            "Individual": "Individual",
+                                            "Enterprise": "Enterprise"
+                                        }
                                     }
                                 },
                                 outputMap: {
@@ -462,8 +466,7 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                     },
                     "customerType": {
                         "type": "string",
-                        "title": "CUSTOMER_TYPE",
-                        "enumCode": "customer_type"
+                        "title": "CUSTOMER_TYPE"
                     },
                     "lastName": {
                         "type": "string",
