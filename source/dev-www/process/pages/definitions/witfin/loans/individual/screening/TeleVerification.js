@@ -74,6 +74,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 pageClass: 'vehicle-valuation',
                                 minimum: 1,
                                 maximum: 1,
+                                order:56
+                            },
+                            {
+                                pageName: 'witfin.customer.tvr',
+                                title: 'TELE_VERIFICATION',
+                                pageClass: 'tvr',
+                                minimum: 1,
+                                maximum: 1,
                                 order:57
                             },
                             {
@@ -244,6 +252,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 $this.bundlePages.push({
                                     pageClass: 'vehicle-details',
                                     model: {
+                                        loanProcess: loanProcess
+                                    }
+                                });
+
+                                $this.bundlePages.push({
+                                    pageClass: 'tvr',
+                                    model: {
+                                        enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
                                         loanProcess: loanProcess
                                     }
                                 });

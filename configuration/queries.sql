@@ -64,3 +64,4 @@ pincodeMaster.list= SELECT p.pincode,p.division, p.region, p.taluk, p.district, 
 deseaseDetails = select * from desease_details where customer_id = :customer_id
 vehicleSchemeCodeDetails.list = select * from vehicle_loan_scheme_master where DATE(`valid_till`)>= CURDATE() and `status`="Active" and `branch`= :branch_name and `dealer`=:centre_name
 LoanRepayBankAccountByPartnerCode.list=SELECT * from bank_account_master where allow_collection = 1 and partner_code LIKE :partner_code and bank_name in ('HDFC Bank','RBL Bank')
+questionnaireDetails.list=SELECT qm.party_type, qm.question, qm.input_type, qdm.value  FROM questions_master qm LEFT JOIN questionnaire_dropdown_master qdm ON qm.id = qdm.questions_master_id WHERE qm.module_code=:module_code AND qm.process=:process AND qm.stage=:stage
