@@ -14,819 +14,15 @@ define([], function () {
             var branch = SessionStore.getBranch();
             var podiValue = SessionStore.getGlobalSetting("percentOfDisposableIncome");
             //PMT calculation
-            var pmt = function (rate, nper, pv, fv, type) {
-                if (!fv) fv = 0;
-                if (!type) type = 0;
-
-                if (rate == 0) return -(pv + fv) / nper;
-
-                var pvif = Math.pow(1 + rate, nper);
-                var pmt = rate / (pvif - 1) * -(pv * pvif + fv);
-
-                if (type == 1) {
-                    pmt /= (1 + rate);
-                };
-
-                return pmt;
-            }
-            //pmt function completed
-
             var self;
-            var validateForm = function (formCtrl) {
-                formCtrl.scope.$broadcast('schemaFormValidate');
-                if (formCtrl && formCtrl.$invalid) {
-                    PageHelper.showProgress("enrolment", "Your form have errors. Please fix them.", 5000);
-                    return false;
-                }
-                return true;
-            };
-
-            var getRelationFromClass = function (relation) {
-                if (relation == 'guarantor') {
-                    return 'Guarantor';
-                } else if (relation == 'applicant') {
-                    return 'Applicant';
-                } else if (relation == 'co-applicant') {
-                    return 'Co-Applicant';
-                }
-            };
-
-
-
-            var configFiles = function () {
-                return {
-                    "loanAccount.currentStage": {
-                        "KYC": {
-                            "excludes": [
-                                "LoanRecommendation",
-                                "LoanSanction",
-                                "LoanMitigants",
-                                "DeductionsFromLoan",
-                                "LoanMitigants",
-                                "LoanMitigants.deviationParameter",
-                                "AdditionalLoanInformation",
-                                "NomineeDetails",
-                                "PreliminaryInformation.expectedPortfolioInsurancePremium",
-                                "ProposedUtilizationPlan",
-                                "CollateralDetails"
-                            ],
-                            "overrides": {
-                                "PreliminaryInformation": {
-                                    "orderNo": 1
-                                },
-                                "LoanCustomerRelations": {
-                                    "orderNo": 2
-                                },
-                                "DeductionsFromLoan": {
-                                    "orderNo": 3
-                                },
-                                "LoanMitigants": {
-                                    "orderNo": 4
-                                },
-                                "LoanDocuments": {
-                                    "orderNo": 5
-                                },
-                                "PreliminaryInformation.loanAmountRequested": {
-                                    "required": true
-                                },
-                                "PreliminaryInformation.tenureRequested": {
-                                    "type": "select",
-                                    "schema": {
-                                        "enumCode": "tenure_requested"
-                                    }
-                                },
-                                "PreliminaryInformation.expectedEmi": {
-                                    "readonly": true
-                                },
-                                "PreliminaryInformation.emiRequested": {
-                                    "required": true
-                                },
-                                "PreliminaryInformation.collectionPaymentType": {
-                                    "required": true
-                                },
-                                "PreliminaryInformation.loanPurpose1": {
-                                    "resolver": "LoanPurpose1LOVConfiguration"
-                                },
-                                "PreliminaryInformation.loanPurpose2": {
-                                    "resolver": "LoanPurpose2LOVConfiguration"
-                                },
-                                "LoanCustomerRelations.loanCustomerRelations": {
-                                    "add": null,
-                                    "remove": null,
-                                    "startEmpty": true
-                                },
-                                "LoanCustomerRelations.loanCustomerRelations.customerId": {
-                                    "readonly": true
-                                },
-                                "LoanCustomerRelations.loanCustomerRelations.urn": {
-                                    "readonly": true
-                                },
-                                "LoanCustomerRelations.loanCustomerRelations.name": {
-                                    "readonly": true
-                                },
-                                "LoanCustomerRelations.loanCustomerRelations.relation": {
-                                    "readonly": true
-                                },
-                                "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
-                                    "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
-                                    "required": true
-                                }
-                            }
-                        },
-                        "GuarantorAddition": {
-                            "excludes": [
-                                "ProposedUtilizationPlan",
-                                "LoanSanction",
-                                "DeductionsFromLoan",
-                                "LoanMitigants",
-                                "LoanMitigants.deviationParameter",
-                                "NomineeDetails.nominees.nomineeButton",
-                                "PreliminaryInformation.actualAmountRequired",
-                                "PreliminaryInformation.fundsFromDifferentSources",
-                            ],
-                            "overrides": {
-                                "PreliminaryInformation": {
-                                    "orderNo": 1,
-                                    "readonly": true
-                                },
-                                "LoanRecommendation.udf8": {
-                                    "readonly": true
-                                },
-                                "LoanRecommendation.udf3": {
-                                    "readonly": true
-                                },
-                                "LoanCustomerRelations": {
-                                    "orderNo": 2,
-                                    "readonly": true
-                                },
-                                "LoanMitigants": {
-                                    "orderNo": 4
-                                },
-                                "LoanDocuments": {
-                                    "orderNo": 5
-                                },
-                                "AdditionalLoanInformation": {
-                                    "orderNo": 6,
-                                    "readonly": true
-                                },
-                                "CollateralDetails": {
-                                    "orderNo": 7,
-                                    "readonly": true
-                                },
-                                "NomineeDetails": {
-                                    "orderNo": 8,
-                                    "readonly": true
-                                },
-                                "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
-                                    "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
-                                }
-                            }
-                        },
-                        "KYCReview": {
-                            "excludes": [
-                                "LoanRecommendation",
-                                "LoanSanction",
-                                "LoanMitigants",
-                                "DeductionsFromLoan",
-                                "LoanMitigants",
-                                "LoanMitigants.deviationParameter",
-                                "AdditionalLoanInformation",
-                                "NomineeDetails",
-                                "ProposedUtilizationPlan",
-                                "CollateralDetails"
-                            ],
-                            "overrides": {
-                                "PreliminaryInformation": {
-                                    "orderNo": 1,
-                                    "readonly": true
-                                },
-                                "LoanCustomerRelations": {
-                                    "orderNo": 2,
-                                    "readonly": true
-                                },
-                                "DeductionsFromLoan": {
-                                    "orderNo": 3,
-                                    "readonly": true
-                                },
-                                "LoanMitigants": {
-                                    "orderNo": 4
-                                },
-                                "LoanDocuments": {
-                                    "orderNo": 5
-                                },
-                                "LoanRecommendation": {
-                                    "orderNo": 6
-                                },
-                                "LoanCustomerRelations.loanCustomerRelations": {
-                                    "add": null,
-                                    "remove": null,
-                                    "startEmpty": false
-                                },
-                                "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
-                                    "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'"
-                                }
-                            }
-                        },
-                        "Appraisal": {
-                            "excludes": [
-                                "LoanRecommendation",
-                                "LoanSanction",
-                                "DeductionsFromLoan",
-                                "LoanMitigants",
-                                "LoanMitigants.deviationParameter"
-                            ],
-                            "overrides": {
-                                "PreliminaryInformation": {
-                                    "orderNo": 1
-                                },
-                                "LoanCustomerRelations": {
-                                    "orderNo": 2,
-                                    "readonly": true
-                                },
-                                "LoanMitigants": {
-                                    "orderNo": 4
-                                },
-                                "LoanDocuments": {
-                                    "orderNo": 5
-                                },
-                                "AdditionalLoanInformation": {
-                                    "orderNo": 6
-                                },
-                                "CollateralDetails": {
-                                    "orderNo": 7
-                                },
-                                "NomineeDetails": {
-                                    "orderNo": 8
-                                },
-                                "PreliminaryInformation.loanAmountRequested": {
-                                    "required": true
-                                },
-                                "PreliminaryInformation.tenureRequested": {
-                                    "required": true
-                                },
-                                "PreliminaryInformation.expectedEmi": {
-                                    "readonly": true
-                                },
-                                "PreliminaryInformation.emiRequested": {
-                                    "required": true
-                                },
-                                "PreliminaryInformation.collectionPaymentType": {
-                                    "required": true
-                                },
-                                "PreliminaryInformation.expectedPortfolioInsurancePremium": {
-                                    "readonly": true
-                                },
-                                "LoanCustomerRelations.loanCustomerRelations": {
-                                    "add": null,
-                                    "remove": null,
-                                    "startEmpty": true
-                                },
-                                "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
-                                    "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
-                                    "required": true
-                                },
-                                "AdditionalLoanInformation.productCategory": {
-                                    "required": true,
-                                    "type": "select",
-                                    "enumCode": "loan_product_category"
-                                },
-                                "AdditionalLoanInformation.proposedHires": {
-                                    "required": true
-                                },
-                                "NomineeDetails.nominees.nomineeFirstName": {
-                                    "required": true,
-                                    "resolver": "NomineeFirstNameLOVConfiguration"
-                                },
-                                "NomineeDetails.nominees.nomineeGender": {
-                                    "required": true
-                                },
-                                "NomineeDetails.nominees.nomineeDOB": {
-                                    "required": true
-                                },
-                                "NomineeDetails.nominees.nomineeButton": {
-                                    "orderNo": 41,
-                                },
-                                "NomineeDetails.nominees.nomineeDoorNo": {
-                                    "required": true
-                                },
-                                "NomineeDetails.nominees.nomineePincode": {
-                                    "required": true,
-                                    "resolver": "NomineePincodeLOVConfiguration"
-                                },
-                                "NomineeDetails.nominees.nomineeRelationship": {
-                                    "required": true
-                                },
-                                "CollateralDetails.collateral.collateralDescription": {
-                                    "required": true,
-                                    "orderNo": 10
-                                },
-                                "CollateralDetails.collateral.collateralValue": {
-                                    "required": true,
-                                    "orderNo": 20
-                                },
-                                "CollateralDetails.collateral.expectedIncome": {
-                                    "required": true,
-                                    "orderNo": 30
-                                },
-                                "CollateralDetails.collateral.collateralType": {
-                                    "required": true,
-                                    "orderNo": 40
-                                },
-                                "CollateralDetails.collateral.manufacturer": {
-                                    "required": true,
-                                    "orderNo": 50
-                                },
-                                "CollateralDetails.collateral.modelNo": {
-                                    "required": true,
-                                    "orderNo": 60
-                                },
-                                "CollateralDetails.collateral.serialNo": {
-                                    "orderNo": 70
-                                },
-                                "CollateralDetails.collateral.expectedPurchaseDate": {
-                                    "required": true,
-                                    "orderNo": 80
-                                },
-                                "CollateralDetails.collateral.machineAttachedToBuilding": {
-                                    "required": true,
-                                    "orderNo": 90
-                                },
-                                "CollateralDetails.collateral.hypothecatedToBank": {
-                                    "required": true,
-                                    "orderNo": 100
-                                },
-                                "CollateralDetails.collateral.electricityAvailable": {
-                                    "required": true,
-                                    "orderNo": 110
-                                },
-                                "CollateralDetails.collateral.spaceAvailable": {
-                                    "required": true,
-                                    "orderNo": 120
-                                },
-                                "CollateralDetails.collateral.collateral1FilePath": {
-                                    "required": true,
-                                    "orderNo": 130
-                                },
-
-                            }
-                        },
-                        "AppraisalReview": {
-                            "excludes": [
-                                "LoanSanction",
-                                "DeductionsFromLoan",
-                                "NomineeDetails.nominees.nomineeButton",
-                                "LoanMitigants",
-                                "LoanRecommendation.udf8",
-                                "LoanRecommendation.udf3",
-                                "LoanMitigants.deviationParameter"
-                            ],
-                            "overrides": {
-                                "PreliminaryInformation": {
-                                    "orderNo": 1,
-                                    "readonly": true
-                                },
-                                "LoanCustomerRelations": {
-                                    "orderNo": 2,
-                                    "readonly": true
-                                },
-                                "LoanMitigants": {
-                                    "orderNo": 4
-                                },
-                                "LoanDocuments": {
-                                    "orderNo": 5
-                                },
-                                "AdditionalLoanInformation": {
-                                    "orderNo": 6,
-                                    "readonly": true
-                                },
-                                "CollateralDetails": {
-                                    "orderNo": 7,
-                                    "readonly": true
-                                },
-                                "NomineeDetails": {
-                                    "orderNo": 8,
-                                    "readonly": true
-                                },
-                                "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
-                                    "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
-                                }
-                            }
-                        },
-                        "Televerification": {
-                            "excludes": [
-                                "ProposedUtilizationPlan",
-                                "LoanSanction",
-                                "LoanMitigants",
-                                "LoanRecommendation.udf8",
-                                "LoanRecommendation.udf3",
-                                "LoanMitigants.deviationParameter",
-                                "PreliminaryInformation.actualAmountRequired",
-                                "PreliminaryInformation.fundsFromDifferentSources",
-                                "NomineeDetails.nominees.nomineeButton"
-                            ],
-                            "overrides": {
-                                "PreliminaryInformation": {
-                                    "orderNo": 1,
-                                    "readonly": true
-                                },
-                                "LoanCustomerRelations": {
-                                    "orderNo": 2,
-                                    "readonly": true
-                                },
-                                "LoanMitigants": {
-                                    "orderNo": 4
-                                },
-                                "LoanDocuments": {
-                                    "orderNo": 5
-                                },
-                                "AdditionalLoanInformation": {
-                                    "orderNo": 6,
-                                    "readonly": true
-                                },
-                                "CollateralDetails": {
-                                    "orderNo": 7,
-                                    "readonly": true
-                                },
-                                "NomineeDetails": {
-                                    "orderNo": 8,
-                                    "readonly": true
-                                },
-                                "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
-                                    "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
-                                }
-
-                            }
-                        },
-                        "Evaluation": {
-                            "excludes": [
-                                "ProposedUtilizationPlan",
-                                "LoanSanction",
-                                "DeductionsFromLoan",
-                                "LoanMitigants",
-                                "LoanMitigants.deviationParameter",
-                                "PreliminaryInformation.actualAmountRequired",
-                                "PreliminaryInformation.fundsFromDifferentSources",
-                                "NomineeDetails.nominees.nomineeButton"
-                            ],
-                            "overrides": {
-                                "PreliminaryInformation": {
-                                    "orderNo": 1,
-                                    "readonly": true
-                                },
-                                "LoanCustomerRelations": {
-                                    "orderNo": 2,
-                                    "readonly": true
-                                },
-                                "LoanMitigants": {
-                                    "orderNo": 4
-                                },
-                                "LoanDocuments": {
-                                    "orderNo": 5
-                                },
-                                "AdditionalLoanInformation": {
-                                    "orderNo": 6,
-                                    "readonly": true
-                                },
-                                "CollateralDetails": {
-                                    "orderNo": 7,
-                                    "readonly": true
-                                },
-                                "NomineeDetails": {
-                                    "orderNo": 8,
-                                    "readonly": true
-                                },
-                                "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
-                                    "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
-                                }
-
-                            }
-                        },
-
-                        "CreditCommitteeReview": {
-                            "excludes": [
-                                "ProposedUtilizationPlan",
-                                "LoanSanction",
-                                "DeductionsFromLoan",
-                                "LoanMitigants",
-                                "LoanMitigants.deviationParameter",
-                                "PreliminaryInformation.actualAmountRequired",
-                                "PreliminaryInformation.fundsFromDifferentSources",
-                                "NomineeDetails.nominees.nomineeButton"
-                            ],
-                            "overrides": {
-                                "PreliminaryInformation": {
-                                    "orderNo": 1,
-                                    "readonly": true
-                                },
-                                "LoanCustomerRelations": {
-                                    "orderNo": 2,
-                                    "readonly": true
-                                },
-                                "LoanMitigants": {
-                                    "orderNo": 4
-                                },
-                                "LoanDocuments": {
-                                    "orderNo": 5
-                                },
-                                "AdditionalLoanInformation": {
-                                    "orderNo": 6,
-                                    "readonly": true
-                                },
-                                "LoanRecommendation.udf8": {
-                                    "readonly": true
-                                },
-                                "LoanRecommendation.udf3": {
-                                    "readonly": true
-                                },
-                                "CollateralDetails": {
-                                    "orderNo": 7,
-                                    "readonly": true
-                                },
-                                "NomineeDetails": {
-                                    "orderNo": 8,
-                                    "readonly": true
-                                },
-                                "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
-                                    "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
-                                }
-
-                            }
-                        },
-                        "Sanction": {
-                            "excludes": [
-                                "ProposedUtilizationPlan",
-                                "DeductionsFromLoan",
-                                "LoanMitigants",
-                                "LoanMitigants.deviationParameter",
-                                "PreliminaryInformation.actualAmountRequired",
-                                "PreliminaryInformation.fundsFromDifferentSources",
-                                "NomineeDetails.nominees.nomineeButton"
-                            ],
-                            "overrides": {
-                                "PreliminaryInformation": {
-                                    "orderNo": 1,
-                                    "readonly": true
-                                },
-                                "LoanRecommendation.udf8": {
-                                    "readonly": true
-                                },
-                                "LoanRecommendation.udf3": {
-                                    "readonly": true
-                                },
-                                "LoanCustomerRelations": {
-                                    "orderNo": 2,
-                                    "readonly": true
-                                },
-                                "LoanMitigants": {
-                                    "orderNo": 4
-                                },
-                                "LoanDocuments": {
-                                    "orderNo": 5
-                                },
-                                "AdditionalLoanInformation": {
-                                    "orderNo": 6,
-                                    "readonly": true
-                                },
-                                "CollateralDetails": {
-                                    "orderNo": 7,
-                                    "readonly": true
-                                },
-                                "NomineeDetails": {
-                                    "orderNo": 8,
-                                    "readonly": true
-                                },
-                                "LoanSanction": {
-                                    "orderNo": 9
-                                },
-                                "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
-                                    "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
-                                }
-
-                            }
-                        }
-
-                    }
-
-                }
-            }
-
-            var overridesFieldss = function (bundlePageObj) {
-                return {
-                    "PreliminaryInformation.linkedAccountNumber": {
-                        "resolver": "LinkedAccountNumberLOVConfiguration"
-                    },
-                    "LoanRecommendation.udf8": {
-                        "title": "ELIGIBLE_DISPOSABLE_INCOME",
-                        "onChange": function (modelValue, form, model, formCtrl, event) {
-                            var eligibleDi = modelValue * podiValue / 100;
-                            var rate = model.loanAccount.expectedInterestRate / 100;
-                            var ir = rate / 12;
-                            var tenure = model.loanAccount.tenureRequested;
-                            var constant = 1;
-                            var pmt1 = pmt(ir, tenure, constant, 0, 0);
-                            var maximumLoanEligible = eligibleDi / (-pmt(ir, tenure, constant, 0, 0)) * 1;
-                            model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf3 = Math.round(maximumLoanEligible);
-                        }
-                    },
-                    "LoanRecommendation.udf3": {
-                        "title": "MAXIMUM_ELIGIBLE_LOAN",
-                        "readonly": true
-                    },
-                    "CollateralDetails.collateral.HYPOTHECATED_TO_IREPatedToBank": {
-                        "title": "HYPOTHECATED_TO_IREP"
-                    },
-                    "PreliminaryInformation.expectedInterestRate": {
-                        "type": "select",
-                        "enumCode": "customerinfo_expect_interestra"
-                    },
-                    "PreliminaryInformation.emiPaymentDateRequested": {
-                        "enumCode": "customerinfo_emirequest_date"
-                    },
-                    "PreliminaryInformation.collectionPaymentType": {
-                        "enumCode": "customerinfo_colctn_Pymt_type"
-                    },
-                    "LoanCustomerRelations.loanCustomerRelations": {
-                        "add": null,
-                        "remove": null,
-                        "startEmpty": true
-                    },
-                    "ProposedUtilizationPlan.loanUtilisationDetail.utilisationType": {
-                        "required": true
-                    },
-                    "ProposedUtilizationPlan.loanUtilisationDetail.fundAllocationPercentage": {
-                        "required": true
-                    },
-                    "NomineeDetails.nominees.nomineeFirstName": {
-                        "orderNo": 10
-                    },
-                    "NomineeDetails.nominees.nomineeGender": {
-                        "orderNo": 20
-                    },
-                    "NomineeDetails.nominees.nomineeDOB": {
-                        "orderNo": 30
-                    },
-                    "NomineeDetails.nominees.nomineeRelationship": {
-                        "orderNo": 40
-                    },
-                    "NomineeDetails.nominees.nomineePincode": {
-                        "resolver": "PincodeLOVConfiguration",
-                        "orderNo": 50
-                    },
-                    "NomineeDetails.nominees.nomineeDoorNo": {
-                        "orderNo": 60
-                    },
-                    "NomineeDetails.nominees.nomineeStreet": {
-                        "orderNo": 70
-                    },
-                    "NomineeDetails.nominees.nomineeLocality": {
-                        "orderNo": 80
-                    },
-                    "NomineeDetails.nominees.nomineeDistrict": {
-                        "orderNo": 90
-                    },
-                    "NomineeDetails.nominees.nomineeState": {
-                        "orderNo": 100
-                    }
-
-                }
-            }
-
-            var getIncludess = function (model) {
-
-                return [
-                    "PreliminaryInformation",
-                    "PreliminaryInformation.linkedAccountNumber",
-                    "PreliminaryInformation.loan",
-                    "PreliminaryInformation.loanPurpose1",
-                    "PreliminaryInformation.loanPurpose2",
-                    "PreliminaryInformation.loanAmountRequested",
-                    "PreliminaryInformation.loanToValue",
-                    "PreliminaryInformation.frequencyRequested",
-                    "PreliminaryInformation.tenureRequested",
-                    "PreliminaryInformation.expectedInterestRate",
-                    "PreliminaryInformation.expectedEmi",
-                    "PreliminaryInformation.emiRequested",
-                    "PreliminaryInformation.emiPaymentDateRequested",
-                    "PreliminaryInformation.collectionPaymentType",
-                    "PreliminaryInformation.expectedPortfolioInsurancePremium",
-                    "PreliminaryInformation.actualAmountRequired",
-                    "PreliminaryInformation.fundsFromDifferentSources",
-
-
-                    "LoanCustomerRelations",
-                    "LoanCustomerRelations.loanCustomerRelations",
-                    "LoanCustomerRelations.loanCustomerRelations.customerId",
-                    "LoanCustomerRelations.loanCustomerRelations.urn",
-                    "LoanCustomerRelations.loanCustomerRelations.name",
-                    "LoanCustomerRelations.loanCustomerRelations.relation",
-                    "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant",
-
-                    "DeductionsFromLoan",
-                    "DeductionsFromLoan.expectedProcessingFeePercentage",
-                    "DeductionsFromLoan.expectedCommercialCibilCharge",
-                    "DeductionsFromLoan.estimatedEmi",
-
-                    "LoanMitigants",
-                    "LoanMitigants.deviationParameter",
-                    "LoanMitigants.deviationParameter.mitigants",
-                    "LoanMitigants.deviationParameter.mitigants.mitigantsName",
-                    "LoanMitigants.deviationParameter.mitigants.mitigantsName.sectionSelected",
-                    "LoanMitigants.deviationParameter.mitigants.mitigantsName.sectionSelected.selected",
-                    "LoanMitigants.deviationParameter.mitigants.mitigantsName.sectionMitigantName",
-                    "LoanMitigants.deviationParameter.mitigants.mitigantsName.sectionMitigantName.mitigantName",
-
-                    "LoanDocuments",
-                    "LoanDocuments.loanDocuments",
-                    "LoanDocuments.loanDocuments.document",
-                    "LoanDocuments.loanDocuments.documentId",
-
-                    "LoanRecommendation",
-                    "LoanRecommendation.loanAmount",
-                    "LoanRecommendation.tenure",
-                    "LoanRecommendation.interestRate",
-                    "LoanRecommendation.estimatedEmi",
-                    "LoanRecommendation.processingFeePercentage",
-                    "LoanRecommendation.securityEmiRequired",
-                    "LoanRecommendation.commercialCibilCharge",
-                    "LoanRecommendation.udf8",
-                    "LoanRecommendation.udf3",
-
-                    "LoanSanction",
-                    "LoanSanction.sanctionDate",
-                    "LoanSanction.numberOfDisbursements",
-                    "LoanSanction.disbursementSchedules",
-                    "LoanSanction.disbursementSchedules.disbursementAmount",
-
-                    "AdditionalLoanInformation",
-                    "AdditionalLoanInformation.estimatedDateOfCompletion",
-                    "AdditionalLoanInformation.productCategory",
-                    "AdditionalLoanInformation.customerSignDateExpected",
-                    "AdditionalLoanInformation.proposedHires",
-                    "AdditionalLoanInformation.percentageIncreasedIncome",
-                    "AdditionalLoanInformation.percentageInterestSaved",
-
-                    "CollateralDetails",
-                    "CollateralDetails.collateral",
-                    "CollateralDetails.collateral.collateralDescription",
-                    "CollateralDetails.collateral.collateralValue",
-                    "CollateralDetails.collateral.expectedIncome",
-                    "CollateralDetails.collateral.collateralType",
-                    "CollateralDetails.collateral.manufacturer",
-                    "CollateralDetails.collateral.modelNo",
-                    "CollateralDetails.collateral.serialNo",
-                    "CollateralDetails.collateral.expectedPurchaseDate",
-                    "CollateralDetails.collateral.machineAttachedToBuilding",
-                    "CollateralDetails.collateral.hypothecatedToBank",
-                    "CollateralDetails.collateral.electricityAvailable",
-                    "CollateralDetails.collateral.spaceAvailable",
-                    "CollateralDetails.collateral.collateral1FilePath",
-
-                    "NomineeDetails",
-                    "NomineeDetails.nominees",
-                    "NomineeDetails.nominees.nomineeFirstName",
-                    "NomineeDetails.nominees.nomineeGender",
-                    "NomineeDetails.nominees.nomineeDOB",
-                    "NomineeDetails.nominees.nomineeButton",
-                    "NomineeDetails.nominees.nomineeDoorNo",
-                    "NomineeDetails.nominees.nomineeLocality",
-                    "NomineeDetails.nominees.nomineeStreet",
-                    "NomineeDetails.nominees.nomineePincode",
-                    "NomineeDetails.nominees.nomineeDistrict",
-                    "NomineeDetails.nominees.nomineeState",
-                    "NomineeDetails.nominees.nomineeRelationship",
-
-                    "PostReview",
-                    "PostReview.action",
-                    "PostReview.proceed",
-                    "PostReview.proceed.remarks",
-                    "PostReview.proceed.proceedButton",
-                    "PostReview.sendBack",
-                    "PostReview.sendBack.remarks",
-                    "PostReview.sendBack.stage",
-                    "PostReview.sendBack.sendBackButton",
-                    "PostReview.reject",
-                    "PostReview.reject.remarks",
-                    "PostReview.reject.rejectReason",
-                    "PostReview.reject.rejectButton",
-                    "PostReview.hold",
-                    "PostReview.hold.remarks",
-                    "PostReview.hold.holdButton",
-
-                    "ProposedUtilizationPlan",
-                    "ProposedUtilizationPlan.loanUtilisationDetail",
-                    "ProposedUtilizationPlan.loanUtilisationDetail.utilisationType",
-                    "ProposedUtilizationPlan.loanUtilisationDetail.fundAllocationPercentage",
-                    "ProposedUtilizationPlan.loanUtilisationDetail.consumptionDetails"
-                ];
-
-            }
             var getIncludes = function (model) {
                 return [
                     "LoanDetails",
                     "LoanDetails.loanType",
                     "LoanDetails.partner",
                     "LoanDetails.frequency",
-                    "LoanDetails.loanProducts",
+                    "LoanDetails.loanProductCategory",
+                    "LoanDetails.loanProductCode",
                     "LoanDetails.loanApplicationDate",
                     "LoanDetails.loanAmountRequested",
                     "LoanDetails.requestedTenure",
@@ -893,120 +89,678 @@ define([], function () {
                 ]
             }
             var configFile = function (model) {
-                return []
+                return {
+                    "loanProcess.loanAccount.currentStage":{
+                        "LoanInitiation":{
+                            "excludes":[],
+                            "overrides":{
+                                "LoanDetails": {
+                                    "orderNo": 1
+                                },
+                                "LoanDetails.loanType": {
+                                    "orderNo": 1,
+                                    "titleMap":[
+                                        {
+                                            value: "JEWEL",
+                                            name: "Jewel Loan"
+                                        },
+                                        {
+                                            value: "SECURED",
+                                            name: "SECURED"
+                                        },
+                                        {
+                                            value: "UNSECURED",
+                                            name: "UNSECURED"
+                                        }
+                                    ]
+                                },
+                                "LoanDetails.partner": {
+                                    "orderNo": 2,
+                                    "enumCode": "partner"
+                                },
+                                "LoanDetails.frequency": {
+                                    "orderNo": 3,
+                                    "enumCode": "loan_product_frequency"
+                                },
+                                "LoanDetails.loanProductCategory": {
+                                    "orderNo": 4,
+                                    "enumCode": "loan_product_category",
+                                    onChange: function (valueObj, model, context) {
+                                        console.log("Its time for place Holder");
+                                        console.log(valueObj);
+                                        console.log(model);
+                                        console.log(context);
+                                    }
+            
+                                },
+                                "LoanDetails.loanProductCode":{
+                                    "orderNo": 4,
+                                    bindMap: {
+                                        "Partner": "loanAccount.partnerCode",
+                                        // "ProductCategory": "loanAccount.productCategory",
+                                        "Frequency": "loanAccount.frequency",
+                                        "loanType": "loanAccount.loanType"
+                                       },
+                                       autolov: true,
+                                       required: true,
+                                       searchHelper: formHelper,
+                                       search: function(inputModel, form, model, context) {
+            
+                                          return Queries.getLoanProductCodeByLoanType(model.loanAccount.productCategory,model.loanAccount.frequency,model.loanAccount.partnerCode,model.loanAccount.loanType);
+                                       },
+                                       onSelect: function(valueObj, model, context) {
+                                           model.loanAccount.productCode = valueObj.productCode;
+                                           model.additions.tenurePlaceHolder = valueObj.tenure_from + '-' + valueObj.tenure_to;
+                                       },
+                                       getListDisplayItem: function(item, index) {
+                                           return [
+                                               item.productCode
+                                           ];
+                                       },
+                                       onChange: function(value, form, model) {
+                                       getProductDetails(value, model);
+                                       },
+                                },
+                                "LoanDetails.loanPurpose1": {
+                                    "orderNo": 6,
+                                    "type": "lov",
+                                    "autolov": true,
+                                    "title":"LOAN_PURPOSE_1",
+                                    bindMap: {
+                                            },
+                                    outputMap: {
+                                                "purpose1": "loanAccount.loanPurpose1"
+                                            },
+                                    searchHelper: formHelper,
+                                    search: function(inputModel, form, model) {
+                                    if(model.loanAccount.productCode != null && model.siteCode != 'witfin')
+                                        return Queries.getLoanPurpose1(model.loanAccount.productCode);
+                                    else
+                                        return Queries.getAllLoanPurpose1();
+                                    },
+                                    getListDisplayItem: function(item, index) {
+                                        return [
+                                                    item.purpose1
+                                                ];
+                                        },
+                                    onSelect: function(result, model, context) {
+                                             model.loanAccount.loanPurpose2 = '';
+                                    }
+                                },
+                                "LoanDetails.loanPurpose2": {
+                                    "orderNo": 7,
+                                    "title": "LOAN_PURPOSE_2",
+                                    // title:"LOAN_PURPOSE_2",
+                                    "type": "lov",
+                                    bindMap: {
+                                    },
+                                    outputMap: {
+                                        "purpose2": "loanAccount.loanPurpose2"
+                                    },
+                                    searchHelper: formHelper,
+                                    search: function(inputModel, form, model) {
+                                        if(model.loanAccount.productCode != null)
+                                            return Queries.getLoanPurpose2(model.loanAccount.productCode, model.loanAccount.loanPurpose1);
+                                        else
+                                            return Queries.getAllLoanPurpose2(model.loanAccount.loanPurpose1);
+                                    },
+                                    getListDisplayItem: function(item, index) {
+                                        return [
+                                            item.purpose2
+                                        ];
+                                    },
+                                    onSelect: function(result, model, context) {
+                                        model.loanAccount.loanPurpose3 = '';
+                               }
+                                    
+                                },
+                                "LoanDetails.loanPurpose3": {
+                                    "orderNo": 8,
+                                    "type": "lov",
+                                    bindMap: {
+                                    },
+                                    outputMap: {
+                                        "purpose3": "loanAccount.loanPurpose3"
+                                    },
+                                    searchHelper: formHelper,
+                                    search: function(inputModel, form, model) {
+                                        if(model.loanAccount.productCode != null)
+                                            return Queries.getLoanPurpose3(model.loanAccount.productCode, model.loanAccount.loanPurpose1,model.loanAccount.loanPurpose2);
+                                        else
+                                            return Queries.getAllLoanPurpose3(model.loanAccount.loanPurpose1);
+                                    },
+                                    getListDisplayItem: function(item, index) {
+                                        return [
+                                            item.purpose3
+                                        ];
+                                    }
+                                },
+                                "LoanDetails.loanAmountRequested": {
+                                    "orderNo": 5,
+                                },
+                                "LoanDetails.requestedTenure":{
+                                    "orderNo" : 6,
+                                    "placeholderExpr": "model.additions.tenurePlaceHolder",
+                                },
+                                "LoanDetials.witnessDetails": {
+                                    "type": "array",
+                                    "view": "fixed"
+                                },
+                                "LoanDetails.witnessDetails.witnessFirstName": {
+                                    "type": "lov",
+                                    // "key": "model.LoanAccounts.witnessDetails[].witnessFirstName",
+                                    searchHelper: formHelper,
+                                    search: function (inputModel, form, model, context) {
+                                        var out = [];
+                                        if (!model.customer.familyMembers) {
+                                            return out;
+                                        }
+            
+                                        for (var i = 0; i < model.customer.familyMembers.length; i++) {
+                                            out.push({
+                                                name: model.customer.familyMembers[i].familyMemberFirstName,
+                                                // value: model.customer.familyDetails[i].value,
+                                                relationship: model.customer.familyMembers[i].relationShip
+                                            })
+                                        }
+                                        return $q.resolve({
+                                            headers: {
+                                                "x-total-count": out.length
+                                            },
+                                            body: out
+                                        });
+                                    },
+                                    onSelect: function (valueObj, model, context) {
+                                        //add to the witnees array.
+                                        model.loanAccount.witnessFirstName = valueObj.name;
+                                        model.loanAccount.witnessRelationship = valueObj.relationship;
+                                    },
+                                    getListDisplayItem: function (item, index) {
+                                        return [
+                                            item.name
+                                        ];
+                                    }
+                                },
+                                "LoanDetails.witnessDetails.witnessRelationship": {
+                                    "readonly":false,
+                                    "require":false
+                                },
+                                "NomineeDetails": {
+                                    "orderNo": 3
+                                },
+                                "JewelDetails":{
+                                    "orderNo": 2,
+                                    "condition": "model.loanAccount.loanType == 'JEWEL'"
+                                },
+                                "NomineeDetails.nominees.nomineeFirstName":{
+                                    "type": "lov",
+                                    "title": "NAME",
+                                    searchHelper: formHelper,
+                                    search: function (inputModel, form, model, context) {
+                                        var out = [];
+                                        if (!model.customer.familyMembers) {
+                                            return out;
+                                        }
+            
+                                        for (var i = 0; i < model.customer.familyMembers.length; i++) {
+                                            out.push({
+                                                name: model.customer.familyMembers[i].familyMemberFirstName,
+                                                // value: model.customer.familyDetails[i].value,
+                                                relationship: model.customer.familyMembers[i].relationShip,
+                                                gender:model.customer.familyMembers[i].gender 
+                                            })
+                                        }
+                                        return $q.resolve({
+                                            headers: {
+                                                "x-total-count": out.length
+                                            },
+                                            body: out
+                                        });
+                                    },
+                                    onSelect: function (valueObj, model, context) {
+                                        //add to the witnees array.
+                                        if (_.isUndefined(model.loanAccount.nominees[context.arrayIndex])) {
+                                             model.loanAccount.nominees[context.arrayIndex] = [];
+                                         }
+                                        model.loanAccount.nominees[context.arrayIndex].nomineeFirstName = valueObj.name;
+                                        model.loanAccount.nominees[context.arrayIndex].nomineeRelationship = valueObj.relationship;
+                                        model.loanAccount.nominees[context.arrayIndex].nomineeGender = valueObj.gender;
+                                    },
+                                    getListDisplayItem: function (item, index) {
+                                        return [
+                                            item.name
+                                        ];
+                                    }
+            
+                                },
+                                "NomineeDetails.nominees.nomineeRelationship": {
+                                    "readonly": true,
+                                    "type": "text"
+                                },
+                                "NomineeDetails.nominees.nomineeGender": {
+                                    "readonly": true,
+                                    "type": "text"
+                                },
+                                "NomineeDetails.nominees.nomineePincode":{
+                                    fieldType: "number",
+                                    autolov: true,
+                                    inputMap: {
+                                        "district": {
+                                            key: "loanAccount.nominees[].nomineeDistrict"
+                                        },
+                                        "state": {
+                                            key: "loanAccount.nominees[].nomineeState"
+                                        },
+                                        "pincode": {
+                                            key:"loanAccount.nominees[].nomineePincode"
+                                        }
+                                    },
+                                    outputMap: {
+                                        "division": "loanAccount.nominees[arrayIndex].nomineeLocality",
+                                        "pincode": "loanAccount.nominees[arrayIndex].nomineePincode",
+                                        "district": "loanAccount.nominees[arrayIndex].nomineeDistrict",
+                                        "state": "loanAccount.nominees[arrayIndex].nomineeState"
+                                    },
+                                    searchHelper: formHelper,
+                                    // initialize: function(inputModel, form, model, context) {
+                                    //     inputModel.pincode = model.loanAccount.nominees[context.arrayIndex].nomineePincode;
+                                    // },
+                                    search: function(inputModel, form, model, context) {
+                                        return Queries.searchPincodes(
+                                            inputModel.pincode || model.loanAccount.nominees[context.arrayIndex].nomineePincode,
+                                            inputModel.district,
+                                            inputModel.state
+                                        );
+                                    },
+                                    getListDisplayItem: function(item, index) {
+                                        return [
+                                            item.division + ', ' + item.region,
+                                            item.pincode,
+                                            item.district + ', ' + item.state
+                                        ];
+                                    }
+                                },
+                                "NomineeDetails.nominees.nomineeGuardian": {
+            
+                                },
+                                "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianFirstName":{
+                                    "type": "lov",
+                                    "title": "NAME",
+                                    searchHelper: formHelper,
+                                    search: function (inputModel, form, model, context) {
+                                        var out = [];
+                                        if (!model.customer.familyMembers) {
+                                            return out;
+                                        }
+            
+                                        for (var i = 0; i < model.customer.familyMembers.length; i++) {
+                                            out.push({
+                                                name: model.customer.familyMembers[i].familyMemberFirstName,
+                                                // value: model.customer.familyDetails[i].value,
+                                                relationship: model.customer.familyMembers[i].relationShip,
+                                                gender:model.customer.familyMembers[i].gender 
+                                            })
+                                        }
+                                        return $q.resolve({
+                                            headers: {
+                                                "x-total-count": out.length
+                                            },
+                                            body: out
+                                        });
+                                    },
+                                    onSelect: function (valueObj, model, context) {
+                                        //add to the witnees array.
+                                        if (_.isUndefined(model.loanAccount.nominees[context.arrayIndex])) {
+                                             model.loanAccount.nominees[context.arrayIndex] = [];
+                                         }
+                                        model.loanAccount.nominees[context.arrayIndex].guardianFirstName = valueObj.name;
+                                        model.loanAccount.nominees[context.arrayIndex].guardianRelationship = valueObj.relationship;
+                                        model.loanAccount.nominees[context.arrayIndex].guardianGender = valueObj.gender;
+                                    },
+                                    getListDisplayItem: function (item, index) {
+                                        return [
+                                            item.name
+                                        ];
+                                    }
+                                },
+                                "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianGender":{
+                                    "readonly": true,
+                                    "type": "text"
+                                },
+                                "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianRelationship":{
+                                    "readonly": true,
+                                    "type": "text"
+                                }
+                            }
+                        },
+                        "DSC":{
+
+                        },
+                        "DocumentUpload":{
+                            "excludes":[],
+                            "overrides":{
+                                "LoanDetails":{
+                                    "orderNo": 1,
+                                    "readonly":true
+                                },
+                                "NomineeDetails":{
+                                    "orderNo": 2,
+                                    "readonly":true
+                                },
+                                "JewelDetais":{
+                                    "orderNo": 3,
+                                    "readonly":true,
+                                    "condition": "model.loanAccount.loanType == 'JEWEL'"
+                                }
+                            }
+                        },
+                    }
+                }
             }
             var overridesFields = function (model) {
                 return {
-                    "LoanDetails": {
-                        "orderNo": 1
-                    },
-                    "LoanDetails.loanType": {
-                        "orderNo": 1,
-                        "titleMap":[
-                            {
-                                value: "JLG",
-                                name: "Jewel Loan"
-                            },
-                            {
-                                value: "consumerLoan",
-                                name: "Consumer Loan"
-                            },
-                            {
-                                value: "individualLoan",
-                                name: "Individual Loan"
-                            }
-                        ]
-                    },
-                    "LoanDetails.partner": {
-                        "orderNo": 2,
-                        "enumCode": "partner"
-                    },
-                    "LoanDetails.frequency": {
-                        "orderNo": 3,
-                        "enumCode": "loan_product_frequency"
-                    },
-                    "LoanDetails.loanProducts": {
-                        "orderNo": 4,
-                        "enumCode": "loan_product",
-                        onChange: function (valueObj, model, context) {
-                            console.log("Its time for place Holder");
-                            console.log(valueObj);
-                            console.log(model);
-                            console.log(context);
-                        }
+                    // "LoanDetails": {
+                    //     "orderNo": 1
+                    // },
+                    // "LoanDetails.loanType": {
+                    //     "orderNo": 1,
+                    //     "titleMap":[
+                    //         {
+                    //             value: "JLG",
+                    //             name: "Jewel Loan"
+                    //         },
+                    //         {
+                    //             value: "consumerLoan",
+                    //             name: "Consumer Loan"
+                    //         },
+                    //         {
+                    //             value: "individualLoan",
+                    //             name: "Individual Loan"
+                    //         }
+                    //     ]
+                    // },
+                    // "LoanDetails.partner": {
+                    //     "orderNo": 2,
+                    //     "enumCode": "partner"
+                    // },
+                    // "LoanDetails.frequency": {
+                    //     "orderNo": 3,
+                    //     "enumCode": "loan_product_frequency"
+                    // },
+                    // "LoanDetails.loanProductCategory": {
+                    //     "orderNo": 4,
+                    //     "enumCode": "loan_product_category",
+                    //     onChange: function (valueObj, model, context) {
+                    //         console.log("Its time for place Holder");
+                    //         console.log(valueObj);
+                    //         console.log(model);
+                    //         console.log(context);
+                    //     }
 
-                    },
-                    "LoanDetails.loanPurpose1": {
-                        "orderNo": 6,
-                        "enumCode": "loan_purpose_1"
-                    },
-                    "LoanDetails.loanPurpose2": {
-                        "orderNo": 7,
-                        "enumCode": "loan_purpose_2",
-                        "parentEnumCode": "loan_purpose_1"
-                    },
-                    "LoanDetails.loanPurpose3": {
-                        "orderNo": 8,
-                        "enumCode": "loan_purpose_3",
-                        "parentEnumCode": "loan_purpose_2"
-                    },
-                    "LoanDetails.loanAmountRequested": {
-                        "orderNo": 5,
-                    },
-                    "LoanDetials.witnessDetails": {
-                        "type": "array",
-                        "view": "fixed"
-                    },
-                    "LoanDetails.witnessDetails.witnessFirstName": {
-                        "type": "lov",
-                        // "key": "model.LoanAccounts.witnessDetails[].witnessFirstName",
-                        searchHelper: formHelper,
-                        search: function (inputModel, form, model, context) {
-                            var out = [];
-                            if (!model.customer.familyMembers) {
-                                return out;
-                            }
+                    // },
+                    // "LoanDetails.loanProductCode":{
+                    //     "orderNo": 4,
+                    //     bindMap: {
+                    //         "Partner": "loanAccount.partnerCode",
+                    //         "ProductCategory": "loanAccount.productCategory",
+                    //         "Frequency": "loanAccount.frequency",
+                    //        },
+                    //        autolov: true,
+                    //        required: true,
+                    //        searchHelper: formHelper,
+                    //        search: function(inputModel, form, model, context) {
 
-                            for (var i = 0; i < model.customer.familyMembers.length; i++) {
-                                out.push({
-                                    name: model.customer.familyMembers[i].familyMemberFirstName,
-                                    // value: model.customer.familyDetails[i].value,
-                                    relationship: model.customer.familyMembers[i].relationShip
-                                })
-                            }
-                            return $q.resolve({
-                                headers: {
-                                    "x-total-count": out.length
-                                },
-                                body: out
-                            });
-                        },
-                        onSelect: function (valueObj, model, context) {
-                            //add to the witnees array.
-                            if (_.isUndefined(model.loanAccount.witnessDetails[0])) {
-                                 model.loanAccount.witnessDetails[0] = [];
-                             }
-                            model.loanAccount.witnessDetails[0].witnessFirstName = valueObj.name;
-                            model.loanAccount.witnessDetails[0].witnessRelationship = valueObj.relationship;
-                        },
-                        getListDisplayItem: function (item, index) {
-                            return [
-                                item.name
-                            ];
-                        }
-                    },
-                    "NomineeDetails": {
-                        "orderNo": 3
-                    },
-                    "JewelDetails":{
-                        "orderNo": 2,
-                        "condition": "model.loanAccount.loanType == 'JLG'"
-                    },
-                    "NomineeDetails.nominees.nomineeFirstName":{
-                    },
-                    "NomineeDetails.nominees.nomineeGuardian": {
+                    //           return Queries.getLoanProductCode(model.loanAccount.productCategory,model.loanAccount.frequency,model.loanAccount.partnerCode);
+                    //        },
+                    //        onSelect: function(valueObj, model, context) {
+                    //            model.loanAccount.productCode = valueObj.productCode;
+                    //            model.additions.tenurePlaceHolder = valueObj.tenure_from + '-' + valueObj.tenure_to;
+                    //        },
+                    //        getListDisplayItem: function(item, index) {
+                    //            return [
+                    //                item.productCode
+                    //            ];
+                    //        },
+                    //        onChange: function(value, form, model) {
+                    //        getProductDetails(value, model);
+                    //        },
+                    // },
+                    // "LoanDetails.loanPurpose1": {
+                    //     "orderNo": 6,
+                    //     "type": "lov",
+                    //     "autolov": true,
+                    //     "title":"LOAN_PURPOSE_1",
+                    //     bindMap: {
+                    //             },
+                    //     outputMap: {
+                    //                 "purpose1": "loanAccount.loanPurpose1"
+                    //             },
+                    //     searchHelper: formHelper,
+                    //     search: function(inputModel, form, model) {
+                    //     if(model.loanAccount.productCode != null && model.siteCode != 'witfin')
+                    //         return Queries.getLoanPurpose1(model.loanAccount.productCode);
+                    //     else
+                    //         return Queries.getAllLoanPurpose1();
+                    //     },
+                    //     getListDisplayItem: function(item, index) {
+                    //         return [
+                    //                     item.purpose1
+                    //                 ];
+                    //         },
+                    //     onSelect: function(result, model, context) {
+                    //                 // model.loanAccount.loanPurpose2 = '';
+                    //     }
+                    // },
+                    // "LoanDetails.loanPurpose2": {
+                    //     "orderNo": 7,
+                    //     "title": "LOAN_PURPOSE_2",
+                    //     "enumCode": "loan_purpose_2",
+                    //     "parentEnumCode": "loan_purpose_1",
+                    //     "parentValueExpr": "model.loanAccount.loanPurpose1"
+                        
+                    // },
+                    // "LoanDetails.loanPurpose3": {
+                    //     "orderNo": 8,
+                    //     "enumCode": "loan_purpose_3",
+                    //     "parentEnumCode": "loan_purpose_2",
+                    //     "parentValueExpr": "model.loanAccount.loanPurpose2"
+                    // },
+                    // "LoanDetails.loanAmountRequested": {
+                    //     "orderNo": 5,
+                    // },
+                    // "LoanDetails.requestedTenure":{
+                    //     "orderNo" : 6,
+                    //     "placeholderExpr": "model.additions.tenurePlaceHolder",
+                    // },
+                    // "LoanDetials.witnessDetails": {
+                    //     "type": "array",
+                    //     "view": "fixed"
+                    // },
+                    // "LoanDetails.witnessDetails.witnessFirstName": {
+                    //     "type": "lov",
+                    //     // "key": "model.LoanAccounts.witnessDetails[].witnessFirstName",
+                    //     searchHelper: formHelper,
+                    //     search: function (inputModel, form, model, context) {
+                    //         var out = [];
+                    //         if (!model.customer.familyMembers) {
+                    //             return out;
+                    //         }
 
-                    }
+                    //         for (var i = 0; i < model.customer.familyMembers.length; i++) {
+                    //             out.push({
+                    //                 name: model.customer.familyMembers[i].familyMemberFirstName,
+                    //                 // value: model.customer.familyDetails[i].value,
+                    //                 relationship: model.customer.familyMembers[i].relationShip
+                    //             })
+                    //         }
+                    //         return $q.resolve({
+                    //             headers: {
+                    //                 "x-total-count": out.length
+                    //             },
+                    //             body: out
+                    //         });
+                    //     },
+                    //     onSelect: function (valueObj, model, context) {
+                    //         //add to the witnees array.
+                    //         model.loanAccount.witnessFirstName = valueObj.name;
+                    //         model.loanAccount.witnessRelationship = valueObj.relationship;
+                    //     },
+                    //     getListDisplayItem: function (item, index) {
+                    //         return [
+                    //             item.name
+                    //         ];
+                    //     }
+                    // },
+                    // "LoanDetails.witnessDetails.witnessRelationship": {
+                    //     "readonly":false,
+                    //     "require":false
+                    // },
+                    // "NomineeDetails": {
+                    //     "orderNo": 3
+                    // },
+                    // "JewelDetails":{
+                    //     "orderNo": 2,
+                    //     "condition": "model.loanAccount.loanType == 'JLG'"
+                    // },
+                    // "NomineeDetails.nominees.nomineeFirstName":{
+                    //     "type": "lov",
+                    //     "title": "NAME",
+                    //     searchHelper: formHelper,
+                    //     search: function (inputModel, form, model, context) {
+                    //         var out = [];
+                    //         if (!model.customer.familyMembers) {
+                    //             return out;
+                    //         }
+
+                    //         for (var i = 0; i < model.customer.familyMembers.length; i++) {
+                    //             out.push({
+                    //                 name: model.customer.familyMembers[i].familyMemberFirstName,
+                    //                 // value: model.customer.familyDetails[i].value,
+                    //                 relationship: model.customer.familyMembers[i].relationShip,
+                    //                 gender:model.customer.familyMembers[i].gender 
+                    //             })
+                    //         }
+                    //         return $q.resolve({
+                    //             headers: {
+                    //                 "x-total-count": out.length
+                    //             },
+                    //             body: out
+                    //         });
+                    //     },
+                    //     onSelect: function (valueObj, model, context) {
+                    //         //add to the witnees array.
+                    //         if (_.isUndefined(model.loanAccount.nominees[context.arrayIndex])) {
+                    //              model.loanAccount.nominees[context.arrayIndex] = [];
+                    //          }
+                    //         model.loanAccount.nominees[context.arrayIndex].nomineeFirstName = valueObj.name;
+                    //         model.loanAccount.nominees[context.arrayIndex].nomineeRelationship = valueObj.relationship;
+                    //         model.loanAccount.nominees[context.arrayIndex].nomineeGender = valueObj.gender;
+                    //     },
+                    //     getListDisplayItem: function (item, index) {
+                    //         return [
+                    //             item.name
+                    //         ];
+                    //     }
+
+                    // },
+                    // "NomineeDetails.nominees.nomineeRelationship": {
+                    //     "readonly": true,
+                    //     "type": "text"
+                    // },
+                    // "NomineeDetails.nominees.nomineeGender": {
+                    //     "readonly": true,
+                    //     "type": "text"
+                    // },
+                    // "NomineeDetails.nominees.nomineePincode":{
+                    //     fieldType: "number",
+                    //     autolov: true,
+                    //     inputMap: {
+                    //         "district": {
+                    //             key: "loanAccount.nominees[].nomineeDistrict"
+                    //         },
+                    //         "state": {
+                    //             key: "loanAccount.nominees[].nomineeState"
+                    //         },
+                    //         "pincode": {
+                    //             key:"loanAccount.nominees[].nomineePincode"
+                    //         }
+                    //     },
+                    //     outputMap: {
+                    //         "division": "loanAccount.nominees[arrayIndex].nomineeLocality",
+                    //         "pincode": "loanAccount.nominees[arrayIndex].nomineePincode",
+                    //         "district": "loanAccount.nominees[arrayIndex].nomineeDistrict",
+                    //         "state": "loanAccount.nominees[arrayIndex].nomineeState"
+                    //     },
+                    //     searchHelper: formHelper,
+                    //     // initialize: function(inputModel, form, model, context) {
+                    //     //     inputModel.pincode = model.loanAccount.nominees[context.arrayIndex].nomineePincode;
+                    //     // },
+                    //     search: function(inputModel, form, model, context) {
+                    //         return Queries.searchPincodes(
+                    //             inputModel.pincode || model.loanAccount.nominees[context.arrayIndex].nomineePincode,
+                    //             inputModel.district,
+                    //             inputModel.state
+                    //         );
+                    //     },
+                    //     getListDisplayItem: function(item, index) {
+                    //         return [
+                    //             item.division + ', ' + item.region,
+                    //             item.pincode,
+                    //             item.district + ', ' + item.state
+                    //         ];
+                    //     }
+                    // },
+                    // "NomineeDetails.nominees.nomineeGuardian": {
+
+                    // },
+                    // "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianFirstName":{
+                    //     "type": "lov",
+                    //     "title": "NAME",
+                    //     searchHelper: formHelper,
+                    //     search: function (inputModel, form, model, context) {
+                    //         var out = [];
+                    //         if (!model.customer.familyMembers) {
+                    //             return out;
+                    //         }
+
+                    //         for (var i = 0; i < model.customer.familyMembers.length; i++) {
+                    //             out.push({
+                    //                 name: model.customer.familyMembers[i].familyMemberFirstName,
+                    //                 // value: model.customer.familyDetails[i].value,
+                    //                 relationship: model.customer.familyMembers[i].relationShip,
+                    //                 gender:model.customer.familyMembers[i].gender 
+                    //             })
+                    //         }
+                    //         return $q.resolve({
+                    //             headers: {
+                    //                 "x-total-count": out.length
+                    //             },
+                    //             body: out
+                    //         });
+                    //     },
+                    //     onSelect: function (valueObj, model, context) {
+                    //         //add to the witnees array.
+                    //         if (_.isUndefined(model.loanAccount.nominees[context.arrayIndex])) {
+                    //              model.loanAccount.nominees[context.arrayIndex] = [];
+                    //          }
+                    //         model.loanAccount.nominees[context.arrayIndex].guardianFirstName = valueObj.name;
+                    //         model.loanAccount.nominees[context.arrayIndex].guardianRelationship = valueObj.relationship;
+                    //         model.loanAccount.nominees[context.arrayIndex].guardianGender = valueObj.gender;
+                    //     },
+                    //     getListDisplayItem: function (item, index) {
+                    //         return [
+                    //             item.name
+                    //         ];
+                    //     }
+                    // },
+                    // "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianGender":{
+                    //     "readonly": true,
+                    //     "type": "text"
+                    // },
+                    // "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianRelationship":{
+                    //     "readonly": true,
+                    //     "type": "text"
+                    // }
                 }
             }
 
@@ -1020,9 +774,17 @@ define([], function () {
                     console.log(model);
                     var familyDetails = [];
                     model.customer = {};
+                    model.additions = {};
                     model.loanAccount = model.loanProcess.loanAccount;
                     model.loanAccount.bcAccount = {};
                     model.loanAccount.processType = "1";
+                    if(typeof model.loanAccount.customerId !="undefined"){
+                        $q.when(Enrollment.get({
+                                'id': model.loanAccount.customerId
+                            })).then(function (resp) {
+                                model.customer = resp;
+                            })
+                    }
                     // model.loanAccount.nominees = [];
                     // model.loanAccount.nominees[0] ={};
                     // model.loanAccount.nominees[0].nomineeFirstName = "Harish";
@@ -1173,7 +935,7 @@ define([], function () {
                                         {
                                             "type": "box",
                                             "title": "POST_REVIEW",
-                                            "condition": "model.loanAccount.id",
+                                            "condition": "model.loanAccount.id && model.loanAccount.currentStage == 'LoanInititation'",
                                             "items": [
                                                 {
                                                     key: "review.action",
@@ -1448,6 +1210,9 @@ define([], function () {
                         /* Loan SAVE */
                         console.log("Model from Submit from LoanBooking ");
                         console.log(model);
+                        if(typeof model.loanAccount.loanAmount !="undefined"){
+                            model.loanAccount.loanAmountRequested = model.loanAccount.loanAmount;
+                        }
                         if (!model.loanAccount.id) {
                             model.loanAccount.isRestructure = false;
                             model.loanAccount.documentTracking = "PENDING";

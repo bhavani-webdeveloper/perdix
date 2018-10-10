@@ -165,6 +165,16 @@ function($log, formHelper,$state, SessionStore, $q, IndividualLoan, entityManage
                                         state: 'Page.Engine',
                                         pageName: "loans.individual.booking.DocumentUploadQueue"
                                     });
+                                }else if (siteCode == 'witfin') {
+                                    irfNavigator.go({
+                                    state: 'Page.Engine',
+                                    pageName: 'witfin.loans.individual.booking.DocumentUpload',
+                                    pageData: item,
+                                    pageId: item.loanId
+                                    }, {
+                                    state: 'Page.Engine',
+                                    pageName: "loans.individual.booking.DocumentUploadQueue"
+                                });
                                 } else {
                                     irfNavigator.go({
                                         state: 'Page.Engine',

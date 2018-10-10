@@ -1964,6 +1964,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 PageHelper.showProgress('enrolment', 'Customer Saved.', 5000);
 
                                BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: value.customer});
+                               BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
                                 PageHelper.clearErrors();
                                 //BundleManager.pushEvent()
                             }, function (err) {
@@ -1997,6 +1998,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 PageHelper.clearErrors();
                                 BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
+                                BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
                             }, function (err) {
                                 PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                 PageHelper.showErrors(err);
@@ -2019,6 +2021,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 PageHelper.clearErrors();
                                 BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
+                                BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
                                 model.enrolmentProcess.proceed()
                                 .subscribe(function(enrolmentProcess) {
                                     PageHelper.showProgress('enrolment', 'Done.', 5000);
