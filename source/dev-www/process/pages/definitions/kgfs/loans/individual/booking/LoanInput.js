@@ -60,14 +60,6 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:60
                         },
                         {
-                            pageName: 'kgfs.loans.individual.booking.DscOverride',
-                            title: 'DSC_OVERRIDE',
-                            pageClass: 'dsc-override',
-                            minimum: 1,
-                            maximum: 1,
-                            order:60
-                        },
-                        {
                             pageName: 'kgfs.customer.CBCheck',
                             title: 'CB_CHECK',
                             pageClass: 'cb-check',
@@ -212,12 +204,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         loanAccount: loanProcess.loanAccount
                                     }
                                 });
-                                $this.bundlePages.push({
-                                    pageClass: 'dsc-override',
-                                    model:{
-                                        loanAccount: loanProcess.loanAccount
-                                    }
-                                });
+                                
                                 
                                 deferred.resolve();
                             });
@@ -258,12 +245,6 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 $this.bundlePages.push({
                                     pageClass: 'dsc-check',
                                     model: {
-                                        loanAccount: loanProcess.loanAccount
-                                    }
-                                });
-                                $this.bundlePages.push({
-                                    pageClass: 'dsc-override',
-                                    model:{
                                         loanAccount: loanProcess.loanAccount
                                     }
                                 });

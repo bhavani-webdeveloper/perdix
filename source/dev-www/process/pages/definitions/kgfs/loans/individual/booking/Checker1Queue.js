@@ -104,12 +104,14 @@ define({
                     },
                     getListItem: function (item) {
                         return [
+
                             "{{'ACCOUNT_NUMBER'|translate}} : " + item.accountNumber,
                             "{{'ENTITY_NAME'|translate}} : " + item.customerName,
                             "{{'LOAN_AMOUNT'|translate}} : " + item.loanAmount,
                             "{{'LOAN_TYPE'|translate}} : " + item.loanType,
                             "{{'PARTNER_CODE'|translate}} : " + item.partnerCode,
                             "{{'PROCESS_TYPE'|translate}} : " + item.processType
+
                         ]
                     },
                     getTableConfig: function() {
@@ -120,7 +122,15 @@ define({
 						};
                     },
                     getColumns: function() {
-						return [{
+						return [
+                            {
+                                title: 'LOAD_ID',
+                                data: 'loanId'
+                            },{
+                                title: 'ENTITY_NAME',
+                                data: 'customerName'
+                            },
+                            {
 							title: 'ACCOUNT_NUMBER',
 							data: 'accountNumber'
 						}, {
@@ -129,13 +139,13 @@ define({
                         }, {
 							title: 'APPLICATION_DATE',
 							data: 'applicationDate'
-                        },
+						}, 
                     ]
 					},
                     getActions: function () {
                         return [
                             {
-                            name: "CHECKER1_DETAILS",
+                            name: "LOAN_INPUT",
                             desc: "",
                             icon: "fa fa-book",
                             fn: function (item, index) 

@@ -257,10 +257,6 @@ define([], function () {
                                         type: "string",
                                     },
                                     {
-                                        "type": "button",
-                                        "title": "DSC_OVERRIDE_REQUEST"
-                                    },
-                                    {
                                         "type": "section",
                                         items: [
                                             {

@@ -150,8 +150,8 @@ define({
                             fn: function (item, index) 
                             {
                                 irfNavigator.go({
-                                    'state': 'Page.Engine',
-                                    'pageName': 'loans.individual.booking.LoanInput',
+                                    'state': 'Page.Bundle',
+                                    'pageName': 'kgfs.loans.individual.booking.Checker2',
                                     'pageId': item.loanId,
                                     'pageData': item
                                 });
