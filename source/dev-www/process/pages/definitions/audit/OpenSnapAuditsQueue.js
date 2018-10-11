@@ -17,45 +17,29 @@ irf.pageCollection.factory(irf.page("audit.OpenSnapAuditsQueue"), ["$log", "Util
                 if (typeof($stateParams.pageData.readonly) == 'undefined') {
                     $stateParams.pageData.readonly = true;
                 }
+                model.branch_id = SessionStore.getCurrentBranch().branchId;
+                var bankName = SessionStore.getBankName();
+                var banks = formHelper.enum('bank').data;
+                for (var i = 0; i < banks.length; i++) {
+                    if (banks[i].name == bankName) {
+                        model.bankId = banks[i].value;
+                    }
+                }
+                var userRole = SessionStore.getUserRole();
+                if (userRole && userRole.accessLevel && userRole.accessLevel === 5) {
+                    model.fullAccess = true;
+                }
             },
             definition: {
                 title: "SEARCH_AUDITS",
                 searchForm: [{
-                        key: "auditor_id",
-                        title: "AUDITOR_USERID",
-                        type: "lov",
-                        inputMap: {
-                            "userName": {
-                                "key": "user_name"
-                            },
-                            "login": {
-                                "key": "login"
-                            },
-                            "branch_id": {
-                                "key": "branch_id"
-                            }
-                        },
-                        outputMap: {
-                            "login": "auditor_id",
-                            "userName": "user_name",
-                            "branch_id": "branch_id"
-                        },
-                        searchHelper: formHelper,
-                        search: function(inputModel, form, model) {
-                            return User.query({
-                                'login': inputModel.login,
-                                'userName': inputModel.userName,
-                                'roleId': model.auditor_role_id,
-                                'branchName': inputModel.branch_id,
-                            }).$promise;
-                        },
-                        getListDisplayItem: function(item, index) {
-                            return [
-                                item.login + ': ' + item.userName,
-                                item.branchName
-                            ];
-                        }
-                    },
+                    "key": "bankId",
+                    "readonly": true,
+                    "condition": "!model.fullAccess"
+                }, {
+                    "key": "bankId",
+                    "condition": "model.fullAccess"
+                }, 
                     "branch_id",
                     "start_date",
                     "end_date"
@@ -65,16 +49,22 @@ irf.pageCollection.factory(irf.page("audit.OpenSnapAuditsQueue"), ["$log", "Util
                     "type": 'object',
                     "title": 'SEARCH_OPTIONS',
                     "properties": {
-                        "auditor_id": {
-                            "title": "AUDITOR_ID",
-                            "type": "string"
+                        "bankId": {
+                            "title": "BANK_NAME",
+                            "type": ["integer", "null"],
+                            "enumCode": "bank",	
+                            "x-schema-form": {
+                                "type": "select"
+                            }
                         },
                         "branch_id": {
                             "title": "BRANCH_ID",
-                            "type": "number",
+                            "type": ["integer", "null"],
                             "enumCode": "branch_id",
                             "x-schema-form": {
-                                "type": "select"
+                                "type": "select",
+                                "parentEnumCode": "bank",
+                                "parentValueExpr": "model.bankId"
                             }
                         },
                         "start_date": {

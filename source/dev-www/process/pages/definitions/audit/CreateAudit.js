@@ -94,7 +94,7 @@ irf.pageCollection.factory(irf.page("audit.CreateAudit"), ["$log", "PageHelper",
                             },
                             "branch_id": {
                                 "title": "BRANCH_NAME",
-                                "type": "integer",
+                                "type": ["integer", "null"],
                                 "enumCode": "branch_id"
                             },
                             "report_date": {

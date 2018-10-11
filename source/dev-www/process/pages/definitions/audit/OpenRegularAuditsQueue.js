@@ -13,23 +13,50 @@ irf.pageCollection.factory(irf.page("audit.OpenRegularAuditsQueue"), ["$log", "U
                 } else {
                     returnObj.definition.listOptions.tableConfig.page = 0;
                 }
+                model.branch_id = SessionStore.getCurrentBranch().branchId;
+                var bankName = SessionStore.getBankName();
+                var banks = formHelper.enum('bank').data;
+                for (var i = 0; i < banks.length; i++) {
+                    if (banks[i].name == bankName) {
+                        model.bankId = banks[i].value;
+                    }
+                }
+                var userRole = SessionStore.getUserRole();
+                if (userRole && userRole.accessLevel && userRole.accessLevel === 5) {
+                    model.fullAccess = true;
+                }
             },
             definition: {
                 title: "SEARCH_AUDITS",
-                searchForm: [
-                    "*"
-                ],
+                searchForm: [{
+                    "key": "bankId",
+                    "readonly": true,
+                    "condition": "!model.fullAccess"
+                }, {
+                    "key": "bankId",
+                    "condition": "model.fullAccess"
+                }, "branch_id", "start_date", "end_date", "report_date"],
                 autoSearch: true,
                 searchSchema: {
                     "type": 'object',
                     "title": 'SEARCH_OPTIONS',
                     "properties": {
-                        "branch_id": {
-                            "title": "BRANCH_ID",
-                            "type": "number",
-                            "enumCode": "branch_id",
+                        "bankId": {
+                            "title": "BANK_NAME",
+                            "type": ["integer", "null"],
+                            "enumCode": "bank",	
                             "x-schema-form": {
                                 "type": "select"
+                            }
+                        },
+                        "branch_id": {
+                            "title": "BRANCH_ID",
+                            "type": ["integer", "null"],
+                            "enumCode": "branch_id",
+                            "x-schema-form": {
+                                "type": "select",
+                                "parentEnumCode": "bank",
+                                "parentValueExpr": "model.bankId"
                             }
                         },
                         "start_date": {
