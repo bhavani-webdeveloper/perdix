@@ -57,6 +57,7 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter, Utils){
 		}
 	};
 	var clear = function() {
+		var deferred = $q.defer();
 		if (MSIE.FileSystem) {
 			try {
 				 MSIE.FileSystem.DeleteFolder(MSIE.FileSystemDirectory, true);
@@ -67,7 +68,24 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter, Utils){
 				}
 			}
 		}
+		if (fileSystem.root) {
+			try {
+				fileSystem.root.getFile('irfMasters', {create: false}, function(fileEntry) {
+					fileEntry.remove(deferred.resolve, deferred.reject);
+				}, function(e) {
+					fileSystem.errorHandler(e);
+					deferred.reject(e);
+				});
+			} catch (e) {
+				deferred.reject(e);
+			}
+		} else {
+			deferred.resolve();
+		}
+		SessionStore.clear();
 		localStorage.clear();
+		masters = null;
+		return deferred.promise;
 	};
 	var masters = {};
 	var processMasters = function(codes) {
@@ -156,7 +174,7 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter, Utils){
 				}
 				return deferred.promise;
 			} else {
-				$q.resolve(factoryObj.storeJSON('irfMasters', value));
+				return $q.resolve(factoryObj.storeJSON('irfMasters', value));
 			}
 		},
 		retrieveMaster: function() {
@@ -167,12 +185,16 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter, Utils){
 						fileEntry.file(function(file) {
 							var reader = new FileReader();
 							reader.onloadend = function(e) {
-								deferred.resolve(JSON.parse(this.result));
+								try {
+									var json = JSON.parse(this.result);
+									deferred.resolve(json);
+								} catch (e) {
+									deferred.reject(e);
+								}
 							};
 							reader.readAsText(file);
 						});
 					}, function(e) {
-						fileSystem.errorHandler(e);
 						deferred.reject(e);
 					});
 				} catch (e) {
@@ -257,16 +279,17 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter, Utils){
 			}
 		},
 		cacheAllMaster: function(isServer, forceFetch) {
+			var deferred = $q.defer();
 			if (masters && !_.isEmpty(masters)) {
 				$log.info('masters already in memory');
-				return $q.resolve();
-			}
-			var deferred = $q.defer();
-			factoryObj.retrieveMaster().then(function(value) {
-				masters = value;
-			}).finally(function() {
-				if (isServer) {
-					$log.info('masters isServer');
+				deferred.resolve();
+			} else if (isServer) {
+				$log.info('masters isServer');
+				factoryObj.retrieveMaster().then(function(value) {
+					masters = value;
+				}, function(e) {
+					console.error(e);
+				}).finally(function() {
 					try {
 						var isSameDay = false;
 						if (masters && masters._timestamp) {
@@ -292,7 +315,6 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter, Utils){
 								}, function(e) {
 									deferred.reject(e);
 								});
-	
 							});
 						} else {
 							deferred.resolve("It's the same day for Masters/ not downloading");
@@ -300,9 +322,17 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter, Utils){
 					} catch (e) {
 						deferred.reject(e);
 					}
-				}
-			});
+				});
+			} else {
+				factoryObj.retrieveMaster().then(function(value) {
+					masters = value;
+					deferred.resolve();
+				}, deferred.reject);
+			}
 			return deferred.promise;
+		},
+		isMasterLoaded: function() {
+			return masters && !_.isEmpty(masters);
 		},
 		getMaster: function(classifier) {
 			return masters[classifier];
