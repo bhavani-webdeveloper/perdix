@@ -18,6 +18,7 @@ define([], function () {
             var getIncludes = function (model) {
                 return [
                     "LoanDetails",
+                    "LoanDetails.centreName",
                     "LoanDetails.loanType",
                     "LoanDetails.partner",
                     "LoanDetails.frequency",
@@ -29,14 +30,14 @@ define([], function () {
                     "LoanDetails.loanPurpose1",
                     "LoanDetails.loanPurpose2",
                     "LoanDetails.loanPurpose3",
-                    "LoanDetails.centreName",
-                    "LoanDetails.borrowers.borrowers",
-                    "LoanDetails.borrowers.borrowersFullName",
-                    "LoanDetails.borrowers.borrowersRelationship",
+                    "LoanDetails.borrowers",
+                    "LoanDetails.borrowersFatherName",
+                    "LoanDetails.borrowersHusbandName",
+                    "LoanDetails.borrowersRelationship",
                     "LoanDetails.witnessDetails",
                     "LoanDetails.witnessDetails.witnessFirstName",
                     "LoanDetails.witnessDetails.witnessRelationship",
-                   
+
 
                     "NomineeDetails",
                     "NomineeDetails.nominees",
@@ -90,17 +91,21 @@ define([], function () {
             }
             var configFile = function (model) {
                 return {
-                    "loanProcess.loanAccount.currentStage":{
-                        "LoanInitiation":{
-                            "excludes":[],
-                            "overrides":{
+                    "loanProcess.loanAccount.currentStage": {
+                        "LoanInitiation": {
+                            "excludes": [],
+                            "overrides": {
                                 "LoanDetails": {
                                     "orderNo": 1
                                 },
-                                "LoanDetails.loanType": {
+                                "LoanDetails.centreName": {
                                     "orderNo": 1,
-                                    "titleMap":[
-                                        {
+                                    "type": "select",
+                                    "enumCode": "centre"
+                                },
+                                "LoanDetails.loanType": {
+                                    "orderNo": 2,
+                                    "titleMap": [{
                                             value: "JEWEL",
                                             name: "Jewel Loan"
                                         },
@@ -119,8 +124,7 @@ define([], function () {
                                     "enumCode": "partner"
                                 },
                                 "LoanDetails.frequency": {
-                                    "orderNo": 3,
-                                    "enumCode": "loan_product_frequency"
+                                    "enumCode": "productFrequency"
                                 },
                                 "LoanDetails.loanProductCategory": {
                                     "orderNo": 4,
@@ -131,60 +135,59 @@ define([], function () {
                                         console.log(model);
                                         console.log(context);
                                     }
-            
+
                                 },
-                                "LoanDetails.loanProductCode":{
+                                "LoanDetails.loanProductCode": {
                                     "orderNo": 4,
                                     bindMap: {
                                         "Partner": "loanAccount.partnerCode",
                                         // "ProductCategory": "loanAccount.productCategory",
                                         "Frequency": "loanAccount.frequency",
                                         "loanType": "loanAccount.loanType"
-                                       },
-                                       autolov: true,
-                                       required: true,
-                                       searchHelper: formHelper,
-                                       search: function(inputModel, form, model, context) {
-            
-                                          return Queries.getLoanProductCodeByLoanType(model.loanAccount.productCategory,model.loanAccount.frequency,model.loanAccount.partnerCode,model.loanAccount.loanType);
-                                       },
-                                       onSelect: function(valueObj, model, context) {
-                                           model.loanAccount.productCode = valueObj.productCode;
-                                           model.additions.tenurePlaceHolder = valueObj.tenure_from + '-' + valueObj.tenure_to;
-                                       },
-                                       getListDisplayItem: function(item, index) {
-                                           return [
-                                               item.productCode
-                                           ];
-                                       },
-                                       onChange: function(value, form, model) {
-                                       getProductDetails(value, model);
-                                       },
+                                    },
+                                    autolov: true,
+                                    required: true,
+                                    searchHelper: formHelper,
+                                    search: function (inputModel, form, model, context) {
+
+                                        return Queries.getLoanProductCodeByLoanType(model.loanAccount.productCategory, model.loanAccount.frequency, model.loanAccount.partnerCode, model.loanAccount.loanType);
+                                    },
+                                    onSelect: function (valueObj, model, context) {
+                                        model.loanAccount.productCode = valueObj.productCode;
+                                        model.additions.tenurePlaceHolder = valueObj.tenure_from + '-' + valueObj.tenure_to;
+                                    },
+                                    getListDisplayItem: function (item, index) {
+                                        return [
+                                            item.productCode
+                                        ];
+                                    },
+                                    onChange: function (value, form, model) {
+                                        getProductDetails(value, model);
+                                    },
                                 },
                                 "LoanDetails.loanPurpose1": {
                                     "orderNo": 6,
                                     "type": "lov",
                                     "autolov": true,
-                                    "title":"LOAN_PURPOSE_1",
-                                    bindMap: {
-                                            },
+                                    "title": "LOAN_PURPOSE_1",
+                                    bindMap: {},
                                     outputMap: {
-                                                "purpose1": "loanAccount.loanPurpose1"
-                                            },
-                                    searchHelper: formHelper,
-                                    search: function(inputModel, form, model) {
-                                    if(model.loanAccount.productCode != null && model.siteCode != 'witfin')
-                                        return Queries.getLoanPurpose1(model.loanAccount.productCode);
-                                    else
-                                        return Queries.getAllLoanPurpose1();
+                                        "purpose1": "loanAccount.loanPurpose1"
                                     },
-                                    getListDisplayItem: function(item, index) {
+                                    searchHelper: formHelper,
+                                    search: function (inputModel, form, model) {
+                                        if (model.loanAccount.productCode != null && model.siteCode != 'witfin')
+                                            return Queries.getLoanPurpose1(model.loanAccount.productCode);
+                                        else
+                                            return Queries.getAllLoanPurpose1();
+                                    },
+                                    getListDisplayItem: function (item, index) {
                                         return [
-                                                    item.purpose1
-                                                ];
-                                        },
-                                    onSelect: function(result, model, context) {
-                                             model.loanAccount.loanPurpose2 = '';
+                                            item.purpose1
+                                        ];
+                                    },
+                                    onSelect: function (result, model, context) {
+                                        model.loanAccount.loanPurpose2 = '';
                                     }
                                 },
                                 "LoanDetails.loanPurpose2": {
@@ -192,44 +195,42 @@ define([], function () {
                                     "title": "LOAN_PURPOSE_2",
                                     // title:"LOAN_PURPOSE_2",
                                     "type": "lov",
-                                    bindMap: {
-                                    },
+                                    bindMap: {},
                                     outputMap: {
                                         "purpose2": "loanAccount.loanPurpose2"
                                     },
                                     searchHelper: formHelper,
-                                    search: function(inputModel, form, model) {
-                                        if(model.loanAccount.productCode != null)
+                                    search: function (inputModel, form, model) {
+                                        if (model.loanAccount.productCode != null)
                                             return Queries.getLoanPurpose2(model.loanAccount.productCode, model.loanAccount.loanPurpose1);
                                         else
                                             return Queries.getAllLoanPurpose2(model.loanAccount.loanPurpose1);
                                     },
-                                    getListDisplayItem: function(item, index) {
+                                    getListDisplayItem: function (item, index) {
                                         return [
                                             item.purpose2
                                         ];
                                     },
-                                    onSelect: function(result, model, context) {
+                                    onSelect: function (result, model, context) {
                                         model.loanAccount.loanPurpose3 = '';
-                               }
-                                    
+                                    }
+
                                 },
                                 "LoanDetails.loanPurpose3": {
                                     "orderNo": 8,
                                     "type": "lov",
-                                    bindMap: {
-                                    },
+                                    bindMap: {},
                                     outputMap: {
                                         "purpose3": "loanAccount.loanPurpose3"
                                     },
                                     searchHelper: formHelper,
-                                    search: function(inputModel, form, model) {
-                                        if(model.loanAccount.productCode != null)
-                                            return Queries.getLoanPurpose3(model.loanAccount.productCode, model.loanAccount.loanPurpose1,model.loanAccount.loanPurpose2);
+                                    search: function (inputModel, form, model) {
+                                        if (model.loanAccount.productCode != null)
+                                            return Queries.getLoanPurpose3(model.loanAccount.productCode, model.loanAccount.loanPurpose1, model.loanAccount.loanPurpose2);
                                         else
                                             return Queries.getAllLoanPurpose3(model.loanAccount.loanPurpose1);
                                     },
-                                    getListDisplayItem: function(item, index) {
+                                    getListDisplayItem: function (item, index) {
                                         return [
                                             item.purpose3
                                         ];
@@ -238,8 +239,11 @@ define([], function () {
                                 "LoanDetails.loanAmountRequested": {
                                     "orderNo": 5,
                                 },
-                                "LoanDetails.requestedTenure":{
-                                    "orderNo" : 6,
+                                "LoanDetails.loanApplicationDate": {
+                                    "orderNo": 8
+                                },
+                                "LoanDetails.requestedTenure": {
+                                    "orderNo": 6,
                                     "placeholderExpr": "model.additions.tenurePlaceHolder",
                                 },
                                 "LoanDetials.witnessDetails": {
@@ -255,7 +259,7 @@ define([], function () {
                                         if (!model.customer.familyMembers) {
                                             return out;
                                         }
-            
+
                                         for (var i = 0; i < model.customer.familyMembers.length; i++) {
                                             out.push({
                                                 name: model.customer.familyMembers[i].familyMemberFirstName,
@@ -282,17 +286,18 @@ define([], function () {
                                     }
                                 },
                                 "LoanDetails.witnessDetails.witnessRelationship": {
-                                    "readonly":false,
-                                    "require":false
+                                    "readonly": false,
+                                    "require": false
                                 },
                                 "NomineeDetails": {
                                     "orderNo": 3
                                 },
-                                "JewelDetails":{
+                                "JewelDetails": {
                                     "orderNo": 2,
                                     "condition": "model.loanAccount.loanType == 'JEWEL'"
                                 },
-                                "NomineeDetails.nominees.nomineeFirstName":{
+                                "NomineeDetails.nominees.nomineeFirstName": {
+                                    "orderNo": 1,
                                     "type": "lov",
                                     "title": "NAME",
                                     searchHelper: formHelper,
@@ -301,13 +306,13 @@ define([], function () {
                                         if (!model.customer.familyMembers) {
                                             return out;
                                         }
-            
+
                                         for (var i = 0; i < model.customer.familyMembers.length; i++) {
                                             out.push({
                                                 name: model.customer.familyMembers[i].familyMemberFirstName,
                                                 // value: model.customer.familyDetails[i].value,
                                                 relationship: model.customer.familyMembers[i].relationShip,
-                                                gender:model.customer.familyMembers[i].gender 
+                                                gender: model.customer.familyMembers[i].gender
                                             })
                                         }
                                         return $q.resolve({
@@ -320,8 +325,8 @@ define([], function () {
                                     onSelect: function (valueObj, model, context) {
                                         //add to the witnees array.
                                         if (_.isUndefined(model.loanAccount.nominees[context.arrayIndex])) {
-                                             model.loanAccount.nominees[context.arrayIndex] = [];
-                                         }
+                                            model.loanAccount.nominees[context.arrayIndex] = [];
+                                        }
                                         model.loanAccount.nominees[context.arrayIndex].nomineeFirstName = valueObj.name;
                                         model.loanAccount.nominees[context.arrayIndex].nomineeRelationship = valueObj.relationship;
                                         model.loanAccount.nominees[context.arrayIndex].nomineeGender = valueObj.gender;
@@ -331,17 +336,28 @@ define([], function () {
                                             item.name
                                         ];
                                     }
-            
+
+                                },
+                                "NomineeDetails.nominees.nomineeDOB": {
+                                    "orderNo": 2
                                 },
                                 "NomineeDetails.nominees.nomineeRelationship": {
                                     "readonly": true,
                                     "type": "text"
                                 },
                                 "NomineeDetails.nominees.nomineeGender": {
+                                    "orderNo": 3,
                                     "readonly": true,
                                     "type": "text"
                                 },
-                                "NomineeDetails.nominees.nomineePincode":{
+                                "NomineeDetails.nominees.nomineeDoorNo": {
+                                    "orderNo": 4
+                                },
+                                "NomineeDetails.nominees.nomineeStreet": {
+                                    "orderNo": 5,
+                                },
+                                "NomineeDetails.nominees.nomineePincode": {
+                                    "orderNo": 6,
                                     fieldType: "number",
                                     autolov: true,
                                     inputMap: {
@@ -352,7 +368,7 @@ define([], function () {
                                             key: "loanAccount.nominees[].nomineeState"
                                         },
                                         "pincode": {
-                                            key:"loanAccount.nominees[].nomineePincode"
+                                            key: "loanAccount.nominees[].nomineePincode"
                                         }
                                     },
                                     outputMap: {
@@ -365,14 +381,14 @@ define([], function () {
                                     // initialize: function(inputModel, form, model, context) {
                                     //     inputModel.pincode = model.loanAccount.nominees[context.arrayIndex].nomineePincode;
                                     // },
-                                    search: function(inputModel, form, model, context) {
+                                    search: function (inputModel, form, model, context) {
                                         return Queries.searchPincodes(
                                             inputModel.pincode || model.loanAccount.nominees[context.arrayIndex].nomineePincode,
                                             inputModel.district,
                                             inputModel.state
                                         );
                                     },
-                                    getListDisplayItem: function(item, index) {
+                                    getListDisplayItem: function (item, index) {
                                         return [
                                             item.division + ', ' + item.region,
                                             item.pincode,
@@ -381,9 +397,9 @@ define([], function () {
                                     }
                                 },
                                 "NomineeDetails.nominees.nomineeGuardian": {
-            
+
                                 },
-                                "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianFirstName":{
+                                "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianFirstName": {
                                     "type": "lov",
                                     "title": "NAME",
                                     searchHelper: formHelper,
@@ -392,13 +408,13 @@ define([], function () {
                                         if (!model.customer.familyMembers) {
                                             return out;
                                         }
-            
+
                                         for (var i = 0; i < model.customer.familyMembers.length; i++) {
                                             out.push({
                                                 name: model.customer.familyMembers[i].familyMemberFirstName,
                                                 // value: model.customer.familyDetails[i].value,
                                                 relationship: model.customer.familyMembers[i].relationShip,
-                                                gender:model.customer.familyMembers[i].gender 
+                                                gender: model.customer.familyMembers[i].gender
                                             })
                                         }
                                         return $q.resolve({
@@ -411,8 +427,8 @@ define([], function () {
                                     onSelect: function (valueObj, model, context) {
                                         //add to the witnees array.
                                         if (_.isUndefined(model.loanAccount.nominees[context.arrayIndex])) {
-                                             model.loanAccount.nominees[context.arrayIndex] = [];
-                                         }
+                                            model.loanAccount.nominees[context.arrayIndex] = [];
+                                        }
                                         model.loanAccount.nominees[context.arrayIndex].guardianFirstName = valueObj.name;
                                         model.loanAccount.nominees[context.arrayIndex].guardianRelationship = valueObj.relationship;
                                         model.loanAccount.nominees[context.arrayIndex].guardianGender = valueObj.gender;
@@ -423,34 +439,73 @@ define([], function () {
                                         ];
                                     }
                                 },
-                                "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianGender":{
+                                "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianGender": {
                                     "readonly": true,
                                     "type": "text"
                                 },
-                                "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianRelationship":{
+                                "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianRelationship": {
                                     "readonly": true,
                                     "type": "text"
+                                },
+                                "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianPincode": {
+                                    fieldType: "number",
+                                    autolov: true,
+                                    inputMap: {
+                                        "district": {
+                                            key: "loanAccount.nominees[].guardianDistrict"
+                                        },
+                                        "state": {
+                                            key: "loanAccount.nominees[]guardianState"
+                                        },
+                                        "pincode": {
+                                            key: "loanAccount.nominees[].guardianPincode"
+                                        }
+                                    },
+                                    outputMap: {
+                                        "division": "loanAccount.nominees[arrayIndex].guardianLocality",
+                                        "pincode": "loanAccount.nominees[arrayIndex].guaardianPincode",
+                                        "district": "loanAccount.nominees[arrayIndex].guardianDistrict",
+                                        "state": "loanAccount.nominees[arrayIndex].guardianState"
+                                    },
+                                    searchHelper: formHelper,
+                                    // initialize: function(inputModel, form, model, context) {
+                                    //     inputModel.pincode = model.loanAccount.nominees[context.arrayIndex].nomineePincode;
+                                    // },
+                                    search: function (inputModel, form, model, context) {
+                                        return Queries.searchPincodes(
+                                            inputModel.pincode || model.loanAccount.nominees[context.arrayIndex].guardianPincode,
+                                            inputModel.district,
+                                            inputModel.state
+                                        );
+                                    },
+                                    getListDisplayItem: function (item, index) {
+                                        return [
+                                            item.division + ', ' + item.region,
+                                            item.pincode,
+                                            item.district + ', ' + item.state
+                                        ];
+                                    }
                                 }
                             }
                         },
-                        "DSC":{
+                        "DSC": {
 
                         },
-                        "DocumentUpload":{
-                            "excludes":[],
-                            "overrides":{
-                                "LoanDetails":{
+                        "DocumentUpload": {
+                            "excludes": [],
+                            "overrides": {
+                                "LoanDetails": {
                                     "orderNo": 1,
-                                    "readonly":true
+                                    "readonly": true
                                 },
-                                "NomineeDetails":{
-                                    "orderNo": 2,
-                                    "readonly":true
-                                },
-                                "JewelDetais":{
+                                "NomineeDetails": {
                                     "orderNo": 3,
-                                    "readonly":true,
-                                    "condition": "model.loanAccount.loanType == 'JEWEL'"
+                                    "readonly": true
+                                },
+                                "JewelDetails": {
+                                    "orderNo": 2,
+                                    "readonly": true,
+                                    condition: "model.loanAccount.loanType == 'JEWEL'"
                                 }
                             }
                         },
@@ -459,308 +514,7 @@ define([], function () {
             }
             var overridesFields = function (model) {
                 return {
-                    // "LoanDetails": {
-                    //     "orderNo": 1
-                    // },
-                    // "LoanDetails.loanType": {
-                    //     "orderNo": 1,
-                    //     "titleMap":[
-                    //         {
-                    //             value: "JLG",
-                    //             name: "Jewel Loan"
-                    //         },
-                    //         {
-                    //             value: "consumerLoan",
-                    //             name: "Consumer Loan"
-                    //         },
-                    //         {
-                    //             value: "individualLoan",
-                    //             name: "Individual Loan"
-                    //         }
-                    //     ]
-                    // },
-                    // "LoanDetails.partner": {
-                    //     "orderNo": 2,
-                    //     "enumCode": "partner"
-                    // },
-                    // "LoanDetails.frequency": {
-                    //     "orderNo": 3,
-                    //     "enumCode": "loan_product_frequency"
-                    // },
-                    // "LoanDetails.loanProductCategory": {
-                    //     "orderNo": 4,
-                    //     "enumCode": "loan_product_category",
-                    //     onChange: function (valueObj, model, context) {
-                    //         console.log("Its time for place Holder");
-                    //         console.log(valueObj);
-                    //         console.log(model);
-                    //         console.log(context);
-                    //     }
 
-                    // },
-                    // "LoanDetails.loanProductCode":{
-                    //     "orderNo": 4,
-                    //     bindMap: {
-                    //         "Partner": "loanAccount.partnerCode",
-                    //         "ProductCategory": "loanAccount.productCategory",
-                    //         "Frequency": "loanAccount.frequency",
-                    //        },
-                    //        autolov: true,
-                    //        required: true,
-                    //        searchHelper: formHelper,
-                    //        search: function(inputModel, form, model, context) {
-
-                    //           return Queries.getLoanProductCode(model.loanAccount.productCategory,model.loanAccount.frequency,model.loanAccount.partnerCode);
-                    //        },
-                    //        onSelect: function(valueObj, model, context) {
-                    //            model.loanAccount.productCode = valueObj.productCode;
-                    //            model.additions.tenurePlaceHolder = valueObj.tenure_from + '-' + valueObj.tenure_to;
-                    //        },
-                    //        getListDisplayItem: function(item, index) {
-                    //            return [
-                    //                item.productCode
-                    //            ];
-                    //        },
-                    //        onChange: function(value, form, model) {
-                    //        getProductDetails(value, model);
-                    //        },
-                    // },
-                    // "LoanDetails.loanPurpose1": {
-                    //     "orderNo": 6,
-                    //     "type": "lov",
-                    //     "autolov": true,
-                    //     "title":"LOAN_PURPOSE_1",
-                    //     bindMap: {
-                    //             },
-                    //     outputMap: {
-                    //                 "purpose1": "loanAccount.loanPurpose1"
-                    //             },
-                    //     searchHelper: formHelper,
-                    //     search: function(inputModel, form, model) {
-                    //     if(model.loanAccount.productCode != null && model.siteCode != 'witfin')
-                    //         return Queries.getLoanPurpose1(model.loanAccount.productCode);
-                    //     else
-                    //         return Queries.getAllLoanPurpose1();
-                    //     },
-                    //     getListDisplayItem: function(item, index) {
-                    //         return [
-                    //                     item.purpose1
-                    //                 ];
-                    //         },
-                    //     onSelect: function(result, model, context) {
-                    //                 // model.loanAccount.loanPurpose2 = '';
-                    //     }
-                    // },
-                    // "LoanDetails.loanPurpose2": {
-                    //     "orderNo": 7,
-                    //     "title": "LOAN_PURPOSE_2",
-                    //     "enumCode": "loan_purpose_2",
-                    //     "parentEnumCode": "loan_purpose_1",
-                    //     "parentValueExpr": "model.loanAccount.loanPurpose1"
-                        
-                    // },
-                    // "LoanDetails.loanPurpose3": {
-                    //     "orderNo": 8,
-                    //     "enumCode": "loan_purpose_3",
-                    //     "parentEnumCode": "loan_purpose_2",
-                    //     "parentValueExpr": "model.loanAccount.loanPurpose2"
-                    // },
-                    // "LoanDetails.loanAmountRequested": {
-                    //     "orderNo": 5,
-                    // },
-                    // "LoanDetails.requestedTenure":{
-                    //     "orderNo" : 6,
-                    //     "placeholderExpr": "model.additions.tenurePlaceHolder",
-                    // },
-                    // "LoanDetials.witnessDetails": {
-                    //     "type": "array",
-                    //     "view": "fixed"
-                    // },
-                    // "LoanDetails.witnessDetails.witnessFirstName": {
-                    //     "type": "lov",
-                    //     // "key": "model.LoanAccounts.witnessDetails[].witnessFirstName",
-                    //     searchHelper: formHelper,
-                    //     search: function (inputModel, form, model, context) {
-                    //         var out = [];
-                    //         if (!model.customer.familyMembers) {
-                    //             return out;
-                    //         }
-
-                    //         for (var i = 0; i < model.customer.familyMembers.length; i++) {
-                    //             out.push({
-                    //                 name: model.customer.familyMembers[i].familyMemberFirstName,
-                    //                 // value: model.customer.familyDetails[i].value,
-                    //                 relationship: model.customer.familyMembers[i].relationShip
-                    //             })
-                    //         }
-                    //         return $q.resolve({
-                    //             headers: {
-                    //                 "x-total-count": out.length
-                    //             },
-                    //             body: out
-                    //         });
-                    //     },
-                    //     onSelect: function (valueObj, model, context) {
-                    //         //add to the witnees array.
-                    //         model.loanAccount.witnessFirstName = valueObj.name;
-                    //         model.loanAccount.witnessRelationship = valueObj.relationship;
-                    //     },
-                    //     getListDisplayItem: function (item, index) {
-                    //         return [
-                    //             item.name
-                    //         ];
-                    //     }
-                    // },
-                    // "LoanDetails.witnessDetails.witnessRelationship": {
-                    //     "readonly":false,
-                    //     "require":false
-                    // },
-                    // "NomineeDetails": {
-                    //     "orderNo": 3
-                    // },
-                    // "JewelDetails":{
-                    //     "orderNo": 2,
-                    //     "condition": "model.loanAccount.loanType == 'JLG'"
-                    // },
-                    // "NomineeDetails.nominees.nomineeFirstName":{
-                    //     "type": "lov",
-                    //     "title": "NAME",
-                    //     searchHelper: formHelper,
-                    //     search: function (inputModel, form, model, context) {
-                    //         var out = [];
-                    //         if (!model.customer.familyMembers) {
-                    //             return out;
-                    //         }
-
-                    //         for (var i = 0; i < model.customer.familyMembers.length; i++) {
-                    //             out.push({
-                    //                 name: model.customer.familyMembers[i].familyMemberFirstName,
-                    //                 // value: model.customer.familyDetails[i].value,
-                    //                 relationship: model.customer.familyMembers[i].relationShip,
-                    //                 gender:model.customer.familyMembers[i].gender 
-                    //             })
-                    //         }
-                    //         return $q.resolve({
-                    //             headers: {
-                    //                 "x-total-count": out.length
-                    //             },
-                    //             body: out
-                    //         });
-                    //     },
-                    //     onSelect: function (valueObj, model, context) {
-                    //         //add to the witnees array.
-                    //         if (_.isUndefined(model.loanAccount.nominees[context.arrayIndex])) {
-                    //              model.loanAccount.nominees[context.arrayIndex] = [];
-                    //          }
-                    //         model.loanAccount.nominees[context.arrayIndex].nomineeFirstName = valueObj.name;
-                    //         model.loanAccount.nominees[context.arrayIndex].nomineeRelationship = valueObj.relationship;
-                    //         model.loanAccount.nominees[context.arrayIndex].nomineeGender = valueObj.gender;
-                    //     },
-                    //     getListDisplayItem: function (item, index) {
-                    //         return [
-                    //             item.name
-                    //         ];
-                    //     }
-
-                    // },
-                    // "NomineeDetails.nominees.nomineeRelationship": {
-                    //     "readonly": true,
-                    //     "type": "text"
-                    // },
-                    // "NomineeDetails.nominees.nomineeGender": {
-                    //     "readonly": true,
-                    //     "type": "text"
-                    // },
-                    // "NomineeDetails.nominees.nomineePincode":{
-                    //     fieldType: "number",
-                    //     autolov: true,
-                    //     inputMap: {
-                    //         "district": {
-                    //             key: "loanAccount.nominees[].nomineeDistrict"
-                    //         },
-                    //         "state": {
-                    //             key: "loanAccount.nominees[].nomineeState"
-                    //         },
-                    //         "pincode": {
-                    //             key:"loanAccount.nominees[].nomineePincode"
-                    //         }
-                    //     },
-                    //     outputMap: {
-                    //         "division": "loanAccount.nominees[arrayIndex].nomineeLocality",
-                    //         "pincode": "loanAccount.nominees[arrayIndex].nomineePincode",
-                    //         "district": "loanAccount.nominees[arrayIndex].nomineeDistrict",
-                    //         "state": "loanAccount.nominees[arrayIndex].nomineeState"
-                    //     },
-                    //     searchHelper: formHelper,
-                    //     // initialize: function(inputModel, form, model, context) {
-                    //     //     inputModel.pincode = model.loanAccount.nominees[context.arrayIndex].nomineePincode;
-                    //     // },
-                    //     search: function(inputModel, form, model, context) {
-                    //         return Queries.searchPincodes(
-                    //             inputModel.pincode || model.loanAccount.nominees[context.arrayIndex].nomineePincode,
-                    //             inputModel.district,
-                    //             inputModel.state
-                    //         );
-                    //     },
-                    //     getListDisplayItem: function(item, index) {
-                    //         return [
-                    //             item.division + ', ' + item.region,
-                    //             item.pincode,
-                    //             item.district + ', ' + item.state
-                    //         ];
-                    //     }
-                    // },
-                    // "NomineeDetails.nominees.nomineeGuardian": {
-
-                    // },
-                    // "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianFirstName":{
-                    //     "type": "lov",
-                    //     "title": "NAME",
-                    //     searchHelper: formHelper,
-                    //     search: function (inputModel, form, model, context) {
-                    //         var out = [];
-                    //         if (!model.customer.familyMembers) {
-                    //             return out;
-                    //         }
-
-                    //         for (var i = 0; i < model.customer.familyMembers.length; i++) {
-                    //             out.push({
-                    //                 name: model.customer.familyMembers[i].familyMemberFirstName,
-                    //                 // value: model.customer.familyDetails[i].value,
-                    //                 relationship: model.customer.familyMembers[i].relationShip,
-                    //                 gender:model.customer.familyMembers[i].gender 
-                    //             })
-                    //         }
-                    //         return $q.resolve({
-                    //             headers: {
-                    //                 "x-total-count": out.length
-                    //             },
-                    //             body: out
-                    //         });
-                    //     },
-                    //     onSelect: function (valueObj, model, context) {
-                    //         //add to the witnees array.
-                    //         if (_.isUndefined(model.loanAccount.nominees[context.arrayIndex])) {
-                    //              model.loanAccount.nominees[context.arrayIndex] = [];
-                    //          }
-                    //         model.loanAccount.nominees[context.arrayIndex].guardianFirstName = valueObj.name;
-                    //         model.loanAccount.nominees[context.arrayIndex].guardianRelationship = valueObj.relationship;
-                    //         model.loanAccount.nominees[context.arrayIndex].guardianGender = valueObj.gender;
-                    //     },
-                    //     getListDisplayItem: function (item, index) {
-                    //         return [
-                    //             item.name
-                    //         ];
-                    //     }
-                    // },
-                    // "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianGender":{
-                    //     "readonly": true,
-                    //     "type": "text"
-                    // },
-                    // "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianRelationship":{
-                    //     "readonly": true,
-                    //     "type": "text"
-                    // }
                 }
             }
 
@@ -778,12 +532,12 @@ define([], function () {
                     model.loanAccount = model.loanProcess.loanAccount;
                     model.loanAccount.bcAccount = {};
                     model.loanAccount.processType = "1";
-                    if(typeof model.loanAccount.customerId !="undefined"){
+                    if (typeof model.loanAccount.customerId != "undefined") {
                         $q.when(Enrollment.get({
-                                'id': model.loanAccount.customerId
-                            })).then(function (resp) {
-                                model.customer = resp;
-                            })
+                            'id': model.loanAccount.customerId
+                        })).then(function (resp) {
+                            model.customer = resp;
+                        })
                     }
                     // model.loanAccount.nominees = [];
                     // model.loanAccount.nominees[0] ={};
@@ -879,63 +633,82 @@ define([], function () {
                                         "LoanDetails": {
                                             "items": {
                                                 "borrowers": {
-                                                    "items": {
-                                                        "borrowers":{
-                                                            "title": "BORROWERS",
-                                                            "type": "radios",
-                                                            "orderNo": 8,
-                                                            "key": "yet to decided",
-                                                            "titleMap": [{
-                                                                    value: "Father",
-                                                                    name: "Father"
-                                                                },
-                                                                {
-                                                                    value: "Husband",
-                                                                    name: "Husband"
-                                                                }
-                                                            ]
+                                                    "title": "BORROWERS",
+                                                    "type": "radios",
+                                                    "orderNo": 8,
+                                                    "key": "loanAccount.husbandOrFatherMiddleName",
+                                                    "titleMap": [{
+                                                            value: "Father",
+                                                            name: "Father"
                                                         },
-                                                        "borrowersFirstName":{
-                                                            "title":"FULL_NAME",
-                                                            "type": "text",
-                                                            "readonly":true,
-                                                            "key":"yet to decide",
-                                                        },
-                                                        "borrowersRealtionship":{
-                                                            "title":"RELATIONSHIP",
-                                                            "type":"text",
-                                                            "readonly":true,
-                                                            "key":"yet to decide",
+                                                        {
+                                                            value: "Husband",
+                                                            name: "Husband"
                                                         }
-
-                                                    }
-
-                                                },
-                                                "NomineeDetails":{
-                                                    "items":{
-                                                        "nominees":{
-                                                            "items":{
-                                                                "nomineeAddressSameasBorrower":{
-                                                                    "type":"checkbox",
-                                                                    "title": "ADDRESS_SAME_AS_BORROWER",
-                                                                    "schema":{
-                                                                        "type": ["boolean", "null"]
+                                                    ],
+                                                    onChange: function (valueObj, form, model) {
+                                                        if (typeof model.customer.familyMembers != "undefined") {
+                                                            if (model.customer.familyMembers.length > 0) {
+                                                                for (i = 0; i < model.customer.familyMembers.length; i++) {
+                                                                    if (model.customer.familyMembers[i].relationShip == valueObj) {
+                                                                        model.loanAccount.husbandOrFatherFirstName = model.customer.familyMembers[i].familyMemberFirstName;
+                                                                    } else {
+                                                                        model.loanAccount.husbandOrFatherFirstName = null;
                                                                     }
                                                                 }
                                                             }
                                                         }
                                                     }
+                                                },
+                                                "borrowersHusbandName": {
+                                                    "title": "HUSBAND_NAME",
+                                                    "condition": "model.loanAccount.husbandOrFatherMiddleName == 'Husband'",
+                                                    "type": "text",
+                                                    "key": "loanAccount.husbandOrFatherFirstName",
+                                                },
+                                                "borrowersFatherName": {
+                                                    "title": "FATHER_NAME",
+                                                    "condition": "model.loanAccount.husbandOrFatherMiddleName == 'Father'",
+                                                    "type": "text",
+                                                    "key": "loanAccount.husbandOrFatherFirstName"
+                                                },
+                                                "borrowersRealtionship": {
+                                                    "title": "RELATIONSHIP",
+
+                                                    "type": "text",
+                                                    "readonly": true,
+                                                    "key": "yet to decide",
                                                 }
 
                                             }
 
+                                        },
+
+                                        "NomineeDetails": {
+                                            "items": {
+                                                "nominees": {
+                                                    "items": {
+                                                        "nomineeAddressSameasBorrower": {
+                                                            "type": "checkbox",
+                                                            "title": "ADDRESS_SAME_AS_BORROWER",
+                                                            "schema": {
+                                                                "type": ["boolean", "null"]
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
                                         }
+
+
+
+
                                     },
                                     "additions": [
                                         {
                                             "type": "box",
                                             "title": "POST_REVIEW",
-                                            "condition": "model.loanAccount.id && model.loanAccount.currentStage == 'LoanInititation'",
+                                            "condition": "model.loanAccount.id && model.loanAccount.currentStage == 'LoanInitiation'",
                                             "items": [
                                                 {
                                                     key: "review.action",
@@ -989,8 +762,7 @@ define([], function () {
                                                 {
                                                     type: "section",
                                                     condition: "model.review.action=='REJECT'",
-                                                    items: [
-                                                        {
+                                                    items: [{
                                                             title: "REMARKS",
                                                             key: "review.remarks",
                                                             type: "textarea",
@@ -1003,22 +775,22 @@ define([], function () {
                                                             title: "REJECT_REASON",
                                                             bindMap: {},
                                                             searchHelper: formHelper,
-                                                            search: function(inputModel, form, model, context) {
+                                                            search: function (inputModel, form, model, context) {
                                                                 var stage1 = model.currentStage;
-                            
+
                                                                 if (model.currentStage == 'Application' || model.currentStage == 'ApplicationReview') {
                                                                     stage1 = "Application";
                                                                 }
                                                                 if (model.currentStage == 'FieldAppraisal' || model.currentStage == 'FieldAppraisalReview') {
                                                                     stage1 = "FieldAppraisal";
                                                                 }
-                            
+
                                                                 var rejectReason = formHelper.enum('application_reject_reason').data;
                                                                 var out = [];
                                                                 for (var i = 0; i < rejectReason.length; i++) {
                                                                     var t = rejectReason[i];
                                                                     if (t.field1 == stage1) {
-                                                                         out.push({
+                                                                        out.push({
                                                                             name: t.name,
                                                                         })
                                                                     }
@@ -1030,16 +802,16 @@ define([], function () {
                                                                     body: out
                                                                 });
                                                             },
-                                                            onSelect: function(valueObj, model, context) {
+                                                            onSelect: function (valueObj, model, context) {
                                                                 model.loanAccount.rejectReason = valueObj.name;
                                                             },
-                                                            getListDisplayItem: function(item, index) {
+                                                            getListDisplayItem: function (item, index) {
                                                                 return [
                                                                     item.name
                                                                 ];
                                                             }
                                                         },
-                            
+
                                                         {
                                                             key: "review.rejectButton",
                                                             type: "button",
@@ -1052,8 +824,7 @@ define([], function () {
                                                 {
                                                     type: "section",
                                                     condition: "model.review.action=='HOLD'",
-                                                    items: [
-                                                        {
+                                                    items: [{
                                                             title: "REMARKS",
                                                             key: "review.remarks",
                                                             type: "textarea",
@@ -1111,8 +882,7 @@ define([], function () {
                                                 {
                                                     type: "section",
                                                     condition: "model.review.action=='PROCEED'",
-                                                    items: [
-                                                        {
+                                                    items: [{
                                                             title: "REMARKS",
                                                             key: "review.remarks",
                                                             type: "textarea",
@@ -1129,12 +899,13 @@ define([], function () {
                                             ]
                                         },
                                         {
-                                        "type": "actionbox",
-                                        "items": [{
-                                            "type": "submit",
-                                            "title": "SAVE"
-                                        }, ]
-                                    }]
+                                            "type": "actionbox",
+                                            "items": [{
+                                                "type": "submit",
+                                                "title": "SAVE"
+                                            }, ]
+                                        }
+                                    ]
                                 }
                             };
                             var result = IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model);
@@ -1210,8 +981,13 @@ define([], function () {
                         /* Loan SAVE */
                         console.log("Model from Submit from LoanBooking ");
                         console.log(model);
-                        if(typeof model.loanAccount.loanAmount !="undefined"){
+                        if (typeof model.loanAccount.loanAmount != "undefined") {
                             model.loanAccount.loanAmountRequested = model.loanAccount.loanAmount;
+                        }
+                        if (typeof model.loanAccount.husbandOrFatherMiddleName !="undefined"){
+                            if(typeof model.loanAccount.husbandOrFatherFirstName =="undefined" || model.loanAccount.husbandOrFatherFirstName ==null){
+                                   model.loanAccount.husbandOrFatherMiddleName = null; 
+                            }
                         }
                         if (!model.loanAccount.id) {
                             model.loanAccount.isRestructure = false;
