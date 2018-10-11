@@ -59,6 +59,7 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                             model.customer.isOwnershipChanged="YES";
                             model.customer.newOwnership=model.UpdatedWorkflow.customer.enterprise.ownership;
                         }
+                        model.customer.ownership == model.customer.enterprise.ownership;
                     }else if(model.customer.customerType=="Individual")
                     {
                         if(model.customer.ownership == model.UpdatedWorkflow.customer.ownership) {
@@ -295,7 +296,6 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                                         "category": "Customer",
                                         "subCategory": "ADDRESSPROOF",
                                         "offline": true,
-                                        required: true,
                                         condition: "model.customer.isMobileChanged=='YES'"
                                     }]
                             },
