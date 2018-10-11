@@ -60,6 +60,7 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalApprove"),
                             model.customer.isOwnershipChanged="YES";
                             model.customer.newOwnership=model.UpdatedWorkflow.customer.enterprise.ownership;
                         }
+                        model.customer.ownership == model.customer.enterprise.ownership;
                     }else if(model.customer.customerType=="Individual")
                     {
                         if(model.customer.ownership == model.UpdatedWorkflow.customer.ownership) {
