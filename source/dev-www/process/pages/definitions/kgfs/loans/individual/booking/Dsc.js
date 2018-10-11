@@ -247,7 +247,7 @@ define([], function () {
 
                                     {
                                         "type": "button",
-                                        "condition" : "model.customer.loanId",  
+                                        "condition" : "model.customer.loanSaved",  
                                         "title": "DSC_REQUEST",
                                         "onClick": "actions.getDscDetails(model.loanAccount.id)"
                                     },
@@ -391,15 +391,14 @@ define([], function () {
                     },
                     getDscDetails: function (loanid) {
                         PageHelper.showLoader();
-                        PageHelper.clearErrors();
-                        console.log("model ****from DSCC model1");
-                        console.log(model);
+                        PageHelper.clearErrors();   
                         IndividualLoan.individualLoanDsc({ loanId:loanid
                         },{},function(res) {
                             $log.info(res);
-                            PageHelper.hideLoader();
-                            model.customer = _cloneDeep(res);       
+                            PageHelper.hideLoader();       
                             irfProgressMessage.pop("dsc-check", "Dsccheck Succeeded", 2000);
+                            model.loanAccount.dscStatus =  res.dscStatus;
+                            BundleManager.broadcastEvent('dsc_status',model);    
 
                         },function(res) {
                             $log.error(res);

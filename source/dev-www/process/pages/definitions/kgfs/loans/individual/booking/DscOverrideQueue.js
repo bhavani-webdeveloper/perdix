@@ -62,7 +62,7 @@ define({
 
                 getResultsPromise: function (searchOptions, pageOpts) {
                     var promise = IndividualLoan.search({
-                        'stage': 'LoanInitiation',
+                        'stage': 'DSCOverride',
                         'branchId': searchOptions.branch,
                         'centreCode': searchOptions.centre,
                         'customerId': searchOptions.customerId,
@@ -149,6 +149,9 @@ define({
                                     'pageName': 'kgfs.loans.individual.booking.DscCheck',
                                     'pageId': item.loanId,
                                     'pageData': item
+                                },{
+                                    state: 'Page.Engine',
+                                    pageName: "kgfs.loans.individual.booking.DscOverrideQueue"
                                 });
                             },
                             isApplicable: function (item, model) {

@@ -57,7 +57,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             pageClass: 'dsc-check',
                             minimum: 1,
                             maximum: 1,
-                            order:60
+                            order:70
                         },
                         {
                             pageName: 'kgfs.customer.CBCheck',
@@ -65,7 +65,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             pageClass: 'cb-check',
                             minimum: 1,
                             maximum: 1,
-                            order:70
+                            order:60
                         },
                         // {
                         //     pageName: 'kgfs.loans.individual.booking.DocumentUpload',
@@ -164,6 +164,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         $this.bundlePages.push({
                                             pageClass: 'co-applicant',
                                             model: {
+                                                enrolmentProcess: loanProcess.coApplicantsEnrolmentProcesses[i],
                                                 loanRelation: loanAccount.coApplicantsEnrolmentProcesses[i]
                                             }
                                         });
@@ -174,6 +175,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         $this.bundlePages.push({
                                             pageClass: 'guarantor',
                                             model: {
+                                                enrolmentProcess: loanProcess.guarantorsEnrolmentProcesses[i],
                                                 loanRelation: loanAccount.guarantorsEnrolmentProcesses[i]
                                             }
                                         });

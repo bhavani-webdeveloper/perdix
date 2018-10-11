@@ -54,6 +54,9 @@ define({
                    		{
                     		key: "referenceCode.field5",
                             type: "text"
+						   },
+						   {
+                    		key: "referenceCode.isActive"
                    		}
                     ]
             },

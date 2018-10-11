@@ -13,6 +13,10 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                     model.customer.isGenderChanged = "NO";
                     model.customer.isOwnershipChanged = "NO";
                     model.customer.isAddressChanged = "NO";
+
+                    if(model.customer.customerType=="Enterprise")
+                        model.customer.ownership=model.customer.enterprise.ownership;
+
                     $window.scrollTo(0, 0);
                     irfProgressMessage.pop("cust-load", "Load Complete", 2000);
                 }, function (resp) {
@@ -47,12 +51,24 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                         model.customer.mobileProofImageId=model.UpdatedWorkflow.proof.mobileProofImageId;
                     }
 
-                    if(model.customer.ownership == model.UpdatedWorkflow.customer.ownership) {
-                        model.customer.isOwnershipChanged="NO";
-                    }else {
-                        model.customer.isOwnershipChanged="YES";
-                        model.customer.newOwnership=model.UpdatedWorkflow.customer.ownership;
+                    if(model.customer.customerType=="Enterprise")
+                    {
+                        if(model.customer.enterprise.ownership == model.UpdatedWorkflow.customer.enterprise.ownership) {
+                            model.customer.isOwnershipChanged="NO";
+                        }else {
+                            model.customer.isOwnershipChanged="YES";
+                            model.customer.newOwnership=model.UpdatedWorkflow.customer.enterprise.ownership;
+                        }
+                    }else if(model.customer.customerType=="Individual")
+                    {
+                        if(model.customer.ownership == model.UpdatedWorkflow.customer.ownership) {
+                            model.customer.isOwnershipChanged="NO";
+                        }else {
+                            model.customer.isOwnershipChanged="YES";
+                            model.customer.newOwnership=model.UpdatedWorkflow.customer.ownership;
+                        }
                     }
+
                     if(model.customer.gender == model.UpdatedWorkflow.customer.gender) {
                         model.customer.isGenderChanged="NO";
                     }else {
@@ -104,14 +120,12 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                     var workflowId = $stateParams.pageId;
                     $log.info("Loading data for Cust ID " + workflowId);
 
-
                     model._screenMode = 'VIEW';
                     PageHelper.showLoader();
                     irfProgressMessage.pop("cust-load", "Loading Customer Data...");
 
                     if (workflowId != undefined || workflowId != null) {
                         update(model, workflowId);
-
                     }else {
                         PageHelper.hideLoader();
                     }
@@ -135,17 +149,16 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                                 title: "CUSTOMER_ID",
                                 condition: "!model.workflow",
                                 inputMap: {
-                                    "customerId": {
-                                        "key": "customer.id"
+                                    "firstName": {
+                                        "key": "customer.firstName"
                                     },
                                     "urnNo": {
                                         "key": "customer.urnNo"
                                     },
-                                    "firstName": {
-                                        "key": "customer.firstName"
-                                    },
-                                    "branchName": {
-                                        "key": "customer.branchName"
+                                    "customerBranchId": {
+                                        "key": "customer.customerBranchId",
+                                        "type": "select",
+                                        "screenFilter": true,
                                     },
                                     "customerType": {
                                         "key": "customer.customerType",
@@ -155,7 +168,6 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                                             "Individual": "Individual",
                                             "Enterprise": "Enterprise"
                                         }
-
                                     }
                                 },
                                 outputMap: {
@@ -168,9 +180,14 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                                 },
                                 searchHelper: formHelper,
                                 search: function (inputModel, form, model) {
+                                    var branches = formHelper.enum('branch_id').data;
+                                    var branchName;
+                                    for (var i=0; i<branches.length;i++){
+                                        if(branches[i].code==inputModel.customerBranchId)
+                                            branchName = branches[i].name;
+                                    }
                                     return Enrollment.search({
-                                        id: inputModel.customerId,
-                                        branchName: inputModel.branchName,
+                                        branchName: branchName ||SessionStore.getBranch(),
                                         urnNo : inputModel.urnNo ,
                                         firstName : inputModel.firstName,
                                         customerType : inputModel.customerType
@@ -217,33 +234,33 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                                     type: "date",
                                     readonly: true
                                 },
-                                {
-                                    key: "customer.isDateOfBirthChanged",
-                                    type: "radios",
-                                    title: "UPDATE",
-                                    "titleMap": {
-                                        "YES": "YES",
-                                        "NO": "NO"
-                                    }
-                                },
-                                {
-                                    key: "customer.newDateOfBirth",
-                                    type: "date",
-                                    required: true,
-                                    title: "UPDATE_DATE_OF_BIRTH",
-                                    condition: "model.customer.isDateOfBirthChanged=='YES'"
-                                },
-                                {
-                                    key: "customer.ageProofImageId",
-                                    type: "file",
-                                    title: "AGE_PROOF",
-                                    fileType: "file/*",
-                                    "category": "Customer",
-                                    "subCategory": "AGEPROOF",
-                                    "offline": true,
-                                    required: true,
-                                    condition: "model.customer.isDateOfBirthChanged=='YES'"
-                                }]
+                                    {
+                                        key: "customer.isDateOfBirthChanged",
+                                        type: "radios",
+                                        title: "UPDATE",
+                                        "titleMap": {
+                                            "YES": "YES",
+                                            "NO": "NO"
+                                        }
+                                    },
+                                    {
+                                        key: "customer.newDateOfBirth",
+                                        type: "date",
+                                        title: "UPDATE_DATE_OF_BIRTH",
+                                        required: true,
+                                        condition: "model.customer.isDateOfBirthChanged=='YES'"
+                                    },
+                                    {
+                                        key: "customer.ageProofImageId",
+                                        type: "file",
+                                        title: "AGE_PROOF",
+                                        fileType: "file/*",
+                                        "category": "Customer",
+                                        "subCategory": "AGEPROOF",
+                                        "offline": true,
+                                        required: true,
+                                        condition: "model.customer.isDateOfBirthChanged=='YES'"
+                                    }]
                             },
                             {
                                 type: "fieldset",
@@ -253,31 +270,34 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                                     title: "MOBILE_PHONE",
                                     readonly: true
                                 },
-                                {
-                                    key: "customer.isMobileChanged",
-                                    type: "radios",
-                                    title: "UPDATE",
-                                    "titleMap": {
-                                        "YES": "YES",
-                                        "NO": "NO"
-                                    }
-                                },
-                                {
-                                    key: "customer.newMobilePhone",
-                                    title: "UPDATE_MOBILE_PHONE",
-                                    required: true,
-                                    condition: "model.customer.isMobileChanged=='YES'"
-                                },
-                                {
-                                    key: "customer.mobileProofImageId",
-                                    type: "file",
-                                    title: "MOBILE_PROOF",
-                                    fileType: "file/*",
-                                    "category": "Customer",
-                                    "subCategory": "ADDRESSPROOF",
-                                    "offline": true,
-                                    condition: "model.customer.isMobileChanged=='YES'"
-                                }]
+                                    {
+                                        key: "customer.isMobileChanged",
+                                        type: "radios",
+                                        title: "UPDATE",
+                                        "titleMap": {
+                                            "YES": "YES",
+                                            "NO": "NO"
+                                        }
+                                    },
+                                    {
+                                        key: "customer.newMobilePhone",
+                                        title: "UPDATE_MOBILE_PHONE",
+                                        inputmode: "number",
+                                        numberType: "tel",
+                                        required: true,
+                                        condition: "model.customer.isMobileChanged=='YES'"
+                                    },
+                                    {
+                                        key: "customer.mobileProofImageId",
+                                        type: "file",
+                                        title: "MOBILE_PROOF",
+                                        fileType: "file/*",
+                                        "category": "Customer",
+                                        "subCategory": "ADDRESSPROOF",
+                                        "offline": true,
+                                        required: true,
+                                        condition: "model.customer.isMobileChanged=='YES'"
+                                    }]
                             },
 
                             {
@@ -288,27 +308,27 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                                     title: "GENDER",
                                     readonly: true
                                 },
-                                {
-                                    key: "customer.isGenderChanged",
-                                    type: "radios",
-                                    title: "UPDATE",
-                                    "titleMap": {
-                                        "YES": "YES",
-                                        "NO": "NO"
-                                    }
-                                },
-                                {
-                                    key: "customer.newGender",
-                                    type: "radios",
-                                    required: true,
-                                    title: "UPDATE_GENDER",
-                                    "titleMap": {
-                                        "MALE": "MALE",
-                                        "FEMALE": "FEMALE",
-                                        "Un-Specified": "Un-Specified"
+                                    {
+                                        key: "customer.isGenderChanged",
+                                        type: "radios",
+                                        title: "UPDATE",
+                                        "titleMap": {
+                                            "YES": "YES",
+                                            "NO": "NO"
+                                        }
                                     },
-                                    condition: "model.customer.isGenderChanged=='YES'"
-                                }]
+                                    {
+                                        key: "customer.newGender",
+                                        type: "radios",
+                                        title: "UPDATE_GENDER",
+                                        required: true,
+                                        "titleMap": {
+                                            "MALE": "MALE",
+                                            "FEMALE": "FEMALE",
+                                            "Un-Specified": "Un-Specified"
+                                        },
+                                        condition: "model.customer.isGenderChanged=='YES'"
+                                    }]
                             },
                             {
                                 type: "fieldset",
@@ -326,12 +346,14 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                                         "NO": "NO"
                                     }
                                 },
-                                {
-                                    key: "customer.newOwnership",
-                                    title: "UPDATE_OWNERSHIP",
-                                    required: true,
-                                    condition: "model.customer.isOwnershipChanged=='YES'"
-                                }]
+                                    {
+                                        key: "customer.newOwnership",
+                                        title: "UPDATE_OWNERSHIP",
+                                        "type": "select",
+                                        "screenFilter": true,
+                                        required: true,
+                                        condition: "model.customer.isOwnershipChanged=='YES'"
+                                    }]
                             }
                         ]
                     },
@@ -436,223 +458,240 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                     }
                 ],
 
-    schema:{
-        "type": "object",
-        "properties": {
-            "customer": {
-                "type": "object",
-                "properties": {
-                    "id": {
-                        "type": "number",
-                        "title": "CUSTOMER_ID"
+                schema:{
+                    "type": "object",
+                    "properties": {
+                        "customer": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "number",
+                                    "title": "CUSTOMER_ID"
+                                },
+                                "urnNo": {
+                                    "type": "string",
+                                    "title": "URNNO"
+                                },
+                                "firstName": {
+                                    "type": "string",
+                                    "title": "FIRST_NAME"
+                                },
+                                "branchName": {
+                                    "type": "string",
+                                    "title": "BRANCH_NAME"
+                                },
+                                "customerType": {
+                                    "type": "string",
+                                    "title": "CUSTOMER_TYPE"
+                                },
+                                "lastName": {
+                                    "type": "string",
+                                    "title": "LAST_NAME"
+                                },
+                                "place": {
+                                    "type": ["string","null"],
+                                    "title": "PLACE"
+                                },
+                                "customerBranchId": {
+                                    "type": ["integer","null"],
+                                    "title": "BRANCH_NAME",
+                                    "enumCode": "branch_id"
+                                },
+                                "doorNo": {
+                                    "type": ["string","null"],
+                                    "title": "DOOR_NO",
+                                    "captureStages": ["Init"]
+                                },
+                                "street": {
+                                    "type": ["string","null"],
+                                    "title": "STREET",
+                                    "captureStages": ["Init"]
+                                },
+                                "postOffice": {
+                                    "type": ["string","null"],
+                                    "title": "POST_OFFICE",
+                                    "captureStages": ["Init"]
+                                },
+                                "landmark": {
+                                    "type": ["string","null"],
+                                    "title": "LANDMARK",
+                                    "captureStages": ["Init"]
+                                },
+                                "pincode": {
+                                    "type": ["number","null"],
+                                    "title": "PIN_CODE",
+                                    "minimum": 100000,
+                                    "maximum": 999999,
+                                    "captureStages": ["Init"]
+                                },
+                                "locality": {
+                                    "type": ["string","null"],
+                                    "title": "LOCALITY",
+                                    "captureStages": ["Init"]
+                                },
+                                "villageName": {
+                                    "type": ["string","null"],
+                                    "title": "VILLAGE_NAME",
+                                    "enumCode": "village",
+                                    "captureStages": ["Init"]
+                                },
+                                "district": {
+                                    "type": ["string","null"],
+                                    "title": "DISTRICT",
+                                    "enumCode": "district",
+                                    "captureStages": ["Init"]
+                                },
+                                "state": {
+                                    "type": ["string","null"],
+                                    "title": "STATE",
+                                    "enumCode": "state_master",
+                                    "captureStages": ["Init"]
+                                },
+                                "mailingDoorNo": {
+                                    "type": ["string","null"],
+                                    "title": "DOOR_NO",
+                                    "captureStages": ["Init"]
+                                },
+                                "mailingStreet": {
+                                    "type": ["string","null"],
+                                    "title": "STREET",
+                                    "captureStages": ["Init"]
+                                },
+                                "mailingPostoffice": {
+                                    "type": ["string","null"],
+                                    "title": "POST_OFFICE",
+                                    "captureStages": ["Init"]
+                                },
+                                "mailingPincode": {
+                                    "type": ["string","null"],
+                                    "title": "PIN_CODE",
+                                    "captureStages": ["Init"]
+                                },
+                                "mailingLocality": {
+                                    "type": ["string","null"],
+                                    "title": "LOCALITY",
+                                    "captureStages": ["Init"]
+                                },
+                                "mailingDistrict": {
+                                    "type": ["string","null"],
+                                    "title": "DISTRICT",
+                                    "enumCode": "district",
+                                    "captureStages": ["Init"]
+                                },
+                                "mailingState": {
+                                    "type": ["string","null"],
+                                    "title": "STATE",
+                                    "enumCode": "state_master",
+                                    "captureStages": ["Init"]
+                                },
+                                "dateOfBirth": {
+                                    "type": ["string","null"],
+                                    "title": "DATE_OF_BIRTH",
+                                    "format": "date",
+                                    "captureStages": ["Init"]
+                                },
+                                "mobilePhone": {
+                                    "type": ["string","null"],
+                                    "title": "MOBILE_PHONE",
+                                    "minLength": 10,
+                                    "maxLength": 10,
+                                    "captureStages": ["Init"]
+                                },
+                                "landLineNo": {
+                                    "type": ["string","null"],
+                                    "title": "LANDLINE_NO",
+                                    "minLength": 5,
+                                    "maxLength": 15,
+                                    "captureStages": ["Init"]
+                                },
+                                "gender": {
+                                    "type": ["string","null"],
+                                    "title": "GENDER",
+                                    "enumCode": "gender",
+                                    "captureStages": ["Init"]
+                                },
+                                "ownership": {
+                                    "type": ["string","null"],
+                                    "title": "OWNERSHIP",
+                                    "enumCode": "ownership",
+                                    "captureStages": ["Init"]
+                                },
+                                "newOwnership": {
+                                    "type": ["string","null"],
+                                    "title": "OWNERSHIP",
+                                    "enumCode": "ownership",
+                                    "captureStages": ["Init"]
+                                }
+                            }
+                        }
                     },
-                    "urnNo": {
-                        "type": "string",
-                        "title": "URNNO"
-                    },
-                    "firstName": {
-                        "type": "string",
-                        "title": "FIRST_NAME"
-                    },
-                    "branchName": {
-                        "type": "string",
-                        "title": "BRANCH_NAME"
-                    },
-                    "customerType": {
-                        "type": "string",
-                        "title": "CUSTOMER_TYPE"
-                    },
-                    "lastName": {
-                        "type": "string",
-                        "title": "LAST_NAME"
-                    },
-                    "doorNo": {
-                        "type": ["string","null"],
-                        "title": "DOOR_NO",
-                        "captureStages": ["Init"]
-                    },
-                    "street": {
-                        "type": ["string","null"],
-                        "title": "STREET",
-                        "captureStages": ["Init"]
-                    },
-                    "postOffice": {
-                        "type": ["string","null"],
-                        "title": "POST_OFFICE",
-                        "captureStages": ["Init"]
-                    },
-                    "landmark": {
-                        "type": ["string","null"],
-                        "title": "LANDMARK",
-                        "captureStages": ["Init"]
-                    },
-                    "pincode": {
-                        "type": ["number","null"],
-                        "title": "PIN_CODE",
-                        "minimum": 100000,
-                        "maximum": 999999,
-                        "captureStages": ["Init"]
-                    },
-                    "locality": {
-                        "type": ["string","null"],
-                        "title": "LOCALITY",
-                        "captureStages": ["Init"]
-                    },
-                    "villageName": {
-                        "type": ["string","null"],
-                        "title": "VILLAGE_NAME",
-                        "enumCode": "village",
-                        "captureStages": ["Init"]
-                    },
-                    "district": {
-                        "type": ["string","null"],
-                        "title": "DISTRICT",
-                        "enumCode": "district",
-                        "captureStages": ["Init"]
-                    },
-                    "state": {
-                        "type": ["string","null"],
-                        "title": "STATE",
-                        "enumCode": "state_master",
-                        "captureStages": ["Init"]
-                    },
-                    "mailingDoorNo": {
-                        "type": ["string","null"],
-                        "title": "DOOR_NO",
-                        "captureStages": ["Init"]
-                    },
-                    "mailingStreet": {
-                        "type": ["string","null"],
-                        "title": "STREET",
-                        "captureStages": ["Init"]
-                    },
-                    "mailingPostoffice": {
-                        "type": ["string","null"],
-                        "title": "POST_OFFICE",
-                        "captureStages": ["Init"]
-                    },
-                    "mailingPincode": {
-                        "type": ["string","null"],
-                        "title": "PIN_CODE",
-                        "captureStages": ["Init"]
-                    },
-                    "mailingLocality": {
-                        "type": ["string","null"],
-                        "title": "LOCALITY",
-                        "captureStages": ["Init"]
-                    },
-                    "mailingDistrict": {
-                        "type": ["string","null"],
-                        "title": "DISTRICT",
-                        "enumCode": "district",
-                        "captureStages": ["Init"]
-                    },
-                    "mailingState": {
-                        "type": ["string","null"],
-                        "title": "STATE",
-                        "enumCode": "state_master",
-                        "captureStages": ["Init"]
-                    },
-                    "dateOfBirth": {
-                        "type": ["string","null"],
-                        "title": "DATE_OF_BIRTH",
-                        "format": "date",
-                        "captureStages": ["Init"]
-                    },
-                    "mobilePhone": {
-                        "type": ["string","null"],
-                        "title": "MOBILE_PHONE",
-                        "minLength": 10,
-                        "maxLength": 10,
-                        "captureStages": ["Init"]
-                    },
-                    "landLineNo": {
-                        "type": ["string","null"],
-                        "title": "LANDLINE_NO",
-                        "minLength": 5,
-                        "maxLength": 15,
-                        "captureStages": ["Init"]
-                    },
-                    "gender": {
-                        "type": ["string","null"],
-                        "title": "GENDER",
-                        "enumCode": "gender",
-                        "captureStages": ["Init"]
-                    },
-                    "ownership": {
-                        "type": ["string","null"],
-                        "title": "OWNERSHIP",
-                        "enumCode": "ownership",
-                        "captureStages": ["Init"]
+                    "required": [
+                        "customer"
+                    ]
+                },
+                actions: {
+                    submit: function (model, form, formName) {
+                        if (window.confirm("Update - Are You Sure?")) {
+                            PageHelper.showLoader();
+                            irfProgressMessage.pop('workflow-update', 'Working...');
+                            model.customer.title=String(model.customer.addressProofSameAsIdProof);
+                            $log.info(model);
+                            var updatedModel= _.cloneDeep(model);
+                            var proof ={};
+                            if(model.customer.isAddressChanged=='YES'){
+                                proof["addressProofImageId"]=model.customer.addressProofImageId;
+                            }
+                            if(model.customer.isDateOfBirthChanged=='YES'){
+                                updatedModel.customer.dateOfBirth=updatedModel.customer.newDateOfBirth;
+                                proof["ageProofImageId"]=model.customer.ageProofImageId;
+                            }
+                            if(model.customer.isMobileChanged=='YES'){
+                                updatedModel.customer.mobilePhone=updatedModel.customer.newMobilePhone;
+                                proof["mobileProofImageId"]=model.customer.mobileProofImageId;
+                            }
+                            if(model.customer.isGenderChanged=='YES'){
+                                updatedModel.customer.gender=updatedModel.customer.newGender;
+                            }
+                            if(model.customer.isOwnershipChanged=='YES'){
+                                updatedModel.customer.ownership=updatedModel.customer.newOwnership;
+                                if(model.customer.customerType=="Enterprise")
+                                     updatedModel.customer.enterprise.ownership=updatedModel.customer.newOwnership;
+                            }
+
+                            var requestData = {
+                                "processType": "Customer",
+                                "processName": "Approval",
+                                "currentStage": "Init",
+                                "customer": updatedModel.customer,
+                                "proof" : proof,
+                                "action" :  'PROCEED',
+                                "referenceKey" : updatedModel.customer.id
+                            };
+
+                            if(updatedModel.currentStage)
+                                requestData.currentStage=updatedModel.currentStage;
+
+                            if(updatedModel.workflow) {
+                                requestData.id=updatedModel.workflow.id;
+                                requestData.version=updatedModel.workflow.version;
+                            }
+
+                            Workflow.save(requestData, function (res, headers) {
+                                PageHelper.hideLoader();
+                                irfProgressMessage.pop('cust-update', 'Done. Customer Updated, ID : ' + res.customer.id, 2000);
+                                irfNavigator.goBack();
+
+
+                            }, function (res, headers) {
+                                PageHelper.hideLoader();
+                                irfProgressMessage.pop('cust-update', 'Oops. Some error.', 2000);
+                                $window.scrollTo(0, 0);
+                                PageHelper.showErrors(res);
+                            })
+
+                        }
                     }
                 }
-            }
-        },
-        "required": [
-            "customer"
-        ]
-    },
-    actions: {
-        submit: function (model, form, formName) {
-            if (window.confirm("Update - Are You Sure?")) {
-                PageHelper.showLoader();
-                irfProgressMessage.pop('workflow-update', 'Working...');
-                model.customer.title=String(model.customer.addressProofSameAsIdProof);
-                $log.info(model);
-                var updatedModel= _.cloneDeep(model);
-                var proof ={};
-                if(model.customer.isAddressChanged=='YES'){
-                    proof["addressProofImageId"]=model.customer.addressProofImageId;
-                }
-                if(model.customer.isDateOfBirthChanged=='YES'){
-                    updatedModel.customer.dateOfBirth=updatedModel.customer.newDateOfBirth;
-                    proof["ageProofImageId"]=model.customer.ageProofImageId;
-                }
-                if(model.customer.isMobileChanged=='YES'){
-                    updatedModel.customer.mobilePhone=updatedModel.customer.newMobilePhone;
-                    proof["mobileProofImageId"]=model.customer.mobileProofImageId;
-                }
-                if(model.customer.isGenderChanged=='YES'){
-                    updatedModel.customer.gender=updatedModel.customer.newGender;
-                }
-                if(model.customer.isOwnershipChanged=='YES'){
-                    updatedModel.customer.ownership=updatedModel.customer.newOwnership;
-                }
-                var requestData = {
-                    "processType": "Customer",
-                    "processName": "Approval",
-                    "currentStage": "Init",
-                    "customer": updatedModel.customer,
-                    "proof" : proof,
-                    "action" :  'PROCEED',
-                    "referenceKey" : updatedModel.customer.id
-                };
-
-                if(updatedModel.currentStage)
-                    requestData.currentStage=updatedModel.currentStage;
-
-                if(updatedModel.workflow) {
-                    requestData.id=updatedModel.workflow.id;
-                    requestData.version=updatedModel.workflow.version;
-                }
-
-                Workflow.save(requestData, function (res, headers) {
-                    PageHelper.hideLoader();
-                    irfProgressMessage.pop('cust-update', 'Done. Customer Updated, ID : ' + res.customer.id, 2000);
-                    irfNavigator.goBack();
-
-
-                }, function (res, headers) {
-                    PageHelper.hideLoader();
-                    irfProgressMessage.pop('cust-update', 'Oops. Some error.', 2000);
-                    $window.scrollTo(0, 0);
-                    PageHelper.showErrors(res);
-                })
-
-            }
-        }
-    }
             };
 
         }]);
-
