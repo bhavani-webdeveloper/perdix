@@ -43,6 +43,34 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                 var configFile = function () {
                     return {
                         "loanProcess.loanAccount.currentStage": {
+                            "dscOverride" : {
+                                "overrides" : {
+                                    "KYC" : {
+                                        "readonly" : true
+                                    },
+                                    "IndividualInformation": {
+                                        "readonly" : true
+                                    },
+                                    "ContactInformation":{
+                                        "readonly" : true
+                                    },
+                                    "IndividualFinancials":{
+                                        "readonly" : true
+                                    },
+                                    "FamilyDetails":{
+                                        "readonly" : true
+                                    },
+                                    "Liabilities":{
+                                        "readonly" : true
+                                    },
+                                    "PhysicalAssets":{
+                                        "readonly" : true
+                                    },
+                                    "IndividualReferences":{
+                                        "readonly" : true
+                                    },
+                                }
+                            },
                             "KYC": {
                                 "excludes": [
                                     "IndividualFinancials",

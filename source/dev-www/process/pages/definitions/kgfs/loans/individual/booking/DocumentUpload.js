@@ -45,7 +45,7 @@ define({
                             /* DO BASIC VALIDATION */
                             if (res.currentStage!= 'DocumentUpload'){
                                 PageHelper.showProgress('load-loan', 'Loan is in different Stage', 2000);
-                                irfNavigator.goBack();
+                             //    irfNavigator.goBack();
                                 return;
                             }
                             if(model.loanAccount.disbursementSchedules && model.loanAccount.disbursementSchedules.length)

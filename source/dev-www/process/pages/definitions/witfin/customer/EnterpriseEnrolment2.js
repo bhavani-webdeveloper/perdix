@@ -165,9 +165,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     //"EnterpriseAssets.enterpriseAssets.subDetails",
                     "EnterpriseAssets.enterpriseAssets.assetregistrationNumber",
                     "EnterpriseAssets.enterpriseAssets.valueOfAsset",
-                    "EnterpriseAssets.enterpriseAssets.rc",
-                    "EnterpriseAssets.enterpriseAssets.insurance",
-                    "EnterpriseAssets.enterpriseAssets.soa",
+                    "EnterpriseAssets.enterpriseAssets.vehicleDocuments",
+                    "EnterpriseAssets.enterpriseAssets.vehicleDocuments.rc",
+                    "EnterpriseAssets.enterpriseAssets.vehicleDocuments.insurance",
+                    "EnterpriseAssets.enterpriseAssets.vehicleDocuments.soa",
                     "TangibleNetWorth",
                     "TangibleNetWorth.enterpriseNetworth",
                     "TangibleNetWorth.enterpriseNetworth.tangibleNetworth",
@@ -387,7 +388,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "Liabilities"
                                 ]
                             },
-                            "FieldInvestigation3": {
+                            "FieldInvestigation2": {
                                 "excludes": [
                                     "Liabilities"
                                 ]
@@ -995,7 +996,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "title":"YEAR_AND_MONTH_OF_MANUFACTURE"
                                 },
                                 "EnterpriseAssets.enterpriseAssets.valueOfAsset": {
-                                    "required": true
+                                    "required": true,
+                                     "title": "PURCHASE_PRICE"
                                 },
                                 "EnterpriseAssets.enterpriseAssets.endUse": {
                                     "type": "select",
@@ -1207,30 +1209,37 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                                             "enumCode": "existing_vehicle_status",
                                                             "key":"customer.enterpriseAssets[].isHypothecated"   
                                                         },
-                                                        "rc":{
-                                                            "orderNo": 150,
-                                                            "title":"RC",
-                                                            "type": "file",
-                                                            "category": "CustomerEnrollment",
-                                                            "subCategory": "PHOTO",
-                                                            "key":"customer.enterpriseAssets[].udf1"
-                                                        },
-                                                        "insurance":{
-                                                            "orderNo": 160,
-                                                            "title":"INSURANCE",
-                                                            "type": "file",
-                                                            "category": "CustomerEnrollment",
-                                                            "subCategory": "PHOTO",
-                                                            "key":"customer.enterpriseAssets[].udf2"
-                                                        },
-                                                        "soa":{
-                                                            "orderNo": 170,
-                                                            "title":"SOA",
-                                                            "type": "file",
-                                                            "category": "CustomerEnrollment",
-                                                            "subCategory": "PHOTO",
-                                                            "key":"customer.enterpriseAssets[].udf3"
-                                                        }
+                                                        "vehicleDocuments": {
+                                                            "type": "fieldset",
+                                                            "title": "VEHICLE_DOCUMENTS",
+                                                            "view": "fixed",
+                                                            "items": {
+                                                                "rc":{
+                                                                    "orderNo": 150,
+                                                                    "title":"RC",
+                                                                    "type": "file",
+                                                                    "category": "CustomerEnrollment",
+                                                                    "subCategory": "PHOTO",
+                                                                    "key":"customer.enterpriseAssets[].udf1"
+                                                                },
+                                                                "insurance":{
+                                                                    "orderNo": 160,
+                                                                    "title":"INSURANCE",
+                                                                    "type": "file",
+                                                                    "category": "CustomerEnrollment",
+                                                                    "subCategory": "PHOTO",
+                                                                    "key":"customer.enterpriseAssets[].udf2"
+                                                                },
+                                                                "soa":{
+                                                                    "orderNo": 170,
+                                                                    "title":"SOA",
+                                                                    "type": "file",
+                                                                    "category": "CustomerEnrollment",
+                                                                    "subCategory": "PHOTO",
+                                                                    "key":"customer.enterpriseAssets[].udf3"
+                                                                }
+                                                            }
+                                                        }     
                                                 }
                                             }
                                         }

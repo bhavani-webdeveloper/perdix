@@ -12,7 +12,6 @@
          ],
          "properties": 
          {
-         
          "name": {
             "type": ["string", "null"],
             "title": "NAME"
@@ -44,8 +43,11 @@
          "field5": {
             "type": ["string", "null"],
             "title": "FIELD_5"
+         },
+         "isActive":{
+          "type": ["boolean","null"],
+            "title": "IS_ACTIVE"
          }
-
       }
    }
 }
