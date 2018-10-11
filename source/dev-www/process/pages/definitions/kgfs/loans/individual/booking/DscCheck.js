@@ -51,13 +51,6 @@ define(["perdix/domain/model/loan/LoanProcess",
                             maximum: 1,
                             order:50
                         }, {
-                            pageName: 'kgfs.customer.CBCheck',
-                            title: 'CB_CHECK',
-                            pageClass: 'cb-check',
-                            minimum: 1,
-                            maximum: 1,
-                            order:60
-                        },{
                             pageName: 'loans.individual.screening.CreditBureauView',
                             title: 'CREDIT_BUREAU',
                             pageClass: 'cbview',
@@ -152,12 +145,6 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     pageClass: 'loan-booking',
                                     model:{
                                         loanProcess: loanProcess
-                                    }
-                                });
-                                $this.bundlePages.push({
-                                    pageClass: 'cb-check',
-                                    model: {
-                                        loanAccount: loanProcess.loanAccount
                                     }
                                 });
                                 $this.bundlePages.push({

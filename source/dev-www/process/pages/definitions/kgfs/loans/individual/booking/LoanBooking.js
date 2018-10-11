@@ -45,7 +45,7 @@ define([], function () {
                     "NomineeDetails.nominees.nomineeGender",
                     "NomineeDetails.nominees.nomineeDOB",
                     "NomineeDetails.nominees.nomineeButton",
-                    "NomineeDetails.nominees.nomineeAddressSameasBorrower",
+                    // "NomineeDetails.nominees.nomineeAddressSameasBorrower",
                     "NomineeDetails.nominees.nomineeDoorNo",
                     "NomineeDetails.nominees.nomineeLocality",
                     "NomineeDetails.nominees.nomineeStreet",
@@ -124,18 +124,11 @@ define([], function () {
                                     "enumCode": "partner"
                                 },
                                 "LoanDetails.frequency": {
-                                    "enumCode": "productFrequency"
+                                    "enumCode": "loan_product_frequency"
                                 },
                                 "LoanDetails.loanProductCategory": {
                                     "orderNo": 4,
                                     "enumCode": "loan_product_category",
-                                    onChange: function (valueObj, model, context) {
-                                        console.log("Its time for place Holder");
-                                        console.log(valueObj);
-                                        console.log(model);
-                                        console.log(context);
-                                    }
-
                                 },
                                 "LoanDetails.loanProductCode": {
                                     "orderNo": 4,
@@ -162,7 +155,7 @@ define([], function () {
                                         ];
                                     },
                                     onChange: function (value, form, model) {
-                                        getProductDetails(value, model);
+                                        // getProductDetails(value, model);
                                     },
                                 },
                                 "LoanDetails.loanPurpose1": {
@@ -430,7 +423,7 @@ define([], function () {
                                             model.loanAccount.nominees[context.arrayIndex] = [];
                                         }
                                         model.loanAccount.nominees[context.arrayIndex].guardianFirstName = valueObj.name;
-                                        model.loanAccount.nominees[context.arrayIndex].guardianRelationship = valueObj.relationship;
+                                        model.loanAccount.nominees[context.arrayIndex].guardianRelationWithMinor = "Relative";
                                         model.loanAccount.nominees[context.arrayIndex].guardianGender = valueObj.gender;
                                     },
                                     getListDisplayItem: function (item, index) {
@@ -448,14 +441,13 @@ define([], function () {
                                     "type": "text"
                                 },
                                 "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianPincode": {
-                                    fieldType: "number",
                                     autolov: true,
                                     inputMap: {
                                         "district": {
                                             key: "loanAccount.nominees[].guardianDistrict"
                                         },
                                         "state": {
-                                            key: "loanAccount.nominees[]guardianState"
+                                            key: "loanAccount.nominees[].guardianState"
                                         },
                                         "pincode": {
                                             key: "loanAccount.nominees[].guardianPincode"
@@ -463,13 +455,13 @@ define([], function () {
                                     },
                                     outputMap: {
                                         "division": "loanAccount.nominees[arrayIndex].guardianLocality",
-                                        "pincode": "loanAccount.nominees[arrayIndex].guaardianPincode",
+                                        "pincode": "loanAccount.nominees[arrayIndex].guardianPincode",
                                         "district": "loanAccount.nominees[arrayIndex].guardianDistrict",
                                         "state": "loanAccount.nominees[arrayIndex].guardianState"
                                     },
                                     searchHelper: formHelper,
                                     // initialize: function(inputModel, form, model, context) {
-                                    //     inputModel.pincode = model.loanAccount.nominees[context.arrayIndex].nomineePincode;
+                                    //     inputModel.pincode = model.loanAccount.nominees[context.arrayIndex].guardianPincode;
                                     // },
                                     search: function (inputModel, form, model, context) {
                                         return Queries.searchPincodes(
@@ -498,10 +490,42 @@ define([], function () {
                                     "orderNo": 1,
                                     "readonly": true
                                 },
+                                "LoanDetails.frequency":{
+                                    "enumCode": "loan_product_frequency"
+                                },
+                                "LoanDetails.loanProductCategory": {
+                                    "enumCode": "loan_product_category",
+                                },
+                                "LoanDetails.loanType": {
+                                    "orderNo": 2,
+                                    "readonly": true,
+                                    "titleMap": [{
+                                            value: "JEWEL",
+                                            name: "Jewel Loan"
+                                        },
+                                        {
+                                            value: "SECURED",
+                                            name: "SECURED"
+                                        },
+                                        {
+                                            value: "UNSECURED",
+                                            name: "UNSECURED"
+                                        }
+                                    ]
+                                },
                                 "NomineeDetails": {
                                     "orderNo": 3,
                                     "readonly": true
                                 },
+                                "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianRelationship":{
+                                    "readonly": true,
+                                    "type": "text"
+                                },
+                                "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianGender":{
+                                    "readonly": true,
+                                    "type": "text"
+                                },
+                            
                                 "JewelDetails": {
                                     "orderNo": 2,
                                     "readonly": true,
@@ -700,12 +724,14 @@ define([], function () {
                                                     }
                                                 },
                                                 "borrowersHusbandName": {
+                                                    "orderNo":9,
                                                     "title": "HUSBAND_NAME",
                                                     "condition": "model.loanAccount.husbandOrFatherMiddleName == 'Husband'",
                                                     "type": "text",
                                                     "key": "loanAccount.husbandOrFatherFirstName",
                                                 },
                                                 "borrowersFatherName": {
+                                                    "orderNo": 9,
                                                     "title": "FATHER_NAME",
                                                     "condition": "model.loanAccount.husbandOrFatherMiddleName == 'Father'",
                                                     "type": "text",
@@ -769,8 +795,7 @@ define([], function () {
                                         {
                                             "type": "box",
                                             "title": "POST_REVIEW",
-                                            "orderNo " : 11,
-                                            "condition": "model.loanAccount.id && model.loanAccount.currentStage == 'LoanInitiation'",
+                                            condition: "model.loanAccount.id && model.loanAccount.currentStage == 'LoanInitiation'",
                                             "items": [
                                                 {
                                                     key: "review.action",
@@ -961,13 +986,14 @@ define([], function () {
                                             ]
                                         },
                                         {
-                                        "type": "actionbox",
-                                        "orderNo " :12,
-                                        "items": [{
-                                            "type": "submit",
-                                            "title": "SAVE"
-                                        }, ]
-                                    }]
+                                            "type": "actionbox",
+                                            condition: "model.loanAccount.currentStage = 'LoanInitiation'",
+                                            "items": [{
+                                                "type": "submit",
+                                                "title": "SAVE"
+                                            }, ]
+                                        }
+                                    ]
                                 }
                             };
                             var result = IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model);
