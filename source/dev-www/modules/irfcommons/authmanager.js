@@ -129,8 +129,16 @@ function(Auth, Account, $q, $log, SessionStore, irfStorageService, AuthTokenHelp
 				SessionStore.session.offline = false;
 				deferred.resolve();
 				themeswitch.changeTheme(themeswitch.getThemeColor(), true);
-			}, deferred.reject);
-		}, deferred.reject);
+			}, function(e) {
+				$log.error(e);
+				irfStorageService.clear().finally(function() {
+					deferred.reject({ 'statusText': 'Master download failed. ' + e });
+				});
+			});
+		}, function(e) {
+			$log.error(e);
+			deferred.reject({ 'statusText': 'User service failed. ' + e });
+		});
 		return deferred.promise;
 	};
 

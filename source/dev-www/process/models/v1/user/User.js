@@ -86,7 +86,7 @@ function(irfStorageService, User, PageHelper, $q, $log, Utils, SysQueries) {
             var reject = function(error) {
                 PageHelper.showProgress("all-users", "Failed to download all users", 2000);
                 $log.error(error);
-                deferred.reject();
+                deferred.reject("Failed to download all users");
             }
 
             SysQueries.query({identifier:'allusers.list', limit: 0, offset: 0, parameters: {}}).$promise.then(function(records){

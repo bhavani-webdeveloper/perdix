@@ -25,7 +25,7 @@ var fileSystem = {
 	root: null,
 	errorHandler: function(e) {
 		console.log("Storage failed");
-		console.log(e);
+		console.error(e);
 	}
 };
 
@@ -35,6 +35,13 @@ if (navigator.webkitPersistentStorage && window.requestFileSystem) {
 		window.requestFileSystem(window.PERSISTENT, grantedBytes, function(fs) {
 			console.log('Opened file system: ' + fs.name);
 			fileSystem.root = fs.root;
+			fileSystem.viewDirectory = function() {
+				var dirReader = fileSystem.root.createReader();
+				var entries = [];
+				dirReader.readEntries(function(results) {
+					console.log(results);
+				}, fileSystem.errorHandler);
+			};
 		}, fileSystem.errorHandler);
 	}, function(e) {
 		alert("Storage permission denied, Please approve storage permission for continuous access. " + e);
