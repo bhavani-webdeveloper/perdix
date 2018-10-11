@@ -124,7 +124,7 @@ define({
                     getColumns: function () {
                         return [
                             {
-                                title: 'LOAD_ID',
+                                title: 'LOAN_ID',
                                 data: 'loanId'
                             }, {
                                 title: 'ENTITY_NAME',

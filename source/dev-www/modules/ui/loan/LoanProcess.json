@@ -1569,7 +1569,7 @@
                                 "title": "STATE"
                             },
                             "nomineeGuardianRelationship": {
-                                "key": "loanAccount.nominees[].guardianRelationship",
+                                "key": "loanAccount.nominees[].guardianRelationWithMinor",
                                 "type": "select",
                                 "title": "RELATIONSHIP"
                             }
