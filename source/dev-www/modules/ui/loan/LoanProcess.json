@@ -1554,12 +1554,12 @@
                                 "key": "loanAccount.nominees[].guardianStreet",
                                 "title": "STREET"
                             },
-                            "nomineeGuardianincode": {
+                            "nomineeGuardianPincode": {
                                 "key": "loanAccount.nominees[].guardianPincode",
                                 "title": "PIN_CODE",
                                 "type": "lov"
                             },
-                            "nomineeGuardainDistrict": {
+                            "nomineeGuardianDistrict": {
                                 "key": "loanAccount.nominees[].guardianDistrict",
                                 "type": "text",
                                 "title": "DISTRICT"
@@ -1710,7 +1710,7 @@
         "title": "LOAN_DETAILS",
         "items": {
             "loanType": {
-                "orderNo": "1",
+                "orderNo": "2",
                 "title": "LOAN_TYPE",
                 "type": "select",
                 "key": "loanAccount.loanType"
@@ -1776,8 +1776,10 @@
                 "key": "loanAccount.loanPurpose3"
             },
             "centreName": {
-                "title": "CENTRE_NAME",
-                "type": "select"
+                "orderNo":"0",
+                "key": "loanAccount.loanCentre.centreId",
+                "title": "CENTRE_NAME"
+
             },
             "witnessDetails": {
                 "title": "WITNESS_DETAILS",
@@ -1826,7 +1828,7 @@
                     "ornamentDescription": {
                         "title": "ORNAMENT_DESCRIPTION",
                         "type": "text",
-                        "key": "loanAccount.ornamentAppraisals[].ornamentDescription"
+                        "key": "loanAccount.ornamentsAppraisals[].ornamentDescription"
                     },
                     "stoneDescription": {
                         "title": "STONE_DESCRIPTION",
