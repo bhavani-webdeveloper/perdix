@@ -77,12 +77,12 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 order:56
                             },
                             {
-                                pageName: 'witfin.customer.tvr',
+                                pageName: 'witfin.customer.televerification',
                                 title: 'TELE_VERIFICATION',
-                                pageClass: 'tvr',
+                                pageClass: 'televerification',
                                 minimum: 1,
                                 maximum: 1,
-                                order:57
+                                order:58
                             },
                             {
                                 pageName: 'loans.individual.screening.CBCheck',
@@ -257,7 +257,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 });
 
                                 $this.bundlePages.push({
-                                    pageClass: 'tvr',
+                                    pageClass: 'televerification',
                                     model: {
                                         enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
                                         loanProcess: loanProcess
