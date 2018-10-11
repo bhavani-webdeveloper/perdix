@@ -139,7 +139,7 @@ define({
 					},
                     getActions: function () {
                         return [{
-                            name: "LOAN_INPUT",
+                            name: "VIEW/EDIT_APPLICATION",
                             desc: "",
                             icon: "fa fa-book",
                             fn: function (item, index) {
@@ -148,7 +148,11 @@ define({
                                     'pageName': 'kgfs.loans.individual.booking.LoanInput',
                                     'pageId': item.loanId,
                                     'pageData': item
-                                });
+                                },{
+                                    'state': 'Page.Engine',
+                                    'pageName': 'kgfs.loans.individual.booking.LoanInitiationQueue'
+                                }
+                                );
                             },
                             isApplicable: function (item, model) {
                                 return true;

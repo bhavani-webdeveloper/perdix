@@ -25,17 +25,17 @@ define({
                     "type": 'object',
                     "title": 'SearchOptions',
                     "properties": {
-                        'branch': 
+                        'branch':
                         {
                             'title': "BRANCH_NAME",
                             "type": ["string", "null"],
                             "x-schema-form": {
                                 "type": "select",
                                 "screenFilter": true,
-                                "enumCode" : "branch"
+                                "enumCode": "branch"
                             }
                         },
-                        'loanType': 
+                        'loanType':
                         {
                             'title': "LOAN_TYPE",
                             "type": ["string", "null"],
@@ -44,27 +44,27 @@ define({
                                 "screenFilter": true
                             }
                         },
-                        'productName': 
+                        'productName':
                         {
                             'title': "PRODUCT_NAME",
                             "type": ["string", "null"],
                             "x-schema-form": {
                                 "type": "select",
-                                "enumCode" : "branch",
+                                "enumCode": "branch",
                                 "screenFilter": true
                             }
                         },
-                        'requestType': 
+                        'requestType':
                         {
                             'title': "REQUEST_TYPE",
                             "type": ["string", "null"],
                             "x-schema-form": {
                                 "type": "select",
-                                "enumCode" : "branch",
+                                "enumCode": "branch",
                                 "screenFilter": true
                             }
                         },
-                        "accountNumber": 
+                        "accountNumber":
                         {
                             "title": "ACCOUNT_NUMBER",
                             "type": "string"
@@ -79,11 +79,11 @@ define({
 
                 getResultsPromise: function (searchOptions, pageOpts) {
                     var promise = IndividualLoan.search({
-                        'stage': 'LoanInitiation',
+                        'stage': 'Checker2',
                         'branch': searchOptions.branch,
                         'loanType': searchOptions.loanType,
                         'productName': searchOptions.productName,
-                        'requestType' : searchOptions.requestType,
+                        'requestType': searchOptions.requestType,
                         'accountNumber': searchOptions.accountNumber,
                         'page': pageOpts.pageNo
                     }).$promise;
@@ -101,8 +101,8 @@ define({
 
                 listOptions: {
                     expandable: true,
-					listStyle: "table",
-                    itemCallback: function (item, index) {},
+                    listStyle: "table",
+                    itemCallback: function (item, index) { },
                     getItems: function (response, headers) {
                         if (response != null && response.length && response.length != 0) {
                             return response;
@@ -121,46 +121,56 @@ define({
 
                         ]
                     },
-                    getTableConfig: function() {
-						return {
-							"serverPaginate": true,
-							"paginate": true,
-							"pageLength": 10
-						};
+                    getTableConfig: function () {
+                        return {
+                            "serverPaginate": true,
+                            "paginate": true,
+                            "pageLength": 10
+                        };
                     },
-                    getColumns: function() {
-						return [{
-							title: 'ACCOUNT_NUMBER',
-							data: 'accountNumber'
-						}, {
-                            title: 'PRODUCT_TYPE',
-                            data: 'productCode'
-                        }, {
-							title: 'APPLICATION_DATE',
-							data: 'applicationDate'
-						}, 
-                    ]
-					},
+                    getColumns: function () {
+                        return [
+                            {
+                                title: 'LOAD_ID',
+                                data: 'loanId'
+                            }, {
+                                title: 'ENTITY_NAME',
+                                data: 'customerName'
+                            },
+                            {
+                                title: 'ACCOUNT_NUMBER',
+                                data: 'accountNumber'
+                            }, {
+                                title: 'PRODUCT_TYPE',
+                                data: 'productCode'
+                            }, {
+                                title: 'APPLICATION_DATE',
+                                data: 'applicationDate'
+                            },
+                        ]
+                    },
                     getActions: function () {
                         return [
                             {
-                            name: "LOAN_INPUT",
-                            desc: "",
-                            icon: "fa fa-book",
-                            fn: function (item, index) 
-                            {
-                                irfNavigator.go({
-                                    'state': 'Page.Bundle',
-                                    'pageName': 'kgfs.loans.individual.booking.Checker2',
-                                    'pageId': item.loanId,
-                                    'pageData': item
-                                });
-                            },
-                            isApplicable: function (item, model) 
-                            {
-                                return true;
-                            }
-                        }];
+                                name: "CHECKER_2",
+                                desc: "",
+                                icon: "fa fa-book",
+                                fn: function (item, index) {
+                                    irfNavigator.go({
+                                        'state': 'Page.Bundle',
+                                        'pageName': 'kgfs.loans.individual.booking.Checker2',
+                                        'pageId': item.loanId,
+                                        'pageData': item
+                                    },{
+                                        'state': 'Page.Engine',
+                                        'pageName': 'kgfs.loans.individual.booking.Checker2Queue',
+                                    }
+                                    );
+                                },
+                                isApplicable: function (item, model) {
+                                    return true;
+                                }
+                            }];
                     }
                 }
             }

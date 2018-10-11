@@ -31,7 +31,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             pageName: 'kgfs.customer.IndividualEnrollment',
                             title: 'CO_APPLICANT',
                             pageClass: 'co-applicant',
-                            minimum: 0,
+                            minimum: 1,
                             maximum: 5,
                             order:20
                         },
@@ -39,7 +39,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             pageName: 'kgfs.customer.IndividualEnrollment',
                             title: 'GUARANTOR',
                             pageClass: 'guarantor',
-                            minimum: 0,
+                            minimum: 1,
                             maximum: 3,
                             order:30
                         },
@@ -57,7 +57,15 @@ define(["perdix/domain/model/loan/LoanProcess",
                             minimum: 1,
                             maximum: 1,
                             order:60
+                        },{
+                            pageName: 'loans.individual.screening.CreditBureauView',
+                            title: 'CREDIT_BUREAU',
+                            pageClass: 'cbview',
+                            minimum: 1,
+                            maximum: 1,
+                            order:70
                         },
+                        
                         {
                             pageName: 'kgfs.loans.individual.booking.Dsc',
                             title: 'DSC',
@@ -84,7 +92,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                 },
                 "pre_pages_initialize": function(bundleModel){
                     $log.info("Inside pre_page_initialize");
-                    bundleModel.currentStage = "LoanInitiation";
+                    bundleModel.currentStage = "DSCOverride";
                     var deferred = $q.defer();
 
                     var $this = this;
@@ -103,7 +111,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         loanProcess.loanAccount.leadId = _leadId;
 
                                     }
-                                // if (loanAccount.loanAccount.currentStage != 'LoanInitiation'){
+                                // if (loanAccount.loanAccount.currentStage != 'DSCOverride'){
                                 //     PageHelper.showProgress('load-loan', 'Loan Application is in different Stage', 2000);
                                 //    // irfNavigator.goBack();
                                 //     return;
@@ -122,6 +130,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         $this.bundlePages.push({
                                             pageClass: 'co-applicant',
                                             model: {
+                                                enrolmentProcess: loanProcess.coApplicantsEnrolmentProcesses[i],
                                                 loanRelation: loanAccount.coApplicantsEnrolmentProcesses[i]
                                             }
                                         });
@@ -132,6 +141,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         $this.bundlePages.push({
                                             pageClass: 'guarantor',
                                             model: {
+                                                enrolmentProcess: loanProcess.guarantorsEnrolmentProcesses[i],
                                                 loanRelation: loanAccount.guarantorsEnrolmentProcesses[i]
                                             }
                                         });
@@ -152,6 +162,12 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 });
                                 $this.bundlePages.push({
                                     pageClass: 'dsc-check',
+                                    model: {
+                                        loanAccount: loanProcess.loanAccount
+                                    }
+                                });
+                                $this.bundlePages.push({
+                                    pageClass: 'cbview',
                                     model: {
                                         loanAccount: loanProcess.loanAccount
                                     }
@@ -195,7 +211,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                         BundleManager.broadcastEvent("test-listener", {name: "SHAHAL AGAIN"});
                     },
                     "customer-loaded": function(pageObj, bundleModel, params){
-                        console.log("custome rloaded :: " + params.customer.firstName);
+                        console.log("customer reloaded :: " + params.customer.firstName);
                         if (pageObj.pageClass =='applicant'){
                             BundleManager.broadcastEvent("applicant-updated", params.customer);
                         }
