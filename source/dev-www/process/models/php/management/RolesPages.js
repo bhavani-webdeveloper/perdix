@@ -58,7 +58,9 @@ function(irfStorageService, $q, RolesPages) {
             }
             irfStorageService.setMaster("roles", {"data":rolesTitleMap});
             deferred.resolve();
-        }, deferred.reject);
+        }, function() {
+            deferred.reject("Role sevice failed");
+        });
         return deferred.promise;
     });
 }]);
