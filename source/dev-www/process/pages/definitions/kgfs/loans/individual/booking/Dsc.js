@@ -243,15 +243,12 @@ define([], function () {
                                         readonly: true,
                                         type: "string",
 
+                                    },{
+                                            title: "DSC_STATUS",
+                                            key: "model.customer.dscStatus",
+                                            readonly: true,
+                                            type: "string",
                                     },
-
-                                    {
-                                        "type": "button",
-                                        "condition" : "model.customer.loanId",  
-                                        "title": "DSC_REQUEST",
-                                        "onClick": "actions.getDscDetails(model.loanAccount.id)"
-                                    },
-                                    
                                     {
                                         key: "customer.coapplicants",
                                         type: "array",
@@ -268,11 +265,10 @@ define([], function () {
                                             type: "string"
                                         },
                                         {
-                                            "type": "button",
-                                            "condition": "model.customer.loanSaved",
-                                            "title": "DSC_REQUEST",
-                                            "onClick": "action.getDscDetails(model)"
-
+                                            title: "DSC_STATUS",
+                                            key: "model.customer.dscStatus ",
+                                            readonly: true,
+                                            type: "string",
                                         },
                                         ]
                                     },
@@ -292,40 +288,16 @@ define([], function () {
                                             type: "string"
                                         },
                                         {
-                                            "type": "button",
-                                            "condition": "model.customer.loanSaved",
-                                            "title": "DSC_REQUEST",
-                                            "onClick" : "action.getDscDetails(model)"
+                                            title: "DSC_STATUS",
+                                            key: "model.customer.dscStatus",
+                                            readonly: true,
+                                            type: "string",
                                         },
                                         ]
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        "type": "box",
-                        "condition" : "model.loanAccount.currentStage === 'LoanInitiation'",
-                        "items": [
-                            {
-                                "type": "fieldset",
-                                "title": "DSC_STATUS",
-                                "items": [
-                                    {
-                                        key: "customer.applicantname",
-                                        title: "ApplicantName",
-                                        readonly: true,
-                                        type: "string",
                                     },
-                                    {
-                                        title: "DSC_STATUS",
-                                        key: "model.customer.dscStatus",
-                                        readonly: true,
-                                        type: "string",
-                                    },
-                                    
                                     {
                                         "type": "section",
+                                        "condition" : "model.loanAccount.currentStage == 'DSCOverride'",
                                         items: [
                                             {
                                                 title: "REMARKS",
@@ -341,20 +313,10 @@ define([], function () {
                                         ]
                                     },
                                     {
-                                        "key": "group.jlgGroupMembers[].getDSCData",
                                         "type": "button",
-                                        "title": "VIEW_DSC_RESPONSE",
-                                        "icon": "fa fa-eye",
-                                        "style": "btn-primary",
-                                        // "condition": "model.group.jlgGroupMembers[arrayIndex].dscStatus=='DSC_OVERRIDE_REQUIRED'",
-                                        "onClick": function (model, formCtrl, form, event) {
-                                            console.log(form);
-                                            console.warn(event);
-                                            //var i = event['arrayIndex'];
-                                            //console.warn("dscid :" + model.group.jlgGroupMembers[i].dscId);
-                                            var dscId = model.group.jlgGroupMembers[i].dscId;
-                                            showDscData(dscId);
-                                        }
+                                        "condition" : "model.customer.loanSaved && model.loanAccount.currentStage == 'LoanInitiation' ",  
+                                        "title": "DSC_REQUEST",
+                                        "onClick": "actions.getDscDetails(model.loanAccount.id)"
                                     },
                                 ]
                             }
@@ -391,15 +353,14 @@ define([], function () {
                     },
                     getDscDetails: function (loanid) {
                         PageHelper.showLoader();
-                        PageHelper.clearErrors();
-                        console.log("model ****from DSCC model1");
-                        console.log(model);
+                        PageHelper.clearErrors();   
                         IndividualLoan.individualLoanDsc({ loanId:loanid
                         },{},function(res) {
                             $log.info(res);
-                            PageHelper.hideLoader();
-                            model.customer = _cloneDeep(res);       
+                            PageHelper.hideLoader();       
                             irfProgressMessage.pop("dsc-check", "Dsccheck Succeeded", 2000);
+                            model.loanAccount.dscStatus =  res.dscStatus;
+                            BundleManager.broadcastEvent('dsc_status',model);    
 
                         },function(res) {
                             $log.error(res);

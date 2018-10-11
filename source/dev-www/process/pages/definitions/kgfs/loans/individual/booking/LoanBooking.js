@@ -480,7 +480,7 @@ define([], function () {
                                 }
                             }
                         },
-                        "DSC": {
+                        "DSCOverride":{
 
                         },
                         "DocumentUpload": {
@@ -556,12 +556,50 @@ define([], function () {
                     model.loanAccount = model.loanProcess.loanAccount;
                     model.loanAccount.bcAccount = {};
                     model.loanAccount.processType = "1";
-                    if (typeof model.loanAccount.customerId != "undefined") {
+                    model.loanAccount.remarksHistory = null;
+                    if(typeof model.loanAccount.customerId !="undefined"){
                         $q.when(Enrollment.get({
                             'id': model.loanAccount.customerId
                         })).then(function (resp) {
                             model.customer = resp;
                         })
+                    }
+                    if( model.loanAccount && model.loanAccount.id){
+                        PageHelper.showLoader();
+                        IndividualLoan.loanRemarksSummary({id: model.loanAccount.id}).$promise.then(function (resp){
+                            model.loanAccount.remarksHistory = resp;
+
+                            console.log("resposne for CheckerHistory");
+                            console.log(model);  
+                            // if (_.isArray(model.loanSummary) && model.loanSummary.length > 0) {
+                            //     var lastEntry = model.loanSummary[model.loanSummary.length - 1];
+                            //     var aTime = new moment(lastEntry.createdDate);
+                            //     var bTime = new moment();
+                            //     model.minutesInCurrentStage = Utils.millisecondsToStr( Math.abs(bTime.diff(aTime)) );
+        
+        
+                            //     var currentStage = _.findLastKey(model.loanSummary, {'action': 'PROCEED' });
+                            //     if(model.currentStage == 'loanView') {
+                            //         model.loanSummary[currentStage].hideCreateConversation = true;
+                            //     }
+        
+                            //     model.loanSummary[currentStage].isCurrentStage = true;
+                            //     model.loanSummary[currentStage]._conversationExpand = true;	
+        
+                            //     Messaging.getConversationStatus({
+                            //         'process_id': model.loanAccount.id
+                            //     }).$promise.then(function(response) {
+                            //         model.conversationStatus = response.body;
+        
+                            //         for(var i = 0; i < model.loanSummary.length; i++) {
+                            //             if(model.loanSummary[i].action == 'PROCEED' && (_.find(model.conversationStatus, {'sub_process_id': model.loanSummary[i].id}) || model.loanSummary[i].isCurrentStage)) {
+                            //                 model.loanSummary[i].conversationStatus =  true;
+                            //             }
+                            //         }
+                            //     });
+                            // }				
+                        }).finally(PageHelper.hideLoader);
+
                     }
                     // model.loanAccount.nominees = [];
                     // model.loanAccount.nominees[0] ={};
@@ -655,6 +693,7 @@ define([], function () {
                                 "options": {
                                     "repositoryAdditions": {
                                         "LoanDetails": {
+                                            "orderNo" : 7,
                                             "items": {
                                                 "borrowers": {
                                                     "title": "BORROWERS",
@@ -731,6 +770,28 @@ define([], function () {
 
                                     },
                                     "additions": [
+                                        {
+                                            "title": "REMARKS_HISTORY",
+                                            "type": "box",
+                                            "orderNo" : 10, 
+                                            condition: "model.loanAccount.remarksHistory && model.loanAccount.remarksHistory.length > 0",
+                                            "items": [
+                                                {
+                                                "key": "loanAccount.remarksHistory",
+                                                "type": "array",
+                                                "view": "fixed",
+                                                add: null,
+                                                remove: null,
+                                                "items": [{
+                                                    "type": "section",
+                                                    "htmlClass": "",
+                                                    "html": '<i class="fa fa-user text-gray">&nbsp;</i> {{model.loanAccount.remarksHistory[arrayIndex].userId}}\
+                                                    <br><i class="fa fa-clock-o text-gray">&nbsp;</i> {{model.loanAccount.remarksHistory[arrayIndex].createdDate}}\
+                                                    <br><i class="fa fa-commenting text-gray">&nbsp;</i> <strong>{{model.loanAccount.remarksHistory[arrayIndex].remarks}}</strong>\
+                                                    <br><i class="fa fa-pencil-square-o text-gray">&nbsp;</i>{{model.loanAccount.remarksHistory[arrayIndex].stage}}-{{model.loanAccount.remarksHistory[arrayIndex].action}}<br>'
+                                                }]
+                                            }]
+                                        },
                                         {
                                             "type": "box",
                                             "title": "POST_REVIEW",
@@ -998,7 +1059,27 @@ define([], function () {
                         }
                     }
                 },
-                form: [],
+                form: [
+                    {
+                    "title": "REMARKS_HISTORY",
+                    "type": "box",
+                    condition: "model.loanAccount.remarksHistory && model.loanAccount.remarksHistory.length > 0",
+                    "items": [{
+                        "key": "loanAccount.remarksHistory",
+                        "type": "array",
+                        "view": "fixed",
+                        add: null,
+                        remove: null,
+                        "items": [{
+                            "type": "section",
+                            "htmlClass": "",
+                            "html": '<i class="fa fa-user text-gray">&nbsp;</i> {{model.loanAccount.remarksHistory[arrayIndex].updatedBy}}\
+                            <br><i class="fa fa-clock-o text-gray">&nbsp;</i> {{model.loanAccount.remarksHistory[arrayIndex].updatedOn}}\
+                            <br><i class="fa fa-commenting text-gray">&nbsp;</i> <strong>{{model.loanAccount.remarksHistory[arrayIndex].remarks}}</strong>\
+                            <br><i class="fa fa-pencil-square-o text-gray">&nbsp;</i>{{model.loanAccount.remarksHistory[arrayIndex].stage}}-{{model.loanAccount.remarksHistory[arrayIndex].action}}<br>'
+                        }]
+                    }]
+                },],
                 schema: function () {
                     console.log("First thing to excecute I guess");
                     return SchemaResource.getLoanAccountSchema().$promise;

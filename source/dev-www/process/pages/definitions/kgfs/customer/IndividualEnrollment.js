@@ -33,17 +33,20 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                             PageHelper.showProgress("pre-save-validation", "Self Relationship is Mandatory", 5000);
                             return false;
                         }
-                    } else {
+                    } 
+                    else {
                         PageHelper.showProgress("pre-save-validation", "Family Members section is missing. Self Relationship is Mandatory", 5000);
                         return false;
                     }
-                    return true;
+                    
                 }
+            
+            
 
-                var configFile = function () {
+                var configFile = function(){
                     return {
                         "loanProcess.loanAccount.currentStage": {
-                            "dscOverride" : {
+                            "DSCOverride" : {
                                 "overrides" : {
                                     "KYC" : {
                                         "readonly" : true
@@ -69,6 +72,23 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                                     "IndividualReferences":{
                                         "readonly" : true
                                     },
+                                }
+                            },
+                            "LoanInitiation" : {
+                                "overrides":{
+                                    "LoanDetails":{
+                                        "orderNo": 1,
+                                        "readonly":true
+                                    },
+                                    "NomineeDetails":{
+                                        "orderNo": 2,
+                                        "readonly":true 
+                                    },
+                                    "JewelDetais":{
+                                        "orderNo": 3,
+                                        "readonly":true,
+                                        "condition": "model.loanAccount.loanType == 'JEWEL'"
+                                    }
                                 }
                             },
                             "KYC": {
@@ -1199,7 +1219,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                         }
                     }
                 }
-
+        
                 var overridesFields = function (bundlePageObj) {
                     return {
 
@@ -1521,11 +1541,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                         "ContactInformation.mailingDistrict",
                         "ContactInformation.mailingState",
 
-                        "IndividualFinancials",
-                        "IndividualFinancials.expenditures",
-                        "IndividualFinancials.expenditures.expenditureSource",
-                        "IndividualFinancials.expenditures.annualExpenses",
-                        "IndividualFinancials.expenditures.frequency",
                         // if(model.pageClass == "guarantor" || model.pageClass == "co-applicacnt"){}
                         "FamilyDetails",
                         "FamilyDetails.familyMembers",
@@ -1555,18 +1570,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                         "Liabilities.liabilities.liabilityLoanPurpose",
                         "Liabilities.liabilities.interestOnly",
                         "Liabilities.liabilities.interestRate",
-
-                        "HouseVerification",
-                        "HouseVerification.houseDetailsFieldSet",
-                        "HouseVerification.ownership",
-                        "HouseVerification.inCurrentAddressSince",
-                        "HouseVerification.inCurrentAreaSince",
-                        "HouseVerification.latitude",
-                        "HouseVerification.houseVerificationPhoto",
-                        "HouseVerification.date",
-                        "HouseVerification.place",
-                        "HouseVerification.rentLeaseStatus",
-                        "HouseVerification.rentLeaseAgreement",
 
                         "BankAccounts",
                         "BankAccounts.customerBankAccounts",
@@ -1606,19 +1609,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                         "PhysicalAssets.financialAssets.frequencyOfDeposite",
                         "PhysicalAssets.financialAssets.startDate",
                         "PhysicalAssets.financialAssets.maturityDate",
-
-                        "IndividualReferences",
-                        "IndividualReferences.verifications",
-                        "IndividualReferences.verifications.referenceFirstName",
-                        "IndividualReferences.verifications.mobileNo",
-                        "IndividualReferences.verifications.occupation",
-                        "IndividualReferences.verifications.address",
-                        "IndividualReferences.verifications.ReferenceCheck",
-                        "IndividualReferences.verifications.ReferenceCheck.knownSince",
-                        "IndividualReferences.verifications.ReferenceCheck.relationship",
-                        "IndividualReferences.verifications.ReferenceCheck.opinion",
-                        "IndividualReferences.verifications.ReferenceCheck.financialStatus",
-                        "IndividualReferences.verifications.ReferenceCheck.customerResponse"
                     ];
 
                 }
