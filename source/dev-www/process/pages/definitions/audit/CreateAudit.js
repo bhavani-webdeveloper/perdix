@@ -1,5 +1,5 @@
-irf.pageCollection.factory(irf.page("audit.CreateAudit"), ["$log", "PageHelper", "Audit", "$stateParams", "irfNavigator", "SessionStore",
-    function($log, PageHelper, Audit, $stateParams, irfNavigator, SessionStore) {
+irf.pageCollection.factory(irf.page("audit.CreateAudit"), ["$log", "PageHelper", "Audit", "formHelper", "irfNavigator", "SessionStore",
+    function($log, PageHelper, Audit, formHelper, irfNavigator, SessionStore) {
         var branch = SessionStore.getBranch();
         return {
             "type": "schema-form",
@@ -7,10 +7,19 @@ irf.pageCollection.factory(irf.page("audit.CreateAudit"), ["$log", "PageHelper",
             initialize: function(model, form, formCtrl) {
                 var self = this;
                 model.audit_info = model.audit_info || {};
-                model.branchName = SessionStore.getBranch();
+                model.audit_info.branch_id = SessionStore.getCurrentBranch().branchId;
+                var bankName = SessionStore.getBankName();
+                var banks = formHelper.enum('bank').data;
+                for (var i = 0; i < banks.length; i++) {
+                    if (banks[i].name == bankName) {
+                        model.audit_info.bankId = banks[i].value;
+                    }
+                }
+                var userRole = SessionStore.getUserRole();
+                if (userRole && userRole.accessLevel && userRole.accessLevel === 5) {
+                    model.fullAccess = true;
+                }
                 model.audit_info.auditor_id = SessionStore.getLoginname();
-                var master = Audit.offline.getAuditMaster();
-                var auditTypeValue = [];
                 self.form = [];
                 var init = function() {
                     self.form = [{
@@ -22,8 +31,17 @@ irf.pageCollection.factory(irf.page("audit.CreateAudit"), ["$log", "PageHelper",
                             "title": "AUDITOR_ID",
                             "readonly": true
                         }, {
+                            "key": "audit_info.bankId",
+                            "readonly": true,
+                            "condition": "!model.fullAccess"
+                        }, {
+                            "key": "audit_info.bankId",
+                            "condition": "model.fullAccess"
+                        }, {
                             "key": "audit_info.branch_id",
                             "type": "select",
+                            "parentEnumCode": "bank",
+                            "parentValueExpr": "model.audit_info.bankId"
                         }, {
                             "key": "audit_info.audit_type",
                             "type": "select",
@@ -65,6 +83,14 @@ irf.pageCollection.factory(irf.page("audit.CreateAudit"), ["$log", "PageHelper",
                             "auditor_id": {
                                 "title": "AUDITOR_ID",
                                 "type": "string",
+                            },
+                            "bankId": {
+                                "title": "BANK_NAME",
+                                "type": ["integer", "null"],
+                                "enumCode": "bank",	
+                                "x-schema-form": {
+                                    "type": "select"
+                                }
                             },
                             "branch_id": {
                                 "title": "BRANCH_NAME",
