@@ -274,6 +274,13 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 });
 
+                               $this.bundlePages.push({
+                                    pageClass: 'cb-check',
+                                    model: {
+                                        loanAccount: loanProcess.loanAccount
+                                    }
+                                });
+
                                 deferred.resolve();
 
                             });

@@ -1554,12 +1554,12 @@
                                 "key": "loanAccount.nominees[].guardianStreet",
                                 "title": "STREET"
                             },
-                            "nomineeGuardianincode": {
+                            "nomineeGuardianPincode": {
                                 "key": "loanAccount.nominees[].guardianPincode",
                                 "title": "PIN_CODE",
                                 "type": "lov"
                             },
-                            "nomineeGuardainDistrict": {
+                            "nomineeGuardianDistrict": {
                                 "key": "loanAccount.nominees[].guardianDistrict",
                                 "type": "text",
                                 "title": "DISTRICT"
@@ -1569,7 +1569,7 @@
                                 "title": "STATE"
                             },
                             "nomineeGuardianRelationship": {
-                                "key": "loanAccount.nominees[].guardianRelationship",
+                                "key": "loanAccount.nominees[].guardianRelationWithMinor",
                                 "type": "select",
                                 "title": "RELATIONSHIP"
                             }
@@ -1710,63 +1710,76 @@
         "title": "LOAN_DETAILS",
         "items": {
             "loanType": {
+                "orderNo": "2",
                 "title": "LOAN_TYPE",
                 "type": "select",
                 "key": "loanAccount.loanType"
             },
             "partner": {
+                "orderNo": "2",
                 "title": "PARTNER",
                 "type": "select",
                 "key": "loanAccount.partnerCode"
             },
             "frequency": {
+                "orderNo": "3",
                 "title": "FREQUENCY",
                 "type": "select",
                 "key": "loanAccount.frequency"
 
             },
             "loanProductCategory": {
+                "orderNo": "4",
                 "title": "LOAN_PRODUCTS",
                 "type": "select",
                 "key": "loanAccount.productCategory"
             },
             "loanProductCode":{
+                "orderNo": "5",
                 "title": "LOAN_PRODUCT_CODE",
                 "type": "lov",
                 "key": "loanAccount.productCode"
             },
             "loanApplicationDate": {
+                "orderNo": "6",
                 "title": "LOAN_APPLICATION_DATE",
                 "type": "date",
                 "key": "loanAccount.loanApplicationDate"
             },
             "loanAmountRequested": {
+                "orderNo": "7",
                 "title": "LOAN_AMOUNT_REQUESTED",
-                "key": "loanAccount.loanAmountRequested"
+                "key": "loanAccount.loanAmount"
             },
             "requestedTenure": {
+                "orderNo": "8",
                 "title": "REQUESTED_TENURE",
                 "type": "numeric",
-                "key": "loanAccount.test"
+                "key": "loanAccount.tenure"
             },
             "loanPurpose1": {
+                "orderNo": "9",
                 "title": "LOAN_PURPOSE_1",
                 "type": "select",
                 "key": "loanAccount.loanPurpose1"
             },
             "loanPurpose2": {
+                "orderNo": "10",
                 "title": "LOAN_PURPOSE_2",
                 "type": "select",
                 "key": "loanAccount.loanPurpose2"
             },
             "loanPurpose3": {
+                "orderNo": "11",
                 "title": "LOAN_PURPOSE_3",
                 "type": "select",
                 "key": "loanAccount.loanPurpose3"
             },
             "centreName": {
-                "title": "CENTRE_NAME",
-                "type": "select"
+                "orderNo":"0",
+                "key": "loanAccount.loanCentre.centreId",
+                "title": "CENTRE_NAME"
+
             },
             "witnessDetails": {
                 "title": "WITNESS_DETAILS",
@@ -1774,10 +1787,9 @@
                 "add": null,
                 "remove": null,
                 "view": "fixed",
-                "key": "loanAccount.witnessDetails",
                 "items": {
                     "witnessFirstName": {
-                        "key": "loanAccount.witnessDetails[].witnessFirstName",
+                        "key": "loanAccount.witnessFirstName",
                         "type": "lov",
                         "title": "FIRST_NAME"
                     },
@@ -1788,7 +1800,7 @@
                         "readonly": true
                     },
                     "witnessRelationship": {
-                        "key": "loanAccount.witnessDetails[].witnessRelationship",
+                        "key": "loanAccount.witnessRelationship",
                         "type": "text",
                         "title": "RELATIONSHIP",
                         "readonly": true
@@ -1811,42 +1823,38 @@
             "ornamentDetails": {
                 "type": "array",
                 "title": "ORNAMENT_DETAILS",
-                "key": "loanAccount.ornamentAppraisal",
+                "key": "loanAccount.ornamentsAppraisals",
                 "items": {
                     "ornamentDescription": {
                         "title": "ORNAMENT_DESCRIPTION",
                         "type": "text",
-                        "key": "loanAccount.ornamentAppraisal[].ornamentDescription"
+                        "key": "loanAccount.ornamentsAppraisals[].ornamentDescription"
                     },
                     "stoneDescription": {
                         "title": "STONE_DESCRIPTION",
                         "type": "text",
-                        "key": "loanAccount.ornamentAppraisal[].stoneDescription"
+                        "key": "loanAccount.ornamentsAppraisals[].stoneDescription"
                     },
                     "jewelDefects": {
                         "title": "JEWEL_DEFECTS",
                         "type": "text",
-                        "key": "loanAccount.ornamentAppraisal[].jewelDefects"
+                        "key": "loanAccount.ornamentsAppraisals[].jewelDefects"
                     },
                     "noOfArticles": {
                         "title": "NO_OF_ARTICLES",
-                        "type": "numeric",
-                        "key": "loanAccount.ornamentAppraisal[].noOfArticles"
+                        "key": "loanAccount.ornamentsAppraisals[].noOfArticles"
                     },
                     "grossWeight": {
                         "title": "GROSS_WEIGHT",
-                        "type": "numeric",
-                        "key": "loanAccount.ornamentAppraisal[].grossWeightInGrams"
+                        "key": "loanAccount.ornamentsAppraisals[].grossWeightInGrams"
                     },
                     "netWeight": {
                         "title": "NET_WEIGHT",
-                        "type": "numeric",
-                        "key": "loanAccount.ornamentAppraisal[].netWeightInGrams"
+                        "key": "loanAccount.ornamentsAppraisals[].netWeightInGrams"
                     },
                     "carat": {
                         "title": "CARAT",
-                        "type": "numeric",
-                        "key": "loanAccount.ornamentAppraisal[].qualityInCarats"
+                        "key": "loanAccount.ornamentsAppraisals[].qualityInCarats"
                     },
                     "rate": {
                         "title": "RATE",

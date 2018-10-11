@@ -69,7 +69,7 @@ function($resource,$httpParamSerializer,BASE_URL, $q, SessionStore, formHelper, 
             if (response && response.length>=0) {
                 var centres = [];
                 for (var i = 0; i < response.length; i++) {
-                    if (response[i].employee == userId) {
+                    if (response[i].employee == userId && response[i].status != 'INACTIVE') {
                         centres.push(_.clone(response[i]));
                     }
                 };

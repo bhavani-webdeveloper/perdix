@@ -28,7 +28,9 @@ define([], function () {
                 return [];
             }
             var configFile = function (model) {
-                return []
+                return [
+                    
+                ]
             }
             var overridesFields = function (model) {
                 return {};
@@ -48,6 +50,7 @@ define([], function () {
                     model.customer.guarantors = model.customer.guarantors || [];
                     model.customer.loanSaved = false;
                     model.customer.cbcheckdone = false;
+                    model.customer.dscOverrideRemarks = null;
 
                     if (_.hasIn(model, "loanProcess")) {
                         var lp = model.loanProcess;
@@ -79,6 +82,8 @@ define([], function () {
                             for (var i = model.loanAccount.loanCustomerRelations.length - 1; i >= 0; i--) {
                                 if (model.loanAccount.loanCustomerRelations[i].relation == 'Applicant') {
                                     PageHelper.showLoader();
+                                    console.log("Model fromDSCCC");
+                                    console.log(model);
                                     Enrollment.getCustomerById({ id: model.loanAccount.loanCustomerRelations[i].customerId })
                                         .$promise
                                         .then(function (res) {
@@ -199,6 +204,8 @@ define([], function () {
                             model.customer.guarantors[i].loanAmount = params.loanAccount.loanAmountRequested;
                             model.customer.guarantors[i].loanPurpose1 = params.loanAccount.loanPurpose1;
                         }
+                        console.log("model ****from DSCC model2 ");
+                        console.log(model);
                     },
                     "remove-customer-relation": function (bundleModel, model, enrolmentDetails) {
                         $log.info("Inside remove-customer-relation of CBCheck");
@@ -236,12 +243,11 @@ define([], function () {
                                         readonly: true,
                                         type: "string",
 
-                                    },
-                                    {
-                                        "type": "button",
-                                        "condition" : "model.customer.loanId",  
-                                        "title": "DSC_REQUEST",
-                                        "onClick": "actions.getDscDetails(model)"
+                                    },{
+                                            title: "DSC_STATUS",
+                                            key: "model.customer.dscStatus",
+                                            readonly: true,
+                                            type: "string",
                                     },
                                     {
                                         key: "customer.coapplicants",
@@ -259,11 +265,10 @@ define([], function () {
                                             type: "string"
                                         },
                                         {
-                                            "type": "button",
-                                            "condition": "model.customer.loanSaved",
-                                            "title": "DSC_REQUEST",
-                                            "onClick": "action.getDscDetails(model)"
-
+                                            title: "DSC_STATUS",
+                                            key: "model.customer.dscStatus ",
+                                            readonly: true,
+                                            type: "string",
                                         },
                                         ]
                                     },
@@ -283,31 +288,79 @@ define([], function () {
                                             type: "string"
                                         },
                                         {
-                                            "type": "button",
-                                            "condition": "model.customer.loanSaved",
-                                            "title": "DSC_REQUESTs"
+                                            title: "DSC_STATUS",
+                                            key: "model.customer.dscStatus",
+                                            readonly: true,
+                                            type: "string",
                                         },
                                         ]
-                                    }
+                                    },
+                                    {
+                                        "type": "section",
+                                        "condition" : "model.loanAccount.currentStage == 'DSCOverride'",
+                                        items: [
+                                            {
+                                                title: "REMARKS",
+                                                key: "customer.dscOverrideRemarks",
+                                                type: "textarea",
+                                                required: true
+                                            },
+                                            {
+                                                "title": "DSC_OVERRIDE",
+                                                "type": "button",
+                                                "onClick": "actions.doDscOverride(model)"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "button",
+                                        "condition" : "model.customer.loanSaved && model.loanAccount.currentStage == 'LoanInitiation' ",  
+                                        "title": "DSC_REQUEST",
+                                        "onClick": "actions.getDscDetails(model.loanAccount.id)"
+                                    },
                                 ]
                             }
                         ]
-                    }
+                    },
                 ],
                 schema: function () {
                     console.log("First thing to excecute I guess");
                     return SchemaResource.getLoanAccountSchema().$promise;
                 },
                 actions: {
-                    getDscDetails: function (model) {
+                    doDscOverride: function (model) {
+                        if (model.customer.dscOverrideRemarks) {
+                            irfProgressMessage.pop("dsc-override", "Performing DSC Override");
+                            IndividualLoan.overrideDsc({
+                                customerId: model.loanAccount.customerId,
+                                loanId: model.loanAccount.id,
+                                remarks: model.customer.dscOverrideRemarks,
+                                action: 'approve'
+                            }, {}, function (resp, headers) {
+                                $log.info(resp);
+                                PageHelper.hideLoader();
+                                irfProgressMessage.pop("dsc-override", "Override Succeeded", 2000);
+                                //irfNavigator.goBack();
+                            }, function (resp) {
+                                $log.error(resp);
+                                PageHelper.hideLoader();
+                                irfProgressMessage.pop("dsc-override", "An error occurred. Please Try Again", 2000);
+                                PageHelper.showErrors(resp);
+                            });
+                        } else {
+                            PageHelper.hideLoader();
+                        }
+                    },
+                    getDscDetails: function (loanid) {
                         PageHelper.showLoader();
-                        PageHelper.clearErrors();
-                        IndividualLoan.individualLoanDsc({ loanId: model.loanAccount.id 
+                        PageHelper.clearErrors();   
+                        IndividualLoan.individualLoanDsc({ loanId:loanid
                         },{},function(res) {
                             $log.info(res);
-                            PageHelper.hideLoader();
-                            model.customer = _cloneDeep(res);       
+                            PageHelper.hideLoader();       
                             irfProgressMessage.pop("dsc-check", "Dsccheck Succeeded", 2000);
+                            model.loanAccount.dscStatus =  res.dscStatus;
+                            BundleManager.broadcastEvent('dsc_status',model);    
 
                         },function(res) {
                             $log.error(res);

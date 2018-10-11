@@ -57,15 +57,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             pageClass: 'dsc-check',
                             minimum: 1,
                             maximum: 1,
-                            order:60
-                        },
-                        {
-                            pageName: 'kgfs.loans.individual.booking.DscOverride',
-                            title: 'DSC_OVERRIDE',
-                            pageClass: 'dsc-override',
-                            minimum: 1,
-                            maximum: 1,
-                            order:60
+                            order:70
                         },
                         {
                             pageName: 'kgfs.customer.CBCheck',
@@ -73,16 +65,16 @@ define(["perdix/domain/model/loan/LoanProcess",
                             pageClass: 'cb-check',
                             minimum: 1,
                             maximum: 1,
-                            order:70
+                            order:60
                         },
-                        {
-                            pageName: 'kgfs.loans.individual.booking.DocumentUpload',
-                            title: 'DOCUMENT_UPLOAD',
-                            pageClass: 'document-upload',
-                            minimum: 1,
-                            maximum: 1,
-                            order:80
-                        }
+                        // {
+                        //     pageName: 'kgfs.loans.individual.booking.DocumentUpload',
+                        //     title: 'DOCUMENT_UPLOAD',
+                        //     pageClass: 'document-upload',
+                        //     minimum: 1,
+                        //     maximum: 1,
+                        //     order:80
+                        // }
                         
                         
                     ]);
@@ -153,11 +145,11 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         loanProcess.loanAccount.leadId = _leadId;
 
                                     }
-                                if (loanAccount.loanAccount.currentStage != 'LoanInitiation'){
-                                    PageHelper.showProgress('load-loan', 'Loan Application is in different Stage', 2000);
-                                    irfNavigator.goBack();
-                                    return;
-                                }
+                                // if (loanAccount.loanAccount.currentStage != 'LoanInitiation'){
+                                //     PageHelper.showProgress('load-loan', 'Loan Application is in different Stage', 2000);
+                                //     irfNavigator.goBack();
+                                //     return;
+                                // }
 
                                 $this.bundlePages.push({
                                     pageClass: 'applicant',
@@ -172,6 +164,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         $this.bundlePages.push({
                                             pageClass: 'co-applicant',
                                             model: {
+                                                enrolmentProcess: loanProcess.coApplicantsEnrolmentProcesses[i],
                                                 loanRelation: loanAccount.coApplicantsEnrolmentProcesses[i]
                                             }
                                         });
@@ -182,6 +175,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         $this.bundlePages.push({
                                             pageClass: 'guarantor',
                                             model: {
+                                                enrolmentProcess: loanProcess.guarantorsEnrolmentProcesses[i],
                                                 loanRelation: loanAccount.guarantorsEnrolmentProcesses[i]
                                             }
                                         });
@@ -194,12 +188,12 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         loanProcess: loanProcess
                                     }
                                 });
-                                $this.bundlePages.push({
-                                    pageClass: 'document-upload',
-                                    model:{
-                                        loanProcess: loanProcess
-                                    }
-                                });
+                                // $this.bundlePages.push({
+                                //     pageClass: 'document-upload',
+                                //     model:{
+                                //         loanProcess: loanProcess
+                                //     }
+                                // });
                                 $this.bundlePages.push({
                                     pageClass: 'cb-check',
                                     model: {
@@ -212,12 +206,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         loanAccount: loanProcess.loanAccount
                                     }
                                 });
-                                $this.bundlePages.push({
-                                    pageClass: 'dsc-override',
-                                    model:{
-                                        loanAccount: loanProcess.loanAccount
-                                    }
-                                });
+                                
                                 
                                 deferred.resolve();
                             });
@@ -261,20 +250,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         loanAccount: loanProcess.loanAccount
                                     }
                                 });
-                                $this.bundlePages.push({
-                                    pageClass: 'dsc-override',
-                                    model:{
-                                        loanAccount: loanProcess.loanAccount
-                                    }
-                                });
                                
 
-                                $this.bundlePages.push({
-                                    pageClass: 'document-upload',
-                                    model:{
-                                        loanProcess: loanProcess
-                                    }
-                                }); 
+                                    // $this.bundlePages.push({
+                                    //     pageClass: 'document-upload',
+                                    //     model:{
+                                    //         loanProcess: loanProcess
+                                    //     }
+                                    // }); 
 
                                 deferred.resolve();
                             });

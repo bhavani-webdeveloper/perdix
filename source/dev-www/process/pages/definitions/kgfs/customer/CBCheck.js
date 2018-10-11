@@ -521,7 +521,7 @@ define({
                                     }, {
                                         type: 'button',
                                         title: 'Submit for CBCheck',
-                                        "condition": "model.customer.loanSaved",
+                                        "condition": "model.customer.loanSaved  && model.loanAccount.currentStage == 'LoanInitiation'",
                                         "onClick": "actions.save(model,'APP','CIBIL', null)"
                                     }, {
                                         "key": "customer.cibilStatus",
@@ -546,7 +546,7 @@ define({
                                             type: 'button',
                                             key: "customer.coapplicants[].cibilbutton",
                                             title: 'Submit for CBCheck',
-                                            "condition": "model.customer.loanSaved && model.customer.coapplicants.length",
+                                            "condition": "model.customer.loanSaved && model.customer.coapplicants.length && model.loanAccount.currentStage == 'LoanInitiation'",
                                             "onClick": function(model, schemaForm, form, event) {
                                                 fnPost(model, 'CO-APP', 'CIBIL', event.arrayIndex);
                                             }
@@ -574,7 +574,7 @@ define({
                                             type: 'button',
                                             key: "customer.guarantors[].cibilbutton",
                                             title: 'Submit for CBCheck',
-                                            "condition": "model.customer.loanSaved && model.customer.guarantors.length",
+                                            "condition": "model.customer.loanSaved && model.customer.guarantors.length && model.loanAccount.currentStage == 'LoanInitiation'",
                                             "onClick": function(model, schemaForm, form, event) {
                                                 fnPost(model, 'GUARANTOR', 'CIBIL', event.arrayIndex);
                                             }
@@ -601,7 +601,7 @@ define({
 
                                 }, {
                                     type: 'button',
-                                    "condition": "model.customer.loanSaved",
+                                    "condition": "model.customer.loanSaved && model.loanAccount.currentStage == 'LoanInitiation'",
                                     title: 'Submit for CBCheck',
                                     "onClick": "actions.save(model,'APP', 'BASE',null)"
                                 }, {
@@ -612,7 +612,7 @@ define({
                                 }, {
                                     type: 'button',
                                     title: 'Retry',
-                                    "condition": "model.customer.applicantHighmarkFailed",
+                                    "condition": "model.customer.applicantHighmarkFailed && model.loanAccount.currentStage == 'LoanInitiation'",
                                     "onClick": function(model, schemaForm, form, event) {
                                         retry(model, 'APP', null);
                                     }
@@ -632,7 +632,7 @@ define({
                                         type: "string"
                                     }, {
                                         type: 'button',
-                                        key: "customer.coapplicants[].highmarkbutton",
+                                        key: "customer.coapplicants[].highmarkbutton && model.loanAccount.currentStage == 'LoanInitiation'",
                                         title: 'Submit for CBCheck',
                                         "condition": "model.customer.loanSaved && model.customer.coapplicants.length",
                                         "onClick": function(model, schemaForm, form, event) {
@@ -645,9 +645,9 @@ define({
                                         title: "Status"
                                     }, {
                                         type: 'button',
-                                        key: "customer.coapplicants[].retrybutton",
+                                        key: "customer.coapplicants[].retrybutton ",
                                         title: 'Retry',
-                                        "condition": "model.customer.coapplicants[arrayIndex].applicantHighmarkFailed",
+                                        "condition": "model.customer.coapplicants[arrayIndex].applicantHighmarkFailed && model.loanAccount.currentStage == 'LoanInitiation'",
                                         "onClick": function(model, schemaForm, form, event) {
                                             retry(model, 'CO-APP', event.arrayIndex);
                                         }
@@ -668,9 +668,9 @@ define({
                                         type: "string"
                                     }, {
                                         type: 'button',
-                                        key: "customer.guarantors[].highmarkbutton",
+                                        key: "customer.guarantors[].highmarkbutton ",
                                         title: 'Submit for CBCheck',
-                                        "condition": "model.customer.loanSaved && model.customer.guarantors.length",
+                                        "condition": "model.customer.loanSaved && model.customer.guarantors.length && model.loanAccount.currentStage == 'LoanInitiation'",
                                         "onClick": function(model, schemaForm, form, event) {
                                             fnPost(model, 'GUARANTOR', 'BASE', event.arrayIndex);
                                         }
@@ -683,7 +683,7 @@ define({
                                         type: 'button',
                                         key: "customer.guarantors[].retrybutton",
                                         title: 'Retry',
-                                        "condition": "model.customer.guarantors[arrayIndex].applicantHighmarkFailed",
+                                        "condition": "model.customer.guarantors[arrayIndex].applicantHighmarkFailed && model.loanAccount.currentStage == 'LoanInitiation'",
                                         "onClick": function(model, schemaForm, form, event) {
                                             retry(model, 'GUARANTOR', event.arrayIndex);
                                         }
@@ -703,7 +703,7 @@ define({
 
                                 }, {
                                     type: 'button',
-                                    "condition": "model.customer.loanSaved",
+                                    "condition": "model.customer.loanSaved && model.loanAccount.currentStage == 'LoanInitiation'",
                                     title: 'Submit for CBCheck',
                                     "onClick": "actions.save(model,'APP', 'INDIVIDUAL',null)"
                                 }, {
@@ -714,7 +714,7 @@ define({
                                 }, {
                                     type: 'button',
                                     title: 'Retry',
-                                    "condition": "model.customer.applicantIndvHighmarkFailed",
+                                    "condition": "model.customer.applicantIndvHighmarkFailed  && model.loanAccount.currentStage == 'LoanInitiation'",
                                     "onClick": function(model, schemaForm, form, event) {
                                         retry(model, 'APP', null);
                                     }
@@ -736,7 +736,7 @@ define({
                                         type: 'button',
                                         key: "customer.coapplicants[].highmarkbutton",
                                         title: 'Submit for CBCheck',
-                                        "condition": "model.customer.loanSaved && model.customer.coapplicants.length",
+                                        "condition": "model.customer.loanSaved && model.customer.coapplicants.length && model.loanAccount.currentStage == 'LoanInitiation'",
                                         "onClick": function(model, schemaForm, form, event) {
                                             fnPost(model, 'CO-APP', 'INDIVIDUAL', event.arrayIndex);
                                         }
@@ -749,7 +749,7 @@ define({
                                         type: 'button',
                                         key: "customer.coapplicants[].retrybutton",
                                         title: 'Retry',
-                                        "condition": "model.customer.coapplicants[arrayIndex].applicantIndvHighmarkFailed",
+                                        "condition": "model.customer.coapplicants[arrayIndex].applicantIndvHighmarkFailed && model.loanAccount.currentStage == 'LoanInitiation'",
                                         "onClick": function(model, schemaForm, form, event) {
                                             retry(model, 'CO-APP', event.arrayIndex);
                                         }
@@ -772,7 +772,7 @@ define({
                                         type: 'button',
                                         key: "customer.guarantors[].highmarkbutton",
                                         title: 'Submit for CBCheck',
-                                        "condition": "model.customer.loanSaved && model.customer.guarantors.length",
+                                        "condition": "model.customer.loanSaved && model.customer.guarantors.length && model.loanAccount.currentStage == 'LoanInitiation'",
                                         "onClick": function(model, schemaForm, form, event) {
                                             fnPost(model, 'GUARANTOR', 'INDIVIDUAL', event.arrayIndex);
                                         }
@@ -785,7 +785,7 @@ define({
                                         type: 'button',
                                         key: "customer.guarantors[].retrybutton",
                                         title: 'Retry',
-                                        "condition": "model.customer.guarantors[arrayIndex].applicantIndvHighmarkFailed",
+                                        "condition": "model.customer.guarantors[arrayIndex].applicantIndvHighmarkFailed && model.loanAccount.currentStage == 'LoanInitiation'",
                                         "onClick": function(model, schemaForm, form, event) {
                                             retry(model, 'GUARANTOR', event.arrayIndex);
                                         }
@@ -805,7 +805,7 @@ define({
                                         type: "string",
                                     }, {
                                         type: 'button',
-                                        "condition": "model.customer.loanSaved",
+                                        "condition": "model.customer.loanSaved && model.loanAccount.currentStage == 'LoanInitiation'",
                                         title: 'Submit for CBCheck',
                                         "onClick": "actions.save(model,'APP','EQUIFAX',null)"
                                     }, {
@@ -816,7 +816,7 @@ define({
                                     }, {
                                         type: 'button',
                                         title: 'Retry',
-                                        "condition": "model.customer.applicantEquifaxFailed",
+                                        "condition": "model.customer.applicantEquifaxFailed && model.loanAccount.currentStage == 'LoanInitiation'",
                                         "onClick": function(model, schemaForm, form, event) {
                                             retry(model, 'APP', null);
                                         }
@@ -836,9 +836,9 @@ define({
                                             type: "string"
                                         }, {
                                             type: 'button',
-                                            key: "customer.coapplicants[].Equifaxbutton",
+                                            key: "customer.coapplicants[].Equifaxbutton ",
                                             title: 'Submit for CBCheck',
-                                            "condition": "model.customer.loanSaved && model.customer.coapplicants.length",
+                                            "condition": "model.customer.loanSaved && model.customer.coapplicants.length && model.loanAccount.currentStage == 'LoanInitiation'",
                                             "onClick": function(model, schemaForm, form, event) {
                                                 fnPost(model, 'CO-APP', 'EQUIFAX', event.arrayIndex);
                                             }
@@ -851,7 +851,7 @@ define({
                                             type: 'button',
                                             key: "customer.coapplicants[].retrybutton",
                                             title: 'Retry',
-                                            "condition": "model.customer.coapplicants[arrayIndex].applicantEquifaxFailed",
+                                            "condition": "model.customer.coapplicants[arrayIndex].applicantEquifaxFailed && model.loanAccount.currentStage == 'LoanInitiation'",
                                             "onClick": function(model, schemaForm, form, event) {
                                                 retry(model, 'CO-APP', event.arrayIndex);
                                             }
@@ -874,7 +874,7 @@ define({
                                             type: 'button',
                                             key: "customer.guarantors[].Equifaxbutton",
                                             title: 'Submit for CBCheck',
-                                            "condition": "model.customer.loanSaved && model.customer.guarantors.length",
+                                            "condition": "model.customer.loanSaved && model.customer.guarantors.length && model.loanAccount.currentStage == 'LoanInitiation'",
                                             "onClick": function(model, schemaForm, form, event) {
                                                 fnPost(model, 'GUARANTOR', 'EQUIFAX', event.arrayIndex);
                                             }
@@ -887,7 +887,7 @@ define({
                                             type: 'button',
                                             key: "customer.guarantors[].retrybutton",
                                             title: 'Retry',
-                                            "condition": "model.customer.guarantors[arrayIndex].applicantEquifaxFailed",
+                                            "condition": "model.customer.guarantors[arrayIndex].applicantEquifaxFailed && model.loanAccount.currentStage == 'LoanInitiation'",
                                             "onClick": function(model, schemaForm, form, event) {
                                                 retry(model, 'GUARANTOR', event.arrayIndex);
                                             }
@@ -907,7 +907,7 @@ define({
                                         type: "string",
                                     }, {
                                         type: 'button',
-                                       "condition": "model.customer.loanSaved",
+                                       "condition": "model.customer.loanSaved && model.loanAccount.currentStage == 'LoanInitiation'",
                                         title: 'Submit for CBCheck',
                                         "onClick":"actions.save(model,'APP','CHMHUB', null)"
 
@@ -919,7 +919,7 @@ define({
                                     }, {
                                         type: 'button',
                                         title: 'Retry',
-                                        "condition": "model.customer.applicantIdenCheckFailed",
+                                        "condition": "model.customer.applicantIdenCheckFailed && model.loanAccount.currentStage == 'LoanInitiation'",
                                         "onClick": function(model, schemaForm, form, event) {
                                             retry(model, 'APP', null);
                                         }
@@ -941,7 +941,7 @@ define({
                                             type: 'button',
                                             key: "customer.coapplicants[].idenCheckbutton",
                                             title: 'Submit for CBCheck',
-                                            "condition": "model.customer.loanSaved && model.customer.coapplicants.length",
+                                            "condition": "model.customer.loanSaved && model.customer.coapplicants.length && model.loanAccount.currentStage == 'LoanInitiation'",
                                             "onClick": function(model, schemaForm, form, event) {
                                                 fnPost(model, 'CO-APP', 'CHMHUB', event.arrayIndex);
                                             }
@@ -954,7 +954,7 @@ define({
                                             type: 'button',
                                             key: "customer.coapplicants[].retrybutton",
                                             title: 'Retry',
-                                            "condition": "model.customer.coapplicants[arrayIndex].applicantIdenCheckFailed",
+                                            "condition": "model.customer.coapplicants[arrayIndex].applicantIdenCheckFailed && model.loanAccount.currentStage == 'LoanInitiation'",
                                             "onClick": function(model, schemaForm, form, event) {
                                                 retry(model, 'CO-APP', event.arrayIndex);
                                             }
@@ -977,7 +977,7 @@ define({
                                             type: 'button',
                                             key: "customer.guarantors[].idenCheckbutton",
                                             title: 'Submit for CBCheck',
-                                            "condition": "model.customer.loanSaved && model.customer.guarantors.length",
+                                            "condition": "model.customer.loanSaved && model.customer.guarantors.length && model.loanAccount.currentStage == 'LoanInitiation'",
                                             "onClick": function(model, schemaForm, form, event) {
                                                 fnPost(model, 'GUARANTOR', 'CHMHUB', event.arrayIndex);
                                             }
@@ -990,7 +990,7 @@ define({
                                             type: 'button',
                                             key: "customer.guarantors[].retrybutton",
                                             title: 'Retry',
-                                            "condition": "model.customer.guarantors[arrayIndex].applicantIdenCheckFailed",
+                                            "condition": "model.customer.guarantors[arrayIndex].applicantIdenCheckFailed && model.loanAccount.currentStage == 'LoanInitiation'",
                                             "onClick": function(model, schemaForm, form, event) {
                                                 retry(model, 'GUARANTOR', event.arrayIndex);
                                             }

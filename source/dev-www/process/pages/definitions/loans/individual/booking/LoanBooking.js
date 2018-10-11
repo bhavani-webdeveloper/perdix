@@ -367,7 +367,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     },
                     {
                         key: "loanAccount.emiPaymentDateRequested",
-                        condition : "model.siteCode != 'sambandh' && model.siteCode != 'saija'",
+                        condition : "model.siteCode != 'sambandh' && model.siteCode != 'saija' && model.siteCode != 'witfin'",
                         type: "string",
                         title: "EMI_PAYMENT_DATE_REQUESTED",
                         readonly: true

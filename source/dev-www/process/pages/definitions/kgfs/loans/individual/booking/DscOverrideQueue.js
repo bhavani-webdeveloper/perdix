@@ -1,173 +1,160 @@
 define({
     pageUID: "kgfs.loans.individual.booking.DscOverrideQueue",
     pageType: "Engine",
-    dependencies: ["$log", "formHelper", "SessionStore", "PageHelper", "Groups", "$state", "irfProgressMessage", "irfNavigator"],
-    $pageFn: function($log, formHelper, SessionStore, PageHelper, Groups, $state, irfProgressMessage, irfNavigator) {
-
-        var branchId = SessionStore.getBranchId();
-        var branchName = SessionStore.getBranch();
-        var siteCode = SessionStore.getGlobalSetting('siteCode');
-
+    dependencies: ["$log", "irfNavigator", "formHelper", "entityManager", "IndividualLoan", "$state", "SessionStore", "Utils"],
+    $pageFn: function ($log, irfNavigator, formHelper, EntityManager, IndividualLoan, $state, SessionStore, Utils) {
+        var branch = SessionStore.getBranch();
         return {
             "type": "search-list",
-            "title": "DSC_OVERRIDE_QUEUE",
+            "title": "DSC_OVERRIDE_SEARCH",
             "subTitle": "",
-            initialize: function(model, form, formCtrl) {
-                $log.info("DSC Queue got initialized");
-            },
-            definition: {
-                title: "DSC_QUEUE",
 
-                getSearchFormHelper: function() {
+            initialize: function (model, form, formCtrl) {
+                // model.branch = branch;
+                model.siteCode = SessionStore.getGlobalSetting("siteCode");
+                model.branch = SessionStore.getCurrentBranch().branchId;
+            },
+
+            definition: {
+                title: "SEARCH_LOANS",
+                autoSearch: true,
+                searchForm: [
+                    "*"
+                ],
+                searchSchema: {
+                    "type": 'object',
+                    "title": 'SearchOptions',
+                    "properties": {
+                        'branch': {
+                            'title': "BRANCH",
+                            "type": ["string", "null"],
+                            "x-schema-form": {
+                                "type": "userbranch",
+                                "screenFilter": true
+                            }
+                        },
+                        "centre": {
+                            "title": "CENTRE",
+                            "type": ["integer", "null"],
+                            "x-schema-form": {
+                                "type": "select",
+                                "enumCode": "centre",
+                                "parentEnumCode": "branch",
+                                "parentValueExpr": "model.branch",
+                                "screenFilter": true
+                            }
+                        },
+                        "customerId": {
+                            "title": "CUSTOMER_ID",
+                            "type": "number"
+                        },
+                        "accountNumber": {
+                            "title": "ACCOUNT_NUMBER",
+                            "type": "string"
+                        }
+                    },
+                    "required": ["stage"]
+                },
+
+                getSearchFormHelper: function () {
                     return formHelper;
                 },
-                getResultsPromise: function(searchOptions, pageOpts) {
-                    return Groups.getDscOverrideList({
-                        'page': pageOpts.pageNo,
-                        'per_page': pageOpts.itemsPerPage
+
+                getResultsPromise: function (searchOptions, pageOpts) {
+                    var promise = IndividualLoan.search({
+                        'stage': 'DSCOverride',
+                        'branchId': searchOptions.branch,
+                        'centreCode': searchOptions.centre,
+                        'customerId': searchOptions.customerId,
+                        'accountNumber': searchOptions.accountNumber,
+                        'page': pageOpts.pageNo
                     }).$promise;
+                    return promise;
                 },
+
                 paginationOptions: {
-                    "getItemsPerPage": function(response, headers) {
-                        return 100;
+                    "getItemsPerPage": function (response, headers) {
+                        return 20;
                     },
-                    "getTotalItemsCount": function(response, headers) {
+                    "getTotalItemsCount": function (response, headers) {
                         return headers['x-total-count']
                     }
                 },
+
                 listOptions: {
-                    selectable: false,
                     expandable: true,
                     listStyle: "table",
-                    itemCallback: function(item, index) {},
-                    getItems: function(response, headers) {
+                    itemCallback: function (item, index) {},
+                    getItems: function (response, headers) {
                         if (response != null && response.length && response.length != 0) {
                             return response;
                         }
                         return [];
                     },
-                    getListItem: function(item) {
-                        return []
+                    getListItem: function (item) {
+                        return [
+
+                            "{{'ACCOUNT_NUMBER'|translate}} : " + item.accountNumber,
+                            "{{'ENTITY_NAME'|translate}} : " + item.customerName,
+                            "{{'LOAN_AMOUNT'|translate}} : " + item.loanAmount,
+                            "{{'LOAN_TYPE'|translate}} : " + item.loanType,
+                            "{{'PARTNER_CODE'|translate}} : " + item.partnerCode,
+                            "{{'PROCESS_TYPE'|translate}} : " + item.processType
+
+                        ]
                     },
                     getTableConfig: function() {
-                        return {
-                            "serverPaginate": true,
-                            "paginate": true,
-                            "pageLength": 10
-                        };
+						return {
+							"serverPaginate": true,
+							"paginate": true,
+							"pageLength": 10
+						};
                     },
                     getColumns: function() {
-                        var branchList = formHelper.enum('branch_id').data;
-                        var branches = {}
-                        for (var i = 0; i < branchList.length; i++) {
-                            branches[branchList[i].value] = branchList[i].name;
-                        }
-                        var centreList = formHelper.enum('centre').data;
-                        var centres = {}
-                        for (var i = 0; i < centreList.length; i++) {
-                            centres[centreList[i].field3] = centreList[i].name;
-                        }
-                        return [{
-                            title: 'URN',
-                            data: 'jlgGroupMember.urnNo'
+						return [{
+							title: 'LOAN_ID',
+							data: 'id'
+                        }, {
+							title: 'ACCOUNT_NUMBER',
+							data: 'accountNumber'
                         }, 
-                        // {
-                        //     title: 'GROUP_MEMBER_NAME',
-                        //     data: 'jlgGroupMember.urnNo'
-                        // }, 
                         {
-                            title: 'GROUP_ID',
-                            data: 'jlgGroup.id'
+                            title: 'ENTITY_NAME',
+                            data: 'customerName'
                         }, {
-                            title: 'GROUP_CODE',
-                            data: 'jlgGroup.groupCode'
-                        }, {
-                            title: 'GROUP_NAME',
-                            data: 'jlgGroup.groupName'
-                        }, {
-                            title: 'BRANCH_NAME',
-                            data: 'jlgGroup.branchId',
-                            render: function(data, type, full, meta) {
-                                if(data){
-                                    return branches[data];
-                                }
-                                else{
-                                   return data; 
-                                }
-                            }
-                        }, {
-                            title: 'CENTRE_CODE',
-                            data: 'jlgGroupMember.centreCode',
-                            render: function(data, type, full, meta) {
-                                if(data){
-                                    return centres[data];
-                                }
-                                else{
-                                   return data; 
-                                }
-                            }
-                        }]
-                    },
-                    getActions: function() {
-                        return [{
-                            name: "Do DSC Override",
+							title: 'LOAN_AMOUNT',
+							data: 'loanAmount'
+                        },{
+							title: 'LOAN_TYPE',
+							data: 'loanType'
+                        },
+                        {
+							title: 'PARTNER_CODE',
+							data: 'partnerCode'
+                        },{
+							title: 'PROCESS_TYPE',
+							data: 'processType'
+                        },
+                    ]
+					},
+                    getActions: function () {
+                        return [
+                        {
+                            name: "DO_DSC_OVERRIDE",
                             desc: "",
-                            fn: function(item, index) {
-                                PageHelper.showLoader();
-
-                                // var remarks = window.prompt("Enter Remarks", "");
-                                // if (remarks) {
-                                //     irfProgressMessage.pop("dsc-override", "Performing DSC Override");
-                                //     Groups.post({
-                                //         service: "overridedsc",
-                                //         urnNo: item.jlgGroupMember.urnNo,
-                                //         groupCode: item.jlgGroup.groupCode,
-                                //         productCode: item.jlgGroup.productCode,
-                                //         remarks: remarks
-                                //     }, {}, function(resp, headers) {
-                                //         $log.info(resp);
-                                //         PageHelper.hideLoader();
-                                //         irfProgressMessage.pop("dsc-override", "Override Succeeded", 2000);
-                                //         $state.go('Page.Engine', {
-                                //             pageName: "loans.group.DscOverrideQueue"
-                                //         },{
-                                //             reload: true,
-                                //             inherit: false,
-                                //             notify: true
-                                //         });
-                                //     }, function(resp) {
-                                //         $log.error(resp);
-                                //         PageHelper.hideLoader();
-                                //         irfProgressMessage.pop("dsc-override", "An error occurred. Please Try Again", 2000);
-                                //         PageHelper.showErrors(resp);
-                                //     });
-                                // } else {
-                                //     PageHelper.hideLoader();
-                                // }
+                            icon: "fa fa-book",
+                            fn: function (item, index) {
                                 irfNavigator.go({
-                                    state: "Page.Engine",
-                                    pageName: "loans.group.DscOverride",
-                                    pageId: item.dscIntegration.id,
-                                    pageData: {
-                                        jlgGroup: item.jlgGroup,
-                                        jlgGroupMember: item.jlgGroupMember,
-                                    }, 
-                                }, {
-                                    state: "Page.Engine",
-                                    pageName: "loans.group.DscOverrideQueue",
+                                    'state': 'Page.Bundle',
+                                    'pageName': 'kgfs.loans.individual.booking.DscCheck',
+                                    'pageId': item.loanId,
+                                    'pageData': item
+                                },{
+                                    state: 'Page.Engine',
+                                    pageName: "kgfs.loans.individual.booking.DscOverrideQueue"
                                 });
-
                             },
-                            isApplicable: function(item, index) {
-                                return true;
-                            }
-                        }, {
-                            name: "ViewDSC Response",
-                            desc: "",
-                            fn: function(item, index) {
-                                Groups.showDscDataPopup(item.jlgGroupMember.dscId);
-                            },
-                            isApplicable: function(item, index) {
+                            isApplicable: function (item, model) {
                                 return true;
                             }
                         }];
@@ -176,4 +163,5 @@ define({
             }
         };
     }
+
 })

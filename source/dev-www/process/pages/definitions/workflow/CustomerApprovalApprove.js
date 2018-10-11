@@ -13,6 +13,9 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalApprove"),
                     model.customer.isOwnershipChanged = "NO";
                     model.customer.isAddressChanged = "NO";
 
+                    if(model.customer.customerType=="Enterprise")
+                        model.customer.ownership=model.customer.enterprise.ownership;
+
                     irfProgressMessage.pop("cust-load", "Load Complete", 2000);
                 }, function (resp) {
                     PageHelper.hideLoader();
@@ -48,12 +51,27 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalApprove"),
                         model.customer.mobileProofImageId=model.UpdatedWorkflow.proof.mobileProofImageId;
                     }
 
-                    if(model.customer.ownership == model.UpdatedWorkflow.customer.ownership) {
-                        model.customer.isOwnershipChanged="NO";
-                    }else {
-                        model.customer.isOwnershipChanged="YES";
-                        model.customer.newOwnership=model.UpdatedWorkflow.customer.ownership;
+                    
+                    if(model.customer.customerType=="Enterprise")
+                    {
+                        if(model.customer.enterprise.ownership == model.UpdatedWorkflow.customer.enterprise.ownership) {
+                            model.customer.isOwnershipChanged="NO";
+                        }else {
+                            model.customer.isOwnershipChanged="YES";
+                            model.customer.newOwnership=model.UpdatedWorkflow.customer.enterprise.ownership;
+                        }
+                        model.customer.ownership = model.customer.enterprise.ownership;
+                    }else if(model.customer.customerType=="Individual")
+                    {
+                        if(model.customer.ownership == model.UpdatedWorkflow.customer.ownership) {
+                            model.customer.isOwnershipChanged="NO";
+                        }else {
+                            model.customer.isOwnershipChanged="YES";
+                            model.customer.newOwnership=model.UpdatedWorkflow.customer.ownership;
+                        }
                     }
+
+
                     if(model.customer.gender == model.UpdatedWorkflow.customer.gender) {
                         model.customer.isGenderChanged="NO";
                     }else {
@@ -541,6 +559,8 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalApprove"),
                             }
                             if(model.customer.isOwnershipChanged=='YES'){
                                 updatedModel.customer.ownership=updatedModel.customer.newOwnership;
+                                if(model.customer.customerType=="Enterprise")
+                                     updatedModel.customer.enterprise.ownership=updatedModel.customer.newOwnership;
                             }
 
                             var requestData = {
