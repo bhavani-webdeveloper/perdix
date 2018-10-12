@@ -33,60 +33,60 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                             PageHelper.showProgress("pre-save-validation", "Self Relationship is Mandatory", 5000);
                             return false;
                         }
-                    } 
+                    }
                     else {
                         PageHelper.showProgress("pre-save-validation", "Family Members section is missing. Self Relationship is Mandatory", 5000);
                         return false;
                     }
-                    
-                }
-            
-            
 
-                var configFile = function(){
+                }
+
+
+
+                var configFile = function () {
                     return {
                         "loanProcess.loanAccount.currentStage": {
-                            "DSCOverride" : {
-                                "overrides" : {
-                                    "KYC" : {
-                                        "readonly" : true
+                            "DSCOverride": {
+                                "overrides": {
+                                    "KYC": {
+                                        "readonly": true
                                     },
                                     "IndividualInformation": {
-                                        "readonly" : true
+                                        "readonly": true
                                     },
-                                    "ContactInformation":{
-                                        "readonly" : true
+                                    "ContactInformation": {
+                                        "readonly": true
                                     },
-                                    "IndividualFinancials":{
-                                        "readonly" : true
+                                    "IndividualFinancials": {
+                                        "readonly": true
                                     },
-                                    "FamilyDetails":{
-                                        "readonly" : true
+                                    "FamilyDetails": {
+                                        "readonly": true
                                     },
-                                    "Liabilities":{
-                                        "readonly" : true
+                                    "Liabilities": {
+                                        "readonly": true
                                     },
-                                    "PhysicalAssets":{
-                                        "readonly" : true
+                                    "PhysicalAssets": {
+                                        "readonly": true
                                     },
-                                    "IndividualReferences":{
-                                        "readonly" : true
+                                    "IndividualReferences": {
+                                        "readonly": true
                                     },
                                 }
                             },
-                            "LoanInitiation" : {
-                                "overrides":{
-                                    "LoanDetails":{
+                            "LoanInitiation": {
+                                "overrides": {
+                                    "LoanDetails": {
                                         "orderNo": 1,
-                                        "readonly":true
+                                        "readonly": true
                                     },
-                                    "NomineeDetails":{
+                                    "NomineeDetails": {
                                         "orderNo": 2,
-                                        "readonly":true 
+                                        "readonly": true
                                     },
-                                    "JewelDetais":{
+                                    "JewelDetais": {
                                         "orderNo": 3,
-                                        "readonly":true,
+                                        "readonly": true,
                                         "condition": "model.loanAccount.loanType == 'JEWEL'"
                                     }
                                 }
@@ -1219,7 +1219,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                         }
                     }
                 }
-        
+
                 var overridesFields = function (bundlePageObj) {
                     return {
 
@@ -1557,58 +1557,58 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                         "FamilyDetails.familyMembers.noOfDependents",
 
 
-                        "Liabilities",
-                        "Liabilities.liabilities",
-                        "Liabilities.liabilities.loanSource",
-                        "Liabilities.liabilities.loanAmountInPaisa",
-                        "Liabilities.liabilities.installmentAmountInPaisa",
-                        "Liabilities.liabilities.outstandingAmountInPaisa",
-                        "Liabilities.liabilities.startDate",
-                        "Liabilities.liabilities.maturityDate",
-                        "Liabilities.liabilities.noOfInstalmentPaid",
-                        "Liabilities.liabilities.frequencyOfInstallment",
-                        "Liabilities.liabilities.liabilityLoanPurpose",
-                        "Liabilities.liabilities.interestOnly",
-                        "Liabilities.liabilities.interestRate",
+                        // "Liabilities",
+                        // "Liabilities.liabilities",
+                        // "Liabilities.liabilities.loanSource",
+                        // "Liabilities.liabilities.loanAmountInPaisa",
+                        // "Liabilities.liabilities.installmentAmountInPaisa",
+                        // "Liabilities.liabilities.outstandingAmountInPaisa",
+                        // "Liabilities.liabilities.startDate",
+                        // "Liabilities.liabilities.maturityDate",
+                        // "Liabilities.liabilities.noOfInstalmentPaid",
+                        // "Liabilities.liabilities.frequencyOfInstallment",
+                        // "Liabilities.liabilities.liabilityLoanPurpose",
+                        // "Liabilities.liabilities.interestOnly",
+                        // "Liabilities.liabilities.interestRate",
 
-                        "BankAccounts",
-                        "BankAccounts.customerBankAccounts",
-                        "BankAccounts.customerBankAccounts.ifscCode",
-                        "BankAccounts.customerBankAccounts.customerBankName",
-                        "BankAccounts.customerBankAccounts.customerBankBranchName",
-                        "BankAccounts.customerBankAccounts.customerNameAsInBank",
-                        "BankAccounts.customerBankAccounts.accountNumber",
-                        "BankAccounts.customerBankAccounts.accountType",
-                        "BankAccounts.customerBankAccounts.bankingSince",
-                        "BankAccounts.customerBankAccounts.netBankingAvailable",
-                        "BankAccounts.customerBankAccounts.bankStatements",
-                        "BankAccounts.customerBankAccounts.bankStatements.startMonth",
-                        "BankAccounts.customerBankAccounts.bankStatements.openingBalance",
-                        "BankAccounts.customerBankAccounts.bankStatements.closingBalance",
-                        "BankAccounts.customerBankAccounts.bankStatements.emiAmountdeducted",
-                        "BankAccounts.customerBankAccounts.bankStatements.totalDeposits",
-                        "BankAccounts.customerBankAccounts.bankStatements.totalWithdrawals",
-                        "BankAccounts.customerBankAccounts.bankStatements.balanceAsOn15th",
-                        "BankAccounts.customerBankAccounts.bankStatements.noOfChequeBounced",
-                        "BankAccounts.customerBankAccounts.bankStatements.noOfEmiChequeBounced",
-                        "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto",
-                        "BankAccounts.customerBankAccounts.isDisbersementAccount",
+                        // "BankAccounts",
+                        // "BankAccounts.customerBankAccounts",
+                        // "BankAccounts.customerBankAccounts.ifscCode",
+                        // "BankAccounts.customerBankAccounts.customerBankName",
+                        // "BankAccounts.customerBankAccounts.customerBankBranchName",
+                        // "BankAccounts.customerBankAccounts.customerNameAsInBank",
+                        // "BankAccounts.customerBankAccounts.accountNumber",
+                        // "BankAccounts.customerBankAccounts.accountType",
+                        // "BankAccounts.customerBankAccounts.bankingSince",
+                        // "BankAccounts.customerBankAccounts.netBankingAvailable",
+                        // "BankAccounts.customerBankAccounts.bankStatements",
+                        // "BankAccounts.customerBankAccounts.bankStatements.startMonth",
+                        // "BankAccounts.customerBankAccounts.bankStatements.openingBalance",
+                        // "BankAccounts.customerBankAccounts.bankStatements.closingBalance",
+                        // "BankAccounts.customerBankAccounts.bankStatements.emiAmountdeducted",
+                        // "BankAccounts.customerBankAccounts.bankStatements.totalDeposits",
+                        // "BankAccounts.customerBankAccounts.bankStatements.totalWithdrawals",
+                        // "BankAccounts.customerBankAccounts.bankStatements.balanceAsOn15th",
+                        // "BankAccounts.customerBankAccounts.bankStatements.noOfChequeBounced",
+                        // "BankAccounts.customerBankAccounts.bankStatements.noOfEmiChequeBounced",
+                        // "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto",
+                        // "BankAccounts.customerBankAccounts.isDisbersementAccount",
 
-                        "PhysicalAssets",
-                        "PhysicalAssets.physicalAssets",
-                        "PhysicalAssets.physicalAssets.nameOfOwnedAsset",
-                        "PhysicalAssets.physicalAssets.vehicleModel",
-                        "PhysicalAssets.physicalAssets.registeredOwner",
-                        "PhysicalAssets.physicalAssets.ownedAssetValue",
-                        "PhysicalAssets.physicalAssets.unit",
-                        "PhysicalAssets.financialAssets",
-                        "PhysicalAssets.financialAssets.instrumentType",
-                        "PhysicalAssets.financialAssets.nameOfInstitution",
-                        "PhysicalAssets.financialAssets.instituteType",
-                        "PhysicalAssets.financialAssets.amount",
-                        "PhysicalAssets.financialAssets.frequencyOfDeposite",
-                        "PhysicalAssets.financialAssets.startDate",
-                        "PhysicalAssets.financialAssets.maturityDate",
+                        // "PhysicalAssets",
+                        // "PhysicalAssets.physicalAssets",
+                        // "PhysicalAssets.physicalAssets.nameOfOwnedAsset",
+                        // "PhysicalAssets.physicalAssets.vehicleModel",
+                        // "PhysicalAssets.physicalAssets.registeredOwner",
+                        // "PhysicalAssets.physicalAssets.ownedAssetValue",
+                        // "PhysicalAssets.physicalAssets.unit",
+                        // "PhysicalAssets.financialAssets",
+                        // "PhysicalAssets.financialAssets.instrumentType",
+                        // "PhysicalAssets.financialAssets.nameOfInstitution",
+                        // "PhysicalAssets.financialAssets.instituteType",
+                        // "PhysicalAssets.financialAssets.amount",
+                        // "PhysicalAssets.financialAssets.frequencyOfDeposite",
+                        // "PhysicalAssets.financialAssets.startDate",
+                        // "PhysicalAssets.financialAssets.maturityDate",
                     ];
 
                 }
@@ -1647,7 +1647,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                         model.currentStage = bundleModel.currentStage;
                         model.enrolmentProcess.currentStage = model.currentStage;
                         /* End of setting data recieved from Bundle */
-
                         /* Setting data for the form */
                         model.customer = model.enrolmentProcess.customer;
                         var branchId = SessionStore.getBranchId();
@@ -1726,29 +1725,171 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                                     }
                                 },
                                 "additions": [
-                                    // {
-                                    //     "type": "actionbox",
-                                    //     "condition": "!model.customer.currentStage",
-                                    //     "orderNo": 1000,
-                                    //     "items": [
-                                    //         {
-                                    //             "type": "submit",
-                                    //             "title": "SUBMIT"
-                                    //         }
-                                    //     ]
-                                    // },
-                                    // {
-                                    //     "type": "actionbox",
-                                    //     "condition": "model.customer.currentStage && (model.currentStage=='KYC' || model.currentStage=='Appraisal' || (model.currentStage=='GuarantorAddition' && model.pageClass=='guarantor'))",
-                                    //     "orderNo": 1200,
-                                    //     "items": [
-                                    //         {
-                                    //             "type": "button",
-                                    //             "title": "UPDATE_ENROLMENT",
-                                    //             "onClick": "actions.proceed(model, formCtrl, form, $event)"
-                                    //         }
-                                    //     ]
-                                    // }
+                                    {
+                                        "type": "box",
+                                        "items": [
+                                            {
+
+                                                "type": "fieldset",
+                                                "title": "COAPPLICANTS",
+                                                "items": [
+                                                    {
+                                                        "key": "loanProcess.coApplicantsEnrolmentProcesses",
+                                                        "title": "COAPPLICANTS",
+                                                        "titleExpr": "model.loanProcess.coApplicantsEnrolmentProcesses[arrayIndex].customer.id + ': ' + model.loanProcess.coApplicantsEnrolmentProcesses[arrayIndex].customer.firstName",
+                                                        "type": "array",
+                                                        "startEmpty": true,
+                                                        "schema": {
+                                                            "maxItems": 4
+                                                        },
+                                                        "items": [
+                                                            {
+                                                                "key": "loanProcess.coApplicantsEnrolmentProcesses[].customer.urnNo",
+                                                                "title": "CO_APPLICANT_URN_NO",
+                                                                "type": "lov",
+                                                                bindMap: {},
+                                                                "lovonly": true,
+                                                                "inputMap": {
+
+                                                                    "firstName": {
+                                                                        "key": "customer.firstName",
+                                                                        "title": "CUSTOMER_NAME"
+                                                                    },
+                                                                    "branch": {
+                                                                        "key": "customer.customerBranchId",
+                                                                        "type": "select",
+                                                                        "screenFilter": true
+                                                                    },
+                                                                    "centreId": {
+                                                                        "key": "customer.centreId",
+                                                                        "type": "select",
+                                                                        "screenFilter": true
+                                                                    }
+                                                                },
+                                                                "outputMap": {
+                                                                    "id": "loanProcess.coApplicantsEnrolmentProcesses[arrayIndex].customer.id",
+                                                                    "urnNo": "loanProcess.coApplicantsEnrolmentProcesses[arrayIndex].customer.urnNo",
+                                                                    "firstName": "loanProcess.coApplicantsEnrolmentProcesses[arrayIndex].customer.firstName"
+                                                                },
+                                                                "searchHelper": formHelper,
+                                                                "search": function (inputModel, form, model) {
+                                                                    $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                                                                    var promise = Enrollment.search({
+                                                                        'branchName': inputModel.branch || SessionStore.getBranch(),
+                                                                        'firstName': inputModel.firstName,
+                                                                        'centreId': inputModel.centreId,
+                                                                        'customerType': "individual",
+
+                                                                    }).$promise;
+                                                                    return promise;
+                                                                },
+                                                                getListDisplayItem: function (data, index) {
+                                                                    return [
+                                                                        [data.firstName, data.fatherFirstName].join(' | '),
+                                                                        data.id,
+                                                                        data.urnNo
+                                                                    ];
+                                                                },
+                                                                onSelect: function (valueObj, model, context) {
+                                                                    console.log("Hello this model");
+                                                                    console.log(model);
+                                                                    // EnrolmentProcess.fromCustomerID(valueObj.id)
+                                                                    //     .finally(function () {
+                                                                    //         PageHelper.showProgress('customer-load', 'Done.', 5000);
+                                                                    //     })
+                                                                    //     .subscribe(function (enrolmentProcess) {
+                                                                    //         /* Setting on the current page */
+                                                                    //         console.log("Model from Individual Enrollment from Fuck");
+
+                                                                    //         // mode.loanAccount.coBorrowers = enrolmentProcess.customer;
+                                                                    //         console.log(model);
+                                                                    //         model.loanProcess.removeRelatedEnrolmentProcess(model.enrolmentProcess, LoanCustomerRelationTypes.CO_APPLICANT);
+                                                                    //         model.loanProcess.setRelatedCustomerWithRelation(enrolmentProcess,LoanCustomerRelationTypes.CO_APPLICANT);
+                                                                    //         if (model.customer.dateOfBirth) {
+                                                                    //             model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                                                                    //         }
+
+
+                                                                    //     })
+                                                                },
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            },{
+
+                                                "type": "fieldset",
+                                                "title": "GUARANTORS",
+                                                "items": [
+                                                    {
+                                                        "key": "loanProcess.guarantorsEnrolmentProcesses",
+                                                        "title": "GUARANTORS",
+                                                        "titleExpr": "model.loanProcess.guarantorsEnrolmentProcesses[arrayIndex].customer.id + ': ' + model.loanProcess.guarantorsEnrolmentProcesses[arrayIndex].customer.firstName",
+                                                        "type": "array",
+                                                        "startEmpty": true,
+                                                        "schema": {
+                                                            "maxItems": 4
+                                                        },
+                                                        "items": [
+                                                            {
+                                                                "key": "loanProcess.guarantorsEnrolmentProcesses[].customer.urnNo",
+                                                                "title": "URN_NO",
+                                                                "type": "lov",
+                                                                bindMap: {},
+                                                                "lovonly": true,
+                                                                "inputMap": {
+
+                                                                    "firstName": {
+                                                                        "key": "customer.firstName",
+                                                                        "title": "CUSTOMER_NAME"
+                                                                    },
+                                                                    "branch": {
+                                                                        "key": "customer.customerBranchId",
+                                                                        "type": "select",
+                                                                        "screenFilter": true
+                                                                    },
+                                                                    "centreId": {
+                                                                        "key": "customer.centreId",
+                                                                        "type": "select",
+                                                                        "screenFilter": true
+                                                                    }
+                                                                },
+                                                                "outputMap": {
+                                                                    "id": "loanProcess.guarantorsEnrolmentProcesses[arrayIndex].customer.id",
+                                                                    "urnNo": "loanProcess.guarantorsEnrolmentProcesses[arrayIndex].customer.urnNo",
+                                                                    "firstName": "loanProcess.guarantorsEnrolmentProcesses[arrayIndex].customer.firstName"
+                                                                },
+                                                                "searchHelper": formHelper,
+                                                                "search": function (inputModel, form, model) {
+                                                                    $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                                                                    var promise = Enrollment.search({
+                                                                        'branchName': inputModel.branch || SessionStore.getBranch(),
+                                                                        'firstName': inputModel.firstName,
+                                                                        'centreId': inputModel.centreId,
+                                                                        'customerType': "individual",
+
+                                                                    }).$promise;
+                                                                    return promise;
+                                                                },
+                                                                getListDisplayItem: function (data, index) {
+                                                                    return [
+                                                                        [data.firstName, data.fatherFirstName].join(' | '),
+                                                                        data.id,
+                                                                        data.urnNo
+                                                                    ];
+                                                                },
+                                                                onSelect: function (valueObj, model, context) {
+                                                                    console.log("Hello this model");
+                                                                    console.log(model);
+                   
+                                                                },
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            },      
+                                        ]
+                                    }
                                 ]
                             }
                         };
@@ -1765,7 +1906,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                     },
 
                     preDestroy: function (model, form, formCtrl, bundlePageObj, bundleModel) {
-                      
+
                         if (bundlePageObj) {
                             var enrolmentDetails = {
                                 'customerId': model.customer.id,
@@ -1845,7 +1986,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                             item.customer.villageName
                         ]
                     },
-                    form: [],
+                    form: [
+                        
+                    ],
 
                     schema: function () {
                         return Enrollment.getSchema().$promise;
