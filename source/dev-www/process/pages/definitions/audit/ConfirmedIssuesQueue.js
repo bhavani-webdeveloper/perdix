@@ -4,17 +4,13 @@ irf.pageCollection.factory(irf.page("audit.ConfirmedIssuesQueue"), ["$log", "irf
             "type": "search-list",
             "title": "CONFIRMED_ISSUES",
             initialize: function(model, form, formCtrl) {
-                model.Audits = model.Audits || {};
                 var bankName = SessionStore.getBankName();
                 var banks = formHelper.enum('bank').data;
                 for (var i = 0; i < banks.length; i++) {
                     if (banks[i].name == bankName) {
                         model.bankId = banks[i].value;
-                        model.bankName = banks[i].name;
                     }
                 }
-                localFormController = formCtrl;
-                syncCheck = false;
                 var userRole = SessionStore.getUserRole();
                 if (userRole && userRole.accessLevel && userRole.accessLevel === 5) {
                     model.fullAccess = true;
@@ -48,17 +44,17 @@ irf.pageCollection.factory(irf.page("audit.ConfirmedIssuesQueue"), ["$log", "irf
                             "type": ["integer", "null"],
                             "enumCode": "bank",
                             "x-schema-form": {
-                                "type": "select",
-                                "screenFilter": true,
-
+                                "type": "select"
                             }
                         },
                         "branch_id": {
                             "title": "BRANCH_ID",
-                            "type": "number",
+                            "type": ["integer", "null"],
                             "enumCode": "branch_id",
                             "x-schema-form": {
-                                "type": "select"
+                                "type": "select",
+                                "parentEnumCode": "bank",
+                                "parentValueExpr": "model.bankId"
                             }
                         }
                     },

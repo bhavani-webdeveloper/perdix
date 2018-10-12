@@ -4,17 +4,13 @@ irf.pageCollection.factory(irf.page("audit.AssignedIssuesViewQueue"), ["$log","P
             "type": "search-list",
             "title": "ASSIGNED_ISSUES_VIEW_QUEUE",
             initialize: function(model, form, formCtrl) {
-                model.Audits = model.Audits || {};
                 var bankName = SessionStore.getBankName();
                 var banks = formHelper.enum('bank').data;
                 for (var i = 0; i < banks.length; i++) {
                     if (banks[i].name == bankName) {
                         model.bankId = banks[i].value;
-                        model.bankName = banks[i].name;
                     }
                 }
-                localFormController = formCtrl;
-                syncCheck = false;
                 var userRole = SessionStore.getUserRole();
                 if (userRole && userRole.accessLevel && userRole.accessLevel === 5) {
                     model.fullAccess = true;
@@ -47,27 +43,19 @@ irf.pageCollection.factory(irf.page("audit.AssignedIssuesViewQueue"), ["$log","P
                             "type": ["integer", "null"],
                             "enumCode": "bank",
                             "x-schema-form": {
-                                "type": "select",
-                                "screenFilter": true,
-
+                                "type": "select"
                             }
                         },
                         "branch_id": {
                             "title": "BRANCH_ID",
-                            "type": "number",
+                            "type": ["integer", "null"],
                             "enumCode": "branch_id",
                             "x-schema-form": {
-                                "type": "select"
+                                "type": "select",
+                                "parentEnumCode": "bank",
+                                "parentValueExpr": "model.bankId"
                             }
-                        },
-                        "user_name": {
-                            "title": "USER_NAME",
-                            "type": "string"
-                        },
-                        "login": {
-                            "title": "LOGIN",
-                            "type": "string"
-                        },
+                        }
                     },
                     "required": []
                 },
@@ -79,7 +67,6 @@ irf.pageCollection.factory(irf.page("audit.AssignedIssuesViewQueue"), ["$log","P
                     $q.all([
                         Audit.online.getIssuesList({
                             'branch_id': searchOptions.branch_id,
-                            'user_id': searchOptions.userId,
                             'issue_status': "A",
                             'bank_id': searchOptions.bankId,
                             'page': pageOpts.pageNo,
@@ -87,7 +74,6 @@ irf.pageCollection.factory(irf.page("audit.AssignedIssuesViewQueue"), ["$log","P
                         }).$promise,
                         Audit.online.getIssuesList({
                             'branch_id': searchOptions.branch_id,
-                            'user_id': searchOptions.userId,
                             'bank_id': searchOptions.bankId,
                             'issue_status': "P",
                             'page': pageOpts.pageNo,
