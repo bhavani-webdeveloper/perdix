@@ -1,19 +1,9 @@
-irf.pageCollection.factory(irf.page("audit.OutstandingIssuesQueue"), ["$log", "formHelper", "irfNavigator", "$stateParams", "Audit", "$state", "$q", "SessionStore",
-    function($log, formHelper, irfNavigator, $stateParams, Audit, $state, $q, SessionStore) {
+irf.pageCollection.factory(irf.page("audit.OutstandingIssuesQueue"), ["$log", "formHelper", "irfNavigator", "Audit",
+    function($log, formHelper, irfNavigator, Audit) {
         var returnObj = {
             "type": "search-list",
             "title": "OUTSTANDING_ISSUES",
-            initialize: function(model, form, formCtrl) {
-                model.Audits = model.Audits || {};
-                localFormController = formCtrl;
-                model.branch_id = SessionStore.getCurrentBranch().branchId;
-                syncCheck = false;
-                if ($stateParams.pageData && $stateParams.pageData.page) {
-                    returnObj.definition.listOptions.tableConfig.page = $stateParams.pageData.page;
-                } else {
-                    returnObj.definition.listOptions.tableConfig.page = 0;
-                }
-            },
+            initialize: function(model, form, formCtrl) {},
             definition: {
                 title: "SEARCH_ISSUES",
                 searchForm: [
@@ -41,7 +31,6 @@ irf.pageCollection.factory(irf.page("audit.OutstandingIssuesQueue"), ["$log", "f
                     return Audit.online.findIssues({
                         'branch_id': searchOptions.branch_id,
                         'current_stage': 'close',
-                        'issue_publish': "ALL",
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage,
                     }).$promise;

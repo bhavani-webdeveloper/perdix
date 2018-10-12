@@ -1,19 +1,10 @@
-irf.pageCollection.factory(irf.page("audit.UnconfirmedIssuesQueue"), ["$log", "formHelper", "irfNavigator", "$stateParams", "Audit", "$state", "$q", "SessionStore",
-    function($log, formHelper, irfNavigator, $stateParams, Audit, $state, $q, SessionStore) {
+irf.pageCollection.factory(irf.page("audit.UnconfirmedIssuesQueue"), ["$log", "formHelper", "irfNavigator", "$stateParams", "Audit",
+    function($log, formHelper, irfNavigator, $stateParams, Audit) {
 
         var returnObj = {
             "type": "search-list",
             "title": "UNCONFIRMED_ISSUES",
-            initialize: function(model, form, formCtrl) {
-                model.Audits = model.Audits || {};
-                localFormController = formCtrl;
-                syncCheck = false;
-                if ($stateParams.pageData && $stateParams.pageData.page) {
-                    returnObj.definition.listOptions.tableConfig.page = $stateParams.pageData.page;
-                } else {
-                    returnObj.definition.listOptions.tableConfig.page = 0;
-                }
-            },
+            initialize: function(model, form, formCtrl) {},
             definition: {
                 title: "SEARCH_ISSUES",
                 searchForm: [

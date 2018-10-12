@@ -1,17 +1,9 @@
-irf.pageCollection.factory(irf.page("audit.AssignedIssuesQueue"), ["$log", "PageHelper", "User", "formHelper", "irfNavigator", "$stateParams", "Audit", "$state", "$q", "SessionStore",
-    function($log, PageHelper, User, formHelper, irfNavigator, $stateParams, Audit, $state, $q, SessionStore) {
+irf.pageCollection.factory(irf.page("audit.AssignedIssuesQueue"), ["$log", "formHelper", "irfNavigator", "Audit", "SessionStore",
+    function($log, formHelper, irfNavigator, Audit, SessionStore) {
         var returnObj = {
             "type": "search-list",
             "title": "ASSIGNED_ISSUES",
             initialize: function(model, form, formCtrl) {
-                model.Audits = model.Audits || {};
-                localFormController = formCtrl;
-                syncCheck = false;
-                if ($stateParams.pageData && $stateParams.pageData.page) {
-                    returnObj.definition.listOptions.tableConfig.page = $stateParams.pageData.page;
-                } else {
-                    returnObj.definition.listOptions.tableConfig.page = 0;
-                }
                 model.role_id = SessionStore.getUserRole().id;
             },
             definition: {
