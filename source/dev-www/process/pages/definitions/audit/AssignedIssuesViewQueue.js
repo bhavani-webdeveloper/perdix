@@ -1,18 +1,9 @@
-irf.pageCollection.factory(irf.page("audit.AssignedIssuesViewQueue"), ["$log", "PageHelper", "User", "formHelper", "irfNavigator", "$stateParams", "Audit", "$state", "$q", "SessionStore",
-    function($log, PageHelper, User, formHelper, irfNavigator, $stateParams, Audit, $state, $q, SessionStore) {
+irf.pageCollection.factory(irf.page("audit.AssignedIssuesViewQueue"), ["$log", "formHelper", "irfNavigator", "$stateParams", "Audit",
+    function($log, formHelper, irfNavigator, $stateParams, Audit) {
         var returnObj = {
             "type": "search-list",
             "title": "ASSIGNED_ISSUES_VIEW_QUEUE",
-            initialize: function(model, form, formCtrl) {
-                model.Audits = model.Audits || {};
-                localFormController = formCtrl;
-                syncCheck = false;
-                if ($stateParams.pageData && $stateParams.pageData.page) {
-                    returnObj.definition.listOptions.tableConfig.page = $stateParams.pageData.page;
-                } else {
-                    returnObj.definition.listOptions.tableConfig.page = 0;
-                }
-            },
+            initialize: function(model, form, formCtrl) {},
             definition: {
                 title: "SEARCH_ISSUES",
                 searchForm: [
@@ -30,15 +21,7 @@ irf.pageCollection.factory(irf.page("audit.AssignedIssuesViewQueue"), ["$log", "
                             "x-schema-form": {
                                 "type": "userbranch"
                             }
-                        },
-                        "user_name": {
-                            "title": "USER_NAME",
-                            "type": "string"
-                        },
-                        "login": {
-                            "title": "LOGIN",
-                            "type": "string"
-                        },
+                        }
                     },
                     "required": []
                 },
@@ -49,7 +32,7 @@ irf.pageCollection.factory(irf.page("audit.AssignedIssuesViewQueue"), ["$log", "
                     return Audit.online.findIssues({
                         'branch_id': searchOptions.branch_id,
                         'current_stage': "assign",
-                        'assignee_designation_id': searchOptions.role_id,
+                        //'assignee_designation_id': searchOptions.role_id,
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage
                     }).$promise;

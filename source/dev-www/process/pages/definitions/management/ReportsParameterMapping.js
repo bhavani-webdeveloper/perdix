@@ -79,8 +79,8 @@
                                      } 
                                 }
                             }
-                            model.management.report_access_hierarchy = resp.accessHierarchy.status;
-                            model.management.report_access_hierarchy_details = resp.accessHierarchy.access_filter_query_column;
+                            // model.management.report_access_hierarchy = resp.accessHierarchy.status;
+                            // model.management.report_access_hierarchy_details = resp.accessHierarchy.access_filter_query_column;
                             PageHelper.hideLoader();
                         },function(resp){
                             PageHelper.hideLoader();
@@ -174,7 +174,7 @@
                             ]
                         }
                     ]
-                },
+                },/*
                     {
                     type: "box",
                     condition:"model.management.report_name",
@@ -198,7 +198,7 @@
                                     type:"textarea",
                                     required:true ,                           
                         }]
-                    },
+                    },*/
 
                 {
                     type: "actionbox",
@@ -235,8 +235,8 @@
                     submit: function(model, form, formName) {
                         var req = {
                             report_name :model.management.report_name,
-                            access_hierarchy:model.management.report_access_hierarchy_details,
-                            status:model.management.report_access_hierarchy,
+                            // access_hierarchy:model.management.report_access_hierarchy_details,
+                            // status:model.management.report_access_hierarchy,
                             parameter: []
                         };   
                          for (var i = 0; i < model.management._filterCollection.length; i++) {
