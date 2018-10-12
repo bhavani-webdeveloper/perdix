@@ -613,31 +613,40 @@ define({
                     PageHelper.clearErrors();
                     PageHelper.showLoader();
                     var reqData = _.cloneDeep(model);
-                    if (reqData.group.id) {
-                        proceedData(reqData).then(function(res) {
-                            irfNavigator.goBack();
-                            PageHelper.hideLoader();
-                        }, function(err) {
-                            Utils.removeNulls(res.group, true);
-                            model.group = _.clone(res.group);
-                            fixData(model);
-                            fillNames(model);
-                            PageHelper.hideLoader();
-                        });
-                    } else {
-                        saveData(reqData).then(function(res) {
-                            proceedData(res).then(function(res1) {
+                    Utils.confirm("Please Verify customer/spouse DOB in the system with actual ID Proof. DOB change request will not be allowed afterwards").then(function(){
+                        if (reqData.group.id) {
+                            proceedData(reqData).then(function(res) {
                                 irfNavigator.goBack();
                                 PageHelper.hideLoader();
                             }, function(err) {
-                                Utils.removeNulls(res1.group, true);
-                                model.group = _.clone(res1.group);
+                                Utils.removeNulls(res.group, true);
+                                model.group = _.clone(res.group);
                                 fixData(model);
                                 fillNames(model);
                                 PageHelper.hideLoader();
                             });
-                        });
-                    }
+                        } else {
+                            for (var i=0; i< reqData.group.jlgGroupMembers.length; i++){
+                                reqData.group.jlgGroupMembers[i].centreCode = reqData.group.centreCode;
+                                if(!reqData.group.id){
+                                    reqData.group.jlgGroupMembers[i].loanAmountSanctionedInPaisa = reqData.group.jlgGroupMembers[i].loanAmount * 100;
+                                }   
+                            }
+                            saveData(reqData).then(function(res) {
+                                proceedData(res).then(function(res1) {
+                                    irfNavigator.goBack();
+                                    PageHelper.hideLoader();
+                                }, function(err) {
+                                    Utils.removeNulls(res1.group, true);
+                                    model.group = _.clone(res1.group);
+                                    fixData(model);
+                                    fillNames(model);
+                                    PageHelper.hideLoader();
+                                });
+                            });
+                        }
+
+                    }); 
                 }
             }
         }
