@@ -481,7 +481,7 @@ define([], function () {
                             }
                         },
                         "DSCOverride": {
-
+                            
                         },
                         "DocumentUpload": {
                             "excludes": [],
@@ -841,16 +841,6 @@ define([], function () {
                                                     "REJECT": "REJECT",
                                                     "PROCEED": "PROCEED",
                                                     "SEND_BACK": "SEND_BACK"
-                                                }
-                                            },
-                                            {
-                                                "key": "review.action",
-                                                condition: "model.loanAccount.currentStage != 'LoanInitiation'",
-                                                "type": "radios",
-                                                titleMap: {
-                                                    "REJECT": "REJECT",
-                                                    "PROCEED": "PROCEED",
-
                                                 }
                                             },
                                             {
