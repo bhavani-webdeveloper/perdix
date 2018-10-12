@@ -24,7 +24,7 @@ $parameterMappingList = DB::connection("bi_db")->table('report_parameter_mapping
             ->select('report_parameter_mapping.*', 'report_parameters_master.name')
             ->where('report_parameter_mapping.report_name',$reportName)
             ->get();
-$accessHierarchy = DB::connection("bi_db")->table('reports_access_hierarchy')->select('access_filter_query_column')->where('report_name',$reportName)->first();                      
+/*$accessHierarchy = DB::connection("bi_db")->table('reports_access_hierarchy')->select('access_filter_query_column')->where('report_name',$reportName)->first();                      
 if(!empty($accessHierarchy)){
     $allData['accessHierarchy'] = array(
         'access_filter_query_column'=> $accessHierarchy->access_filter_query_column,
@@ -35,7 +35,7 @@ if(!empty($accessHierarchy)){
         'access_filter_query_column'=> null,
         'status'=> 0
     );
-}
+}*/
 $allData['parameterMappingList'] = $parameterMappingList->toArray();
 $response = get_response_obj();
 

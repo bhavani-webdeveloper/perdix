@@ -36,15 +36,19 @@ $reportMaster = ReportParameterMapping::where('report_name',$reportName)->delete
 /// Insert all form params
 $allInsertParameters = array();
 foreach($formParams as $formdata){
-$allInsertParameters[] = array(
-    'report_name' => $reportName,
-    'parameter' => $formdata['parameter_name'],
-    'report_query_column_name' => $formdata['report_query_column_name'],
-    'type' => $formdata['type'],
-    'query' => isset($formdata['query'])?$formdata['query']:'',
-    'operators' => $formdata['operator'],
-    'required' => $formdata['required']
-);
+    $parameters= array(
+        'report_name' => $reportName,
+        'parameter' => $formdata['parameter_name'],
+        'report_query_column_name' => $formdata['report_query_column_name'],
+        'type' => $formdata['type'],
+        'operators' => $formdata['operator'],
+        'required' => $formdata['required']
+    );
+
+    if(isset($formdata['query']) &&  !empty($formdata['query'])) {
+        $parameters["query"] = $formdata['query'];
+    }
+    $allInsertParameters[] = $parameters;
 }
 
 ReportParameterMapping::insert($allInsertParameters);
