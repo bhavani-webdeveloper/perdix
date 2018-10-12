@@ -155,7 +155,7 @@ export class CalculateVehicleViabilityPolicy extends IPolicy<LoanProcess> {
 
                         // Vehicle Income Details
                          if (d.calculation_method == 'DISTANCE') {
-                            let incomeAmount =  loanProcess.loanAccount.vehicleLoanDetails.ratePerTrip *  loanProcess.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].trips;
+                            let incomeAmount =  loanProcess.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].ratePerTrip *  loanProcess.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].trips;
                             if ( loanProcess.loanAccount &&  loanProcess.loanAccount.vehicleLoanDetails &&  loanProcess.loanAccount.vehicleLoanDetails.vehicleLoanIncomes && _.isArray( loanProcess.loanAccount.vehicleLoanDetails.vehicleLoanIncomes)) {
                                 loanProcess.loanAccount.vehicleLoanDetails.vehicleLoanIncomes = [];   
                                 loanProcess.loanAccount.vehicleLoanDetails.vehicleLoanIncomes.push({
