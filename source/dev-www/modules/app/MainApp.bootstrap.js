@@ -31,7 +31,7 @@ var fileSystem = {
 
 window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
 if (navigator.webkitPersistentStorage && window.requestFileSystem) {
-	navigator.webkitPersistentStorage.requestQuota(50*1024*1024, function(grantedBytes) {
+	navigator.webkitPersistentStorage.requestQuota(100*1024*1024, function(grantedBytes) {
 		window.requestFileSystem(window.PERSISTENT, grantedBytes, function(fs) {
 			console.log('Opened file system: ' + fs.name);
 			fileSystem.root = fs.root;
