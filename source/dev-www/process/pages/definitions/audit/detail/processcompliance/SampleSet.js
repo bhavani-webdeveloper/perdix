@@ -63,7 +63,7 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleSet"),
                             break;
                         }
                     }
-                    var fetchCountString = (auto_sampling.sample_fetched && auto_sampling.sample_total)? ' (' + auto_sampling.sample_fetched + '/' + auto_sampling.sample_total + ')': '';
+                    var fetchCountString = (auto_sampling && auto_sampling.sample_fetched && auto_sampling.sample_total)? ' (' + auto_sampling.sample_fetched + '/' + auto_sampling.sample_total + ')': '';
                     self.form = [{
                         "type": "box",
                         "colClass": "col-md-12",

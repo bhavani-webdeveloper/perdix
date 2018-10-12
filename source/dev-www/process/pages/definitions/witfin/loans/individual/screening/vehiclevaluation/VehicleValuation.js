@@ -384,6 +384,15 @@ define(
                                             }
                                         }
                                     }
+                                },
+                                "VehicleAccessories": {
+                                    "items": {
+                                        "VehicleAccessories": {
+                                            "startEmpty": true,
+                                            "items": {
+                                            }
+                                        }
+                                    }
                                 }
                             }
                             }

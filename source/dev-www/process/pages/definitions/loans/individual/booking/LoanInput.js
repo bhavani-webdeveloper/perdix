@@ -164,7 +164,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         model.loanAccount.frequency = model.additional.product.frequency;
                         // if (model.additional.product.frequency == 'M')
                         //     model.loanAccount.frequency = 'Monthly';
-                        if(model.loanAccount.loanPurpose1!=null && model.siteCode != 'witfin'){
+                        if(model.loanAccount.loanPurpose1!=null){
                             var purpose1_found = false;
                             Queries.getLoanPurpose1(model.loanAccount.productCode).then(function(resp1){
                                 loanPurpose1List = [];
@@ -896,7 +896,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 },
                                 searchHelper: formHelper,
                                 search: function(inputModel, form, model) {
-                                    if(model.loanAccount.productCode != null && model.siteCode != 'witfin')
+                                    if(model.loanAccount.productCode != null)
                                         return Queries.getLoanPurpose1(model.loanAccount.productCode);
                                     else
                                         return Queries.getAllLoanPurpose1();
@@ -923,7 +923,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 },
                                 searchHelper: formHelper,
                                 search: function(inputModel, form, model) {
-                                    if(model.loanAccount.productCode != null && model.siteCode != 'witfin')
+                                    if(model.loanAccount.productCode != null)
                                         return Queries.getLoanPurpose2(model.loanAccount.productCode, model.loanAccount.loanPurpose1);
                                     else
                                         return Queries.getAllLoanPurpose2(model.loanAccount.loanPurpose1);
@@ -1353,7 +1353,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 },
                                 searchHelper: formHelper,
                                 search: function(inputModel, form, model) {
-                                    if(model.loanAccount.productCode != null && model.siteCode != 'witfin')
+                                    if(model.loanAccount.productCode != null)
                                         return Queries.getLoanPurpose1(model.loanAccount.productCode);
                                     else
                                         return Queries.getAllLoanPurpose1();
@@ -1380,7 +1380,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 },
                                 searchHelper: formHelper,
                                 search: function(inputModel, form, model) {
-                                    if(model.loanAccount.productCode != null && model.siteCode != 'witfin')
+                                    if(model.loanAccount.productCode != null)
                                         return Queries.getLoanPurpose2(model.loanAccount.productCode, model.loanAccount.loanPurpose1);
                                     else
                                         return Queries.getAllLoanPurpose2(model.loanAccount.loanPurpose1);

@@ -68,9 +68,9 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:80
                         },
                         {
-                            pageName: 'kgfs.loans.individual.booking.DocumentUpload',
-                            title: 'DOCUMENT_UPLOAD',
-                            pageClass: 'document-upload',
+                            pageName: 'kgfs.loans.individual.booking.DocumentVerification',
+                            title: 'DOCUMENT_VERIFICATION',
+                            pageClass: 'document-verification',
                             minimum: 1,
                             maximum: 1,
                             order:90
@@ -160,7 +160,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 });
                                 $this.bundlePages.push({
-                                    pageClass: 'document-upload',
+                                    pageClass: 'document-verification',
                                     model:{
                                         loanProcess: loanProcess
                                     }
@@ -215,7 +215,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 });
                                 $this.bundlePages.push({
-                                    pageClass: 'document-upload',
+                                    pageClass: 'document-verification',
                                     model:{
                                         loanProcess: loanProcess
                                     }

@@ -157,7 +157,67 @@ define(
                     },
                     "VehiclePhotoCaptures": {
                         "readonly": true
-                    }
+                    },
+                    "VehicleIdentityDetails": {
+                        "items": {
+                            "make": {
+                                "type": "text",
+                                "title": "MANUFACTURER",
+                                "readonly":  true
+                            },
+                            "vehicleModel": {
+                                "key": "loanAccount.vehicleLoanDetails.vehicleModel",
+                                "title": "MODEL",
+                                "type": "text",
+                                "required": "true",
+                                "readonly":  true
+                            },
+                            "yearOfManufacture": {
+                                "key": "loanAccount.vehicleLoanDetails.yearOfManufacture",
+                                "title": "YEAR_OF_MANUFACTURE",
+                                "type": "date",
+                                "required": "true",
+                                "readonly":  true
+                            },
+                            "trailerAttached": {
+                                "key": "loanAccount.vehicleLoanDetails.trailerAttached",
+                                "title": "TRAILER_ATTACHED",
+                                "type": "select",
+                                "required": "true",
+                                "enumCode": "vehicle_trailer_attached"
+                            }
+                        }
+                    },
+                    "VehicleRegistrationDetails":{
+                        "items": {
+                            "noOfCylinders":{
+                                "key": "loanAccount.vehicleLoanDetails.noOfCylinders",
+                                "title": "NO_OF_CYLINDERS",
+                                "inputmode": "number",
+                                "numberType": "number",
+                                "type": "number"
+                            },
+                            "grossVehicleWeight":{
+                                "key": "loanAccount.vehicleLoanDetails.grossVehicleWeight",
+                                "title": "GROSS_VEHICLE_WEIGHT",
+                                "inputmode": "number",
+                                "numberType": "number"
+                            },
+                            "noOfAxles":{
+                                "key": "loanAccount.vehicleLoanDetails.noOfAxles",
+                                "title": "NO_OF_AXLES",
+                                "inputmode": "number",
+                                "numberType": "number",
+                                "type": "number"
+                            },
+                            "bodyType":{
+                                "enumCode": "business_asset_description"
+                            },
+                            "hypothecatedTo":{
+                                "type": "text"
+                            }
+                        }
+                    } 
 
                 }
             }
@@ -198,7 +258,8 @@ define(
                         "VehicleIdentityDetails.odometer",
                         "VehicleIdentityDetails.usedFor",
                         "VehicleIdentityDetails.vehicleModel",
-                        "VehicleIdentityDetails.yearOfManufacture",                     
+                        "VehicleIdentityDetails.yearOfManufacture",
+                        "VehicleIdentityDetails.trailerAttached",                   
                         "VehicleRegistrationDetails",
                         "VehicleRegistrationDetails.reRegistered",
                         "VehicleRegistrationDetails.previousRegistrationNumber",

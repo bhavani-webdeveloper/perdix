@@ -176,9 +176,9 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["irfNavigator", "for
                             "items": [{
                                 "type": "section",
                                 "htmlClass": "",
-                                "html": '<i class="fa fa-user text-gray">&nbsp;</i> {{model.actions.getUsername(model.auditIssue.messages[arrayIndex].created_id)}}\
-                    <br><i class="fa fa-clock-o text-gray">&nbsp;</i> {{model.auditIssue.messages[arrayIndex].created_on}}\
-                    <br><i class="fa fa-commenting text-gray">&nbsp;</i> <strong>{{model.auditIssue.messages[arrayIndex].comment}}</strong><br>'
+                                "html": '<i class="fa fa-user text-gray">&nbsp;</i> {{model.actions.getUsername(model.auditIssue.messages[arrayIndex].created_by)}}\
+                                        <br><i class="fa fa-clock-o text-gray">&nbsp;</i> {{model.auditIssue.messages[arrayIndex].created_on}}\
+                                        <br><i class="fa fa-commenting text-gray">&nbsp;</i> <strong>{{model.auditIssue.messages[arrayIndex].comment}}</strong><br>'
                             }]
                         }]
                     }, {

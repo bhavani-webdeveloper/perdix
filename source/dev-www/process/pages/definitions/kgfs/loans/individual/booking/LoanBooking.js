@@ -36,6 +36,7 @@ define([], function () {
                     "LoanDetails.borrowersRelationship",
                     "LoanDetails.witnessDetails",
                     "LoanDetails.witnessDetails.witnessFirstName",
+                    "LoanDetails.witnessDetails.witnessDOB",
                     "LoanDetails.witnessDetails.witnessRelationship",
 
 
@@ -256,7 +257,7 @@ define([], function () {
                                         for (var i = 0; i < model.customer.familyMembers.length; i++) {
                                             out.push({
                                                 name: model.customer.familyMembers[i].familyMemberFirstName,
-                                                // value: model.customer.familyDetails[i].value,
+                                                dob: model.customer.familyMembers[i].dateOfBirth,
                                                 relationship: model.customer.familyMembers[i].relationShip
                                             })
                                         }
@@ -271,12 +272,17 @@ define([], function () {
                                         //add to the witnees array.
                                         model.loanAccount.witnessFirstName = valueObj.name;
                                         model.loanAccount.witnessRelationship = valueObj.relationship;
+                                        model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf3 = valueObj.dob;
                                     },
                                     getListDisplayItem: function (item, index) {
                                         return [
                                             item.name
                                         ];
                                     }
+                                },
+                                "LoanDetails.witnessDetails.witnessDOB":{
+                                    "type": "date",
+                                    "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf3"
                                 },
                                 "LoanDetails.witnessDetails.witnessRelationship": {
                                     "readonly": false,
@@ -481,7 +487,57 @@ define([], function () {
                             }
                         },
                         "DSCOverride":{
-
+                            "excludes": [],
+                            "overrides": {
+                                "LoanDetails": {
+                                    "orderNo": 1,
+                                    "readonly": true
+                                },
+                                "LoanDetails.frequency":{
+                                    "enumCode": "loan_product_frequency"
+                                },
+                                "LoanDetails.loanProductCategory": {
+                                    "enumCode": "loan_product_category",
+                                },
+                                "LoanDetails.loanType": {
+                                    "orderNo": 2,
+                                    "readonly": true,
+                                    "titleMap": [{
+                                            value: "JEWEL",
+                                            name: "Jewel Loan"
+                                        },
+                                        {
+                                            value: "SECURED",
+                                            name: "SECURED"
+                                        },
+                                        {
+                                            value: "UNSECURED",
+                                            name: "UNSECURED"
+                                        }
+                                    ]
+                                },
+                                "LoanDetails.witnessDetails.witnessDOB":{
+                                    "type": "date",
+                                    "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf3"
+                                },
+                                "NomineeDetails": {
+                                    "orderNo": 3,
+                                    "readonly": true
+                                },
+                                "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianRelationship":{
+                                    "readonly": true,
+                                    "type": "text"
+                                },
+                                "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianGender":{
+                                    "readonly": true,
+                                    "type": "text"
+                                },
+                                "JewelDetails": {
+                                    "orderNo": 2,
+                                    "readonly": true,
+                                    condition: "model.loanAccount.loanType == 'JEWEL'"
+                                }
+                            }
                         },
                         "DocumentUpload": {
                             "excludes": [],
@@ -513,6 +569,10 @@ define([], function () {
                                         }
                                     ]
                                 },
+                                "LoanDetails.witnessDetails.witnessDOB":{
+                                    "type": "date",
+                                    "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf3"
+                                },
                                 "NomineeDetails": {
                                     "orderNo": 3,
                                     "readonly": true
@@ -533,6 +593,114 @@ define([], function () {
                                 }
                             }
                         },
+                        "Checker1":{
+                            "excludes": [],
+                            "overrides": {
+                                "LoanDetails": {
+                                    "orderNo": 1,
+                                    "readonly": true
+                                },
+                                "LoanDetails.frequency":{
+                                    "enumCode": "loan_product_frequency"
+                                },
+                                "LoanDetails.loanProductCategory": {
+                                    "enumCode": "loan_product_category",
+                                },
+                                "LoanDetails.loanType": {
+                                    "orderNo": 2,
+                                    "readonly": true,
+                                    "titleMap": [{
+                                            value: "JEWEL",
+                                            name: "Jewel Loan"
+                                        },
+                                        {
+                                            value: "SECURED",
+                                            name: "SECURED"
+                                        },
+                                        {
+                                            value: "UNSECURED",
+                                            name: "UNSECURED"
+                                        }
+                                    ]
+                                },
+                                "LoanDetails.witnessDetails.witnessDOB":{
+                                    "type": "date",
+                                    "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf3"
+                                },
+                                "NomineeDetails": {
+                                    "orderNo": 3,
+                                    "readonly": true
+                                },
+                                "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianRelationship":{
+                                    "readonly": true,
+                                    "type": "text"
+                                },
+                                "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianGender":{
+                                    "readonly": true,
+                                    "type": "text"
+                                },
+                            
+                                "JewelDetails": {
+                                    "orderNo": 2,
+                                    "readonly": true,
+                                    condition: "model.loanAccount.loanType == 'JEWEL'"
+                                }
+                            }
+                        },
+                        "Checker2":{
+                            "excludes": [],
+                            "overrides": {
+                                "LoanDetails": {
+                                    "orderNo": 1,
+                                    "readonly": true
+                                },
+                                "LoanDetails.frequency":{
+                                    "enumCode": "loan_product_frequency"
+                                },
+                                "LoanDetails.loanProductCategory": {
+                                    "enumCode": "loan_product_category",
+                                },
+                                "LoanDetails.loanType": {
+                                    "orderNo": 2,
+                                    "readonly": true,
+                                    "titleMap": [{
+                                            value: "JEWEL",
+                                            name: "Jewel Loan"
+                                        },
+                                        {
+                                            value: "SECURED",
+                                            name: "SECURED"
+                                        },
+                                        {
+                                            value: "UNSECURED",
+                                            name: "UNSECURED"
+                                        }
+                                    ]
+                                },
+                                "LoanDetails.witnessDetails.witnessDOB":{
+                                    "type": "date",
+                                    "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf3"
+                                },
+                                "NomineeDetails": {
+                                    "orderNo": 3,
+                                    "readonly": true
+                                },
+                                "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianRelationship":{
+                                    "readonly": true,
+                                    "type": "text"
+                                },
+                                "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianGender":{
+                                    "readonly": true,
+                                    "type": "text"
+                                },
+                            
+                                "JewelDetails": {
+                                    "orderNo": 2,
+                                    "readonly": true,
+                                    condition: "model.loanAccount.loanType == 'JEWEL'"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -556,6 +724,10 @@ define([], function () {
                     model.loanAccount = model.loanProcess.loanAccount;
                     model.loanAccount.bcAccount = {};
                     model.loanAccount.processType = "1";
+                    if(typeof model.loanAccount.accountUserDefinedFields =="undefined" ){
+                        model.loanAccount.accountUserDefinedFields = {};
+                        model.loanAccount.accountUserDefinedFields.userDefinedFieldValues =  {};
+                    }
                     model.loanAccount.remarksHistory = null;
                     if(typeof model.loanAccount.customerId !="undefined"){
                         $q.when(Enrollment.get({
@@ -699,7 +871,7 @@ define([], function () {
                                                     "title": "BORROWERS",
                                                     "type": "radios",
                                                     "orderNo": 8,
-                                                    "key": "loanAccount.husbandOrFatherMiddleName",
+                                                    "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf4",
                                                     "titleMap": [{
                                                             value: "Father",
                                                             name: "Father"
@@ -726,14 +898,14 @@ define([], function () {
                                                 "borrowersHusbandName": {
                                                     "orderNo":9,
                                                     "title": "HUSBAND_NAME",
-                                                    "condition": "model.loanAccount.husbandOrFatherMiddleName == 'Husband'",
+                                                    "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf4 == 'Husband'",
                                                     "type": "text",
                                                     "key": "loanAccount.husbandOrFatherFirstName",
                                                 },
                                                 "borrowersFatherName": {
                                                     "orderNo": 9,
                                                     "title": "FATHER_NAME",
-                                                    "condition": "model.loanAccount.husbandOrFatherMiddleName == 'Father'",
+                                                    "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf4 == 'Father'",
                                                     "type": "text",
                                                     "key": "loanAccount.husbandOrFatherFirstName"
                                                 },
@@ -795,7 +967,7 @@ define([], function () {
                                         {
                                             "type": "box",
                                             "title": "POST_REVIEW",
-                                            condition: "model.loanAccount.id && model.loanAccount.currentStage == 'LoanInitiation'",
+                                            condition: "model.loanAccount.currentStage == 'LoanInitiation' && model.loanAccount.id ",
                                             "items": [
                                                 {
                                                     key: "review.action",
@@ -987,7 +1159,7 @@ define([], function () {
                                         },
                                         {
                                             "type": "actionbox",
-                                            condition: "model.loanAccount.currentStage = 'LoanInitiation'",
+                                            condition: "model.loaProcess.loanAccount.currentStage == 'LoanInitiation'",
                                             "items": [{
                                                 "type": "submit",
                                                 "title": "SAVE"
@@ -1092,9 +1264,9 @@ define([], function () {
                         if (typeof model.loanAccount.loanAmount != "undefined") {
                             model.loanAccount.loanAmountRequested = model.loanAccount.loanAmount;
                         }
-                        if (typeof model.loanAccount.husbandOrFatherMiddleName !="undefined"){
+                        if (typeof model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf4 !="undefined"){
                             if(typeof model.loanAccount.husbandOrFatherFirstName =="undefined" || model.loanAccount.husbandOrFatherFirstName ==null){
-                                   model.loanAccount.husbandOrFatherMiddleName = null; 
+                                   model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf4 = null; 
                             }
                         }
                         if (!model.loanAccount.id) {
