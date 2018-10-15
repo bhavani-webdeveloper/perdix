@@ -21,6 +21,7 @@ export class LoanAccountsLOVConfiguration extends LOVElementConfiguration {
     };
 
     getListDisplayItem: Function =  function(data, index) {
+        console.log(data);
         return [
             'Account Number : ' + data.accountNumber,
             'Loan Amount : ' + data.loanAmount
@@ -40,7 +41,7 @@ export class LoanAccountsLOVConfiguration extends LOVElementConfiguration {
                 if(model.payment.paymentPurpose == 'Loan Disbursement') {
                     model.payment.amount = res.loanAmount;
                 }
-                if(res.disbursementSchedules.length > 0) {                    
+                if(model.pageConfig.DefaultBeneficaryParty == 'NONE' && res.disbursementSchedules.length > 0) {                    
                     model.payment.beneficiaryAccountNumber = res.disbursementSchedules[0].customerAccountNumber;
                     model.payment.beneficiaryIfsc = res.disbursementSchedules[0].ifscCode;
                     model.payment.beneficiaryBankName = res.disbursementSchedules[0].customerBankName;
