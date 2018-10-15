@@ -122,6 +122,20 @@ irf.pageCollection.factory(irf.page("audit.CreateAudit"), ["$log", "PageHelper",
             },
             actions: {
                 submit: function(model, formCtrl, form, $event) {
+                    if (!model.audit_info.report_date || !model.audit_info.start_date || !model.audit_info.end_date) {
+                        PageHelper.setError({message: "Report date, start date, and end date are mandatory"});
+                        return;
+                    }
+                    var rDate = moment(model.audit_info.report_date, SessionStore.getSystemDateFormat());
+                    var sDate = moment(model.audit_info.start_date, SessionStore.getSystemDateFormat());
+                    var eDate = moment(model.audit_info.end_date, SessionStore.getSystemDateFormat());
+                    if (rDate.isAfter(sDate)) {
+                        PageHelper.setError({message: "Report date should be on or before start date"});
+                        return;
+                    } else if (sDate.isAfter(eDate)) {
+                        PageHelper.setError({message: "Start date should be on or before end date"});
+                        return;
+                    }
                     PageHelper.showLoader();
                     model.audit_info.status = "O";
                     model.audit_info.next_stage = "create";
