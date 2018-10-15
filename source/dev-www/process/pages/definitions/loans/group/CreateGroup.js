@@ -7,7 +7,7 @@ define({
 
     $pageFn: function($log, GroupProcess, Enrollment, CreditBureau, Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
         PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
-        model.siteCode = SessionStore.getGlobalSetting("siteCode");
+        
 
         var validateForm = function(formCtrl){
             formCtrl.scope.$broadcast('schemaFormValidate');
@@ -129,6 +129,7 @@ define({
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 model.group = model.group || {};
+                model.siteCode = SessionStore.getGlobalSetting("siteCode");
                 model.group.siteCode = SessionStore.getGlobalSetting("siteCode");
                 for (var i = 0; i < banks.length; i++){
                     if(banks[i].name == bankName){
