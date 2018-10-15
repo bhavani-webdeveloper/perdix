@@ -13,11 +13,11 @@ export class LoanAccountsLOVConfiguration extends LOVElementConfiguration {
     };
 
     search: Function = function(inputModel, form, model) {
-        /*let Queries = AngularResourceService.getInstance().getNGService("Queries");
-        return Queries.getAccountDetails([inputModel.accountNumber]);
-*/
-        let IndividualLoan = AngularResourceService.getInstance().getNGService("IndividualLoan");
-        return IndividualLoan.search({urn: model.customer.urnNo}).$promise;
+        let Queries = AngularResourceService.getInstance().getNGService("Queries");
+        return Queries.getReadyToDisburseAccountDetails(model.customer.urnNo);
+
+        // let IndividualLoan = AngularResourceService.getInstance().getNGService("IndividualLoan");
+        // return IndividualLoan.search({urn: model.customer.urnNo}).$promise;
     };
 
     getListDisplayItem: Function =  function(data, index) {
