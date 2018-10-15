@@ -588,7 +588,7 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
                                         item.district + ', ' + item.state
                                     ];
                                 }
-                            }, {
+                            },  {
                                 "key": "lead.area",
                                 "readonly": true
                             }, {
@@ -796,6 +796,7 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
                                     type: "lov",
                                     fieldType: "number",
                                     autolov: true,
+                                    condition:"model.siteCode!='IREPDhan'",
                                     inputMap: {
                                         "pincode": "lead.pincode",
                                         "district": {
@@ -816,6 +817,55 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
                                     searchHelper: formHelper,
                                     search: function (inputModel, form, model) {
                                         return Queries.searchPincodes(inputModel.pincode, inputModel.district, inputModel.state);
+                                    },
+                                    getListDisplayItem: function (item, index) {
+                                        return [
+                                            item.division + ', ' + item.region,
+                                            item.pincode,
+                                            item.district + ', ' + item.state
+                                        ];
+                                    }
+                                },{
+                                    key: "lead.pincode",
+                                    type: "lov",
+                                    fieldType: "number",
+                                    autolov: true,
+                                    condition: "model.siteCode == 'IREPDhan'",
+                                    inputMap: {
+                                        "pincode":"lead.pincode",
+                                       "district": {
+                                           key: "lead.district"
+                                       },
+                                       "state": {
+                                           key: "lead.state"
+                                       },
+                                       "division": {
+                                           key: "lead.division"
+                                       },
+                                       "region": {
+                                           key: "lead.region"
+                                       }
+                                    },
+                                    outputMap: {
+                                        "division": "lead.area",
+                                        "region": "lead.cityTownVillage",
+                                        "pincode": "lead.pincode",
+                                        "district": "lead.district",
+                                        "state": "lead.state"
+    
+                                    },
+                                    searchHelper: formHelper,
+                                    search: function (inputModel, form, model) {
+                                        if (!inputModel.pincode) {
+                                            return $q.reject();
+                                        }
+                                        return Queries.searchPincodes(
+                                            inputModel.pincode,
+                                            inputModel.district,
+                                            inputModel.state,
+                                            inputModel.region,
+                                            inputModel.division
+                                        );
                                     },
                                     getListDisplayItem: function (item, index) {
                                         return [
