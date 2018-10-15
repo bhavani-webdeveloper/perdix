@@ -368,7 +368,16 @@ define(
                                         }
                                     }
                                 },
-
+                                "VehicleAccessories": {
+                                    "items": {
+                                        "vehicleAccessories": {
+                                            "startEmpty": true,
+                                            "items": {
+                                              
+                                            }
+                                        }
+                                    }
+                                },
                                 "VehicleAsset": {
                                     "items": {
                                         "vehicleAssetConditions": {
@@ -381,15 +390,6 @@ define(
                                                     "enumCode": "vehicle_tyre_condition",
                                                     "condition": "model.loanAccount.vehicleLoanDetails.vehicleAssetConditions[arrayIndex].componentType == 'LH Front' || model.loanAccount.vehicleLoanDetails.vehicleAssetConditions[arrayIndex].componentType == 'LH Rear' || model.loanAccount.vehicleLoanDetails.vehicleAssetConditions[arrayIndex].componentType == 'RH Front' || model.loanAccount.vehicleLoanDetails.vehicleAssetConditions[arrayIndex].componentType == 'RH Rear'"
                                                 }
-                                            }
-                                        }
-                                    }
-                                },
-                                "VehicleAccessories": {
-                                    "items": {
-                                        "VehicleAccessories": {
-                                            "startEmpty": true,
-                                            "items": {
                                             }
                                         }
                                     }

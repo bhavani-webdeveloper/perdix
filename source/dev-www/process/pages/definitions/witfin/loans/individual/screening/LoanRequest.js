@@ -522,6 +522,18 @@ define([], function() {
                                 },
                                 "LoanDocuments": {
                                     "readonly": true
+                                },
+                                "PayerDetails": {
+                                    "readonly": true
+                                },
+                                "LoanRecommendation":{
+                                    "readonly": true
+                                },
+                                "TeleVerification":{
+                                    "readonly":true
+                                },
+                                "FieldInvestigationDetails":{
+                                    "readonly":true
                                 }
                             }
                         }
@@ -670,7 +682,7 @@ define([], function() {
                     // AngularResourceService.getInstance().setInjector($injector);
                     /* Setting data recieved from Bundle */
                     model.loanAccount = model.loanProcess.loanAccount;
-
+                    model.currentStage = bundleModel.currentStage;
                     if (!model.loanAccount.id){
                         model.loanAccount.accountUserDefinedFields = {
                             userDefinedFieldValues: {
@@ -1104,10 +1116,18 @@ define([], function() {
                                 "items": [{
                                     key: "review.action",
                                     type: "radios",
+                                    "condition": "model.currentStage != 'Rejected'",
                                     titleMap: {
                                         "REJECT": "REJECT",
                                         "SEND_BACK": "SEND_BACK",
                                         "PROCEED": "PROCEED"
+                                    }
+                                }, {
+                                    key: "review.action",
+                                    type: "radios",
+                                    "condition": "model.currentStage == 'Rejected'",
+                                    titleMap: {
+                                        "SEND_BACK": "SEND_BACK"
                                     }
                                 }, {
                                     type: "section",
