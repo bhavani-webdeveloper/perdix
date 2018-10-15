@@ -611,9 +611,9 @@ define({
                         model.group.jlgGroupMembers[i].centreCode = model.group.centreCode;
                     }
                     PageHelper.clearErrors();
-                    PageHelper.showLoader();
                     var reqData = _.cloneDeep(model);
                     Utils.confirm("Please Verify customer/spouse DOB in the system with actual ID Proof. DOB change request will not be allowed afterwards").then(function(){
+                        PageHelper.showLoader();
                         if (reqData.group.id) {
                             proceedData(reqData).then(function(res) {
                                 irfNavigator.goBack();
