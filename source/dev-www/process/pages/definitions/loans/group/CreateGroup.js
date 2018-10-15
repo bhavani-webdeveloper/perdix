@@ -520,7 +520,7 @@ define({
                             var familyMembers = [];
                             if(model.group.jlgGroupMembers[context.arrayIndex].familyMembers)
                             for (var idx = 0; idx < model.group.jlgGroupMembers[context.arrayIndex].familyMembers.length; idx++){
-                                if(model.group.jlgGroupMembers[context.arrayIndex].familyMembers[idx].relationShip != 'self' && 
+                                if((model.group.jlgGroupMembers[context.arrayIndex].familyMembers[idx].relationShip).toUpperCase() != 'SELF' && 
                                 (model.group.jlgGroupMembers[context.arrayIndex].familyMembers[idx].age>=18 &&
                                     model.group.jlgGroupMembers[context.arrayIndex].familyMembers[idx].age<=59)
                                 ) {
