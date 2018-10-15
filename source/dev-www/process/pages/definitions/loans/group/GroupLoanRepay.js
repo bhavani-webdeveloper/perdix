@@ -370,7 +370,7 @@ function($log, $q, SessionStore, $state, formHelper, $stateParams, LoanAccount, 
             }, {
                 "type": "button",
                 "style": "btn-theme",
-                "condition": "model.siteCode == 'KGFS'",
+                "condition": "model.siteCode == 'KGFS' || model.printDataDownloadFailed",
                 "title": "PRINT",
                 "onClick": function(model, formCtrl, formName) {
                     function PrinterConstants() {
@@ -651,10 +651,6 @@ function($log, $q, SessionStore, $state, formHelper, $stateParams, LoanAccount, 
                                 r.customerName = Utils.getFullName(resp.customer1FirstName, resp.customer1MiddleName, resp.customer1LastName);
                                 r.payOffAmount = resp.payOffAmount;
                             }
-                        })
-
-                        $q.all(promise).finally(function() {
-
                             opts.accountName= model.repaymentResponse.repayments[0].accountName;
                             opts.productCode=model.repaymentResponse.repayments[0].productCode;
                             getPrintHeader(opts);
@@ -692,7 +688,9 @@ function($log, $q, SessionStore, $state, formHelper, $stateParams, LoanAccount, 
                                 $log.info("cordova not there");
                                 console.log("errr collback");
                             }, pData.getLines());
-
+                        }, function(e) {
+                            model.printDataDownloadFailed = true;
+                            PageHelper.setError({message: "Failed to download data required to print. Pl retry again."});
                         });
                     } else
                     {
@@ -742,9 +740,6 @@ function($log, $q, SessionStore, $state, formHelper, $stateParams, LoanAccount, 
                                 r.payOffAmount = resp.payOffAmount;
                                 r.demandAmount = resp.equatedInstallment;
                             }
-                        })
-
-                        $q.all(promise).finally(function() {
                             opts.accountName= model.repaymentResponse.loanDemandScheduleDto[0].accountName;
                             opts.productCode=model.repaymentResponse.loanDemandScheduleDto[0].product;
                             getPrintHeader(opts);
@@ -779,6 +774,9 @@ function($log, $q, SessionStore, $state, formHelper, $stateParams, LoanAccount, 
                                 console.error(err);
                                 console.log("errr collback");
                             }, pData.getLines());
+                        }, function(e) {
+                            model.printDataDownloadFailed = true;
+                            PageHelper.setError({message: "Failed to download data required to print. Pl retry again."});
                         });
                     }
                 }
