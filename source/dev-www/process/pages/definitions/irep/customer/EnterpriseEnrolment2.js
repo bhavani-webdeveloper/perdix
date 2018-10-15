@@ -12,7 +12,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
             var overridesFields = function(bundlePageObj){
                return {
                     "ContactInformation.pincode": {
-                         "title": "pincode"
+                         "title": "pincode",
+                        "required": true,
+                        "resolver": "PincodeLOVConfiguration"
                     },
                     "Machinery.fixedAssetsMachinaries.hypothecatedToUs": {
                          "title": "HYPOTHECATED_TO_IREP"
