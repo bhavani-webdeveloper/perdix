@@ -70,6 +70,7 @@ export class CalculateVehicleViabilityPolicy extends IPolicy<LoanProcess> {
                          // vehicle Expense Details
                          if (loanProcess.loanAccount && loanProcess.loanAccount.vehicleLoanDetails && loanProcess.loanAccount.vehicleLoanDetails.vehicleLoanExpenses && _.isArray(loanProcess.loanAccount.vehicleLoanDetails.vehicleLoanExpenses)) {
                             loanProcess.loanAccount.vehicleLoanDetails.vehicleLoanExpenses = [];
+                            var ptmi_total = d.permit_cost + d.taxes +  d.maintenance +  d.insurance + d.miscellaneous_expense;
                             loanProcess.loanAccount.vehicleLoanDetails.vehicleLoanExpenses.push(
                                 {
                                     'expenseType': "Fuel Cost per month",
@@ -92,24 +93,8 @@ export class CalculateVehicleViabilityPolicy extends IPolicy<LoanProcess> {
                                     'expenseAmount': d.cleaner_salary
                                 },
                                 {
-                                    'expenseType': "Permit Cost",
-                                    'expenseAmount': d.permit_cost
-                                },
-                                {
-                                    'expenseType': "Taxes",
-                                    'expenseAmount': d.taxes
-                                },
-                                {
-                                    'expenseType': "Maintenance",
-                                    'expenseAmount': d.maintenance
-                                },
-                                {
-                                    'expenseType': "Insurance",
-                                    'expenseAmount': d.insurance
-                                },
-                                {
-                                    'expenseType': "Miscellaneous",
-                                    'expenseAmount': d.miscellaneous_expense
+                                    'expenseType': "PTMI",
+                                    'expenseAmount': ptmi_total
                                 }
                             );      
                         }
