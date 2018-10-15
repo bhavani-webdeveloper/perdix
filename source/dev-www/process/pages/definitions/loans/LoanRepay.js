@@ -677,6 +677,50 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 title:"VISITED_DATE",
                                 readonly:true,
                                 type:"date"
+                            },
+                            {
+                                key:"additional.reasonForDelay",
+                                title:"REASON_FOR_DELAY",
+                                type:"select",
+                                titleMap: [{
+                                    "name":"Wilful default",
+                                    "value":"Wilful default"
+                                },
+                                {
+                                    "name":"Hardship",
+                                    "value":"Hard ship"
+                                },
+                                {
+                                    "name":"Able to Pay",
+                                    "value":"Able to Pay"
+                                },
+                                {
+                                    "name":"Others",
+                                    "value":"Others"
+                                }],
+                                
+                            },
+                            {
+                                key:"additional.reason",
+                                title:"REASON",
+                                type:"select",
+                                titleMap: [{
+                                    "name":"Wilful default",
+                                    "value":"Wilful default"
+                                },
+                                {
+                                    "name":"Hardship",
+                                    "value":"Hard ship"
+                                },
+                                {
+                                    "name":"Able to Pay",
+                                    "value":"Able to Pay"
+                                },
+                                {
+                                    "name":"Others",
+                                    "value":"Others"
+                                }],
+                                
                             }
                         ]
 
