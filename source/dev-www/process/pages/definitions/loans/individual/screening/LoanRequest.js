@@ -2530,7 +2530,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
         {
             "type": "box",
             "title": "POST_REVIEW",
-            "condition": "model.loanAccount.id && model.currentStage !== 'Rejected'&& model.currentStage !== 'loanView'",
+            "condition": "model.loanAccount.id && model.currentStage !== 'Rejected'&& model.currentStage !== 'loanView' && model.currentStage !== 'Dedupe'",
             "items": [{
                     key: "review.action",
                     condition: "model.currentStage !== 'Screening'",
