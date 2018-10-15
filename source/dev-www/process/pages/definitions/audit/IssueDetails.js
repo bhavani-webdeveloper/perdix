@@ -202,6 +202,7 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["$log", "irfNavigato
                         model.auditIssue.status = 'X';
                         model.auditIssue.closed_by = SessionStore.getLoginname();
                         model.auditIssue.closed_on = moment().format('YYYY-MM-DD HH:mm:ss');
+                        model.auditIssue.next_stage = 'close';
                     } 
                     // else if (actionType == 'send') {
                     //     model.auditIssue.send_message = model.message;
