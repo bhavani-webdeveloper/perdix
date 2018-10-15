@@ -384,6 +384,7 @@ define({
                                     if (res.familyMembers[i].relationShip != 'Self' || res.familyMembers[i].relationShip != 'self') {
                                         obj.name = res.familyMembers[i].familyMemberFirstName;
                                         obj.relationShip = res.familyMembers[i].relationShip;
+                                        obj.age = res.familyMembers[i].dateOfBirth? moment().diff(moment(res.familyMembers[i].dateOfBirth), 'years'):0;
                                         familyMembers.push(obj);
                                     }
                                 }
@@ -517,7 +518,10 @@ define({
                             var familyMembers = [];
                             if(model.group.jlgGroupMembers[context.arrayIndex].familyMembers)
                             for (var idx = 0; idx < model.group.jlgGroupMembers[context.arrayIndex].familyMembers.length; idx++){
-                                if(model.group.jlgGroupMembers[context.arrayIndex].familyMembers[idx].name != model.group.jlgGroupMembers[context.arrayIndex].firstName) {
+                                if(model.group.jlgGroupMembers[context.arrayIndex].familyMembers[idx].relationShip != 'self' && 
+                                (model.group.jlgGroupMembers[context.arrayIndex].familyMembers[idx].age>=18 &&
+                                    model.group.jlgGroupMembers[context.arrayIndex].familyMembers[idx].age<=59)
+                                ) {
                                     familyMembers.push(model.group.jlgGroupMembers[context.arrayIndex].familyMembers[idx]);
                                 }
                             }
@@ -543,7 +547,7 @@ define({
                         "title": "RELATION",
                         "required":true,
                         "type": "select",
-                        "enumCode": "relation"
+                        "enumCode": "witness_relationship"
                     }]
                 }]
             }, {
