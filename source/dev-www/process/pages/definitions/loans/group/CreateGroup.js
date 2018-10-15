@@ -7,6 +7,7 @@ define({
 
     $pageFn: function($log, GroupProcess, Enrollment, CreditBureau, Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
         PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
+        model.siteCode = SessionStore.getGlobalSetting("siteCode");
 
         var validateForm = function(formCtrl){
             formCtrl.scope.$broadcast('schemaFormValidate');

@@ -645,9 +645,8 @@ function($log, $q, SessionStore, $state, formHelper, $stateParams, LoanAccount, 
                                 }
                                 $log.info(totalSatisfiedDemands);
                                 $log.info(pendingInstallment);
-                                r.totalSatisfiedDemands = totalSatisfiedDemands;
-                                r.pendingInstallment = pendingInstallment;
-                                r.pendingInstallment = pendingInstallment;
+                                r.totalSatisfiedDemands = totalSatisfiedDemands || 0;
+                                r.pendingInstallment = pendingInstallment || 0;
                                 r.accountName = resp.accountName;
                                 r.customerName = Utils.getFullName(resp.customer1FirstName, resp.customer1MiddleName, resp.customer1LastName);
                                 r.payOffAmount = resp.payOffAmount;
