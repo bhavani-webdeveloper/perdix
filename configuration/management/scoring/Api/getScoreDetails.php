@@ -45,7 +45,7 @@ if (isset($_GET)) {
 	'' AS 'OverallWeightedScore',
 	'' AS 'OverallPassStatus',
 	'' AS 'Parameters',
-    c.customer_category
+    app.customer_category
 	FROM $perdix_db.loan_accounts l
 	LEFT JOIN $perdix_db.loan_customer_relation lcr ON l.id=lcr.loan_id
 	LEFT JOIN $perdix_db.customer app ON (lcr.customer_id=app.id AND LOWER(lcr.relation) IN ('Sole Proprieter', 'APPLICANT'))
@@ -174,7 +174,6 @@ if (isset($_GET)) {
         array_push($relations,"Applicant","Co-Applicant");
 	}
     $relationsStr = implode(',', $relations);
-    echo $relationsStr;
     //get all applicant and co-applicant details
 	if($guarantor_is_required) {	
 		$ApplicantDetails = "

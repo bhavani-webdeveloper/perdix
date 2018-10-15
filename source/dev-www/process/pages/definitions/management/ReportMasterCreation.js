@@ -27,7 +27,7 @@ function($log, $state, ReportMaintenance, formHelper, $q, irfProgressMessage,Pag
 
                 var p2 = ReportMaintenance.getConfigurationJson({name: 'reportsFileType.json'}).$promise.then(function(resp) {
 
-                self.formSource[0].items[5].titleMap = resp.file_type;
+                // self.formSource[0].items[5].titleMap = resp.file_type;
 
                 }, function(errResp) {
                     PageHelper.showErrors(errResp);

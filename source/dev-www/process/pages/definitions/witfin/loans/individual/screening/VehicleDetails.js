@@ -48,8 +48,8 @@ define(
                             "excludes": [
                                 "VehicleLoanIncomesInformation",
                                 "VehicleLoanIncomesInformation1",
-                                "VehicleViability",
-                                "VehicleViability.calculateVehicleDetails"
+                                "VehicleExpensesInformation1",
+                                "VehicleViability"
                             ],
                             "overrides": {
 
@@ -57,8 +57,9 @@ define(
                         },
                         "ScreeningReview": {
                             "excludes": [
-                                "VehicleViability",
-
+                                "VehicleLoanIncomesInformation1",
+                                "VehicleExpensesInformation1",
+                                "VehicleViability"
                             ],
                             "overrides": {
                                  "VehicleLoanIncomesInformation": {
@@ -93,7 +94,8 @@ define(
                         "GoNoGoApproval1": {
                             "excludes": [
                                 "VehicleViability",
-                                "VehicleViability.calculateVehicleDetails",
+                                "VehicleLoanIncomesInformation1",
+                                "VehicleExpensesInformation1"
                             ],
                             "overrides": {
                                 "VehicleLoanIncomesInformation": {
@@ -128,7 +130,8 @@ define(
                         "GoNoGoApproval2": {
                             "excludes": [
                                 "VehicleViability",
-                                "VehicleViability.calculateVehicleDetails",
+                                "VehicleLoanIncomesInformation1",
+                                "VehicleExpensesInformation1"
                             ],
                             "overrides": {
                                 "VehicleLoanIncomesInformation": {
@@ -163,6 +166,8 @@ define(
                         "FieldInvestigation": {
                             "excludes": [
                                 "VehicleViability",
+                                "VehicleLoanIncomesInformation1",
+                                "VehicleExpensesInformation1"
                             ],
                             "overrides": {
 
@@ -171,6 +176,8 @@ define(
                         "TeleVerification": {
                             "excludes": [
                                 "VehicleViability",
+                                "VehicleLoanIncomesInformation1",
+                                "VehicleExpensesInformation1"
                             ],
                             "overrides": {
 
@@ -186,7 +193,9 @@ define(
                         },
                         "DeviationApproval1": {
                             "excludes": [
-                                "VehicleViability.calculateVehicleDetails"
+                                "VehicleViability",
+                                "VehicleLoanIncomesInformation1",
+                                "VehicleExpensesInformation1"
                             ],
                             "overrides": {
                                 "VehicleLoanIncomesInformation": {
@@ -219,7 +228,11 @@ define(
                             }
                         },
                         "DeviationApproval2": {
-                            "excludes": [],
+                            "excludes": [
+                                "VehicleViability",
+                                "VehicleLoanIncomesInformation1",
+                                "VehicleExpensesInformation1"
+                            ],
                             "overrides": {
                                 "VehicleLoanIncomesInformation": {
                                     "readonly": true
@@ -418,6 +431,36 @@ define(
                                 "VehiclePhotoCaptures": {
                                     "readonly": true
                                 }
+                            }
+                        },
+                        "FieldInvestigation1": {
+                            "excludes": [
+                                "VehicleLoanIncomesInformation1",
+                                "VehicleExpensesInformation1",
+                                "VehicleViability"
+                            ],
+                            "overrides": {
+
+                            }
+                        },
+                        "FieldInvestigation2": {
+                            "excludes": [
+                                "VehicleLoanIncomesInformation1",
+                                "VehicleExpensesInformation1",
+                                "VehicleViability"
+                            ],
+                            "overrides": {
+
+                            }
+                        },
+                        "FieldInvestigation3": {
+                            "excludes": [
+                                "VehicleLoanIncomesInformation1",
+                                "VehicleExpensesInformation1",
+                                "VehicleViability"
+                            ],
+                            "overrides": {
+
                             }
                         },
                         "CreditApproval1": {
@@ -978,7 +1021,7 @@ define(
                             }
                         },
                         "includes": getIncludes (model),
-                        "excludes": [],
+                        "excludes": ["VehicleViability.validation"],
                         "options": {
                             "repositoryAdditions": {
                                 "NewVehicleDetails": {

@@ -78,14 +78,6 @@ function(IndividualLoan, $log, $state, Enrollment, EnrollmentHelper, SessionStor
                                                     {
                                                         'data': 'requestFieldValue',
                                                         'title': 'CUSTOMER_FIELD_VALUE'
-                                                    },
-                                                    {
-                                                        'data': 'matchFieldValue',
-                                                        'title': 'MATCHED_CUSTOMER_FIELD_VALUE'
-                                                    },
-                                                    {
-                                                        'data': 'score',
-                                                        'title': 'SCORE'
                                                     }
                                                 ],
                                                 'data': i.dedupeMatchDetails

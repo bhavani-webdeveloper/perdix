@@ -62,19 +62,15 @@ function($scope, authService, $log, $state, $stateParams, irfStorageService, Ses
 		if (userData && userData.login && username.toLowerCase() !== userData.login.toLowerCase()) {
 			if (autoLogin) {
 				$log.info('auto login - clearing all offline records');
-				irfStorageService.clear().then(function() {
+				irfStorageService.clear().finally(function() {
 					successLogin(true);
-				}, function(e) {
-					$scope.errorMessage = 'Cleanup failed. Pl do manually. ' + e;
 				});
 			} else {
 				Utils.confirm('User is different. This will clear all data saved by previous user ('+
 					userData.login+'). Do you want to proceed?', 'User Data Clear Alert').then(function() {
 					$log.info('clearing all offline records');
-					irfStorageService.clear().then(function() {
+					irfStorageService.clear().finally(function() {
 						doLogin(username, password, true);
-					}, function(e) {
-						$scope.errorMessage = 'Cleanup failed. Pl do manually. ' + e;
 					});
 				});
 			}

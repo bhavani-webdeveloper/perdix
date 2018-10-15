@@ -368,7 +368,16 @@ define(
                                         }
                                     }
                                 },
-
+                                "VehicleAccessories": {
+                                    "items": {
+                                        "vehicleAccessories": {
+                                            "startEmpty": true,
+                                            "items": {
+                                              
+                                            }
+                                        }
+                                    }
+                                },
                                 "VehicleAsset": {
                                     "items": {
                                         "vehicleAssetConditions": {

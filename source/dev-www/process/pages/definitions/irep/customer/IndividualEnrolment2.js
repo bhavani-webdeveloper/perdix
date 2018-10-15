@@ -1080,6 +1080,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "resolver": "PincodeLOVConfiguration",
                         "searchHelper": formHelper
                     },
+                    "ContactInformation.mailingPincode": {
+                        "condition": "!model.customer.mailSameAsResidence",
+                        "resolver": "PincodeLOVConfiguration"
+                    },
                     "HouseVerification.houseDetailsFieldSet": {
                         "orderNo": 10
                     },
