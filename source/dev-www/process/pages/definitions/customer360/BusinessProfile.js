@@ -15,6 +15,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
             var init = function() {
                 var deferred = $q.defer();
                 model.customer = model.customer || {};
+                model.siteCode = SessionStore.getGlobalSetting('siteCode');
                 if (model.customer.id) {
                     deferred.resolve();
                 } else if ($stateParams.pageId) {
@@ -528,6 +529,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     {
                         key: "customer.pincode",
                         type: "lov",
+                        condition:"model.siteCode!='IREPDhan'",
                         fieldType: "number",
                         autolov: true,
                         inputMap: {
@@ -554,6 +556,55 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                             return Queries.searchPincodes(inputModel.pincode, inputModel.district, inputModel.state);
                         },
                         getListDisplayItem: function(item, index) {
+                            return [
+                                item.division + ', ' + item.region,
+                                item.pincode,
+                                item.district + ', ' + item.state
+                            ];
+                        }
+                    },{
+                        key: "customer.pincode",
+                        type: "lov",
+                        fieldType: "number",
+                        autolov: true,
+                        condition: "model.siteCode == 'IREPDhan'",
+                        inputMap: {
+                            "pincode":"customer.pincode",
+                           "district": {
+                               key: "customer.district"
+                           },
+                           "state": {
+                               key: "customer.state"
+                           },
+                           "division": {
+                               key: "customer.division"
+                           },
+                           "region": {
+                               key: "customer.region"
+                           }
+                        },
+                        outputMap: {
+                            "division": "lead.area",
+                            "region": "lead.cityTownVillage",
+                            "pincode": "lead.pincode",
+                            "district": "lead.district",
+                            "state": "lead.state"
+
+                        },
+                        searchHelper: formHelper,
+                        search: function (inputModel, form, model) {
+                            if (!inputModel.pincode) {
+                                return $q.reject();
+                            }
+                            return Queries.searchPincodes(
+                                inputModel.pincode,
+                                inputModel.district,
+                                inputModel.state,
+                                inputModel.region,
+                                inputModel.division
+                            );
+                        },
+                        getListDisplayItem: function (item, index) {
                             return [
                                 item.division + ', ' + item.region,
                                 item.pincode,
