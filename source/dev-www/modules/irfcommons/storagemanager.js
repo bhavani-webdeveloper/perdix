@@ -612,7 +612,7 @@ irf.commons.run(["irfStorageService", "SessionStore", "$q", "$log", "filterFilte
 				o.data = filterFilter(o.data, function(a,p){ if(a.value != "New Loan"){ return true}});
 			});
 			createEnum("witness_relationship", "relation", function(s, o) {
-				o.data = filterFilter(o.data, function(a,p){ if( a.value != "self"){ return true}});
+				o.data = filterFilter(o.data, function(a,p){ if( (a.value).toUpperCase() != "SELF"){ return true}});
 			});
 			createEnum("groupLoanStages", "groupLoanBackStages", function(s, o) {
 				var filterData = [] , names = [];
