@@ -733,8 +733,16 @@ irf.models.factory('Queries', [
             var request = {
                 "urn_no":urn_no
             };
-            resource.getResult("ReadyToDisburseAccountDetails.list", request).then(function(response) {
-                  deferred.resolve(response);           
+            resource.getResult("ReadyToDisburseAccountDetails.list", request).then(function(records) {
+                if (records && records.results) {
+                    var result = {
+                        headers: {
+                            "x-total-count": records.results.length
+                        },
+                        body: records.results
+                    };
+                    deferred.resolve(result);
+                }         
             }, deferred.reject);
             return deferred.promise;
         }
