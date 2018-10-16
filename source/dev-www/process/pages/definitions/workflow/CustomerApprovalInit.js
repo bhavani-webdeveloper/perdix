@@ -656,8 +656,11 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                             }
                             if(model.customer.isOwnershipChanged=='YES'){
                                 updatedModel.customer.ownership=updatedModel.customer.newOwnership;
-                                if(model.customer.customerType=="Enterprise")
-                                     updatedModel.customer.enterprise.ownership=updatedModel.customer.newOwnership;
+                                if(model.customer.customerType=="Enterprise"){
+                                    updatedModel.customer.enterprise.ownership=updatedModel.customer.newOwnership;
+                                    updatedModel.customer.enterprise.landmark=updatedModel.customer.landmark;
+                                }
+
                             }
 
                             var requestData = {

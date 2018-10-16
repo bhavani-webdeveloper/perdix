@@ -51,7 +51,7 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalApprove"),
                         model.customer.mobileProofImageId=model.UpdatedWorkflow.proof.mobileProofImageId;
                     }
 
-                    
+
                     if(model.customer.customerType=="Enterprise")
                     {
                         if(model.customer.enterprise.ownership == model.UpdatedWorkflow.customer.enterprise.ownership) {
@@ -559,8 +559,10 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalApprove"),
                             }
                             if(model.customer.isOwnershipChanged=='YES'){
                                 updatedModel.customer.ownership=updatedModel.customer.newOwnership;
-                                if(model.customer.customerType=="Enterprise")
-                                     updatedModel.customer.enterprise.ownership=updatedModel.customer.newOwnership;
+                                if(model.customer.customerType=="Enterprise"){
+                                    updatedModel.customer.enterprise.ownership=updatedModel.customer.newOwnership;
+                                    updatedModel.customer.enterprise.landmark=updatedModel.customer.landmark;
+                                }
                             }
 
                             var requestData = {
