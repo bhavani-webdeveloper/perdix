@@ -80,13 +80,13 @@ define([], function () {
                     "JewelDetails.ornamentDetails.rate",
                     "JewelDetails.ornamentDetails.marketValue",
 
-
-
-
-
-
-
-
+                    "LoanSanction",
+                    "LoanSanction.sanctionDate",
+                    "LoanSanction.numberOfDisbursements",
+                    "LoanSanction.scheduleDisbursmentDate",
+                    "LoanSanction.firstRepaymentDate",
+                    "LoanSanction.customerSignatureDate",
+                    "LoanSanction.disbursementSchedules",
 
                 ]
             }
@@ -482,6 +482,42 @@ define([], function () {
                                             item.pincode,
                                             item.district + ', ' + item.state
                                         ];
+                                    }
+                                },
+                                "LoanSanction.numberOfDisbursements":{
+                                    onChange:function(value,form,model){
+                                        model.loanAccount.disbursementSchedules=[];
+                                        for(var i=0;i<value;i++){
+                                            model.loanAccount.disbursementSchedules.push({
+                                                trancheNumber:""+(i+1),
+                                                disbursementAmount:0
+                                            });
+                                        }
+                                        if (value ==1){
+                                            model.loanAccount.disbursementSchedules[0].disbursementAmount = model.loanAccount.loanAmount;
+                                        }
+                                    }
+                                },
+                                "LoanSanction.customerSignatureDate":{
+                                    onChange : function(modelValue,form,model){
+                                        if (modelValue){
+                                            modelValue = new Date(modelValue);
+                                            model._currentDisbursement.scheduledDisbursementDate = new Date(modelValue.setDate(modelValue.getDate()+1));
+                                        }
+                                    }
+                                },
+                                "LoanSanction.firstRepaymentDate":{
+                                    onChange: function(value,form,model,event){
+                                        if(!model.allowPreEmiInterest){
+                                            return;
+                                        }
+                                        var repaymentDate = moment(model.loanAccount.firstRepaymentDate,SessionStore.getSystemDateFormat());
+                                        var applicationDate = moment(model.loanAccount.loanApplicationDate,SessionStore.getSystemDateFormat());
+                                        if(repaymentDate < applicationDate){
+                                            model.loanAccount.firstRepaymentDate = null;
+                                            PageHelper.showProgress("loan-create","Repayment date should be greater than Application date",5000);
+                                        }
+                                    }
                                     }
                                 }
                             }
@@ -920,6 +956,22 @@ define([], function () {
                                             }
 
                                         },
+                                        "LoanSanction":{
+                                            "items":{
+                                                "scheduleDisbursmentDate":{
+                                                    "title":"SCHEDULE_DISBURSMENT_DATE",
+                                                    "type":"date"
+                                                },
+                                                "firstRepaymentDate":{
+                                                    "type":"date",
+                                                    "title":"FIRST_REPAYMENT_DATE"
+                                                },
+                                                "customerSignatureDate":{
+                                                    "type":"date",
+                                                    "title": "CUSTOMER_SIGNATURE_DATE"
+                                                }
+                                            }
+                                        },
 
                                         "NomineeDetails": {
                                             "items": {
@@ -967,7 +1019,7 @@ define([], function () {
                                         {
                                             "type": "box",
                                             "title": "POST_REVIEW",
-                                            condition: "model.loanAccount.currentStage == 'LoanInitiation' && model.loanAccount.id ",
+                                            condition: "model.loanAccount.currentStage != 'DocumentUpload' && model.loanAccount.id ",
                                             "items": [
                                                 {
                                                     key: "review.action",
@@ -1011,7 +1063,7 @@ define([], function () {
                                                 },
                                                 {
                                                     key: "review.action",
-                                                    condition: "model.loanAccount.currentStage == 'LoanInitiation'",
+                                                    condition: "model.loanAccount.currentStage != 'DocumentUplaod'",
                                                     type: "radios",
                                                     titleMap: {
                                                         "REJECT": "REJECT",
@@ -1159,7 +1211,7 @@ define([], function () {
                                         },
                                         {
                                             "type": "actionbox",
-                                            condition: "model.loaProcess.loanAccount.currentStage == 'LoanInitiation'",
+                                            condition: "model.loanAccount.currentStage == 'LoanInitiation'",
                                             "items": [{
                                                 "type": "submit",
                                                 "title": "SAVE"
