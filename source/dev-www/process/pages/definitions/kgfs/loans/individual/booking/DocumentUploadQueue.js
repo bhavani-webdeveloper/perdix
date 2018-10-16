@@ -163,10 +163,16 @@ define({
 						};
                     },
                     getColumns: function() {
-						return [{
+						return [
+                            {
+                                title : "LOAN_ID",
+                                data : "loanId"
+                            },
+                            {
 							title: 'ENTITY_NAME',
 							data: 'customerName'
                         },
+
                             {
 
 							title: 'LOAN_AMOUNT',
