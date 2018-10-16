@@ -38,7 +38,6 @@ define([], function() {
                     "loanProcess.loanAccount.currentStage": {
                         "Screening": {
                             "excludes": [
-                                "TeleVerification",
                                 "FieldInvestigationDetails",
                                 "LoanRecommendation"
                             ],
@@ -49,7 +48,6 @@ define([], function() {
                         "ScreeningReview": {
                             "excludes": [
                                 "PreliminaryInformation.calculateEmi",
-                                "TeleVerification",
                                 "FieldInvestigationDetails"
                             ],
                             "overrides": {
@@ -106,7 +104,6 @@ define([], function() {
                         "GoNoGoApproval1": {
                             "excludes": [
                                 "PreliminaryInformation.calculateEmi",
-                                "TeleVerification",
                                 "FieldInvestigationDetails"
                             ],
                             "overrides": {
@@ -127,7 +124,6 @@ define([], function() {
                         "GoNoGoApproval2": {
                             "excludes": [
                                 "PreliminaryInformation.calculateEmi",
-                                "TeleVerification",
                                 "FieldInvestigationDetails"
                             ],
                             "overrides": {
@@ -147,8 +143,7 @@ define([], function() {
                         },
                         "FieldInvestigation1": {
                             "excludes": [
-                                "LoanRecommendation",
-                                "TeleVerification"
+                                "LoanRecommendation"
                             ],
                             "overrides": {
 
@@ -156,8 +151,7 @@ define([], function() {
                         },
                         "FieldInvestigation2": {
                             "excludes": [
-                                "LoanRecommendation",
-                                "TeleVerification"
+                                "LoanRecommendation"
                             ],
                             "overrides": {
 
@@ -165,8 +159,7 @@ define([], function() {
                         },
                         "FieldInvestigation3": {
                             "excludes": [
-                                "LoanRecommendation",
-                                "TeleVerification"
+                                "LoanRecommendation"
                             ],
                             "overrides": {
 
@@ -192,9 +185,6 @@ define([], function() {
                             "overrides": {
                                 "FieldInvestigationDetails": {
                                     "readonly": true
-                                },
-                                "TeleVerification": {
-                                    "readonly": true
                                 }
 
                             }
@@ -204,9 +194,6 @@ define([], function() {
                                 "PreliminaryInformation.calculateEmi",
                             ],
                             "overrides": {
-                                "TeleVerification": {
-                                    "readonly": true
-                                },
                                 "FieldInvestigationDetails": {
                                     "readonly": true
                                 },
@@ -229,9 +216,6 @@ define([], function() {
                                 "PreliminaryInformation.calculateEmi",
                             ],
                             "overrides": {
-                                "TeleVerification": {
-                                    "readonly": true
-                                },
                                 "FieldInvestigationDetails": {
                                     "readonly": true
                                 },
@@ -254,9 +238,6 @@ define([], function() {
                                 "PreliminaryInformation.calculateEmi",
                             ],
                             "overrides": {
-                                "TeleVerification": {
-                                    "readonly": true
-                                },
                                 "FieldInvestigationDetails": {
                                     "readonly": true
                                 },
@@ -279,9 +260,6 @@ define([], function() {
                                 "PreliminaryInformation.calculateEmi"
                             ],
                             "overrides": {
-                                "TeleVerification": {
-                                    "readonly": true
-                                },
                                 "FieldInvestigationDetails": {
                                     "readonly": true
                                 },
@@ -304,9 +282,6 @@ define([], function() {
                                 "PreliminaryInformation.calculateEmi"
                             ],
                             "overrides": {
-                                "TeleVerification": {
-                                    "readonly": true
-                                },
                                 "FieldInvestigationDetails": {
                                     "readonly": true
                                 },
@@ -329,9 +304,6 @@ define([], function() {
                                 "PreliminaryInformation.calculateEmi"
                             ],
                             "overrides": {
-                                "TeleVerification": {
-                                    "readonly": true
-                                },
                                 "FieldInvestigationDetails": {
                                     "readonly": true
                                 },
@@ -354,9 +326,6 @@ define([], function() {
                                 "PreliminaryInformation.calculateEmi"
                             ],
                             "overrides": {
-                                "TeleVerification": {
-                                    "readonly": true
-                                },
                                 "FieldInvestigationDetails": {
                                     "readonly": true
                                 },
@@ -379,9 +348,6 @@ define([], function() {
                                 "PreliminaryInformation.calculateEmi"
                             ],
                             "overrides": {
-                                "TeleVerification": {
-                                    "readonly": true
-                                },
                                 "FieldInvestigationDetails": {
                                     "readonly": true
                                 },
@@ -404,9 +370,6 @@ define([], function() {
                                 "PreliminaryInformation.calculateEmi"
                             ],
                             "overrides": {
-                                "TeleVerification": {
-                                    "readonly": true
-                                },
                                 "FieldInvestigationDetails": {
                                     "readonly": true
                                 },
@@ -429,9 +392,6 @@ define([], function() {
                                 "PreliminaryInformation.calculateEmi"
                             ],
                             "overrides": {
-                                "TeleVerification": {
-                                    "readonly": true
-                                },
                                 "FieldInvestigationDetails": {
                                     "readonly": true
                                 },
@@ -454,9 +414,6 @@ define([], function() {
                                 "PreliminaryInformation.calculateEmi"
                             ],
                             "overrides": {
-                                "TeleVerification": {
-                                    "readonly": true
-                                },
                                 "FieldInvestigationDetails": {
                                     "readonly": true
                                 },
@@ -479,9 +436,6 @@ define([], function() {
                                 "PreliminaryInformation.calculateEmi"
                             ],
                             "overrides": {
-                                "TeleVerification": {
-                                    "readonly": true
-                                },
                                 "FieldInvestigationDetails": {
                                     "readonly": true
                                 },
@@ -529,9 +483,6 @@ define([], function() {
                                 "LoanRecommendation":{
                                     "readonly": true
                                 },
-                                "TeleVerification":{
-                                    "readonly":true
-                                },
                                 "FieldInvestigationDetails":{
                                     "readonly":true
                                 }
@@ -542,7 +493,6 @@ define([], function() {
                         "Yes": {
                             "excludes": [
                                 "PreliminaryInformation.calculateEmi",
-                                "TeleVerification",
                                 "actionbox"
                             ],
                             "overrides": {
@@ -652,18 +602,6 @@ define([], function() {
                     "LoanRecommendation.calculateNominalRate",
                     "LoanRecommendation.processingFee",
                     "LoanRecommendation.udf6",
-                    "TeleVerification",
-                    "TeleVerification.verifications",
-                    "TeleVerification.verifications.personContacted",
-                    "TeleVerification.verifications.contactNumber",
-                    "TeleVerification.verifications.occupation",
-                    "TeleVerification.verifications.address",
-                    "TeleVerification.verifications.knownSince",
-                    "TeleVerification.verifications.relationship",
-                    "TeleVerification.verifications.opinion",
-                    "TeleVerification.verifications.financialStatus",
-                    "TeleVerification.verifications.customerResponse",
-                    "TeleVerification.verifications.remarks",
                     "FieldInvestigationDetails",
                     "FieldInvestigationDetails.fieldInvestigationDecision",
                     "FieldInvestigationDetails.fieldInvestigationReason",
@@ -718,13 +656,6 @@ define([], function() {
                     var self = this;
                     var formRequest = {
                         "overrides": {
-                            "TeleVerification.verifications.personContacted": {
-                                "required": true
-                            },
-                            "TeleVerification.verifications.customerResponse":{
-                                "type": "select",
-                                "enumCode": "customer_response"
-                            },
                             "LoanRecommendation.udf6": {
                                 "title": "NOMINAL_RATE",
                                 "readonly": true
