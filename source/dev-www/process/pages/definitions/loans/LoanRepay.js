@@ -138,6 +138,8 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                     model.repayment.id = resp.body[0].id;
                                     model.repayment.latitude = resp.body[0].latitude;
                                     model.repayment.longitude = resp.body[0].longitude;
+                                    model.repayment.delayReasonType = resp.body[0].delayReasonType;
+                                    model.repayment.overdueReasons = resp.body[0].overdueReasons;
                             }, function(httperr){});
 
                     var p4 = Queries.getUnApprovedPaymentsForAccount(loanAccountNo)
@@ -437,7 +439,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 key: "repayment.amount",
                                 type: "number",
                                 "readonly":true,
-                                
+
                                 condition:"model.repayment.chequeNumber"
                             },
                             {
@@ -677,7 +679,89 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 title:"VISITED_DATE",
                                 readonly:true,
                                 type:"date"
-                            }
+                            },
+                            {
+                                key: "repayment.delayReasonType",
+                                title: "REASON_FOR_DELAY",
+                                type: "select",
+                                titleMap: [{
+                                    "name": "Business",
+                                    "value": "Business"
+                                },
+                                    {
+                                        "name": "Personal",
+                                        "value": "Personal"
+                                    }],
+
+                            },
+                            {
+                                key: "repayment.overdueReasons",
+                                title: "REASON",
+                                type: "select",
+                                condition: "model.repayment.delayReasonType =='Business'",
+                                titleMap: [{
+                                    "name": "Change in business circumstance due to Govt. order",
+                                    "value": "Change in business circumstance due to Govt. order"
+                                },
+                                    {
+                                        "name": "Payment held up with Third party ",
+                                        "value": "Payment held up with Third party"
+                                    },
+                                    {
+                                        "name": "Sudden lack of or-ders",
+                                        "value": "Sudden lack of or-ders"
+                                    },
+                                    {
+                                        "name": "Business loss",
+                                        "value": "Business loss"
+                                    },
+                                    {
+                                        "name": "Business dispute in the firm",
+                                        "value": "Business dispute in the firm"
+                                    },
+                                    {
+                                        "name": "Machine Repo and sold ",
+                                        "value": "Machine Repo and sold "
+                                    },
+                                    {
+                                        "name": "Others",
+                                        "value": "Others"
+                                    }],
+
+                            },
+                            {
+                                key: "repayment.overdueReasons",
+                                title: "REASON",
+                                type: "select",
+                                condition: "model.repayment.delayReasonType=='Personal'",
+                                titleMap: [{
+                                    "name": "Death in Family",
+                                    "value": "Death in Family "
+                                },
+                                    {
+                                        "name": "Function in Family",
+                                        "value": "Function in Family"
+                                    },
+                                    {
+                                        "name": "Illness in Family",
+                                        "value": "Illness in Family"
+                                    },
+                                    {
+                                        "name": "Matrimonial disputes ",
+                                        "value": "Matrimonial disputes "
+                                    },
+                                    {
+                                        "name": "Others",
+                                        "value": "Others"
+                                    }],
+                            },
+                            {
+                                key: "repayment.reasons",
+                                title: "OVERDUE_REASON",
+                                type: "textarea",
+                                "condition": "model.repayment.overdueReasons=='Others'"
+
+                            },
                         ]
 
                     },
@@ -811,7 +895,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             PageHelper.showProgress("loan-repay","Advance Repayment is not allowed for an outstanding Loan",5000);
                             return false;
                         }
-                    
+
                         if (model.repayment.transactionName == 'Pre-closure' && model.repayment.totalDemandDue > 0){
                             PageHelper.showProgress("loan-repay", "Preclosure not allowed. Demand of " + model.repayment.totalDemandDue + " is due.", 5000);
                         }
@@ -846,7 +930,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             //     return;
                             // }
                         }
-                        
+
                         if (model.siteCode == 'witfin' && model.repayment.amount >=199999){
                             PageHelper.clearErrors();
                             PageHelper.setError({
@@ -882,6 +966,17 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                     var postData = {
                                         "loanCollection": {}
                                     };
+
+                                    if(model.repayment.delayReasonType) {
+                                        postData.loanCollection.delayReasonType=model.repayment.delayReasonType;
+                                        if(model.repayment.overdueReasons){
+                                            if(model.repayment.overdueReasons=='Others')
+                                                model.repayment.overdueReasons=model.repayment.reasons;
+                                            else
+                                                postData.loanCollection.overdueReasons=model.repayment.overdueReasons
+                                        }
+                                    }
+
                                     postData.loanCollection.accountNumber = model.repayment.accountNumber;
                                     postData.loanCollection.bankAccountNumber = model.repayment.bankAccountNumber;
 

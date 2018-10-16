@@ -206,6 +206,25 @@ irf.models.factory('Queries', [
             }, deferred.reject);
             return deferred.promise;
         }
+        resource.getLoanProductDetails = function(loanType,partnerCode,frequency){
+            var deferred  = $q.defer();
+            var request = {};
+            request.partnerCode = partnerCode;
+            request.loanType = loanType;
+            request.frequency = frequency;
+            resource.getResult('loanProductDetails.list',request).then(function(records){
+                if (records && records.results) {
+                    var result = {
+                        headers: {
+                            "x-total-count": records.results.length
+                        },
+                        body: records.results
+                    };
+                    deferred.resolve(result);
+                }
+            }, deferred.reject);
+            return deferred.promise;
+        }
         resource.getLoanProductCodeByLoanType = function(productCategory,frequency,partner,loanType) {
             var deferred = $q.defer();
             var request = {};
@@ -1076,6 +1095,16 @@ irf.models.factory('Queries', [
                 deferred.reject(res.data);
             }
         )
+        return deferred.promise;
+    }
+    resource.getReadyToDisburseAccountDetails = function(urn_no) {
+        var deferred = $q.defer();
+        var request = {
+            "urn_no":urn_no
+        };
+        resource.getResult("ReadyToDisburseAccountDetails.list", request).then(function(response) {
+              deferred.resolve(response);           
+        }, deferred.reject);
         return deferred.promise;
     }
     return resource;

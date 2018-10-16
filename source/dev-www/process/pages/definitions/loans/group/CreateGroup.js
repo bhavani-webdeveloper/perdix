@@ -397,7 +397,7 @@ define({
                                     if (res.familyMembers[i].relationShip != 'Self' || res.familyMembers[i].relationShip != 'self') {
                                         obj.name = res.familyMembers[i].familyMemberFirstName;
                                         obj.relationShip = res.familyMembers[i].relationShip;
-                                        obj.age = moment().diff(moment(res.familyMembers[i].dateOfBirth), 'years');
+                                        obj.age = res.familyMembers[i].dateOfBirth? moment().diff(moment(res.familyMembers[i].dateOfBirth), 'years'):0;
                                         familyMembers.push(obj);
                                     }
                                 }
@@ -531,7 +531,10 @@ define({
                             var familyMembers = [];
                             if(model.group.jlgGroupMembers[context.arrayIndex].familyMembers)
                             for (var idx = 0; idx < model.group.jlgGroupMembers[context.arrayIndex].familyMembers.length; idx++){
-                                if(model.group.jlgGroupMembers[context.arrayIndex].familyMembers[idx].relationShip != 'self') {
+                                if(model.group.jlgGroupMembers[context.arrayIndex].familyMembers[idx].relationShip != 'self' && 
+                                (model.group.jlgGroupMembers[context.arrayIndex].familyMembers[idx].age>=18 &&
+                                    model.group.jlgGroupMembers[context.arrayIndex].familyMembers[idx].age<=59)
+                                ) {
                                     familyMembers.push(model.group.jlgGroupMembers[context.arrayIndex].familyMembers[idx]);
                                 }
                             }
@@ -558,7 +561,7 @@ define({
                         "title": "RELATION",
                         "required":true,
                         "type": "select",
-                        "enumCode": "relation"
+                        "enumCode": "witness_relationship"
                     }]
                 }]
             }, {
@@ -624,9 +627,9 @@ define({
                     // }
 
                     PageHelper.clearErrors();
-                    PageHelper.showLoader();
                     var reqData = _.cloneDeep(model);
                     Utils.confirm("Please Verify customer/spouse DOB in the system with actual ID Proof. DOB change request will not be allowed afterwards").then(function(){
+                        PageHelper.showLoader();
                         if (reqData.group.id) {
                             proceedData(reqData).then(function(res) {
                                 irfNavigator.goBack();

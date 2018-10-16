@@ -169,7 +169,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                 },
                 "post_pages_initialize": function(bundleModel){
                     $log.info("Inside post_page_initialize");
-                    BundleManager.broadcastEvent('origination-stage', 'KYC');
+                    BundleManager.broadcastEvent('origination-stage', 'DSCOverride');
                     if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
                         PageHelper.showLoader();
                         PageHelper.showProgress("KYC-input", 'Loading lead details');
@@ -265,7 +265,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                     for (var i=0; i<offlineData.bundlePages.length; i++){
                         var page = offlineData.bundlePages[i];
                         if (page.pageClass == "applicant" && !page.model.customer.firstName){
-                            PageHelper.showProgress("KYC", "Applicant first name is required to save offline", 5000);
+                            PageHelper.showProgress("DSCOverride", "Applicant first name is required to save offline", 5000);
                             defer.reject();
                         }
                     }

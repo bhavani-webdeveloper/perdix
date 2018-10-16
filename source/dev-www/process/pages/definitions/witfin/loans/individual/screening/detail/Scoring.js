@@ -22,7 +22,9 @@ define({
             model.CamDetails =[res[6], res[7], res[8], res[9],res[10],res[11]];
             model.totalScores = res[5];
             model.deviationDetails = res[6];
-
+            model.business = {};
+            model.business.kgfsName =  res[7].data[0]['Branch'];
+            model.business.centreName = res[7].data[0]['Spoke'];
 
 
             var managementScore = model.scoreDetails[0];

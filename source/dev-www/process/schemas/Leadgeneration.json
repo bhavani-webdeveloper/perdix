@@ -359,6 +359,14 @@
             "type": ["string", "null"],
             "title": "DISTRICT"
          },
+         "division": {
+            "type": ["string", "null"],
+            "title": "DIVISION"
+         },
+         "region": {
+            "type": ["string", "null"],
+            "title": "REGION"
+         },
          "location": {
             "type": ["string", "null"],
             "title": "LOCATION"
