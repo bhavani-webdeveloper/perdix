@@ -88,76 +88,78 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                 "title":"LAST_P2P_DETAILS",
                 "readonly":true,
                 "condition": "model.previousPromise",
-                "items":[
-                    {
-                        key: "previousPromise.customerAvailable",
-                        title: "CUSTOMER_AVAILABLE",
-                        type: "checkbox",
-                        schema: {
-                            default:false
-                        }
-                    },
-                    {
-                        key:"previousPromise.promiseToPayDate",
-                        title:"PROMISE_TO_PAY_DATE",
-                        readonly:false,
-                        type:"date",
-                    },
-                    {
-                        key: "previousPromise.customerCategoryLoanOfficer",
-                        title: "CUSTOMER_CATEGORY_LOAN_OFFICER",
-                        //type: "select",
-                        /*titleMap: {
-                            "A": "A",
-                            "B": "B",
-                            "C": "C",
-                            "D": "D"
-                        }*/
-                    },
-                    {
-                        key: "previousPromise.customerCategoryHubManager",
-                        title: "CUSTOMER_CATEGORY_HUB_MANAGER",
-                       // type: "select",
-                       /* titleMap: {
-                            "A": "A",
-                            "B": "B",
-                            "C": "C",
-                            "D": "D"
-                        }*/
-                    },
-                    {
-                        key:"previousPromise.overdueReasons",
-                        title:"REASON",
-                        //type:"select",
-                        /*titleMap: [{
-                            "name":"Wilful default",
-                            "value":"Wilfuldefault"
-                        },
-                        {
-                            "name":"Hardship",
-                            "value":"Hardship"
-                        },
-                        {
-                            "name":"Able to Pay",
-                            "value":"AbletoPay"
-                        },
-                        {
-                            "name":"Others",
-                            "value":"Others"
-                        }]*/
-                    },
-                    /*{
-                        key:"previousPromise.overdueReasons",
-                        title:"OTHER_REASON",
-                        type:"textarea",
-                        condition:"model.previousPromise.reason=='Others'"
-                    },*/
-                    {
-                        key:"previousPromise.remarks",
-                        title:"REMARKS",
-                        type:"textarea"
-                    }
-                ]
+                        "items": [
+                            {
+                                key: "previousPromise.customerCategoryLoanOfficer",
+                                title: "CUSTOMER_CATEGORY_LOAN_OFFICER",
+                                "condition": "model.previousPromise.customerCategoryLoanOfficer",
+                            },
+                            {
+                                key: "previousPromise.customerCategoryHubManager",
+                                title: "CUSTOMER_CATEGORY_HUB_MANAGER",
+                                "condition": "model.previousPromise.customerCategoryHubManager",
+                            },
+                            {
+                                key: "previousPromise.customerAvailable",
+                                title: "CUSTOMER_AVAILABLE",
+                                type: "checkbox",
+                                schema: {
+                                    default: false
+                                }
+                            },
+                            {
+                                key: "previousPromise.udf1",
+                                title: "BUSINESS_RUNNING",
+                            },
+                            {
+                                key: "previousPromise.udf2",
+                                title: "COLLATERAL_AVAILABLE",
+                            },
+                            {
+                                key: "previousPromise.promiseToPay",
+                                title: "P2P_DATA_PRODIDED",
+                            },
+                            {
+                                key: "previousPromise.promiseToPayDate",
+                                title: "PROMISE_TO_PAY_DATE",
+                                "condition": "model.previousPromise.promiseToPay=='YES'",
+                                readonly: true,
+                            },
+                            {
+                                key: "previousPromise.reasonType",
+                                title: "REASON_FOR_DELAY",
+                                readonly: true,
+                                "condition": "model.previousPromise.promiseToPay=='YES'"
+                            },
+
+                            {
+                                key: "previousPromise.overdueReasons",
+                                title: "REASON",
+                                condition: "model.previousPromise.promiseToPay=='YES'",
+                            },
+                            {
+                                key: "previousPromise.currentCollectionStatus",
+                                title: "RECOVERY_ATTEMPT",
+                                "condition": "model.previousPromise.promiseToPay=='NO'",
+                            },
+                            {
+                                key: "previousPromise.scheduledDate",
+                                title: "FOLLOW_UP_DATE",
+                                readonly: true,
+                                "condition": "model.previousPromise.promiseToPay=='NO' && model.previousPromise.currentCollectionStatus=='Contact Again' ",
+                            },
+                            /*{
+                                key:"previousPromise.overdueReasons",
+                                title:"OTHER_REASON",
+                                type:"textarea",
+                                condition:"model.previousPromise.reason=='Others'"
+                            },*/
+                            {
+                                key: "previousPromise.remarks",
+                                title: "REMARKS",
+                                type: "textarea"
+                            }
+                        ]
             },
             {
 				"type":"box",
@@ -217,69 +219,185 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                         latitude: "promise.latitude",
                         longitude: "promise.longitude"
                     },
-                    {
-                     "type": "fieldset",
-                     "title": "COLLECTION_STATUS_DETAILS",
-                     "items": [
-                        {
-                            key:"promise.promiseToPayDate",
-                            title:"NEXT_ACTION_DATE",
-                            readonly:false,
-                            type:"date",
-                            
-                        },
-                        {
-                            key: "promise.customerCategoryLoanOfficer", // When User change this condition should also change
-                            title: "CUSTOMER_CATEGORY",
-                            type: "select",
-                            "condition":"model.additional.fromBounceQueue==true",
-                            enumCode : "p2p_customer_category"
-                            
-                        },
-                        {
-                            key: "promise.customerCategoryHubManager", // When User change this condition should also change
-                            title: "CUSTOMER_CATEGORY",
-                            type: "select",
-                            "condition":"model.additional.fromBouncePromiseQueue==true",
-                            enumCode : "p2p_customer_category"
-                            
-                        },
-                        {
-                            key:"additional.reason",
-                            title:"REASON",
-                            type:"select",
-                            titleMap: [{
-                                "name":"Wilful default",
-                                "value":"Wilful default"
-                            },
-                            {
-                                "name":"Hardship",
-                                "value":"Hard ship"
-                            },
-                            {
-                                "name":"Able to Pay",
-                                "value":"Able to Pay"
-                            },
-                            {
-                                "name":"Others",
-                                "value":"Others"
-                            }],
-                            
-                        },
-    					{
-    						key:"additional.overdueReasons",
-                            title:"OVERDUE_REASON",
-    						type:"textarea",
-                           "condition":"model.additional.reason=='Others'"
-                           
-    					},
-                        {
-                            key:"promise.remarks",
-                            title:"REMARKS",
-                            type:"textarea",
+ {
+                                "type": "fieldset",
+                                "title": "COLLECTION_STATUS_DETAILS",
+                                "items": [
+                                    {
+                                        key: "promise.customerCategoryLoanOfficer", // When User change this condition should also change
+                                        title: "CUSTOMER_CATEGORY",
+                                        type: "select",
+                                        "condition": "model.additional.fromBounceQueue==true",
+                                        enumCode: "p2p_customer_category"
 
-                        }]
-                    }    
+                                    },
+                                    {
+                                        key: "promise.customerCategoryHubManager", // When User change this condition should also change
+                                        title: "CUSTOMER_CATEGORY",
+                                        type: "select",
+                                        "condition": "model.additional.fromBouncePromiseQueue==true",
+                                        enumCode: "p2p_customer_category"
+
+                                    },
+                                    {
+                                        key: "promise.promiseToPay",
+                                        type: "radios",
+                                        title: "P2P_DATA_PRODIDED",
+                                        "titleMap": {
+                                            "YES": "YES",
+                                            "NO": "NO"
+                                        }
+                                    },
+                                    {
+                                        key: "additional.promiseToPayDate",
+                                        title: "NEXT_ACTION_DATE",
+                                        readonly: false,
+                                        "condition": "model.promise.promiseToPay=='YES'",
+                                        type: "date",
+
+                                    },
+                                    {
+                                        key: "additional.reasonType",
+                                        title: "REASON_FOR_DELAY",
+                                        type: "select",
+                                        "condition": "model.promise.promiseToPay=='YES'",
+                                        titleMap: [{
+                                            "name": "Business",
+                                            "value": "Business"
+                                        },
+                                            {
+                                                "name": "Personal",
+                                                "value": "Personal"
+                                            }],
+
+                                    },
+                                    {
+                                        key: "additional.reason",
+                                        title: "REASON",
+                                        type: "select",
+                                        condition: "model.additional.reasonType=='Business' && model.promise.promiseToPay=='YES'",
+                                        titleMap: [{
+                                            "name": "Change in business circumstance due to Govt. order",
+                                            "value": "Change in business circumstance due to Govt. order"
+                                        },
+                                            {
+                                                "name": "Payment held up with Third party ",
+                                                "value": "Payment held up with Third party"
+                                            },
+                                            {
+                                                "name": "Sudden lack of or-ders",
+                                                "value": "Sudden lack of or-ders"
+                                            },
+                                            {
+                                                "name": "Business loss",
+                                                "value": "Business loss"
+                                            },
+                                            {
+                                                "name": "Business dispute in the firm",
+                                                "value": "Business dispute in the firm"
+                                            },
+                                            {
+                                                "name": "Machine Repo and sold ",
+                                                "value": "Machine Repo and sold "
+                                            },
+                                            {
+                                                "name": "Others",
+                                                "value": "Others"
+                                            }],
+
+                                    },
+                                    {
+                                        key: "additional.reason",
+                                        title: "REASON",
+                                        type: "select",
+                                        condition: "model.additional.reasonType=='Personal' && model.promise.promiseToPay=='YES'",
+                                        titleMap: [{
+                                            "name": "Death in Family",
+                                            "value": "Death in Family "
+                                        },
+                                            {
+                                                "name": "Function in Family",
+                                                "value": "Function in Family"
+                                            },
+                                            {
+                                                "name": "Illness in Family",
+                                                "value": "Illness in Family"
+                                            },
+                                            {
+                                                "name": "Matrimonial disputes ",
+                                                "value": "Matrimonial disputes "
+                                            },
+                                            {
+                                                "name": "Others",
+                                                "value": "Others"
+                                            }],
+
+                                    },
+                                    {
+                                        key: "additional.currentCollectionStatus",
+                                        title: "RECOVERY_ATTEMPT",
+                                        type: "select",
+                                        "condition": "model.promise.promiseToPay=='NO'",
+                                        titleMap: [{
+                                            "name": "Customer not available",
+                                            "value": "Customer not available"
+                                        },
+                                            {
+                                                "name": "Customer skip and not traceable",
+                                                "value": "Customer skip and not traceable"
+                                            },
+                                            {
+                                                "name": "No Income",
+                                                "value": "No Income"
+                                            },
+                                            {
+                                                "name": "Family Issues",
+                                                "value": "Family Issues"
+                                            },
+                                            {
+                                                "name": "Contact Again",
+                                                "value": "Contact Again"
+                                            },
+                                            {
+                                                "name": "Visited Customer Reference",
+                                                "value": "Visited Customer Reference"
+                                            },
+                                            {
+                                                "name": "Visited Co-applicant/Guarantor",
+                                                "value": "Visited Co-applicant/Guarantor"
+                                            },
+                                            {
+                                                "name": "Visited neighbor",
+                                                "value": "Visited neighbor"
+                                            },
+                                            {
+                                                "name": "Problematic Customer",
+                                                "value": "Problematic Customer"
+                                            }],
+
+                                    },
+                                    {
+                                        key: "additional.scheduledDate",
+                                        title: "FOLLOW_UP_DATE",
+                                        readonly: false,
+                                        "condition": "model.promise.promiseToPay=='NO' && model.additional.currentCollectionStatus=='Contact Again' ",
+                                        type: "date",
+
+                                    },
+                                    {
+                                        key: "additional.overdueReasons",
+                                        title: "OVERDUE_REASON",
+                                        type: "textarea",
+                                        "condition": "model.additional.reason=='Others'"
+
+                                    },
+                                    {
+                                        key: "promise.remarks",
+                                        title: "REMARKS",
+                                        type: "textarea",
+
+                                    }]
+                            }   
 				]
 			}
 			,
@@ -337,10 +455,32 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                 }
 
                 PageHelper.showLoader();
-                if (model.additional.reason && model.additional.reason == "Others")
-                    model.promise.overdueReasons = model.additional.overdueReasons;
-                else
-                    model.promise.overdueReasons = model.additional.reason;
+                        
+                        delete model.promise.udf1;
+                        delete model.promise.udf2;
+                        delete model.promise.promiseToPayDate;
+                        delete model.promise.reasonType;
+                        delete model.promise.overdueReasons;
+                        delete model.promise.scheduledDate;
+
+                        if (model.promise.isBusinessRunning)
+                            model.promise.udf1 = model.promise.isBusinessRunning;
+                        if (model.promise.isCollateralAvailable)
+                            model.promise.udf2 = model.promise.isCollateralAvailable;
+
+                        if (model.promise.promiseToPay == 'YES') {
+                            model.promise.promiseToPayDate = model.additional.promiseToPayDate;
+                            model.promise.reasonType = model.additional.reasonType;
+                            if (model.additional.reason && model.additional.reason == "Others")
+                                model.promise.overdueReasons = model.additional.overdueReasons;
+                            else
+                                model.promise.overdueReasons = model.additional.reason;
+                        } else {
+                            model.promise.currentCollectionStatus = model.additional.currentCollectionStatus;
+                            if (model.additional.currentCollectionStatus == 'Contact Again')
+                                model.promise.scheduledDate = model.additional.scheduledDate;
+                        }
+
                 $log.info("going to submit");
                 $log.info(model._screen);
 

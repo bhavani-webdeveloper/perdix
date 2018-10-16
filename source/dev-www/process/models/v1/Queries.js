@@ -1097,6 +1097,16 @@ irf.models.factory('Queries', [
         )
         return deferred.promise;
     }
+    resource.getReadyToDisburseAccountDetails = function(urn_no) {
+        var deferred = $q.defer();
+        var request = {
+            "urn_no":urn_no
+        };
+        resource.getResult("ReadyToDisburseAccountDetails.list", request).then(function(response) {
+              deferred.resolve(response);           
+        }, deferred.reject);
+        return deferred.promise;
+    }
     return resource;
     
     }

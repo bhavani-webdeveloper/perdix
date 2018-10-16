@@ -36,6 +36,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"), 
 				model.achACHSearch = model.achACHSearch || {};
 				model.ach.loanId = $stateParams.pageId;
 				model.isRejected = false;
+                		model.siteCode = SessionStore.getGlobalSetting("siteCode");
 				//flag is to identify Create(false) or Update(true), and to update Submit Button Name
 
 				if (!$stateParams.pageId) {
@@ -241,6 +242,10 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"), 
 							},
 							searchHelper: formHelper,
 							onSelect: function(result, model, arg1) {
+								if(model.siteCode == "witfin"){
+									model.ach.accountHolderName = result.customer_name_as_in_bank;
+									model.ach.accountType = result.account_type.toUpperCase();	
+								}
 								CustomerBankBranch.search({
 									'ifscCode': result.ifsc_code
 								}).$promise.then(function(response) {
