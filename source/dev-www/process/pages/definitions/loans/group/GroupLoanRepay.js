@@ -1,4 +1,4 @@
-irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
+irf.pageCollection.factory(irf.page('loans.group.GroupLoanRepay'),
 ["$log", "$q", "SessionStore", "$state", "formHelper",
 "$stateParams", "LoanAccount", "LoanProcess", "PageHelper",
 "Groups","GroupProcess", "Utils", "elementsUtils", '$filter', 'LoanProducts', 'irfNavigator',
