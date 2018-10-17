@@ -25,16 +25,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
             var calculateVehiclesFree = function(modelValue, form, model) {
                 if( model.customer.vehiclesOwned >= model.customer.vehiclesFinanced){
                     model.customer.vehiclesFree = model.customer.vehiclesOwned - model.customer.vehiclesFinanced;
-                }
-                else {
-                    PageHelper.showErrors({
-                        data: {
-                            error: "No of vehicle financed cannot be greater than no of vehicle owned."
-                        }
-                    });
-                    return false;
-                }
-            }
+                }            }
 
 
             var getLocation = function() {
@@ -1474,6 +1465,19 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                         if(PageHelper.isFormInvalid(form)) {
                             return false;
                         }
+
+                        if( model.customer.vehiclesOwned >= model.customer.vehiclesFinanced){
+                            model.customer.vehiclesFree = model.customer.vehiclesOwned - model.customer.vehiclesFinanced;
+                        }
+                        else {
+                            PageHelper.showErrors({
+                                data: {
+                                    error: "No of vehicle financed cannot be greater than no of vehicle owned."
+                                }
+                            });
+                            return false;
+                        }
+                        
                         PageHelper.showProgress('enrolment', 'Updating Customer');
                         PageHelper.showLoader();
 
