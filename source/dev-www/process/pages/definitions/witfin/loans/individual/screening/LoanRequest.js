@@ -621,12 +621,41 @@ define([], function() {
                     /* Setting data recieved from Bundle */
                     model.loanAccount = model.loanProcess.loanAccount;
                     model.currentStage = bundleModel.currentStage;
+
+                    model.review = model.review|| {};
+
                     if (!model.loanAccount.id){
                         model.loanAccount.accountUserDefinedFields = {
                             userDefinedFieldValues: {
                                 udf1: 'NO'
                             }
                         };
+                    }
+
+                    if (_.hasIn(model, 'loanAccount.id') && _.isNumber(model.loanAccount.id)){
+                        $log.info('Printing Loan Account');
+                        IndividualLoan.loanRemarksSummary({id: model.loanAccount.id})
+                        .$promise
+                        .then(function (resp){
+                            model.loanSummary = resp;
+                            if(model.loanSummary && model.loanSummary.length)
+                            {
+                                for(i=0;i<model.loanSummary.length;i++)
+                                {
+                                    if(model.loanSummary[i].postStage=="Rejected" &&
+                                        model.loanSummary[i].preStage != "Rejected")
+                                    {
+                                        if(model.currentStage=='Rejected')
+                                        {
+                                            model.review.preStage = model.loanSummary[i].preStage;
+                                            model.review.targetStage = model.loanSummary[i].preStage;
+                                        }
+                                    }
+                                }
+                            }
+                        },function (errResp){
+        
+                        });
                     }
 
                     model.loanAccount.processingFee = (model.loanAccount.expectedProcessingFeePercentage / 100) * model.loanAccount.loanAmountRequested;
@@ -1043,22 +1072,14 @@ define([], function() {
                                 "type": "box",
                                 "orderNo": 999,
                                 "title": "POST_REVIEW",
-                                "condition": "model.loanAccount.id && model.loanAccount.isReadOnly!='Yes'",
+                                "condition": "model.loanAccount.id && model.loanAccount.isReadOnly!='Yes' && model.currentStage != 'Rejected'",
                                 "items": [{
                                     key: "review.action",
                                     type: "radios",
-                                    "condition": "model.currentStage != 'Rejected'",
                                     titleMap: {
                                         "REJECT": "REJECT",
                                         "SEND_BACK": "SEND_BACK",
                                         "PROCEED": "PROCEED"
-                                    }
-                                }, {
-                                    key: "review.action",
-                                    type: "radios",
-                                    "condition": "model.currentStage == 'Rejected'",
-                                    titleMap: {
-                                        "SEND_BACK": "SEND_BACK"
                                     }
                                 }, {
                                     type: "section",
@@ -1183,7 +1204,70 @@ define([], function() {
                                         }
                                     ]
                                 }]
-                            }]
+                            },
+        {
+            "type": "box",
+            "title": "REVERT_REJECT",
+            "condition": "model.currentStage=='Rejected'",
+            "items": [{
+                    type: "section",
+                    items: [{
+                        title: "REMARKS",
+                        key: "loanProcess.remarks",
+                        type: "textarea",
+                        required: true
+                    }, {
+                        title: "Reject Reason",
+                        key: "loanAccount.rejectReason",
+                        readonly: true,
+                        type: "textarea",
+                    }, {
+                        key: "review.targetStage",
+                        title: "SEND_BACK_TO_STAGE",
+                        type: "lov",
+                        lovonly:true,
+                        autolov: true,
+                        required: true,
+                        searchHelper: formHelper,
+                        search: function(inputModel, form, model, context) {
+                            var stage1 = model.review.preStage;
+                            var targetstage = formHelper.enum('targetstage').data;
+                            var out = [{'name': stage1, 'value': stage1}];
+                            for (var i = 0; i < targetstage.length; i++) {
+                                var t = targetstage[i];
+                                if (t.field1 == stage1) {
+                                    out.push({
+                                        name: t.name,
+                                        value: t.code
+                                    })
+                                }
+                            }
+                            return $q.resolve({
+                                headers: {
+                                    "x-total-count": out.length
+                                },
+                                body: out
+                            });
+                        },
+                        onSelect: function(valueObj, model, context) {
+                            model.review.targetStage1 = valueObj.name;
+                            model.loanProcess.stage = valueObj.value;
+                        },
+                        getListDisplayItem: function(item, index) {
+                            return [
+                                item.name
+                            ];
+                        }
+                    }, {
+                        key: "review.sendBackButton",
+                        type: "button",
+                        title: "SEND_BACK",
+                        onClick: "actions.sendBack(model, formCtrl, form, $event)"
+                    }]
+                },
+            ]
+        }
+                        ]
                         }
                     };
                     var p1 = UIRepository.getLoanProcessUIRepository().$promise;
@@ -1431,7 +1515,7 @@ define([], function() {
                         if (_.isArray(model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes) && !model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes[0])
                             delete model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes
 
-                        if (model.review.action==null || model.review.action =="" || model.review.targetStage1 ==null || model.review.targetStage1 ==""){
+                        if (model.loanProcess.remarks==null || model.loanProcess.remarks =="" || model.review.targetStage1 ==null || model.review.targetStage1 ==""){
                                PageHelper.showProgress("update-loan", "Send to Stage / Remarks is mandatory", 3000);
                                PageHelper.hideLoader();
                                return false;
