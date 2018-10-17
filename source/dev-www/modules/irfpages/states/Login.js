@@ -1,6 +1,6 @@
 irf.pages.controller('LoginCtrl',
-['$scope', 'authService', '$log', '$state', '$stateParams', '$timeout', 'irfStorageService', 'SessionStore', 'Utils', '$q', 'SysQueries', 'irfNavigator',
-function($scope, authService, $log, $state, $stateParams, $timeout, irfStorageService, SessionStore, Utils, $q, SysQueries, irfNavigator){
+['$scope', 'authService', '$log', '$state', '$stateParams', 'irfStorageService', 'SessionStore', 'Utils', 'irfNavigator',
+function($scope, authService, $log, $state, $stateParams, irfStorageService, SessionStore, Utils, irfNavigator){
 
 	var failedLogin = function(arg) {
 		$log.error(arg);
@@ -62,16 +62,14 @@ function($scope, authService, $log, $state, $stateParams, $timeout, irfStorageSe
 		if (userData && userData.login && username.toLowerCase() !== userData.login.toLowerCase()) {
 			if (autoLogin) {
 				$log.info('auto login - clearing all offline records');
-				localStorage.clear();
-				SessionStore.clear();
-				successLogin(true);
+				irfStorageService.clear().finally(function() {
+					successLogin(true);
+				});
 			} else {
 				Utils.confirm('User is different. This will clear all data saved by previous user ('+
 					userData.login+'). Do you want to proceed?', 'User Data Clear Alert').then(function() {
 					$log.info('clearing all offline records');
-					localStorage.clear();
-					SessionStore.clear();
-					$timeout(function() {
+					irfStorageService.clear().finally(function() {
 						doLogin(username, password, true);
 					});
 				});

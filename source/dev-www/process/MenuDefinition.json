@@ -21,6 +21,7 @@
         },
         "Page/LeadDashboard",
         "Page/LoanOriginationDashboard",
+        "Page/Adhoc/payment.PaymentDashboard",
         "Page/DocumentTrackingDashboard",
         {
             "title": "INDIVIDUAL_LOANS",
@@ -56,6 +57,7 @@
                 "Page/JournalPostingDashboard"
             ]
         },
+        "Page/Adhoc/MutualFund.MutualFundDashboard",
         {
             "title": "MANAGEMENT",
             "iconClass": "fa fa-cubes",

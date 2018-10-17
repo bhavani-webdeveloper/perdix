@@ -55,20 +55,23 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleSet"),
                         pageData.auditData = $stateParams.pageData.auditData;
                     }
                     model.processCompliance = response;
+                    var auto_sampling = null;
                     for (i in response.auto_sampling) {
                         if (response.auto_sampling[i].scoring_sample_type_id == sampleTypeId) {
-                            model.sampleSet = response.auto_sampling[i].sample_set;
+                            auto_sampling = response.auto_sampling[i];
+                            model.sampleSet = auto_sampling.sample_set;
                             $log.info(response.auto_sampling[i].sample_set)
                             break;
                         }
                     }
+                    var fetchCountString = (auto_sampling.sample_fetched && auto_sampling.sample_total)? ' (' + auto_sampling.sample_fetched + '/' + auto_sampling.sample_total + ')': '';
                     self.form = [{
                         "type": "box",
                         "colClass": "col-md-12",
                         "title": master.process_tabs[master.scoring_sample_sets[sampleTypeId].scoring_process_type_id].scoring_process_type,
                         "items": [{
                             "key": "sampleSet",
-                            "title": master.scoring_sample_sets[sampleTypeId].scoring_sample_type,
+                            "title": master.scoring_sample_sets[sampleTypeId].scoring_sample_type + fetchCountString,
                             "type": "tableview",
                             "selectable": false,
                             "editable": false,

@@ -14,32 +14,47 @@ irf.pageCollection.factory(irf.page("bi.BIReports"), ["$log", "RolesPages", "BIR
                 }
                 var self = this;
                 self.form = [];
-                
-                var p2 = BIReports.reportList().$promise.then(function(resp) {
-                    RolesPages.getReportsByRole({
-                        roleId: model.report.role.id
-                    }).$promise.then(function(response) {
-                        var object=[];
-                        for (i in resp) {
-                            if (response && response.body && response.body.length) {
-                                for (j in response.body) {
-                                    if (resp[i].value == response.body[j].report_name)
-                                    {
-                                        object.push(resp[i]);
+                PageHelper.showLoader();
+                var p1 = BIReports.allReportParameters().$promise.then(function(result){
+                    var item;
+                    self.formSource[0].items.splice(3, self.formSource[0].items.length -3);
+                    for(var i=0; i < result.length ; i++) {
+                        if(result[i].parameter == 'from_date' || result[i].parameter == 'to_date'){
+                            continue;
+                        }
+                        item = {};
+                        BIReports.Utils.setOptionsForReportParameter(item, result[i]);
+                        console.log (item['key']);
+                        item['condition'] = "model.selectedReport && model.selectedReport.parameters.indexOf('" + result[i].parameter + "') != -1";
+                        self.formSource[0].items.push(item);    
+                    }
+                    var p2 = BIReports.reportList().$promise.then(function(resp) {
+                        RolesPages.getReportsByRole({
+                            roleId: model.report.role.id
+                        }).$promise.then(function(response) {
+                            var object=[];
+                            for (i in resp) {
+                                if (response && response.body && response.body.length) {
+                                    for (j in response.body) {
+                                        if (resp[i].value == response.body[j].report_name)
+                                        {
+                                            object.push(resp[i]);
+                                        }
                                     }
                                 }
                             }
-                        }
-                        $log.info(object);
-                        self.formSource[0].items[0].titleMap = object;
-                        model.report.masterData = object;
-                        self.form = self.formSource;
+                            $log.info(object);
+                            self.formSource[0].items[0].titleMap = object;
+                            model.report.masterData = object;
+                            self.form = self.formSource;
+                        });
+                    }, function(errResp) {
+                        PageHelper.showErrors(errResp);
+                    }).finally(function() {
+                        PageHelper.hideLoader();
                     });
-                }, function(errResp) {
-                    PageHelper.showErrors(errResp);
-                }).finally(function() {
-
-                    PageHelper.hideLoader();
+                }, function(err){
+                    PageHelper.showErrors(err);
                 });
 
             },

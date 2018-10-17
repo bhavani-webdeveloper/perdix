@@ -463,11 +463,14 @@ function($log,formHelper,Enrollment,EnrollmentHelper,$state, $stateParams,elemen
                             key: "customer.customerBankAccounts[].customerNameAsInBank"
                         }, {
                             key: "customer.customerBankAccounts[].accountNumber",
+                            "required":true,
                             type: "password",
                             inputmode: "number",
                             numberType: "tel"
                         }, {
                             key: "customer.customerBankAccounts[].confirmedAccountNumber",
+                            "required":true,
+                            "title": "CONFIRMED_ACCOUNT_NUMBER",
                             inputmode: "number",
                             numberType: "tel"
                         }, {
@@ -534,7 +537,7 @@ function($log,formHelper,Enrollment,EnrollmentHelper,$state, $stateParams,elemen
                                 required: true,
                                 //maximum:99,
                                 title: "NO_OF_EMI_CHEQUE_BOUNCED"
-                            }, {
+                            },{
                                 key: "customer.customerBankAccounts[].bankStatements[].bankStatementPhoto",
                                 type: "file",
                                 required: true,
@@ -542,17 +545,8 @@ function($log,formHelper,Enrollment,EnrollmentHelper,$state, $stateParams,elemen
                                 fileType: "application/pdf",
                                 "category": "CustomerEnrollment",
                                 "subCategory": "IDENTITYPROOF",
-                                using: "scanner"
-                            }, ]
-                        }, {
-                            key: "customer.customerBankAccounts[].isDisbersementAccount",
-                            type: "radios",
-                            titleMap: [{
-                                value: true,
-                                name: "Yes"
-                            }, {
-                                value: false,
-                                name: "No"
+                                using: "scanner",
+                                offline:true
                             }]
                         }]
                     }]
@@ -1287,6 +1281,11 @@ function($log,formHelper,Enrollment,EnrollmentHelper,$state, $stateParams,elemen
 
                 var out = model.customer.$fingerprint;
                 //var BiometricQuality = SessionStore.getGlobalSetting("BiometricQuality");
+                if (!EnrollmentHelper.validateBankAccounts(model)) {
+                    $log.warn("Invalid Data, returning false");
+                    PageHelper.hideLoader();
+                    return false;
+                }
 
                 if (model.customer.verifications && model.customer.verifications.length) {
                     for (i in model.customer.verifications) {

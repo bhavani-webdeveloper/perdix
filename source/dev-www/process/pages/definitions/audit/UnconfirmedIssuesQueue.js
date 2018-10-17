@@ -5,9 +5,17 @@ irf.pageCollection.factory(irf.page("audit.UnconfirmedIssuesQueue"), ["$log", "f
             "type": "search-list",
             "title": "UNCONFIRMED_ISSUES",
             initialize: function(model, form, formCtrl) {
-                model.Audits = model.Audits || {};
-                localFormController = formCtrl;
-                syncCheck = false;
+                var bankName = SessionStore.getBankName();
+                var banks = formHelper.enum('bank').data;
+                for (var i = 0; i < banks.length; i++) {
+                    if (banks[i].name == bankName) {
+                        model.bankId = banks[i].value;
+                    }
+                }
+                var userRole = SessionStore.getUserRole();
+                if (userRole && userRole.accessLevel && userRole.accessLevel === 5) {
+                    model.fullAccess = true;
+                }
                 if ($stateParams.pageData && $stateParams.pageData.page) {
                     returnObj.definition.listOptions.tableConfig.page = $stateParams.pageData.page;
                 } else {
@@ -17,19 +25,37 @@ irf.pageCollection.factory(irf.page("audit.UnconfirmedIssuesQueue"), ["$log", "f
             definition: {
                 title: "SEARCH_ISSUES",
                 searchForm: [
-                    "*"
+                    {
+                        key: "bankId",
+                        readonly: true,
+                        condition: "!model.fullAccess"
+                    }, {
+                        key: "bankId",
+                        condition: "model.fullAccess"
+                    },
+                    "branch_id"
                 ],
                 autoSearch: true,
                 searchSchema: {
                     "type": 'object',
                     "title": 'SEARCH_OPTIONS',
                     "properties": {
-                        "branch_id": {
-                            "title": "BRANCH_ID",
-                            "type": "number",
-                            "enumCode": "branch_id",
+                        "bankId": {
+                            "title": "BANK_NAME",
+                            "type": ["integer", "null"],
+                            "enumCode": "bank",
                             "x-schema-form": {
                                 "type": "select"
+                            }
+                        },
+                        "branch_id": {
+                            "title": "BRANCH_ID",
+                            "type": ["integer", "null"],
+                            "enumCode": "branch_id",
+                            "x-schema-form": {
+                                "type": "select",
+                                "parentEnumCode": "bank",
+                                "parentValueExpr": "model.bankId"
                             }
                         }
                     },
@@ -41,6 +67,7 @@ irf.pageCollection.factory(irf.page("audit.UnconfirmedIssuesQueue"), ["$log", "f
                     return Audit.online.getIssuesList({
                         'branch_id': searchOptions.branch_id,
                         'confirmity_status': "2",
+                        'bank_id': searchOptions.bankId,
                         'issue_status': "P",
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage

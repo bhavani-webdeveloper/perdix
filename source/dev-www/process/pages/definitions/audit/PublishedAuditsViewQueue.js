@@ -4,14 +4,11 @@ irf.pageCollection.factory(irf.page("audit.PublishedAuditsViewQueue"), ["$log", 
             "type": "search-list",
             "title": "PUBLISHED_AUDITS_VIEW",
             initialize: function(model, form, formCtrl) {
-                model.Audits = model.Audits || {};
-                model.branch = SessionStore.getCurrentBranch().branchId;
                 var bankName = SessionStore.getBankName();
                 var banks = formHelper.enum('bank').data;
                 for (var i = 0; i < banks.length; i++) {
                     if (banks[i].name == bankName) {
                         model.bankId = banks[i].value;
-                        model.bankName = banks[i].name;
                     }
                 }
                 localFormController = formCtrl;
@@ -38,7 +35,10 @@ irf.pageCollection.factory(irf.page("audit.PublishedAuditsViewQueue"), ["$log", 
                     }, {
                         key: "bankId",
                         condition: "model.fullAccess"
-                    }, {
+                    },
+                    "branch_id",
+                    "audit_type",
+                    {
                         key: "auditor_id",
                         title: "AUDITOR_USERID",
                         type: "lov",
@@ -74,8 +74,6 @@ irf.pageCollection.factory(irf.page("audit.PublishedAuditsViewQueue"), ["$log", 
                             ];
                         }
                     },
-                    "branch_id",
-                    "audit_type",
                     "report_date",
                     "start_date",
                     "end_date"
@@ -90,9 +88,7 @@ irf.pageCollection.factory(irf.page("audit.PublishedAuditsViewQueue"), ["$log", 
                             "type": ["integer", "null"],
                             "enumCode": "bank",
                             "x-schema-form": {
-                                "type": "select",
-                                "screenFilter": true,
-
+                                "type": "select"
                             }
                         },
                         "auditor_id": {
@@ -101,10 +97,12 @@ irf.pageCollection.factory(irf.page("audit.PublishedAuditsViewQueue"), ["$log", 
                         },
                         "branch_id": {
                             "title": "BRANCH_ID",
-                            "type": "number",
+                            "type": ["integer", "null"],
                             "enumCode": "branch_id",
                             "x-schema-form": {
-                                "type": "select"
+                                "type": "select",
+                                "parentEnumCode": "bank",
+                                "parentValueExpr": "model.bankId"
                             }
                         },
                         "audit_type": {
@@ -153,6 +151,7 @@ irf.pageCollection.factory(irf.page("audit.PublishedAuditsViewQueue"), ["$log", 
                     return Audit.online.getAuditList({
                         'auditor_id': searchOptions.auditor_id,
                         'branch_id': searchOptions.branch_id,
+                        'bank_id': searchOptions.bankId,
                         'audit_type': searchOptions.audit_type,
                         'start_date': searchOptions.start_date ? searchOptions.start_date + " 00:00:00" : "",
                         'end_date': searchOptions.end_date ? searchOptions.end_date + " 23:59:59" : "",

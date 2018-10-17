@@ -30,8 +30,6 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
             $log.info("Profile Page got initialized");
             initData(model);
             var enabletrue= false;
-            model = EnrollmentHelper.fixData(model);
-
             if($stateParams.pageData){
                 if($stateParams.pageData.enabletrue){
                     enabletrue= $stateParams.pageData.enabletrue;
@@ -774,11 +772,14 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                             key: "customer.customerBankAccounts[].customerNameAsInBank"
                         }, {
                             key: "customer.customerBankAccounts[].accountNumber",
+                            "required":true,
                             type: "password",
                             inputmode: "number",
                             numberType: "tel"
                         }, {
                             key: "customer.customerBankAccounts[].confirmedAccountNumber",
+                            "required":true,
+                            "title": "CONFIRMED_ACCOUNT_NUMBER",
                             inputmode: "number",
                             numberType: "tel"
                         }, {
@@ -845,7 +846,7 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                                 required: true,
                                 //maximum:99,
                                 title: "NO_OF_EMI_CHEQUE_BOUNCED"
-                            }, {
+                            },{
                                 key: "customer.customerBankAccounts[].bankStatements[].bankStatementPhoto",
                                 type: "file",
                                 required: true,
@@ -853,17 +854,8 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                                 fileType: "application/pdf",
                                 "category": "CustomerEnrollment",
                                 "subCategory": "IDENTITYPROOF",
-                                using: "scanner"
-                            }, ]
-                        }, {
-                            key: "customer.customerBankAccounts[].isDisbersementAccount",
-                            type: "radios",
-                            titleMap: [{
-                                value: true,
-                                name: "Yes"
-                            }, {
-                                value: false,
-                                name: "No"
+                                using: "scanner",
+                                offline:true
                             }]
                         }]
                     }]
@@ -1423,6 +1415,7 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                     var model = {$$OFFLINE_FILES$$:_model.$$OFFLINE_FILES$$};
                     model.customer = resp;
                     model.customer.addressProofSameAsIdProof = (model.customer.title == "true") ? true : false;
+
                     model = EnrollmentHelper.fixData(model);
                     PagesDefinition.getRolePageConfig("Page/Engine/customer360.EnrollmentProfile").then(function(data){
                         $log.info(data);
@@ -1474,17 +1467,23 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                     irfProgressMessage.pop('PROFILE', 'Working...');
                     model.customer.title=String(model.customer.addressProofSameAsIdProof);
                     $log.info(model);
+                    if (!EnrollmentHelper.validateBankAccounts(model)) {
+                        $log.warn("Invalid Data, returning false");
+                        PageHelper.hideLoader();
+                        return false;
+                    }
                     if (!( EnrollmentHelper.validateDate(model))) {
                         return false;
                     }
-                    if (model.customer.latitude == "0") {
-                            delete model.customer.latitude;
+                    if(model.customer.latitude == "0") {
+                        delete model.customer.latitude;
                     }
-                    if (model.customer.longitude == "0") {
+                    if(model.customer.longitude == "0") {
                         delete model.customer.longitude;
                     }
                     var reqData = _.cloneDeep(model);
                     EnrollmentHelper.fixData(reqData);
+
                     if (reqData.customer.currentStage == 'Completed'){ 
                         reqData['enrollmentAction'] = 'PROCEED';
                     } else {
@@ -1504,7 +1503,6 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                         window.scrollTo(0, 0);
                         PageHelper.showErrors(res);
                     })
-
                 });
             }
         }

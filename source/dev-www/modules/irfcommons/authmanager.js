@@ -129,6 +129,39 @@ function(Auth, Account, $q, $log, SessionStore, irfStorageService, AuthTokenHelp
 				SessionStore.session.offline = false;
 				deferred.resolve();
 				themeswitch.changeTheme(themeswitch.getThemeColor(), true);
+			}, function(e) {
+				$log.error(e);
+				irfStorageService.clear().finally(function() {
+					deferred.reject({ 'statusText': 'Master download failed. ' + e });
+				});
+			});
+		}, function(e) {
+			$log.error(e);
+			deferred.reject({ 'statusText': 'User service failed. ' + e });
+		});
+		return deferred.promise;
+	};
+
+	var postLogin = function(refresh) {
+		var deferred = $q.defer();
+		removeUserData();
+		getUser().then(function(result) {
+			var m = irfStorageService.getMasterJSON("UserProfile");
+			var km = _.keys(m);
+			if (km.length !== 1 || km[0] !== username) {
+				// clear UserProfile
+				irfStorageService.removeMasterJSON("UserProfile");
+			}
+			setUserData(result);
+
+			var p = [
+				irfStorageService.cacheAllMaster(true, refresh),
+				loadUserBranches()
+			];
+			$q.all(p).then(function(msg) {
+				SessionStore.session.offline = false;
+				deferred.resolve();
+				themeswitch.changeTheme(themeswitch.getThemeColor(), true);
 			}, deferred.reject);
 		}, deferred.reject);
 		return deferred.promise;

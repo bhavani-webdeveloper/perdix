@@ -273,9 +273,14 @@ function($rootScope, $log, $timeout, $q, $state, authService, $location, ALLOWED
 		$translate.use(SessionStore.getLanguage());
 	}
 
+	var ignoreTransition = false;
 	$rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams, options){
 		$log.info('|--------Changing State START--------|');
-
+		if (ignoreTransition) {
+			ignoreTransition = false;
+			$log.info('IGNORING TRANSITION');
+			return;
+		}
         /* Clearing page errors */
         PageHelper.clearErrors();
 
@@ -324,26 +329,36 @@ function($rootScope, $log, $timeout, $q, $state, authService, $location, ALLOWED
 					//return;
 				} else {
 					$log.debug("> Online page loaing");
-					event.preventDefault();
 					authService.getUser().then(function(result){ /* Success Callback */
 						$log.info("User account information loaded.");
 
 						setProfilePreferences(result);
-						irfStorageService.cacheAllMaster(false);
-						$state.transitionTo(toState, toParams);
-						return;
+						irfStorageService.cacheAllMaster(false).then(function() {
+							$state.transitionTo(toState, toParams);
+						}, function(e) {
+							$state.transitionTo(authService.getRedirectState());
+						});
 					}, function(response){ /* Error callback */
 						$log.info("Unable to load user information. Redirecting to Login...");
 						$state.transitionTo(authService.getRedirectState());
-						return;
 					});
+					event.preventDefault();
+					ignoreTransition = true;
+					return;
 				}
 			}
 		} else {
 			$log.info("UserData is already in Session");
 			setProfilePreferences(authService.getUserData());
 		}
-		irfStorageService.cacheAllMaster(false);
+		if (!irfStorageService.isMasterLoaded()) {
+			irfStorageService.cacheAllMaster(false).finally(function() {
+				$state.transitionTo(toState, toParams);
+			});
+			event.preventDefault();
+			ignoreTransition = true;
+			return;
+		}
 		$log.info('|--------Changing State END--------|');
 	});
 	$rootScope.$on('$stateChangeSuccess', function(){

@@ -77,6 +77,7 @@ irf.pageCollection.factory(irf.page("audit.detail.GeneralObservation"), ["$log",
                                 "condition": "model.general_observations[arrayIndex].option_type != 'user'",
                                 "type": "lov",
                                 lovonly: true,
+                                "required": true,
                                 outputMap: {},
                                 searchHelper: formHelper,
                                 search: function(inputModel, form, model, context) {
@@ -117,10 +118,12 @@ irf.pageCollection.factory(irf.page("audit.detail.GeneralObservation"), ["$log",
                                         "title": "EMPLOYEE",
                                         "titleExpr": "model.general_observations[arrayIndexes[0]].option_id[arrayIndexes[1]]",
                                         "startEmpty": true,
+                                        "required": true,
                                         "items": [{
                                             key: "general_observations[].option_id[]",
                                             "type": "lov",
                                             lovonly: true,
+                                            "required": true,
                                             inputMap: {
                                                 "branch_id": {
                                                     "key": "branch_id"

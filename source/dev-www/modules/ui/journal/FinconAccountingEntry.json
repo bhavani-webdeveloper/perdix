@@ -1,0 +1,165 @@
+{
+    "FinconAccounting": {
+        "type": "box",
+        "title": "FINCON_ACCOUNTING",
+        "colClass": "col-sm-12",
+        "orderNo": 10,
+        "items": {
+            "transactionSection": {
+                "type": "section",
+                "htmlClass": "col-xs-6 col-md-6",
+                "items": {
+                    "entryType": {
+                        "key": "journal.journalHeader.entryType",
+                        "title": "ENTRY_TYPE",
+                        "type": "select",
+                        "enumCode": "journal_transaction_type",
+                         "orderNo": 10
+                    },
+                    "transactionDate": {
+                        "key": "journal.journalHeader.transactionDate",
+                        "required":true,
+                        "title": "TRANSACTION_DATE",
+                        "type": "date",
+                        "orderNo": 20
+                    },
+                    "transactionBranchId": {
+                        "key": "journal.journalHeader.transactionBranchId",
+                        "required":true,
+                        "title": "TRANSACTION_BRANCH",
+                        "type": "select",
+                        "enumCode": "branch_id",
+                        "orderNo": 30
+                    },
+                     "remarks":{
+                        "key": "journal.journalHeader.remarks",
+                        "type": "string",
+                        "title": "TRANSACTION_NAME",
+                        "orderNo": 35
+
+                    },
+                     "valueDate": {
+                        "key": "journal.journalHeader.valueDate",
+                        "title": "VALUE_DATE",
+                        "type": "date",
+                        "orderNo": 40
+                    },
+                    "billNumber": {
+                        "key": "journal.journalHeader.billNumber",
+                        "title": "BILL_NO",
+                        "type": "number",
+                        "orderNo": 50
+                    },
+                    "billDate": {
+                        "key": "journal.journalHeader.billDate",
+                        "title": "BILL_DATE",
+                        "type": "date",
+                        "orderNo": 70
+                    }
+                }
+            },
+            "instrumentSection": {
+                "type": "section",
+                "htmlClass": "col-xs-6 col-md-6",
+                "items": {
+                    "billUpload": {
+                        "key": "journal.journalHeader.fileId",
+                        "title": "BILL_UPLOAD",
+                        "type": "file",
+                        "fileType": "application/pdf",
+                        "category": "CustomerEnrollment",
+                        "subCategory": "IDENTITYPROOF",
+                        "orderNo": 60
+                    },
+                    "instrumentType": {
+                        "key": "journal.journalHeader.instrumentType",
+                        "type": "select",
+                        "title": "INSTRUMENT_TYPE",
+                        "enumCode": "journal_instrument_type",
+                        "orderNo": 80
+                    },
+                    "instrumentDate": {
+                        "key": "journal.journalHeader.instrumentDate",
+                        "title": "INSTRUMENT_DATE",
+                        "type": "date",
+                        "orderNo": 90
+                    },
+                    "instrumentNumber": {
+                        "key": "journal.journalHeader.instrumentNumber",
+                        "title": "INSTRUMENT_NUMBER",
+                        "type": "number",
+                        "orderNo": 100
+                    },
+                    "instrumentBankName": {
+                        "key": "journal.journalHeader.instrumentBankName",
+                        "type": "string",
+                        "title": "INSTRUMENT_BANK_NAME",
+                        "orderNo": 110
+                    },
+                    "instrumentBranchName": {
+                        "key": "journal.journalHeader.instrumentBranchName",
+                        "type": "string",
+                        "title": "INSTRUMENT_BRANCH_NAME",
+                        "orderNo": 120
+                    }
+                }
+            }
+
+        }
+    },
+    "AccountEntry": {
+        "type": "box",
+        "title": "ACCOUNT_ENTRY",
+        "orderNo": 20,
+        "colClass": "col-sm-12",
+        "items": {
+            "JournalDetailsGridVIew": {
+                "type": "grid",
+                "orientation": "vertical",
+                "items": {
+                    "journalDetails": {
+                        "type": "array",
+                        "startEmpty": true,
+                        "title": "ACCOUNT_ENTRY",
+                        "key": "journal.journalHeader.journalDetails",
+                        "items": {
+                            "glAcNo": {
+                                "key": "journal.journalHeader.journalDetails[].glAcNo",
+                                "title": "GL_AC_NO",
+                                "type":"lov"
+                            },
+                            "type": {
+                                "key": "journal.journalHeader.journalDetails[].type",
+                                "title": "TYPE",
+                                "type":"string"
+                            },
+                            "transactionAmount": {
+                                "key": "journal.journalHeader.journalDetails[].transactionAmount",
+                                "title": "AMOUNT",
+                                "type":"string"
+                            },
+                            "relatedAccountNo": {
+                                "key": "journal.journalHeader.journalDetails[].relatedAccountNo",
+                                "title": "ACCOUNT_NO",
+                                "type":"string"
+                            },
+                            "remarks": {
+                                "key": "journal.journalHeader.journalDetails[].remarks",
+                                "title": "NARRATION",
+                                "type":"string"
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+    },
+    "Entries": {
+        "type":"box",
+        "title": "ENTRIES",
+        "colClass":"col-sm-12",
+        "orderNo":"30",
+        "items": []
+    }
+}

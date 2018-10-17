@@ -46,6 +46,4 @@ groupProcess.remarksHistory = SELECT pre_stage as stage, actions as action, grou
 groupLoanProductsByPartner.list=SELECT product_name as productName, `product_code` as productCode, tenure_from, tenure_to, frequency FROM `loan_products` WHERE `partner_code`=:partner and loan_type = 'JLG'
 feesFormMapping.list = select * from invoice_form_mapping
 getCustomerGroups.list= SELECT j.group_id,g.group_code,g.group_name,g.group_category,g.partner_code,g.branch_id FROM jlg_group_members j left join jlg_groups g on j.group_id=g.id WHERE j.urn_no=:urn_no and g.group_status='1'
-
-
-
+ReadyToDisburseAccountDetails.list = SELECT l.id as loanId ,l.account_number as accountNumber, l.loan_amount as loanAmount ,c.first_name as customerName FROM loan_accounts l LEFT JOIN customer c ON (c.urn_no = :urn_no) LEFT JOIN jlg_account_details jlga ON (l.account_number = jlga.account_number) LEFT JOIN jlg_groups jlg ON (jlg.group_code = jlga.group_code) WHERE loan_disbursement_date IS NULL AND jlg.current_stage = 'Completed'AND l.urn_no = :urn_no UNION SELECT l.id as loanId ,l.account_number as accountNumber, l.loan_amount as loanAmount ,c.first_name as customerName FROM loan_accounts l LEFT JOIN customer c ON (c.urn_no = :urn_no) WHERE loan_disbursement_date IS NULL AND l.current_stage = 'Completed'AND (l.urn_no = :urn_no or l.applicant = :urn_no)

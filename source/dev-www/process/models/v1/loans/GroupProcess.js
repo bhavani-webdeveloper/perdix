@@ -33,9 +33,9 @@ irf.models.factory('GroupProcess',
             method: 'PUT',
             url: endpoint + '/groupBatchDisburse',
         },
-        closeLegacyGroup: {
+        closeGroup: {
             method: 'PUT',
-            url: groupEndpoint + '/close',
+            url: endpoint  + '/close',    
         }
     });
 

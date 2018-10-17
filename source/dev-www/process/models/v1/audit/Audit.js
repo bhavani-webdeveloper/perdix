@@ -500,7 +500,7 @@ irf.pageCollection.run(["irfStorageService", "OfflineManager", "SessionStore", "
                 deferred.resolve();
             }, function(error) {
                 PageHelper.showProgress("page-init", "Failed to load audit master", 5000);
-                deferred.reject();
+                deferred.reject("Failed to load audit master");
             });
             return deferred.promise;
         });

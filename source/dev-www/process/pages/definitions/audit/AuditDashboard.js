@@ -1,6 +1,15 @@
-irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "$q", "$stateParams", "$scope", "PagesDefinition", "SessionStore", "Audit",
-    function($log, $q, $stateParams, $scope, PagesDefinition, SessionStore, Audit) {
+irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "formHelper", "$q", "$stateParams", "$scope", "PagesDefinition", "SessionStore", "PageHelper", "Audit",
+    function($log, formHelper, $q, $stateParams, $scope, PagesDefinition, SessionStore, PageHelper, Audit) {
         $scope.$templateUrl = "process/pages/templates/Page.Dashboard.html";
+
+        if (!irf.appConfig.AMS_ENABLED) {
+            PageHelper.setError({
+                message: "Audit Feature is disabled"
+            });
+            return;
+        }
+
+        var role_id = SessionStore.getUserRole().id;
 
         PagesDefinition.getUserAllowedDefinition({
             "title": "AUDIT_DASHBOARD",
@@ -11,6 +20,8 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 "Page/Engine/audit.ScheduledAuditsViewQueue",
                 "Page/Engine/audit.DeferredAuditsQueue",
                 "Page/Engine/audit.OpenRegularAuditsQueue",
+                "Page/Engine/audit.DraftOperationQueue",
+                "Page/Engine/audit.DraftAuditQueue",
                 "Page/Engine/audit.OpenSnapAuditsQueue",
                 "Page/Engine/audit.PublishedAuditsViewQueue",
                 "Page/Engine/audit.PublishedAuditsQueue",
@@ -38,6 +49,8 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 var savqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.ScheduledAuditsViewQueue"];
                 var daq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.DeferredAuditsQueue"];
                 var oraq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.OpenRegularAuditsQueue"];
+                var doaq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.DraftOperationQueue"];
+                var daaq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.DraftAuditQueue"];
                 var osaq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.OpenSnapAuditsQueue"];
                 var pavq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.PublishedAuditsViewQueue"];
                 var paq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.PublishedAuditsQueue"];
@@ -60,7 +73,9 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 if (savqMenu) savqMenu.data = '-';
                 if (daq) daq.data = '-';
                 if (oraq) oraq.data = '-';
-                if (osaq) osaq.data = '-';
+                if (oraq) oraq.data = '-';
+                if (doaq) doaq.data = '-';
+                if (daaq) daaq.data = '-';
                 if (pavq) pavq.data = '-';
                 if (paq) paq.data = '-';
                 if (raq) raq.data = '-';
@@ -84,10 +99,6 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                             'auditor_id': auditor_id,
                             'current_stage': 'scheduled',
                         }).$promise
-                        // Audit.online.getAuditList({
-                        //     'auditor_id': auditor_id,
-                        //     'current_stage': 'reassign',
-                        // }).$promise
                     ]).then(function(data) {
                         saqMenu.data = data[0].body.length;
                     });
@@ -98,9 +109,6 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                         Audit.online.getAuditList({
                             'current_stage': 'scheduled'
                         }).$promise
-                        // Audit.online.getAuditList({
-                        //     'current_stage': 'reassign'
-                        // }).$promise
                     ]).then(function(data) {
                         savqMenu.data = data[0].body.length;
                     });
@@ -127,14 +135,32 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                         oraq.data = data.body.length;
                     });
                 }
-
                 if (osaq) {
                     Audit.online.getAuditList({
                         'auditor_id': auditor_id,
                         'audit_type': 0,
-                        'status' : 'O'
+                        'status': 'O'
                     }).$promise.then(function(data) {
                         osaq.data = data.body.length;
+                    });
+                }
+
+                if (doaq) {
+                    Audit.online.findAuditInfo({
+                        'current_stage': 'draft',
+                        'status': 'D'
+                    }).$promise.then(function(data) {
+                        doaq.data = data.body.length;
+                    });
+                }
+
+                if (daaq) {
+                    Audit.online.findAuditInfo({
+                        'auditor_id': auditor_id,
+                        'current_stage': 'draft-review',
+                        'status': 'D'
+                    }).$promise.then(function(data) {
+                        daaq.data = data.body.length;
                     });
                 }
 
@@ -179,7 +205,6 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
 
                 if (reaq) {
                     Audit.online.getAuditList({
-                        'auditor_id': auditor_id,
                         'current_stage': 'reject'
                     }).$promise.then(function(data) {
                         reaq.data = data.body.length;
@@ -188,12 +213,6 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
 
                 if (adq) {
                     Audit.online.getAuditList({}).$promise.then(function(data) {
-                        var returnObj = {
-                            headers: {
-                                'x-total-count': data.headers['x-total-count']
-                            },
-                            body: data.body
-                        };
                         adq.data = data.body.length;
                     });
                 }
@@ -203,24 +222,12 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                         'page': 1,
                         'per_page': 100
                     }).$promise.then(function(data) {
-                        var returnObj = {
-                            headers: {
-                                'x-total-count': data.headers['x-total-count']
-                            },
-                            body: data.body
-                        };
                         asq.data = data.body.length;
                     });
                 }
 
                 if (avq) {
                     Audit.online.getAuditList({}).$promise.then(function(data) {
-                        var returnObj = {
-                            headers: {
-                                'x-total-count': data.headers['x-total-count']
-                            },
-                            body: data.body
-                        };
                         avq.data = data.body.length;
                     });
                 }
@@ -229,11 +236,13 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                     $q.all([
                         Audit.online.getIssuesList({
                             'issue_status': "A",
+                            'assignee_designation_id': role_id,
                             'page': 1,
                             'per_page': 100
                         }).$promise,
                         Audit.online.getIssuesList({
                             'issue_status': "P",
+                            'assignee_designation_id': role_id,
                             'page': 1,
                             'per_page': 100
                         }).$promise
@@ -246,11 +255,13 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                     $q.all([
                         Audit.online.getIssuesList({
                             'issue_status': "A",
+                            'assignee_designation_id': role_id,
                             'page': 1,
                             'per_page': 100
                         }).$promise,
                         Audit.online.getIssuesList({
                             'issue_status': "P",
+                            'assignee_designation_id': role_id,
                             'page': 1,
                             'per_page': 100
                         }).$promise
@@ -258,7 +269,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                         aivq.data = data[0].body.length + data[1].body.length;
                     });
                 }
-
+ 
                 if (oiq || oivq) {
                     Audit.online.getIssuesList({
                         'confirmity_status': "NULL",
@@ -272,7 +283,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                         }
                     });
                 }
-
+ 
                 if (ciq) {
                     Audit.online.getIssuesList({
                         'confirmity_status': "1",
@@ -287,7 +298,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                         ciq.data = data.body.length;
                     });
                 }
-
+ 
                 if (uciq) {
                     Audit.online.getIssuesList({
                         'confirmity_status': "2",
@@ -304,8 +315,5 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 }
             }
         });
-
-
-
     }
 ]);

@@ -4,9 +4,17 @@ irf.pageCollection.factory(irf.page("audit.AssignedIssuesViewQueue"), ["$log","P
             "type": "search-list",
             "title": "ASSIGNED_ISSUES_VIEW_QUEUE",
             initialize: function(model, form, formCtrl) {
-                model.Audits = model.Audits || {};
-                localFormController = formCtrl;
-                syncCheck = false;
+                var bankName = SessionStore.getBankName();
+                var banks = formHelper.enum('bank').data;
+                for (var i = 0; i < banks.length; i++) {
+                    if (banks[i].name == bankName) {
+                        model.bankId = banks[i].value;
+                    }
+                }
+                var userRole = SessionStore.getUserRole();
+                if (userRole && userRole.accessLevel && userRole.accessLevel === 5) {
+                    model.fullAccess = true;
+                }
                 if ($stateParams.pageData && $stateParams.pageData.page) {
                     returnObj.definition.listOptions.tableConfig.page = $stateParams.pageData.page;
                 } else {
@@ -15,30 +23,39 @@ irf.pageCollection.factory(irf.page("audit.AssignedIssuesViewQueue"), ["$log","P
             },
             definition: {
                 title: "SEARCH_ISSUES",
-                searchForm: [
-                    "*"
+                searchForm: [{
+                        key: "bankId",
+                        readonly: true,
+                        condition: "!model.fullAccess"
+                    }, {
+                        key: "bankId",
+                        condition: "model.fullAccess"
+                    },
+                    "branch_id"
                 ],
                 autoSearch: true,
                 searchSchema: {
                     "type": 'object',
                     "title": 'SEARCH_OPTIONS',
                     "properties": {
-                        "branch_id": {
-                            "title": "BRANCH_ID",
-                            "type": "number",
-                            "enumCode": "branch_id",
+                        "bankId": {
+                            "title": "BANK_NAME",
+                            "type": ["integer", "null"],
+                            "enumCode": "bank",
                             "x-schema-form": {
                                 "type": "select"
                             }
                         },
-                        "user_name": {
-                            "title": "USER_NAME",
-                            "type": "string"
-                        },
-                        "login": {
-                            "title": "LOGIN",
-                            "type": "string"
-                        },
+                        "branch_id": {
+                            "title": "BRANCH_ID",
+                            "type": ["integer", "null"],
+                            "enumCode": "branch_id",
+                            "x-schema-form": {
+                                "type": "select",
+                                "parentEnumCode": "bank",
+                                "parentValueExpr": "model.bankId"
+                            }
+                        }
                     },
                     "required": []
                 },
@@ -50,14 +67,14 @@ irf.pageCollection.factory(irf.page("audit.AssignedIssuesViewQueue"), ["$log","P
                     $q.all([
                         Audit.online.getIssuesList({
                             'branch_id': searchOptions.branch_id,
-                            'user_id': searchOptions.userId,
                             'issue_status': "A",
+                            'bank_id': searchOptions.bankId,
                             'page': pageOpts.pageNo,
                             'per_page': pageOpts.itemsPerPage
                         }).$promise,
                         Audit.online.getIssuesList({
                             'branch_id': searchOptions.branch_id,
-                            'user_id': searchOptions.userId,
+                            'bank_id': searchOptions.bankId,
                             'issue_status': "P",
                             'page': pageOpts.pageNo,
                             'per_page': pageOpts.itemsPerPage

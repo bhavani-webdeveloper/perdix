@@ -1,0 +1,30 @@
+import {IQueryRepository} from "./IQueryRepository";
+import {Observable} from "@reactivex/rxjs";
+import AngularResourceService = require("../../../infra/api/AngularResourceService");
+import {RxObservable} from "../RxObservable";
+
+export class QueryRepository implements IQueryRepository{
+
+    private queryService: any;
+
+    constructor() {
+        this.queryService = AngularResourceService.getInstance().getNGService('Queries');
+    }
+
+    getAllLoanPurpose1(): Observable<any> {
+        return RxObservable.fromPromise(this.queryService.getAllLoanPurpose1());
+    }
+
+    getAllLoanPurpose2(model: string): Observable<any> {
+        return RxObservable.fromPromise(this.queryService.getAllLoanPurpose2(model));
+    }
+
+    getVehicleDetails(): Observable<any> {
+        return RxObservable.fromPromise(this.queryService.getVehicleDetails());
+    }
+
+    getVehicleSchemeCodes(branch:string,centre:string): Observable<any> {
+        return RxObservable.fromPromise(this.queryService.getVehicleSchemeCodes(branch,centre));
+    }
+
+}

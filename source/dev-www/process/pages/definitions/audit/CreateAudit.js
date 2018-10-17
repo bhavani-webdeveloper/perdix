@@ -1,5 +1,5 @@
-irf.pageCollection.factory(irf.page("audit.CreateAudit"), ["$log", "PageHelper", "Audit", "$stateParams", "irfNavigator", "SessionStore",
-    function($log, PageHelper, Audit, $stateParams, irfNavigator, SessionStore) {
+irf.pageCollection.factory(irf.page("audit.CreateAudit"), ["$log", "PageHelper", "Audit", "formHelper", "irfNavigator", "SessionStore",
+    function($log, PageHelper, Audit, formHelper, irfNavigator, SessionStore) {
         var branch = SessionStore.getBranch();
         return {
             "type": "schema-form",
@@ -7,10 +7,19 @@ irf.pageCollection.factory(irf.page("audit.CreateAudit"), ["$log", "PageHelper",
             initialize: function(model, form, formCtrl) {
                 var self = this;
                 model.audit_info = model.audit_info || {};
-                model.branchName = SessionStore.getBranch();
+                model.audit_info.branch_id = SessionStore.getCurrentBranch().branchId;
+                var bankName = SessionStore.getBankName();
+                var banks = formHelper.enum('bank').data;
+                for (var i = 0; i < banks.length; i++) {
+                    if (banks[i].name == bankName) {
+                        model.audit_info.bankId = banks[i].value;
+                    }
+                }
+                var userRole = SessionStore.getUserRole();
+                if (userRole && userRole.accessLevel && userRole.accessLevel === 5) {
+                    model.fullAccess = true;
+                }
                 model.audit_info.auditor_id = SessionStore.getLoginname();
-                var master = Audit.offline.getAuditMaster();
-                var auditTypeValue = [];
                 self.form = [];
                 var init = function() {
                     self.form = [{
@@ -22,8 +31,17 @@ irf.pageCollection.factory(irf.page("audit.CreateAudit"), ["$log", "PageHelper",
                             "title": "AUDITOR_ID",
                             "readonly": true
                         }, {
+                            "key": "audit_info.bankId",
+                            "readonly": true,
+                            "condition": "!model.fullAccess"
+                        }, {
+                            "key": "audit_info.bankId",
+                            "condition": "model.fullAccess"
+                        }, {
                             "key": "audit_info.branch_id",
                             "type": "select",
+                            "parentEnumCode": "bank",
+                            "parentValueExpr": "model.audit_info.bankId"
                         }, {
                             "key": "audit_info.audit_type",
                             "type": "select",
@@ -66,9 +84,17 @@ irf.pageCollection.factory(irf.page("audit.CreateAudit"), ["$log", "PageHelper",
                                 "title": "AUDITOR_ID",
                                 "type": "string",
                             },
+                            "bankId": {
+                                "title": "BANK_NAME",
+                                "type": ["integer", "null"],
+                                "enumCode": "bank",	
+                                "x-schema-form": {
+                                    "type": "select"
+                                }
+                            },
                             "branch_id": {
                                 "title": "BRANCH_NAME",
-                                "type": "integer",
+                                "type": ["integer", "null"],
                                 "enumCode": "branch_id"
                             },
                             "report_date": {
@@ -96,6 +122,20 @@ irf.pageCollection.factory(irf.page("audit.CreateAudit"), ["$log", "PageHelper",
             },
             actions: {
                 submit: function(model, formCtrl, form, $event) {
+                    if (!model.audit_info.report_date || !model.audit_info.start_date || !model.audit_info.end_date) {
+                        PageHelper.setError({message: "Report date, start date, and end date are mandatory"});
+                        return;
+                    }
+                    var rDate = moment(model.audit_info.report_date, SessionStore.getSystemDateFormat());
+                    var sDate = moment(model.audit_info.start_date, SessionStore.getSystemDateFormat());
+                    var eDate = moment(model.audit_info.end_date, SessionStore.getSystemDateFormat());
+                    if (rDate.isAfter(sDate)) {
+                        PageHelper.setError({message: "Report date should be on or before start date"});
+                        return;
+                    } else if (sDate.isAfter(eDate)) {
+                        PageHelper.setError({message: "Start date should be on or before end date"});
+                        return;
+                    }
                     PageHelper.showLoader();
                     model.audit_info.status = "O";
                     model.audit_info.next_stage = "create";

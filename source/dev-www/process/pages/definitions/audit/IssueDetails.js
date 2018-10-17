@@ -123,9 +123,9 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["$log", "irfNavigato
                     "items": [{
                         "type": "section",
                         "htmlClass": "",
-                        "html": '<i class="fa fa-user text-gray">&nbsp;</i> {{model.auditIssue.messages[arrayIndex].employee_id}}\
+                        "html": '<i class="fa fa-user text-gray">&nbsp;</i> {{model.auditIssue.messages[arrayIndex].created_by}}\
                         <br><i class="fa fa-clock-o text-gray">&nbsp;</i> {{model.auditIssue.messages[arrayIndex].created_on}}\
-                        <br><i class="fa fa-commenting text-gray">&nbsp;</i> <strong>{{model.auditIssue.messages[arrayIndex].comments}}</strong><br>'
+                        <br><i class="fa fa-commenting text-gray">&nbsp;</i> <strong>{{model.auditIssue.messages[arrayIndex].comment}}</strong><br>'
                     }]
                 }]
             }, {
@@ -202,6 +202,7 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["$log", "irfNavigato
                         model.auditIssue.status = 'X';
                         model.auditIssue.closed_by = SessionStore.getLoginname();
                         model.auditIssue.closed_on = moment().format('YYYY-MM-DD HH:mm:ss');
+                        model.auditIssue.next_stage = 'close';
                     } 
                     // else if (actionType == 'send') {
                     //     model.auditIssue.send_message = model.message;

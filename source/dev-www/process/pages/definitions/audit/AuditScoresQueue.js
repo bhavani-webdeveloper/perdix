@@ -4,7 +4,19 @@ irf.pageCollection.factory(irf.page("audit.AuditScoresQueue"), ["$log", "$stateP
             "type": "search-list",
             "title": "AUDIT_SCORES",
             initialize: function(model, form, formCtrl) {
-                $log.info("search-list sample got initialized");
+                model.branch_id = SessionStore.getCurrentBranch().branchId;
+                var bankName = SessionStore.getBankName();
+                var banks = formHelper.enum('bank').data;
+                for (var i = 0; i < banks.length; i++) {
+                    if (banks[i].name == bankName) {
+                        model.bankId = banks[i].value;
+                        model.bankName = banks[i].name;
+                    }
+                }
+                var userRole = SessionStore.getUserRole();
+                if (userRole && userRole.accessLevel && userRole.accessLevel === 5) {
+                    model.fullAccess = true;
+                }
                 model.Audits = model.Audits || {};
                 if ($stateParams.pageData && $stateParams.pageData.page) {
                     returnObj.definition.listOptions.tableConfig.page = $stateParams.pageData.page;
@@ -14,14 +26,34 @@ irf.pageCollection.factory(irf.page("audit.AuditScoresQueue"), ["$log", "$stateP
             },
             definition: {
                 title: "SEARCH_SCORES",
-                searchForm: [
-                    "*"
+                searchForm: [{
+                        key: "bankId",
+                        readonly: true,
+                        condition: "!model.fullAccess"
+                    }, {
+                        key: "bankId",
+                        condition: "model.fullAccess"
+                    },
+                    "audit_id",
+                    "branch_id",
+                    "from_date",
+                    "to_date"
                 ],
                 autoSearch: true,
                 searchSchema: {
                     "type": 'object',
                     "title": 'SEARCH_OPTIONS',
                     "properties": {
+                        "bankId": {
+                            "title": "BANK_NAME",
+                            "type": ["integer", "null"],
+                            "enumCode": "bank",
+                            "x-schema-form": {
+                                "type": "select",
+                                "screenFilter": true,
+
+                            }
+                        },
                         "audit_id": {
                             "title": "AUDIT_ID",
                             "type": "string"
@@ -34,7 +66,7 @@ irf.pageCollection.factory(irf.page("audit.AuditScoresQueue"), ["$log", "$stateP
                                 "type": "select"
                             }
                         },
-                        "start_date": {
+                        "from_date": {
                             "title": "FROM_DATE",
                             "type": "string",
                             "x-schema-form": {
@@ -57,9 +89,9 @@ irf.pageCollection.factory(irf.page("audit.AuditScoresQueue"), ["$log", "$stateP
                     return Audit.online.getAuditScores({
                         'audit_id': searchOptions.audit_id,
                         'branch_id': searchOptions.branch_id,
-                        'branch_name': searchOptions.branch_name,
-                        'start_date': searchOptions.start_date,
-                        'audit_score': searchOptions.audit_score,
+                        'bank_id': searchOptions.bankId,
+                        'from_date': searchOptions.from_date,
+                        'to_date': searchOptions.to_date,
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage
                     }).$promise;

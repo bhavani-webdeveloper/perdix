@@ -463,6 +463,21 @@ function($log, $q, Enrollment,formHelper, PageHelper, irfProgressMessage, Utils,
         }
         return true;
     };
+
+    var validateBankAccounts = function(model) {
+        PageHelper.clearErrors();
+        if (model.customer && model.customer.customerBankAccounts) {
+            for (var i=0; i<model.customer.customerBankAccounts.length; i++){
+                var bankAccount = model.customer.customerBankAccounts[i];
+                if (bankAccount.accountNumber!=bankAccount.confirmedAccountNumber){
+                    //PageHelper.showProgress('validate-error', 'Bank Accounts: Account Number doesnt match with Confirmed Account Number', 5000);
+                    PageHelper.setError({message:'Bank Accounts: Account Number doesnt match with Confirmed Account Number'});
+                    return false;
+                }
+            }
+        }
+        return true;
+    };
     /*
     * function saveData:
     *
@@ -592,7 +607,15 @@ function($log, $q, Enrollment,formHelper, PageHelper, irfProgressMessage, Utils,
             model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
         } else if (aadhaarData.yob) {
             $log.debug('aadhaarData yob: ' + aadhaarData.yob);
-            model.customer.dateOfBirth = aadhaarData.yob + '-01-01';
+            if (model.customer.dateOfBirth) {
+                var dateOfBirth = moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat());
+                var month = dateOfBirth.format('M');
+                var day = dateOfBirth.format('D');
+                var year = dateOfBirth.format('YYYY');
+                model.customer.dateOfBirth = aadhaarData.yob + '-' + month + '-' + day;
+            } else {
+                model.customer.dateOfBirth = aadhaarData.yob + '-01-01';
+            }
             model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
         }
         if (!model.customer.identityProof && !model.customer.identityProofNo
@@ -616,6 +639,7 @@ function($log, $q, Enrollment,formHelper, PageHelper, irfProgressMessage, Utils,
         proceedData: proceedData,
         validateData: validateData,
         validateDate:validateDate,
+        validateBankAccounts:validateBankAccounts,
         parseAadhaar: parseAadhaar,
         customerAadhaarOnCapture: customerAadhaarOnCapture,
         validatePanCard: validatePanCard,

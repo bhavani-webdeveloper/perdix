@@ -5,6 +5,8 @@ var useref = require('gulp-useref');
 var del = require('del');
 var gulpLoadPlugins = require('gulp-load-plugins');
 var argv = require('yargs').argv;
+var ts = require('gulp-typescript');
+var merge = require('merge2');
 var $ = gulpLoadPlugins();
 
 /*
@@ -36,9 +38,12 @@ gulp.task('bower', function () {
 });
 
 gulp.task('clean', function(){
-    return del([
-            buildDirectory + "/**/*"
-        ])
+    return del(
+        [
+            buildDirectory + "/**/*",
+            'dev-www/process/config/**/*'
+        ]
+    )
 })
 
 gulp.task('fonts', function(){
@@ -47,19 +52,41 @@ gulp.task('fonts', function(){
         .pipe(gulp.dest(buildDirectory + '/fonts'));
 })
 
-gulp.task('assets', function(){
-    return gulp.src([
-        'dev-www/img/**/*',
-        'dev-www/modules/**/*.' + '+(json|html)',
-        'dev-www/process/**/*.' + '+(json|html|css)',
-        'dev-www/process/pages/definitions/**/*',
-        'dev-www/css/fonts/**/*',
-        'dev-www/js/vendor/renderjson.js',
-        'dev-www/js/themeswitch.js',
-        'dev-www/js/require.js',
-        'dev-www/js/index.js',
-        'dev-www/app_manifest.json'
-        ], {base: 'dev-www/'})
+gulp.task('assets', ['ts:scripts', 'ts:perdixConfig'], function(){
+    var src = [];
+    if(argv.segam) {
+        src = [
+            'dev-www/img/**/*',
+            'dev-www/resources/**/*',
+            'dev-www/modules/**/*.' + '+(json|html)',
+            'dev-www/process/**/*.' + '+(json|html|css)',
+            'dev-www/process/config/**/*',
+            'dev-www/process/pages/definitions/**/*',
+            'dev-www/css/fonts/**/*',
+            'dev-www/js/vendor/**/*',
+            'dev-www/js/themeswitch.js',
+            'dev-www/js/require.js',
+            'dev-www/js/index.js',
+            'dev-www/tsjs/**/*',
+            'dev-www/app_manifest.json'
+            ];
+    } else {
+        src = [
+            'dev-www/img/**/*',
+            'dev-www/modules/**/*.' + '+(json|html)',
+            'dev-www/process/**/*.' + '+(json|html|css)',
+            'dev-www/process/config/**/*',
+            'dev-www/process/pages/definitions/**/*',
+            'dev-www/css/fonts/**/*',
+            'dev-www/js/vendor/**/*',
+            'dev-www/js/themeswitch.js',
+            'dev-www/js/require.js',
+            'dev-www/js/index.js',
+            'dev-www/tsjs/**/*',
+            'dev-www/app_manifest.json'
+            ];
+    }
+    return gulp.src(src , {base: 'dev-www/'})
         .pipe(gulp.dest(buildDirectory));
 })
 
@@ -157,5 +184,51 @@ gulp.task('generateBuildMetaFile', function(){
     return gulp.file('VERSION', str, {src: true})
 })
 
+
+var tsProject = ts.createProject({
+    declaration: true,
+    out: 'dev-www/domain/run.js'
+});
+
+gulp.task('clean:tsPerdixConfig', function(){
+    return del(['./dev-www/process/config/**/*']);
+})
+
+gulp.task('ts:perdixConfig', ['clean:tsPerdixConfig'], function(){
+    return gulp.src('../configuration/ui-process-config/' + argv.siteCode + '/**/*.ts')
+        .pipe(ts({
+            noImplicitAny: true,
+            module: 'AMD',
+            moduleResolution:'node',
+            target: "es5",
+            experimentalDecorators: true
+        }))
+        .pipe(gulp.dest('./dev-www/process/config'));
+})
+
+gulp.task("clean:tsScripts", function(){
+    return del(['./dev-www/tsjs/**/*']);
+})
+gulp.task('ts:scripts', ['clean:tsScripts'], function() {
+    return gulp.src('./dev-www/ts/**/*.ts')
+        .pipe(ts({
+            noImplicitAny: true,
+            module: 'AMD',
+            moduleResolution:'node',
+            target: "es5",
+            experimentalDecorators: true
+        }))
+        .pipe(gulp.dest('./dev-www/tsjs'));
+});
+
+gulp.task('watch', ['ts:scripts', 'ts:perdixConfig'], function() {
+    gulp.watch('dev-www/ts/**/*.ts', ['ts:scripts']);
+    gulp.watch('../configuration/ui-process-config/**/*.ts', ['ts:perdixConfig'])
+});
+
+gulp.task("resources", function(){
+     return gulp.src('dev-www/resources/')
+        .pipe(gulp.dest(buildDirectory + '/resources')); 
+})
 gulp.task('build', ['html', 'assets', 'fonts']);
 
