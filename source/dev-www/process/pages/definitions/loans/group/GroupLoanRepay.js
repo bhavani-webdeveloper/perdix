@@ -80,8 +80,6 @@ function($log, $q, SessionStore, $state, formHelper, $stateParams, LoanAccount, 
             } catch (err) {
                 isLegacy = false;
             }
-            return $filter('currency')(amount, "Rs.", 2);
-        }
 
             $q.all([
                 GroupProcess.search({
