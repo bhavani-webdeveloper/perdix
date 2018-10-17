@@ -76,7 +76,7 @@ irf.pageCollection.factory(irf.page("audit.AssignedIssuesViewQueue"), ["$log","P
                         return 15;
                     },
                     "getTotalItemsCount": function(response, headers) {
-                        return headers['max-total-count']
+                        return headers['x-total-count']
                     }
                 },
                 listOptions: {
