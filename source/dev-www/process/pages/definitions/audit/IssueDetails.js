@@ -207,7 +207,7 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["$log", "irfNavigato
                     }
                     else if (actionType == 'audit') {
                         if (model.auditIssue.confirmity_status == 2) {
-                            model.auditIssue.status = 'A';
+                            model.auditIssue.status = 'P';
                             model.auditIssue.next_stage = 'assign';
                         } else if (model.auditIssue.confirmity_status == 1) {
                             model.auditIssue.status = '';

@@ -272,7 +272,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
 
                 if (uciq) {
                     Audit.online.getIssuesList({
-                        'current_stage': "unconfirm",
+                        'issue_status': "P",
                     }).$promise.then(function(data) {
                         uciq.data = Number(data.headers['x-total-count']) || data.body.length;
                     });
