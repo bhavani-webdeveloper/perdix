@@ -83,10 +83,13 @@ define([], function () {
                     "LoanSanction",
                     "LoanSanction.sanctionDate",
                     "LoanSanction.numberOfDisbursements",
-                    "LoanSanction.scheduleDisbursmentDate",
+                    "LoanSanction.scheduleDisbursementDate",
                     "LoanSanction.firstRepaymentDate",
                     "LoanSanction.customerSignatureDate",
                     "LoanSanction.disbursementSchedules",
+                    "LoanSanction.disbursementSchedules.trancheNumber",
+                    "LoanSanction.disbursementSchedules.disbursementAmount",
+                    "LoanSanction.disbursementSchedules.tranchCondition"
 
                 ]
             }
@@ -107,17 +110,17 @@ define([], function () {
                                 "LoanDetails.loanType": {
                                     "orderNo": 2,
                                     "titleMap": [{
-                                        value: "JEWEL",
-                                        name: "Jewel Loan"
-                                    },
-                                    {
-                                        value: "SECURED",
-                                        name: "SECURED"
-                                    },
-                                    {
-                                        value: "UNSECURED",
-                                        name: "UNSECURED"
-                                    }
+                                            value: "JEWEL",
+                                            name: "Jewel Loan"
+                                        },
+                                        {
+                                            value: "SECURED",
+                                            name: "SECURED"
+                                        },
+                                        {
+                                            value: "UNSECURED",
+                                            name: "UNSECURED"
+                                        }
                                     ]
                                 },
                                 "LoanDetails.partner": {
@@ -144,7 +147,7 @@ define([], function () {
                                     searchHelper: formHelper,
                                     search: function (inputModel, form, model, context) {
 
-                                        return Queries.getLoanProductDetails(model.loanAccount.loanType, model.loanAccount.partnerCode, model.loanAccount.frequency);
+                                        return Queries.getLoanProductCodeByLoanType(model.loanAccount.productCategory, model.loanAccount.frequency, model.loanAccount.partnerCode, model.loanAccount.loanType);
                                     },
                                     onSelect: function (valueObj, model, context) {
                                         model.loanAccount.productCode = valueObj.productCode;
@@ -232,6 +235,9 @@ define([], function () {
                                 },
                                 "LoanDetails.loanAmountRequested": {
                                     "orderNo": 5,
+                                    onChange: function (value, form, model) {
+                                        model.loanAccount.disbursementSchedules[0].disbursementAmount = value;
+                                    }
                                 },
                                 "LoanDetails.loanApplicationDate": {
                                     "orderNo": 8
@@ -484,42 +490,48 @@ define([], function () {
                                         ];
                                     }
                                 },
-                                "LoanSanction.numberOfDisbursements":{
-                                    onChange:function(value,form,model){
-                                        model.loanAccount.disbursementSchedules=[];
-                                        for(var i=0;i<value;i++){
+                                "LoanSanction.numberOfDisbursements": {
+                                    onChange: function (value, form, model) {
+                                        model.loanAccount.disbursementSchedules = [];
+                                        for (var i = 0; i < value; i++) {
                                             model.loanAccount.disbursementSchedules.push({
-                                                trancheNumber:""+(i+1),
-                                                disbursementAmount:0
+                                                trancheNumber: "" + (i + 1),
+                                                disbursementAmount: 0
                                             });
                                         }
-                                        if (value ==1){
+                                        if (value == 1) {
                                             model.loanAccount.disbursementSchedules[0].disbursementAmount = model.loanAccount.loanAmount;
                                         }
                                     }
                                 },
-                                "LoanSanction.customerSignatureDate":{
-                                    onChange : function(modelValue,form,model){
-                                        if (modelValue){
-                                            modelValue = new Date(modelValue);
-                                            model._currentDisbursement.scheduledDisbursementDate = new Date(modelValue.setDate(modelValue.getDate()+1));
+                                "LoanSanction.customerSignatureDate": {
+                                    onChange: function (modelValue, form, model) {
+                                        if (modelValue) {
+                                            model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate = "2018-10-12";
                                         }
                                     }
                                 },
-                                "LoanSanction.firstRepaymentDate":{
-                                    onChange: function(value,form,model,event){
-                                        if(!model.allowPreEmiInterest){
-                                            return;
-                                        }
-                                        var repaymentDate = moment(model.loanAccount.firstRepaymentDate,SessionStore.getSystemDateFormat());
-                                        var applicationDate = moment(model.loanAccount.loanApplicationDate,SessionStore.getSystemDateFormat());
-                                        if(repaymentDate < applicationDate){
+                                "LoanSanction.firstRepaymentDate": {
+                                    onChange: function (value, form, model, event) {
+                                        var repaymentDate = moment(model.loanAccount.firstRepaymentDate, SessionStore.getSystemDateFormat());
+                                        var applicationDate = moment(model.loanAccount.loanApplicationDate, SessionStore.getSystemDateFormat());
+                                        if (repaymentDate < applicationDate) {
                                             model.loanAccount.firstRepaymentDate = null;
-                                            PageHelper.showProgress("loan-create","Repayment date should be greater than Application date",5000);
+                                            PageHelper.showProgress("loan-create", "Repayment date should be greater than Application date", 5000);
                                         }
                                     }
+
+                                },
+                                "LoanSanction.scheduleDisbursementDate": {
+                                    onChange: function (value, form, model) {
+                                        var repaymentDate = moment(model.loanAccount.firstRepaymentDate, SessionStore.getSystemDateFormat());
+                                        var disbursementSchedules = moment(model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate, SessionStore.getSystemDateFormat());
+                                        if (repaymentDate < disbursementSchedules) {
+                                            // model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate = null;
+                                            PageHelper.showProgress("loan-create", "Disbursement date should be lesser than Repayment date", 5000);
+                                        }
                                     }
-                                
+                                }
                             }
                         },
                         "DSCOverride": {
@@ -539,17 +551,17 @@ define([], function () {
                                     "orderNo": 2,
                                     "readonly": true,
                                     "titleMap": [{
-                                        value: "JEWEL",
-                                        name: "Jewel Loan"
-                                    },
-                                    {
-                                        value: "SECURED",
-                                        name: "SECURED"
-                                    },
-                                    {
-                                        value: "UNSECURED",
-                                        name: "UNSECURED"
-                                    }
+                                            value: "JEWEL",
+                                            name: "Jewel Loan"
+                                        },
+                                        {
+                                            value: "SECURED",
+                                            name: "SECURED"
+                                        },
+                                        {
+                                            value: "UNSECURED",
+                                            name: "UNSECURED"
+                                        }
                                     ]
                                 },
                                 "LoanDetails.witnessDetails.witnessDOB": {
@@ -592,17 +604,17 @@ define([], function () {
                                     "orderNo": 2,
                                     "readonly": true,
                                     "titleMap": [{
-                                        value: "JEWEL",
-                                        name: "Jewel Loan"
-                                    },
-                                    {
-                                        value: "SECURED",
-                                        name: "SECURED"
-                                    },
-                                    {
-                                        value: "UNSECURED",
-                                        name: "UNSECURED"
-                                    }
+                                            value: "JEWEL",
+                                            name: "Jewel Loan"
+                                        },
+                                        {
+                                            value: "SECURED",
+                                            name: "SECURED"
+                                        },
+                                        {
+                                            value: "UNSECURED",
+                                            name: "UNSECURED"
+                                        }
                                     ]
                                 },
                                 "LoanDetails.witnessDetails.witnessDOB": {
@@ -646,17 +658,17 @@ define([], function () {
                                     "orderNo": 2,
                                     "readonly": true,
                                     "titleMap": [{
-                                        value: "JEWEL",
-                                        name: "Jewel Loan"
-                                    },
-                                    {
-                                        value: "SECURED",
-                                        name: "SECURED"
-                                    },
-                                    {
-                                        value: "UNSECURED",
-                                        name: "UNSECURED"
-                                    }
+                                            value: "JEWEL",
+                                            name: "Jewel Loan"
+                                        },
+                                        {
+                                            value: "SECURED",
+                                            name: "SECURED"
+                                        },
+                                        {
+                                            value: "UNSECURED",
+                                            name: "UNSECURED"
+                                        }
                                     ]
                                 },
                                 "LoanDetails.witnessDetails.witnessDOB": {
@@ -700,17 +712,17 @@ define([], function () {
                                     "orderNo": 2,
                                     "readonly": true,
                                     "titleMap": [{
-                                        value: "JEWEL",
-                                        name: "Jewel Loan"
-                                    },
-                                    {
-                                        value: "SECURED",
-                                        name: "SECURED"
-                                    },
-                                    {
-                                        value: "UNSECURED",
-                                        name: "UNSECURED"
-                                    }
+                                            value: "JEWEL",
+                                            name: "Jewel Loan"
+                                        },
+                                        {
+                                            value: "SECURED",
+                                            name: "SECURED"
+                                        },
+                                        {
+                                            value: "UNSECURED",
+                                            name: "UNSECURED"
+                                        }
                                     ]
                                 },
                                 "LoanDetails.witnessDetails.witnessDOB": {
@@ -774,90 +786,17 @@ define([], function () {
                     }
                     if (model.loanAccount && model.loanAccount.id) {
                         PageHelper.showLoader();
-                        IndividualLoan.loanRemarksSummary({ id: model.loanAccount.id }).$promise.then(function (resp) {
+                        IndividualLoan.loanRemarksSummary({
+                            id: model.loanAccount.id
+                        }).$promise.then(function (resp) {
                             model.loanAccount.remarksHistory = resp;
 
                             console.log("resposne for CheckerHistory");
                             console.log(model);
-                            // if (_.isArray(model.loanSummary) && model.loanSummary.length > 0) {
-                            //     var lastEntry = model.loanSummary[model.loanSummary.length - 1];
-                            //     var aTime = new moment(lastEntry.createdDate);
-                            //     var bTime = new moment();
-                            //     model.minutesInCurrentStage = Utils.millisecondsToStr( Math.abs(bTime.diff(aTime)) );
-
-
-                            //     var currentStage = _.findLastKey(model.loanSummary, {'action': 'PROCEED' });
-                            //     if(model.currentStage == 'loanView') {
-                            //         model.loanSummary[currentStage].hideCreateConversation = true;
-                            //     }
-
-                            //     model.loanSummary[currentStage].isCurrentStage = true;
-                            //     model.loanSummary[currentStage]._conversationExpand = true;	
-
-                            //     Messaging.getConversationStatus({
-                            //         'process_id': model.loanAccount.id
-                            //     }).$promise.then(function(response) {
-                            //         model.conversationStatus = response.body;
-
-                            //         for(var i = 0; i < model.loanSummary.length; i++) {
-                            //             if(model.loanSummary[i].action == 'PROCEED' && (_.find(model.conversationStatus, {'sub_process_id': model.loanSummary[i].id}) || model.loanSummary[i].isCurrentStage)) {
-                            //                 model.loanSummary[i].conversationStatus =  true;
-                            //             }
-                            //         }
-                            //     });
-                            // }				
                         }).finally(PageHelper.hideLoader);
 
                     }
-                    // model.loanAccount.nominees = [];
-                    // model.loanAccount.nominees[0] ={};
-                    // model.loanAccount.nominees[0].nomineeFirstName = "Harish";
-                    // model.loanAccount.nominees[0].nomineeMiddleName = "Harish";
-                    // $q.when(Enrollment.get({
-                    //     'id': model.loanAccount.customerId
-                    // })).then(function (resp) {
-                    //     model.customer.familyDetails = resp;
-                    // });
 
-                    // model.loanAccount.witnessFirstName="Harish";
-                    // model.loanAccount.witnessRelationship="Tester";
-
-
-                    // model.customer.familyDetails=[
-                    //     {
-                    //         name:"Mahesh",
-                    //         value:"Mahesh",
-                    //         relationshipWithApplicant:"Brother"
-                    //     },
-                    //     {
-                    //         name:"Satya",
-                    //         value:"Satya",
-                    //         relationshipWithApplicant:"Friend"
-                    //     }
-                    // ];
-
-                    // if (_.hasIn(model, 'loanAccount.loanCustomerRelations') &&
-                    //     model.loanAccount.loanCustomerRelations != null &&
-                    //     model.loanAccount.loanCustomerRelations.length > 0) {
-                    //     var lcr = model.loanAccount.loanCustomerRelations;
-                    //     var idArr = [];
-                    //     for (var i = 0; i < lcr.length; i++) {
-                    //         idArr.push(lcr[i].customerId);
-                    //     }
-                    //     Queries.getCustomerBasicDetails({
-                    //             'ids': idArr
-                    //         })
-                    //         .then(function (result) {
-                    //             if (result && result.ids) {
-                    //                 for (var i = 0; i < lcr.length; i++) {
-                    //                     var cust = result.ids[lcr[i].customerId];
-                    //                     if (cust) {
-                    //                         lcr[i].name = cust.first_name;
-                    //                     }
-                    //                 }
-                    //             }
-                    //         });
-                    // }
 
                     BundleManager.broadcastEvent('loan-account-loaded', {
                         loanAccount: model.loanAccount
@@ -888,151 +827,153 @@ define([], function () {
                         })
                     }
                     /* End of Deviations and Mitigations grouping */
+                    if (model.loanAccount.loanApplicationDate == "undefined" || model.loanAccount.loanApplicationDate == "" || model.loanAccount.loanApplicationDate == null) {
+                        model.loanAccount.loanApplicationDate = SessionStore.getCBSDate()
+                    }
+                    if (model.loanAccount.sanctionDate == "undefined" || model.loanAccount.sanctionDate == "" || model.loanAccount.sanctionDate == null) {
+                        model.loanAccount.sanctionDate = SessionStore.getCBSDate()
+                    }
+                    if (model.loanAccount.numberOfDisbursments == "undefined" || model.loanAccount.numberOfDisbursments == "" || model.loanAccount.numberOfDisbursments == null) {
+                        model.loanAccount.numberOfDisbursments = 1;
+                        model.loanAccount.disbursementSchedules = [];
+                        model.loanAccount.disbursementSchedules.push({
+                            trancheNumber  : 1
+                        })
+                    }
 
                     self = this;
                     var p1 = UIRepository.getLoanProcessUIRepository().$promise;
                     p1.then(function (repo) {
-                        console.log("Text");
-                        // console.log(repo);                       
-                        var formRequest = {
-                            "overrides": overridesFields(model),
-                            "includes": getIncludes(model),
-                            "excludes": [],
-                            "options": {
-                                "repositoryAdditions": {
-                                    "LoanDetails": {
-                                        "orderNo": 7,
-                                        "items": {
-                                            "borrowers": {
-                                                "title": "BORROWERS",
-                                                "type": "radios",
-                                                "orderNo": 8,
-                                                "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf4",
-                                                "titleMap": [{
-                                                    value: "Father",
-                                                    name: "Father"
-                                                },
-                                                {
-                                                    value: "Husband",
-                                                    name: "Husband"
-                                                }
-                                                ],
-                                                onChange: function (valueObj, form, model) {
-                                                    if (typeof model.customer.familyMembers != "undefined") {
-                                                        if (model.customer.familyMembers.length > 0) {
-                                                            for (i = 0; i < model.customer.familyMembers.length; i++) {
-                                                                if (model.customer.familyMembers[i].relationShip == valueObj) {
-                                                                    model.loanAccount.husbandOrFatherFirstName = model.customer.familyMembers[i].familyMemberFirstName;
-                                                                } else {
-                                                                    model.loanAccount.husbandOrFatherFirstName = null;
+                            console.log("Text");
+                            // console.log(repo);                       
+                            var formRequest = {
+                                "overrides": overridesFields(model),
+                                "includes": getIncludes(model),
+                                "excludes": [],
+                                "options": {
+                                    "repositoryAdditions": {
+                                        "LoanDetails": {
+                                            "orderNo": 7,
+                                            "items": {
+                                                "borrowers": {
+                                                    "title": "BORROWERS",
+                                                    "type": "radios",
+                                                    "orderNo": 8,
+                                                    "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf4",
+                                                    "titleMap": [{
+                                                            value: "Father",
+                                                            name: "Father"
+                                                        },
+                                                        {
+                                                            value: "Husband",
+                                                            name: "Husband"
+                                                        }
+                                                    ],
+                                                    onChange: function (valueObj, form, model) {
+                                                        if (typeof model.customer.familyMembers != "undefined") {
+                                                            if (model.customer.familyMembers.length > 0) {
+                                                                for (i = 0; i < model.customer.familyMembers.length; i++) {
+                                                                    if (model.customer.familyMembers[i].relationShip == valueObj) {
+                                                                        model.loanAccount.husbandOrFatherFirstName = model.customer.familyMembers[i].familyMemberFirstName;
+                                                                    } else {
+                                                                        model.loanAccount.husbandOrFatherFirstName = null;
+                                                                    }
                                                                 }
                                                             }
                                                         }
                                                     }
-                                                }
-                                            },
-                                            "borrowersHusbandName": {
-                                                "orderNo": 9,
-                                                "title": "HUSBAND_NAME",
-                                                "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf4 == 'Husband'",
-                                                "type": "text",
-                                                "key": "loanAccount.husbandOrFatherFirstName",
-                                            },
-                                            "borrowersFatherName": {
-                                                "orderNo": 9,
-                                                "title": "FATHER_NAME",
-                                                "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf4 == 'Father'",
-                                                "type": "text",
-                                                "key": "loanAccount.husbandOrFatherFirstName"
-                                            },
-                                            "borrowersRealtionship": {
-                                                "title": "RELATIONSHIP",
+                                                },
+                                                "borrowersHusbandName": {
+                                                    "orderNo": 9,
+                                                    "title": "HUSBAND_NAME",
+                                                    "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf4 == 'Husband'",
+                                                    "type": "text",
+                                                    "key": "loanAccount.husbandOrFatherFirstName",
+                                                },
+                                                "borrowersFatherName": {
+                                                    "orderNo": 9,
+                                                    "title": "FATHER_NAME",
+                                                    "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf4 == 'Father'",
+                                                    "type": "text",
+                                                    "key": "loanAccount.husbandOrFatherFirstName"
+                                                },
+                                                "borrowersRealtionship": {
+                                                    "title": "RELATIONSHIP",
 
-                                                "type": "text",
-                                                "readonly": true,
-                                                "key": "yet to decide",
+                                                    "type": "text",
+                                                    "readonly": true,
+                                                    "key": "yet to decide",
+                                                }
+
                                             }
+
                                         },
-                                        "LoanSanction":{
-                                            "items":{
-                                                "scheduleDisbursmentDate":{
-                                                    "title":"SCHEDULE_DISBURSMENT_DATE",
-                                                    "type":"date"
+                                        "LoanSanction": {
+                                            "items": {
+                                                "scheduleDisbursementDate": {
+                                                    "key": "loanAccount.disbursementSchedules[0].scheduledDisbursementDate",
+                                                    "title": "SCHEDULE_DISBURSMENT_DATE",
+                                                    "type": "date"
                                                 },
-                                                "firstRepaymentDate":{
-                                                    "type":"date",
-                                                    "title":"FIRST_REPAYMENT_DATE"
+                                                "firstRepaymentDate": {
+                                                    "key": "loanAccount.firstRepaymentDate",
+                                                    "type": "date",
+                                                    "title": "FIRST_REPAYMENT_DATE"
                                                 },
-                                                "customerSignatureDate":{
-                                                    "type":"date",
+                                                "customerSignatureDate": {
+                                                    "key": "loanAccount.disbursementSchedules[0].customerSignatureDate",
+                                                    "type": "date",
                                                     "title": "CUSTOMER_SIGNATURE_DATE"
                                                 }
                                             }
                                         },
 
-                                },
-
-                                "NomineeDetails": {
-                                    "items": {
-                                        "nominees": {
+                                        "NomineeDetails": {
                                             "items": {
-                                                "nomineeAddressSameasBorrower": {
-                                                    "type": "checkbox",
-                                                    "title": "ADDRESS_SAME_AS_BORROWER",
-                                                    "schema": {
-                                                        "type": ["boolean", "null"]
+                                                "nominees": {
+                                                    "items": {
+                                                        "nomineeAddressSameasBorrower": {
+                                                            "type": "checkbox",
+                                                            "title": "ADDRESS_SAME_AS_BORROWER",
+                                                            "schema": {
+                                                                "type": ["boolean", "null"]
+                                                            }
+                                                        }
                                                     }
                                                 }
                                             }
                                         }
-                                    }
-                                }
-                            },
-                            "additions": [
-                                {
-                                    "title": "REMARKS_HISTORY",
-                                    "type": "box",
-                                    "orderNo": 10,
-                                    condition: "model.loanAccount.remarksHistory && model.loanAccount.remarksHistory.length > 0",
-                                    "items": [
-                                        {
-                                            "key": "loanAccount.remarksHistory",
-                                            "type": "array",
-                                            "view": "fixed",
-                                            add: null,
-                                            remove: null,
+
+
+
+
+                                    },
+                                    "additions": [{
+                                            "title": "REMARKS_HISTORY",
+                                            "type": "box",
+                                            "orderNo": 10,
+                                            condition: "model.loanAccount.remarksHistory && model.loanAccount.remarksHistory.length > 0",
                                             "items": [{
-                                                "type": "section",
-                                                "htmlClass": "",
-                                                "html": '<i class="fa fa-user text-gray">&nbsp;</i> {{model.loanAccount.remarksHistory[arrayIndex].userId}}\
+                                                "key": "loanAccount.remarksHistory",
+                                                "type": "array",
+                                                "view": "fixed",
+                                                add: null,
+                                                remove: null,
+                                                "items": [{
+                                                    "type": "section",
+                                                    "htmlClass": "",
+                                                    "html": '<i class="fa fa-user text-gray">&nbsp;</i> {{model.loanAccount.remarksHistory[arrayIndex].userId}}\
                                                     <br><i class="fa fa-clock-o text-gray">&nbsp;</i> {{model.loanAccount.remarksHistory[arrayIndex].createdDate}}\
                                                     <br><i class="fa fa-commenting text-gray">&nbsp;</i> <strong>{{model.loanAccount.remarksHistory[arrayIndex].remarks}}</strong>\
                                                     <br><i class="fa fa-pencil-square-o text-gray">&nbsp;</i>{{model.loanAccount.remarksHistory[arrayIndex].stage}}-{{model.loanAccount.remarksHistory[arrayIndex].action}}<br>'
+                                                }]
                                             }]
-                                        }]
-                                },
-                                {
-                                    "type": "box",
-                                    "title": "POST_REVIEW",
-                                    condition: "model.loanAccount.id && model.loanAccount.currentStage == 'LoanInitiation'",
-                                    "items": [
-                                        {
-                                            key: "review.action",
-                                            condition: "model.currentStage == 'PendingForPartner' && model.loanHoldRequired!='NO'",
-                                            type: "radios",
-                                            titleMap: {
-                                                "REJECT": "REJECT",
-                                                "SEND_BACK": "SEND_BACK",
-                                                "PROCEED": "PROCEED",
-                                                "HOLD": "HOLD"
-                                            }
                                         },
                                         {
                                             "type": "box",
                                             "title": "POST_REVIEW",
                                             condition: "model.loanAccount.currentStage != 'DocumentUpload' && model.loanAccount.id ",
-                                            "items": [
-                                                {
+                                            "items": [{
                                                     key: "review.action",
                                                     condition: "model.currentStage == 'PendingForPartner' && model.loanHoldRequired!='NO'",
                                                     type: "radios",
@@ -1042,225 +983,208 @@ define([], function () {
                                                         "PROCEED": "PROCEED",
                                                         "HOLD": "HOLD"
                                                     }
-                                                    if (model.currentStage == 'FieldAppraisal' || model.currentStage == 'FieldAppraisalReview') {
-                                                        stage1 = "FieldAppraisal";
-                                                    }
-
-                                                    var rejectReason = formHelper.enum('application_reject_reason').data;
-                                                    var out = [];
-                                                    for (var i = 0; i < rejectReason.length; i++) {
-                                                        var t = rejectReason[i];
-                                                        if (t.field1 == stage1) {
-                                                            out.push({
-                                                                name: t.name,
-                                                            })
-                                                        }
-                                                    }
-                                                    return $q.resolve({
-                                                        headers: {
-                                                            "x-total-count": out.length
-                                                        },
-                                                        body: out
-                                                    });
-                                                },
-                                                onSelect: function (valueObj, model, context) {
-                                                    model.loanAccount.rejectReason = valueObj.name;
                                                 },
                                                 {
                                                     key: "review.action",
-                                                    condition: "model.loanAccount.currentStage != 'DocumentUplaod'",
+                                                    condition: "model.currentStage == 'LoanInitiation' && model.loanHoldRequired!='NO'",
+                                                    type: "radios",
+                                                    titleMap: {
+                                                        "REJECT": "REJECT",
+                                                        "PROCEED": "PROCEED",
+                                                        "HOLD": "HOLD"
+                                                    }
+                                                },
+                                                {
+                                                    key: "review.action",
+                                                    condition: "model.currentStage == 'PendingForPartner' && model.siteCode=='YES'",
+                                                    type: "radios",
+                                                    titleMap: {
+                                                        "REJECT": "REJECT",
+                                                        "SEND_BACK": "SEND_BACK",
+                                                        "PROCEED": "PROCEED"
+                                                    }
+                                                },
+                                                {
+                                                    key: "review.action",
+                                                    condition: "model.currentStage == 'LoanInitiation'&& model.siteCode=='YES'",
                                                     type: "radios",
                                                     titleMap: {
                                                         "REJECT": "REJECT",
                                                         "PROCEED": "PROCEED"
                                                     }
-                                                    return $q.resolve({
-                                                        headers: {
-                                                            "x-total-count": out.length
+                                                },
+                                                {
+                                                    key: "review.action",
+                                                    condition: "model.loanAccount.currentStage == 'LoanInitiation'",
+                                                    type: "radios",
+                                                    titleMap: {
+                                                        "REJECT": "REJECT",
+                                                        "PROCEED": "PROCEED"
+                                                    }
+                                                },
+                                                {
+                                                    key: "review.action",
+                                                    condition: "model.loanAccount.currentStage != 'DocumentUplaod' && model.loanAccount.currentStage !='LoanInitiation'",
+                                                    type: "radios",
+                                                    titleMap: {
+                                                        "REJECT": "REJECT",
+                                                        "PROCEED": "PROCEED",
+                                                        "SEND_BACK": "SEND_BACK",
+                                                    }
+                                                },
+                                                {
+                                                    type: "section",
+                                                    condition: "model.review.action=='REJECT'",
+                                                    items: [{
+                                                            title: "REMARKS",
+                                                            key: "review.remarks",
+                                                            type: "textarea",
+                                                            required: true
                                                         },
-                                                        body: out
-                                                    });
-                                                },
-                                                onSelect: function (valueObj, model, context) {
-                                                    model.review.targetStage = valueObj.name;
-                                                },
-                                                getListDisplayItem: function (item, index) {
-                                                    return [
-                                                        item.name
-                                                    ];
-                                                }
-                                            }, {
-                                                key: "review.sendBackButton",
-                                                type: "button",
-                                                title: "SEND_BACK",
-                                                onClick: "actions.sendBack(model, formCtrl, form, $event)"
-                                            }]
-                                        },
-                                        {
-                                            type: "section",
-                                            condition: "model.review.action=='PROCEED'",
-                                            items: [{
-                                                title: "REMARKS",
-                                                key: "review.remarks",
-                                                type: "textarea",
-                                                required: true
-                                            },
-                                            {
-                                                key: "review.proceedButton",
-                                                type: "button",
-                                                title: "PROCEED",
-                                                onClick: "actions.proceed(model, formCtrl, form, $event)"
-                                            }
-                                            ]
-                                        }
-                                    ]
-                                },
-                                {
-                                    "type": "box",
-                                    "title": "POST_REVIEW",
-                                    condition: "model.loanAccount.currentStage != 'LoanInitiation'",
-                                    "items": [
+                                                        {
+                                                            key: "loanAccount.rejectReason",
+                                                            type: "lov",
+                                                            autolov: true,
+                                                            title: "REJECT_REASON",
+                                                            bindMap: {},
+                                                            searchHelper: formHelper,
+                                                            search: function (inputModel, form, model, context) {
+                                                                var stage1 = model.currentStage;
 
-                                        {
-                                            key: "review.action",
-                                            condition: "model.loanAccount.currentStage != 'LoanInitiation'",
-                                            type: "radios",
-                                            titleMap: {
-                                                "REJECT": "REJECT",
-                                                "PROCEED": "PROCEED",
-                                                "SEND_BACK": "SEND_BACK"
-                                            }
-                                        },
-                                        {
-                                            type: "section",
-                                            condition: "model.review.action=='REJECT'",
-                                            items: [{
-                                                title: "REMARKS",
-                                                key: "review.remarks",
-                                                type: "textarea",
-                                                required: true
-                                            },
-                                            {
-                                                key: "loanAccount.rejectReason",
-                                                type: "lov",
-                                                autolov: true,
-                                                title: "REJECT_REASON",
-                                                bindMap: {},
-                                                searchHelper: formHelper,
-                                                search: function (inputModel, form, model, context) {
-                                                    var stage1 = model.currentStage;
+                                                                if (model.currentStage == 'Application' || model.currentStage == 'ApplicationReview') {
+                                                                    stage1 = "Application";
+                                                                }
+                                                                if (model.currentStage == 'FieldAppraisal' || model.currentStage == 'FieldAppraisalReview') {
+                                                                    stage1 = "FieldAppraisal";
+                                                                }
 
-                                                    if (model.currentStage == 'Application' || model.currentStage == 'ApplicationReview') {
-                                                        stage1 = "Application";
-                                                    }
-                                                    if (model.currentStage == 'FieldAppraisal' || model.currentStage == 'FieldAppraisalReview') {
-                                                        stage1 = "FieldAppraisal";
-                                                    }
+                                                                var rejectReason = formHelper.enum('application_reject_reason').data;
+                                                                var out = [];
+                                                                for (var i = 0; i < rejectReason.length; i++) {
+                                                                    var t = rejectReason[i];
+                                                                    if (t.field1 == stage1) {
+                                                                        out.push({
+                                                                            name: t.name,
+                                                                        })
+                                                                    }
+                                                                }
+                                                                return $q.resolve({
+                                                                    headers: {
+                                                                        "x-total-count": out.length
+                                                                    },
+                                                                    body: out
+                                                                });
+                                                            },
+                                                            onSelect: function (valueObj, model, context) {
+                                                                model.loanAccount.rejectReason = valueObj.name;
+                                                            },
+                                                            getListDisplayItem: function (item, index) {
+                                                                return [
+                                                                    item.name
+                                                                ];
+                                                            }
+                                                        },
 
-                                                    var rejectReason = formHelper.enum('application_reject_reason').data;
-                                                    var out = [];
-                                                    for (var i = 0; i < rejectReason.length; i++) {
-                                                        var t = rejectReason[i];
-                                                        if (t.field1 == stage1) {
-                                                            out.push({
-                                                                name: t.name,
-                                                            })
+                                                        {
+                                                            key: "review.rejectButton",
+                                                            type: "button",
+                                                            title: "REJECT",
+                                                            required: true,
+                                                            onClick: "actions.reject(model, formCtrl, form, $event)"
                                                         }
-                                                    }
-                                                    return $q.resolve({
-                                                        headers: {
-                                                            "x-total-count": out.length
+                                                    ]
+                                                },
+                                                {
+                                                    type: "section",
+                                                    condition: "model.review.action=='HOLD'",
+                                                    items: [{
+                                                            title: "REMARKS",
+                                                            key: "review.remarks",
+                                                            type: "textarea",
+                                                            required: true
                                                         },
-                                                        body: out
-                                                    });
-                                                },
-                                                onSelect: function (valueObj, model, context) {
-                                                    model.loanAccount.rejectReason = valueObj.name;
-                                                },
-                                                getListDisplayItem: function (item, index) {
-                                                    return [
-                                                        item.name
-                                                    ];
-                                                }
-                                            },
-
-                                            {
-                                                key: "review.rejectButton",
-                                                type: "button",
-                                                title: "REJECT",
-                                                required: true,
-                                                onClick: "actions.reject(model, formCtrl, form, $event)"
-                                            }
-                                            ]
-                                        },
-                                        {
-                                            type: "section",
-                                            condition: "model.review.action=='SEND_BACK'",
-                                            items: [{
-                                                title: "REMARKS",
-                                                key: "review.remarks",
-                                                type: "textarea",
-                                                required: true
-                                            }, {
-                                                key: "review.targetStage",
-                                                required: true,
-                                                condition: "model.review.action == 'SEND_BACK'",
-                                                type: "lov",
-                                                autolov: true,
-                                                lovonly: true,
-                                                title: "SEND_BACK_TO_STAGE",
-                                                bindMap: {},
-                                                searchHelper: formHelper,
-                                                search: function (inputModel, form, model, context) {
-                                                    var stage1 = model.loanAccount.currentStage;
-                                                    var booking_target_stage = formHelper.enum('booking_target_stage').data;
-                                                    var out = [];
-                                                    for (var i = 0; i < booking_target_stage.length; i++) {
-                                                        var t = booking_target_stage[i];
-                                                        if (t.field1 == stage1) {
-                                                            out.push({
-                                                                name: t.name,
-                                                                value: t.code
-                                                            })
+                                                        {
+                                                            key: "review.holdButton",
+                                                            type: "button",
+                                                            title: "HOLD",
+                                                            required: true,
+                                                            onClick: "actions.holdButton(model, formCtrl, form, $event)"
                                                         }
-                                                    }
-                                                    return $q.resolve({
-                                                        headers: {
-                                                            "x-total-count": out.length
+                                                    ]
+                                                },
+                                                {
+                                                    type: "section",
+                                                    condition: "model.review.action=='SEND_BACKs'",
+                                                    items: [{
+                                                            title: "REMARKS",
+                                                            key: "review.remarks",
+                                                            type: "textarea",
+                                                            required: true
                                                         },
-                                                        body: out
-                                                    });
+                                                        {
+                                                            key: "review.targetStage",
+                                                            required: true,
+                                                            type: "lov",
+                                                            autolov: true,
+                                                            lovonly: true,
+                                                            title: "SEND_BACK_TO_STAGE",
+                                                            bindMap: {},
+                                                            searchHelper: formHelper,
+                                                            search: function (inputModel, form, model, context) {
+                                                                var stage1 = model.loanAccount.currentStage;
+                                                                var booking_target_stage = formHelper.enum('booking_target_stage').data;
+                                                                var out = [];
+                                                                for (var i = 0; i < booking_target_stage.length; i++) {
+                                                                    var t = booking_target_stage[i];
+                                                                    if (t.field1 == stage1) {
+                                                                        out.push({
+                                                                            name: t.name,
+                                                                            value: t.code
+                                                                        })
+                                                                    }
+                                                                }
+                                                                return $q.resolve({
+                                                                    headers: {
+                                                                        "x-total-count": out.length
+                                                                    },
+                                                                    body: out
+                                                                });
+                                                            },
+                                                            onSelect: function (valueObj, model, context) {
+                                                                model.review.targetStage = valueObj.name;
+                                                            },
+                                                            getListDisplayItem: function (item, index) {
+                                                                return [
+                                                                    item.name
+                                                                ];
+                                                            }
+                                                        },
+                                                        {
+                                                            key: "review.sendBackButton",
+                                                            type: "button",
+                                                            title: "SEND_BACK",
+                                                            onClick: "actions.sendBack(model, formCtrl, form, $event)"
+                                                        }
+                                                    ]
                                                 },
-                                                onSelect: function (valueObj, model, context) {
-                                                    model.review.targetStage = valueObj.name;
-                                                },
-                                                getListDisplayItem: function (item, index) {
-                                                    return [
-                                                        item.name
-                                                    ];
+
+                                                {
+                                                    type: "section",
+                                                    condition: "model.review.action=='PROCEED'",
+                                                    items: [{
+                                                            title: "REMARKS",
+                                                            key: "review.remarks",
+                                                            type: "textarea",
+                                                            required: true
+                                                        },
+                                                        {
+                                                            key: "review.proceedButton",
+                                                            type: "button",
+                                                            title: "PROCEED",
+                                                            onClick: "actions.proceed(model, formCtrl, form, $event)"
+                                                        }
+                                                    ]
                                                 }
-                                            }, {
-                                                key: "review.sendBackButton",
-                                                type: "button",
-                                                title: "SEND_BACK",
-                                                onClick: "actions.sendBack(model, formCtrl, form, $event)"
-                                            }]
-                                        },
-                                        {
-                                            type: "section",
-                                            condition: "model.review.action=='PROCEED'",
-                                            items: [{
-                                                title: "REMARKS",
-                                                key: "review.remarks",
-                                                type: "textarea",
-                                                required: true
-                                            },
-                                            {
-                                                key: "review.proceedButton",
-                                                type: "button",
-                                                title: "PROCEED",
-                                                onClick: "actions.proceed(model, formCtrl, form, $event)"
-                                            }
                                             ]
                                         },
                                         {
@@ -1269,17 +1193,16 @@ define([], function () {
                                             "items": [{
                                                 "type": "submit",
                                                 "title": "SAVE"
-                                            },]
+                                            }, ]
                                         }
                                     ]
                                 }
-                            ]
-                        };
-                        var result = IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model);
-                        console.log(result);
-                        console.log("test");
-                        return result;
-                    })
+                            };
+                            var result = IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model);
+                            console.log(result);
+                            console.log("test");
+                            return result;
+                        })
                         .then(function (form) {
                             self.form = form;
                         });
@@ -1338,27 +1261,26 @@ define([], function () {
                         }
                     }
                 },
-                form: [
-                    {
-                        "title": "REMARKS_HISTORY",
-                        "type": "box",
-                        condition: "model.loanAccount.remarksHistory && model.loanAccount.remarksHistory.length > 0",
+                form: [{
+                    "title": "REMARKS_HISTORY",
+                    "type": "box",
+                    condition: "model.loanAccount.remarksHistory && model.loanAccount.remarksHistory.length > 0",
+                    "items": [{
+                        "key": "loanAccount.remarksHistory",
+                        "type": "array",
+                        "view": "fixed",
+                        add: null,
+                        remove: null,
                         "items": [{
-                            "key": "loanAccount.remarksHistory",
-                            "type": "array",
-                            "view": "fixed",
-                            add: null,
-                            remove: null,
-                            "items": [{
-                                "type": "section",
-                                "htmlClass": "",
-                                "html": '<i class="fa fa-user text-gray">&nbsp;</i> {{model.loanAccount.remarksHistory[arrayIndex].updatedBy}}\
+                            "type": "section",
+                            "htmlClass": "",
+                            "html": '<i class="fa fa-user text-gray">&nbsp;</i> {{model.loanAccount.remarksHistory[arrayIndex].updatedBy}}\
                             <br><i class="fa fa-clock-o text-gray">&nbsp;</i> {{model.loanAccount.remarksHistory[arrayIndex].updatedOn}}\
                             <br><i class="fa fa-commenting text-gray">&nbsp;</i> <strong>{{model.loanAccount.remarksHistory[arrayIndex].remarks}}</strong>\
                             <br><i class="fa fa-pencil-square-o text-gray">&nbsp;</i>{{model.loanAccount.remarksHistory[arrayIndex].stage}}-{{model.loanAccount.remarksHistory[arrayIndex].action}}<br>'
-                            }]
                         }]
-                    },],
+                    }]
+                }, ],
                 schema: function () {
                     console.log("First thing to excecute I guess");
                     return SchemaResource.getLoanAccountSchema().$promise;
@@ -1371,9 +1293,9 @@ define([], function () {
                         if (typeof model.loanAccount.loanAmount != "undefined") {
                             model.loanAccount.loanAmountRequested = model.loanAccount.loanAmount;
                         }
-                        if (typeof model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf4 !="undefined"){
-                            if(typeof model.loanAccount.husbandOrFatherFirstName =="undefined" || model.loanAccount.husbandOrFatherFirstName ==null){
-                                   model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf4 = null;
+                        if (typeof model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf4 != "undefined") {
+                            if (typeof model.loanAccount.husbandOrFatherFirstName == "undefined" || model.loanAccount.husbandOrFatherFirstName == null) {
+                                model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf4 = null;
                             }
                         }
                         if (!model.loanAccount.id) {
@@ -1481,20 +1403,6 @@ define([], function () {
                                 PageHelper.hideLoader();
                             });
                     },
-                    // nomineeAddress: function (model, formCtrl, form, $event) {
-                    //     PageHelper.showLoader();
-                    //     if (model.loanProcess.applicantEnrolmentProcess) {
-                    //         model.loanAccount.nominees[0].nomineeDoorNo = model.loanProcess.applicantEnrolmentProcess.customer.doorNo;
-                    //         model.loanAccount.nominees[0].nomineeLocality = model.loanProcess.applicantEnrolmentProcess.customer.locality;
-                    //         model.loanAccount.nominees[0].nomineeStreet = model.loanProcess.applicantEnrolmentProcess.customer.street;
-                    //         model.loanAccount.nominees[0].nomineePincode = model.loanProcess.applicantEnrolmentProcess.customer.pincode;
-                    //         model.loanAccount.nominees[0].nomineeDistrict = model.loanProcess.applicantEnrolmentProcess.customer.district;
-                    //         model.loanAccount.nominees[0].nomineeState = model.loanProcess.applicantEnrolmentProcess.customer.state;
-                    //     } else {
-                    //         PageHelper.hideLoader();
-                    //     }
-                    //     PageHelper.hideLoader();
-                    // }
                 }
             };
 
