@@ -34,7 +34,7 @@ export class VehicleValuationDone extends IPolicy<LoanProcess> {
     run(loanProcess: LoanProcess): Observable<LoanProcess> {
         let activeSession:ISession = ObjectFactory.getInstance("Session");
         let formHelper:IFormHelper = ObjectFactory.getInstance("FormHelper");
-        if(!_.hasIn(loanProcess.loanAccount.vehicleLoanDetails, 'vehicleValuationDoneAt') || loanProcess.loanAccount.vehicleLoanDetails.vehicleValuationDoneAt === null) {
+        if((loanProcess.loanAccount.loanPurpose1 == 'Purchase - Used Vehicle' || loanProcess.loanAccount.loanPurpose1 == 'Refinance') && (!_.hasIn(loanProcess.loanAccount.vehicleLoanDetails, 'vehicleValuationDoneAt') || loanProcess.loanAccount.vehicleLoanDetails.vehicleValuationDoneAt === null)) {
             return Observable.throw({"data": {"error":"Vehicle Valuation should be done"}});
         }
         return Observable.of(loanProcess);
