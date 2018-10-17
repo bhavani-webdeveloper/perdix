@@ -1029,7 +1029,8 @@
                     "BusinessApproval2",
                     "CreditApproval1",
                     "CreditApproval2",
-                    "CreditApproval3"
+                    "CreditApproval3",
+                    "LoanInitiation"
                  ]
               },
               "loanCycle":{
@@ -1306,7 +1307,8 @@
                     "BusinessApproval2",
                     "CreditApproval1",
                     "CreditApproval2",
-                    "CreditApproval3"
+                    "CreditApproval3",
+                    "LoanInitiation"
                  ]
               },
               "expectedProcessingFeePercentage":{
