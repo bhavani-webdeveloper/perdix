@@ -122,7 +122,7 @@ irf.pageCollection.factory(irf.page("audit.OutstandingIssuesViewQueue"), ["$log"
                             title: 'BRANCH_NAME',
                             data: 'branch_id',
                             render: function(data, type, full, meta) {
-                                return master.branch_name[full.branch_id].node_code;
+                                return master.branch_name[full.branch_id]? master.branch_name[full.branch_id].node_code: data;
                             }
                         }, {
                             title: 'CLOSED_ON',
