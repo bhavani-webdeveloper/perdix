@@ -805,11 +805,12 @@
               "Completed"
             ]
           },
-"distanceFromBranch": {
+          "distanceFromBranch": {
             "title": "Existing Loan",
             "type": "string",
-            "minimum": 0,
-            "maximum": 100,
+            "enumCode": "loan_distance_from_branch",
+            "minLength": 1,
+            "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
               "Completed"
