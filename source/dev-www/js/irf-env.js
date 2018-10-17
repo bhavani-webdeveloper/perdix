@@ -175,12 +175,12 @@ irf.ANALYTICS_API_URL = 'http://34.202.113.237:1337';
 
 
 
-/*//KGFS UAT2
-var irf = irf || {};
-irf.BASE_URL = 'http://34.202.145.163:8080/perdix-server';
-irf.MANAGEMENT_BASE_URL = 'http://34.202.145.163:8081/management/';
-irf.FORM_DOWNLOAD_URL = 'http://34.202.145.163:8080/forms/formsPrint.php';
-irf.BI_BASE_URL = "http://34.202.145.163:8081/bi";*/
+//KGFS UAT2
+// var irf = irf || {};
+// irf.BASE_URL = 'http://34.202.145.163:8080/perdix-server';
+// irf.MANAGEMENT_BASE_URL = 'http://34.202.145.163:8081/management/';
+// irf.FORM_DOWNLOAD_URL = 'http://34.202.145.163:8080/forms/formsPrint.php';
+// irf.BI_BASE_URL = "http://34.202.145.163:8081/bi";
 
 // var irf = irf || {}; 
 // irf.BASE_URL = 'http:devkinara.perdix.in:8080/perdix-server'; 
@@ -194,12 +194,12 @@ irf.BI_BASE_URL = "http://34.202.145.163:8081/bi";*/
 
 
 
-/*//KGFS UAT2
-var irf = irf || {};
-irf.BASE_URL = 'http://34.202.145.163:8080/perdix-server';
-irf.MANAGEMENT_BASE_URL = 'http://34.202.145.163:8081/management/';
-irf.FORM_DOWNLOAD_URL = 'http://34.202.145.163:8080/forms/formsPrint.php';
-irf.BI_BASE_URL = "http://34.202.145.163:8081/bi";*/
+// //KGFS UAT2
+// var irf = irf || {};
+// irf.BASE_URL = 'http://34.202.145.163:8080/perdix-server';
+// irf.MANAGEMENT_BASE_URL = 'http://34.202.145.163:8081/management/';
+// irf.FORM_DOWNLOAD_URL = 'http://34.202.145.163:8080/forms/formsPrint.php';
+// irf.BI_BASE_URL = "http://34.202.145.163:8081/bi";
 
 // var irf = irf || {}; 
 // irf.BASE_URL = 'http://devkinara.perdix.in:8080/perdix-server'; 
