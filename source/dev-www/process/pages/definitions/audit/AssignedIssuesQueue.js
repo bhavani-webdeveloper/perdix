@@ -64,49 +64,14 @@ irf.pageCollection.factory(irf.page("audit.AssignedIssuesQueue"), ["$log","PageH
                     return formHelper;
                 },
                 getResultsPromise: function(searchOptions, pageOpts) {
-                    var deferred = $q.defer();
-                    $q.all([
-                        Audit.online.getIssuesList({
-                            'bank_id': searchOptions.bankId,
-                            'branch_id': searchOptions.branch_id,
-                            'issue_status': "A",
-                            'assignee_designation_id': searchOptions.role_id,
-                            'page': pageOpts.pageNo,
-                            'per_page': pageOpts.itemsPerPage
-                        }).$promise,
-                        Audit.online.getIssuesList({
-                            'bank_id': searchOptions.bankId,
-                            'branch_id': searchOptions.branch_id,
-                            'issue_status': "P",
-                            'assignee_designation_id': searchOptions.role_id,
-                            'page': pageOpts.pageNo,
-                            'per_page': pageOpts.itemsPerPage
-                        }).$promise
-                    ]).then(function(data) {
-                        var returnObj = {
-                            headers: {},
-                            body: data[0].body
-                        };
-                        returnObj.headers['max-total-count'] = 0;
-                        if (data[0].headers['x-total-count']) {
-                            var c1 = Number(data[0].headers['x-total-count']);
-                            returnObj.headers['x-total-count'] = c1;
-                            returnObj.headers['max-total-count'] = c1;
-                        }
-                        if (data[1].headers['x-total-count']) {
-                            var c1 = returnObj.headers['max-total-count'];
-                            var c2 = Number(data[1].headers['x-total-count']);
-                            if (c2 > c1) {
-                                returnObj.headers['max-total-count'] = c2;
-                            }
-                            returnObj.headers['x-total-count'] += c2;
-                        }
-                        returnObj.body.push.apply(returnObj.body, data[1].body);
-                        deferred.resolve(returnObj);
-                    }, function(data) {
-                        deferred.reject(data[0]);
-                    });
-                    return deferred.promise;
+                    return Audit.online.getIssuesList({
+                        'bank_id': searchOptions.bankId,
+                        'branch_id': searchOptions.branch_id,
+                        'current_stage': "assign",
+                        'assignee_designation_id': searchOptions.role_id,
+                        'page': pageOpts.pageNo,
+                        'per_page': pageOpts.itemsPerPage
+                    }).$promise;
                 },
                 paginationOptions: {
                     "getItemsPerPage": function(response, headers) {

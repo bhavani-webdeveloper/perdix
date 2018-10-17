@@ -65,8 +65,7 @@ irf.pageCollection.factory(irf.page("audit.OutstandingIssuesQueue"), ["$log", "f
                     return Audit.online.getIssuesList({
                         'bank_id': searchOptions.bankId,
                         'branch_id': searchOptions.branch_id,
-                        'confirmity_status': "NULL",
-                        'issue_status': 'X',
+                        'current_stage': "close",
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage,
                     }).$promise;

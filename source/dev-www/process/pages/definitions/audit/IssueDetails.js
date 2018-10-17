@@ -197,19 +197,21 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["$log", "irfNavigato
             actions: {
                 updateIssue: function(model, form, formName, actionType) {
                     PageHelper.showLoader();
+                    model.auditIssue.comments = model.auditIssue.comments || model.message;
                     if (actionType == 'close') {
                         model.auditIssue.close_message = model.message;
                         model.auditIssue.status = 'X';
                         model.auditIssue.closed_by = SessionStore.getLoginname();
                         model.auditIssue.closed_on = moment().format('YYYY-MM-DD HH:mm:ss');
                         model.auditIssue.next_stage = 'close';
-                    } 
-                    // else if (actionType == 'send') {
-                    //     model.auditIssue.send_message = model.message;
-                    // } 
+                    }
                     else if (actionType == 'audit') {
                         if (model.auditIssue.confirmity_status == 2) {
                             model.auditIssue.status = 'A';
+                            model.auditIssue.next_stage = 'assign';
+                        } else if (model.auditIssue.confirmity_status == 1) {
+                            model.auditIssue.status = '';
+                            model.auditIssue.next_stage = 'confirm';
                         }
                     }
                     Audit.online.updateIssueDetails(model.auditIssue).$promise.then(function(res) {

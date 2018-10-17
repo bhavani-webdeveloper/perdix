@@ -65,10 +65,9 @@ irf.pageCollection.factory(irf.page("audit.UnconfirmedIssuesQueue"), ["$log", "f
                 },
                 getResultsPromise: function(searchOptions, pageOpts) {
                     return Audit.online.getIssuesList({
-                        'branch_id': searchOptions.branch_id,
-                        'confirmity_status': "2",
                         'bank_id': searchOptions.bankId,
-                        'issue_status': "P",
+                        'branch_id': searchOptions.branch_id,
+                        'current_stage': "unconfirm",
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage
                     }).$promise;
