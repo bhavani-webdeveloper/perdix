@@ -648,7 +648,7 @@ define([], function() {
                                         if(model.currentStage=='Rejected')
                                         {
                                             model.review.preStage = model.loanSummary[i].preStage;
-                                            model.review.targetStage = model.loanSummary[i].preStage;
+                                            model.review.targetStage1 = model.loanSummary[i].preStage;
                                         }
                                     }
                                 }
@@ -1222,7 +1222,7 @@ define([], function() {
                         readonly: true,
                         type: "textarea",
                     }, {
-                        key: "review.targetStage",
+                        key: "loanProcess.stage",
                         title: "SEND_BACK_TO_STAGE",
                         type: "lov",
                         lovonly:true,

@@ -1627,6 +1627,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         }
                         PageHelper.showProgress('enrolment', 'Updating Customer');
                         PageHelper.showLoader();
+                        adharAndPanVAlidation(model.enrolmentProcess.customer,model);
                         model.enrolmentProcess.save()
                             .finally(function () {
                                 PageHelper.hideLoader();
