@@ -1,4 +1,5 @@
 customers.list=select * from customer where id=:id
+loanCollectionDepositSum.list=SELECT SUM(`demand_amount`) FROM loan_collections where bank_deposit_summary_id=:bank_deposit_summary_id
 loanaccounts.list=select l.* from loan_accounts l,jlg_account_details jlg where jlg.account_number = l.account_number and l.bank_id =:bank_id and jlg.group_code =:group_code and l.partner_code = :partner_code and l.is_closed = 0
 loanAccount.list=select * from loan_accounts where account_number=:account_number and branch_id=:branch_id
 loanAccountIn.list=select l.*, c.first_name, c.customer_type, c.mobile_phone, c.email from loan_accounts l left join customer c on (l.customer_id = c.id) where l.account_number IN (:account_numbers)
