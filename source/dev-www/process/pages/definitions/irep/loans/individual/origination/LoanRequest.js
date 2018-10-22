@@ -1054,6 +1054,15 @@ define([],function(){
                         model.loanAccount.loanCentre.centreId = params.customer.centreId;
                         model.enterprise = params.customer;
                     },
+                    "business-updated": function(bundleModel, model, obj){
+                        $log.info("Inside business-update of IREP/LoanRequest");
+                        model.loanAccount.customerId = obj.customer.id;
+                        model.loanAccount.loanCentre = model.loanAccount.loanCentre || {};
+                        model.loanAccount.loanCentre.branchId = obj.customer.customerBranchId;
+                        model.loanAccount.loanCentre.centreId = obj.customer.centreId;
+                        model.enterprise = obj.customer;
+
+                    },
                     "load-deviation":function(bundleModel, model, params){
                         $log.info("Inside Deviation List");
                         model.deviations = {};
