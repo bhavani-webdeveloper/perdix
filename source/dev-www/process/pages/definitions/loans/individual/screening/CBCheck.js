@@ -26,7 +26,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
 
         $log.info("Inside submit()");
         PageHelper.showLoader();
-        loanPurpose = 'Business Loan - General';
+        loanPurpose = model.customer.loanPurpose1;
         //loanPurpose = 'Agriculture';
         PageHelper.clearErrors();
         if (CBType != 'CHMHUB') {
