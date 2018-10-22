@@ -32,6 +32,10 @@ let config = {
                     {
                         "name": "DefaultVehicleDocumentsPolicy",
                         "arguments": {}
+                    },
+                    {
+                        "name": "LoanVirtualFieldsPolicy",
+                        "arguments": {}
                     }
                 ],
                 "overrides": [
@@ -93,6 +97,10 @@ let config = {
                     },
                     {
                         "name": "DefaultVehicleDocumentsPolicy",
+                        "arguments": {}
+                    },
+                    {
+                        "name": "LoanVirtualFieldsPolicy",
                         "arguments": {}
                     }
                 ],
