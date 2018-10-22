@@ -116,6 +116,10 @@ irfSessionManager.factory('SessionStore', ["$log", "$window", "dateFormats", fun
 		return session.bankName;
 	};
 
+	self.getBankId = function() {
+		return session.bankId;
+	};
+
 	self.getCentres = function() {
 		return session.centres;
 	}
@@ -204,4 +208,17 @@ irfSessionManager.factory('SessionStore', ["$log", "$window", "dateFormats", fun
 	};
 
 	return self;
+}]);
+
+irf.pageCollection.run(["irfStorageService", "SessionStore", "formHelper", function(irfStorageService, SessionStore, formHelper) {
+	irfStorageService.onMasterUpdate(function() {
+		var bankName = SessionStore.getBankName();
+		var banks = formHelper.enum('bank').data;
+		for (var i = 0; i < banks.length; i++) {
+			if (banks[i].name == bankName) {
+				SessionStore.session.bankId = banks[i].value;
+				break;
+			}
+		}
+	});
 }]);
