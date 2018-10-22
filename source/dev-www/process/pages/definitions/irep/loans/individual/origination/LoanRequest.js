@@ -1050,7 +1050,6 @@ define([],function(){
                         $log.info("Inside new-business of LoanRequest");
                         model.loanAccount.customerId = params.customer.id;
                         model.loanAccount.loanCentre = model.loanAccount.loanCentre || {};
-                        model.loanAccount.loanCentre.branchId = params.customer.customerBranchId;
                         model.loanAccount.loanCentre.centreId = params.customer.centreId;
                         model.enterprise = params.customer;
                     },
