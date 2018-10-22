@@ -575,8 +575,6 @@
             "udf1": {
               "title": "udf1",
               "type": "String",
-              "minimum": 0,
-              "maximum": 100,
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"
@@ -585,8 +583,6 @@
             "udf2": {
               "title": "udf2",
               "type": "string",
-              "minimum": 0,
-              "maximum": 100,
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"
@@ -595,8 +591,6 @@
             "udf3": {
               "title": "udf3",
               "type": "String",
-              "minimum": 0,
-              "maximum": 100,
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"
@@ -605,8 +599,6 @@
             "udf4": {
               "title": "udf4",
               "type": "String",
-              "minimum": 0,
-              "maximum": 100,
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"
@@ -615,8 +607,6 @@
             "udf5": {
               "title": "udf5",
               "type": "String",
-              "minimum": 0,
-              "maximum": 100,
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"
@@ -626,8 +616,6 @@
               "title": "udfDate1",
               "type": "string",
               "format": "date",
-              "minimum": 0,
-              "maximum": 100,
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"
@@ -637,8 +625,6 @@
               "title": "udfDate2",
               "type": "string",
               "format": "date",
-              "minimum": 0,
-              "maximum": 100,
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"
@@ -648,8 +634,6 @@
               "title": "udfDate3",
               "type": "string",
               "format": "date",
-              "minimum": 0,
-              "maximum": 100,
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"
@@ -658,8 +642,6 @@
             "instituteName": {
               "title": "Institute Name",
               "type": "string",
-              "minLength": 1,
-              "maxLength": 100,
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"
@@ -685,8 +667,6 @@
             "loanAmountInPaisa": {
               "title": "Loan Amount In Paisa",
               "type": "number",
-              "minimum": 0,
-              "maximum": 10000000,
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"
@@ -695,8 +675,6 @@
             "installmentAmountInPaisa": {
               "title": "Installment Amount In Paisa",
               "type": "number",
-              "minimum": 0,
-              "maximum": 10000000,
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"
@@ -715,8 +693,6 @@
             "outstandingAmountInPaisa": {
               "title": "outstandingAmountInPaisa",
               "type": "number",
-              "minimum": 0,
-              "maximum": 10000000,
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"
@@ -725,8 +701,6 @@
             "interestRate": {
               "title": "interestRate",
               "type": "number",
-              "minimum": 0,
-              "maximum": 10000000,
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"
@@ -735,8 +709,6 @@
             "interestOnly": {
               "title": "Interest Only",
               "type": "string",
-              "minimum": 0,
-              "maximum": 100,
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"
@@ -745,8 +717,6 @@
             "interestExpense": {
               "title": "Interest Expense",
               "type": "string",
-              "minimum": 0,
-              "maximum": 100,
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"
@@ -755,8 +725,6 @@
             "principalExpense": {
               "title": "Principal Expense",
               "type": "string",
-              "minimum": 0,
-              "maximum": 100,
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"
@@ -820,8 +788,6 @@
             "noOfInstalmentPaid": {
               "title": "noOfInstalmentPaid",
               "type": "number",
-              "minimum": 0,
-              "maximum": 10000,
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"

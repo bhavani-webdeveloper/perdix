@@ -2820,6 +2820,21 @@
                     "LoanInitiation"
                  ]
               },
+              "vehicleValuationDoneAt": {
+                "title": "vehicleValuationDoneAt",
+                "type": "string",
+                "minLength":1,
+                "maxLength":100,
+                "captureStages":[
+                  "Screening",
+                  "VehicleValuation",
+                  "FieldInvestigation1",
+                  "FieldInvestigation2",
+                  "FieldInvestigation3",
+                  "TeleVerification",
+                  "LoanInitiation"
+               ]   
+                },
               "category":{
                  "title":"Category",
                  "type":"string",
