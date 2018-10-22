@@ -42,6 +42,19 @@
                 </div>
             </div>
         </div>
+        <div id="info-wrapper">
+            <div class="info-container" ng-show="info.length>0" style="padding: 0">
+                <div class="alert alert-warning alert-dismissible" style="border-radius: 0; margin-bottom: 0; background: linear-gradient(to bottom, #f39c12 0%,#ea7100 100%);">
+                    <button type="button" class="close" ng-click="clearInfo()" aria-hidden="true">×</button>
+                    <h4><i class="icon fa fa-info"></i> info</h4>
+                    <ol>
+                        <li ng-repeat="i in info">
+                            <span ng-bind-html="i.message"></span>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
         <div class="spinner-wrapper spinner-section-far-wrapper" ng-show="showSectionFarLoader">
             <div class="spinner-section-far"></div>
             <div class="spinner-section-far-text" ng-bind="showLoaderMsg"></div>

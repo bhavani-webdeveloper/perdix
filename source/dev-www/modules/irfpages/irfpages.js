@@ -284,6 +284,7 @@ function($rootScope, $log, $timeout, $q, $state, authService, $location, ALLOWED
         /* Clearing page errors */
         PageHelper.clearErrors();
         PageHelper.clearWarnings();
+        PageHelper.clearInfo();
 
         /* Gracefully clearing progress messages */
         PageHelper.gracefulClearProgress();
