@@ -18,10 +18,14 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
             promise.then(function (data) { /* SUCCESS */
                 model.P2PUpdate = data;
                 console.log(data);
+
+                model.siteCode = SessionStore.getGlobalSetting("siteCode");
+
                 model.promise = model.promise || {};
                 model.promise.customerName=data.customer1FirstName;
                 model.promise.applicant = data.customer2FirstName;
                 model.promise.productCode=data.productCode;
+                model.promise.customer1Phone1=data.customer1Phone1;
                 //model.promise.customerCategoryLoanOfficer=data.customerCategoryLoanOfficer;
                 //model.promise.urnNo=data.customerId1;
                 //model.promise.instrument='CASH_IN';
@@ -191,6 +195,12 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                         title:"AMOUNT_DUE",
                         //type:"amount",
                         readonly:true
+                    },
+                    {
+                        key: "promise.customer1Phone1",
+                        title: "MOBILE_PHONE",
+                        "condition": "model.siteCode == 'witfin'",
+                        readonly: true
                     },
                     {
                         key:"promise.visitedDate",
