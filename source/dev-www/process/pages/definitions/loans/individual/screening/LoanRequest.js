@@ -219,6 +219,9 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     collateral.quantity = collateral.quantity || 1;
                     collateral.loanToValue = collateral.collateralValue;
                     collateral.totalValue = collateral.loanToValue * collateral.quantity;
+                }else{
+                    collateral.loanToValue = collateral.collateralValue;
+                    collateral.totalValue = collateral.loanToValue * collateral.quantity;
                 }
             })
         }
