@@ -207,5 +207,47 @@
                 "default": "NOW()"
             }
         ]
+
+    },
+    "Tip Of The Day": {
+        "table": "thought_details",
+        "columns": [
+            {
+                "columnName": "version",
+                "default": "0"
+            },
+            {
+                "columnName" : "thought_date",
+                "fieldName" :  "thought_date"
+            },
+            {
+                "columnName" : "thought_of_the_day",
+                "fieldName" :  "thought_of_the_day"
+            },
+            {
+                "columnName" : "language",
+                "fieldName" :  "language"
+            },
+            {
+                "fieldName" : "bank_id",
+                "columnName": "bank_id"
+            },            
+            {
+                "columnName": "created_by",
+                "default": "system"
+            },
+            {
+                "columnName": "created_at",
+                "default": "NOW()"
+            },
+            {
+                "columnName": "last_edited_by",
+                "default": "SYSTEM"
+            },
+            {
+                "columnName": "last_edited_at",
+                "default": "NOW()"
+            }
+        ]
     }
 }
