@@ -443,8 +443,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         "readonly": true
                     },
                     {
-                        "key": "loanAccount.loanAmount",
-                        "title": "LOAN_AMOUNT",
+                        "key": "loanAccount.loanAmountRequested",
+                        "title": "REQUESTED_LOAN_AMOUNT",
                         "type":"amount",
                         "readonly": true
                     },
@@ -503,9 +503,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         "readonly": true
                     },
                     {
-                        "key": "loanAccount.loanAmountRequested",
+                        "key": "loanAccount.loanAmount",
                         "condition": "model.siteCode != 'sambandh' && model.siteCode != 'saija'",
-                        "title": "LOAN_AMOUNT_REQUESTED",
+                        "title": "SANCTIONED_AMOUNT",
                         "type":"amount",
                         "readonly": true
                     },
