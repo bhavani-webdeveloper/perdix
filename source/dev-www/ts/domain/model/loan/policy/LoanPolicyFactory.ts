@@ -23,6 +23,7 @@ import {DefaultIncomeTypePolicy} from './DefaultIncomeTypePolicy';
 import {DefaultVehicleDocumentsPolicy} from './DefaultVehicleDocumentsPolicy';
 import {DefaultCalculatedVehicleDetailsPolicy} from './DefaultCalculatedVehicleDetailsPolicy';
 import {DefaultIndividualReferencePolicy} from './DefaultIndividualReferencePolicy';
+import {LoanVirtualFieldsPolicy} from './LoanVirtualFieldsPolicy';
 
 export class LoanPolicyFactory implements IPolicyFactory{
 
@@ -85,6 +86,8 @@ export class LoanPolicyFactory implements IPolicyFactory{
                 return new DefaultCalculatedVehicleDetailsPolicy();
             case 'DefaultIndividualReferencePolicy':
                 return new DefaultIndividualReferencePolicy();
+            case 'LoanVirtualFieldsPolicy':
+                return new LoanVirtualFieldsPolicy();
             default:
                 return null;
         }

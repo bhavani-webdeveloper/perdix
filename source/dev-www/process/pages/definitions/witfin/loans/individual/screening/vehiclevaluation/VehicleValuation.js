@@ -454,6 +454,8 @@ define(
                             if(PageHelper.isFormInvalid(formCtrl)) {
                                 return false;
                             }
+                            var vehicleValuationDoneAt_time=new Date();
+                            model.loanAccount.vehicleLoanDetails.vehicleValuationDoneAt=vehicleValuationDoneAt_time;
                             PageHelper.showProgress('loan-process', 'Updating Loan');
                             model.loanProcess.save()
                                 .finally(function () {
