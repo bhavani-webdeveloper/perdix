@@ -594,6 +594,7 @@ define([], function() {
                     "LoanRecommendation",
                     "LoanRecommendation.loanAmount",
                     "LoanRecommendation.tenure",
+                    "LoanRecommendation.frequency",
                     "LoanRecommendation.interestRate",
                     "LoanRecommendation.processingFeePercentage",
                     "LoanRecommendation.securityEmiRequired",
@@ -1017,13 +1018,20 @@ define([], function() {
                                 },
                                 "LoanRecommendation": {
                                     "items": {
+                                        "frequency": {
+                                            "key": "loanAccount.frequency",
+                                            "type": "select",
+                                            "title": "FREQUENCY",
+                                            "enumCode": "loan_product_frequency",
+                                            "orderNo": 45
+                                        },
                                         "calculateNominalRate": {
                                             "title": "CALCULATE_NOMINAL_RATE",
                                             "type": "button",
                                             onClick: function(model, formCtrl) {
                                                 var frequencyRequested;
-                                                if (model.loanAccount.frequencyRequested && model.loanAccount.tenure && model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5) {
-                                                    switch (model.loanAccount.frequencyRequested) {
+                                                if (model.loanAccount.frequency && model.loanAccount.tenure && model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5) {
+                                                    switch (model.loanAccount.frequency) {
                                                         case 'Daily':
                                                             frequencyRequested = 365;
                                                             break;
