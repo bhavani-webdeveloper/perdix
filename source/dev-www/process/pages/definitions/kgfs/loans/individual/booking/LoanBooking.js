@@ -837,6 +837,7 @@ define([], function () {
                         })
                     }
                     model.loanAccount.securityEmiRequired = "No"
+                    
 
                     self = this;
                     var p1 = UIRepository.getLoanProcessUIRepository().$promise;
@@ -1370,6 +1371,31 @@ define([], function () {
                     },
                     proceed: function (model, formCtrl, form, $event) {
                         PageHelper.showProgress('enrolment', 'Updating Loan');
+                        if (model.loanAccount.id){
+                            if(model.loanAccount.loanCustomerRelations && model.loanAccount.loanCustomerRelations.length > 0){
+                                for(i = 0; i< model.loanAccount.loanCustomerRelations.length;i++){
+                                    if(typeof model.loanAccount.loanCustomerRelations[i].dscStatus == "undefined" || model.loanAccount.loanCustomerRelations[i].dscStatus == ""){
+                                        model.loanProcess.loanAccount.dscOverride = null
+                                        break;
+                                    }
+                                    if(model.loanAccount.loanCustomerRelations[i].dscStatus == "FAILURE"){
+                                        model.loanProcess.loanAccount.dscOverride = true
+                                        break;
+                                    }
+                                    else{
+                                        model.loanProcess.loanAccount.dscOverride = false
+                                    }
+                                    
+                                }
+                            }
+                        }
+                        if(typeof model.loanProcess.loanAccount.dscOverride =="undefined" || model.loanProcess.loanAccount.dscOverride == null){
+                            PageHelper.showErrors({data:{error:"DSC STATUS IS REQUIRED...."}});
+                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                PageHelper.hideLoader();
+                                return false;
+                        }
+                        
                         if(model.loanAccount.currentStage=='Checker2'){
                             model.loanProcess.stage='Completed';
                         }
