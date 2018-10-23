@@ -103,12 +103,13 @@ irf.pageCollection.factory(irf.page("audit.OpenSnapAuditsQueue"), ["$log", "Util
                 },
                 getResultsPromise: function(searchOptions, pageOpts) {
                     if (SessionStore.session.offline) {
-                        return Audit.utils.processDisplayRecords();
+                        return Audit.utils.processDisplayRecords(null, 0, 'O');
                     }
                     var deferred = $q.defer();
                     Audit.online.getAuditList({
                         'audit_id': searchOptions.audit_id,
                         'auditor_id': SessionStore.getLoginname(),
+                        'bank_id': searchOptions.bankId,
                         'branch_id': searchOptions.branch_id,
                         'start_date': searchOptions.start_date ? searchOptions.start_date + " 00:00:00" : "",
                         'end_date': searchOptions.end_date ? searchOptions.end_date + " 23:59:59" : "",
@@ -117,7 +118,7 @@ irf.pageCollection.factory(irf.page("audit.OpenSnapAuditsQueue"), ["$log", "Util
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage
                     }).$promise.then(function(res) {
-                        Audit.utils.processDisplayRecords(res.body).then(deferred.resolve, deferred.reject);
+                        Audit.utils.processDisplayRecords(res.body, 0, 'O').then(deferred.resolve, deferred.reject);
                     });
                     return deferred.promise;
                 },
