@@ -27,6 +27,7 @@ define([], function () {
                     "LoanDetails.loanApplicationDate",
                     "LoanDetails.loanAmountRequested",
                     "LoanDetails.requestedTenure",
+                    "LoanDetails.interestRate",
                     "LoanDetails.loanPurpose1",
                     "LoanDetails.loanPurpose2",
                     "LoanDetails.loanPurpose3",
@@ -161,6 +162,9 @@ define([], function () {
                                     onChange: function (value, form, model) {
                                         // getProductDetails(value, model);
                                     },
+                                },
+                                "LoanDetails.interestRate":{
+                                    "orderNo":6
                                 },
                                 "LoanDetails.loanPurpose1": {
                                     "orderNo": 6,
@@ -832,6 +836,7 @@ define([], function () {
                             trancheNumber  : 1
                         })
                     }
+                    model.loanAccount.securityEmiRequired = "No"
 
                     self = this;
                     var p1 = UIRepository.getLoanProcessUIRepository().$promise;
@@ -1145,6 +1150,7 @@ define([], function () {
                                                             },
                                                             onSelect: function (valueObj, model, context) {
                                                                 model.review.targetStage = valueObj.name;
+                                                                model.loanProcess.stage = valueObj.value;
                                                             },
                                                             getListDisplayItem: function (item, index) {
                                                                 return [
@@ -1217,6 +1223,9 @@ define([], function () {
                         // })).then(function (resp) {
                         //     model.customer = resp;
                         // })
+                    },
+                    "dsc-response": function(bundleModel,model,obj){
+                        model.loanAccount.loanCustomerRelations = obj;
                     },
                     "lead-loaded": function (bundleModel, model, obj) {
                         model.lead = obj;
@@ -1361,7 +1370,11 @@ define([], function () {
                     },
                     proceed: function (model, formCtrl, form, $event) {
                         PageHelper.showProgress('enrolment', 'Updating Loan');
-                        model.loanProcess.proceed()
+                        if(model.loanAccount.currentStage=='Checker2'){
+                            model.loanProcess.stage='Completed';
+                        }
+                        var toStage=model.loanProcess.stage||'';
+                        model.loanProcess.proceed(toStage)
                             .finally(function () {
                                 PageHelper.hideLoader();
                             })
