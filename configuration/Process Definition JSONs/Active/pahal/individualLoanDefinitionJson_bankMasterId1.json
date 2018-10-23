@@ -6305,6 +6305,28 @@
                 "CreditApproval2",
                 "CreditApproval3"
             ]
+          },
+          "udf7": {
+            "type": "string",
+            "captureStages": [
+               "ScreeningReview",
+                "ApplicationReview",
+                "GoNoGoApproval1",
+                "GoNoGoApproval2",
+                "CreditApproval1",
+                "CreditApproval2",
+                "CreditApproval3",
+                "Screening",
+                "Application",
+                "VehicleValuation",
+                "FieldInvestigation1",
+                "FieldInvestigation2",
+                "FieldInvestigation3",
+                "TeleVerification",
+                "CreditAppraisal",
+                "LoanInitiation",
+                "Completed"
+             ]
           }
         }
       },

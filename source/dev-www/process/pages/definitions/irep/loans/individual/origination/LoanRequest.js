@@ -1057,8 +1057,8 @@ define([],function(){
                         $log.info("Inside business-update of IREP/LoanRequest");
                         model.loanAccount.customerId = obj.customer.id;
                         model.loanAccount.loanCentre = model.loanAccount.loanCentre || {};
-                        model.loanAccount.loanCentre.branchId = obj.customer.customerBranchId;
                         model.loanAccount.loanCentre.centreId = obj.customer.centreId;
+                        model.loanAccount.loanCentre.loanId = model.loanAccount.id?model.loanAccount.id:null;
                         model.enterprise = obj.customer;
 
                     },

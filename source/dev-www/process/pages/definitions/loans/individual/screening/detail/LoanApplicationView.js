@@ -726,6 +726,15 @@ define({
                                     "title": "TENURE",
                                     "data": "tenure",
                                     "render": self.strongRender
+                                },
+                                {
+                                    "title": "# of EMI Paid",
+                                    "data": "no_of_emi_paid"
+                                },
+                                {
+                                    "title": "Total Exposure of Turnover",
+                                    "data": "exposer",
+                                    "render": currencyRightRender
                                 }
                             ];
                             },
@@ -1010,6 +1019,7 @@ define({
                     var oustandingAmount = 0;
                     if(params){
                        _.forEach(params, function(param){
+                        //param[5].data[0].exposer = (param[5].data[0].exposer).toFixed(2);
                             prepareFinancialData['tableData'].push(param[5].data[0]);
                             oustandingAmount = oustandingAmount + param[5].data[0].Outstanding;
                         });
