@@ -358,9 +358,20 @@ define([], function () {
                         },{},function(res) {
                             $log.info(res);
                             PageHelper.hideLoader();       
+                            if(res.length > 0){
+                                for (i = 0;i<res.length;i++){
+                                    if(res[i].dscStatus == "FAILURE"){
+                                        irfProgressMessage.pop("dsc-check", "Dsccheck Succeeded", 2000);
+                                        return 
+                                    }
+                                }
+                            }
                             irfProgressMessage.pop("dsc-check", "Dsccheck Succeeded", 2000);
-                            model.loanAccount.dscStatus =  res.dscStatus;
-                            BundleManager.broadcastEvent('dsc_status',model);    
+                           IndividualLoan.get({id:loanid},{},function(resp){
+                               if(resp.loanCustomerRelations && resp.loanCustomerRelations.length > 0){
+                                BundleManager.pushEvent('dsc-status',resp.loanCustomerRelations);    
+                               }
+                           })
 
                         },function(res) {
                             $log.error(res);

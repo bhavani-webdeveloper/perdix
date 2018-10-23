@@ -27,6 +27,7 @@ define([], function () {
                     "LoanDetails.loanApplicationDate",
                     "LoanDetails.loanAmountRequested",
                     "LoanDetails.requestedTenure",
+                    "LoanDetails.interestRate",
                     "LoanDetails.loanPurpose1",
                     "LoanDetails.loanPurpose2",
                     "LoanDetails.loanPurpose3",
@@ -161,6 +162,9 @@ define([], function () {
                                     onChange: function (value, form, model) {
                                         // getProductDetails(value, model);
                                     },
+                                },
+                                "LoanDetails.interestRate":{
+                                    "orderNo":6
                                 },
                                 "LoanDetails.loanPurpose1": {
                                     "orderNo": 6,
@@ -490,24 +494,16 @@ define([], function () {
                                         ];
                                     }
                                 },
+                                "LoanSanction":{
+                                    "condition": "model.loanAccount.id"
+                                },
                                 "LoanSanction.numberOfDisbursements": {
-                                    onChange: function (value, form, model) {
-                                        model.loanAccount.disbursementSchedules = [];
-                                        for (var i = 0; i < value; i++) {
-                                            model.loanAccount.disbursementSchedules.push({
-                                                trancheNumber: "" + (i + 1),
-                                                disbursementAmount: 0
-                                            });
-                                        }
-                                        if (value == 1) {
-                                            model.loanAccount.disbursementSchedules[0].disbursementAmount = model.loanAccount.loanAmount;
-                                        }
-                                    }
+                                    
                                 },
                                 "LoanSanction.customerSignatureDate": {
                                     onChange: function (modelValue, form, model) {
                                         if (modelValue) {
-                                            model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate = "2018-10-12";
+                                            model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate = modelValue;
                                         }
                                     }
                                 },
@@ -525,7 +521,7 @@ define([], function () {
                                 "LoanSanction.scheduleDisbursementDate": {
                                     onChange: function (value, form, model) {
                                         var repaymentDate = moment(model.loanAccount.firstRepaymentDate, SessionStore.getSystemDateFormat());
-                                        var disbursementSchedules = moment(model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate, SessionStore.getSystemDateFormat());
+                                        var disbursementSchedules = moment(model.loanAccount.disbursementSchedules[form.arrayIndex].scheduledDisbursementDate, SessionStore.getSystemDateFormat());
                                         if (repaymentDate < disbursementSchedules) {
                                             // model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate = null;
                                             PageHelper.showProgress("loan-create", "Disbursement date should be lesser than Repayment date", 5000);
@@ -833,13 +829,14 @@ define([], function () {
                     if (model.loanAccount.sanctionDate == "undefined" || model.loanAccount.sanctionDate == "" || model.loanAccount.sanctionDate == null) {
                         model.loanAccount.sanctionDate = SessionStore.getCBSDate()
                     }
-                    if (model.loanAccount.numberOfDisbursments == "undefined" || model.loanAccount.numberOfDisbursments == "" || model.loanAccount.numberOfDisbursments == null) {
-                        model.loanAccount.numberOfDisbursments = 1;
+                    if (model.loanAccount.numberOfDisbursements == "undefined" || model.loanAccount.numberOfDisbursements == "" || model.loanAccount.numberOfDisbursements == null) {
+                        model.loanAccount.numberOfDisbursements = 1;
                         model.loanAccount.disbursementSchedules = [];
                         model.loanAccount.disbursementSchedules.push({
                             trancheNumber  : 1
                         })
                     }
+                    model.loanAccount.securityEmiRequired = "No"
 
                     self = this;
                     var p1 = UIRepository.getLoanProcessUIRepository().$promise;
@@ -909,6 +906,7 @@ define([], function () {
 
                                         },
                                         "LoanSanction": {
+                                            "key": "loanAccount.disbursementSchedules",
                                             "items": {
                                                 "scheduleDisbursementDate": {
                                                     "key": "loanAccount.disbursementSchedules[0].scheduledDisbursementDate",
@@ -1114,7 +1112,7 @@ define([], function () {
                                                 },
                                                 {
                                                     type: "section",
-                                                    condition: "model.review.action=='SEND_BACKs'",
+                                                    condition: "model.review.action=='SEND_BACK'",
                                                     items: [{
                                                             title: "REMARKS",
                                                             key: "review.remarks",
@@ -1152,6 +1150,7 @@ define([], function () {
                                                             },
                                                             onSelect: function (valueObj, model, context) {
                                                                 model.review.targetStage = valueObj.name;
+                                                                model.loanProcess.stage = valueObj.value;
                                                             },
                                                             getListDisplayItem: function (item, index) {
                                                                 return [
@@ -1224,6 +1223,9 @@ define([], function () {
                         // })).then(function (resp) {
                         //     model.customer = resp;
                         // })
+                    },
+                    "dsc-response": function(bundleModel,model,obj){
+                        model.loanAccount.loanCustomerRelations = obj;
                     },
                     "lead-loaded": function (bundleModel, model, obj) {
                         model.lead = obj;
@@ -1368,7 +1370,11 @@ define([], function () {
                     },
                     proceed: function (model, formCtrl, form, $event) {
                         PageHelper.showProgress('enrolment', 'Updating Loan');
-                        model.loanProcess.proceed()
+                        if(model.loanAccount.currentStage=='Checker2'){
+                            model.loanProcess.stage='Completed';
+                        }
+                        var toStage=model.loanProcess.stage||'';
+                        model.loanProcess.proceed(toStage)
                             .finally(function () {
                                 PageHelper.hideLoader();
                             })

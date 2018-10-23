@@ -1757,6 +1757,12 @@
                 "type": "numeric",
                 "key": "loanAccount.tenure"
             },
+            "interestRate": {
+                "key": "loanAccount.interestRate",
+                "type": "number",
+                "required": true,
+                "title": "INTEREST_RATE"
+            },
             "loanPurpose1": {
                 "orderNo": "9",
                 "title": "LOAN_PURPOSE_1",
