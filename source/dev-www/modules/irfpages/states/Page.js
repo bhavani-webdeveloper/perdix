@@ -209,6 +209,10 @@ function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPop
                 $rootScope.$broadcast('server-info', info);
                 this.scrollToInfo();
             },
+            getInfo: function () {
+                $log.info("Inside getInfo");
+                return errors;
+            },
             scrollToInfo: function () {
                 jQuery('html, body').animate({
                     scrollTop: $("#info-wrapper").offset().top - 50
@@ -252,6 +256,28 @@ function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPop
                         errors.push({message: data.error});
                     }
                     this.setErrors(errors);
+                }catch(err){
+                    $log.error(err);
+                }
+            },
+            showInfo: function(res){
+                clearInfoFn();
+                try {
+                    var data = res.data;
+                    var infos = [];
+                    if (_.hasIn(data, 'errors')) {
+                        _.forOwn(data.error, function (keyInfo, key) {
+                            var keyInfoLength = keyInfo.length;
+                            for (var i = 0; i < keyInfoLength; i++) {
+                                var error = {"message": "<strong>" + key + "</strong>: " + keyInfo[i]};
+                                infos.push(error);
+                            }
+                        });
+                    }
+                    if (_.hasIn(data, 'error')) {
+                        infos.push(data.error);
+                    }
+                    this.setInfo(infos);
                 }catch(err){
                     $log.error(err);
                 }
