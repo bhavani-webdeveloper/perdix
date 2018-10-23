@@ -210,7 +210,7 @@ irfSessionManager.factory('SessionStore', ["$log", "$window", "dateFormats", fun
 	return self;
 }]);
 
-irf.pageCollection.run(["irfStorageService", "SessionStore", "formHelper", function(irfStorageService, SessionStore, formHelper) {
+irfSessionManager.run(["irfStorageService", "SessionStore", "formHelper", function(irfStorageService, SessionStore, formHelper) {
 	irfStorageService.onMasterUpdate(function() {
 		var bankName = SessionStore.getBankName();
 		var banks = formHelper.enum('bank').data;
