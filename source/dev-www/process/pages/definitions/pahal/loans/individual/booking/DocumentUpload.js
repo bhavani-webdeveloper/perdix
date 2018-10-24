@@ -827,7 +827,6 @@ define({
                                     Queries.getLoanProductDocuments(model.loanAccount.productCode, "LoanBooking", "DocumentUpload")
                                     .then(
                                         function(docs) {
-                                            console.log(dummy);
                                             var docsForProduct = [];
                                             for (var i = 0; i < docs.length; i++) {
                                                 var doc = docs[i];
@@ -835,7 +834,8 @@ define({
                                                     docTitle: doc.document_name,
                                                     docCode: doc.document_code,
                                                     formsKey: doc.forms_key,
-                                                    downloadRequired: doc.download_required
+                                                    downloadRequired: doc.download_required,
+                                                    mandatory: doc.mandatory
                                                 })
                                             }
                                             var loanDocuments = model.loanAccount.loanDocuments;
@@ -856,6 +856,8 @@ define({
                                                     loanDocuments[i].$key = documentObj.formsKey;
                                                     loanDocuments[i].$formsKey = documentObj.formsKey;
                                                     loanDocuments[i].$downloadRequired = documentObj.downloadRequired;
+                                                    loanDocuments[i].$mandatory = documentObj.mandatory;
+                                                    loanDocuments[i].isDocs = true;
                                                 } else {
                                                     if (_.hasIn(loanDocuments[i],'document') && _.isString(loanDocuments[i].document)){
                                                         loanDocuments[i].$title = loanDocuments[i].document;
@@ -872,7 +874,9 @@ define({
                                                         $title: docsForProduct[i].docTitle,
                                                         $formsKey: docsForProduct[i].formsKey,
                                                         disbursementId: model.loanAccount.disbursementSchedules[0].id,
-                                                        isHidden: false
+                                                        isHidden: false,
+                                                        isDocs:true,
+                                                        $mandatory: docsForProduct[i].mandatory
                                                     })
                                                 }
                                             }

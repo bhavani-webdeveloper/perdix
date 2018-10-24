@@ -305,7 +305,6 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 "type":"select",
                                 "required": true,
                                 //condition: "!model._pageGlobals.hideTransactionName",
-                                condition: "model.siteCode != 'witfin'",
                                 titleMap: {
                                     "Scheduled Demand":"Scheduled Demand",
                                     "Fee Payment":"Fee Payment",

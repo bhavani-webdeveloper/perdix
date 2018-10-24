@@ -16,21 +16,15 @@ irf.models.factory('Commons', [
     irf.pages.run([ "$rootScope", "SessionStore","PageHelper","Commons", 
     function( $rootScope, SessionStore,PageHelper,Commons) {
         $rootScope.$on("irf-login-success", function() {
+        
         Commons.tipOfTheDay({
             'thoughtDate':SessionStore.getSystemDate(), 
-            'bankId': 1
+            'bankId': SessionStore.getBankId()
             }, {}, function (resp) {
                 PageHelper.setInfo(resp);
                 //irfNavigator.goBack();
             }, function (resp) {
                 PageHelper.showInfo(resp);
             });
-            // Commons.tipOfTheDay({'thoughtDate':SessionStore.getSystemDate(), 'bankId': SessionStore.getBankId()}).$promise
-            // .then(function(res){
-            //     PageHelper.setInfo(res);
-            // },function(err){
-            //     PageHelper.setInfo('hi');
-            // });
-            
         })
     }]);

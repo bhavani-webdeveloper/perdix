@@ -269,13 +269,13 @@ function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPop
                         _.forOwn(data.error, function (keyInfo, key) {
                             var keyInfoLength = keyInfo.length;
                             for (var i = 0; i < keyInfoLength; i++) {
-                                var error = {"message": "<strong>" + key + "</strong>: " + keyInfo[i]};
+                                var error = {"message" : "<strong>" + key + "</strong>: " + keyInfo[i]};
                                 infos.push(error);
                             }
                         });
                     }
                     if (_.hasIn(data, 'error')) {
-                        infos.push(data.error);
+                        infos = { message: data.error };
                     }
                     this.setInfo(infos);
                 }catch(err){

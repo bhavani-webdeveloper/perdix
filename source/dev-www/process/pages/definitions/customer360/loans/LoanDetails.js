@@ -864,16 +864,6 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                 ]
             },
             {
-              "type": "box",
-              "title": "REPOSSESSION",
-              "items": [{
-                    "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf7",
-                    "type": "select",
-                    "enumCode": "repo_status",
-                    "title": "REPOSSESSION_STATUS"
-               }]  
-            },
-            {
                     "type": "box",
                     "title": "LOAN_DETAILS",
                     "colClass": "col-sm-6",
