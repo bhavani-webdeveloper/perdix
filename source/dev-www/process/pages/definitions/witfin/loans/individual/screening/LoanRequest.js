@@ -1022,6 +1022,7 @@ define([], function() {
                                             "key": "loanAccount.frequency",
                                             "type": "select",
                                             "title": "FREQUENCY",
+                                            required: true,
                                             "enumCode": "loan_product_frequency",
                                             "orderNo": 45
                                         },
@@ -1032,31 +1033,34 @@ define([], function() {
                                                 var frequencyRequested;
                                                 if (model.loanAccount.frequency && model.loanAccount.tenure && model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5) {
                                                     switch (model.loanAccount.frequency) {
+                                                        case 'D':
                                                         case 'Daily':
                                                             frequencyRequested = 365;
                                                             break;
+                                                        case 'F':
                                                         case 'Fortnightly':
                                                             frequencyRequested = parseInt(365 / 15);
                                                             break;
+                                                        case 'M':
                                                         case 'Monthly':
                                                             frequencyRequested = 12;
                                                             break;
+                                                        case 'Q':
                                                         case 'Quarterly':
                                                             frequencyRequested = 4;
                                                             break;
+                                                        case 'W':
                                                         case 'Weekly':
                                                             frequencyRequested = parseInt(365 / 7);
                                                             break;
+                                                        case 'Y':
                                                         case 'Yearly':
                                                             frequencyRequested = 1;
                                                     }
                                                     model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = Math.round((((Math.pow((((2 * parseFloat((model.loanAccount.interestRate)/100) * parseFloat(model.loanAccount.tenure)) / (parseFloat(model.loanAccount.tenure) + 1)) + 1), 1 / frequencyRequested) - 1) * frequencyRequested)*100)*100)/100;
-                                                }
-
-                                                model.loanAccount.vProcessingFee = null;
-                                                if(model.loanAccount.loanAmount && model.loanAccount.processingFeePercentage) {
-                                                    model.loanAccount.vProcessingFee = (model.loanAccount.processingFeePercentage / 100) * model.loanAccount.loanAmount;
-                                                }
+                                                }  else {
+                                                PageHelper.showProgress("nominal-rate-calculation", "Error while calculating nominal rate, check the input values.", 5000);
+                                            }
                                             }
                                         }
                                     }
