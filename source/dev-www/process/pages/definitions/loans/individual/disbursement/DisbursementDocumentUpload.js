@@ -20,15 +20,6 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementD
                 $log.info("Demo Customer Page got initialized");
                 model.siteCode = SessionStore.getGlobalSetting("siteCode");
                 model.loanView = SessionStore.getGlobalSetting("loanViewPageName");
-                model._queue = $stateParams.pageData;
-                if (!model._queue) {
-                    $log.info("Screen directly launched hence redirecting to queue screen");
-                    $state.go('Page.Engine', {
-                        pageName: 'loans.individual.disbursement.DisbursementDocumentUploadQueue',
-                        pageId: null
-                    });
-                    return;
-                }
 
                 var loanId = $stateParams['pageId'].split(".")[0];
                 var disbursementId = $stateParams['pageId'].split(".")[1];
@@ -114,14 +105,14 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementD
                                             }
                                         }
 
-                                        if (model._queue.accountNumber != null) {
+                                        if (model._disbursementDocumentUpload.accountNumber != null) {
                                             LoanAccount.activateLoan({
-                                                "accountId": model._queue.accountNumber
+                                                "accountId": model._disbursementDocumentUpload.accountNumber
                                             }, function(data) {
                                                 $log.info("Inside success of activateLoan");
                                                 LoanProcess.generateScheduleForSpecifiedDate({
-                                                        // "accountNumber": model._queue.accountNumber,
-                                                        "loanId": model._queue.loanId,
+                                                        // "accountNumber": model._disbursementDocumentUpload.accountNumber,
+                                                        "loanId": model._disbursementDocumentUpload.loanId,
                                                         "tranchNumber": model.loanAccount.disbursementSchedules[0].trancheNumber,
                                                         "amount":model.loanAccount.disbursementSchedules[0].disbursementAmount,
                                                         "scheduledDisbursementDate":model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate,
@@ -162,11 +153,11 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementD
                 "colClass": "col-sm-12",
                 "title": "LOAN_DOCUMENT_UPLOAD_QUEUE",
                 "items": [{
-                        "key": "_queue.centreName",
+                        "key": "_disbursementDocumentUpload.centreName",
                         "title": "CENTRE",
                         "readonly": true
                     }, {
-                        "key": "_queue.customerName",
+                        "key": "_disbursementDocumentUpload.customerName",
                         "title": "ENTITY_NAME",
                         "readonly": true
                     }, {
@@ -195,7 +186,8 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementD
                                 {
                                     "type": "section",
                                     "htmlClass": "col-sm-4",
-                                    "items": [{
+                                    "items": [
+                                    {
                                         "key": "loanAccount.loanDocuments[].$title",
                                         "notitle": true,
                                         "titleExpr": "model.loanAccount.loanDocuments[arrayIndex].$title",
@@ -207,7 +199,8 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementD
                                             console.log(doc);
                                             Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=" + doc.$formsKey + "&record_id=" + model.loanAccount.id)
                                         }
-                                    },{
+                                    },
+                                    {
                                         "key": "loanAccount.loanDocuments[].$title",
 
                                         "notitle": true,
@@ -623,7 +616,6 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementD
 
                                 IndividualLoan.updateDisbursement(reqDataForDisburse,function(resp,header){
                                     PageHelper.showProgress("upd-disb","Done.","5000");
-                                        backToQueue();
                                     },function(resp){
                                         PageHelper.showProgress("upd-disb","Oops. An error occurred","5000");
                                         PageHelper.showErrors(resp);
