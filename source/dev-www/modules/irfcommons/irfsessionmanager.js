@@ -13,6 +13,7 @@ irfSessionManager.factory('SessionStore', ["$log", "$window", "dateFormats", fun
 		activated:false,
 		agentAmtLimit:null,
 		bankName:null,
+		bankId : null,
 		branchName:"Karambayam",
 		branchSetCode:null,
 		email:null,
@@ -119,6 +120,9 @@ irfSessionManager.factory('SessionStore', ["$log", "$window", "dateFormats", fun
 	self.getBankId = function() {
 		return session.bankId;
 	};
+	self.setBankId = function(id) {
+		self.session.bankId = id;
+	};
 
 	self.getCentres = function() {
 		return session.centres;
@@ -208,17 +212,4 @@ irfSessionManager.factory('SessionStore', ["$log", "$window", "dateFormats", fun
 	};
 
 	return self;
-}]);
-
-irfSessionManager.run(["irfStorageService", "SessionStore", "formHelper", function(irfStorageService, SessionStore, formHelper) {
-	irfStorageService.onMasterUpdate(function() {
-		var bankName = SessionStore.getBankName();
-		var banks = formHelper.enum('bank').data;
-		for (var i = 0; i < banks.length; i++) {
-			if (banks[i].name == bankName) {
-				SessionStore.session.bankId = banks[i].value;
-				break;
-			}
-		}
-	});
 }]);
