@@ -64,7 +64,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"), 
 							model.ach.reference2 = model.achIndividualLoanSearch.urnNo;
 							//model.ach.utilityCode = "HDFC05720000027482";
 							model.ach.accountId = model.achIndividualLoanSearch.accountNumber;
-							model.ach.bankAccountNumber = model.achIndividualLoanSearch.customerBankAccountNumber;
+							model.ach.bankAccountNumber = model.achIndividualLoanSearch.collectionAccountNumber;
 
 							model.ach.maximumAmount = parseInt(model.achIndividualLoanSearch.maxEmi);
 							model.ach.maximumAmount = model.ach.maximumAmount.toString();
