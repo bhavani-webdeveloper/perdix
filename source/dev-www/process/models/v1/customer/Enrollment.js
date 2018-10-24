@@ -325,8 +325,8 @@ function($log, $q, Enrollment,formHelper, PageHelper, irfProgressMessage, Utils,
                     }
 
                     if (model.customer.physicalAssets[i].assetType) {
-                        var ownedAssetDetails1 = formHelper.enum('asset_Details').data;
-                        var assetunit1 = formHelper.enum('asset_unit').data;
+                        var ownedAssetDetails1 = formHelper.enum('asset_Details')? formHelper.enum('asset_Details').data: null;
+                        var assetunit1 = formHelper.enum('asset_unit')? formHelper.enum('asset_unit').data: null;
                         var ownedAssetDetails = [];
                         var assetunit = [];
                         if (ownedAssetDetails1 && ownedAssetDetails1.length) {
