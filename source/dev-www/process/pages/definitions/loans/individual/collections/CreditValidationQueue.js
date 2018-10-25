@@ -65,7 +65,9 @@ function($log, formHelper, LoanCollection, $state, SessionStore, $q, entityManag
                     'currentStage':"CreditValidation",
                     'accountCentreId': searchOptions.centre,
                     'accountBranchId': searchOptions.branch,
-                    'accountNumber': searchOptions.accountNumber
+                    'accountNumber': searchOptions.accountNumber,
+                    'page': pageOpts.pageNo,
+	                'per_page': pageOpts.itemsPerPage
                 }).$promise;
 
                 return promise;
