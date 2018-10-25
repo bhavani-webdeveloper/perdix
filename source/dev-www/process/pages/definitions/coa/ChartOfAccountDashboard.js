@@ -9,7 +9,8 @@ irf.pageCollection.controller(irf.controller("coa.ChartOfAccountDashboard"),
             "title": "CHART_OF_ACCOUNT_DASHBOARD",
             "iconClass": "fa fa-users",     
             "items": [
-                "Page/Engine/coa.ListOfAccount"
+                "Page/Engine/coa.ListOfAccount",
+                "Page/Engine/coa.AddAccount"
             ]
         };
         PagesDefinition.getUserAllowedDefinition(fullDefinition).then(function(resp) {
