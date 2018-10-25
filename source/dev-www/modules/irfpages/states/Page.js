@@ -260,28 +260,6 @@ function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPop
                     $log.error(err);
                 }
             },
-            showInfo: function(res){
-                clearInfoFn();
-                try {
-                    var data = res.data;
-                    var infos = [];
-                    if (_.hasIn(data, 'errors')) {
-                        _.forOwn(data.error, function (keyInfo, key) {
-                            var keyInfoLength = keyInfo.length;
-                            for (var i = 0; i < keyInfoLength; i++) {
-                                var error = {"message" : "<strong>" + key + "</strong>: " + keyInfo[i]};
-                                infos.push(error);
-                            }
-                        });
-                    }
-                    if (_.hasIn(data, 'error')) {
-                        infos = { message: data.error };
-                    }
-                    this.setInfo(infos);
-                }catch(err){
-                    $log.error(err);
-                }
-            },
             showWarnings: function(res){
                 this.clearWarnings();
                 try {
