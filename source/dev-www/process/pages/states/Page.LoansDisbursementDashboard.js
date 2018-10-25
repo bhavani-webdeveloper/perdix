@@ -8,6 +8,7 @@ function($log, $scope, PagesDefinition, SessionStore, IndividualLoan) {
         "iconClass": "fa fa-share",
         "items": [
             "Page/Engine/loans.individual.disbursement.ReadyForDisbursementQueue",
+            "Page/Engine/loans.individual.disbursement.JLGReadyForDisbursementQueue",
             "Page/Engine/loans.individual.disbursement.DisbursementConfirmationQueue",
             "Page/Engine/loans.individual.disbursement.DisbursementConfirmationUpload",
             "Page/Engine/loans.individual.disbursement.RejectedDisbursementQueue",
@@ -26,6 +27,7 @@ function($log, $scope, PagesDefinition, SessionStore, IndividualLoan) {
         $scope.dashboardDefinition = resp;
         var branchId = SessionStore.getBranchId();
         var branchName = SessionStore.getBranch();
+        var customerBranchId = SessionStore.getCurrentBranch().branchId;
 
         var rfdqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.disbursement.ReadyForDisbursementQueue"];
         if (rfdqMenu) {
@@ -37,6 +39,20 @@ function($log, $scope, PagesDefinition, SessionStore, IndividualLoan) {
                 rfdqMenu.data = response.headers['x-total-count'];
             }, function() {
                 rfdqMenu.data = '-';
+            });
+        }
+
+        var JLGrfdqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.disbursement.JLGReadyForDisbursementQueue"];
+        if (JLGrfdqMenu) {
+            IndividualLoan.searchDisbursement({
+                'currentStage': 'ReadyForDisbursement',
+                'branchId':customerBranchId,
+                'page': 1,
+                'per_page': 1
+            }).$promise.then(function(response,headerGetter){
+                JLGrfdqMenu.data = response.headers['x-total-count'];
+            }, function() {
+                JLGrfdqMenu.data = '-';
             });
         }
 
