@@ -1187,6 +1187,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         },
                         onSelect: function (valueObj, model, context) {
                             PageHelper.showProgress('customer-load', 'Loading customer...');
+
+                            var enrolmentDetails = {
+                                'customerId': model.customer.id,
+                                'customerClass': model._bundlePageObj.pageClass,
+                                'firstName': model.customer.firstName
+                            };
+                            if (_.hasIn(model, 'customer.id')){
+                                BundleManager.pushEvent("enrolment-removed", model._bundlePageObj, enrolmentDetails)
+                            }
+                            
                             EnrolmentProcess.fromCustomerID(valueObj.id)
                                 .finally(function(){
                                     PageHelper.showProgress('customer-load', 'Done.', 5000);

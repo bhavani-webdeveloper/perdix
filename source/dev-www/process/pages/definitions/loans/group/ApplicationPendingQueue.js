@@ -66,6 +66,10 @@ define({
 					"type": "string",
 					"title": "PRODUCT",
 					readonly: true
+				},{
+					"key":"groupCode",
+					"title": "GROUP_CODE",
+					"type": ["string", "null"]
 				}],
 				searchSchema: {
 					"type": 'object',
@@ -116,6 +120,7 @@ define({
 						'branchId': searchOptions.branchId,
 						'partner': searchOptions.partner,
 						'product': searchOptions.product,
+						'groupCode': searchOptions.groupCode,
 						'groupStatus': true,
 						'currentStage': "ApplicationPending",
 						'page': pageOpts.pageNo,
@@ -158,6 +163,9 @@ define({
 						}, {
 							title: 'GROUP_NAME',
 							data: 'groupName'
+						},{
+							title: 'GROUP_CODE',
+							data: 'groupCode'
 						}, {
 							title: 'PARTNER',
 							data: 'partnerCode'

@@ -393,18 +393,47 @@ define({
                             key: "review.remarks",
                             type: "textarea",
                             required: true
-                        }, {
+                        },
+                        {
                             key: "review.targetStage",
-                            title: "SEND_BACK_TO_STAGE",
-                            type: "select",
                             required: true,
-                            titleMap: {
-                                "LoanInitiation": "LoanInitiation",
-                                "LoanBooking": "LoanBooking",
-                                "DocumentUpload":"DocumentUpload"
-
+                            type: "lov",
+                            autolov: true,
+                            lovonly: true,
+                            title: "SEND_BACK_TO_STAGE",
+                            bindMap: {},
+                            searchHelper: formHelper,
+                            search: function (inputModel, form, model, context) {
+                                var stage1 = model.loanAccount.currentStage;
+                                var booking_target_stage = formHelper.enum('booking_target_stage').data;
+                                var out = [];
+                                for (var i = 0; i < booking_target_stage.length; i++) {
+                                    var t = booking_target_stage[i];
+                                    if (t.field1 == stage1) {
+                                        out.push({
+                                            name: t.name,
+                                            value: t.code
+                                        })
+                                    }
+                                }
+                                return $q.resolve({
+                                    headers: {
+                                        "x-total-count": out.length
+                                    },
+                                    body: out
+                                });
                             },
-                        }, {
+                            onSelect: function (valueObj, model, context) {
+                                model.review.targetStage = valueObj.name;
+                                model.loanProcess.stage = valueObj.value;
+                            },
+                            getListDisplayItem: function (item, index) {
+                                return [
+                                    item.name
+                                ];
+                            }
+                        },
+                        {
                             key: "review.sendBackButton",
                             type: "button",
                             title: "SEND_BACK",

@@ -38,7 +38,19 @@ define(
             //         return 'Co-Applicant';
             //     }
             // };
-
+            var calculateKmPerMonth = function(modelValue, form, model) {
+                if( model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].routesKms && model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].trips){
+                    model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].kmPerMonth = model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].routesKms * model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].trips;
+                }
+                else {
+                    PageHelper.showErrors({
+                        data: {
+                            error: "Please Enter Required Values for calculating kmPerMonth."
+                        }
+                    });
+                    return false;
+                }
+            }
 
 
             var configFile = function() {
@@ -1390,6 +1402,9 @@ define(
                                     "items": {
                                         "vehicleRouteDetails": {
                                             "items": {
+                                                "routesKms":{
+                                                    "onChange":calculateKmPerMonth
+                                                },
                                                 "kmPerMonth": {
                                                     "type": "string",
                                                     "key": "loanAccount.vehicleLoanDetails.vehicleRouteDetails[].kmPerMonth",

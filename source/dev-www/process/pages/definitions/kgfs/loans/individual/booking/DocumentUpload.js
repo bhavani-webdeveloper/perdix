@@ -1,10 +1,10 @@
 define({
     pageUID: "kgfs.loans.individual.booking.DocumentUpload",
     pageType: "Engine",
-    dependencies: ["$log", "Enrollment", "IndividualLoan", "SessionStore", "$state", '$stateParams', 'PageHelper', 'IndividualLoan', 'Queries', 'Utils', 'formHelper', "LoanProcess", "CustomerBankBranch", "SchemaResource", "LoanAccount", "irfNavigator", "PagesDefinition",
+    dependencies: ["$q","$log", "Enrollment", "IndividualLoan", "SessionStore", "$state", '$stateParams', 'PageHelper', 'IndividualLoan', 'Queries', 'Utils', 'formHelper', "LoanProcess", "CustomerBankBranch", "SchemaResource", "LoanAccount", "irfNavigator", "PagesDefinition",
         "PageHelper", "Utils", "PagesDefinition", "Queries", "$stateParams", "Queries", "DeathMarking"
     ],
-    $pageFn: function ($log, Enrollment, IndividualLoan, SessionStore, $state, $stateParams, PageHelper, IndividualLoan, Queries, Utils, formHelper, LoanProcess, CustomerBankBranch, SchemaResource, LoanAccount, irfNavigator, PagesDefinition) {
+    $pageFn: function ($q,$log, Enrollment, IndividualLoan, SessionStore, $state, $stateParams, PageHelper, IndividualLoan, Queries, Utils, formHelper, LoanProcess, CustomerBankBranch, SchemaResource, LoanAccount, irfNavigator, PagesDefinition) {
         var getDocument = function (docsArr, docCode) {
             var i = 0;
             for (i = 0; i < docsArr.length; i++) {
@@ -479,6 +479,7 @@ define({
                                     },
                                     onSelect: function (valueObj, model, context) {
                                         model.review.targetStage = valueObj.name;
+                                        model.loanProcess.stage = valueObj.value;
                                     },
                                     getListDisplayItem: function (item, index) {
                                         return [
