@@ -70,7 +70,6 @@ export class CalculateVehicleViabilityPolicy extends IPolicy<LoanProcess> {
                          // vehicle Expense Details
                          if (loanProcess.loanAccount && loanProcess.loanAccount.vehicleLoanDetails && loanProcess.loanAccount.vehicleLoanDetails.vehicleLoanExpenses && _.isArray(loanProcess.loanAccount.vehicleLoanDetails.vehicleLoanExpenses)) {
                             loanProcess.loanAccount.vehicleLoanDetails.vehicleLoanExpenses = [];
-                            var ptmi_total = d.permit_cost + d.taxes +  d.maintenance +  d.insurance + d.miscellaneous_expense;
                             loanProcess.loanAccount.vehicleLoanDetails.vehicleLoanExpenses.push(
                                 {
                                     'expenseType': "Fuel Cost per month",
@@ -78,10 +77,6 @@ export class CalculateVehicleViabilityPolicy extends IPolicy<LoanProcess> {
                                 },
                                 {
                                     'expenseType': "Tyre Cost per month",
-                                    'expenseAmount': null
-                                },
-                                {
-                                    'expenseType': "Lubricant Cost",
                                     'expenseAmount': null
                                 },
                                 {
@@ -94,7 +89,7 @@ export class CalculateVehicleViabilityPolicy extends IPolicy<LoanProcess> {
                                 },
                                 {
                                     'expenseType': "PTMI",
-                                    'expenseAmount': ptmi_total
+                                    'expenseAmount': d.ptmi
                                 }
                             );      
                         }
@@ -115,28 +110,31 @@ export class CalculateVehicleViabilityPolicy extends IPolicy<LoanProcess> {
 
                          // Calculation for Fuel_Cost_per_month
                          if (d.calculation_method == "DISTANCE") {
-                            if (d.fuel_cost && loanProcess.loanAccount.vehicleLoanDetails.mileage)
-                            loanProcess.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[0].expenseAmount = parseFloat(loanProcess.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].kmPerMonth) * parseFloat(d.fuel_cost) / parseFloat(loanProcess.loanAccount.vehicleLoanDetails.mileage);                               
+                                let incomeAmount =  loanProcess.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].ratePerTrip *  loanProcess.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].trips;
+
+                                loanProcess.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[0].expenseAmount = parseFloat(incomeAmount) * parseFloat( parseFloat(d.fuel_cost_pm);                                
+
                         } else if (d.calculation_method == "TIME") {
-                            if (loanProcess.loanAccount.vehicleLoanDetails.fuelConsumptionPerHour && loanProcess.loanAccount.vehicleLoanDetails.monthlyWorkingDays && d.fuel_cost)
-                            loanProcess.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[0].expenseAmount = parseFloat(loanProcess.loanAccount.vehicleLoanDetails.monthlyWorkingHours) * parseFloat(loanProcess.loanAccount.vehicleLoanDetails.fuelConsumptionPerHour) * parseFloat(d.fuel_cost);
+
+                                let incomeAmount =  loanProcess.loanAccount.vehicleLoanDetails.monthlyWorkingHours *  loanProcess.loanAccount.vehicleLoanDetails.hourlyRate;
+                            
+                                loanProcess.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[0].expenseAmount = parseFloat(incomeAmount) * parseFloat( parseFloat(d.fuel_cost_pm);
+                            
                         }
 
                         // Calculation for Tyre_Cost_per_month
                         if(d.calculation_method && d.calculation_method == "DISTANCE") {
-                            if (_.isArray(loanProcess.loanAccount.vehicleLoanDetails.vehicleRouteDetails) && loanProcess.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0] && loanProcess.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].kmPerMonth && loanProcess.loanAccount.vehicleLoanDetails.noOfTyres && loanProcess.loanAccount.vehicleLoanDetails.costOfTyre &&loanProcess.loanAccount.vehicleLoanDetails.lifeOfTyre)
-                            loanProcess.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[1].expenseAmount = parseFloat(loanProcess.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].kmPerMonth) * parseFloat(loanProcess.loanAccount.vehicleLoanDetails.noOfTyres) * parseFloat(loanProcess.loanAccount.vehicleLoanDetails.costOfTyre)/parseFloat(loanProcess.loanAccount.vehicleLoanDetails.lifeOfTyre);
-                        } else {
-                            loanProcess.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[1].expenseAmount = 0;
-                        }
 
-                        // Calculation for lubricant
-                        if(d.calculation_method == "TIME") {
-                            loanProcess.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[2].expenseAmount = parseFloat(   loanProcess.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[0].expenseAmount * 0.1);
-                        } else {
-                            loanProcess.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[2].expenseAmount = 0;
-                        }
+                             let incomeAmount =  loanProcess.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].ratePerTrip *  loanProcess.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].trips;
 
+                            loanProcess.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[1].expenseAmount = parseFloat(incomeAmount) * parseFloat( parseFloat(d.tyre_cost_pm);       
+                                
+                        } else {
+                                let incomeAmount =  loanProcess.loanAccount.vehicleLoanDetails.monthlyWorkingHours *  loanProcess.loanAccount.vehicleLoanDetails.hourlyRate;
+
+                                loanProcess.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[1].expenseAmount = parseFloat(incomeAmount) * parseFloat( parseFloat(d.tyre_cost_pm);
+                        }
+                       
 
                         // Vehicle Income Details
                          if (d.calculation_method == 'DISTANCE') {
