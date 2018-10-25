@@ -33,6 +33,109 @@ define([], function() {
                     return 'Co-Applicant';
                 }
             };
+
+            var excelRate = function(nper, pmt, pv, fv, type, guess) {
+                // Sets default values for missing parameters
+                fv = typeof fv !== 'undefined' ? fv : 0;
+                pv = typeof pv !== 'undefined' ? pv : 0;
+                type = typeof type !== 'undefined' ? type : 0;
+                guess = typeof guess !== 'undefined' ? guess : 0.1;
+
+                // Sets the limits for possible guesses to any
+                // number between 0% and 100%
+                var lowLimit = 0;
+                var highLimit = 1;
+
+                // Defines a tolerance of up to +/- 0.00005% of pmt, to accept
+                // the solution as valid.
+                var tolerance = Math.abs(0.00000005 * pmt);
+
+                // Tries at most 40 times to find a solution within the tolerance.
+                for (var i = 0; i < 40; i++) {
+                    // Resets the balance to the original pv.
+                    var balance = pv;
+
+                    // Calculates the balance at the end of the loan, based
+                    // on loan conditions.
+                    for (var j = 0; j < nper; j++) {
+                        if (type == 0) {
+                            // Interests applied before payment
+                            balance = balance * (1 + guess) + pmt;
+                        } else {
+                            // Payments applied before insterests
+                            balance = (balance + pmt) * (1 + guess);
+                        }
+                    }
+
+                    // Returns the guess if balance is within tolerance.  If not, adjusts
+                    // the limits and starts with a new guess.
+                    if (Math.abs(balance + fv) < tolerance) {
+                        return guess;
+                    } else if (balance + fv > 0) {
+                        // Sets a new highLimit knowing that
+                        // the current guess was too big.
+                        highLimit = guess;
+                    } else {
+                        // Sets a new lowLimit knowing that
+                        // the current guess was too small.
+                        lowLimit = guess;
+                    }
+
+                    // Calculates the new guess.
+                    guess = (highLimit + lowLimit) / 2;
+                }
+
+                // Returns null if no acceptable result was found after 40 tries.
+                return null;
+            };
+
+            var calculateNominalRate = function(loanAmount, frequency, tenure, flatRate) {
+                var frequencyFactor;
+                if (frequency && tenure && flatRate) {
+                    switch (frequency) {
+                        case 'D':
+                        case 'Daily':
+                            frequencyFactor = 365;
+                            break;
+                        case 'F':
+                        case 'Fortnightly':
+                            frequencyFactor = parseInt(365 / 15);
+                            break;
+                        case 'M':
+                        case 'Monthly':
+                            frequencyFactor = 12;
+                            break;
+                        case 'Q':
+                        case 'Quarterly':
+                            frequencyFactor = 4;
+                            break;
+                        case 'H':
+                        case 'Half Yearly':
+                            frequencyFactor = 2;
+                            break;
+                        case 'W':
+                        case 'Weekly':
+                            frequencyFactor = parseInt(365 / 7);
+                            break;
+                        case 'Y':
+                        case 'Yearly':
+                            frequencyFactor = 1;
+                            break;
+                        default:
+                            throw new Error("Invalid frequency");
+                    }
+                    var nominalRate = Math.round(excelRate(parseFloat(tenure),  -Math.round(parseFloat(loanAmount) * (1 + (parseFloat(flatRate) / 100 * parseFloat(tenure) / frequencyFactor)) / parseFloat(tenure)), parseFloat(loanAmount)) * frequencyFactor * 1000000)/10000;
+                    var someRate = parseFloat(nominalRate / (100 * frequencyFactor));
+                    var estimatedEmi = (parseFloat(loanAmount) * someRate / parseFloat((1 - Math.pow(1 + someRate, -tenure))));
+                    return {
+                        nominalRate: nominalRate,
+                        estimatedEmi: Math.round(estimatedEmi)
+                    };
+                } else {
+                    throw new Error("Invalid input for nominal rate calculation");
+                }
+            }
+
             var configFile = function() {
                 return {
                     "loanProcess.loanAccount.currentStage": {
@@ -686,10 +789,6 @@ define([], function() {
                     var self = this;
                     var formRequest = {
                         "overrides": {
-                            "LoanRecommendation.udf6": {
-                                "title": "NOMINAL_RATE",
-                                "readonly": true
-                            },
                             "LoanRecommendation.loanChannels": {
                                 "condition": "model.loanProcess.loanAccount.currentStage == 'CreditApproval2'",
                                 "required": true
@@ -809,67 +908,13 @@ define([], function() {
                                             "title": "CALCULATE_EMI",
                                             "type": "button",
                                             "onClick": function(model, formCtrl) {
-                                                var frequencyRequested1, frequencyRequested2;
-                                                if (model.loanAccount.frequencyRequested && model.loanAccount.tenureRequested && model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5) {
-                                                    switch (model.loanAccount.frequencyRequested) {
-                                                        case 'Daily':
-                                                            frequencyRequested1 = 365;
-                                                            break;
-                                                        case 'Fortnightly':
-                                                            frequencyRequested1 = parseInt(365 / 15);
-                                                            break;
-                                                        case 'Monthly':
-                                                            frequencyRequested1 = 12;
-                                                            break;
-                                                        case 'Quarterly':
-                                                            frequencyRequested1 = 4;
-                                                            break;
-                                                        case 'Weekly':
-                                                            frequencyRequested1 = parseInt(365 / 7);
-                                                            break;
-                                                        case 'Yearly':
-                                                            frequencyRequested1 = 1;
-                                                    }
-                                                    model.loanAccount.expectedInterestRate = Math.round((((Math.pow((((parseFloat((model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5)/100)*2*parseFloat(model.loanAccount.tenureRequested))/(parseFloat(model.loanAccount.tenureRequested)+1))+1),(1/frequencyRequested1))-1)*frequencyRequested1)*100)*100)/100;
-                                                } else {
-                                                    PageHelper.showErrors({
-                                                        data: {
-                                                            error: "Please Enter Required Values for calculating Nominal Rate"
-                                                        }
-                                                    });
-                                                    return false;
-                                                }
-                                                if (parseFloat(model.loanAccount.expectedInterestRate) && model.loanAccount.tenureRequested && model.loanAccount.frequencyRequested && model.loanAccount.loanAmountRequested) {
-                                                    switch (model.loanAccount.frequencyRequested) {
-                                                        case 'Daily':
-                                                            frequencyRequested2 = 365;
-                                                            break;
-                                                        case 'Fortnightly':
-                                                            frequencyRequested2 = parseInt(365 / 15);
-                                                            break;
-                                                        case 'Monthly':
-                                                            frequencyRequested2 = 12;
-                                                            break;
-                                                        case 'Quarterly':
-                                                            frequencyRequested2 = 4;
-                                                            break;
-                                                        case 'Weekly':
-                                                            frequencyRequested2 = parseInt(365 / 7);
-                                                            break;
-                                                        case 'Yearly':
-                                                            frequencyRequested2 = 1;
-                                                    }
-                                                    var rate = parseFloat((model.loanAccount.expectedInterestRate) / (100 * frequencyRequested2));
-                                                    var n = parseFloat(model.loanAccount.tenureRequested);
-                                                    var calculateEmi = (parseFloat(model.loanAccount.loanAmountRequested) * rate / parseFloat((1 - Math.pow(1 + rate, -n))));
-                                                    model.loanAccount.estimatedEmi = parseInt(calculateEmi.toFixed());
-                                                } else {
-                                                    PageHelper.showErrors({
-                                                        data: {
-                                                            error: "Nominal Rate is not proper"
-                                                        }
-                                                    });
-                                                    return false;
+                                                try{
+                                                    var obj = calculateNominalRate(model.loanAccount.loanAmountRequested, model.loanAccount.frequencyRequested, model.loanAccount.tenureRequested, parseFloat(model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5));
+                                                    model.loanAccount.expectedInterestRate = obj.nominalRate;
+                                                    model.loanAccount.estimatedEmi = obj.estimatedEmi;
+                                                } catch (e){
+                                                    console.log(e);
+                                                    PageHelper.showProgress("nominal-rate-calculation", "Error while calculating nominal rate, check the input values.", 5000);
                                                 }
                                             }
                                         }
@@ -1018,6 +1063,13 @@ define([], function() {
                                 },
                                 "LoanRecommendation": {
                                     "items": {
+                                        "udf6": {
+                                            "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6",
+                                            "title": "FLAT_RATE",
+                                            "type": "string",
+                                            "required": true,
+                                            "orderNo": 25
+                                        },
                                         "frequency": {
                                             "key": "loanAccount.frequency",
                                             "type": "select",
@@ -1030,37 +1082,17 @@ define([], function() {
                                             "title": "CALCULATE_NOMINAL_RATE",
                                             "type": "button",
                                             onClick: function(model, formCtrl) {
-                                                var frequencyRequested;
-                                                if (model.loanAccount.frequency && model.loanAccount.tenure && model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5) {
-                                                    switch (model.loanAccount.frequency) {
-                                                        case 'D':
-                                                        case 'Daily':
-                                                            frequencyRequested = 365;
-                                                            break;
-                                                        case 'F':
-                                                        case 'Fortnightly':
-                                                            frequencyRequested = parseInt(365 / 15);
-                                                            break;
-                                                        case 'M':
-                                                        case 'Monthly':
-                                                            frequencyRequested = 12;
-                                                            break;
-                                                        case 'Q':
-                                                        case 'Quarterly':
-                                                            frequencyRequested = 4;
-                                                            break;
-                                                        case 'W':
-                                                        case 'Weekly':
-                                                            frequencyRequested = parseInt(365 / 7);
-                                                            break;
-                                                        case 'Y':
-                                                        case 'Yearly':
-                                                            frequencyRequested = 1;
-                                                    }
-                                                    model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = Math.round((((Math.pow((((2 * parseFloat((model.loanAccount.interestRate)/100) * parseFloat(model.loanAccount.tenure)) / (parseFloat(model.loanAccount.tenure) + 1)) + 1), 1 / frequencyRequested) - 1) * frequencyRequested)*100)*100)/100;
-                                                }  else {
-                                                PageHelper.showProgress("nominal-rate-calculation", "Error while calculating nominal rate, check the input values.", 5000);
-                                            }
+                                                try{
+                                                    var obj = calculateNominalRate(model.loanAccount.loanAmount,
+                                                        model.loanAccount.frequency,
+                                                        model.loanAccount.tenure,
+                                                        parseFloat(model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6));
+                                                    model.loanAccount.interestRate = obj.nominalRate;
+                                                    model.loanAccount.estimatedEmi = obj.estimatedEmi;
+                                                } catch (e){
+                                                    console.log(e);
+                                                    PageHelper.showProgress("nominal-rate-calculation", "Error while calculating nominal rate, check the input values.", 5000);
+                                                }
                                             }
                                         }
                                     }
