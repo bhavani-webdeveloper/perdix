@@ -60,7 +60,9 @@ define({
                             'currentStage': "Deposit",
                             'branchName' : branchName,
                             'depositId': searchOptions.depositId,
-                            'instrumentType': "CASH"
+                            'instrumentType': "CASH",
+                            'page': pageOpts.pageNo,
+	                    'per_page': pageOpts.itemsPerPage
                         }, function(res, headers) {
                             _.each(res.body,function(data){
                                 out.push({
@@ -93,7 +95,9 @@ define({
                             'currentStage':"Deposit",
                             'accountBranchId': searchOptions.branchName,
                             'chequeDepositId': searchOptions.depositId,
-                            'instrumentType': "CHQ"
+                            'instrumentType': "CHQ",
+                            'page': pageOpts.pageNo,
+	                        'per_page': pageOpts.itemsPerPage
                         }, function(res, headers) {
                             _.each(res.body, function(data){
                                 out.push({
