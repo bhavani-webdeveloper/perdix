@@ -24,48 +24,126 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
             }
 
-            var generateQuestionairreFormForParty = function(key) {
+            var generateQuestionairreFormForParty = function(key, title) {
                 return {
                     "type": "box",
                     "colClass": "col-xs-6 col-md-6",
-                    "title": "TELE_VERIFICATION",
+                    "title": title + "_TELE_VERIFICATION",
                     "items": [
                         {
-                            "key": key + ".questions",
-                            "type": "array",
-                            "add": null,
-                            "remove": null,
-                            "view": "fixed",
-                            "items":  [
+                            "type": "fieldset",
+                            "title": "CALLING_ATTEMPTS",
+                            "items": [
                                 {
-                                    "key": key + ".questions[].question",
-                                    "type": "string",
-                                    "title": "QUESTION",
-                                    "readonly": true
+                                    "key": key +".telecallingResponse",
+                                    "type": "select",
+                                    "title": "TELECALLING_RESPONSE",
+                                    "enumCode": "telecalling_response"
                                 },
                                 {
-                                    "key": key + ".questions[].answer",                                                                            
-                                    "type": "string",  
-                                    "title": "ANSWER",
-                                    "condition":"model." + key + ".questions[arrayIndex].input_type=='string'"
+                                    "key": key +".noOfCallAttempts",
+                                    "type": "number",
+                                    "title": "NO_OF_CALLATTEMPTS"
                                 },
                                 {
-                                    "key": key + ".questions[].answer",                                                                            
-                                    "type": "textarea",  
-                                    "title": "ANSWER",
-                                    "condition":"model." + key + ".questions[arrayIndex].input_type=='textarea'"
+                                    "key": key +".followupCallRequired",
+                                    "type": "date",
+                                    "title": "FOLLOWUP_ON"
                                 },
                                 {
-                                    "key": key + ".questions[].answer",                                                                            
-                                    "type": "number",  
-                                    "title": "ANSWER",
-                                    "condition":"model." + key + ".questions[arrayIndex].input_type=='number'"
-                                },
+                                    "key": key +".telecallingRemarks",
+                                    "type": "textarea",
+                                    "title": "TELECALLING_REMARKS"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "fieldset",
+                            "title": "QUESTIONS",
+                            "items": [
                                 {
-                                    "key": key + ".questions[].answer",                                                                            
-                                    "type": "select",  
-                                    "title": "ANSWER",
-                                    "condition":"model." + key + ".questions[arrayIndex].input_type=='select'"
+                                    "key": key + ".telecallingQuestionnaireList",
+                                    "type": "array",
+                                    "add": null,
+                                    "remove": null,
+                                    "view": "fixed",
+                                    "items":  [
+                                        {
+                                            "key": key + ".telecallingQuestionnaireList[].question",
+                                            "type": "textarea",
+                                            "title": "QUESTION",
+                                            "readonly": true
+                                        },
+                                        {
+                                            "key": key + ".telecallingQuestionnaireList[].answer",                                                                            
+                                            "type": "string",  
+                                            "title": "ANSWER",
+                                            "condition":"model." + key + ".telecallingQuestionnaireList[arrayIndex].input_type=='string'"
+                                        },
+                                        {
+                                            "key": key + ".telecallingQuestionnaireList[].answer",                                                                            
+                                            "type": "textarea",  
+                                            "title": "ANSWER",
+                                            "condition":"model." + key + ".telecallingQuestionnaireList[arrayIndex].input_type=='textarea'"
+                                        },
+                                        {
+                                            "key": key + ".telecallingQuestionnaireList[].answer",                                                                            
+                                            "type": "number",  
+                                            "title": "ANSWER",
+                                            "condition":"model." + key + ".telecallingQuestionnaireList[arrayIndex].input_type=='number'"
+                                        },
+                                        {
+                                            "key": key + ".telecallingQuestionnaireList[].answer",
+                                            "title": "ANSWER",
+                                            "condition":"model." + key + ".telecallingQuestionnaireList[arrayIndex].input_type=='select'",
+                                            "type": "lov",
+                                            "autolov": true,
+                                            "lovonly": true,
+                                            "bindMap": {},
+                                            "searchHelper": formHelper,
+                                            "search": function(inputModel, form, model, context) {
+                                                var list = {};
+                                                var mkey = key.replace ( /[^\d.]/g, '' )
+                                                if(form.key[0] == 'applicant') {
+                                                    list = model.applicant.telecallingQuestionnaireList[context.arrayIndex].select;
+                                                } else if(form.key[0] == 'coApplicants') {
+                                                    list = model.coApplicants[mkey].telecallingQuestionnaireList[context.arrayIndex].select;
+                                                } else if(form.key[0] == 'guarantors') {
+                                                    list = model.guarantors[mkey].telecallingQuestionnaireList[context.arrayIndex].select;
+                                                } else if(form.key[0] == 'loanCustomer') {
+                                                    list = model.loanCustomer.telecallingQuestionnaireList[context.arrayIndex].select;
+                                                }
+
+                                                var out = [];
+                                                _.forEach(list, function(val) {
+                                                    out.push({"name":val,"partyType":form.key[0],"mkey":mkey});
+                                                });
+
+                                                return $q.resolve({
+                                                    headers: {
+                                                        "x-total-count": out.length
+                                                    },
+                                                    body: out
+                                                });
+                                            },
+                                            onSelect: function(valueObj, model, context) {
+                                                if(valueObj.partyType == 'applicant') {
+                                                    model.applicant.telecallingQuestionnaireList[context.arrayIndex].answer = valueObj.name;
+                                                } else if(valueObj.partyType == 'coApplicants') {
+                                                    model.coApplicants[valueObj.mkey].telecallingQuestionnaireList[context.arrayIndex].answer = valueObj.name;
+                                                } else if(valueObj.partyType == 'guarantors') {
+                                                    model.guarantors[valueObj.mkey].telecallingQuestionnaireList[context.arrayIndex].answer = valueObj.name;
+                                                } else if(form.key[0] == 'loanCustomer') {
+                                                    model.loanCustomer.telecallingQuestionnaireList[context.arrayIndex].answer = valueObj.name;;
+                                                }
+                                            },
+                                            getListDisplayItem: function(item, index) {
+                                                return [
+                                                    item.name
+                                                ];
+                                            }
+                                        }
+                                    ]
                                 }
                             ]
                         }
@@ -285,7 +363,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     }
                                 ]
                             });
-                    data.push(generateQuestionairreFormForParty("coApplicants["+key + "]"));
+                    data.push(generateQuestionairreFormForParty("coApplicants["+key + "]", "CoApplicant-"+(key+1)));
                     coAppData.push({"type": "section","htmlClass": "row","items": data});
                 })
                 return coAppData;
@@ -503,7 +581,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     }
                                 ]
                             });
-                    data.push(generateQuestionairreFormForParty("guarantors["+ key + "]"));
+                    data.push(generateQuestionairreFormForParty("guarantors["+ key + "]", "Guarantor-"+(key+1)));
                     guarantorData.push({"type": "section","htmlClass": "row","items": data});
                 });
                 return guarantorData;
@@ -547,10 +625,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     var self = this;
                     Queries.questionnaireDetails('TELECALLING', 'Loan', 'Televerification').then(
                         function(res) { 
-                            model.applicant.questions = _.filter(res, function(obj) {
+                            model.applicant.telecallingQuestionnaireList = _.filter(res, function(obj) {
                                 return obj.party_type == 'applicant';     
                             });
-                            model.loanCustomer.questions = _.filter(res, function(obj) {
+                            model.loanCustomer.telecallingQuestionnaireList = _.filter(res, function(obj) {
                                 return obj.party_type == 'loanCustomer';
                             });
                             model.coapplicantQuestions = _.filter(res, function(obj) {
@@ -561,14 +639,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             });
 
                             _.forEach(model.coApplicants, function(val, key) {
-                                model.coApplicants[key].questions = model.coapplicantQuestions;
+                                model.coApplicants[key].telecallingQuestionnaireList = model.coapplicantQuestions;
                                 if(model.telecalling.coApplicant.length>0) {
                                     var findKey = _.findLastIndex(model.telecalling.coApplicant, ["customerId", val.customer.id]);
                                     if(findKey!=-1) {
+                                        model.coApplicants[key].telecallingResponse = model.telecalling.coApplicant[findKey].telecallingResponse;
+                                        model.coApplicants[key].noOfCallAttempts = model.telecalling.coApplicant[findKey].noOfCallAttempts;
+                                        model.coApplicants[key].followupCallRequired = model.telecalling.coApplicant[findKey].followupCallRequired;
+                                        model.coApplicants[key].telecallingRemarks = model.telecalling.coApplicant[findKey].telecallingRemarks;
                                         _.forEach(model.coapplicantQuestions, function(qval, qkey) {
                                             var callingDetails = _.find(model.telecalling.coApplicant[findKey].telecallingQuestionnaireList, {"question": qval.question});
                                             if(!_.isNull(callingDetails)) {
-                                               model.coApplicants[key].questions[qkey].answer = callingDetails.answer;
+                                               model.coApplicants[key].telecallingQuestionnaireList[qkey].answer = callingDetails.answer;
                                             }
                                         });
                                     }
@@ -576,14 +658,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             });
 
                             _.forEach(model.guarantors, function(val, key) {
-                                model.guarantors[key].questions = model.guarantorQuestions;
+                                model.guarantors[key].telecallingQuestionnaireList = model.guarantorQuestions;
                                 if(model.telecalling.guarantor.length>0) {
                                     var findKey = _.findLastIndex(model.telecalling.guarantor, ["customerId", val.customer.id]);
                                     if(findKey!=-1) {
+                                        model.guarantors[key].telecallingResponse = model.telecalling.guarantor[findKey].telecallingResponse;
+                                        model.guarantors[key].noOfCallAttempts = model.telecalling.guarantor[findKey].noOfCallAttempts;
+                                        model.guarantors[key].followupCallRequired = model.telecalling.guarantor[findKey].followupCallRequired;
+                                        model.guarantors[key].telecallingRemarks = model.telecalling.guarantor[findKey].telecallingRemarks;
                                         _.forEach(model.guarantorQuestions, function(qval, qkey) {
                                             var callingDetails = _.find(model.telecalling.guarantor[findKey].telecallingQuestionnaireList, {"question": qval.question});
                                             if(!_.isNull(callingDetails)) {
-                                               model.guarantors[key].questions[qkey].answer = callingDetails.answer;
+                                               model.guarantors[key].telecallingQuestionnaireList[qkey].answer = callingDetails.answer;
                                             }
                                         });
                                     }
@@ -592,38 +678,32 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
                             if(model.telecalling.applicant.length>0) {
                                 var findKey = model.telecalling.applicant.length-1;
-                                _.forEach(model.applicant.questions, function(val, key) {
+                                model.applicant.telecallingResponse = model.telecalling.applicant[findKey].telecallingResponse;
+                                model.applicant.noOfCallAttempts = model.telecalling.applicant[findKey].noOfCallAttempts;
+                                model.applicant.followupCallRequired = model.telecalling.applicant[findKey].followupCallRequired;
+                                model.applicant.telecallingRemarks = model.telecalling.applicant[findKey].telecallingRemarks;
+                                _.forEach(model.applicant.telecallingQuestionnaireList, function(val, key) {
                                     var callingDetails = _.find(model.telecalling.applicant[findKey].telecallingQuestionnaireList, {"question": val.question});
                                     if(!_.isNull(callingDetails)) {
-                                       model.applicant.questions[key].answer = callingDetails.answer;
+                                       model.applicant.telecallingQuestionnaireList[key].answer = callingDetails.answer;
                                     }
                                 });
                             }
 
 
-                            if(model.telecalling.loanCustomer.length>0) {                                
+                            if(model.telecalling.loanCustomer.length>0) {                            
                                 var findKey = model.telecalling.loanCustomer.length-1;
-                                _.forEach(model.loanCustomer.questions, function(val, key) {
+                                model.loanCustomer.telecallingResponse = model.telecalling.loanCustomer[findKey].telecallingResponse;
+                                model.loanCustomer.noOfCallAttempts = model.telecalling.loanCustomer[findKey].noOfCallAttempts;
+                                model.loanCustomer.followupCallRequired = model.telecalling.loanCustomer[findKey].followupCallRequired;
+                                model.loanCustomer.telecallingRemarks = model.telecalling.loanCustomer[findKey].telecallingRemarks;
+                                _.forEach(model.loanCustomer.telecallingQuestionnaireList, function(val, key) {
                                     var callingDetails = _.find(model.telecalling.loanCustomer[findKey].telecallingQuestionnaireList, {"question": val.question});
                                     if(!_.isNull(callingDetails)) {
-                                       model.loanCustomer.questions[key].answer = callingDetails.answer;
+                                       model.loanCustomer.telecallingQuestionnaireList[key].answer = callingDetails.answer;
                                     }
                                 });
                             }
-
-                            /*_.forEach(model.coapplicant.questions, function(val, key) {
-                                var callingDetails = _.find(model.loanAccount.coapplicantTelecallingDetails[0].telecallingQuestionnaireList, {"question": val.question});
-                                if(!_.isNull(callingDetails)) {
-                                   model.coapplicant.questions[key].answer = callingDetails.answer;
-                                }
-                            });
-
-                            _.forEach(model.guarantor.questions, function(val, key) {
-                                var callingDetails = _.find(model.loanAccount.guarantorTelecallingDetails[0].telecallingQuestionnaireList, {"question": val.question});
-                                if(!_.isNull(callingDetails)) {
-                                   model.guarantor.questions[key].answer = callingDetails.answer;
-                                }
-                            });*/
 
                             var formRequest = {
                                 "overrides": overridesFields(model),
@@ -637,7 +717,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "type": "section",
                                             "htmlClass": "col-sm-12",
                                             "items": [
-                                               {
+                                                {
                                                     "type": "section",
                                                     "htmlClass": "row",
                                                     "items": [
@@ -900,41 +980,102 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             "title": "APPLICANT_TELE_VERIFICATION",
                                                             "items": [
                                                                 {
-                                                                    "key": "applicant.questions",
-                                                                    "type": "array",
-                                                                    "add": null,
-                                                                    "remove": null,
-                                                                    "view": "fixed",
-                                                                    "items":  [
+                                                                    "type": "fieldset",
+                                                                    "title": "CALLING_ATTEMPTS",
+                                                                    "items": [
                                                                         {
-                                                                            "key": "applicant.questions[].question",
-                                                                            "type": "string",
-                                                                            "title": "QUESTION",
-                                                                            "readonly": true
+                                                                            "key": "applicant.telecallingResponse",
+                                                                            "type": "select",
+                                                                            "title": "TELECALLING_RESPONSE",
+                                                                            "enumCode": "telecalling_response"
                                                                         },
                                                                         {
-                                                                            "key": "applicant.questions[].answer",                                                                            
-                                                                            "type": "string",  
-                                                                            "title": "ANSWER",
-                                                                            "condition":"model.applicant.questions[arrayIndex].input_type=='string'"
+                                                                            "key": "applicant.noOfCallAttempts",
+                                                                            "type": "number",
+                                                                            "title": "NO_OF_CALLATTEMPTS"
                                                                         },
                                                                         {
-                                                                            "key": "applicant.questions[].answer",                                                                            
-                                                                            "type": "textarea",  
-                                                                            "title": "ANSWER",
-                                                                            "condition":"model.applicant.questions[arrayIndex].input_type=='textarea'"
+                                                                            "key": "applicant.followupCallRequired",
+                                                                            "type": "date",
+                                                                            "title": "FOLLOWUP_ON"
                                                                         },
                                                                         {
-                                                                            "key": "applicant.questions[].answer",                                                                            
-                                                                            "type": "number",  
-                                                                            "title": "ANSWER",
-                                                                            "condition":"model.applicant.questions[arrayIndex].input_type=='number'"
-                                                                        },
+                                                                            "key": "applicant.telecallingRemarks",
+                                                                            "type": "textarea",
+                                                                            "title": "TELECALLING_REMARKS"
+                                                                        }
+                                                                    ]
+                                                                },
+                                                                {
+                                                                    "type": "fieldset",
+                                                                    "title": "QUESTIONS",
+                                                                    "items": [
                                                                         {
-                                                                            "key": "applicant.questions[].answer",                                                                            
-                                                                            "type": "select",  
-                                                                            "title": "ANSWER",
-                                                                            "condition":"model.applicant.questions[arrayIndex].input_type=='select'"
+                                                                            "key": "applicant.telecallingQuestionnaireList",
+                                                                            "type": "array",
+                                                                            "add": null,
+                                                                            "remove": null,
+                                                                            "view": "fixed",
+                                                                            "items":  [
+                                                                                {
+                                                                                    "key": "applicant.telecallingQuestionnaireList[].question",
+                                                                                    "type": "textarea",
+                                                                                    "title": "QUESTION",
+                                                                                    "readonly": true
+                                                                                },
+                                                                                {
+                                                                                    "key": "applicant.telecallingQuestionnaireList[].answer",                                                                            
+                                                                                    "type": "string",  
+                                                                                    "title": "ANSWER",
+                                                                                    "condition":"model.applicant.telecallingQuestionnaireList[arrayIndex].input_type=='string'"
+                                                                                },
+                                                                                {
+                                                                                    "key": "applicant.telecallingQuestionnaireList[].answer",                                                                            
+                                                                                    "type": "textarea",  
+                                                                                    "title": "ANSWER",
+                                                                                    "condition":"model.applicant.telecallingQuestionnaireList[arrayIndex].input_type=='textarea'"
+                                                                                },
+                                                                                {
+                                                                                    "key": "applicant.telecallingQuestionnaireList[].answer",                                                                            
+                                                                                    "type": "number",  
+                                                                                    "title": "ANSWER",
+                                                                                    "condition":"model.applicant.telecallingQuestionnaireList[arrayIndex].input_type=='number'"
+                                                                                },
+                                                                                {
+                                                                                    "key": "applicant.telecallingQuestionnaireList[].answer",                                                                            
+                                                                                    "title": "ANSWER",
+                                                                                    "condition":"model.applicant.telecallingQuestionnaireList[arrayIndex].input_type=='select'",
+                                                                                    "type": "lov",
+                                                                                    "autolov": true,
+                                                                                    "lovonly": true,
+                                                                                    "bindMap": {},
+                                                                                    "searchHelper": formHelper,
+                                                                                    "search": function(inputModel, form, model, context) {
+                                                                                        var list = {};
+                                                                                        list = model.applicant.telecallingQuestionnaireList[context.arrayIndex].select;
+
+                                                                                        var out = [];
+                                                                                        _.forEach(list, function(val) {
+                                                                                            out.push({"name":val});
+                                                                                        });
+
+                                                                                        return $q.resolve({
+                                                                                            headers: {
+                                                                                                "x-total-count": out.length
+                                                                                            },
+                                                                                            body: out
+                                                                                        });
+                                                                                    },
+                                                                                    onSelect: function(valueObj, model, context) {
+                                                                                        model.applicant.telecallingQuestionnaireList[context.arrayIndex].answer = valueObj.name;
+                                                                                    },
+                                                                                    getListDisplayItem: function(item, index) {
+                                                                                        return [
+                                                                                            item.name
+                                                                                        ];
+                                                                                    }
+                                                                                }
+                                                                            ]
                                                                         }
                                                                     ]
                                                                 }
@@ -1033,41 +1174,102 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             "title": "TELE_VERIFICATION",
                                                             "items": [
                                                                 {
-                                                                    "key": "loanCustomer.questions",
-                                                                    "type": "array",
-                                                                    "add": null,
-                                                                    "remove": null,
-                                                                    "view": "fixed",
-                                                                    "items":  [
+                                                                    "type": "fieldset",
+                                                                    "title": "CALLING_ATTEMPTS",
+                                                                    "items": [
                                                                         {
-                                                                            "key": "loanCustomer.questions[].question",
-                                                                            "type": "string",
-                                                                            "title": "QUESTION",
-                                                                            "readonly": true
+                                                                            "key": "loanCustomer.telecallingResponse",
+                                                                            "type": "select",
+                                                                            "title": "TELECALLING_RESPONSE",
+                                                                            "enumCode": "telecalling_response"
                                                                         },
                                                                         {
-                                                                            "key": "loanCustomer.questions[].answer",                                                                            
-                                                                            "type": "string",  
-                                                                            "title": "ANSWER",
-                                                                            "condition":"model.loanCustomer.questions[arrayIndex].input_type=='string'"
+                                                                            "key": "loanCustomer.noOfCallAttempts",
+                                                                            "type": "number",
+                                                                            "title": "NO_OF_CALLATTEMPTS"
                                                                         },
                                                                         {
-                                                                            "key": "loanCustomer.questions[].answer",                                                                            
-                                                                            "type": "textarea",  
-                                                                            "title": "ANSWER",
-                                                                            "condition":"model.loanCustomer.questions[arrayIndex].input_type=='textarea'"
+                                                                            "key": "loanCustomer.followupCallRequired",
+                                                                            "type": "date",
+                                                                            "title": "FOLLOWUP_ON"
                                                                         },
                                                                         {
-                                                                            "key": "loanCustomer.questions[].answer",                                                                            
-                                                                            "type": "number",  
-                                                                            "title": "ANSWER",
-                                                                            "condition":"model.loanCustomer.questions[arrayIndex].input_type=='number'"
-                                                                        },
+                                                                            "key": "loanCustomer.telecallingRemarks",
+                                                                            "type": "textarea",
+                                                                            "title": "TELECALLING_REMARKS"
+                                                                        }
+                                                                    ]
+                                                                },
+                                                                {
+                                                                    "type": "fieldset",
+                                                                    "title": "QUESTIONS",
+                                                                    "items": [
                                                                         {
-                                                                            "key": "loanCustomer.questions[].answer",                                                                            
-                                                                            "type": "select",  
-                                                                            "title": "ANSWER",
-                                                                            "condition":"model.loanCustomer.questions[arrayIndex].input_type=='select'"
+                                                                            "key": "loanCustomer.telecallingQuestionnaireList",
+                                                                            "type": "array",
+                                                                            "add": null,
+                                                                            "remove": null,
+                                                                            "view": "fixed",
+                                                                            "items":  [
+                                                                                {
+                                                                                    "key": "loanCustomer.telecallingQuestionnaireList[].question",
+                                                                                    "type": "textarea",
+                                                                                    "title": "QUESTION",
+                                                                                    "readonly": true
+                                                                                },
+                                                                                {
+                                                                                    "key": "loanCustomer.telecallingQuestionnaireList[].answer",                                                                            
+                                                                                    "type": "string",  
+                                                                                    "title": "ANSWER",
+                                                                                    "condition":"model.loanCustomer.telecallingQuestionnaireList[arrayIndex].input_type=='string'"
+                                                                                },
+                                                                                {
+                                                                                    "key": "loanCustomer.telecallingQuestionnaireList[].answer",                                                                            
+                                                                                    "type": "textarea",  
+                                                                                    "title": "ANSWER",
+                                                                                    "condition":"model.loanCustomer.telecallingQuestionnaireList[arrayIndex].input_type=='textarea'"
+                                                                                },
+                                                                                {
+                                                                                    "key": "loanCustomer.telecallingQuestionnaireList[].answer",                                                                            
+                                                                                    "type": "number",  
+                                                                                    "title": "ANSWER",
+                                                                                    "condition":"model.loanCustomer.telecallingQuestionnaireList[arrayIndex].input_type=='number'"
+                                                                                },
+                                                                                {
+                                                                                    "key": "loanCustomer.telecallingQuestionnaireList[].answer", 
+                                                                                    "title": "ANSWER",
+                                                                                    "condition":"model.loanCustomer.telecallingQuestionnaireList[arrayIndex].input_type=='select'",
+                                                                                    "type": "lov",
+                                                                                    "autolov": true,
+                                                                                    "lovonly": true,
+                                                                                    "bindMap": {},
+                                                                                    "searchHelper": formHelper,
+                                                                                    "search": function(inputModel, form, model, context) {
+                                                                                        var list = {};
+                                                                                        list = model.loanCustomer.telecallingQuestionnaireList[context.arrayIndex].select;
+
+                                                                                        var out = [];
+                                                                                        _.forEach(list, function(val) {
+                                                                                            out.push({"name":val});
+                                                                                        });
+
+                                                                                        return $q.resolve({
+                                                                                            headers: {
+                                                                                                "x-total-count": out.length
+                                                                                            },
+                                                                                            body: out
+                                                                                        });
+                                                                                    },
+                                                                                    onSelect: function(valueObj, model, context) {
+                                                                                        model.loanCustomer.telecallingQuestionnaireList[context.arrayIndex].answer = valueObj.name;;
+                                                                                    },
+                                                                                    getListDisplayItem: function(item, index) {
+                                                                                        return [
+                                                                                            item.name
+                                                                                        ];
+                                                                                    }
+                                                                                }
+                                                                            ]
                                                                         }
                                                                     ]
                                                                 }
@@ -1122,67 +1324,29 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 },
                 actions: {                    
                     save: function(model, formCtrl, form, $event) {
-                        model.loanAccount.telecallingDetails.push({"customerId":model.applicant.customer.id, "partyType":"applicant","telecallingQuestionnaireList":model.applicant.questions});
-                        model.loanAccount.telecallingDetails.push({"customerId":model.loanCustomer.customer.id, "partyType":"loanCustomer","telecallingQuestionnaireList":model.loanCustomer.questions});
+                        model.applicant.customerId = model.applicant.customer.id;
+                        model.applicant.partyType = "applicant";
+                        model.applicant.customerCalledAt = new Date();
+                        model.loanAccount.telecallingDetails.push(model.applicant);
+
+                        model.loanCustomer.customerId = model.loanCustomer.customer.id;
+                        model.loanCustomer.partyType = "loanCustomer";
+                        model.loanCustomer.customerCalledAt = new Date();
+                        model.loanAccount.telecallingDetails.push(model.loanCustomer);
                             
                          _.forEach(model.coApplicants, function(val) {
-                            model.loanAccount.telecallingDetails.push({"customerId":val.customer.id, "partyType":"coApplicant","telecallingQuestionnaireList":val.questions});
+                            val.customerId = val.customer.id;
+                            val.partyType = "coApplicant";
+                            val.customerCalledAt = new Date();
+                            model.loanAccount.telecallingDetails.push(val);
                         });
 
-                        _.forEach(model.guarantors, function(val) {
-                            model.loanAccount.telecallingDetails.push({"customerId":val.customer.id, "partyType":"guarantor","telecallingQuestionnaireList":val.questions});
+                        _.forEach(model.guarantors, function(val) {                            
+                            val.customerId = val.customer.id;
+                            val.partyType = "guarantor";
+                            val.customerCalledAt = new Date();
+                            model.loanAccount.telecallingDetails.push(val);
                         });
-
-                        /*// applicant telecalling details
-                        var applicantKey = _.findIndex(model.loanAccount.telecallingDetails, function(o) {
-                            return o.customerId==model.applicant.customer.id && o.partyType == 'applicant';
-                        });
-                        if(applicantKey == -1) {
-                            model.loanAccount.telecallingDetails.push({"customerId":model.applicant.customer.id, "partyType":"applicant","telecallingQuestionnaireList":model.applicant.questions});
-                        } else {
-                            model.loanAccount.telecallingDetails[applicantKey].telecallingQuestionnaireList = model.applicant.questions;
-                        }
-
-                        // loan customer telecalling details                        
-                        var loanCustomerKey = _.findIndex(model.loanAccount.telecallingDetails, function(o) {
-                            return o.customerId==model.loanCustomer.customer.id && o.partyType == 'loanCustomer';
-                        });
-
-                        if(loanCustomerKey == -1) {
-                            model.loanAccount.telecallingDetails.push({"customerId":model.loanCustomer.customer.id, "partyType":"loanCustomer","telecallingQuestionnaireList":model.loanCustomer.questions});
-                        } else {
-                            model.loanAccount.telecallingDetails[loanCustomerKey].telecallingQuestionnaireList = model.loanCustomer.questions;
-                        }
-
-                        // co-applicant telecalling details 
-                        _.forEach(model.coApplicants, function(val) {
-                            var coAppKey = _.findIndex(model.loanAccount.telecallingDetails, function(o) {
-                                return o.customerId==val.customer.id && o.partyType == 'coApplicant';
-                            });
-
-                            if(coAppKey == -1) {
-                                model.loanAccount.telecallingDetails.push({"customerId":val.customer.id, "partyType":"coApplicant","telecallingQuestionnaireList":val.questions});
-                            } else {
-                                model.loanAccount.telecallingDetails[coAppKey].telecallingQuestionnaireList = val.questions;       
-                            }
-                        });
-
-
-                        // guarantor telecalling details 
-                        _.forEach(model.guarantors, function(val) {
-                             var guarantorKey = _.findIndex(model.loanAccount.telecallingDetails, function(o) {
-                                return o.customerId==val.customer.id && o.partyType == 'guarantor';
-                            });
-
-                            if(guarantorKey == -1) {
-                                model.loanAccount.telecallingDetails.push({"customerId":val.customer.id, "partyType":"guarantor","telecallingQuestionnaireList":val.questions});
-                            } else {
-                                model.loanAccount.telecallingDetails[guarantorKey].telecallingQuestionnaireList = val.questions;                                
-                            }
-                        });*/
-                        
-
-                        // return false;
                         
                         /* Loan SAVE */
                         PageHelper.clearErrors();
