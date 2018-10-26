@@ -29,6 +29,8 @@ function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionSto
 				setTimeout(function(){formCtrl.submit();}, 0);	
 				$log.info("search-list sample got initialized");
 			});
+			model.dedupeEnabled = SessionStore.getGlobalSetting("DedupeEnabled");
+			
 		},
 		definition: {
 			title: "Search Customers",
@@ -65,6 +67,9 @@ function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionSto
 	                    condition: "model.siteCode=='sambandh' || model.siteCode =='IREPDhan'"
 	                }, {
 	                    key: "centre",
+	                },{
+						key: "includeDuplicates",
+						condition : 'model.dedupeEnabled == "Y" || "y"'
 	                }]
 	            }],
 			searchSchema: {
@@ -114,6 +119,10 @@ function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionSto
 							"parentValueExpr": "model.branch",
 							"screenFilter": true
 						}
+					},
+					"includeDuplicates":{
+						"type": "boolean",
+						"title": "Include_Duplicates"
 					}
 
 				},
@@ -144,6 +153,7 @@ function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionSto
 						'per_page': pageOpts.itemsPerPage,
 						'kycNumber': searchOptions.kyc_no,
 						'lastName': searchOptions.lastName,
+						'includeDuplicates':searchOptions.includeDuplicates,
 						'urnNo': searchOptions.urnNo
 					}).$promise;
 				}else{

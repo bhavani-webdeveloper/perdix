@@ -4106,7 +4106,7 @@
           "type": "object",
           "required": [
             "registrationNumber",
-            "registeredDate",
+            // "registeredDate",
             "documentId"
           ],
           "properties": {
