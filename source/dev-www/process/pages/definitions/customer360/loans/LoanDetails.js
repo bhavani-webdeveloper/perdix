@@ -653,7 +653,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                     },
                     {
                         "key": "cbsLoan.nextDemandScheduledDate",
-                        "title": "NEXT_DEMAND_RUN_DATE",
+                        "title": "NEXT_DEMAND_SCHEDULED_DATE",
                         "required":false,
                         "type": ["string","null"]
                     },
