@@ -5955,7 +5955,8 @@
                        "FieldInvestigation2",
                        "FieldInvestigation3",
                        "TeleVerification",
-                       "LoanInitiation"
+                       "LoanInitiation",
+                       "DocumentUpload"
                     ]
                  },
                  "customerNameInBank":{
@@ -5984,7 +5985,8 @@
                        "FieldInvestigation2",
                        "FieldInvestigation3",
                        "TeleVerification",
-                       "LoanInitiation"
+                       "LoanInitiation",
+                       "DocumentUpload"
                     ]
                  },
                  "customerBankName":{
@@ -5997,7 +5999,8 @@
                        "FieldInvestigation2",
                        "FieldInvestigation3",
                        "TeleVerification",
-                       "LoanInitiation"
+                       "LoanInitiation",
+                       "DocumentUpload"
                     ]
                  },
                  "customerBankBranchName":{
@@ -6010,7 +6013,8 @@
                        "FieldInvestigation2",
                        "FieldInvestigation3",
                        "TeleVerification",
-                       "LoanInitiation"
+                       "LoanInitiation",
+                       "DocumentUpload"
                     ]
                  },
                  "party":{
