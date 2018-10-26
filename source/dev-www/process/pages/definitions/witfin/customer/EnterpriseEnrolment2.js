@@ -1155,6 +1155,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                                 "add": null,
                                                 "remove": null,
                                                 "view": "fixed",
+                                                "startEmpty": true,
                                                 "items": {
                                                     "personMet": { 
                                                         "key": "customer.fieldInvestigationDetails[].category",
