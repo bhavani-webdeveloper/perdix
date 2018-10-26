@@ -29,7 +29,7 @@ function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionSto
 				setTimeout(function(){formCtrl.submit();}, 0);	
 				$log.info("search-list sample got initialized");
 			});
-			model.dedupeEnabled = SessionStore.getGlobalSetting("DedupeEnabled");
+		     model.dedupeEnabled = SessionStore.getGlobalSetting("DedupeEnabled");
 			
 		},
 		definition: {
@@ -69,7 +69,7 @@ function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionSto
 	                    key: "centre",
 	                },{
 						key: "includeDuplicates",
-						condition : 'model.dedupeEnabled == "Y" || "y"'
+						condition : 'model.dedupeEnabled == "Y" || model.dedupeEnabled == "y"'
 	                }]
 	            }],
 			searchSchema: {
@@ -153,8 +153,8 @@ function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionSto
 						'per_page': pageOpts.itemsPerPage,
 						'kycNumber': searchOptions.kyc_no,
 						'lastName': searchOptions.lastName,
-						'includeDuplicates':searchOptions.includeDuplicates,
-						'urnNo': searchOptions.urnNo
+						'urnNo': searchOptions.urnNo,
+						'includeDuplicates':searchOptions.includeDuplicates
 					}).$promise;
 				}else{
 					var promise = Enrollment.search({
@@ -166,7 +166,8 @@ function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionSto
 						'per_page': pageOpts.itemsPerPage,
 						'kycNumber': searchOptions.kyc_no,
 						'lastName': searchOptions.lastName,
-						'urnNo': searchOptions.urnNo
+						'urnNo': searchOptions.urnNo,
+						'includeDuplicates':searchOptions.includeDuplicates
 					}).$promise;
 				}
 				return promise;
