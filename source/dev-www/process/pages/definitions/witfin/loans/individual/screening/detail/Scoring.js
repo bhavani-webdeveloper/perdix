@@ -184,23 +184,29 @@ define({
                 items: [              
                     {
                         type: "section",
-                        htmlClass: "col-sm-8",
-                        html: '<table class="table"><colgroup><col width="30%"><col width="15%"><col width="25%"><col width="5%"><col width="25%"></colgroup>'+
+                        htmlClass: "col-sm-6",
+                        html: '<table class="table"><colgroup><col width="50%"><col width="10%"><col width="40%"></colgroup>'+
                         '<tbody>'+
-                        '<tr><td></td><td> </td><td><strong><u>Co-applicant 1</u></strong></td><td> </td><td><strong><u>Co-applicant 2</u></strong></td></tr>'+
-                        '<tr><td>Co-applicant</td><td> </td><td><strong>{{model.CamDetails[2].data[0].Co_applicant}}</strong></td><td> </td><td><strong>{{model.CamDetails[2].data[1].Co_applicant}}</strong></td></tr>'+
-                        '<tr><td>Aadhar No</td><td> </td><td><strong>{{model.CamDetails[2].data[0].Aadhar_No}}</strong></td><td> </td><td><strong>{{model.CamDetails[2].data[1].Aadhar_No}}</strong></td></tr>'+
-                        '<tr><td>DL No</td><td> </td><td><strong>{{model.CamDetails[2].data[0].DL_No}}</strong></td><td> </td><td><strong>{{model.CamDetails[2].data[1].DL_No}}</strong></td></tr>'+
-                        '<tr><td>DOB</td><td> </td><td><strong>{{model.CamDetails[2].data[0].DOB}}</strong></td><td> </td><td><strong>{{model.CamDetails[2].data[1].DOB}}</strong></td></tr>'+
-                        '<tr><td>PAN No</td><td> </td><td><strong>{{model.CamDetails[2].data[0].PAN_No}}</strong></td><td> </td><td><strong>{{model.CamDetails[2].data[1].PAN_No}}</strong></td></tr>'+
-                        '<tr><td>Mobile</td><td> </td><td><strong>{{model.CamDetails[2].data[0].Mobile}}</strong></td><td> </td><td><strong>{{model.CamDetails[2].data[1].Mobile}}</strong></td></tr>'+
-                        '<tr><td>CIBIL score</td><td> </td><td><strong>{{model.CamDetails[2].data[0].CIBIL_score}}</strong></td><td> </td><td><strong>{{model.CamDetails[2].data[1].CIBIL_score}}</strong></td></tr>'+
-                        '<tr><td>Occupation</td><td> </td><td><strong>{{model.CamDetails[2].data[0].Occupation}}</strong></td><td> </td><td><strong>{{model.CamDetails[2].data[1].Occupation}}</strong></td></tr>'+
-                        '<tr><td>Door/Building</td><td> </td><td><strong>{{model.CamDetails[2].data[0].Door_Building}}</strong></td><td> </td><td><strong>{{model.CamDetails[2].data[1].Door_Building}}</strong></td></tr>'+
-                        '<tr><td>Street</td><td> </td><td><strong>{{model.CamDetails[2].data[0].Street}}</strong></td><td> </td><td><strong>{{model.CamDetails[2].data[1].Street}}</strong></td></tr>'+
-                        '<tr><td>Postoffice</td><td> </td><td><strong>{{model.CamDetails[2].data[0].Postoffice}}</strong></td><td> </td><td><strong>{{model.CamDetails[2].data[1].Postoffice}}</strong></td></tr>'+
-                        '<tr><td>District</td><td> </td><td><strong>{{model.CamDetails[2].data[0].District}}</strong></td><td> </td><td><strong>{{model.CamDetails[2].data[1].District}}</strong></td></tr>'+
-                        '<tr><td>Pincode</td><td> </td><td><strong>{{model.CamDetails[2].data[0].Pincode}}</strong></td><td> </td><td><strong>{{model.CamDetails[2].data[1].Pincode}}</strong></td></tr>'+                        
+                        '<tr><td>Co-applicant</td><td> </td><td><strong>{{model.CamDetails[2].data[0].Co_applicant}}</strong></td></tr>'+                    
+                        '<tr><td>DL No</td><td> </td><td><strong>{{model.CamDetails[2].data[0].DL_No}}</strong></td></tr>'+                    
+                        '<tr><td>PAN No</td><td> </td><td><strong>{{model.CamDetails[2].data[0].PAN_No}}</strong></td></tr>'+                    
+                        '<tr><td>CIBIL score</td><td> </td><td><strong>{{model.CamDetails[2].data[0].CIBIL_score}}</strong></td></tr>'+                    
+                        '<tr><td>Door/Building</td><td> </td><td><strong>{{model.CamDetails[2].data[0].Door_Building}}</strong></td></tr>'+                    
+                        '<tr><td>Postoffice</td><td> </td><td><strong>{{model.CamDetails[2].data[0].Postoffice}}</strong></td></tr>'+                    
+                        '<tr><td>Pincode</td><td> </td><td><strong>{{model.CamDetails[2].data[0].Pincode}}</strong></td></tr>'+                        
+                        '</tbody></table>'
+                    },
+                    {
+                        type: "section",
+                        htmlClass: "col-sm-6",
+                        html: '<table class="table"><colgroup><col width="50%"><col width="10%"><col width="40%"></colgroup>'+
+                        '<tbody>'+                        
+                        '<tr><td>Aadhar No</td><td> </td><td><strong>{{model.CamDetails[2].data[0].Aadhar_No}}</strong></td></tr>'+                        
+                        '<tr><td>DOB</td><td> </td><td><strong>{{model.CamDetails[2].data[0].DOB}}</strong></td></tr>'+                        
+                        '<tr><td>Mobile</td><td> </td><td><strong>{{model.CamDetails[2].data[0].Mobile}}</strong></td></tr>'+                        
+                        '<tr><td>Occupation</td><td> </td><td><strong>{{model.CamDetails[2].data[0].Occupation}}</strong></td></tr>'+                        
+                        '<tr><td>Street</td><td> </td><td><strong>{{model.CamDetails[2].data[0].Street}}</strong></td></tr>'+                        
+                        '<tr><td>District</td><td> </td><td><strong>{{model.CamDetails[2].data[0].District}}</strong></td></tr>'+                        
                         '</tbody></table>'
                     }
                 ]
@@ -211,24 +217,30 @@ define({
                 title: model.CamDetails[3].title,
                 items: [              
                     {
-                        type: "section",
-                        htmlClass: "col-sm-8",
-                        html: '<table class="table"><colgroup><col width="30%"><col width="15%"><col width="25%"><col width="5%"><col width="25%"></colgroup>'+
+                        type: "section",                        
+                        htmlClass: "col-sm-6",
+                        html: '<table class="table"><colgroup><col width="50%"><col width="10%"><col width="40%"></colgroup>'+
                         '<tbody>'+
-                        '<tr><td></td><td> </td><td><strong><u>Guarantor 1</u></strong></td><td> </td><td><strong><u>Guarantor 2</u></strong></td></tr>'+
-                        '<tr><td>Guarantor</td><td> </td><td ng-repeat="data in model.CamDetails[3].data" ng-init="parameterIndex=$index"><strong>{{model.CamDetails[3].data[0].Guarantor}}</strong></td><td> </td><td><strong>{{model.CamDetails[3].data[1].Guarantor}}</strong></td></tr>'+  
-                        '<tr><td>Aadhar No</td><td> </td><td><strong>{{model.CamDetails[3].data[0].Aadhar_No}}</strong></td><td> </td><td><strong>{{model.CamDetails[3].data[1].Aadhar_No}}</strong></td></tr>'+  
-                        '<tr><td>DL No</td><td> </td><td><strong>{{model.CamDetails[3].data[0].DL_No}}</strong></td><td> </td><td><strong>{{model.CamDetails[3].data[1].DL_No}}</strong></td></tr>'+  
-                        '<tr><td>DOB</td><td> </td><td><strong>{{model.CamDetails[3].data[0].DOB}}</strong></td><td> </td><td><strong>{{model.CamDetails[3].data[1].DOB}}</strong></td></tr>'+  
-                        '<tr><td>PAN No</td><td> </td><td><strong>{{model.CamDetails[3].data[0].PAN_No}}</strong></td><td> </td><td><strong>{{model.CamDetails[3].data[1].PAN_No}}</strong></td></tr>'+  
-                        '<tr><td>Mobile</td><td> </td><td><strong>{{model.CamDetails[3].data[0].Mobile}}</strong></td><td> </td><td><strong>{{model.CamDetails[3].data[1].Mobile}}</strong></td></tr>'+  
-                        '<tr><td>CIBIL score</td><td> </td><td><strong>{{model.CamDetails[3].data[0].CIBIL_score}}</strong></td><td> </td><td><strong>{{model.CamDetails[3].data[1].CIBIL_score}}</strong></td></tr>'+  
-                        '<tr><td>Occupation</td><td> </td><td><strong>{{model.CamDetails[3].data[0].Occupation}}</strong></td><td> </td><td><strong>{{model.CamDetails[3].data[1].Occupation}}</strong></td></tr>'+  
-                        '<tr><td>Door/Building</td><td> </td><td><strong>{{model.CamDetails[3].data[0].Door_Building}}</strong></td><td> </td><td><strong>{{model.CamDetails[3].data[1].Door_Building}}</strong></td></tr>'+  
-                        '<tr><td>Street</td><td> </td><td><strong>{{model.CamDetails[3].data[0].Street}}</strong></td><td> </td><td><strong>{{model.CamDetails[3].data[1].Street}}</strong></td></tr>'+  
-                        '<tr><td>Postoffice</td><td> </td><td><strong>{{model.CamDetails[3].data[0].Postoffice}}</strong></td><td> </td><td><strong>{{model.CamDetails[3].data[1].Postoffice}}</strong></td></tr>'+  
-                        '<tr><td>District</td><td> </td><td><strong>{{model.CamDetails[3].data[0].District}}</strong></td><td> </td><td><strong>{{model.CamDetails[3].data[1].District}}</strong></td></tr>'+  
-                        '<tr><td>Pincode</td><td> </td><td><strong>{{model.CamDetails[3].data[0].Pincode}}</strong></td><td> </td><td><strong>{{model.CamDetails[3].data[1].Pincode}}</strong></td></tr>'+                                             
+                        '<tr><td>Guarantor</td><td> </td><td ng-repeat="data in model.CamDetails[3].data" ng-init="parameterIndex=$index"><strong>{{model.CamDetails[3].data[0].Guarantor}}</strong></td></tr>'+                      
+                        '<tr><td>DL No</td><td> </td><td><strong>{{model.CamDetails[3].data[0].DL_No}}</strong></td></tr>'+                      
+                        '<tr><td>PAN No</td><td> </td><td><strong>{{model.CamDetails[3].data[0].PAN_No}}</strong></td></tr>'+                      
+                        '<tr><td>CIBIL score</td><td> </td><td><strong>{{model.CamDetails[3].data[0].CIBIL_score}}</strong></td></tr>'+                      
+                        '<tr><td>Door/Building</td><td> </td><td><strong>{{model.CamDetails[3].data[0].Door_Building}}</strong></td></tr>'+                      
+                        '<tr><td>Postoffice</td><td> </td><td><strong>{{model.CamDetails[3].data[0].Postoffice}}</strong></td></tr>'+                      
+                        '<tr><td>Pincode</td><td> </td><td><strong>{{model.CamDetails[3].data[0].Pincode}}</strong></td></tr>'+
+                        '</tbody></table>'
+                    },              
+                    {
+                        type: "section",                        
+                        htmlClass: "col-sm-6",
+                        html: '<table class="table"><colgroup><col width="50%"><col width="10%"><col width="40%"></colgroup>'+
+                        '<tbody>'+                        
+                        '<tr><td>Aadhar No</td><td> </td><td><strong>{{model.CamDetails[3].data[0].Aadhar_No}}</strong></td></tr>'+                        
+                        '<tr><td>DOB</td><td> </td><td><strong>{{model.CamDetails[3].data[0].DOB}}</strong></td></tr>'+                        
+                        '<tr><td>Mobile</td><td> </td><td><strong>{{model.CamDetails[3].data[0].Mobile}}</strong></td></tr>'+                        
+                        '<tr><td>Occupation</td><td> </td><td><strong>{{model.CamDetails[3].data[0].Occupation}}</strong></td></tr>'+                        
+                        '<tr><td>Street</td><td> </td><td><strong>{{model.CamDetails[3].data[0].Street}}</strong></td></tr>'+                        
+                        '<tr><td>District</td><td> </td><td><strong>{{model.CamDetails[3].data[0].District}}</strong></td></tr>'+                        
                         '</tbody></table>'
                     }
                 ]

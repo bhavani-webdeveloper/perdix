@@ -29,6 +29,8 @@ export class CollateralFieldPolicy extends IPolicy<LoanProcess> {
             col = new Collateral();
             let vehicleDetails = loanProcess.loanAccount.vehicleLoanDetails;
             col.collateralType = 'Vehicle';
+            col.collateralCategory = 'Vehicle';
+            col.quantity = 1;
             col.electricityAvailable = vehicleDetails.segment;
             col.collateralDescription = vehicleDetails.category;
             // col.expectedPurchaseDate = vehicleDetails.yearOfManufacture;
