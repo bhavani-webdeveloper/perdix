@@ -276,8 +276,8 @@ define({
                 items: [              
                     {
                         type: "section",
-                        htmlClass: "col-sm-6",
-                        html: '<table class="table"><colgroup><col width="50%"><col width="10%"><col width="40%"></colgroup>'+
+                        htmlClass: "col-sm-12",
+                        html: '<table class="table">'+
                         '<tbody>'+
                         '<tr><td>Registration No</td><td> </td><td>Model</td><td> </td><td>Make</td><td> </td><td>Free/Financed</td></tr>'+
                         '<tr ng-repeat="data in model.CamDetails[5].data"><td><strong>{{ data.Registration_No}}</strong></td><td> </td><td><strong>{{ data.Model }}</strong></td><td> </td><td><strong>{{ data.Make }}</strong></td><td> </td><td><strong>{{ data.Free_Financed }}</strong></td></tr>'+                    

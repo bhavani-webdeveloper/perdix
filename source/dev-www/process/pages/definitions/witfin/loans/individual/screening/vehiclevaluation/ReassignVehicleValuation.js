@@ -322,6 +322,7 @@ define(
                         "VehicleValuation.futureLife",
                         "VehicleValuation.currentMarketValue",
                         "VehicleValuation.distressValue",
+                        "VehicleValuation.valuationUpload",
                         "VehiclePhotoCaptures",
                         "VehiclePhotoCaptures.vehiclePhotoCaptures",
                         "VehiclePhotoCaptures.vehiclePhotoCaptures.photoFileId",
@@ -455,7 +456,19 @@ define(
                                         }
                                     }
                                 },
-
+                                "VehicleValuation": {
+                                    "items": {
+                                        "valuationUpload": {
+                                            title: "VALUATION_UPLOAD",
+                                            key: "loanAccount.vehicleLoanDetails.vehicleValuationReportId",
+                                            type: "file",
+                                            fileType: "application/pdf",
+                                            category: "Loan",
+                                            subCategory: "DOC1",
+                                            using: "scanner"
+                                        }
+                                    }
+                                },
                                 "VehicleAsset": {
                                     "items": {
                                         "vehicleAssetConditions": {

@@ -1,5 +1,5 @@
 define({
-    pageUID: "kgfs.loans.individual.booking.DocumentVerification",
+    pageUID: "witfin.loans.individual.booking.DocumentVerification",
     pageType: "Engine",
     dependencies:  ["$log", "SessionStore", "$state","irfNavigator", "$stateParams", "PageHelper", "IndividualLoan", "LoanBookingCommons", "Utils", "Files", "Queries", "formHelper", "$q", "$filter", "SchemaResource"],
     $pageFn:function($log, SessionStore, $state, irfNavigator, $stateParams, PageHelper, IndividualLoan, LoanBookingCommons, Utils, Files, Queries, formHelper, $q, $filter, SchemaResource) {
@@ -16,18 +16,17 @@ define({
                 model.loanView = SessionStore.getGlobalSetting("LoanViewPageName");
                 model.siteCode = SessionStore.getGlobalSetting("siteCode");
                 var loanId = $stateParams['pageId'];
-                model._queue = $stateParams.pageData;
                 PageHelper.showProgress('loan-load', 'Loading loan details...');
                 PageHelper.showLoader();
                 IndividualLoan.get({ id: $stateParams.pageId }).$promise.then(function(res) {
                     PageHelper.showProgress('loan-load', 'Loading done.', 2000);
                     model.loanAccount = res;
                     /* DO BASIC VALIDATION */
-                    // if (res.currentStage!= 'DocumentVerification'){
-                    //     PageHelper.showProgress('load-loan', 'Loan is in different Stage', 2000);
-                    //     irfNavigator.goBack();
-                    //     return;
-                    // }
+                    if (res.currentStage!= 'DocumentVerification'){
+                        PageHelper.showProgress('load-loan', 'Loan is in different Stage', 2000);
+                        irfNavigator.goBack();
+                        return;
+                    }
                     if(model.siteCode == 'kinara' && model.loanAccount.linkedAccountNumber && model.loanAccount.transactionType=='Internal Foreclosure'){
                         if (_.has(res, 'disbursementSchedules') &&
                         _.isArray(res.disbursementSchedules) &&
@@ -70,7 +69,113 @@ define({
                     PageHelper.showErrors(httpRes);
                 });
             },
-            form: [
+            form: [{
+                "type": "box",
+                "title": "DISBURSEMENT_DETAILS",
+                "colClass": "col-sm-12",
+                "items": [{
+                    "type": "fieldset",
+                    "title": "DISBURSEMENT_ACCOUNT_DETAILS",
+                    "items": [{
+                        "key": "loanAccount.disbursementSchedules[0].party",
+                        "type": "text",
+                        "readonly":true,
+                        "title":"PARTY"
+                    }, {
+                        key: "loanAccount.disbursementSchedules[0].customerNameInBank",
+                        title: "CUSTOMER_NAME_IN_BANK",
+                        "readonly":true
+                    }, {
+                        key: "loanAccount.customerBankAccountNumber",
+                        title: "CUSTOMER_BANK_ACC_NO",
+                        "readonly":true
+                    }, {
+                        key: "loanAccount.customerBankIfscCode",
+                        title: "CUSTOMER_BANK_IFSC",
+                        "readonly":true
+                    }, {
+                        key: "loanAccount.customerBank",
+                        "readonly":true,
+                        title: "CUSTOMER_BANK"
+                    }, {
+                        key: "loanAccount.customerBranch",
+                        "readonly":true,
+                        title: "BRANCH_NAME"
+                    }]
+                }]
+            },{
+                "type":"box",
+                "title":"ACH_ACCOUNT_DETAILS",
+                readonly: true,
+                "condition":"model.loanAccount.collectionPaymentType=='ACH'",
+                "items":[{
+                        "key": "loanAccount.collectionCustomerNameAsInBank",
+                        "title": "ACCOUNT_HOLDER_NAME",
+                    },{
+                        "key": "loanAccount.collectionAccountNumber",
+                        "title": "CUSTOMER_BANK_ACC_NO",
+                        type: "lov",
+                        autolov: true,
+                        bindMap: {
+                            "customerId": "loanAccount.customerId"
+                        },
+                        outputMap: {
+                            "account_number": "loanAccount.collectionAccountNumber",
+                            "ifsc_code": "loanAccount.collectionIfscCode",
+                            "customer_bank_name": "loanAccount.collectionBankName",
+                            "customer_bank_branch_name": "loanAccount.collectionBankBranchName",
+                            "customer_name_as_in_bank":"loanAccount.collectionCustomerNameAsInBank",
+                            "account_type": "loanAccount.collectionAccountType"
+                        },
+                        searchHelper: formHelper,
+                        search: function(inputModel, form, model) {
+                            var urn = [];
+                            var ids = [];
+                            for(var i =0; i <model.loanAccount.loanCustomerRelations.length; i++)
+                            {
+                                if (model.loanAccount.loanCustomerRelations[i].urn)
+                                    urn.push(model.loanAccount.loanCustomerRelations[i].urn);
+                                else if (model.loanAccount.loanCustomerRelations[i].customerId)
+                                    ids.push(model.loanAccount.loanCustomerRelations[i].customerId)
+                            }
+                            if (model.loanAccount.urnNo !=null)
+                                urn.push(model.loanAccount.urnNo);
+                            ids.push(model.loanAccount.customerId);
+                            return Queries.getCustomersBankAccounts({
+                               customer_urns : urn,
+                               customer_ids : ids
+                            });
+                        },
+                        onSelect: function(result, model, context) {
+                           
+                        },
+
+                        getListDisplayItem: function(item, index) {
+                            return [
+                                'Account Number : ' +item.account_number,
+                                'Branch : ' + item.customer_bank_branch_name,
+                                'Bank : ' + item.customer_bank_name,
+                                'IFSC Code : ' + item.ifsc_code
+                            ];
+                        }
+                    },{
+                            "key": "loanAccount.collectionAccountType",
+                            "title": "ACCOUNT_TYPE",
+                            "type": "select",
+                            "enumCode": "ach_account_type"
+
+                    },{
+                        "key": "loanAccount.collectionIfscCode",
+                        "title": "IFSC_CODE",
+                    },{
+                        "key": "loanAccount.collectionBankName",
+                        "title": "BANK_NAME",
+                    },{
+                        "key": "loanAccount.collectionBankBranchName",
+                        "title": "HUB_NAME",
+                    }
+                ]
+            },
             {
                 "type": "box",
                 "colClass": "col-sm-12",
@@ -393,47 +498,18 @@ define({
                             key: "review.remarks",
                             type: "textarea",
                             required: true
-                        },
-                        {
+                        }, {
                             key: "review.targetStage",
-                            required: true,
-                            type: "lov",
-                            autolov: true,
-                            lovonly: true,
                             title: "SEND_BACK_TO_STAGE",
-                            bindMap: {},
-                            searchHelper: formHelper,
-                            search: function (inputModel, form, model, context) {
-                                var stage1 = model.loanAccount.currentStage;
-                                var booking_target_stage = formHelper.enum('booking_target_stage').data;
-                                var out = [];
-                                for (var i = 0; i < booking_target_stage.length; i++) {
-                                    var t = booking_target_stage[i];
-                                    if (t.field1 == stage1) {
-                                        out.push({
-                                            name: t.name,
-                                            value: t.code
-                                        })
-                                    }
-                                }
-                                return $q.resolve({
-                                    headers: {
-                                        "x-total-count": out.length
-                                    },
-                                    body: out
-                                });
+                            type: "select",
+                            required: true,
+                            titleMap: {
+                                "LoanInitiation": "LoanInitiation",
+                                "LoanBooking": "LoanBooking",
+                                "DocumentUpload":"DocumentUpload"
+
                             },
-                            onSelect: function (valueObj, model, context) {
-                                model.review.targetStage = valueObj.name;
-                                model.loanProcess.stage = valueObj.value;
-                            },
-                            getListDisplayItem: function (item, index) {
-                                return [
-                                    item.name
-                                ];
-                            }
-                        },
-                        {
+                        }, {
                             key: "review.sendBackButton",
                             type: "button",
                             title: "SEND_BACK",
@@ -459,8 +535,7 @@ define({
                         ]
                     }
                 ]
-            }, 
-            {
+            }, {
                 "type": "actionbox",
                 "items": [{
                     "type": "button",
@@ -501,17 +576,9 @@ define({
                             .$promise
                             .then(function(res){
                                 PageHelper.showProgress("update-loan", "Done.", 3000);
-                                if(model.loanAccount.currentStage == "Checker1")
-                               {
                                 $state.go('Page.Engine', {
-                                    pageName: 'kgfs.loans.individual.booking.Checker1Queue'
+                                    pageName: 'loans.individual.booking.PendingVerificationQueue'
                                 });
-                               }
-                                if(model.loanAccount.currentStage == "Checker2"){
-                                    $state.go('Page.Engine', {
-                                        pageName: 'kgfs.loans.individual.booking.Checker2Queue'
-                                    }); 
-                                }
                             }, function(httpRes){
                                 PageHelper.showProgress("update-loan", "Oops. Some error occured.", 3000);
                                 PageHelper.showErrors(httpRes);
@@ -534,17 +601,9 @@ define({
                                 IndividualLoan.create(reqData)
                                     .$promise
                                     .then(function(res){
-                                        if(model.loanAccount.currentStage == "Checker1")
-                                        {
-                                         $state.go('Page.Engine', {
-                                             pageName: 'kgfs.loans.individual.booking.Checker1Queue'
-                                         });
-                                        }
-                                         if(model.loanAccount.currentStage == "Checker2"){
-                                             $state.go('Page.Engine', {
-                                                 pageName: 'kgfs.loans.individual.booking.Checker2Queue'
-                                             }); 
-                                         }
+                                        $state.go('Page.Engine', {
+                                            pageName: 'loans.individual.booking.PendingVerificationQueue'
+                                        });
                                     }, function(httpRes){
                                         PageHelper.showErrors(httpRes);
                                     })
@@ -602,17 +661,9 @@ define({
                             .$promise
                             .then(function(res){
                                 PageHelper.showProgress("update-loan", "Done.", 3000);
-                                if(model.loanAccount.currentStage == "Checker1")
-                               {
                                 $state.go('Page.Engine', {
-                                    pageName: 'kgfs.loans.individual.booking.Checker1Queue'
+                                    pageName: 'loans.individual.booking.PendingVerificationQueue'
                                 });
-                               }
-                                if(model.loanAccount.currentStage == "Checker2"){
-                                    $state.go('Page.Engine', {
-                                        pageName: 'kgfs.loans.individual.booking.Checker2Queue'
-                                    }); 
-                                }
                             }, function(httpRes){
                                 PageHelper.showProgress("update-loan", "Oops. Some error occured.", 3000);
                                 PageHelper.showErrors(httpRes);
@@ -661,17 +712,9 @@ define({
                         .then(
                             function(res) {
                                 PageHelper.showProgress('update-loan', 'Done.', 2000);
-                                if(model.loanAccount.currentStage == "Checker1")
-                               {
                                 $state.go('Page.Engine', {
-                                    pageName: 'kgfs.loans.individual.booking.Checker1Queue'
+                                    pageName: 'loans.individual.booking.PendingVerificationQueue'
                                 });
-                               }
-                                if(model.loanAccount.currentStage == "Checker2"){
-                                    $state.go('Page.Engine', {
-                                        pageName: 'kgfs.loans.individual.booking.Checker2Queue'
-                                    }); 
-                                }
                                 return;
                             },
                             function(httpRes) {

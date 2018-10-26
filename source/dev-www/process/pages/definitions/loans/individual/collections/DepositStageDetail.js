@@ -1,8 +1,8 @@
 define({
     pageUID: "loans.individual.collections.DepositStageDetail",
     pageType: "Engine",
-    dependencies: ["$log","CustomerBankBranch","SessionStore", "formHelper", "$stateParams", "PageHelper", "Utils", "LoanCollection", "irfNavigator","Queries","Files"],
-    $pageFn: function ($log,CustomerBankBranch,SessionStore, formHelper, $stateParams, PageHelper, Utils, LoanCollection, irfNavigator, Queries, Files) {
+    dependencies: ["$log","Queries", "CustomerBankBranch","SessionStore", "formHelper", "$stateParams", "PageHelper", "Utils", "LoanCollection", "irfNavigator","Queries","Files"],
+    $pageFn: function ($log,Queries, CustomerBankBranch,SessionStore, formHelper, $stateParams, PageHelper, Utils, LoanCollection, irfNavigator, Queries, Files) {
         return {
             "type": "schema-form",
             "title": "DEPOSIT_STAGE_DETAIL",
@@ -18,6 +18,10 @@ define({
                 model.branchname = SessionStore.getCurrentBranch().branchId;
                 model.depositDetails = $stateParams.pageData;
                 //model.depositDetails.ifscCode = model.depositDetails.collectionDetail.ifscCode;
+               Queries.getLoanCollectionDepositSum(model.depositDetails.id).then(function(response){
+                model.demandDeposit=response[0]['SUM(`demand_amount`)'];
+
+                })
             },
             form: [{
                 "type": "box",
@@ -28,7 +32,7 @@ define({
                         "title": "DEPOSIT_ID",
                         "readonly":true
                     },{
-                        "key":"depositDetails.collectionDetail.totalAmount",
+                        "key":"demandDeposit",
                         "title": "TOTAL_TO_BE_DEPOSITED",
                         "readonly":true
                     },

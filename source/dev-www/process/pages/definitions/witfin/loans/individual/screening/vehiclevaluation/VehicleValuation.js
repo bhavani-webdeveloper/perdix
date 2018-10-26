@@ -143,7 +143,8 @@ define(
                                 "key": "loanAccount.vehicleLoanDetails.grossVehicleWeight",
                                 "title": "GROSS_VEHICLE_WEIGHT",
                                 "inputmode": "number",
-                                "numberType": "number"
+                                "numberType": "number",
+                                "type": "number"
                             },
                             "noOfAxles":{
                                 "key": "loanAccount.vehicleLoanDetails.noOfAxles",

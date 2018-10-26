@@ -190,7 +190,7 @@ export class CalculateVehicleViabilityPolicy extends IPolicy<LoanProcess> {
 
                         // Calculation for fcfToEmi
                         if ( loanProcess.loanAccount.vehicleLoanDetails.freeCashFlow &&  loanProcess.loanAccount.estimatedEmi)
-                        loanProcess.loanAccount.vehicleLoanDetails.fcfToEmi = Math.round(parseFloat( loanProcess.loanAccount.vehicleLoanDetails.freeCashFlow) / parseFloat( loanProcess.loanAccount.estimatedEmi))*100/100;
+                        loanProcess.loanAccount.vehicleLoanDetails.fcfToEmi = Math.round((parseFloat( loanProcess.loanAccount.vehicleLoanDetails.freeCashFlow) / parseFloat( loanProcess.loanAccount.estimatedEmi))*100)/100;
                                    
                         break;
                     }

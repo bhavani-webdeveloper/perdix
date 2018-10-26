@@ -20,7 +20,6 @@ define({
             initialize: function(model, form, formCtrl) {
                 $log.info("Demo Customer Page got initialized");
                 model.siteCode = SessionStore.getGlobalSetting("siteCode");
-                console.log(model.siteCode);
                 model.loanView = SessionStore.getGlobalSetting("LoanViewPageName");
                 model._queue = $stateParams.pageData;
                 if (!model._queue) {
@@ -394,7 +393,7 @@ define({
                     }, {
                         "type": "fieldset",
                         "title": "LOAN_DOCUMENT_UPLOAD_QUEUE",
-                        // "condition": "model.siteCode != 'sambandh' && model.siteCode != 'saija'",
+                         "condition": "model.siteCode != 'sambandh' && model.siteCode != 'saija'",
                         "items": [{
                             "type": "array",
                             "notitle": true,
@@ -828,7 +827,6 @@ define({
                                     Queries.getLoanProductDocuments(model.loanAccount.productCode, "LoanBooking", "DocumentUpload")
                                     .then(
                                         function(docs) {
-                                            console.log(dummy);
                                             var docsForProduct = [];
                                             for (var i = 0; i < docs.length; i++) {
                                                 var doc = docs[i];
@@ -837,7 +835,7 @@ define({
                                                     docCode: doc.document_code,
                                                     formsKey: doc.forms_key,
                                                     downloadRequired: doc.download_required,
-                                                    mandatory : doc.mandatory
+                                                    mandatory: doc.mandatory
                                                 })
                                             }
                                             var loanDocuments = model.loanAccount.loanDocuments;
@@ -848,7 +846,6 @@ define({
                                                 availableDocCodes.push(loanDocuments[i].document);
                                                 var documentObj = getDocument(docsForProduct, loanDocuments[i].document);
                                                 /* To add flag whether to show or not */
-                                                loanDocuments[i].isDocs = false;
                                                 loanDocuments[i].isHidden = false;
                                                 if (loanDocuments[i].documentStatus == 'APPROVED'){
                                                     loanDocuments[i].isHidden = true;
@@ -878,12 +875,12 @@ define({
                                                         $formsKey: docsForProduct[i].formsKey,
                                                         disbursementId: model.loanAccount.disbursementSchedules[0].id,
                                                         isHidden: false,
-                                                        $mandatory : docsForProduct[i].mandatory,
+                                                        isDocs:true,
+                                                        $mandatory: docsForProduct[i].mandatory
                                                     })
                                                 }
                                             }
                                             PageHelper.hideLoader();
-                                            console.log(model.loanAccount.loanDocuments);
                                         },
                                         function(httpRes) {
                                             PageHelper.hideLoader();
