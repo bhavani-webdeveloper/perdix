@@ -51,7 +51,8 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                     .then(function(data){
                         // defaulting
                         var defaultConfig = {
-                            ShowPayerInfo: false
+                            ShowPayerInfo: false,
+                            Restrict2LakhsCashPayments: false
                         };
                         _.defaults(data, defaultConfig);
                         model.pageConfig = data;
@@ -931,12 +932,11 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             // }
                         }
 
-                        if (model.siteCode == 'witfin' && model.repayment.amount >=199999){
-                            PageHelper.clearErrors();
-                            PageHelper.setError({
-                                message: "please enter amount less than 199999"
-                            });
-                            return false;
+                        if (model.pageConfig.Restrict2LakhsCashPayments == true && 
+                                model.instrumentType=='CASH' && 
+                                model.repayment.amount>199999 ){
+                            PageHelper.showProgress("loan-repay","Cash payments more than 2,00,000/- are not allowed",5000);
+                            return;
                         }
 
                         // if (model._screen && model._screen =='BounceQueue'){
