@@ -1184,11 +1184,6 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                 "required":false,
                                 type: "amount"
                             }, {
-                                "key": "additional.loanAmount",
-                                "required":false,
-                                "type": "amount",
-                                "title": "NET_DISBURSEMENT_AMOUNT"
-                            }, {
                                 "key": "loanAccount.interestRate",
                                 "required":false,
                                 "type": "number"
@@ -1201,7 +1196,6 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                 "key": "loanAccount.loanPurpose1",
                                 "required":false,
                                 "title": "LOAN_PURPOSE",
-                                "type": "select"
                             }
                             /*,
                                                                  {

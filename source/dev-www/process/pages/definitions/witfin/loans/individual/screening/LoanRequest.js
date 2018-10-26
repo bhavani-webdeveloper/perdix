@@ -793,11 +793,6 @@ define([], function() {
                                 "condition": "model.loanProcess.loanAccount.currentStage == 'CreditApproval2'",
                                 "required": true
                             },
-                            "LoanRecommendation.tenure": {
-                                onChange: function(modelValue, form, model) {
-                                    model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = null;
-                                }
-                            },
                             "VehicleLoanIncomesInformation.VehicleLoanIncomes.incomeAmount": {
                                 "required": true
                             },

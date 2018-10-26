@@ -1407,18 +1407,23 @@
                  "type":"string",
                  "captureStages":[
                     "Screening",
-                    "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
                     "TeleVerification",
-                    "LoanInitiation",
-                    "BusinessApproval1",
-                    "BusinessApproval2",
                     "CreditApproval1",
                     "CreditApproval2",
-                    "CreditApproval3"
-
+                    "BusinessApproval1",
+                    "CreditApproval3",
+                    "BusinessApproval2",
+                    "Rejected",
+                    "LoanInitiation",
+                    "PendingForPartner",
+                    "LoanBooking",
+                    "DocumentUpload",
+                    "DocumentVerification",
+                    "Completed"
                  ]
               },
               "assetAvailableForHypothecation":{
