@@ -51,8 +51,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                     .then(function(data){
                         // defaulting
                         var defaultConfig = {
-                            ShowPayerInfo: false,
-                            Restrict2LakhsCashPayments: false
+                            ShowPayerInfo: false
                         };
                         _.defaults(data, defaultConfig);
                         model.pageConfig = data;
@@ -932,10 +931,10 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             // }
                         }
 
-                        if (model.pageConfig.Restrict2LakhsCashPayments == true && 
-                                model.instrumentType=='CASH' && 
-                                model.repayment.amount>199999 ){
-                            PageHelper.showProgress("loan-repay","Cash payments more than 2,00,000/- are not allowed",5000);
+                        var cashPerDayLimit = new Number(SessionStore.getGlobalSetting("perDayLimit") || "0");
+                        if (model.repayment.instrument=='CASH' && 
+                                model.repayment.amount>cashPerDayLimit ){
+                            PageHelper.showProgress("loan-repay","Cash payments more than " + cashPerDayLimit + " is not allowed",5000);
                             return;
                         }
 
