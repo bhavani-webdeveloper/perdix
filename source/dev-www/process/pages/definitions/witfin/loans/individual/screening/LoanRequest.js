@@ -1594,6 +1594,12 @@ define([], function() {
                         if (PageHelper.isFormInvalid(formCtrl)) {
                             return false;
                         }
+
+                        if(model.loanProcess.loanAccount.currentStage=='TeleVerification' && (model.loanProcess.loanAccount.loanPurpose1 == 'Purchase - Used Vehicle' || model.loanProcess.loanAccount.loanPurpose1 == 'Refinance') && (!_.hasIn(model.loanProcess.loanAccount.vehicleLoanDetails, 'vehicleValuationDoneAt') || model.loanProcess.loanAccount.vehicleLoanDetails.vehicleValuationDoneAt === null)) {
+                            PageHelper.showErrors({"data": {"error":"Vehicle Valuation should be done"}});
+                            return false;
+                        }
+
                         model.loanProcess.proceed()
                             .finally(function() {
                                 PageHelper.hideLoader();

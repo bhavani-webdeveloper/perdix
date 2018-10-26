@@ -16,6 +16,28 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 readonly: true
             };
 
+            var adharAndPanVAlidation = function(customer,model){
+
+                if (model.enrolmentProcess.customer.addressProof == 'Aadhar Card' &&
+                    !_.isNull(model.enrolmentProcess.customer.addressProofNo)) {
+                    model.enrolmentProcess.customer.aadhaarNo = customer.addressProofNo;
+                }
+                if (model.enrolmentProcess.customer.identityProof == 'Pan Card' &&
+                    !_.isNull(model.enrolmentProcess.customer.identityProofNo)) {
+                    model.enrolmentProcess.customer.panNo = customer.identityProofNo;
+                }
+                if (model.enrolmentProcess.customer.addressProof != 'Aadhar Card' &&
+                    !_.isNull(model.enrolmentProcess.customer.addressProofNo)) {
+                    model.enrolmentProcess.customer.aadhaarNo = null;
+                }
+                if (model.enrolmentProcess.customer.identityProof != 'Pan Card' &&
+                    !_.isNull(model.enrolmentProcess.customer.identityProofNo)) {
+                    model.enrolmentProcess.customer.panNo = null;
+                }
+
+            }
+
+
             var preSaveOrProceed = function (reqData) {
                 if (_.hasIn(reqData, 'customer.familyMembers') && _.isArray(reqData.customer.familyMembers)) {
                     var selfExist = false
@@ -1958,12 +1980,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             PageHelper.showProgress("enrolment", "Your form have errors. Please fix them.", 5000);
                             return false;
                         }
-                         if (model.enrolmentProcess.customer.identityProof == 'Pan Card' &&
-                            !_.isNull(model.enrolmentProcess.customer.identityProof)) {
-                            model.enrolmentProcess.customer.panNo = model.enrolmentProcess.customer.identityProof;
-                        }
+                        //  if (model.enrolmentProcess.customer.identityProof == 'Pan Card' &&
+                        //     !_.isNull(model.enrolmentProcess.customer.identityProof)) {
+                        //     model.enrolmentProcess.customer.panNo = model.enrolmentProcess.customer.identityProof;
+                        // }
 
                         PageHelper.showLoader();
+
+                        adharAndPanVAlidation(model.enrolmentProcess.customer,model);
 
                         // $q.all start
                         model.enrolmentProcess.save()
@@ -1997,10 +2021,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         //     !_.isNull(model.enrolmentProcess.customer.addressProofNo)) {
                         //     reqData.customer.aadhaarNo = reqData.customer.addressProofNo;
                         // }
-                        if (model.enrolmentProcess.customer.identityProof == 'Pan Card' &&
-                            !_.isNull(model.enrolmentProcess.customer.identityProof)) {
-                            model.enrolmentProcess.customer.panNo = model.enrolmentProcess.customer.identityProofNo;
-                        }
+                        // if (model.enrolmentProcess.customer.identityProof == 'Pan Card' &&
+                        //     !_.isNull(model.enrolmentProcess.customer.identityProof)) {
+                        //     model.enrolmentProcess.customer.panNo = model.enrolmentProcess.customer.identityProofNo;
+                        // }
+
+                        adharAndPanVAlidation(model.enrolmentProcess.customer,model);
+
                         model.enrolmentProcess.proceed()
                             .finally(function () {
                                 PageHelper.hideLoader();
@@ -2024,6 +2051,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         }
                         PageHelper.showProgress('enrolment', 'Updating Customer');
                         PageHelper.showLoader();
+                        adharAndPanVAlidation(model.enrolmentProcess.customer,model);
                         model.enrolmentProcess.save()
                             .finally(function () {
                                 PageHelper.hideLoader();
