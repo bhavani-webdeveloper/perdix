@@ -795,6 +795,22 @@ define(
                             "vehicleLoanDocuments.vehicleLoanDocuments.fileId": {
                                 // "required": true
                             },
+                            "vehicleLoanDocuments.vehicleLoanDocuments.issueDate":{
+                                "onChange": function (modelValue, form, model) {
+                                    if (moment(model.loanAccount.vehicleLoanDetails.vehicleLoanDocuments[form.arrayIndex].expiryDate).format('YYYY-MM-DD') < moment(model.loanAccount.vehicleLoanDetails.vehicleLoanDocuments[form.arrayIndex].issueDate).format('YYYY-MM-DD')) {
+                                        model.loanAccount.vehicleLoanDetails.vehicleLoanDocuments[form.arrayIndex].issueDate = null;
+                                        PageHelper.showProgress('date', 'Please enter a date lesser than expiry date', 5000);
+                                    } 
+                                }
+                            },
+                            "vehicleLoanDocuments.vehicleLoanDocuments.expiryDate":{
+                                "onChange": function (modelValue, form, model) {
+                                    if (moment(model.loanAccount.vehicleLoanDetails.vehicleLoanDocuments[form.arrayIndex].expiryDate).format('YYYY-MM-DD') < moment(model.loanAccount.vehicleLoanDetails.vehicleLoanDocuments[form.arrayIndex].issueDate).format('YYYY-MM-DD')) {
+                                        model.loanAccount.vehicleLoanDetails.vehicleLoanDocuments[form.arrayIndex].expiryDate = null;
+                                        PageHelper.showProgress('date', 'Please enter a date greater than issue date', 5000);
+                                    }
+                                }
+                            },
                             "VehicleRouteDetails": {
                                 "condition": "(model.loanAccount.loanPurpose1 == 'Purchase - New Vehicle' || model.loanAccount.loanPurpose1 == 'Purchase - Used Vehicle' || model.loanAccount.loanPurpose1 == 'Refinance')&& (model.loanAccount.vehicleLoanDetails.segment.toLowerCase() == 'goods')"
                             },
@@ -992,7 +1008,14 @@ define(
                                 "key": "loanAccount.vehicleLoanDetails.yearOfManufacture",
                                 "title": "MANUFACTURER_YEAR",
                                 "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'NO'",
-                                "required": true
+                                "required": true,
+                                "onChange": function(modelValue, form, model){
+                                    var d = new Date();
+                                    if(model.loanAccount.vehicleLoanDetails.yearOfManufacture < 1990 || model.loanAccount.vehicleLoanDetails.yearOfManufacture > d.getFullYear()) {
+                                        model.loanAccount.vehicleLoanDetails.yearOfManufacture = null;
+                                        PageHelper.showProgress('date', 'Please enter a valid year', 5000);
+                                    }
+                                }
                             },
                             "NewVehicleDetails.assetDetails": {
                                 "orderNo": 90

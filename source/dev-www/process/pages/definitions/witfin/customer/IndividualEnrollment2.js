@@ -1772,12 +1772,24 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                 "licence1ValidFrom": {
                                                       "key": "customer.customerLicenceDetails[].licence1ValidFrom",
                                                       "title": "LICENCE_VALID_FROM",
-                                                      "type": "date"
-                                                },
+                                                      "type": "date",
+                                                      "onChange": function (modelValue, form, model) {
+                                                        if (moment(model.customer.customerLicenceDetails[form.arrayIndex].licence1ValidTo).format('YYYY-MM-DD') < moment(model.customer.customerLicenceDetails[form.arrayIndex].licence1ValidFrom).format('YYYY-MM-DD')) {
+                                                                model.customer.customerLicenceDetails[form.arrayIndex].licence1ValidFrom = null;
+                                                                PageHelper.showProgress('date', 'Please enter a date less than to date', 5000);
+                                                            }
+                                                }
+                                            },
                                                 "licence1ValidTo": {
                                                       "key": "customer.customerLicenceDetails[].licence1ValidTo",
                                                       "title": "LICENCE_VALID_TO",
-                                                      "type": "date"
+                                                      "type": "date",
+                                                      "onChange": function (modelValue, form, model) {
+                                                        if (moment(model.customer.customerLicenceDetails[form.arrayIndex].licence1ValidTo).format('YYYY-MM-DD') < moment(model.customer.customerLicenceDetails[form.arrayIndex].licence1ValidFrom).format('YYYY-MM-DD')) {
+                                                                model.customer.customerLicenceDetails[form.arrayIndex].licence1ValidTo = null;
+                                                                PageHelper.showProgress('date', 'Please enter a date greater than from date', 5000);
+                                                            }
+                                                    }
                                                 }
                                             }
                                         }
