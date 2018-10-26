@@ -1534,7 +1534,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
             {
                 "type":"box",
                 "title":"HYPOTHECATION",
-                "condition": "model.siteCode != 'IFMRCapital' && model.siteCode != 'IREPDhan' && model.siteCode != 'witfin'",
+                "condition": "model.siteCode != 'IFMRCapital' && model.siteCode != 'IREPDhan'",
                 "items":[
                     {
                         "key":"loanAccount.collateral",
@@ -1618,72 +1618,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "fileType":"image/*",
                                 "title":"PHOTO"
                             }*/
-                        ]
-                    }
-                ]
-            },
-            {
-                "type":"box",
-                "title":"COLLATERAL",
-                "condition": "model.siteCode == 'witfin'",
-                "items":[
-                    {
-                        "key":"loanAccount.collateral",
-                        "title":"COLLATERAL",
-                        "type":"array",
-                        onArrayAdd: function(modelValue, form, model, formCtrl, $event) {
-                            model.loanAccount.collateral[model.loanAccount.collateral.length-1].quantity = 1;
-                        },
-                        "items":[
-                            {
-                                "key":"loanAccount.collateral[].collateralCategory",
-                                "type":"select",
-                                "enumCode":"collateral_type_witfin",
-                                "title":"COLLATERAL_TYPE",
-                                "readonly": true
-                            },
-                            {
-                                "key":"loanAccount.collateral[].collateralDescription",
-                                "title":"COLLATERAL_DESCRIPTION",
-                                "readonly": true
-                            },
-                            {
-                                "key":"loanAccount.collateral[].collateralValue",
-                                "type":"amount",
-                                "title":"COLLATERAL_VALUE"
-                            },
-                            {
-                                "key":"loanAccount.collateral[].manufacturer",
-                                "title": "MANUFACTURER",
-                                "readonly": true
-                            },
-                            {
-                                "title": "MODEL",
-                                "key":"loanAccount.collateral[].modelNo",
-                                "readonly": true
-                            },
-                            {
-                                "key":"loanAccount.collateral[].machineOld",
-                                "type": "checkbox",
-                                "title": "USED_ASSET"
-                            },
-                            {
-                                "key": "loanAccount.collateral[].electricityAvailable",
-                                "title": "SEGMENT",
-                                "readonly": true
-                            },
-                            {
-                                "key": "loanAccount.collateral[].expectedPurchaseDate",
-                                "type": "string",
-                                "title": "YEAR_OF_MANUFACTURE",
-                                "readonly": true
-                            },
-                            {
-                                "key": "loanAccount.collateral[].serialNo",
-                                "type": "string",
-                                "title": "REGISTRATION_NUMBER",
-                                "readonly": true
-                            }
                         ]
                     }
                 ]
