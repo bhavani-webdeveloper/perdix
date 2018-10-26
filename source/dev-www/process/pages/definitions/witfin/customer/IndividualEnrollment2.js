@@ -1963,6 +1963,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             model.enrolmentProcess.customer.panNo = model.enrolmentProcess.customer.identityProof;
                         }
 
+                        PageHelper.showLoader();
+
                         // $q.all start
                         model.enrolmentProcess.save()
                             .finally(function () {
