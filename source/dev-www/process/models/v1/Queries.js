@@ -352,6 +352,17 @@ irf.models.factory('Queries', [
             return deferred.promise;
         }
 
+        resource.getLoanCollectionDepositSum = function(bank_deposit_summary_id) {
+            var deferred = $q.defer();
+            var request = {
+                "bank_deposit_summary_id":bank_deposit_summary_id
+            };
+            resource.getResult("loanCollectionDepositSum.list", request).then(function(response){
+                deferred.resolve(response.results);
+            },deferred.reject);
+            return deferred.promise;
+        }
+
         resource.getCustomerBasicDetails = function(filter) {
             var deferred = $q.defer();
             var request = {};
