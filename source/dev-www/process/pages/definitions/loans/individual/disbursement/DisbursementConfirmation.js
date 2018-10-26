@@ -36,9 +36,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
                             console.log(disbSchedule);
                             if (disbSchedule.id == disbursementId) {
                                 model.loanAccountDisbursementSchedule = disbSchedule;
-                                if(model.siteCode == 'witfin') {
-                                    model.loanAccountDisbursementSchedule.udf1=null;
-                                }
+                                model.loanAccountDisbursementSchedule.udf1=null;
                                 Utils.removeNulls(model,true);
                                 disbExistFlag = true;
                                 break;
