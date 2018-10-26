@@ -87,6 +87,18 @@ let config = {
                         "name":"LoanDerivedFieldsUpdate",
                         "arguments": null
                     }
+                ],
+                "overrides": [
+                    {
+                        "type": "expr",
+                        "expr": "this.loanAccount.currentStage=='BusinessApproval1' || this.loanAccount.currentStage=='CreditApproval3' || this.loanAccount.currentStage=='BusinessApproval2'",
+                        "add": [{
+                            "name": "CollateralFieldPolicy",
+                            "arguments": {
+                                "postStage": "LoanInitiation"
+                            }
+                        }]
+                    }
                 ]
             },
             afterSave: {
