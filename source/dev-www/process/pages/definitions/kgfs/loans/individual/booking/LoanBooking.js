@@ -1383,7 +1383,7 @@ define([], function () {
                                         break;
                                     }
                                     else{
-                                        model.loanProcess.loanAccount.dscOverride = false
+                                        model.loanProcess.loanAccount.dscOverride = true
                                     }
                                     
                                 }

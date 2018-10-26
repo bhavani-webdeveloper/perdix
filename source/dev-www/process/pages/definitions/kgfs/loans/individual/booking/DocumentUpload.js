@@ -42,7 +42,8 @@ define({
                     .then(
                         function (res) {
                             PageHelper.showProgress('loan-load', 'Loading done.', 2000);
-                            model.loanAccount = res;
+                            model.loanProcess.loanAccount = res;
+                            model.loanAccount = model.loanProcess.loanAccount;
                             /* DO BASIC VALIDATION */
                             if (res.currentStage != 'DocumentUpload') {
                                 PageHelper.showProgress('load-loan', 'Loan is in different Stage', 2000);
