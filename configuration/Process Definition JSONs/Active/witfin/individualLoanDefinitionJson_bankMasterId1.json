@@ -5207,6 +5207,7 @@
               "type":"object",
               "required":[
                  "collateralType",
+                 "collateralDescription",
                  "collateralValue",
                  "expectedIncome",
                  "machineAttachedToBuilding",
@@ -5243,7 +5244,10 @@
                        "FieldInvestigation2",
                        "FieldInvestigation3",
                        "TeleVerification",
-                       "LoanInitiation"
+                       "LoanInitiation",
+                        "BusinessApproval1",
+                        "CreditApproval3",
+                        "BusinessApproval2"
                     ]
                  },
                  "collateralValue":{

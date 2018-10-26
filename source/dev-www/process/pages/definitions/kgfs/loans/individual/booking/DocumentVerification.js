@@ -534,9 +534,17 @@ define({
                                 IndividualLoan.create(reqData)
                                     .$promise
                                     .then(function(res){
-                                        $state.go('Page.Engine', {
-                                            pageName: 'loans.individual.booking.PendingVerificationQueue'
-                                        });
+                                        if(model.loanAccount.currentStage == "Checker1")
+                                        {
+                                         $state.go('Page.Engine', {
+                                             pageName: 'kgfs.loans.individual.booking.Checker1Queue'
+                                         });
+                                        }
+                                         if(model.loanAccount.currentStage == "Checker2"){
+                                             $state.go('Page.Engine', {
+                                                 pageName: 'kgfs.loans.individual.booking.Checker2Queue'
+                                             }); 
+                                         }
                                     }, function(httpRes){
                                         PageHelper.showErrors(httpRes);
                                     })
@@ -594,9 +602,17 @@ define({
                             .$promise
                             .then(function(res){
                                 PageHelper.showProgress("update-loan", "Done.", 3000);
+                                if(model.loanAccount.currentStage == "Checker1")
+                               {
                                 $state.go('Page.Engine', {
-                                    pageName: 'loans.individual.booking.PendingVerificationQueue'
+                                    pageName: 'kgfs.loans.individual.booking.Checker1Queue'
                                 });
+                               }
+                                if(model.loanAccount.currentStage == "Checker2"){
+                                    $state.go('Page.Engine', {
+                                        pageName: 'kgfs.loans.individual.booking.Checker2Queue'
+                                    }); 
+                                }
                             }, function(httpRes){
                                 PageHelper.showProgress("update-loan", "Oops. Some error occured.", 3000);
                                 PageHelper.showErrors(httpRes);
@@ -645,9 +661,17 @@ define({
                         .then(
                             function(res) {
                                 PageHelper.showProgress('update-loan', 'Done.', 2000);
+                                if(model.loanAccount.currentStage == "Checker1")
+                               {
                                 $state.go('Page.Engine', {
-                                    pageName: 'loans.individual.booking.PendingVerificationQueue'
+                                    pageName: 'kgfs.loans.individual.booking.Checker1Queue'
                                 });
+                               }
+                                if(model.loanAccount.currentStage == "Checker2"){
+                                    $state.go('Page.Engine', {
+                                        pageName: 'kgfs.loans.individual.booking.Checker2Queue'
+                                    }); 
+                                }
                                 return;
                             },
                             function(httpRes) {

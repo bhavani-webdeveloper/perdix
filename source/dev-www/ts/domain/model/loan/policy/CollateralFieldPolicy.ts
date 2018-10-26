@@ -30,14 +30,14 @@ export class CollateralFieldPolicy extends IPolicy<LoanProcess> {
             let vehicleDetails = loanProcess.loanAccount.vehicleLoanDetails;
             col.collateralType = 'Vehicle';
             col.electricityAvailable = vehicleDetails.segment;
-            col.collateralCategory = vehicleDetails.category;
-            col.expectedPurchaseDate = vehicleDetails.yearOfManufacture;
+            col.collateralDescription = vehicleDetails.category;
+            // col.expectedPurchaseDate = vehicleDetails.yearOfManufacture;
 
             col.manufacturer = vehicleDetails.make;
             col.modelNo = vehicleDetails.vehicleModel;
             col.serialNo = vehicleDetails.registrationNumber;
             // col.collateralValue = vehicleDetails.registrationNumber;
-            // col.machineOld = vehicleDetails.vehicleType;
+            col.machineOld = (vehicleDetails.vehicleType == 'Used') ? 'true': 'false';
             loanProcess.loanAccount.collateral.push(col); 
         } 
         
