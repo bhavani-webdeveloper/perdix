@@ -1599,7 +1599,7 @@ define([], function() {
                             PageHelper.showErrors({"data": {"error":"Vehicle Valuation should be done"}});
                             return false;
                         }
-
+                        PageHelper.showLoader();
                         model.loanProcess.proceed()
                             .finally(function() {
                                 PageHelper.hideLoader();
@@ -1621,6 +1621,11 @@ define([], function() {
 
                     },
                     reject: function(model, formCtrl, form, $event) {
+                        if (model.loanProcess.remarks==null || model.loanProcess.remarks =="" || model.loanAccount.rejectReason ==null || model.loanAccount.rejectReason ==""){
+                               PageHelper.showProgress("update-loan", "Reject Reason / Remarks is mandatory", 3000);
+                               PageHelper.hideLoader();
+                               return false;
+                        }
                         PageHelper.showLoader();
                         model.loanProcess.reject()
                             .finally(function() {
