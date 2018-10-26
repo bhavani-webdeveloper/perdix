@@ -27,7 +27,8 @@
                 "Page/EngineOffline/AssetsLiabilitiesAndHealth",
                 "Page/Engine/CustomerFormDownloads",
                 "Page/Engine/customer360.RecaptureQueue",
-                "Page/Adhoc/workflow.CustomerApprovalDashboard"
+                "Page/Adhoc/workflow.CustomerApprovalDashboard",
+                "Page/Adhoc/kgfs.kgfsWorkflow.GpsFingerApprovalDashboard"
             ]
         },
         "Page/Adhoc/sambandh.customer.EnrollmentDashboard",

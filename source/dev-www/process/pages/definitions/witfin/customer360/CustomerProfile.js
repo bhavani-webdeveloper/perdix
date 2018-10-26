@@ -2,7 +2,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
     EnrolmentProcess = EnrolmentProcess['EnrolmentProcess'];
 
     return {
-        pageUID: "pahal.customer360.CustomerProfile",
+        pageUID: "witfin.customer360.CustomerProfile",
         pageType: "Engine",
         dependencies: ["$log", "$q","Enrollment","IrfFormRequestProcessor", 'EnrollmentHelper', 'PageHelper','formHelper',"elementsUtils",
 'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch", "BundleManager", "$filter", "$injector", "UIRepository"],

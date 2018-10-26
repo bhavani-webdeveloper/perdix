@@ -1631,6 +1631,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         "key":"loanAccount.collateral",
                         "title":"COLLATERAL",
                         "type":"array",
+                        onArrayAdd: function(modelValue, form, model, formCtrl, $event) {
+                            model.loanAccount.collateral[model.loanAccount.collateral.length-1].quantity = 1;
+                        },
                         "items":[
                             {
                                 "key":"loanAccount.collateral[].collateralCategory",

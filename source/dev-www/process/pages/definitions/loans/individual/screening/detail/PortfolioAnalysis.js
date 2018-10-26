@@ -544,11 +544,11 @@ define({
                                     "render": self.currencyRightRender
                                 },
                                 {
-                                    "title": "# of Check Bounces",
+                                    "title": "# of Cheque Bounces",
                                     "data": "no_of_cheque_bounced"
                                 }, 
                                 {
-                                    "title": "# of KINARA Check Bounces",
+                                    "title": "# of KINARA Cheque Bounces",
                                     "data": "no_of_kinara_cheque_bounces"
                                 },                                
                                 {

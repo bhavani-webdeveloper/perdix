@@ -2853,6 +2853,21 @@
                   "LoanInitiation"
                ]   
                 },
+              "vehicleValuationReportId": {
+                "title": "vehicleValuationReportId",
+                "type": "string",
+                "minLength":1,
+                "maxLength":100,
+                "captureStages":[
+                  "Screening",
+                  "VehicleValuation",
+                  "FieldInvestigation1",
+                  "FieldInvestigation2",
+                  "FieldInvestigation3",
+                  "TeleVerification",
+                  "LoanInitiation"
+               ]   
+                },
               "category":{
                  "title":"Category",
                  "type":"string",
@@ -5210,7 +5225,10 @@
                        "FieldInvestigation2",
                        "FieldInvestigation3",
                        "TeleVerification",
-                       "LoanInitiation"
+                       "LoanInitiation",
+                        "BusinessApproval1",
+                        "CreditApproval3",
+                        "BusinessApproval2"
                     ],
                     "refCodeCategory":"collateral_type"
                  },
@@ -5226,7 +5244,10 @@
                        "FieldInvestigation2",
                        "FieldInvestigation3",
                        "TeleVerification",
-                       "LoanInitiation"
+                       "LoanInitiation",
+                        "BusinessApproval1",
+                        "CreditApproval3",
+                        "BusinessApproval2"
                     ]
                  },
                  "collateralValue":{
@@ -5286,7 +5307,10 @@
                        "FieldInvestigation2",
                        "FieldInvestigation3",
                        "TeleVerification",
-                       "LoanInitiation"
+                       "LoanInitiation",
+                        "BusinessApproval1",
+                        "CreditApproval3",
+                        "BusinessApproval2"
                     ]
                  },
                  "quantity":{
@@ -5316,7 +5340,10 @@
                        "FieldInvestigation2",
                        "FieldInvestigation3",
                        "TeleVerification",
-                       "LoanInitiation"
+                       "LoanInitiation",
+                        "BusinessApproval1",
+                        "CreditApproval3",
+                        "BusinessApproval2"
                     ]
                  },
                  "totalValue":{
@@ -5387,7 +5414,10 @@
                        "FieldInvestigation2",
                        "FieldInvestigation3",
                        "TeleVerification",
-                       "LoanInitiation"
+                       "LoanInitiation",
+                        "BusinessApproval1",
+                        "CreditApproval3",
+                        "BusinessApproval2"
                     ]
                  },
                  "hypothecatedToBank":{
@@ -5417,7 +5447,28 @@
                        "FieldInvestigation2",
                        "FieldInvestigation3",
                        "TeleVerification",
-                       "LoanInitiation"
+                       "LoanInitiation",
+                        "BusinessApproval1",
+                        "CreditApproval3",
+                        "BusinessApproval2"
+                    ]
+                 },
+                 "collateralCategory":{
+                    "title":"collateralCategory",
+                    "type":"string",
+                    "minLength":1,
+                    "maxLength":100,
+                    "captureStages":[
+                       "Screening",
+                       "VehicleValuation",
+                       "FieldInvestigation1",
+                       "FieldInvestigation2",
+                       "FieldInvestigation3",
+                       "TeleVerification",
+                       "LoanInitiation",
+                        "BusinessApproval1",
+                        "CreditApproval3",
+                        "BusinessApproval2"
                     ]
                  },
                  "spaceAvailable":{
@@ -5503,7 +5554,10 @@
                        "FieldInvestigation2",
                        "FieldInvestigation3",
                        "TeleVerification",
-                       "LoanInitiation"
+                       "LoanInitiation",
+                        "BusinessApproval1",
+                        "CreditApproval3",
+                        "BusinessApproval2"
                     ]
                  }
               }

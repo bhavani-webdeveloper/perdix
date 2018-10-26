@@ -1,0 +1,1248 @@
+{  
+   "urnGenerateStage":"BasicEnrolment",
+   "cbValidationStage":"BasicEnrolment",
+   "stages":[  
+      {  
+         "order":1,
+         "code":"BasicEnrolment",
+         "name":"Customer Enrollment",
+         "stageType":"CAPTURE",
+         "allowedRoles":[  
+            "WM"
+         ]
+      },
+      {  
+         "order":2,
+         "code":"Completed",
+         "name":"Completed",
+         "stageType":"CAPTURE",
+         "allowedRoles":[  
+            "WM"
+         ]
+      }
+   ],
+   "schema":{  
+      "$schema":"http://json-schema.org/draft-04/schema#",
+      "type":"object",
+      "title":"Comment",
+      "customerMinAge":18,
+      "customerMaxAge":70,
+      "isMinimumFingerPrintRequired":1,
+      "required":[  
+         "personalProfile"
+      ],
+      "properties":{  
+         "personalProfile":{  
+            "title":"Personal Profile",
+            "type":"object",
+            "required":[  
+               "firstName"
+            ],
+            "properties":{  
+               "urnNo":{  
+                  "title":"URN",
+                  "type":"string",
+                  "minLength":16,
+                  "maxLength":16,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "title":{  
+                  "title":"Title",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":10,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "centreId":{  
+                  "title":"Centre",
+                  "type":"integer",
+                  "minimum":0,
+                  "maximum":999999,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "ownership":{  
+                  "title":"Ownershop",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":50,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "doorNo":{  
+                  "title":"Door Number",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "street":{  
+                  "title":"Street",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "oldCustomerId":{  
+                  "title":"Old Customer ID",
+                  "type":"string",
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "villageName":{  
+                  "title":"Village",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "locality":{  
+                  "title":"Locality",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "localityType":{  
+                  "title":"localityType",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "accomodationType":{  
+                  "title":"accomodationType",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "landmark":{  
+                  "title":"Landmark",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":45,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "postOffice":{  
+                  "title":"Post Office",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "district":{  
+                  "title":"District",
+                  "type":"string",
+                  "refCodeCategory":"district",
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "pincode":{  
+                  "title":"Pincode",
+                  "type":"string",
+                  "minimum":100000,
+                  "maximum":999999,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "stdCode":{  
+                  "title":"STD CODE",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "state":{  
+                  "title":"State",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "landLineNo":{  
+                  "title":"LandLine Number",
+                  "type":"number",
+                  "minimum":10,
+                  "maximum":15,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "inCurrentAddressSince":{  
+                  "title":"In Correct Address Since",
+                  "type":"string",
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "inCurrentAreaSince":{  
+                  "title":"In Correct Area Since",
+                  "type":"string",
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "mobilePhone":{  
+                  "title":"Mobile Number",
+                  "type":"string",
+                  "minLength":10,
+                  "maxLength":10,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "whatsAppMobileNo":{  
+                  "title":"Whatsapp Mobile No",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "email":{  
+                  "title":"Email",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "mailSameAsResidence":{  
+                  "title":"Mail Same as Residence",
+                  "type":"boolean",
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "firstName":{  
+                  "title":"First Name",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "lastName":{  
+                  "title":"Last Name",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "middleName":{  
+                  "title":"Middle Name",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "motherName":{  
+                  "title":"Mother's Name",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "requestedLoanAmount":{  
+                  "title":"requestedLoanAmount",
+                  "type":"number",
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "requestedLoanPurpose":{  
+                  "title":"requestedLoanPurpose",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "weddingDate":{  
+                  "title":"weddingDate",
+                  "type":"date",
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "monthlyRent":{  
+                  "title":"monthlyRent",
+                  "type":"number",
+                  "minimum":0,
+                  "maximum":100000,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "previousRentDetails":{  
+                  "title":"previousRentDetails",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "vehiclesOwned":{  
+                  "title":"vehiclesOwned",
+                  "type":"number",
+                  "minimum":0,
+                  "maximum":100,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "vehiclesFinanced":{  
+                  "title":"vehiclesFinanced",
+                  "type":"number",
+                  "minimum":0,
+                  "maximum":100,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "vehiclesFree":{  
+                  "title":"vehiclesFree",
+                  "type":"number",
+                  "minimum":1,
+                  "maximum":100,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "businessSignboardImage":{  
+                  "title":"businessSignboardImage",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "fatherFirstName":{  
+                  "title":"Father's First Name",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "fatherLastName":{  
+                  "title":"Father's Last Name",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "fatherMiddleName":{  
+                  "title":"Father's Middle Name",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "gender":{  
+                  "title":"Gender",
+                  "type":"string",
+                  "refCodeCategory":"gender",
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "dateOfBirth":{  
+                  "title":"Date Of Birth",
+                  "type":"string",
+                  "format":"date",
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "religion":{  
+                  "title":"Religion",
+                  "type":"string",
+                  "refCodeCategory":"religion",
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "caste":{  
+                  "title":"Caste",
+                  "type":"string",
+                  "refCodeCategory":"caste",
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "language":{  
+                  "title":"Language",
+                  "type":"string",
+                  "refCodeCategory":"language",
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "maritalStatus":{  
+                  "title":"Marital Status",
+                  "type":"string",
+                  "refCodeCategory":"marital_status",
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "spouseFirstName":{  
+                  "title":"Spouse First Name",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "spouseMiddleName":{  
+                  "title":"Spouse Middle Name",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "spouseLastName":{  
+                  "title":"Spouse Last Name",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "spouseDateOfBirth":{  
+                  "title":"Spouse Date Of Birth",
+                  "type":"string",
+                  "format":"date",
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "careOf":{  
+                  "title":"Care Of",
+                  "type":"string",
+                  "minLength":0,
+                  "maxLength":100,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "existingLoan":{  
+                  "title":"Existing Loan",
+                  "type":"string",
+                  "minLength":0,
+                  "maxLength":10,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "authenticationRegisterId":{  
+                  "title":"Authentication Register Id",
+                  "type":"number",
+                  "minimum":0,
+                  "maximum":1000000,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "partnerCode":{  
+                  "title":"partnerCode",
+                  "type":"string",
+                  "minLength":0,
+                  "maxLength":45,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               }
+            }
+         },
+		  "customerBankAccounts": {
+        "title": "Customer Bank Account",
+        "type": "array",
+        "maxItems": null,
+        "required": [
+        ],
+        "properties": {
+          "Completed": {
+            "title": "Customer Id",
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1000000,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "customerBankName": {
+            "title": "Customer Bank Name",
+            "type": "string",
+            "minimum": 0,
+            "maximum": 1000000,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+		  "openingBalance": {
+            "title": "openingBalance",
+            "type": "string",
+            "minimum": 0,
+            "maximum": 1000000,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+		  "closingBalance": {
+            "title": "closingBalance",
+            "type": "string",
+            "minimum": 0,
+            "maximum": 1000000,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+		  "amountOfEmiDeducted": {
+            "title": "amountOfEmiDeducted",
+            "type": "string",
+            "minimum": 0,
+            "maximum": 1000000,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "confirmedAccountNumber": {
+            "title": "Confirmed Account Number",
+            "type": "string",
+            "minimum": 0,
+            "maximum": 100,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "limit": {
+            "title": "limit",
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100000000,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "bankStatementDocId": {
+            "title": "Bank Statement Doc Id",
+            "type": "string",
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "customerBankBranchName": {
+            "title": "Customer Bank Branch Name",
+            "type": "string",
+            "minimum": 0,
+            "maximum": 1000000,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "ifscCode": {
+            "title": "IFSC Code",
+            "type": "string",
+            "minimum": 0,
+            "maximum": 1000000,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "accountNumber": {
+            "title": "Account Number",
+            "type": "string",
+            "minimum": 0,
+            "maximum": 1000000,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "accountType": {
+            "title": "accountType",
+            "type": "string",
+            "minimum": 0,
+            "maximum": 1000000,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "isDisbersementAccount": {
+            "title": "DISBURSEMENT_ACCOUNT",
+            "type": "boolean",
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "bankingSince": {
+            "title": "BANKING_SINCE",
+            "type": "string",
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "netBankingAvailable": {
+            "title": "netBankingAvailable",
+            "type": "string",
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "sanctionedAmount": {
+            "title": "sanctionedAmount",
+            "type": "number",
+            "minimum": 0,
+            "maximum": 10000000,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "customerNameAsInBank": {
+            "title": "customerNameAsInBank",
+            "type": "string",
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          }
+        }
+      },
+         "bankdetails":{  
+            "title":"Bank Details",
+            "type":"object",
+            "required":[  
+               "kgfsName",
+               "enrolledAs"
+            ],
+            "properties":{  
+               "kgfsName":{  
+                  "title":"Branch Name",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "enrolledAs":{  
+                  "title":"Enrolled as",
+                  "type":"string",
+                  "refCodeCategory":"enrolledAs",
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "inviteId":{  
+                  "title":"Invite Id",
+                  "type":"string",
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               }
+            }
+         },
+         "user_defined_fields":{  
+            "title":"User Defined Details",
+            "type":"object",
+            "required":[  
+
+            ],
+            "properties":{  
+               "udf1":{  
+                  "title":"SPOUSE_LOAN_CONSENT",
+                  "type":"boolean",
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "udf2":{  
+                  "title":"IF_HOUSE_RENTED_NAME_OF_LANDLORD",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "udf3":{  
+                  "title":"HOUSE_OWNERSHIP",
+                  "type":"string",
+                  "enumCode":"house_ownership",
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "udf4":{  
+                  "title":"HOUSE_DURATION_OF_STAY",
+                  "type":"integer",
+                  "minimum":0,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "udf5":{  
+                  "title":"HOUSE_CONDITION",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "enumCode":"condition",
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "udf6":{  
+                  "title":"TOILET",
+                  "type":"boolean",
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "udf7":{  
+                  "title":"BUSINESS_OR_EMPLOYER_NAME",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "udf8":{  
+                  "title":"BUSINESS_VILLAGE",
+                  "type":"string",
+                  "maxLength":100,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "udf9":{  
+                  "title":"BUSINESS_LANDMARK",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "udf10":{  
+                  "title":"BUSINESS_PINCODE",
+                  "type":"number",
+                  "minimum":100000,
+                  "maximum":999999,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "udf11":{  
+                  "title":"BUSINESS_PHONE",
+                  "type":"number",
+                  "minimum":1000000000,
+                  "maximum":9999999999,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "udf12":{  
+                  "title":"IF_SHOP_RENTED_NAME_OF_LANDLORD",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "udf13":{  
+                  "title":"CUST_OCCUPATION_TYPE",
+                  "type":"string",
+                  "enumCode":"broad_occupation_type",
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "udf14":{  
+                  "title":"RELATIONSHIP_WITH_BUSINESS_OWNER",
+                  "type":"string",
+                  "enumCode":"relation_with_business_owner",
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "udf15":{  
+                  "title":"CROP_NAME",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "udf16":{  
+                  "title":"WORK_PLACE_TYPE",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "enumCode":"work_place_type",
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "udf17":{  
+                  "title":"WORK_PERIOD",
+                  "type":"integer",
+                  "minimum":0,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "udf18":{  
+                  "title":"WORK_PLACE_BUILD_TYPE",
+                  "type":"string",
+                  "enumCode":"work_place_build_type",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "udf19":{  
+                  "title":"WORK_PLACE_CONDITION",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "enumCode":"condition",
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "udf20":{  
+                  "title":"WORK_PLACE",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "enumCode":"work_place",
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "udf21":{  
+                  "title":"WORK_PLACE_OTHERS",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "udf22":{  
+                  "title":"BUSINESS_REG_NO",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "udf23":{  
+                  "title":"BUSINESS_DESCRIPTION",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "enumCode":"condition",
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "udf24":{  
+                  "title":"RELATION_WITH_FARMER",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "enumCode":"relation_with_business_owner",
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "udf25":{  
+                  "title":"LAND_OWNERSHIP",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "enumCode":"land_ownership",
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "udf26":{  
+                  "title":"IRRIGATED",
+                  "type":"boolean",
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "udf27":{  
+                  "title":"HARVEST_MONTH",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "enumCode":"months",
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "udf28":{  
+                  "title":"LAND_AREA",
+                  "type":"number",
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "udf29":{  
+                  "title":"YEARS_IN_CURR_ADDRESS",
+                  "type":"string",
+                  "enumCode":"years_in_current_address",
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "udf30":{  
+                  "title":"YEARS_IN_CURR_AREA",
+                  "type":"string",
+                  "enumCode":"years_in_current_area",
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "udf31":{  
+                  "title":"YEARS_OF_BUSINESS_PRESENT_AREA",
+                  "type":"string",
+                  "enumCode":"years_in_present_area",
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "udf32":{  
+                  "title":"YEARS_OF_BUSINESS_PRESENT_ADDRESS",
+                  "type":"string",
+                  "enumCode":"years_in_current_address",
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "udf33":{  
+                  "type":"string",
+                  "title":"SPOUSE_IDENTITY_PROOF",
+                  "enumCode":"identity_proof",
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "udf34":{  
+                  "type":"string",
+                  "title":"SPOUSE_IDENTITY_PROOF_IMAGE",
+                  "category":"CustomerEnrollment",
+                  "subCategory":"IDENTITYPROOF",
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "udf35":{  
+                  "type":"string",
+                  "title":"SPOUSE_IDENTITY_PROOF_IMAGE_BACK",
+                  "category":"CustomerEnrollment",
+                  "subCategory":"IDENTITYPROOF",
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "udf36":{  
+                  "type":"string",
+                  "title":"SPOUSE_IDENTITY_PROOF_NO",
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               }
+            }
+         },
+         "user_defined_date_fields":{  
+            "title":"User Defined Date Details",
+            "type":"object",
+            "required":[  
+
+            ],
+            "properties":{  
+               "udfDate1":{  
+                  "title":"date1",
+                  "type":"string",
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               },
+               "udfDate2":{  
+                  "title":"date2",
+                  "type":"string",
+                  "captureStages":[  
+                     "BasicEnrolment",
+                     "Completed"
+                  ]
+               }
+            }
+         },
+         "bankStatements":{  
+            "title":"Bank Statement",
+            "type":"array",
+            "items":{  
+               "type":"object",
+               "required":[  
+                  "startMonth",
+                  "totalDeposits",
+                  "totalWihdrawals",
+                  "balanceAsOn15th",
+                  "noOfChequeBounced",
+                  "noOfEmiChequeBounced"
+               ],
+               "properties":{  
+                  "startMonth":{  
+                     "title":"Start Month",
+                     "type":"string",
+                     "format":"date",
+                     "captureStages":[  
+                        "BasicEnrolment",
+                        "Completed"
+                     ]
+                  },
+                  "endMonth":{  
+                     "title":"End Month",
+                     "type":"string",
+                     "format":"date",
+                     "captureStages":[  
+                        "BasicEnrolment",
+                        "Completed"
+                     ]
+                  },
+                  "totalDeposits":{  
+                     "title":"Total Deposits",
+                     "type":"number",
+                     "minimum":0,
+                     "maximum":10000000,
+                     "captureStages":[  
+                        "BasicEnrolment",
+                        "Completed"
+                     ]
+                  },
+                  "totalWihdrawals":{  
+                     "title":"Total Wihdrawals",
+                     "type":"number",
+                     "minimum":0,
+                     "maximum":10000000,
+                     "captureStages":[  
+                        "BasicEnrolment",
+                        "Completed"
+                     ]
+                  },
+                  "balanceAsOn15th":{  
+                     "title":"Balance As On 15th",
+                     "type":"number",
+                     "minimum":0,
+                     "maximum":10000000,
+                     "captureStages":[  
+                        "BasicEnrolment",
+                        "Completed"
+                     ]
+                  },
+                  "noOfChequeBounced":{  
+                     "title":"No Of Cheques Bounced",
+                     "type":"integer",
+                     "minimum":0,
+                     "maximum":10000000,
+                     "captureStages":[  
+                        "BasicEnrolment",
+                        "Completed"
+                     ]
+                  },
+                  "bankStatementPhoto":{  
+                     "title":"bankStatementPhoto",
+                     "type":"string",
+                     "minLength":1,
+                     "maxLength":100,
+                     "captureStages":[  
+                        "BasicEnrolment",
+                        "Completed"
+                     ]
+                  },
+                  "noOfEmiChequeBounced":{  
+                     "title":"No Of EMI Cheques Bounced",
+                     "type":"integer",
+                     "maximum":10000000,
+                     "captureStages":[  
+                        "BasicEnrolment",
+                        "Completed"
+                     ]
+                  }
+               }
+            }
+         }
+      }
+   }
+}
