@@ -679,7 +679,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
             },
             {
                 "type": "box",
-                "title": "LOAN_OVERVIEW",
+                "title": "LOAN_FINANCIALS",
                 "condition" : "",
                 "readonly": true,
                 "items": [
