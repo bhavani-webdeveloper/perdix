@@ -1079,11 +1079,16 @@ define([], function() {
                                             onClick: function(model, formCtrl) {
                                                 try{
                                                     var obj = calculateNominalRate(model.loanAccount.loanAmount,
-                                                        model.loanAccount.frequency,
-                                                        model.loanAccount.tenure,
-                                                        parseFloat(model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6));
+                                                    model.loanAccount.frequency,
+                                                    model.loanAccount.tenure,
+                                                    parseFloat(model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6));
                                                     model.loanAccount.interestRate = obj.nominalRate;
                                                     model.loanAccount.estimatedEmi = obj.estimatedEmi;
+
+                                                    model.loanAccount.vProcessingFee = null;
+                                                    if(model.loanAccount.loanAmount && model.loanAccount.processingFeePercentage) {
+                                                        model.loanAccount.vProcessingFee = (model.loanAccount.processingFeePercentage / 100) * model.loanAccount.loanAmount;
+                                                    }
                                                 } catch (e){
                                                     console.log(e);
                                                     PageHelper.showProgress("nominal-rate-calculation", "Error while calculating nominal rate, check the input values.", 5000);
