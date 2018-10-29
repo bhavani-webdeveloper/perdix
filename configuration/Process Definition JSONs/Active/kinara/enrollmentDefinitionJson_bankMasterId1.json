@@ -1469,6 +1469,13 @@
               "Completed"
             ]
           },
+          "cKYC": {
+            "title": "cKYC",
+            "type": "string",
+            "captureStages": [
+              "Completed"
+            ]
+          },
           "addressProof": {
             "title": "Address Proof",
             "type": "string",
@@ -2680,6 +2687,13 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "cKYC": {
+            "title": "cKYC",
+            "type": "string",
+            "captureStages": [
               "Completed"
             ]
           },
