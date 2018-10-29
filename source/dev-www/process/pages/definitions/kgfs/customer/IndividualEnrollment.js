@@ -1725,6 +1725,176 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                                     }
                                 },
                                 "additions": [
+                                    {
+                                        "type": "box",
+                                        "items": [
+                                            {
+
+                                                "type": "fieldset",
+                                                "title": "COAPPLICANTS",
+                                                "items": [
+                                                    {
+                                                        "key": "loanProcess.coApplicantsEnrolmentProcesses",
+                                                        "title": "COAPPLICANTS",
+                                                        "titleExpr": "model.loanProcess.coApplicantsEnrolmentProcesses[arrayIndex].customer.id + ': ' + model.loanProcess.coApplicantsEnrolmentProcesses[arrayIndex].customer.firstName",
+                                                        "type": "array",
+                                                        "startEmpty": true,
+                                                        "schema": {
+                                                            "maxItems": 4
+                                                        },
+                                                        "items": [
+                                                            {
+                                                                "key": "loanProcess.coApplicantsEnrolmentProcesses[].customer.urnNo",
+                                                                "title": "CO_APPLICANT_URN_NO",
+                                                                "type": "lov",
+                                                                bindMap: {},
+                                                                "lovonly": true,
+                                                                "inputMap": {
+
+                                                                    "firstName": {
+                                                                        "key": "customer.firstName",
+                                                                        "title": "CUSTOMER_NAME"
+                                                                    },
+                                                                    "branch": {
+                                                                        "key": "customer.customerBranchId",
+                                                                        "type": "select",
+                                                                        "screenFilter": true
+                                                                    },
+                                                                    "centreId": {
+                                                                        "key": "customer.centreId",
+                                                                        "type": "select",
+                                                                        "screenFilter": true
+                                                                    }
+                                                                },
+                                                                "outputMap": {
+                                                                    "id": "loanProcess.coApplicantsEnrolmentProcesses[arrayIndex].customer.id",
+                                                                    "urnNo": "loanProcess.coApplicantsEnrolmentProcesses[arrayIndex].customer.urnNo",
+                                                                    "firstName": "loanProcess.coApplicantsEnrolmentProcesses[arrayIndex].customer.firstName"
+                                                                },
+                                                                "searchHelper": formHelper,
+                                                                "search": function (inputModel, form, model) {
+                                                                    $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                                                                    var promise = Enrollment.search({
+                                                                        'branchName': inputModel.branch || SessionStore.getBranch(),
+                                                                        'firstName': inputModel.firstName,
+                                                                        'centreId': inputModel.centreId,
+                                                                        'customerType': "individual",
+
+                                                                    }).$promise;
+                                                                    return promise;
+                                                                },
+                                                                getListDisplayItem: function (data, index) {
+                                                                    return [
+                                                                        [data.firstName, data.fatherFirstName].join(' | '),
+                                                                        data.id,
+                                                                        data.urnNo
+                                                                    ];
+                                                                },
+                                                                onSelect: function (valueObj, model, context) {
+                                                                    console.log("Hello this model");
+                                                                    console.log(model);
+                                                                    model.loanProcess.setRelatedCustomerWithRelation(model.enrolmentProcess, "Co-applicant");
+                                                                    BundleManager.broadcastEvent('new-co-applicant',{customer:model.enrolmentProcess.customer});
+                                                                    // EnrolmentProcess.fromCustomerID(valueObj.id)
+                                                                    //     .finally(function () {
+                                                                    //         PageHelper.showProgress('customer-load', 'Done.', 5000);
+                                                                    //     })
+                                                                    //     .subscribe(function (enrolmentProcess) {
+                                                                    //         /* Setting on the current page */
+                                                                    //         console.log("Model from Individual Enrollment from Fuck");
+
+                                                                    //         // mode.loanAccount.coBorrowers = enrolmentProcess.customer;
+                                                                    //         console.log(model);
+                                                                    //         model.loanProcess.removeRelatedEnrolmentProcess(model.enrolmentProcess, LoanCustomerRelationTypes.CO_APPLICANT);
+                                                                    //         model.loanProcess.setRelatedCustomerWithRelation(enrolmentProcess,LoanCustomerRelationTypes.CO_APPLICANT);
+                                                                    //         if (model.customer.dateOfBirth) {
+                                                                    //             model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                                                                    //         }
+
+
+                                                                    //     })
+                                                                },
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            },{
+                
+                                                "type": "fieldset",
+                                                "title": "GUARANTORS",
+                                                "items": [
+                                                    {
+                                                        "title": "GUARANTORS",
+                                                        "titleExpr": "model.loanProcess.guarantorsEnrolmentProcesses[arrayIndex].customer.id + ': ' + model.loanProcess.guarantorsEnrolmentProcesses[arrayIndex].customer.firstName",
+                                                        "type": "array",
+                                                        "startEmpty": true,
+                                                        "schema": {
+                                                            "maxItems": 4
+                                                        },
+                                                        "items": [
+                                                            {
+                                                                "key": "loanProcess.guarantorsEnrolmentProcesses[].customer.urnNo",
+                                                                "title": "URN_NO",
+                                                                "type": "lov",
+                                                                bindMap: {},
+                                                                "lovonly": true,
+                                                                "inputMap": {
+
+                                                                    "firstName": {
+                                                                        "key": "customer.firstName",
+                                                                        "title": "CUSTOMER_NAME"
+                                                                    },
+                                                                    "branch": {
+                                                                        "key": "customer.customerBranchId",
+                                                                        "type": "select",
+                                                                        "screenFilter": true
+                                                                    },
+                                                                    "centreId": {
+                                                                        "key": "customer.centreId",
+                                                                        "type": "select",
+                                                                        "screenFilter": true
+                                                                    }
+                                                                },
+                                                                "outputMap": {
+                                                                    "id": "loanProcess.guarantorsEnrolmentProcesses[arrayIndex].customer.id",
+                                                                    "urnNo": "loanProcess.guarantorsEnrolmentProcesses[arrayIndex].customer.urnNo",
+                                                                    "firstName": "loanProcess.guarantorsEnrolmentProcesses[arrayIndex].customer.firstName"
+                                                                },
+                                                                "searchHelper": formHelper,
+                                                                "search": function (inputModel, form, model) {
+                                                                    $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                                                                    var promise = Enrollment.search({
+                                                                        'branchName': inputModel.branch || SessionStore.getBranch(),
+                                                                        'firstName': inputModel.firstName,
+                                                                        'centreId': inputModel.centreId,
+                                                                        'customerType': "individual",
+
+                                                                    }).$promise;
+                                                                    return promise;
+                                                                },
+                                                                getListDisplayItem: function (data, index) {
+                                                                    return [
+                                                                        [data.firstName, data.fatherFirstName].join(' | '),
+                                                                        data.id,
+                                                                        data.urnNo
+                                                                    ];
+                                                                },
+                                                                onSelect: function (valueObj, model, context) {
+                                                                    console.log("Hello this model");
+                                                                    console.log(model);
+                                                                    var obj = {};
+                                                                    obj.customer = valueObj;
+                                                                    model.loanProcess.setRelatedCustomerWithRelation(obj, "Guarantor");
+                                                                    BundleManager.broadcastEvent('new-guarantor',{customer:obj});
+                                                                },
+                                                                
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            },      
+                                        ]
+                                    }
                                 ]
                             }
                         };
