@@ -5567,6 +5567,22 @@
                         "CreditApproval3",
                         "BusinessApproval2"
                     ]
+                 },
+                 "udf1":{
+                    "title":"yearOfManufacture",
+                    "type":"string",
+                    "captureStages":[
+                       "Screening",
+                       "VehicleValuation",
+                       "FieldInvestigation1",
+                       "FieldInvestigation2",
+                       "FieldInvestigation3",
+                       "TeleVerification",
+                       "LoanInitiation",
+                        "BusinessApproval1",
+                        "CreditApproval3",
+                        "BusinessApproval2"
+                    ]
                  }
               }
            }
