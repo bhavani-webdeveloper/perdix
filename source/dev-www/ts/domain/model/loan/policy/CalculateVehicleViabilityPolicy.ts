@@ -57,7 +57,7 @@ export class CalculateVehicleViabilityPolicy extends IPolicy<LoanProcess> {
 
                         loanProcess.loanAccount.vehicleLoanDetails.vehicleModel = d.model;
                         loanProcess.loanAccount.vehicleLoanDetails.viabilityCategory = d.viability_category;
-                        loanProcess.loanAccount.vehicleLoanDetails.grossVehicleWeight = d.gvw;
+                        //loanProcess.loanAccount.vehicleLoanDetails.grossVehicleWeight = d.gvw;
                         loanProcess.loanAccount.vehicleLoanDetails.payLoad = d.payload;
                         loanProcess.loanAccount.vehicleLoanDetails.typeofLoad = d.type_of_load;
                         loanProcess.loanAccount.vehicleLoanDetails.ratePerTrip = d.rate_per_trip;

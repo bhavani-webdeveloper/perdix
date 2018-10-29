@@ -699,7 +699,6 @@ define(
                     "VehicleViability.fcfToEmi",
                     "VehicleViability.totalMonthlyExpense",
                     "VehicleViability1",
-                    "VehicleViability1.grossVehicleWeight1",
                     "VehicleViability1.payLoad1",
                     "VehicleViability1.typeofLoad1",
                     "VehicleViability1.ratePerTrip1",
