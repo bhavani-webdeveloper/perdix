@@ -535,19 +535,7 @@ define([], function () {
                                 "LoanDetails.loanType": {
                                     "orderNo": 2,
                                     "readonly": true,
-                                    "titleMap": [{
-                                            value: "JEWEL",
-                                            name: "Jewel Loan"
-                                        },
-                                        {
-                                            value: "SECURED",
-                                            name: "SECURED"
-                                        },
-                                        {
-                                            value: "UNSECURED",
-                                            name: "UNSECURED"
-                                        }
-                                    ]
+                                    "enumCode": "booking_loan_type"
                                 },
                                 "LoanDetails.witnessDetails.witnessDOB": {
                                     "type": "date",
@@ -588,19 +576,7 @@ define([], function () {
                                 "LoanDetails.loanType": {
                                     "orderNo": 2,
                                     "readonly": true,
-                                    "titleMap": [{
-                                            value: "JEWEL",
-                                            name: "Jewel Loan"
-                                        },
-                                        {
-                                            value: "SECURED",
-                                            name: "SECURED"
-                                        },
-                                        {
-                                            value: "UNSECURED",
-                                            name: "UNSECURED"
-                                        }
-                                    ]
+                                    "enumCode": "booking_loan_type",
                                 },
                                 "LoanDetails.witnessDetails.witnessDOB": {
                                     "type": "date",
@@ -642,19 +618,7 @@ define([], function () {
                                 "LoanDetails.loanType": {
                                     "orderNo": 2,
                                     "readonly": true,
-                                    "titleMap": [{
-                                            value: "JEWEL",
-                                            name: "Jewel Loan"
-                                        },
-                                        {
-                                            value: "SECURED",
-                                            name: "SECURED"
-                                        },
-                                        {
-                                            value: "UNSECURED",
-                                            name: "UNSECURED"
-                                        }
-                                    ]
+                                    "enumCode": "booking_loan_type"
                                 },
                                 "LoanDetails.witnessDetails.witnessDOB": {
                                     "type": "date",
@@ -696,19 +660,7 @@ define([], function () {
                                 "LoanDetails.loanType": {
                                     "orderNo": 2,
                                     "readonly": true,
-                                    "titleMap": [{
-                                            value: "JEWEL",
-                                            name: "Jewel Loan"
-                                        },
-                                        {
-                                            value: "SECURED",
-                                            name: "SECURED"
-                                        },
-                                        {
-                                            value: "UNSECURED",
-                                            name: "UNSECURED"
-                                        }
-                                    ]
+                                    "enumCode": "booking_loan_type"
                                 },
                                 "LoanDetails.witnessDetails.witnessDOB": {
                                     "type": "date",
