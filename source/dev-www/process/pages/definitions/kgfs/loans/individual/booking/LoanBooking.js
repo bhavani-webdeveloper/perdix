@@ -137,7 +137,7 @@ define([], function () {
                                     searchHelper: formHelper,
                                     search: function (inputModel, form, model, context) {
 
-                                        return Queries.getLoanProductDetails(model.loanAccount.frequency, model.loanAccount.partnerCode, model.loanAccount.loanType);
+                                        return Queries.getLoanProductDetails(model.loanAccount.loanType, model.loanAccount.partnerCode, model.loanAccount.frequency);
                                     },
                                     onSelect: function (valueObj, model, context) {
                                         model.loanAccount.productCode = valueObj.productCode;
