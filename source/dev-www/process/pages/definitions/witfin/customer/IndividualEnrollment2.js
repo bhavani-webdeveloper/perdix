@@ -1733,12 +1733,24 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                 "documentDate": {
                                                     "key": "customer.customerDocuments[].documentDate",
                                                     "title": "ISSUE_DATE",
-                                                    "type": "date"
+                                                    "type": "date",
+                                                    "onChange": function (modelValue, form, model) {
+                                                        if (moment(model.customer.customerDocuments[form.arrayIndex].udfDate1).format('YYYY-MM-DD') < moment(model.customer.customerDocuments[form.arrayIndex].documentDate).format('YYYY-MM-DD')) {
+                                                                model.customer.customerDocuments[form.arrayIndex].documentDate = null;
+                                                                PageHelper.showProgress('date', 'Please enter a date greater than from date', 5000);
+                                                            }
+                                                    }
                                                 },
                                                 "udfDate1": {
                                                     "key": "customer.customerDocuments[].udfDate1",
                                                     "title": "EXPIRY_DATE",
-                                                    "type": "date"
+                                                    "type": "date",
+                                                    "onChange": function (modelValue, form, model) {
+                                                        if (moment(model.customer.customerDocuments[form.arrayIndex].udfDate1).format('YYYY-MM-DD') < moment(model.customer.customerDocuments[form.arrayIndex].documentDate).format('YYYY-MM-DD')) {
+                                                                model.customer.customerDocuments[form.arrayIndex].udfDate1 = null;
+                                                                PageHelper.showProgress('date', 'Please enter a date greater than from date', 5000);
+                                                            }
+                                                    }
                                                 },
                                                 "checkNumber": {
                                                     "key": "customer.customerDocuments[].documentNumber",
