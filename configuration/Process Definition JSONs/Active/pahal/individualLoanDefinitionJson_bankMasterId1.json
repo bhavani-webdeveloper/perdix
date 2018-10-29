@@ -1538,7 +1538,15 @@
             "title": "Processing Fee Percentage",
             "type": "number",
             "captureStages": [
-                "ScreeningReview",
+                "Screening",
+                "Application",
+                "VehicleValuation",
+                "FieldInvestigation1",
+                "FieldInvestigation2",
+                "FieldInvestigation3",
+                "TeleVerification1", 
+                "TeleVerification2",
+                "CreditAppraisal",
                 "ApplicationReview",
                 "GoNoGoApproval1",
                 "CreditApproval",
@@ -6592,7 +6600,16 @@
           "udf6": {
             "type": "number",
             "captureStages": [
-               "ScreeningReview",
+                "Screening",
+                "Application",
+                "VehicleValuation",
+                "FieldInvestigation1",
+                "FieldInvestigation2",
+                "FieldInvestigation3",
+                "TeleVerification1", 
+                "TeleVerification2",
+                "CreditAppraisal",
+                "LoanInitiation"
                 "ApplicationReview",
                 "GoNoGoApproval1",
                 "CreditApproval"
