@@ -793,11 +793,6 @@ define([], function() {
                                 "condition": "model.loanProcess.loanAccount.currentStage == 'CreditApproval2'",
                                 "required": true
                             },
-                            "LoanRecommendation.tenure": {
-                                onChange: function(modelValue, form, model) {
-                                    model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = null;
-                                }
-                            },
                             "VehicleLoanIncomesInformation.VehicleLoanIncomes.incomeAmount": {
                                 "required": true
                             },
@@ -1084,11 +1079,16 @@ define([], function() {
                                             onClick: function(model, formCtrl) {
                                                 try{
                                                     var obj = calculateNominalRate(model.loanAccount.loanAmount,
-                                                        model.loanAccount.frequency,
-                                                        model.loanAccount.tenure,
-                                                        parseFloat(model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6));
+                                                    model.loanAccount.frequency,
+                                                    model.loanAccount.tenure,
+                                                    parseFloat(model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6));
                                                     model.loanAccount.interestRate = obj.nominalRate;
                                                     model.loanAccount.estimatedEmi = obj.estimatedEmi;
+
+                                                    model.loanAccount.vProcessingFee = null;
+                                                    if(model.loanAccount.loanAmount && model.loanAccount.processingFeePercentage) {
+                                                        model.loanAccount.vProcessingFee = (model.loanAccount.processingFeePercentage / 100) * model.loanAccount.loanAmount;
+                                                    }
                                                 } catch (e){
                                                     console.log(e);
                                                     PageHelper.showProgress("nominal-rate-calculation", "Error while calculating nominal rate, check the input values.", 5000);
@@ -1594,6 +1594,12 @@ define([], function() {
                         if (PageHelper.isFormInvalid(formCtrl)) {
                             return false;
                         }
+
+                        if(model.loanProcess.loanAccount.currentStage=='TeleVerification' && (model.loanProcess.loanAccount.loanPurpose1 == 'Purchase - Used Vehicle' || model.loanProcess.loanAccount.loanPurpose1 == 'Refinance') && (!_.hasIn(model.loanProcess.loanAccount.vehicleLoanDetails, 'vehicleValuationDoneAt') || model.loanProcess.loanAccount.vehicleLoanDetails.vehicleValuationDoneAt === null)) {
+                            PageHelper.showErrors({"data": {"error":"Vehicle Valuation should be done"}});
+                            return false;
+                        }
+                        PageHelper.showLoader();
                         model.loanProcess.proceed()
                             .finally(function() {
                                 PageHelper.hideLoader();
@@ -1615,6 +1621,11 @@ define([], function() {
 
                     },
                     reject: function(model, formCtrl, form, $event) {
+                        if (model.loanProcess.remarks==null || model.loanProcess.remarks =="" || model.loanAccount.rejectReason ==null || model.loanAccount.rejectReason ==""){
+                               PageHelper.showProgress("update-loan", "Reject Reason / Remarks is mandatory", 3000);
+                               PageHelper.hideLoader();
+                               return false;
+                        }
                         PageHelper.showLoader();
                         model.loanProcess.reject()
                             .finally(function() {

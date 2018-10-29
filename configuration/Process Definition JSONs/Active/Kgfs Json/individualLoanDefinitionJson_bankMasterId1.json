@@ -4148,6 +4148,13 @@
                       "captureStages": [
                          "LoanBooking","DSCOverride"
                       ]
+                   },
+                   "dscOverride":{
+                    "title": "DscOverride",
+                    "type":"boolean",
+                    "captureStages":[
+                       "LoanInitiation", "DocumentUpload" ,"DSCOverride","Checker1","Checker2"
+                    ]
                    }
                 }
              }

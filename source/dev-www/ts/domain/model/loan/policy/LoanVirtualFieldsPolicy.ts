@@ -17,11 +17,11 @@ export class LoanVirtualFieldsPolicy extends IPolicy<LoanProcess> {
 	        loanProcess.loanAccount.vExpectedProcessingFee = null;
 	        
 	        if(loanProcess.loanAccount.loanAmount && loanProcess.loanAccount.processingFeePercentage) {
-	            loanProcess.loanAccount.vProcessingFee = (loanProcess.loanAccount.processingFeePercentage / 100) * loanProcess.loanAccount.loanAmount;
+	            loanProcess.loanAccount.vProcessingFee = Math.round(((loanProcess.loanAccount.processingFeePercentage / 100) * loanProcess.loanAccount.loanAmount)* 100) / 100;
 	        }
 
 	        if(loanProcess.loanAccount.expectedProcessingFeePercentage && loanProcess.loanAccount.loanAmountRequested) {
-        		loanProcess.loanAccount.vExpectedProcessingFee = (loanProcess.loanAccount.expectedProcessingFeePercentage / 100) * loanProcess.loanAccount.loanAmountRequested;
+        		loanProcess.loanAccount.vExpectedProcessingFee = Math.round(((loanProcess.loanAccount.expectedProcessingFeePercentage / 100) * loanProcess.loanAccount.loanAmountRequested)* 100) / 100;
 	        }
         }
 
