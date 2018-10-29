@@ -106,23 +106,12 @@ define([], function () {
                                 "LoanDetails.centreName": {
                                     "orderNo": 1,
                                     "type": "select",
+                                    "readonly": true,
                                     "enumCode": "centre"
                                 },
                                 "LoanDetails.loanType": {
                                     "orderNo": 2,
-                                    "titleMap": [{
-                                            value: "JEWEL",
-                                            name: "Jewel Loan"
-                                        },
-                                        {
-                                            value: "SECURED",
-                                            name: "SECURED"
-                                        },
-                                        {
-                                            value: "UNSECURED",
-                                            name: "UNSECURED"
-                                        }
-                                    ]
+                                    "enumCode": "booking_loan_type"
                                 },
                                 "LoanDetails.partner": {
                                     "orderNo": 2,
