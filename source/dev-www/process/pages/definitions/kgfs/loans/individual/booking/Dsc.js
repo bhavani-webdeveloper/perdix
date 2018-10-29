@@ -282,6 +282,11 @@ define([], function () {
                     ]
                 },
                 eventListeners: {
+
+                    "new-loan-customer": function(bundleModel,model,params){
+                        showDscResponse(model,params);
+                    },
+
                     "new-applicant": function (bundleModel, model, params) {
                         $log.info("Inside new-applicant of DscCheck");
                         model.customer.applicantname = params.customer.firstName;
