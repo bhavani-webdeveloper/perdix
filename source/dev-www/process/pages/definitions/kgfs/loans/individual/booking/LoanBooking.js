@@ -137,11 +137,12 @@ define([], function () {
                                     searchHelper: formHelper,
                                     search: function (inputModel, form, model, context) {
 
-                                        return Queries.getLoanProductCodeByLoanType(model.loanAccount.productCategory, model.loanAccount.frequency, model.loanAccount.partnerCode, model.loanAccount.loanType);
+                                        return Queries.getLoanProductDetails(model.loanAccount.loanType, model.loanAccount.partnerCode, model.loanAccount.frequency);
                                     },
                                     onSelect: function (valueObj, model, context) {
                                         model.loanAccount.productCode = valueObj.productCode;
                                         model.additions.tenurePlaceHolder = valueObj.tenure_from + '-' + valueObj.tenure_to;
+                                        model.additions.amountPlaceHolder = valueObj.amount_from + '-' + valueObj.amount_to;
                                     },
                                     getListDisplayItem: function (item, index) {
                                         return [
@@ -228,6 +229,7 @@ define([], function () {
                                 },
                                 "LoanDetails.loanAmountRequested": {
                                     "orderNo": 5,
+                                    "placeholderExpr": "model.additions.amountPlaceHolder",
                                     onChange: function (value, form, model) {
                                         model.loanAccount.disbursementSchedules[0].disbursementAmount = value;
                                     }
