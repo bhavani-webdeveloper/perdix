@@ -24,7 +24,7 @@ function createPipeFile($path, $fileName, $data) {
         $filePath = $path . "/" . $fileName . ".txt"; //nomenclature of fileName to be decided
         if(count($data) > 0) {
             // reset the array keys
-            $data = array_interface_datas($data);
+            $data = array_values($data);
 
             $pipeFile = fopen($filePath, "w");	
             $pipeHeader = array_keys($data[0]);	// get the headers from the array
@@ -154,12 +154,33 @@ foreach ($customer_interface_dataArray as $interface_data) {
             file_put_contents($photoImage, file_get_contents($photoImageUrl));
         }
 /*   updating ProcessingStatus in customer_external_interface table
-*/
-        DB::table('customer_external_interface')
-        ->where('customer_id', $interface_data['customer_id'])
-        ->update(['processing_status' => "REQUESTCOMPLETE",
-                'response_status' => NULL
-        ]);
+*/    if($interface_data['response_status'] == 'FAILURE' && $customer_dataArray[0]['version']>$interface_data['customer_version']){
+            echo " inserting new record for case of failure \n";
+            DB::table('customer_external_interface')->insert(
+                ['version' => NULL,
+                 'customer_id'=> $interface_data['customer_id'],
+                 'customer_version'=> $interface_data['customer_version'],
+                 'processing_status'=> "REQUESTCOMPLETE",
+                 'response_status'=>"FAILURE",
+                 'interface_type'=>$interface_data['interface_type'],
+                 'response_time' => $interface_data['response_time'],
+                 'loan_amount' => $interface_data['loan_amount'],
+                 'loan_purpose'=> $interface_data['loan_purpose'],
+                 'response_message'=>date('Y-m-d H:i:s'),
+                 'created_by'=> "SYSTEM",
+                 'created_at'=>date('Y-m-d H:i:s'),
+                 'last_edited_by'=>"SYSTEM",
+                 'last_edited_at'=>date('Y-m-d H:i:s')
+                ]
+            );
+                
+        }else{
+            DB::table('customer_external_interface')
+            ->where('customer_id', $interface_data['customer_id'])
+            ->update(['processing_status' => "REQUESTCOMPLETE",
+                    'response_status' => NULL
+            ]);
+        }
 
     }catch(Exception $e) {
         echo $e . "\n";
@@ -191,6 +212,7 @@ try{
                 mkdir($trackwizTempDir, 0777, true);
             }
             rcopy($trackwizDir, $trackwizTempDir);
+            rrmdir($trackwizDir); 
             $fileTemp = new DirectoryIterator($trackwizTempDir);
             foreach($fileTemp as $file){
                 $is_file = $file->isFile();
@@ -272,6 +294,8 @@ try{
             }
         }
     }
+    rrmdir($trackwizTempDir);
+    
 } catch(Exception $e){
     echo "some error occured in response reading part \n";
 }
