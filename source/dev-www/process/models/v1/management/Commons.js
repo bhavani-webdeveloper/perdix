@@ -21,7 +21,7 @@ irf.pages.run(["$rootScope","$q", "SessionStore", "PageHelper", "Commons",
             }, {},function (resp) {
                 PageHelper.setInfo({message : resp.thoughtOfTheDay});
             }, function (resp) {
-                PageHelper.showErrors(resp);
+                console.log("Errors Please Check");
             });
         })
     }]);
