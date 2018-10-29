@@ -249,7 +249,9 @@ try{
                                     $customer_id=$customerId[0]['id'];
                                     $GLOBALS['customer_id'] = $customer_id;
                                     DB::table('customer_external_interface')
-                                    ->where('customer_id', $customer_id)
+                                    ->where([['customer_id', $customer_id],
+                                            ['processing_status', '=', 'REQUESTCOMPLETE']
+                                        ])
                                     ->update(['response_status' => $customer_integration_status]);
                                 } 
                             }catch(Exception $e){
