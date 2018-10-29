@@ -1472,6 +1472,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     },
                     "guarantor-updated": function(bundleModel, model, params){
                         model.enrolmentProcess.refreshEnterpriseCustomerRelations(model.loanProcess);
+                    },
+                    "remove-customer-relation": function(bundleModel, model, enrolmentDetails){
+                        $log.info("Inside remove-customer-relation of EnterpriseEnrolment2");
+                        /**
+                         * Following to be Done
+                         *
+                         * 1. Remove customer from Enterprise Customer Relation if exists.
+                         */
+
+                        model.enrolmentProcess.removeEnterpriseCustomerRelations(model.loanProcess, enrolmentDetails);
                     }
                 },
                 form: [
