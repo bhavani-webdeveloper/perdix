@@ -1203,19 +1203,20 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "fileType": "image/*",
                                             "category": "CustomerEnrollment",
                                             "subCategory": "PHOTO",
+                                            "using": "scanner",
                                             "onChange": function(){
                                                 console.log("INSIDE ONCHANGE1");
                                             },
                                             "viewParams" : function(modelValue, form, model) {
-                                                    getLocation().then((pos)=>{
-                                                        console.log("successful");
-                                                        model.customer.latitude = pos.coords.latitude;
-                                                        model.customer.longitude = pos.coords.longitude;
-                                                    });
-                                                    getLocation().catch((err)=>{
-                                                        console.log(err);
-                                                    });
-                                                }
+                                                getLocation().then((pos)=>{
+                                                    console.log("successful");
+                                                    model.customer.latitude = pos.coords.latitude;
+                                                    model.customer.longitude = pos.coords.longitude;
+                                                });
+                                                getLocation().catch((err)=>{
+                                                    console.log(err);
+                                                });
+                                            }
 
                                             //     "title": "HOUSE_VERIFICATION_PHOTO",
                                             //     "category": "CustomerEnrollment",
