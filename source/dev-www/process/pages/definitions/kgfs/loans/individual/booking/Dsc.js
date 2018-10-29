@@ -397,7 +397,7 @@ define([], function () {
                                         },
                                         {
                                             title: "DSC_STATUS",
-                                            key: "customer.coapplicants[].dscStatus ",
+                                            key: "customer.coapplicants[].dscStatus",
                                             readonly: true,
                                             type: "string",
                                         },
