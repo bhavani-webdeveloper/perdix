@@ -120,10 +120,6 @@ define([], function () {
                                 "LoanDetails.frequency": {
                                     "enumCode": "loan_product_frequency"
                                 },
-                                "LoanDetails.loanProductCategory": {
-                                    "orderNo": 4,
-                                    "enumCode": "loan_product_category",
-                                },
                                 "LoanDetails.loanProductCode": {
                                     "orderNo": 4,
                                     bindMap: {
@@ -137,7 +133,7 @@ define([], function () {
                                     searchHelper: formHelper,
                                     search: function (inputModel, form, model, context) {
 
-                                        return Queries.getLoanProductDetails(model.loanAccount.frequency, model.loanAccount.partnerCode, model.loanAccount.loanType);
+                                        return Queries.getLoanProductDetails(model.loanAccount.loanType, model.loanAccount.partnerCode, model.loanAccount.frequency);
                                     },
                                     onSelect: function (valueObj, model, context) {
                                         model.loanAccount.productCode = valueObj.productCode;
@@ -235,7 +231,7 @@ define([], function () {
                                     }
                                 },
                                 "LoanDetails.loanApplicationDate": {
-                                    "orderNo": 8
+                                    "orderNo": 9
                                 },
                                 "LoanDetails.requestedTenure": {
                                     "orderNo": 6,
@@ -531,9 +527,6 @@ define([], function () {
                                 "LoanDetails.frequency": {
                                     "enumCode": "loan_product_frequency"
                                 },
-                                "LoanDetails.loanProductCategory": {
-                                    "enumCode": "loan_product_category",
-                                },
                                 "LoanDetails.loanType": {
                                     "orderNo": 2,
                                     "readonly": true,
@@ -571,9 +564,6 @@ define([], function () {
                                 },
                                 "LoanDetails.frequency": {
                                     "enumCode": "loan_product_frequency"
-                                },
-                                "LoanDetails.loanProductCategory": {
-                                    "enumCode": "loan_product_category",
                                 },
                                 "LoanDetails.loanType": {
                                     "orderNo": 2,
@@ -614,9 +604,6 @@ define([], function () {
                                 "LoanDetails.frequency": {
                                     "enumCode": "loan_product_frequency"
                                 },
-                                "LoanDetails.loanProductCategory": {
-                                    "enumCode": "loan_product_category",
-                                },
                                 "LoanDetails.loanType": {
                                     "orderNo": 2,
                                     "readonly": true,
@@ -655,9 +642,6 @@ define([], function () {
                                 },
                                 "LoanDetails.frequency": {
                                     "enumCode": "loan_product_frequency"
-                                },
-                                "LoanDetails.loanProductCategory": {
-                                    "enumCode": "loan_product_category",
                                 },
                                 "LoanDetails.loanType": {
                                     "orderNo": 2,

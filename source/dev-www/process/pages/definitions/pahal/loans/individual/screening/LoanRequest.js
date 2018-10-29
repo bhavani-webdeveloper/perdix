@@ -203,9 +203,6 @@ define([], function() {
                             "overrides": {
                                 "FieldInvestigationDetails": {
                                     "readonly": true
-                                },
-                                "LoanRecommendation": {
-                                    "readonly": true
                                 }
                             }
                         },
@@ -214,9 +211,9 @@ define([], function() {
                                 "LoanRecommendation.commercialCibilCharge"
                             ],
                             "overrides": {
-                                "LoanRecommendation": {
-                                    "readonly": true
-                                }
+                                // "LoanRecommendation": {
+                                //     "readonly": true
+                                // }
                             }
                         },
                         "FieldInvestigation2": {
@@ -224,9 +221,9 @@ define([], function() {
                                 "LoanRecommendation.commercialCibilCharge"
                             ],
                             "overrides": {
-                                "LoanRecommendation": {
-                                    "readonly": true
-                                }
+                                // "LoanRecommendation": {
+                                //     "readonly": true
+                                // }
                             }
                         },
                         "FieldInvestigation3": {
@@ -234,9 +231,9 @@ define([], function() {
                                 "LoanRecommendation.commercialCibilCharge"
                             ],
                             "overrides": {
-                                "LoanRecommendation": {
-                                    "readonly": true
-                                }
+                                // "LoanRecommendation": {
+                                //     "readonly": true
+                                // }
                             }
                         },
                         "GoNoGoApproval1": {
@@ -258,10 +255,10 @@ define([], function() {
                                 },
                                 "PayerDetails": {
                                     "readonly": true
-                                },
-                                "LoanRecommendation": {
-                                    "readonly": true
                                 }
+                                // "LoanRecommendation": {
+                                //     "readonly": true
+                                // }
                             }
                         },
                         "Application": {
@@ -271,9 +268,9 @@ define([], function() {
                                 "LoanRecommendation.commercialCibilCharge"
                             ],
                             "overrides": {
-                                "LoanRecommendation": {
-                                    "readonly": true
-                                }
+                                // "LoanRecommendation": {
+                                //     "readonly": true
+                                // }
                             }
                         },
                         "ApplicationReview": {
@@ -306,10 +303,10 @@ define([], function() {
                             "overrides": {
                                 "FieldInvestigationDetails": {
                                     "readonly": true
-                                },
-                                "LoanRecommendation": {
-                                    "readonly": true
                                 }
+                                // "LoanRecommendation": {
+                                //     "readonly": true
+                                // }
                             }
                         },
                         

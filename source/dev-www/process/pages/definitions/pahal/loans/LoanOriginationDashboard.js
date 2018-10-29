@@ -341,9 +341,9 @@ irf.pageCollection.controller(irf.controller("pahal.loans.LoanOriginationDashboa
                 });
             }
 
-            var tvq1Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.TeleVerification2Queue"];
-            if (tvq1Menu) {
-                tvq1Menu.data = 0;
+            var tvq2Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.TeleVerification2Queue"];
+            if (tvq2Menu) {
+                tvq2Menu.data = 0;
                 IndividualLoan.search({
                     'stage': 'TeleVerification2',
                     'enterprisePincode': '',
@@ -354,9 +354,9 @@ irf.pageCollection.controller(irf.controller("pahal.loans.LoanOriginationDashboa
                     'page': 1,
                     'per_page': 1,
                 }).$promise.then(function(response, headerGetter) {
-                    tvq1Menu.data = tvq1Menu.data + Number(response.headers['x-total-count']);
+                    tvq2Menu.data = tvq2Menu.data + Number(response.headers['x-total-count']);
                 }, function() {
-                    tvq1Menu.data = '-';
+                    tvq2Menu.data = '-';
                 });
             }
 
