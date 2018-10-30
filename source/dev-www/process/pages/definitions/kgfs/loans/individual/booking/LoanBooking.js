@@ -785,6 +785,7 @@ define([], function () {
                                                 "loanProductName":{
                                                     "title": "PRODUCT_NAME",
                                                     "type": "lov",
+                                                    "key": "loanAccount.productName",
                                                     bindMap: {
                                                         "Partner": "loanAccount.partnerCode",
                                                         // "ProductCategory": "loanAccount.productCategory",
