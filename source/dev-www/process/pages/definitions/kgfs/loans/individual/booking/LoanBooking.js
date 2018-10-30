@@ -22,7 +22,6 @@ define([], function () {
                     "LoanDetails.loanType",
                     "LoanDetails.partner",
                     "LoanDetails.frequency",
-                    "LoanDetails.loanProductCategory",
                     "LoanDetails.loanProductCode",
                     "LoanDetails.loanApplicationDate",
                     "LoanDetails.loanAmountRequested",
