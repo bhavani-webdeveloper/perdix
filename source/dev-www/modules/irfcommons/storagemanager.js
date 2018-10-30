@@ -385,12 +385,15 @@ irf.commons.provider("formHelper", function() {
 			var r = context.irfStorageService.getMaster(key);
 			
 			if (r && _.isArray(r.data)) {
-				var ret = {parentClassifier:r.parentClassifier,data:[]};
-				ret.data = r.data;
-				return ret;
+				return {
+					parentClassifier: r.parentClassifier,
+					data: r.data
+				};
 			}
 			context.$log.error('No record found for enum key: ' + key);
-			return null;
+			return {
+				data: []
+			};
 		},
 		userbranch: function() {
 			var branches = $this.factory.enum("branch_id").data;
