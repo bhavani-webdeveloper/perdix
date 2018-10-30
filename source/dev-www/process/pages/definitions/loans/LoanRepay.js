@@ -937,6 +937,13 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             PageHelper.showProgress("loan-repay","Cash payments more than " + cashPerDayLimit + " is not allowed",5000);
                             return;
                         }
+                        if (model.siteCode == 'witfin' && model.repayment.amount >=199999 && model.repayment.instrument == 'CASH'){
+                            PageHelper.clearErrors();
+                            PageHelper.setError({
+                                message: "please enter amount less than 199999 for cash type"
+                            });
+                            return false;
+                        }
 
                         // if (model._screen && model._screen =='BounceQueue'){
                         //     if (model.repayment.amount > model.repayment.totalDue){
