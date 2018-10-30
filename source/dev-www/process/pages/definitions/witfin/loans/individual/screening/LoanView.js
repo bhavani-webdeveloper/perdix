@@ -59,6 +59,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:50
                         },
                         {
+                            pageName: 'witfin.loans.individual.screening.VehicleDetails',
+                            title: 'VEHICLE_DETAILS',
+                            pageClass: 'vehicle-details',
+                            minimum: 1,
+                            maximum: 1,
+                            order:55
+                        },
+                        {
                             pageName: 'loans.individual.screening.Review',
                             title: 'REVIEW',
                             pageClass: 'loan-review',
@@ -73,6 +81,19 @@ define(["perdix/domain/model/loan/LoanProcess",
                             minimum: 1,
                             maximum: 1,
                             order:60
+                        },
+                        {
+                            pageName: 'loans.individual.screening.CreditBureauView',
+                            title: 'CREDIT_BUREAU',
+                            pageClass: 'cbview',
+                            minimum: 1,
+                            maximum: 1
+                        },{
+                            pageName: 'loans.individual.screening.Summary',
+                            title: 'SUMMARY',
+                            pageClass: 'summary',
+                            minimum: 1,
+                            maximum: 1
                         }
                     ]);
                 },
@@ -140,7 +161,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                 },
                 "pre_pages_initialize": function(bundleModel){
                     $log.info("Inside pre_page_initialize");
-                    bundleModel.currentStage = "Screening";
+                    bundleModel.currentStage = "loanView";
                     var deferred = $q.defer();
 
                     var $this = this;
@@ -216,6 +237,12 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 });
                                 $this.bundlePages.push({
+                                    pageClass: 'vehicle-details',
+                                    model: {
+                                        loanProcess: loanProcess
+                                    }
+                                });
+                                $this.bundlePages.push({
                                     pageClass: 'loan-review',
                                     model: {
                                         loanAccount: loanProcess.loanAccount,
@@ -229,7 +256,17 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         loanProcess: loanProcess
                                     }
                                 });
-
+                                
+                                $this.bundlePages.push({
+                                    pageClass: 'summary',
+                                    model: {
+                                        cbModel: {
+                                            customerId: loanAccount.customerId,
+                                            loanId: loanAccount.id,
+                                            scoreName: 'RiskScore3'
+                                        }
+                                    }
+                                });
                                 deferred.resolve();
 
                             });
@@ -264,7 +301,12 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         }
                                     });
                                 }
-
+                                $this.bundlePages.push({
+                                    pageClass: 'vehicle-details',
+                                    model: {
+                                        loanProcess: loanProcess
+                                    }
+                                });
                                 $this.bundlePages.push({
                                     pageClass: 'loan-request',
                                     model: {

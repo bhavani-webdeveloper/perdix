@@ -148,10 +148,18 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                                 {
                                     name: "VIEW_LOAN",
                                     fn: function(item, index){
+                                        var siteCode = SessionStore.getGlobalSetting('siteCode');
+                                        if(siteCode == 'witfin') {
+                                        $state.go('Page.Bundle', {
+                                            pageName: 'witfin.loans.individual.screening.LoanView',
+                                            pageId: item.accountId
+                                        })
+                                        } else {
                                         $state.go('Page.Bundle', {
                                             pageName: 'loans.individual.screening.LoanViewList',
                                             pageId: item.accountId
                                         })
+                                        }
                                     },
                                     isApplicable: function(item, index){
                                         return true;

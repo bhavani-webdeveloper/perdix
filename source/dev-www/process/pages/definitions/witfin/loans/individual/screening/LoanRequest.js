@@ -670,6 +670,9 @@ define([], function() {
                             "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
                                "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
                                "required": true
+                            },
+                            "LoanRecommendation": {
+                                "readonly": true
                             }
                             }
                         }
