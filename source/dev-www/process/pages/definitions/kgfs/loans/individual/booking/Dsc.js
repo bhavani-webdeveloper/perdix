@@ -35,35 +35,6 @@ define([], function () {
             var overridesFields = function (model) {
                 return {};
             }
-            var showDscResponses = function(model,resp){
-                var i;
-                for(i=0;i<model.customer.coapplicants.length;i++){
-                    var temp = 0;
-                    while(temp<res.loanCustomerRelations.length){
-                        if(model.customer.coapplicants[i].coapplicantid == res.loanCustomerRelations[temp].id){
-                            model.customer.coapplicants[i].dscStatus = res.loanCustomerRelations[temp].dscStatus;
-                            temp = temp+1;
-                        }
-                        else{
-                            temp=temp+1;
-                            continue;
-                        }
-                    }
-                }
-                for(i=0;i<model.customer.guarantors.length;i++){
-                    var temp = 0;
-                    while(temp<res.loanCustomerRelations.length){
-                        if(model.customer.guarantors[i].coapplicantid == res.loanCustomerRelations[temp].id){
-                            model.customer.guarantors[i].dscStatus = res.loanCustomerRelations[temp].dscStatus;
-                            temp = temp+1;
-                        }
-                        else{
-                            temp=temp+1;
-                            continue;
-                        }
-                    }
-                }
-            }
             var showDscResponse = function(model,resp){
                 if (resp.loanCustomerRelations && resp.loanCustomerRelations.length > 0) {
                     model.loanAccount.loanCustomerRelations = resp.loanCustomerRelations;
@@ -75,6 +46,7 @@ define([], function () {
                             PageHelper.showLoader();
                             console.log("Model fromDSCCC");
                             console.log(model);
+                            (function(index){
                             Enrollment.getCustomerById({ id: model.loanAccount.loanCustomerRelations[i].customerId })
                                 .$promise
                                 .then(function (res) {
@@ -90,7 +62,8 @@ define([], function () {
                             model.customer.loanAmount = model.loanAccount.loanAmountRequested;
                             model.customer.loanPurpose1 = model.loanAccount.loanPurpose1;
                             model.customer.loanSaved = true;
-                            model.customer.dscStatus = model.loanAccount.loanCustomerRelations[i].dscStatus;
+                            model.customer.dscStatus = model.loanAccount.loanCustomerRelations[index].dscStatus;
+                            })(i);
                         }
                         else if (model.loanAccount.loanCustomerRelations[i].relation == 'Co-Applicant') {
                             temp = model.loanAccount.loanCustomerRelations[i].dscStatus;
@@ -283,7 +256,7 @@ define([], function () {
                 },
                 eventListeners: {
 
-                    "new-loan-customer": function(bundleModel,model,params){
+                    "new-loan-customer-relation": function(bundleModel,model,params){
                         showDscResponse(model,params);
                     },
 

@@ -22,7 +22,6 @@ define([], function () {
                     "LoanDetails.loanType",
                     "LoanDetails.partner",
                     "LoanDetails.frequency",
-                    "LoanDetails.loanProductCategory",
                     "LoanDetails.loanProductCode",
                     "LoanDetails.loanApplicationDate",
                     "LoanDetails.loanAmountRequested",
@@ -115,7 +114,7 @@ define([], function () {
                                 },
                                 "LoanDetails.partner": {
                                     "orderNo": 2,
-                                    "enumCode": "partner"
+                                    "enumCode": "loan_partner"
                                 },
                                 "LoanDetails.frequency": {
                                     "enumCode": "loan_product_frequency"
