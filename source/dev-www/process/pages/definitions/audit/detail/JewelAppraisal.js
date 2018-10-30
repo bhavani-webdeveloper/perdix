@@ -20,6 +20,10 @@ irf.pageCollection.factory(irf.page("audit.detail.JewelAppraisal"),
             }
             return true;
         };
+        var recomputeJewelDifference = function(model) {
+            var j = model.jewel_appraisal.jewel_assets;
+            j.CMS_difference = String(j.number_of_pouches_in_hand + j.number_of_pouches_in_hq - j.total_on_hand);
+        },
 
         return {
             "type": "schema-form",
@@ -43,8 +47,7 @@ irf.pageCollection.factory(irf.page("audit.detail.JewelAppraisal"),
                     model.jewel_appraisal = response;
                     
                     if (_.isObject(model.jewel_appraisal.jewel_assets)) {
-                        var addedVal = model.jewel_appraisal.jewel_assets.number_of_pouches_in_hand + model.jewel_appraisal.jewel_assets.number_of_pouches_in_hq - model.jewel_appraisal.jewel_assets.total_on_hand;
-                        model.jewel_appraisal.jewel_assets.CMS_difference = String(addedVal);
+                        recomputeJewelDifference(model);
                     }
 
                     self.form = [{
@@ -87,26 +90,23 @@ irf.pageCollection.factory(irf.page("audit.detail.JewelAppraisal"),
                                 key: "jewel_appraisal.jewel_details[].comments",
                                 required: true
                             }]
-
                         }]
-
                     }, {
                         type: "box",
                         readonly: model.readonly,
                         title: "JEWEL_ASSETS",
                         items: [{
                             key: "jewel_appraisal.jewel_assets.number_of_pouches_in_hand",
-                            type: "number"
+                            type: "number",
+                            "onChange": "actions.recomputeJewelDifference(model)"
                         }, {
                             key: "jewel_appraisal.jewel_assets.number_of_pouches_in_hq",
                             type: "number",
+                            "onChange": "actions.recomputeJewelDifference(model)"
                         }, {
                             key: "jewel_appraisal.jewel_assets.total_on_hand",
                             type: "number",
-                            "onChange": function(modelValue, form, model) {
-                                var addedVal = model.jewel_appraisal.jewel_assets.number_of_pouches_in_hand + model.jewel_appraisal.jewel_assets.number_of_pouches_in_hq - model.jewel_appraisal.jewel_assets.total_on_hand;
-                                model.jewel_appraisal.jewel_assets.CMS_difference = String(addedVal);
-                            }
+                            "onChange": "actions.recomputeJewelDifference(model)"
                         }, {
                             key: "jewel_appraisal.jewel_assets.CMS_difference",
                             readonly:true
@@ -141,7 +141,7 @@ irf.pageCollection.factory(irf.page("audit.detail.JewelAppraisal"),
                 "properties": {
                     "jewel_appraisal": {
                         "type": "object",
-                        "properties": {                           
+                        "properties": {
                             "jewel_details": {
                                 "type": "array",
                                 "title": "CUSTOMER_BANK_ACCOUNT",
@@ -221,6 +221,7 @@ irf.pageCollection.factory(irf.page("audit.detail.JewelAppraisal"),
                 },
             },
             actions: {
+                recomputeJewelDifference: recomputeJewelDifference,
                 submit: function(model, formCtrl, form, $event) {
                     PageHelper.clearErrors();
                     formHelper.validate(formCtrl).then(function() {
@@ -236,25 +237,6 @@ irf.pageCollection.factory(irf.page("audit.detail.JewelAppraisal"),
                         }
                     })
                 },
-                // submit: function(model, formCtrl, form, $event) {
-                //     PageHelper.clearErrors();
-                //     formHelper.validate(formCtrl).then(function() {
-                //         if (model.$isOffline) {
-                //             Audit.offline.setJewelAppraisal(model.auditId, model.jewel_appraisal).then(function(res) {
-                //                 model.jewel_appraisal = res;
-                //                 PageHelper.showProgress("auditId", "Audit Updated Successfully.", 3000);
-                //                 irfNavigator.goBack();
-                //             }, function(errRes) {
-                //                 PageHelper.showErrors(errRes);
-                //             }).finally(function() {
-                //                 PageHelper.hideLoader();
-                //             })
-                //         } else {
-                //             $stateParams.pageData.auditData.jewel_appraisal = model.jewel_appraisal;
-                //             irfNavigator.goBack();
-                //         }
-                //     });
-                // },
                 goBack: function(model, form, formName) {
                     irfNavigator.goBack();
                 },
