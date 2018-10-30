@@ -273,8 +273,8 @@ define({
                                         "pageName": "kgfs.kgfsWorkflow.GpsFPApprovalInit",
                                         "pageId": item.id
                                     },{
-                                        'state': 'Page.Engine',
-                                        'pageName': 'kgfs.kgfsWorkflow.GpsFPUpdateQueue/Init',
+                                        'state': 'Page.Adhoc',
+                                        'pageName': 'kgfs.kgfsWorkflow.GpsFPApprovalDashboard',
                                     });
                                 },
                                 isApplicable: function(item, model){
@@ -291,11 +291,11 @@ define({
                                         state: "Page.Engine",
                                         "pageName": "kgfs.kgfsWorkflow.GpsFPApprovalApprove",
                                         "pageId": item.id
-                                    },
-                                    {
-                                        'state': 'Page.Engine',
-                                        'pageName': 'kgfs.kgfsWorkflow.GpsFPUpdateQueue/Approve',
+                                    },{
+                                        'state': 'Page.Adhoc',
+                                        'pageName': 'kgfs.kgfsWorkflow.GpsFPApprovalDashboard',
                                     });
+                                    
                                 },
                                 isApplicable: function(item, model){
                                     return item.currentStage=="Approve";

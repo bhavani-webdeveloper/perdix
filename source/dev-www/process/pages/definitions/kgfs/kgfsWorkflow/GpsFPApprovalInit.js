@@ -542,6 +542,7 @@ define({
                     var out = model.customer.$fingerprint;
 
                     if (window.confirm("Update - Are You Sure?")) {
+                       
                         PageHelper.showLoader();
                         irfProgressMessage.pop('workflow-update', 'Working...');
                         $log.info(model);

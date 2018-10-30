@@ -114,7 +114,7 @@ define([], function () {
                                 },
                                 "LoanDetails.partner": {
                                     "orderNo": 2,
-                                    "enumCode": "partner"
+                                    "enumCode": "loan_partner"
                                 },
                                 "LoanDetails.frequency": {
                                     "enumCode": "loan_product_frequency"

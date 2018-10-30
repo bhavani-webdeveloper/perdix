@@ -43,6 +43,8 @@ define({
                 model.customer = model.workflow.customer;
                 model.customer.biometricNotCaptured = "Not Captured";
                 model.customer.biometricCaptured = "Captured";
+                model.customer.fingerPrintUpdated = "Updated"; //flag for displaying the updated finger prints
+
 
                 console.log("Hello this is fpr Cmmnets");
                 console.log(model);
@@ -168,7 +170,7 @@ define({
                                     }
                                 },
                                 {
-                                    condition: "model.customer.isGpsUpdated == 'YES'",
+                                    condition: "model.customer.isGpsChanged == 'YES'",
                                     key: "customer.newLatitude",
                                     title: "UPDATED_GEO_LOCATION",
                                     "type": "geotag",

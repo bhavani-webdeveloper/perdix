@@ -238,3 +238,12 @@ irf.ANALYTICS_API_URL = 'http://34.202.113.237:1337';
 // irf.BI_BASE_URL = "https://uat.pahal.perdix.co.in:8081/bi";
 // irf.PSYCHOMETRIC_BASE_URL = "http://uat.pahal.perdix.co.in:8080/psychometric";
 
+//kgfs SIT
+
+// var irf = irf || {};
+// irf.BASE_URL = 'http://sit.perdix.co.in:8080/sit_kgfs_perdix-server';
+// irf.MANAGEMENT_BASE_URL = 'http://sit.perdix.co.in:8081/sit_kgfs_management';
+// irf.FORM_DOWNLOAD_URL = 'http://sit.perdix.co.in:8080/sit_kgfs_forms/formPrint.jsp';
+// irf.BI_BASE_URL = 'http://sit.perdix.co.in:8081/sit_kgfs_bi';
+// irf.AUDIT_API_URL = 'http://sit.perdix.co.in.in:82';
+// irf.CAMS_EKYC_INTEG_URL = "https://eiscuat1.camsonline.com/ekycuat3/eKYCVal_Aadhar.aspx";
