@@ -315,6 +315,7 @@ define({
                                         "remarks": model.review.remarks,
                                         "repaymentProcessAction": "PROCEED"
                                     }
+                                    PageHelper.showLoader();
                     //batchRepay to proceed loancollection account associated with bankSummaryID
                                     LoanCollection.batchUpdate(cashProceedData).$promise
                                         .then(function (res, head) {
