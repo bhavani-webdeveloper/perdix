@@ -1200,9 +1200,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "title": "HOUSE VERIFICATION PHOTO",
                                             "orderNo": 150,
                                             "type": "file",
-                                            "fileType": "image/*",
-                                            "category": "CustomerEnrollment",
-                                            "subCategory": "PHOTO",
+                                            "fileType": "application/pdf",
                                             "using": "scanner",
                                             "onChange": function(){
                                                 console.log("INSIDE ONCHANGE1");

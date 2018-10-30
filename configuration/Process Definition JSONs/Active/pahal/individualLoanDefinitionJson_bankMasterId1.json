@@ -6609,7 +6609,7 @@
                 "TeleVerification1", 
                 "TeleVerification2",
                 "CreditAppraisal",
-                "LoanInitiation"
+                "LoanInitiation",
                 "ApplicationReview",
                 "GoNoGoApproval1",
                 "CreditApproval"
