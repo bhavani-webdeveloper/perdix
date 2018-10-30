@@ -885,12 +885,18 @@
                  "maxLength":100,
                  "captureStages":[
                     "Screening",
+                    "ScreeningReview",
                     "VehicleValuation",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
                     "TeleVerification",
-                    "LoanInitiation"
+                    "LoanInitiation",
+                    "BusinessApproval1",
+                    "CreditApproval1",
+                    "CreditApproval2",
+                    "CreditApproval3",
+                    "BusinessApproval2"
                  ]
               },
               "sanctionDate":{
@@ -5567,7 +5573,24 @@
                         "CreditApproval3",
                         "BusinessApproval2"
                     ]
+                 },
+                 "udf1":{
+                    "title":"yearOfManufacture",
+                    "type":"string",
+                    "captureStages":[
+                       "Screening",
+                       "VehicleValuation",
+                       "FieldInvestigation1",
+                       "FieldInvestigation2",
+                       "FieldInvestigation3",
+                       "TeleVerification",
+                       "LoanInitiation",
+                        "BusinessApproval1",
+                        "CreditApproval3",
+                        "BusinessApproval2"
+                    ]
                  }
+
               }
            }
         },

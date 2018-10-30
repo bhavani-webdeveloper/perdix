@@ -20,19 +20,42 @@
     },
     {
       "order": 2,
-      "code": "ScreeningReview",
-      "name": "Screening Review",
+      "code": "TeleVerification1",
+      "name": "Tele Verification 1",
       "stageType": "CAPTURE",
       "sendSms": "No",
       "smsCategory": "LoanBooking",
-      "isAccountOpening": false,
-      "riskScoreName": "ScreeningScore",
-      "allowedRoles": [
-        "WM"
-      ]
+      "isAccountOpening": false
     },
     {
       "order": 3,
+      "code": "FieldInvestigation1",
+      "name": "Field Investigation",
+      "stageType": "CAPTURE",
+      "sendSms": "No",
+      "smsCategory": "LoanBooking",
+      "isAccountOpening": false
+    },
+    {
+      "order": 4,
+      "code": "FieldInvestigation2",
+      "name": "Field Investigation",
+      "stageType": "CAPTURE",
+      "sendSms": "No",
+      "smsCategory": "LoanBooking",
+      "isAccountOpening": false
+    },
+    {
+      "order": 5,
+      "code": "FieldInvestigation3",
+      "name": "Field Investigation",
+      "stageType": "CAPTURE",
+      "sendSms": "No",
+      "smsCategory": "LoanBooking",
+      "isAccountOpening": false
+    },
+    {
+      "order": 6,
       "code": "GoNoGoApproval1",
       "name": "Go-no-go Approval 1",
       "stageType": "CAPTURE",
@@ -44,19 +67,7 @@
       ]
     },
     {
-      "order": 4,
-      "code": "GoNoGoApproval2",
-      "name": "Go-no-go Approval 2",
-      "stageType": "CAPTURE",
-      "sendSms": "No",
-      "smsCategory": "LoanBooking",
-      "isAccountOpening": false,
-      "allowedRoles": [
-        "WM"
-      ]
-    },
-    {
-      "order": 5,
+      "order": 7,
       "code": "Application",
       "name": "Application",
       "stageType": "CAPTURE",
@@ -68,7 +79,7 @@
       ]
     },
     {
-      "order": 6,
+      "order": 8,
       "code": "ApplicationReview",
       "name": "ApplicationReview",
       "stageType": "CAPTURE",
@@ -80,16 +91,16 @@
       ]
     },
     {
-      "order": 7,
-      "code": "TeleVerification",
-      "name": "Tele Verification",
+      "order": 9,
+      "code": "TeleVerification2",
+      "name": "Tele Verification 2",
       "stageType": "CAPTURE",
       "sendSms": "No",
       "smsCategory": "LoanBooking",
       "isAccountOpening": false
     },
     {
-      "order": 8,
+      "order": 10,
       "code": "VehicleValuation",
       "name": "Vehicle Valuation",
       "stageType": "CAPTURE",
@@ -98,34 +109,7 @@
       "isAccountOpening": false
     },
     {
-      "order": 9,
-      "code": "FieldInvestigation1",
-      "name": "Field Investigation",
-      "stageType": "CAPTURE",
-      "sendSms": "No",
-      "smsCategory": "LoanBooking",
-      "isAccountOpening": false
-    },
-    {
-      "order": 10,
-      "code": "FieldInvestigation2",
-      "name": "Field Investigation",
-      "stageType": "CAPTURE",
-      "sendSms": "No",
-      "smsCategory": "LoanBooking",
-      "isAccountOpening": false
-    },
-    {
       "order": 11,
-      "code": "FieldInvestigation3",
-      "name": "Field Investigation",
-      "stageType": "CAPTURE",
-      "sendSms": "No",
-      "smsCategory": "LoanBooking",
-      "isAccountOpening": false
-    },
-    {
-      "order": 12,
       "code": "CreditAppraisal",
       "name": "Credit Appraisal",
       "stageType": "CAPTURE",
@@ -134,40 +118,19 @@
       "isAccountOpening": false
     },
     {
+      "order": 12,
+      "code": "CreditApproval",
+      "name": "Credit Approval",
+      "stageType": "CAPTURE",
+      "sendSms": "Yes",
+      "smsCategory": "LoanBooking",
+      "isAccountOpening": false,
+      "allowedRoles": [
+        "WM"
+      ]
+    },
+    {
       "order": 13,
-      "code": "DeviationApproval",
-      "name": "Deviation Approval",
-      "stageType": "CAPTURE",
-      "sendSms": "No",
-      "smsCategory": "LoanBooking",
-      "isAccountOpening": false
-    },
-    {
-      "order": 14,
-      "code": "CreditApproval1",
-      "name": "Credit Approval 1",
-      "stageType": "CAPTURE",
-      "sendSms": "Yes",
-      "smsCategory": "LoanBooking",
-      "isAccountOpening": false,
-      "allowedRoles": [
-        "WM"
-      ]
-    },
-    {
-      "order": 15,
-      "code": "CreditApproval2",
-      "name": "Credit Approval 2",
-      "stageType": "CAPTURE",
-      "sendSms": "Yes",
-      "smsCategory": "LoanBooking",
-      "isAccountOpening": false,
-      "allowedRoles": [
-        "WM"
-      ]
-    },
-    {
-      "order": 16,
       "code": "Rejected",
       "name": "Rejected",
       "stageType": "CAPTURE",
@@ -179,7 +142,7 @@
       ]
     },
     {
-      "order": 17,
+      "order": 14,
       "code": "LoanInitiation",
       "name": "Loan Input",
       "stageType": "CAPTURE",
@@ -191,7 +154,7 @@
       ]
     },
     {
-      "order": 18,
+      "order": 15,
       "code": "PendingForPartner",
       "name": "Pending for Partner",
       "stageType": "CAPTURE",
@@ -203,7 +166,7 @@
       ]
     },
     {
-      "order": 19,
+      "order": 16,
       "code": "LoanBooking",
       "name": "Loan Booking",
       "stageType": "CAPTURE",
@@ -215,7 +178,7 @@
       ]
     },
     {
-      "order": 20,
+      "order": 17,
       "code": "DocumentUpload",
       "name": "Document Download and Upload",
       "stageType": "CAPTURE",
@@ -227,7 +190,7 @@
       ]
     },
     {
-      "order": 21,
+      "order": 18,
       "code": "DocumentVerification",
       "name": "Document Verification",
       "stageType": "CAPTURE",
@@ -239,7 +202,7 @@
       ]
     },
     {
-      "order": 22,
+      "order": 19,
       "code":"Completed",
       "name":"Completed",
       "stageType":"CAPTURE",
@@ -283,7 +246,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1",
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -300,7 +264,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -317,7 +282,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -334,16 +300,14 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation",
                 "ScreeningReview",
                 "ApplicationReview",
                 "GoNoGoApproval1",
-                "GoNoGoApproval2",
-                "CreditApproval1",
-                "CreditApproval2",
-                "CreditApproval3"
+                "CreditApproval"
             ]
           },
           "productType": {
@@ -358,7 +322,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -375,7 +340,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -392,7 +358,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -409,16 +376,15 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation",
                 "ScreeningReview",
                 "ApplicationReview",
                 "GoNoGoApproval1",
                 "GoNoGoApproval2",
-                "CreditApproval1",
-                "CreditApproval2",
-                "CreditApproval3"
+                "CreditApproval"
             ]
           },
           "doCustomerLoanAmount": {
@@ -433,7 +399,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -450,7 +417,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -467,7 +435,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -484,7 +453,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -501,7 +471,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -518,7 +489,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -535,7 +507,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -552,7 +525,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -569,7 +543,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -586,7 +561,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -602,7 +578,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -618,7 +595,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -634,7 +612,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -651,7 +630,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -666,7 +646,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -681,7 +662,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -696,7 +678,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -711,7 +694,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ],
@@ -729,7 +713,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -746,7 +731,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -763,7 +749,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -778,7 +765,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -795,7 +783,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -812,7 +801,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -829,7 +819,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -844,7 +835,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ],
@@ -862,7 +854,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -879,7 +872,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -896,7 +890,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -913,7 +908,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -930,7 +926,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -947,7 +944,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -964,7 +962,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -981,7 +980,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -998,7 +998,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1015,7 +1016,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1032,7 +1034,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1047,7 +1050,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1064,7 +1068,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1081,7 +1086,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1098,7 +1104,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation",
               "DocumentUpload",
@@ -1117,7 +1124,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation",
               "DocumentUpload",
@@ -1136,7 +1144,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation",
               "DocumentUpload",
@@ -1155,7 +1164,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation",
               "DocumentUpload",
@@ -1174,7 +1184,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1191,7 +1202,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1205,10 +1217,7 @@
                 "ScreeningReview",
                 "ApplicationReview",
                 "GoNoGoApproval1",
-                "GoNoGoApproval2",
-                "CreditApproval1",
-                "CreditApproval2",
-                "CreditApproval3",
+                "CreditApproval",
                 "LoanInitiation"
             ]
           },
@@ -1224,7 +1233,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1241,7 +1251,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1258,7 +1269,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1275,7 +1287,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1292,7 +1305,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1309,7 +1323,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1326,7 +1341,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1343,7 +1359,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1358,7 +1375,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1375,7 +1393,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1392,7 +1411,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1409,7 +1429,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1426,7 +1447,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1443,7 +1465,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1460,7 +1483,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1477,7 +1501,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1489,10 +1514,7 @@
                 "ScreeningReview",
                 "ApplicationReview",
                 "GoNoGoApproval1",
-                "GoNoGoApproval2",
-                "CreditApproval1",
-                "CreditApproval2",
-                "CreditApproval3",
+                "CreditApproval",
                 "LoanInitiation"
             ]
           },
@@ -1506,7 +1528,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1515,13 +1538,18 @@
             "title": "Processing Fee Percentage",
             "type": "number",
             "captureStages": [
-                "ScreeningReview",
+                "Screening",
+                "Application",
+                "VehicleValuation",
+                "FieldInvestigation1",
+                "FieldInvestigation2",
+                "FieldInvestigation3",
+                "TeleVerification1", 
+                "TeleVerification2",
+                "CreditAppraisal",
                 "ApplicationReview",
                 "GoNoGoApproval1",
-                "GoNoGoApproval2",
-                "CreditApproval1",
-                "CreditApproval2",
-                "CreditApproval3",
+                "CreditApproval",
                 "LoanInitiation"
             ]
           },
@@ -1535,7 +1563,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1550,7 +1579,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1565,7 +1595,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1580,7 +1611,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1595,7 +1627,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1610,7 +1643,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation",
               "LoanBooking"
@@ -1626,16 +1660,14 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation",
                 "ScreeningReview",
                 "ApplicationReview",
                 "GoNoGoApproval1",
-                "GoNoGoApproval2",
-                "CreditApproval1",
-                "CreditApproval2",
-                "CreditApproval3"
+                "CreditApproval"
             ]
           },
           "assetAvailableForHypothecation": {
@@ -1648,7 +1680,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1663,7 +1696,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1678,7 +1712,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1693,7 +1728,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1708,7 +1744,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1723,7 +1760,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1738,7 +1776,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1753,7 +1792,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1768,7 +1808,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1783,7 +1824,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1798,7 +1840,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1813,7 +1856,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1828,7 +1872,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1843,7 +1888,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1858,7 +1904,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1873,7 +1920,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1888,7 +1936,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1903,7 +1952,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1918,7 +1968,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1933,7 +1984,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1948,7 +2000,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1963,7 +2016,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1978,7 +2032,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -1993,7 +2048,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -2008,7 +2064,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -2023,7 +2080,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -2038,7 +2096,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -2053,7 +2112,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -2068,7 +2128,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -2083,7 +2144,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -2112,7 +2174,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -2129,7 +2192,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -2146,7 +2210,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -2161,7 +2226,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ],
@@ -2179,7 +2245,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -2196,7 +2263,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -2213,7 +2281,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -2228,7 +2297,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ],
@@ -2246,7 +2316,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -2263,7 +2334,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -2278,7 +2350,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -2293,7 +2366,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ],
@@ -2309,7 +2383,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -2326,7 +2401,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -2343,7 +2419,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -2360,7 +2437,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -2377,7 +2455,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -2392,7 +2471,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ],
@@ -2408,7 +2488,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -2425,7 +2506,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -2442,7 +2524,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -2459,7 +2542,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -2474,7 +2558,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ],
@@ -2492,7 +2577,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -2509,7 +2595,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -2524,7 +2611,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ],
@@ -2555,7 +2643,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -2572,7 +2661,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -2589,7 +2679,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -2606,7 +2697,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -2641,7 +2733,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -2658,7 +2751,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -2675,7 +2769,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -2690,7 +2785,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -2707,7 +2803,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -2722,7 +2819,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -2739,7 +2837,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -2769,7 +2868,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -2786,7 +2886,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -2803,7 +2904,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -2820,7 +2922,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -2837,7 +2940,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -2854,7 +2958,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -2881,7 +2986,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ],
@@ -2899,7 +3005,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -2914,7 +3021,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -2929,7 +3037,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -2946,7 +3055,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -2961,7 +3071,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -2978,7 +3089,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -2993,7 +3105,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3010,7 +3123,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3027,7 +3141,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3044,7 +3159,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3072,7 +3188,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3089,7 +3206,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3106,7 +3224,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3123,7 +3242,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3138,7 +3258,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3153,7 +3274,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3181,7 +3303,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3198,7 +3321,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3215,7 +3339,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3232,7 +3357,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3249,7 +3375,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3266,7 +3393,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3281,7 +3409,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3298,7 +3427,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3315,7 +3445,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3332,7 +3463,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3349,7 +3481,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3364,7 +3497,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3381,7 +3515,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3398,7 +3533,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3413,7 +3549,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3430,7 +3567,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3447,7 +3585,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3462,7 +3601,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3477,7 +3617,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3492,7 +3633,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3507,7 +3649,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3522,7 +3665,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3537,7 +3681,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3552,7 +3697,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3567,7 +3713,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3582,7 +3729,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3597,7 +3745,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3614,7 +3763,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3629,7 +3779,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3646,7 +3797,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3663,7 +3815,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3680,7 +3833,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3697,7 +3851,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3714,7 +3869,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3731,7 +3887,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3746,7 +3903,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3763,7 +3921,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3780,7 +3939,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3797,7 +3957,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3814,7 +3975,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3831,7 +3993,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3848,7 +4011,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3865,7 +4029,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -3882,7 +4047,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -3899,7 +4065,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3916,7 +4083,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3933,7 +4101,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3950,7 +4119,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3967,7 +4137,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3982,7 +4153,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -3999,7 +4171,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4016,7 +4189,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4033,7 +4207,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4050,7 +4225,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4067,7 +4243,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4084,7 +4261,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4099,7 +4277,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4116,7 +4295,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4133,7 +4313,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4150,7 +4331,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4167,7 +4349,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4184,7 +4367,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4201,7 +4385,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4218,7 +4403,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4235,7 +4421,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4250,7 +4437,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4267,7 +4455,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4282,7 +4471,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4299,7 +4489,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4316,7 +4507,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4333,7 +4525,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4350,7 +4543,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4367,7 +4561,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4384,7 +4579,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4399,7 +4595,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4414,7 +4611,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4431,7 +4629,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4448,7 +4647,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4463,7 +4663,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4480,7 +4681,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4497,7 +4699,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4514,7 +4717,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4529,7 +4733,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4546,7 +4751,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4561,7 +4767,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4578,7 +4785,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4595,7 +4803,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4610,7 +4819,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4625,7 +4835,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4640,7 +4851,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4655,7 +4867,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4670,7 +4883,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4687,7 +4901,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4702,7 +4917,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4719,7 +4935,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4736,7 +4953,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4753,7 +4971,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4770,7 +4989,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4787,7 +5007,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4804,7 +5025,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4821,7 +5043,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4838,7 +5061,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4855,7 +5079,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4872,7 +5097,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4889,7 +5115,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4906,7 +5133,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4923,7 +5151,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+             "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -4952,7 +5181,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -4967,7 +5197,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -4982,7 +5213,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5012,7 +5244,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5029,7 +5262,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5044,7 +5278,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5059,7 +5294,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5074,7 +5310,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5089,7 +5326,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5104,7 +5342,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5119,7 +5358,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5134,7 +5374,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5149,7 +5390,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5164,7 +5406,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5179,7 +5422,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5194,7 +5438,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5224,7 +5469,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5241,7 +5487,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5258,7 +5505,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5275,7 +5523,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5305,7 +5554,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5322,7 +5572,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5339,7 +5590,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+             "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5369,7 +5621,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5386,7 +5639,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5403,7 +5657,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5433,7 +5688,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5448,7 +5704,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5478,7 +5735,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5493,7 +5751,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5523,7 +5782,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5540,7 +5800,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5555,7 +5816,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                  "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5570,7 +5832,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5587,7 +5850,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5617,7 +5881,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5634,7 +5899,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5651,7 +5917,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5668,7 +5935,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5685,7 +5953,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5702,7 +5971,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5719,7 +5989,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5736,7 +6007,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5753,7 +6025,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5770,7 +6043,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5804,7 +6078,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ],
@@ -5822,7 +6097,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5839,7 +6115,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5856,7 +6133,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5873,7 +6151,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5890,7 +6169,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5907,7 +6187,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5924,7 +6205,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5941,7 +6223,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5956,7 +6239,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5971,7 +6255,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -5988,7 +6273,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -6005,7 +6291,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -6022,7 +6309,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -6039,7 +6327,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -6056,7 +6345,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -6071,7 +6361,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -6088,7 +6379,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -6105,7 +6397,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -6122,7 +6415,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -6137,7 +6431,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -6167,7 +6462,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -6184,7 +6480,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -6201,7 +6498,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation"
               ]
@@ -6230,7 +6528,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -6245,7 +6544,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -6260,7 +6560,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -6275,7 +6576,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -6289,7 +6591,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -6297,13 +6600,19 @@
           "udf6": {
             "type": "number",
             "captureStages": [
-               "ScreeningReview",
+                "Screening",
+                "Application",
+                "VehicleValuation",
+                "FieldInvestigation1",
+                "FieldInvestigation2",
+                "FieldInvestigation3",
+                "TeleVerification1", 
+                "TeleVerification2",
+                "CreditAppraisal",
+                "LoanInitiation",
                 "ApplicationReview",
                 "GoNoGoApproval1",
-                "GoNoGoApproval2",
-                "CreditApproval1",
-                "CreditApproval2",
-                "CreditApproval3"
+                "CreditApproval"
             ]
           },
           "udf7": {
@@ -6312,19 +6621,21 @@
                "ScreeningReview",
                 "ApplicationReview",
                 "GoNoGoApproval1",
-                "GoNoGoApproval2",
-                "CreditApproval1",
-                "CreditApproval2",
-                "CreditApproval3",
+                "CreditApproval",
                 "Screening",
                 "Application",
                 "VehicleValuation",
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation",
+                "PendingForPartner",
+                "LoanBooking",
+                "DocumentUpload",
+                "DocumentVerification",
                 "Completed"
              ]
           }
@@ -6350,7 +6661,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -6365,7 +6677,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -6393,7 +6706,8 @@
               "FieldInvestigation1",
               "FieldInvestigation2",
               "FieldInvestigation3",
-              "TeleVerification",
+              "TeleVerification1", 
+              "TeleVerification2",
               "CreditAppraisal",
               "LoanInitiation"
             ]
@@ -6423,7 +6737,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation",
                 "DocumentUpload",
@@ -6443,7 +6758,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation",
                 "DocumentUpload",
@@ -6463,7 +6779,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation",
                 "DocumentUpload",
@@ -6495,7 +6812,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation",
                 "LoanBooking",
@@ -6515,7 +6833,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation",
                 "DocumentUpload",
@@ -6532,7 +6851,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation",
                 "DocumentUpload",
@@ -6549,7 +6869,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation",
                 "DocumentUpload",
@@ -6566,7 +6887,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation",
                 "LoanBooking",
@@ -6584,7 +6906,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation",
                 "DocumentUpload",
@@ -6603,7 +6926,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation",
                 "DocumentUpload",
@@ -6622,7 +6946,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation",
                 "DocumentUpload",
@@ -6641,7 +6966,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation",
                 "DocumentUpload",
@@ -6658,7 +6984,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation",
                 "DocumentUpload",
@@ -6675,7 +7002,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation",
                 "DocumentUpload",
@@ -6692,7 +7020,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation",
                 "DocumentUpload",
@@ -6709,7 +7038,8 @@
                 "FieldInvestigation1",
                 "FieldInvestigation2",
                 "FieldInvestigation3",
-                "TeleVerification",
+                "TeleVerification1", 
+                "TeleVerification2",
                 "CreditAppraisal",
                 "LoanInitiation",
                 "DocumentUpload",

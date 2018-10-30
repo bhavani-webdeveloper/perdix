@@ -33,7 +33,7 @@ export class CollateralFieldPolicy extends IPolicy<LoanProcess> {
             col.quantity = 1;
             col.electricityAvailable = vehicleDetails.segment;
             col.collateralDescription = vehicleDetails.category;
-            // col.expectedPurchaseDate = vehicleDetails.yearOfManufacture;
+            col.udf1 = vehicleDetails.yearOfManufacture;
 
             col.manufacturer = vehicleDetails.make;
             col.modelNo = vehicleDetails.vehicleModel;

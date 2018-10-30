@@ -106,23 +106,12 @@ define([], function () {
                                 "LoanDetails.centreName": {
                                     "orderNo": 1,
                                     "type": "select",
+                                    "readonly": true,
                                     "enumCode": "centre"
                                 },
                                 "LoanDetails.loanType": {
                                     "orderNo": 2,
-                                    "titleMap": [{
-                                            value: "JEWEL",
-                                            name: "Jewel Loan"
-                                        },
-                                        {
-                                            value: "SECURED",
-                                            name: "SECURED"
-                                        },
-                                        {
-                                            value: "UNSECURED",
-                                            name: "UNSECURED"
-                                        }
-                                    ]
+                                    "enumCode": "booking_loan_type"
                                 },
                                 "LoanDetails.partner": {
                                     "orderNo": 2,
@@ -130,10 +119,6 @@ define([], function () {
                                 },
                                 "LoanDetails.frequency": {
                                     "enumCode": "loan_product_frequency"
-                                },
-                                "LoanDetails.loanProductCategory": {
-                                    "orderNo": 4,
-                                    "enumCode": "loan_product_category",
                                 },
                                 "LoanDetails.loanProductCode": {
                                     "orderNo": 4,
@@ -148,11 +133,12 @@ define([], function () {
                                     searchHelper: formHelper,
                                     search: function (inputModel, form, model, context) {
 
-                                        return Queries.getLoanProductCodeByLoanType(model.loanAccount.productCategory, model.loanAccount.frequency, model.loanAccount.partnerCode, model.loanAccount.loanType);
+                                        return Queries.getLoanProductDetails(model.loanAccount.loanType, model.loanAccount.partnerCode, model.loanAccount.frequency);
                                     },
                                     onSelect: function (valueObj, model, context) {
                                         model.loanAccount.productCode = valueObj.productCode;
                                         model.additions.tenurePlaceHolder = valueObj.tenure_from + '-' + valueObj.tenure_to;
+                                        model.additions.amountPlaceHolder = valueObj.amount_from + '-' + valueObj.amount_to;
                                     },
                                     getListDisplayItem: function (item, index) {
                                         return [
@@ -239,12 +225,13 @@ define([], function () {
                                 },
                                 "LoanDetails.loanAmountRequested": {
                                     "orderNo": 5,
+                                    "placeholderExpr": "model.additions.amountPlaceHolder",
                                     onChange: function (value, form, model) {
                                         model.loanAccount.disbursementSchedules[0].disbursementAmount = value;
                                     }
                                 },
                                 "LoanDetails.loanApplicationDate": {
-                                    "orderNo": 8
+                                    "orderNo": 9
                                 },
                                 "LoanDetails.requestedTenure": {
                                     "orderNo": 6,
@@ -540,25 +527,10 @@ define([], function () {
                                 "LoanDetails.frequency": {
                                     "enumCode": "loan_product_frequency"
                                 },
-                                "LoanDetails.loanProductCategory": {
-                                    "enumCode": "loan_product_category",
-                                },
                                 "LoanDetails.loanType": {
                                     "orderNo": 2,
                                     "readonly": true,
-                                    "titleMap": [{
-                                            value: "JEWEL",
-                                            name: "Jewel Loan"
-                                        },
-                                        {
-                                            value: "SECURED",
-                                            name: "SECURED"
-                                        },
-                                        {
-                                            value: "UNSECURED",
-                                            name: "UNSECURED"
-                                        }
-                                    ]
+                                    "enumCode": "booking_loan_type"
                                 },
                                 "LoanDetails.witnessDetails.witnessDOB": {
                                     "type": "date",
@@ -593,25 +565,10 @@ define([], function () {
                                 "LoanDetails.frequency": {
                                     "enumCode": "loan_product_frequency"
                                 },
-                                "LoanDetails.loanProductCategory": {
-                                    "enumCode": "loan_product_category",
-                                },
                                 "LoanDetails.loanType": {
                                     "orderNo": 2,
                                     "readonly": true,
-                                    "titleMap": [{
-                                            value: "JEWEL",
-                                            name: "Jewel Loan"
-                                        },
-                                        {
-                                            value: "SECURED",
-                                            name: "SECURED"
-                                        },
-                                        {
-                                            value: "UNSECURED",
-                                            name: "UNSECURED"
-                                        }
-                                    ]
+                                    "enumCode": "booking_loan_type",
                                 },
                                 "LoanDetails.witnessDetails.witnessDOB": {
                                     "type": "date",
@@ -647,25 +604,10 @@ define([], function () {
                                 "LoanDetails.frequency": {
                                     "enumCode": "loan_product_frequency"
                                 },
-                                "LoanDetails.loanProductCategory": {
-                                    "enumCode": "loan_product_category",
-                                },
                                 "LoanDetails.loanType": {
                                     "orderNo": 2,
                                     "readonly": true,
-                                    "titleMap": [{
-                                            value: "JEWEL",
-                                            name: "Jewel Loan"
-                                        },
-                                        {
-                                            value: "SECURED",
-                                            name: "SECURED"
-                                        },
-                                        {
-                                            value: "UNSECURED",
-                                            name: "UNSECURED"
-                                        }
-                                    ]
+                                    "enumCode": "booking_loan_type"
                                 },
                                 "LoanDetails.witnessDetails.witnessDOB": {
                                     "type": "date",
@@ -701,25 +643,10 @@ define([], function () {
                                 "LoanDetails.frequency": {
                                     "enumCode": "loan_product_frequency"
                                 },
-                                "LoanDetails.loanProductCategory": {
-                                    "enumCode": "loan_product_category",
-                                },
                                 "LoanDetails.loanType": {
                                     "orderNo": 2,
                                     "readonly": true,
-                                    "titleMap": [{
-                                            value: "JEWEL",
-                                            name: "Jewel Loan"
-                                        },
-                                        {
-                                            value: "SECURED",
-                                            name: "SECURED"
-                                        },
-                                        {
-                                            value: "UNSECURED",
-                                            name: "UNSECURED"
-                                        }
-                                    ]
+                                    "enumCode": "booking_loan_type"
                                 },
                                 "LoanDetails.witnessDetails.witnessDOB": {
                                     "type": "date",

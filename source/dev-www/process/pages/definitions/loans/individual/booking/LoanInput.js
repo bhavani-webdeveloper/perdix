@@ -275,6 +275,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     }
                     PagesDefinition.getPageConfig("Page/Engine/loans.individual.booking.LoanInput").then(function(data){
                         $log.info(data);
+                        model.pageConfig = data;
                         if(data.showLoanBookingDetails != undefined && data.showLoanBookingDetails !== null && data.showLoanBookingDetails !=""){
                             model.showLoanBookingDetails = data.showLoanBookingDetails;
                             model.BackedDatedDisbursement=data.BackedDatedDisbursement;
@@ -1561,6 +1562,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "parentValueExpr":"model.loanAccount.collateral[arrayIndex].collateralCategory"
                             },
                             {
+                                "key":"loanAccount.collateral[].electricityAvailable",
+                                "condition": "model.pageConfig.CollateralUDFs.electricityAvailable",
+                                "title":"SEGMENT"
+                            },
+                            {
                                 "key":"loanAccount.collateral[].collateralDescription",
                                 "title":"HYPOTHECATION_DESCRIPTION"
                             },
@@ -1575,6 +1581,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             },
                             {
                                 "key":"loanAccount.collateral[].modelNo"
+                            },
+                            {
+                                "key":"loanAccount.collateral[].udf1",
+                                "condition": "model.pageConfig.CollateralUDFs.udf1",
+                                "type": "string",
+                                "title": "YEAR_OF_MANUFACTURE"
                             },
                             {
                                 "key":"loanAccount.collateral[].machineOld"

@@ -1200,22 +1200,21 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "title": "HOUSE VERIFICATION PHOTO",
                                             "orderNo": 150,
                                             "type": "file",
-                                            "fileType": "image/*",
-                                            "category": "CustomerEnrollment",
-                                            "subCategory": "PHOTO",
+                                            "fileType": "application/pdf",
+                                            "using": "scanner",
                                             "onChange": function(){
                                                 console.log("INSIDE ONCHANGE1");
                                             },
                                             "viewParams" : function(modelValue, form, model) {
-                                                    getLocation().then((pos)=>{
-                                                        console.log("successful");
-                                                        model.customer.latitude = pos.coords.latitude;
-                                                        model.customer.longitude = pos.coords.longitude;
-                                                    });
-                                                    getLocation().catch((err)=>{
-                                                        console.log(err);
-                                                    });
-                                                }
+                                                getLocation().then((pos)=>{
+                                                    console.log("successful");
+                                                    model.customer.latitude = pos.coords.latitude;
+                                                    model.customer.longitude = pos.coords.longitude;
+                                                });
+                                                getLocation().catch((err)=>{
+                                                    console.log(err);
+                                                });
+                                            }
 
                                             //     "title": "HOUSE_VERIFICATION_PHOTO",
                                             //     "category": "CustomerEnrollment",
@@ -1407,7 +1406,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 {
                                     "type": "actionbox",
-                                    "condition": "model.customer.currentStage && (model.loanProcess.loanAccount.currentStage=='Screening' || model.loanProcess.loanAccount.currentStage=='Application' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation1' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation2' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation3' || model.loanProcess.loanAccount.currentStage=='CreditAppraisal' || model.loanProcess.loanAccount.currentStage=='TeleVerification')",
+                                    "condition": "model.customer.currentStage && (model.loanProcess.loanAccount.currentStage=='Screening' || model.loanProcess.loanAccount.currentStage=='Application' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation1' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation2' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation3' || model.loanProcess.loanAccount.currentStage=='CreditAppraisal' || model.loanProcess.loanAccount.currentStage=='TeleVerification1' || model.loanProcess.loanAccount.currentStage=='TeleVerification2')",
                                     "orderNo": 1200,
                                     "items": [
                                         {

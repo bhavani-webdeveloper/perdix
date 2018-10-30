@@ -252,7 +252,7 @@ irf.models.factory('Queries', [
             request = {};
             request.partner_code = partnerCode || null;
             // opts = opts || {partner_code: ""};
-            resource.getResult("bankAccountsByPartnerCode.list", request, 10).then(function(records) {
+            resource.getResult("bankAccountsByPartnerCode.list", request, 100).then(function(records) {
                 if (records && records.results) {
                     var result = {
                         headers: {
