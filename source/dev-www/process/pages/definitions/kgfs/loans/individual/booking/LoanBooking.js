@@ -22,7 +22,7 @@ define([], function () {
                     "LoanDetails.loanType",
                     "LoanDetails.partner",
                     "LoanDetails.frequency",
-                    "LoanDetails.loanProductCode",
+                    "LoanDetails.loanProductName",
                     "LoanDetails.loanApplicationDate",
                     "LoanDetails.loanAmountRequested",
                     "LoanDetails.requestedTenure",
@@ -141,12 +141,15 @@ define([], function () {
                                     },
                                     getListDisplayItem: function (item, index) {
                                         return [
-                                            item.productCode
+                                            item.productCode 
                                         ];
                                     },
                                     onChange: function (value, form, model) {
                                         // getProductDetails(value, model);
                                     },
+                                },
+                                "LoanDetails.loanProductName":{
+                                    "orderNo":5
                                 },
                                 "LoanDetails.interestRate":{
                                     "orderNo":6
@@ -779,6 +782,40 @@ define([], function () {
                                         "LoanDetails": {
                                             "orderNo": 7,
                                             "items": {
+                                                "loanProductName":{
+                                                    "title": "PRODUCT_NAME",
+                                                    "type": "lov",
+                                                    "key": "loanAccount.productName",
+                                                    bindMap: {
+                                                        "Partner": "loanAccount.partnerCode",
+                                                        // "ProductCategory": "loanAccount.productCategory",
+                                                        "Frequency": "loanAccount.frequency",
+                                                        "loanType": "loanAccount.loanType"
+                                                    },
+                                                    autolov: true,
+                                                    required: true,
+                                                    searchHelper: formHelper,
+                                                    search: function (inputModel, form, model, context) {
+                
+                                                        return Queries.getLoanProductDetails(model.loanAccount.loanType, model.loanAccount.partnerCode, model.loanAccount.frequency);
+                                                    },
+                                                    onSelect: function (valueObj, model, context) {
+                                                        model.loanAccount.productName = valueObj.product_name;
+                                                        model.loanAccount.productCode = valueObj.productCode;
+                                                        model.additions.tenurePlaceHolder = valueObj.tenure_from + '-' + valueObj.tenure_to;
+                                                        model.additions.amountPlaceHolder = valueObj.amount_from + '-' + valueObj.amount_to;
+                                                    },
+                                                    getListDisplayItem: function (item, index) {
+                                                        return [
+                                                            item.productCode,
+                                                            item.product_name 
+                                                        ];
+                                                    },
+                                                    onChange: function (value, form, model) {
+                                                        // getProductDetails(value, model);
+                                                    },
+                                            
+                                                },
                                                 "borrowers": {
                                                     "title": "BORROWERS",
                                                     "type": "radios",
@@ -808,14 +845,14 @@ define([], function () {
                                                     }
                                                 },
                                                 "borrowersHusbandName": {
-                                                    "orderNo": 9,
+                                                    "orderNo": 8,
                                                     "title": "HUSBAND_NAME",
                                                     "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf4 == 'Husband'",
                                                     "type": "text",
                                                     "key": "loanAccount.husbandOrFatherFirstName",
                                                 },
                                                 "borrowersFatherName": {
-                                                    "orderNo": 9,
+                                                    "orderNo": 8,
                                                     "title": "FATHER_NAME",
                                                     "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf4 == 'Father'",
                                                     "type": "text",
