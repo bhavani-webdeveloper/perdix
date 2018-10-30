@@ -263,9 +263,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     });
                     //model.loanAccount.partnerCode = model.loanAccount.partnerCode || "Kinara";
                     model.loanAccount.loanCustomerRelations = model.loanAccount.loanCustomerRelations || [];
-                    model.loanAccount.coBorrowers = [];
-                    model.loanAccount.guarantors = [];
+                    model.loanAccount.coBorrowers = model.loanAccount.coBorrowers ||[];
+                    model.loanAccount.guarantors = model.loanAccount.guarantors ||[];
                     model.showLoanBookingDetails = showLoanBookingDetails;
+
                     if(model.siteCode == 'IREPDhan'){
                         model.loanAccount.commercialCibilCharge = 0;
                         model.loanAccount.processingFeePercentage = 1.75;
@@ -273,6 +274,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         model.loanAccount.otherFee = 0;
                         model.loanAccount.interestRate = 26;
                     }
+
                     PagesDefinition.getPageConfig("Page/Engine/loans.individual.booking.LoanInput").then(function(data){
                         $log.info(data);
                         model.pageConfig = data;
@@ -291,17 +293,21 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         }
                         else if (model.loanAccount.loanCustomerRelations[i].relation === 'COAPPLICANT' ||
                             model.loanAccount.loanCustomerRelations[i].relation === 'Co-Applicant') {
-                            model.loanAccount.coBorrowers.push({
+                            if(!model.loanAccount.coBorrowers.length){
+                                model.loanAccount.coBorrowers.push({
                                 coBorrowerUrnNo:model.loanAccount.loanCustomerRelations[i].urn,
                                 customerId:model.loanAccount.loanCustomerRelations[i].customerId
                             });
+                            }  
                         }
                         else if(model.loanAccount.loanCustomerRelations[i].relation === 'GUARANTOR' ||
-                                model.loanAccount.loanCustomerRelations[i].relation === 'Guarantor'){
-                            model.loanAccount.guarantors.push({
+                            model.loanAccount.loanCustomerRelations[i].relation === 'Guarantor'){
+                            if(!model.loanAccount.guarantors.length){
+                                model.loanAccount.guarantors.push({
                                 guaUrnNo:model.loanAccount.loanCustomerRelations[i].urn,
                                 customerId:model.loanAccount.loanCustomerRelations[i].customerId
-                            });
+                                });
+                            }
                         }
                     }
                     /*for (var i in model.loanAccount.loanCustomerRelations) {
@@ -845,7 +851,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             {
                                 key:"loanAccount.commercialCibilCharge",
                                 type:"amount",
-                                "condition" : "model.siteCode != 'IREPDhan'",
+                                "condition" : "model.siteCode != 'IREPDhan' && model.siteCode != 'pahal'",
                                 onChange:function(value,form,model){
                                     getSanctionedAmount(model);
                                 }
