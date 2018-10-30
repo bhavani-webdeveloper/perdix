@@ -23,7 +23,7 @@ irf.pageCollection.factory(irf.page("audit.detail.JewelAppraisal"),
         var recomputeJewelDifference = function(model) {
             var j = model.jewel_appraisal.jewel_assets;
             j.CMS_difference = String(j.number_of_pouches_in_hand + j.number_of_pouches_in_hq - j.total_on_hand);
-        },
+        }
 
         return {
             "type": "schema-form",

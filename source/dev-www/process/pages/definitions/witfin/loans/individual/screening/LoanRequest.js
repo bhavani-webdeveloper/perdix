@@ -193,14 +193,14 @@ define([], function() {
                                 "PreliminaryInformation.estimatedEmi": {
                                     "readonly": true
                                 },
-                                "DeductionsFromLoan": {
-                                    "readonly": true
-                                },
                                 "LoanDocuments": {
                                     "readonly": true
                                 },
                                 "PayerDetails": {
                                     "readonly": true
+                                },
+                                "LoanRecommendation":{
+                                    "orderNo":50
                                 }
                             }
                         },
@@ -355,6 +355,9 @@ define([], function() {
                                 },
                                 "PayerDetails": {
                                     "readonly": true
+                                },
+                                "LoanRecommendation":{
+                                    "orderNo":50
                                 }
                             }
                         },
@@ -377,6 +380,9 @@ define([], function() {
                                 },
                                 "PayerDetails": {
                                     "readonly": true
+                                },
+                                "LoanRecommendation":{
+                                    "orderNo":50
                                 }
                             }
                         },
@@ -399,6 +405,9 @@ define([], function() {
                                 },
                                 "PayerDetails": {
                                     "readonly": true
+                                },
+                                "LoanRecommendation":{
+                                    "orderNo":50
                                 }
                             }
                         },
@@ -421,6 +430,9 @@ define([], function() {
                                 },
                                 "PayerDetails": {
                                     "readonly": true
+                                },
+                                "LoanRecommendation":{
+                                    "orderNo":50
                                 }
                             }
                         },
@@ -443,6 +455,9 @@ define([], function() {
                                 },
                                 "PayerDetails": {
                                     "readonly": true
+                                },
+                                "LoanRecommendation":{
+                                    "orderNo":50
                                 }
                             }
                         },
@@ -465,6 +480,9 @@ define([], function() {
                                 },
                                 "PayerDetails": {
                                     "readonly": true
+                                },
+                                "LoanRecommendation":{
+                                    "orderNo":50
                                 }
                             }
                         },
@@ -487,6 +505,9 @@ define([], function() {
                                 },
                                 "PayerDetails": {
                                     "readonly": true
+                                },
+                                "LoanRecommendation":{
+                                    "orderNo":50
                                 }
                             }
                         },
@@ -509,6 +530,9 @@ define([], function() {
                                 },
                                 "PayerDetails": {
                                     "readonly": true
+                                },
+                                "LoanRecommendation":{
+                                    "orderNo":50
                                 }
                             }
                         },
@@ -531,6 +555,9 @@ define([], function() {
                                 },
                                 "PayerDetails": {
                                     "readonly": true
+                                },
+                                "LoanRecommendation":{
+                                    "orderNo":50
                                 }
                             }
                         },
@@ -553,6 +580,9 @@ define([], function() {
                                 },
                                 "PayerDetails": {
                                     "readonly": true
+                                },
+                                "LoanRecommendation":{
+                                    "orderNo":50
                                 }
                             }
                         },
@@ -666,6 +696,8 @@ define([], function() {
                     "PreliminaryInformation.calculateEmi",
                     "PreliminaryInformation.estimatedEmi",
                     "PreliminaryInformation.VehicleValuator",
+                    "PreliminaryInformation.expectedProcessingFeePercentage",
+                    "PreliminaryInformation.estimatedEmi",
                     "LoanCustomerRelations",
                     "LoanCustomerRelations.loanCustomerRelations",
                     "LoanCustomerRelations.loanCustomerRelations.customerId",
@@ -674,10 +706,8 @@ define([], function() {
                     "LoanCustomerRelations.loanCustomerRelations.relation",
                     "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant",
                     "DeductionsFromLoan",
-                    "DeductionsFromLoan.expectedProcessingFeePercentage",
                     "DeductionsFromLoan.dsaPayout",
                     "DeductionsFromLoan.securityEmiRequired",
-                    "DeductionsFromLoan.estimatedEmi",
                     "DeductionsFromLoan.calculateDisbursedAmount",
                     "DeductionsFromLoan.fee3",
                     "DeductionsFromLoan.fee4",
@@ -702,7 +732,6 @@ define([], function() {
                     "LoanRecommendation.processingFeePercentage",
                     "LoanRecommendation.securityEmiRequired",
                     "LoanRecommendation.loanChannels",
-                    "LoanRecommendation.commercialCibilCharge",
                     "LoanRecommendation.calculateNominalRate",
                     "LoanRecommendation.processingFee",
                     "LoanRecommendation.udf6",
@@ -912,6 +941,17 @@ define([], function() {
                                                     PageHelper.showProgress("nominal-rate-calculation", "Error while calculating nominal rate, check the input values.", 5000);
                                                 }
                                             }
+                                        },
+                                        "expectedProcessingFeePercentage": {
+                                            "key": "loanAccount.expectedProcessingFeePercentage",
+                                            "title": "EXPECTED_PROCESSING_FEES_IN_PERCENTAGE",
+                                            "type": "string",
+                                        },
+                                        "estimatedEmi": {
+                                            "key": "loanAccount.estimatedEmi",
+                                            "type": "amount",
+                                            "readonly": true,
+                                            "title": "EXPECTED_ADVANCE_EMI",
                                         }
                                         
                                         
@@ -919,6 +959,7 @@ define([], function() {
                                 },
                                 
                                 "DeductionsFromLoan": {
+                                    "orderNo": 60,
                                     "items": {
                                         "dsaPayout": {
                                             "key": "loanAccount.dsaPayout",
@@ -934,7 +975,8 @@ define([], function() {
                                         "expectedPortfolioInsurancePremium": {
                                             "key": "loanAccount.expectedPortfolioInsurancePremium",
                                             "title": "PERSONAL_INSURANCE",
-                                            "orderNo": 50
+                                            "orderNo": 50,
+                                            "readonly": true
                                         },
                                         "fee4": {
                                             "key": "loanAccount.fee4",
