@@ -7,7 +7,7 @@ define(["perdix/domain/model/loan/LoanProcess",
         var EnrolmentProcess = EnrolmentProcess["EnrolmentProcess"];
         var LoanCustomerRelationTypes = LoanCustomerRelation["LoanCustomerRelationTypes"];
         return {
-            pageUID: "pahal.loans.individual.screening.TeleVerification",
+            pageUID: "pahal.loans.individual.screening.TeleVerification2",
             pageType: "Bundle",
             dependencies: ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager","formHelper", "$stateParams", "Enrollment"
             ,"LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
@@ -161,7 +161,7 @@ define(["perdix/domain/model/loan/LoanProcess",
 
                     "pre_pages_initialize": function(bundleModel){
                         $log.info("Inside pre_page_initialize");
-                        bundleModel.currentStage = "TeleVerification";
+                        bundleModel.currentStage = "TeleVerification2";
                         var deferred = $q.defer();
 
                         var $this = this;
@@ -283,7 +283,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                     },
                     "post_pages_initialize": function(bundleModel){
                         $log.info("Inside post_page_initialize");
-                        BundleManager.broadcastEvent('origination-stage', 'TeleVerification');
+                        BundleManager.broadcastEvent('origination-stage', 'TeleVerification2');
                         Queries.getVehicleDetails()
                         .then(function (response) {
                             BundleManager.broadcastEvent("get-vehicle-details", response);

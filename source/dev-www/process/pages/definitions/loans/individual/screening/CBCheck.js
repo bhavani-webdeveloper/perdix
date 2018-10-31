@@ -26,7 +26,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
 
         $log.info("Inside submit()");
         PageHelper.showLoader();
-        loanPurpose = 'Business Loan - General';
+        loanPurpose = model.customer.loanPurpose1;
         //loanPurpose = 'Agriculture';
         PageHelper.clearErrors();
         if (CBType != 'CHMHUB') {
@@ -106,7 +106,8 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 }
                 else if(customerType == 'GUARANTOR'){
                     model.customer.guarantors[index].inqUnqRefNo = response.inqUnqRefNo;
-                    model.customer.guarantors[index].highmarkStatus = response.status;
+                    model.customer.guarantors[index].indvHighmarkStatus = response.status;
+                    
                     if(response.status != 'SUCCESS' && response.status != 'PROCESSED')
                         model.customer.guarantors[index].applicantIndvHighmarkFailed = true;
                     else

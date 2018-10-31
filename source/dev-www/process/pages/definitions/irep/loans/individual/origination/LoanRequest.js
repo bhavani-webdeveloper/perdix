@@ -1050,9 +1050,17 @@ define([],function(){
                         $log.info("Inside new-business of LoanRequest");
                         model.loanAccount.customerId = params.customer.id;
                         model.loanAccount.loanCentre = model.loanAccount.loanCentre || {};
-                        model.loanAccount.loanCentre.branchId = params.customer.customerBranchId;
                         model.loanAccount.loanCentre.centreId = params.customer.centreId;
                         model.enterprise = params.customer;
+                    },
+                    "business-updated": function(bundleModel, model, obj){
+                        $log.info("Inside business-update of IREP/LoanRequest");
+                        model.loanAccount.customerId = obj.customer.id;
+                        model.loanAccount.loanCentre = model.loanAccount.loanCentre || {};
+                        model.loanAccount.loanCentre.centreId = obj.customer.centreId;
+                        model.loanAccount.loanCentre.loanId = model.loanAccount.id?model.loanAccount.id:null;
+                        model.enterprise = obj.customer;
+
                     },
                     "load-deviation":function(bundleModel, model, params){
                         $log.info("Inside Deviation List");

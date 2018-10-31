@@ -195,7 +195,7 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.QualityCh
                 submit: function(model, form, formName) {
                     var isFilingDoneForAllDocs = true;
                     for(i=0;i<model.accountDocumentTracker.accountDocTrackerDetails.length;i++){
-                        if(model.accountDocumentTracker.accountDocTrackerDetails[i].status == '' || model.accountDocumentTracker.accountDocTrackerDetails[i].status == null){
+                        if((model.accountDocumentTracker.accountDocTrackerDetails[i].status == '' || model.accountDocumentTracker.accountDocTrackerDetails[i].status == null) && model.accountDocumentTracker.accountDocTrackerDetails[i].documentId ){
                             PageHelper.showProgress("view-account","Status should be updated for all the Documents",3000);
                             return false;
                         }

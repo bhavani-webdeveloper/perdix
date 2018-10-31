@@ -144,16 +144,38 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                                     isApplicable: function(item, index){
                                         return true;
                                     }
-                                },{
+                                },
+                                {
                                     name: "VIEW_LOAN",
                                     fn: function(item, index){
+                                        var siteCode = SessionStore.getGlobalSetting('siteCode');
+                                        if(siteCode == 'witfin') {
+                                        $state.go('Page.Bundle', {
+                                            pageName: 'witfin.loans.individual.screening.LoanView',
+                                            pageId: item.accountId
+                                        })
+                                        } else {
                                         $state.go('Page.Bundle', {
                                             pageName: 'loans.individual.screening.LoanViewList',
                                             pageId: item.accountId
                                         })
+                                        }
                                     },
                                     isApplicable: function(item, index){
                                         return true;
+                                    }
+                                },
+                                {
+                                    name: "REPOSSESSION_STATUS",
+                                    fn: function(item, index) {
+                                        $state.go('Page.Engine', {
+                                            pageName: 'loans.Repossession',
+                                            pageId: item.accountId
+                                        })
+                                    },
+                                    isApplicable: function(item, index){
+                                        var siteCode = SessionStore.getGlobalSetting('siteCode');
+                                        if(siteCode == 'pahal') return true;
                                     }
                                 }
                             ];

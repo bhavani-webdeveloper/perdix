@@ -166,11 +166,16 @@ irf.pages.config([
 
 	elemConfig.configFormHelper(formHelperProvider.factory);
 }]);
-irf.pages.run(["Model_ELEM_FC", "MODEL_ELEM_COMMONS", "$rootScope", "SessionStore", "AuthTokenHelper", function(Model_ELEM_FC, MODEL_ELEM_COMMONS, $rootScope, SessionStore, AuthTokenHelper) {
+irf.pages.run(["Model_ELEM_FC", "MODEL_ELEM_COMMONS", "$rootScope", "SessionStore", "AuthTokenHelper","PageHelper", function(Model_ELEM_FC, MODEL_ELEM_COMMONS, $rootScope, SessionStore, AuthTokenHelper,PageHelper) {
 	$rootScope.$on("irf-login-success", function() {
         Model_ELEM_FC.authToken = AuthTokenHelper.getAuthData().access_token;
 		Model_ELEM_FC.imageCompressionRatio = SessionStore.getGlobalSetting("imageCompressionRatio");
 		Model_ELEM_FC.compressionRatio = SessionStore.getGlobalSetting("compressionRatio");
 		MODEL_ELEM_COMMONS.defaultGeoLocationPLugin = SessionStore.getGlobalSetting("cordova.defaultGeoLocationPlugin");
+		
+		if(!(moment().isSame(moment(SessionStore.getSystemDate(),SessionStore.getSystemDateFormat()), 'date'))){
+			PageHelper.clearWarnings();
+			PageHelper.setWarning({message:'Device date should be in sync with system date: '+SessionStore.getFormatedSystemDate()});
+		}
 	})
 }]);

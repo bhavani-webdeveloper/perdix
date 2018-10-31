@@ -385,12 +385,15 @@ irf.commons.provider("formHelper", function() {
 			var r = context.irfStorageService.getMaster(key);
 			
 			if (r && _.isArray(r.data)) {
-				var ret = {parentClassifier:r.parentClassifier,data:[]};
-				ret.data = r.data;
-				return ret;
+				return {
+					parentClassifier: r.parentClassifier,
+					data: r.data
+				};
 			}
 			context.$log.error('No record found for enum key: ' + key);
-			return null;
+			return {
+				data: []
+			};
 		},
 		userbranch: function() {
 			var branches = $this.factory.enum("branch_id").data;
@@ -630,7 +633,8 @@ irf.commons.run(["irfStorageService", "SessionStore", "$q", "$log", "filterFilte
 			createEnum("creditBureauTypes", "creditBureauTypes", codeToValue);
 			createEnum("origination_stage", "origination_stage", codeToValue);
 			createEnum("investor_id", "investor_id", codeAsNumberToValue);
-			createEnum("lender_product_type", "lender_product_type", codeToValue)
+			createEnum("lender_product_type", "lender_product_type", codeToValue);
+			createEnum("loan_partner","partner_master",codeToValue);
 
 
 			return $q.resolve();

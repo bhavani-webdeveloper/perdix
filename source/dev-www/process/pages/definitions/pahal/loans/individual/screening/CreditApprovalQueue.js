@@ -1,24 +1,31 @@
 define({
-    pageUID: "pahal.loans.individual.screening.TeleVerificationQueue",
+     pageUID: "pahal.loans.individual.screening.CreditApprovalQueue",
     pageType: "Engine",
-    dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager", "IndividualLoan", "LoanBookingCommons"],
+    dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons"],
     $pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
         var branch = SessionStore.getBranch();
+        var centres = SessionStore.getCentres();
+        var centreId=[];
+        if (centres && centres.length) {
+            for (var i = 0; i < centres.length; i++) {
+                centreId.push(centres[i].centreId);
+            }
+        }
         return {
             "type": "search-list",
-            "title": "TELE_VERIFICATION_QUEUE",
+            "title": "CREDIT_APPROVAL_QUEUE",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 // model.branch = branch;
-                model.branchId = SessionStore.getCurrentBranch().branchId;
                 $log.info("search-list sample got initialized");
+
             },
             definition: {
                 title: "SEARCH_LOAN",
                 searchForm: [
                     "*"
                 ],
-                // autoSearch: true,
+                autoSearch: true,
                 searchSchema: {
                     "type": 'object',
                     "title": 'SEARCH_OPTIONS',
@@ -47,7 +54,6 @@ define({
                                 "type": "select",
                                 "enumCode": "centre",
                                 "parentEnumCode": "branch",
-                                "parentValueExpr": "model.branchId",
                                 "screenFilter": true
                             }
                         },
@@ -63,7 +69,7 @@ define({
                             "title": "CITY_TOWN_VILLAGE",
                             "type": "string"
                         },
-                        "pincode": {
+                         "pincode": {
                             "title": "PIN_CODE",
                             "type": "string"
                         }
@@ -74,23 +80,21 @@ define({
                     return formHelper;
                 },
                 getResultsPromise: function(searchOptions, pageOpts) {
-                    if (_.hasIn(searchOptions, 'centreCode')) {
-                        searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centre, formHelper);
+                    if (_.hasIn(searchOptions, 'centreCode')){
+                        searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
                     }
                     return IndividualLoan.search({
-                        'stage': 'TeleVerification',
-                        'branchName': searchOptions.branch,
-                        'enterprisePincode': searchOptions.pincode,
-                        'enterprisePincode': searchOptions.pincode,
-                        'applicantName': searchOptions.applicantName,
-                        'area': searchOptions.area,
-                        'status': searchOptions.status,
-                        'villageName': searchOptions.villageName,
+                        'branchName':searchOptions.branch,
+                        'stage': 'CreditApproval',
+                        'enterprisePincode':searchOptions.pincode,
+                        'applicantName':searchOptions.applicantName,
+                        'area':searchOptions.area,
+                        'villageName':searchOptions.villageName,
+                        'status':searchOptions.status,
                         'customerName': searchOptions.businessName,
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage,
                         'centreCode': searchOptions.centre
-
                     }).$promise;
                 },
                 paginationOptions: {
@@ -117,9 +121,6 @@ define({
                             item.screeningDate,
                             item.applicantName,
                             item.customerName,
-                            item.area,
-                            item.villageName,
-                            item.enterprisePincode,
                             item.branchName,
                             item.centreName
                         ]
@@ -145,33 +146,24 @@ define({
                             title: 'BUSINESS_NAME',
                             data: 'customerName'
                         }, {
-                            title: 'AREA',
-                            data: 'area'
-                        }, {
-                            title: 'CITY_TOWN_VILLAGE',
-                            data: 'villageName'
-                        }, {
-                            title: 'PIN_CODE',
-                            data: 'enterprisePincode'
-                        },{
                             title: 'BRANCH_NAME',
                             data: 'branchName'
-                        },{
+                        }, {
                             title: 'CENTRE_NAME',
                             data: 'centreName'
                         }]
                     },
                     getActions: function() {
                         return [{
-                            name: "TELE_VERIFICATION_QUEUE",
+                            name: "REVIEW",
                             desc: "",
                             icon: "fa fa-pencil-square-o",
                             fn: function(item, index) {
-                                entityManager.setModel('pahal.loans.individual.screening.TeleVerification', {
+                                entityManager.setModel('pahal.loans.individual.screening.CreditApproval', {
                                     _request: item
                                 });
                                 $state.go("Page.Bundle", {
-                                    pageName: "pahal.loans.individual.screening.TeleVerification",
+                                    pageName: "pahal.loans.individual.screening.CreditApproval",
                                     pageId: item.loanId
                                 });
                             },
@@ -185,4 +177,4 @@ define({
             }
         };
     }
-});
+})

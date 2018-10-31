@@ -198,6 +198,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
             var configFile = function() {
                 return {
                         "loanProcess.loanAccount.currentStage": {
+
                             "Screening": {
                                 "overrides": {
                                     
@@ -206,43 +207,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "IndividualReferences"                                    
                                 ]
                             },
-                            "ScreeningReview": {
-                                "overrides": {
-                                    "EnterpriseInformation": {
-                                        "readonly": true
-                                    },
-                                    "EnterpriseInformation.enterpriseType" : {
-                                        "readonly": true
-                                    },
-                                    "CommercialCBCheck.enterpriseBureauDetails":{
-                                        "readonly": true
-                                    },
-                                    "Liabilities": {
-                                        "readonly": true
-                                    },
-                                    "TrackDetails":{
-                                        "readonly": true
-                                    },
-                                    "EnterpriseAssets": {
-                                        "readonly": true
-                                    },
-                                    "BankAccounts": {
-                                        "readonly": true
-                                    },
-                                    "ContactInformation": {
-                                        "readonly": true
-                                    },
-                                    "TangibleNetWorth": {
-                                      "readonly": true
-                                    },
-                                    "EnterpriseAssets": {
-                                        "readonly": true
-                                    }
-                                },
-                                "excludes": [
-                                    "IndividualReferences"                                    
-                                ]
-                            },
+
                             "GoNoGoApproval1": {
                                 "overrides": {
                                     "EnterpriseInformation": {
@@ -277,40 +242,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 "IndividualReferences"                                
                                 ]
                             },
-                            "GoNoGoApproval2": {
-                                "overrides": {
-                                    "EnterpriseInformation": {
-                                        "readonly": true
-                                    },
-                                    "EnterpriseInformation.enterpriseType" : {
-                                        "readonly": true
-                                    },
-                                    "CommercialCBCheck.enterpriseBureauDetails":{
-                                        "readonly": true
-                                    },
-                                    "Liabilities": {
-                                        "readonly": true
-                                    },
-                                    "TrackDetails":{
-                                        "readonly": true
-                                    },
-                                    "EnterpriseAssets": {
-                                        "readonly": true
-                                    },
-                                    "BankAccounts": {
-                                        "readonly": true
-                                    },
-                                    "ContactInformation": {
-                                        "readonly": true
-                                    },
-                                    "TangibleNetWorth": {
-                                      "readonly": true
-                                    }
-                                },
-                                "excludes": [
-                                "IndividualReferences"                                    
-                                ]
-                            },
+
                             "Application": {
                                 "overrides": {
                                     
@@ -318,6 +250,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 "excludes": [                                   
                                 ]
                             },
+                            
                             "ApplicationReview": {
                                 "overrides": {
                                     "EnterpriseInformation": {
@@ -358,7 +291,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                                                         
                                 ]
                             },
-                            "CreditApproval1": {
+
+                            "CreditApproval": {
                                 "overrides": {
                                     "EnterpriseInformation": {
                                         "readonly": true
@@ -398,86 +332,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     
                                 ]
                             },
-                            "CreditApproval2": {
-                                "overrides": {
-                                    "EnterpriseInformation": {
-                                        "readonly": true
-                                    },
-                                    "EnterpriseInformation.enterpriseType" : {
-                                        "readonly": true
-                                    },
-                                    "CommercialCBCheck.enterpriseBureauDetails":{
-                                        "readonly": true
-                                    },
-                                    "Liabilities": {
-                                        "readonly": true
-                                    },
-                                    "TrackDetails":{
-                                        "readonly": true
-                                    },
-                                    "EnterpriseAssets": {
-                                        "readonly": true
-                                    },
-                                    "BankAccounts": {
-                                        "readonly": true
-                                    },
-                                    "ContactInformation": {
-                                        "readonly": true
-                                    },
-                                    "TangibleNetWorth": {
-                                      "readonly": true
-                                    },
-                                    "IndividualReferences":{
-                                        "readonly": true 
-                                    },
-                                    "EnterpriseAssets": {
-                                        "readonly": true
-                                    }
-                                },
-                                "excludes": [
-                                    
-                                ]
-                            },
-                            "DeviationApproval": {
-                                "overrides": {
-                                    "EnterpriseInformation": {
-                                        "readonly": true
-                                    },
-                                    "EnterpriseInformation.enterpriseType" : {
-                                        "readonly": true
-                                    },
-                                    "CommercialCBCheck.enterpriseBureauDetails":{
-                                        "readonly": true
-                                    },
-                                    "Liabilities": {
-                                        "readonly": true
-                                    },
-                                    "TrackDetails":{
-                                        "readonly": true
-                                    },
-                                    "EnterpriseAssets": {
-                                        "readonly": true
-                                    },
-                                    "BankAccounts": {
-                                        "readonly": true
-                                    },
-                                    "ContactInformation": {
-                                        "readonly": true
-                                    },
-                                    "TangibleNetWorth": {
-                                      "readonly": true
-                                    },
-                                    "IndividualReferences":{
-                                        "readonly": true 
-                                    },
-                                    "EnterpriseAssets": {
-                                        "readonly": true
-                                    }
-                                },
-                                "excludes": [
-                                    
-                                ]
-                            },
+
                             "REJECTED": {
                                 "overrides": {
                                     "EnterpriseInformation": {
@@ -918,7 +773,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     {
                                         "type": "actionbox",
-                                        "condition": "model.customer.currentStage && (model.loanProcess.loanAccount.currentStage=='Screening' || model.loanProcess.loanAccount.currentStage=='Application' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation1' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation2' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation3' || model.loanProcess.loanAccount.currentStage=='TeleVerification' || model.loanProcess.loanAccount.currentStage=='CreditAppraisal')",
+                                        "condition": "model.customer.currentStage && (model.loanProcess.loanAccount.currentStage=='Screening' || model.loanProcess.loanAccount.currentStage=='Application' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation1' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation2' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation3' || model.loanProcess.loanAccount.currentStage=='TeleVerification1'|| model.loanProcess.loanAccount.currentStage=='TeleVerification2' || model.loanProcess.loanAccount.currentStage=='CreditAppraisal')",
                                         "orderNo": 1200,
                                         "items": [
                                             {

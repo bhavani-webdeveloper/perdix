@@ -256,8 +256,8 @@ irf.pageCollection.factory(
                                 if (!_.hasIn(bundleModel, 'guarantors')){
                                     bundleModel.guarantors = [];
                                 }
-                                bundleModel.guarantors.push(params.guarantor);
                                 BundleManager.broadcastEvent('new-guarantor', params);
+                                bundleModel.guarantors.push(params.guarantor);
                                 break;
                             case 'business':
                                 $log.info("New Business Enrolment");

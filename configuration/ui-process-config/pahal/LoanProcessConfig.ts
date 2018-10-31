@@ -130,7 +130,7 @@ let config = {
                 "overrides": [
                     {
                         "type": "expr",
-                        "expr": "this.loanAccount.currentStage=='CreditApproval2'",
+                        "expr": "this.loanAccount.currentStage=='CreditApproval'",
                         "add": [
                             {
                                 "name": "OriginationToBookingPolicy",
@@ -142,7 +142,7 @@ let config = {
                     },
                     {
                         "type": "expr",
-                        "expr": "this.loanAccount.currentStage=='CreditApproval2' || this.loanAccount.currentStage=='CreditApproval1' ",
+                        "expr": "this.loanAccount.currentStage=='CreditApproval' || this.loanAccount.currentStage=='CreditApproval' ",
                         "add": [{
                             "name": "CollateralFieldPolicy",
                             "arguments": {

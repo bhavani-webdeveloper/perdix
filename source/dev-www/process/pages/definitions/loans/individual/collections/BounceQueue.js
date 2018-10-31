@@ -71,6 +71,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager, 
                     key: "centreName",
                     type: "lov",
                     autolov: false,
+                    required:true,
                     title:"CENTRE",
                     condition: "model.pageConfig.isAllBranchAllowed===false",
                     bindMap: {

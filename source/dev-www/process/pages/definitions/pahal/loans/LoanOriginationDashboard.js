@@ -22,20 +22,17 @@ irf.pageCollection.controller(irf.controller("pahal.loans.LoanOriginationDashboa
             "items": [
                 "Page/Engine/pahal.lead.ReadyForScreeningQueue",
                 "Page/Engine/pahal.loans.individual.screening.ScreeningQueue",
-                "Page/Engine/pahal.loans.individual.screening.ScreeningReviewQueue",
-                "Page/Engine/pahal.loans.individual.screening.GoNoGoApproval1Queue",
-                "Page/Engine/pahal.loans.individual.screening.GoNoGoApproval2Queue",
-                "Page/Engine/pahal.loans.individual.screening.ApplicationQueue",
-                "Page/Engine/pahal.loans.individual.screening.ApplicationReviewQueue",
-                "Page/Engine/pahal.loans.individual.screening.TeleVerificationQueue",
-                "Page/Engine/pahal.loans.individual.screening.VehicleValuationQueue",
+                "Page/Engine/pahal.loans.individual.screening.TeleVerification1Queue",
                 "Page/Engine/pahal.loans.individual.screening.FieldInvestigation1Queue",
                 "Page/Engine/pahal.loans.individual.screening.FieldInvestigation2Queue",
                 "Page/Engine/pahal.loans.individual.screening.FieldInvestigation3Queue",
+                "Page/Engine/pahal.loans.individual.screening.GoNoGoApproval1Queue",
+                "Page/Engine/pahal.loans.individual.screening.ApplicationQueue",
+                "Page/Engine/pahal.loans.individual.screening.ApplicationReviewQueue",
+                "Page/Engine/pahal.loans.individual.screening.TeleVerification2Queue",
+                "Page/Engine/pahal.loans.individual.screening.VehicleValuationQueue",
                 "Page/Engine/pahal.loans.individual.screening.CreditAppraisalQueue",
-                "Page/Engine/pahal.loans.individual.screening.DeviationApprovalQueue",
-                "Page/Engine/pahal.loans.individual.screening.CreditApproval1Queue",
-                "Page/Engine/pahal.loans.individual.screening.CreditApproval2Queue",
+                "Page/Engine/pahal.loans.individual.screening.CreditApprovalQueue",
                 "Page/Engine/pahal.loans.individual.screening.RejectedQueue"            
             ]
         };
@@ -203,142 +200,23 @@ irf.pageCollection.controller(irf.controller("pahal.loans.LoanOriginationDashboa
                 });
             }
 
-            var srqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.ScreeningReviewQueue"];
-            if (srqMenu) {
-                srqMenu.data = 0;
-                IndividualLoan.search({
-                    'stage': 'ScreeningReview',
-                    'enterprisePincode': '',
-                    'applicantName': '',
-                    'area': '',
-                    'villageName': '',
-                    'customerName': '',
-                    'page': 1,
-                    'per_page': 1,
-                    'branchName': currentBranch.branchName
-                }).$promise.then(function(response, headerGetter) {
-                    srqMenu.data = srqMenu.data + Number(response.headers['x-total-count']);
-                }, function() {
-                    srqMenu.data = '-';
-                });
-            }
-
-            var gng1Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.GoNoGoApproval1Queue"];
-            if (gng1Menu) {
-                gng1Menu.data = 0;
-                IndividualLoan.search({
-                    'stage': 'GoNoGoApproval1',
-                    'enterprisePincode': '',
-                    'applicantName': '',
-                    'area': '',
-                    'villageName': '',
-                    'customerName': '',
-                    'page': 1,
-                    'per_page': 1,
-                }).$promise.then(function(response, headerGetter) {
-                    gng1Menu.data = gng1Menu.data + Number(response.headers['x-total-count']);
-                }, function() {
-                    gng1Menu.data = '-';
-                });
-            }
-
-            var gng2Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.GoNoGoApproval2Queue"];
-            if (gng2Menu) {
-                gng2Menu.data = 0;
-                IndividualLoan.search({
-                    'stage': 'GoNoGoApproval2',
-                    'enterprisePincode': '',
-                    'applicantName': '',
-                    'area': '',
-                    'villageName': '',
-                    'customerName': '',
-                    'page': 1,
-                    'per_page': 1,
-                }).$promise.then(function(response, headerGetter) {
-                    gng2Menu.data = gng2Menu.data + Number(response.headers['x-total-count']);
-                }, function() {
-                    gng2Menu.data = '-';
-                });
-            }
-
-            var appMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.ApplicationQueue"];
-            if (appMenu) {
-                appMenu.data = 0;
-                _.forEach(centres, function(centre) {    
-                        IndividualLoan.search({
-                            'stage': 'Application',
-                            'enterprisePincode': '',
-                            'applicantName': '',
-                            'area': '',
-                            'villageName': '',
-                            'customerName': '',
-                            'page': 1,
-                            'per_page': 1,
-                            'centreCode': centre.centreCode
-                        }).$promise.then(function(response, headerGetter) {
-                            appMenu.data = appMenu.data + Number(response.headers['x-total-count']);
-                        }, function() {
-                            appMenu.data = '-';
-                        });
-                    });      
-            }
-
-            var apprMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.ApplicationReviewQueue"];
-            if (apprMenu) {
-                apprMenu.data = 0;
-                IndividualLoan.search({
-                    'stage': 'ApplicationReview',
-                    'enterprisePincode': '',
-                    'applicantName': '',
-                    'area': '',
-                    'villageName': '',
-                    'customerName': '',
-                    'page': 1,
-                    'per_page': 1,
-                    'branchName': currentBranch.branchName
-                }).$promise.then(function(response, headerGetter) {
-                    apprMenu.data = apprMenu.data + Number(response.headers['x-total-count']);
-                }, function() {
-                    apprMenu.data = '-';
-                });
-            }
-
-            var tvq1Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.TeleVerificationQueue"];
+            var tvq1Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.TeleVerification1Queue"];
+            
             if (tvq1Menu) {
                 tvq1Menu.data = 0;
                 IndividualLoan.search({
-                    'stage': 'TeleVerification',
+                    'stage': 'TeleVerification1',
                     'enterprisePincode': '',
                     'applicantName': '',
                     'area': '',
                     'villageName': '',
                     'customerName': '',
                     'page': 1,
-                    'per_page': 1,
+                    'per_page': 1
                 }).$promise.then(function(response, headerGetter) {
                     tvq1Menu.data = tvq1Menu.data + Number(response.headers['x-total-count']);
                 }, function() {
                     tvq1Menu.data = '-';
-                });
-            }
-
-
-            var prqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.VehicleValuationQueue"];
-            if (prqMenu) {
-                prqMenu.data = 0;
-                IndividualLoan.search({
-                    'stage': 'VehicleValuation',
-                    'enterprisePincode': '',
-                    'applicantName': '',
-                    'area': '',
-                    'villageName': '',
-                    'customerName': '',
-                    'page': 1,
-                    'per_page': 1,
-                }).$promise.then(function(response, headerGetter) {
-                    prqMenu.data = prqMenu.data + Number(response.headers['x-total-count']);
-                }, function() {
-                    prqMenu.data = '-';
                 });
             }
 
@@ -401,6 +279,106 @@ irf.pageCollection.controller(irf.controller("pahal.loans.LoanOriginationDashboa
                 });
             }
 
+            var gng1Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.GoNoGoApproval1Queue"];
+            if (gng1Menu) {
+                gng1Menu.data = 0;
+                IndividualLoan.search({
+                    'stage': 'GoNoGoApproval1',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                }).$promise.then(function(response, headerGetter) {
+                    gng1Menu.data = gng1Menu.data + Number(response.headers['x-total-count']);
+                }, function() {
+                    gng1Menu.data = '-';
+                });
+            }
+
+
+            var appMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.ApplicationQueue"];
+            if (appMenu) {
+                appMenu.data = 0;
+                _.forEach(centres, function(centre) {    
+                        IndividualLoan.search({
+                            'stage': 'Application',
+                            'enterprisePincode': '',
+                            'applicantName': '',
+                            'area': '',
+                            'villageName': '',
+                            'customerName': '',
+                            'page': 1,
+                            'per_page': 1,
+                            'centreCode': centre.centreCode
+                        }).$promise.then(function(response, headerGetter) {
+                            appMenu.data = appMenu.data + Number(response.headers['x-total-count']);
+                        }, function() {
+                            appMenu.data = '-';
+                        });
+                    });      
+            }
+
+            var apprMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.ApplicationReviewQueue"];
+            if (apprMenu) {
+                apprMenu.data = 0;
+                IndividualLoan.search({
+                    'stage': 'ApplicationReview',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                    'branchName': currentBranch.branchName
+                }).$promise.then(function(response, headerGetter) {
+                    apprMenu.data = apprMenu.data + Number(response.headers['x-total-count']);
+                }, function() {
+                    apprMenu.data = '-';
+                });
+            }
+
+            var tvq2Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.TeleVerification2Queue"];
+            if (tvq2Menu) {
+                tvq2Menu.data = 0;
+                IndividualLoan.search({
+                    'stage': 'TeleVerification2',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                }).$promise.then(function(response, headerGetter) {
+                    tvq2Menu.data = tvq2Menu.data + Number(response.headers['x-total-count']);
+                }, function() {
+                    tvq2Menu.data = '-';
+                });
+            }
+
+
+            var prqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.VehicleValuationQueue"];
+            if (prqMenu) {
+                prqMenu.data = 0;
+                IndividualLoan.search({
+                    'stage': 'VehicleValuation',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                }).$promise.then(function(response, headerGetter) {
+                    prqMenu.data = prqMenu.data + Number(response.headers['x-total-count']);
+                }, function() {
+                    prqMenu.data = '-';
+                });
+            }
 
             var caqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.CreditAppraisalQueue"];
             if (caqMenu) {
@@ -421,52 +399,12 @@ irf.pageCollection.controller(irf.controller("pahal.loans.LoanOriginationDashboa
                 });
             }
 
-
-            var daq1Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.DeviationApprovalQueue"];
-            if (daq1Menu) {
-                daq1Menu.data = 0;
-                IndividualLoan.search({
-                    'stage': 'DeviationApproval',
-                    'enterprisePincode': '',
-                    'applicantName': '',
-                    'area': '',
-                    'villageName': '',
-                    'customerName': '',
-                    'page': 1,
-                    'per_page': 1,
-                }).$promise.then(function(response, headerGetter) {
-                    daq1Menu.data = daq1Menu.data + Number(response.headers['x-total-count']);
-                }, function() {
-                    daq1Menu.data = '-';
-                });
-            }
-
-            var caq1Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.CreditApproval1Queue"];
-
-            if (caq1Menu) {
-                caq1Menu.data = 0;
-                IndividualLoan.search({
-                    'stage': 'CreditApproval1',
-                    'enterprisePincode': '',
-                    'applicantName': '',
-                    'area': '',
-                    'villageName': '',
-                    'customerName': '',
-                    'page': 1,
-                    'per_page': 1,
-                }).$promise.then(function(response, headerGetter) {
-                    caq1Menu.data = caq1Menu.data + Number(response.headers['x-total-count']);
-                }, function() {
-                    caq1Menu.data = '-';
-                });
-            }
-
-            var caq2Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.CreditApproval2Queue"];
+            var caq2Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.CreditApprovalQueue"];
 
             if (caq2Menu) {
                 caq2Menu.data = 0;
                 IndividualLoan.search({
-                    'stage': 'CreditApproval2',
+                    'stage': 'CreditApproval',
                     'enterprisePincode': '',
                     'applicantName': '',
                     'area': '',

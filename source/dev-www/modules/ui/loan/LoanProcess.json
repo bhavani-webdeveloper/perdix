@@ -355,11 +355,6 @@
                 "required": true,
                 "title": "INTEREST_RATE"
             },
-            "udf6": {
-                "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6",
-                "type": "string",
-                "required": true
-            },
             "udf8": {
                 "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf8",
                 "title": "ELIGIBLE_DISPOSABLE_INCOME",
@@ -1756,6 +1751,12 @@
                 "title": "REQUESTED_TENURE",
                 "type": "numeric",
                 "key": "loanAccount.tenure"
+            },
+            "interestRate": {
+                "key": "loanAccount.interestRate",
+                "type": "number",
+                "required": true,
+                "title": "INTEREST_RATE"
             },
             "loanPurpose1": {
                 "orderNo": "9",

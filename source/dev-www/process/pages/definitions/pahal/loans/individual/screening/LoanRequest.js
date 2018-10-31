@@ -24,6 +24,52 @@ define([], function() {
                 return true;
             };
 
+            var getStageNameByStageCode = function(stageCode) {
+                var stageName;
+                switch(stageCode) {
+                    case 'Screening':
+                        stageName = $filter('translate')('SCREENING');
+                        break;
+                    case 'Dedupe':
+                        stageName = $filter('translate')('DEDUPE');
+                        break;
+                    case 'ScreeningReview':
+                        stageName = $filter('translate')('SCREENING_REVIEW');
+                        break;
+                    case 'Application':
+                        stageName = $filter('translate')('APPLICATION');
+                        break;
+                    case 'ApplicationReview':
+                        stageName = $filter('translate')('APPLICATION_REVIEW');
+                        break;
+                    case 'FieldAppraisal':
+                        stageName = $filter('translate')('FIELD_APPRAISAL');
+                        break;
+                    case 'FieldAppraisalReview':
+                        stageName = $filter('translate')('REGIONAL_RISK_REVIEW');
+                        break;
+                    case 'ZonalRiskReview':
+                        stageName = $filter('translate')('ZONAL_RISK_REVIEW');
+                        break;
+                    case 'CentralRiskReview':
+                        stageName = $filter('translate')('VP_CREDIT_RISK_REVIEW');
+                        break;
+                    case 'CreditCommitteeReview':
+                        stageName = $filter('translate')('CREDIT_COMITTEE_REVIEW');
+                        break;
+                    case 'Sanction':
+                        stageName = $filter('translate')('SANCTION');
+                        break;
+                    case 'Rejected':
+                        stageName = $filter('translate')('REJECTED');
+                        break;
+                    default:
+                        stageName = stageCode;
+                        break;
+                }
+                return stageName;
+            };
+
             var getRelationFromClass = function(relation) {
                 if (relation == 'guarantor') {
                     return 'Guarantor';
@@ -143,158 +189,133 @@ define([], function() {
                             "excludes": [
                                 "TeleVerification",
                                 "FieldInvestigationDetails",
-                                "LoanRecommendation"
+                                "LoanRecommendation",
+                                "LoanRecommendation.commercialCibilCharge"
                             ],
                             "overrides": {
                             }
                         },
-                        "ScreeningReview": {
+                        "TeleVerification1": {
                             "excludes": [
-                                "PreliminaryInformation.calculateEmi",
-                                "TeleVerification",
-                                "FieldInvestigationDetails"
-                            ],
-                            "overrides": {
-                                "PreliminaryInformation": {
-                                    "readonly": true
-                                },
-                                "DeductionsFromLoan": {
-                                    "readonly": true
-                                },
-                                "LoanDocuments": {
-                                    "readonly": true
-                                },
-                                "PayerDetails": {
-                                    "readonly": true
-                                }
-                            }
-                        },
-                        "GoNoGoApproval1": {
-                            "excludes": [
-                                "PreliminaryInformation.calculateEmi",
-                                "TeleVerification",
-                                "FieldInvestigationDetails"
-                            ],
-                            "overrides": {
-                                "PreliminaryInformation": {
-                                    "readonly": true
-                                },
-                                "DeductionsFromLoan": {
-                                    "readonly": true
-                                },
-                                "LoanDocuments": {
-                                    "readonly": true
-                                },
-                                "PayerDetails": {
-                                    "readonly": true
-                                },
-                                "LoanRecommendation": {
-                                    "readonly": true
-                                }
-                            }
-                        },
-                        "GoNoGoApproval2": {
-                            "excludes": [
-                                "PreliminaryInformation.calculateEmi",
-                                "TeleVerification",
-                                "FieldInvestigationDetails"
-                            ],
-                            "overrides": {
-                                "PreliminaryInformation": {
-                                    "readonly": true
-                                },
-                                "DeductionsFromLoan": {
-                                    "readonly": true
-                                },
-                                "LoanDocuments": {
-                                    "readonly": true
-                                },
-                                "PayerDetails": {
-                                    "readonly": true
-                                },
-                                "LoanRecommendation": {
-                                    "readonly": true
-                                }
-                               
-                            }
-                        },
-                        "Application": {
-                            "excludes": [
-                                "TeleVerification",
-                                "FieldInvestigationDetails"
-                            ],
-                            "overrides": {
-                                "LoanRecommendation": {
-                                    "readonly": true
-                                }
-                            }
-                        },
-                        "ApplicationReview": {
-                            "excludes": [
-                                "PreliminaryInformation.calculateEmi",
-                                "TeleVerification",
-                                "FieldInvestigationDetails"
-                            ],
-                            "overrides": {
-                                "PreliminaryInformation": {
-                                    "readonly": true
-                                },
-                                "DeductionsFromLoan": {
-                                    "readonly": true
-                                },
-                                "LoanDocuments": {
-                                    "readonly": true
-                                },
-                                "PayerDetails": {
-                                    "readonly": true
-                                }
-                            }
-                        },
-                        "TeleVerification": {
-                            "excludes": [
-                                "FieldInvestigationDetails"
+                                "FieldInvestigationDetails",
+                                "LoanRecommendation.commercialCibilCharge"
                             ],
                             "overrides": {
                                 "FieldInvestigationDetails": {
-                                    "readonly": true
-                                },
-                                "LoanRecommendation": {
                                     "readonly": true
                                 }
                             }
                         },
                         "FieldInvestigation1": {
                             "excludes": [
+                                "LoanRecommendation.commercialCibilCharge"
                             ],
                             "overrides": {
-                                "LoanRecommendation": {
-                                    "readonly": true
-                                }
+                                // "LoanRecommendation": {
+                                //     "readonly": true
+                                // }
                             }
                         },
                         "FieldInvestigation2": {
                             "excludes": [
+                                "LoanRecommendation.commercialCibilCharge"
                             ],
                             "overrides": {
-                                "LoanRecommendation": {
-                                    "readonly": true
-                                }
+                                // "LoanRecommendation": {
+                                //     "readonly": true
+                                // }
                             }
                         },
                         "FieldInvestigation3": {
                             "excludes": [
+                                "LoanRecommendation.commercialCibilCharge"
                             ],
                             "overrides": {
-                                "LoanRecommendation": {
+                                // "LoanRecommendation": {
+                                //     "readonly": true
+                                // }
+                            }
+                        },
+                        "GoNoGoApproval1": {
+                            "excludes": [
+                                "PreliminaryInformation.calculateEmi",
+                                "TeleVerification",
+                                "FieldInvestigationDetails",
+                                "LoanRecommendation.commercialCibilCharge"
+                            ],
+                            "overrides": {
+                                "PreliminaryInformation": {
+                                    "readonly": true
+                                },
+                                "DeductionsFromLoan": {
+                                    "readonly": true
+                                },
+                                "LoanDocuments": {
+                                    "readonly": true
+                                },
+                                "PayerDetails": {
+                                    "readonly": true
+                                }
+                                // "LoanRecommendation": {
+                                //     "readonly": true
+                                // }
+                            }
+                        },
+                        "Application": {
+                            "excludes": [
+                                "TeleVerification",
+                                "FieldInvestigationDetails",
+                                "LoanRecommendation.commercialCibilCharge"
+                            ],
+                            "overrides": {
+                                // "LoanRecommendation": {
+                                //     "readonly": true
+                                // }
+                            }
+                        },
+                        "ApplicationReview": {
+                            "excludes": [
+                                "PreliminaryInformation.calculateEmi",
+                                "TeleVerification",
+                                "FieldInvestigationDetails",
+                                "LoanRecommendation.commercialCibilCharge"
+                            ],
+                            "overrides": {
+                                "PreliminaryInformation": {
+                                    "readonly": true
+                                },
+                                "DeductionsFromLoan": {
+                                    "readonly": true
+                                },
+                                "LoanDocuments": {
+                                    "readonly": true
+                                },
+                                "PayerDetails": {
                                     "readonly": true
                                 }
                             }
                         },
+                        "TeleVerification2": {
+                            "excludes": [
+                                "FieldInvestigationDetails",
+                                "LoanRecommendation.commercialCibilCharge"
+                            ],
+                            "overrides": {
+                                "FieldInvestigationDetails": {
+                                    "readonly": true
+                                }
+                                // "LoanRecommendation": {
+                                //     "readonly": true
+                                // }
+                            }
+                        },
+                        
                         "CreditAppraisal":  {
                             "excludes": [
                                 "VehicleRouteDetails",
                                 "VehicleAssetViability",
-                                "VehiclePhotoCaptures"
+                                "VehiclePhotoCaptures",
+                                "LoanRecommendation.commercialCibilCharge"
                             ],
                             "overrides": {
                                 "FieldInvestigationDetails": {
@@ -306,53 +327,10 @@ define([], function() {
 
                             }
                         },
-                        "DeviationApproval": {
+                        "CreditApproval": {
                             "excludes": [
                                 "PreliminaryInformation.calculateEmi",
-                            ],
-                            "overrides": {
-                                "PreliminaryInformation": {
-                                    "readonly": true
-                                },
-                                "DeductionsFromLoan": {
-                                    "readonly": true
-                                },
-                                "LoanDocuments": {
-                                    "readonly": true
-                                },
-                                "PayerDetails": {
-                                    "readonly": true
-                                }
-                            }
-                        },
-                        "CreditApproval1": {
-                            "excludes": [
-                                "PreliminaryInformation.calculateEmi"
-                            ],
-                            "overrides": {
-                                "TeleVerification": {
-                                    "readonly": true
-                                },
-                                "FieldInvestigationDetails": {
-                                    "readonly": true
-                                },
-                                "PreliminaryInformation": {
-                                    "readonly": true
-                                },
-                                "DeductionsFromLoan": {
-                                    "readonly": true
-                                },
-                                "LoanDocuments": {
-                                    "readonly": true
-                                },
-                                "PayerDetails": {
-                                    "readonly": true
-                                }
-                            }
-                        },
-                        "CreditApproval2": {
-                            "excludes": [
-                                "PreliminaryInformation.calculateEmi"
+                                "LoanRecommendation.commercialCibilCharge"
                             ],
                             "overrides": {
                                 "TeleVerification": {
@@ -377,7 +355,8 @@ define([], function() {
                         },
                         "REJECTED": {
                             "excludes": [
-                                "PreliminaryInformation.calculateEmi"
+                                "PreliminaryInformation.calculateEmi",
+                                "LoanRecommendation.commercialCibilCharge"
                             ],
                             "overrides": {
                                 "PreliminaryInformation": {
@@ -560,9 +539,8 @@ define([], function() {
                             "TeleVerification.verifications.personContacted": {
                                 "required": true
                             },
-                            "TeleVerification.verifications.customerResponse":{
-                                "type": "select",
-                                "enumCode": "customer_response"
+                            "TeleVerification.verifications.personContacted": {
+                                "required": true
                             },
                             "LoanRecommendation.interestRate": {
                                 "title": "NOMINAL_RATE",
@@ -659,8 +637,6 @@ define([], function() {
 
                                             }
                                         }
-
-
                                     }
                                 },
 
@@ -813,6 +789,7 @@ define([], function() {
                                         }
                                     }
                                 },
+                                
                                 "FieldInvestigationDetails": {
                                     "type": "box",
                                     "orderNo": 300,
@@ -903,9 +880,9 @@ define([], function() {
                                                         var out = [];
                                                         for (var i = 0; i < targetstage.length; i++) {
                                                             var t = targetstage[i];
-                                                            if (t.field1 == stage1) {
+                                                            if (t.field1.toUpperCase() == stage1.toUpperCase()) {
                                                                 out.push({
-                                                                    name: t.name,
+                                                                    name: getStageNameByStageCode(t.name),
                                                                     value: t.code
                                                                 })
                                                             }

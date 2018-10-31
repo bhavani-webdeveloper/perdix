@@ -180,6 +180,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             LoanProcessts.get(bundleModel.loanId)
                             .subscribe(function(loanProcess){
                                 var loanAccount = loanProcess;
+                                loanProcess.loanAccount.isValuator = "Yes";
                                 loanAccount.applicantEnrolmentProcess.customer.customerId = loanAccount.customerId;
 
                                 // $this.bundlePages.push({
@@ -347,6 +348,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 if (!_.hasIn(bundleModel, 'guarantors')){
                                     bundleModel.guarantors = [];
                                 }
+                                BundleManager.broadcastEvent('new-guarantor', params);
                                 bundleModel.guarantors.push(params.guarantor);
                                 break;
                                 case 'business':
@@ -362,6 +364,9 @@ define(["perdix/domain/model/loan/LoanProcess",
                         },
                         "deviation-loaded":function(pageObj, bundleModel, params){
                             BundleManager.broadcastEvent("load-deviation", params);
+                        },
+                        "financialSummary": function(pageObj, bundleModel, params) {
+                            BundleManager.broadcastEvent("financial-summary", params);
                         }
                     }
 

@@ -615,7 +615,7 @@ var INDIVIDUAL_HTML =
                                        else{
                                             httpres.idenCheckResponseDTO.idenCheckResponses[i].status = true
                                        }
-                                       httpres.idenCheckResponseDTO.idenCheckResponses[i].scoreValue =  httpres.idenCheckResponseDTO.highmarkScores[i].scoreValue
+                                       httpres.idenCheckResponseDTO.idenCheckResponses[i].scoreValue =  httpres.idenCheckResponseDTO.highmarkScores[i]? httpres.idenCheckResponseDTO.highmarkScores[i].scoreValue: '-';
                                     }
                            }
                         }

@@ -252,7 +252,7 @@ irf.models.factory('Queries', [
             request = {};
             request.partner_code = partnerCode || null;
             // opts = opts || {partner_code: ""};
-            resource.getResult("bankAccountsByPartnerCode.list", request, 10).then(function(records) {
+            resource.getResult("bankAccountsByPartnerCode.list", request, 100).then(function(records) {
                 if (records && records.results) {
                     var result = {
                         headers: {
@@ -349,6 +349,17 @@ irf.models.factory('Queries', [
                     deferred.resolve(result);
                 }
             }, deferred.reject);
+            return deferred.promise;
+        }
+
+        resource.getLoanCollectionDepositSum = function(bank_deposit_summary_id) {
+            var deferred = $q.defer();
+            var request = {
+                "bank_deposit_summary_id":bank_deposit_summary_id
+            };
+            resource.getResult("loanCollectionDepositSum.list", request).then(function(response){
+                deferred.resolve(response.results);
+            },deferred.reject);
             return deferred.promise;
         }
 
@@ -1103,6 +1114,22 @@ irf.models.factory('Queries', [
             "urn_no":urn_no
         };
         resource.getResult("ReadyToDisburseAccountDetails.list", request).then(function(records) {
+            if (records && records.results) {
+                var result = {
+                    headers: {
+                        "x-total-count": records.results.length
+                    },
+                    body: records.results
+                };
+                deferred.resolve(result);
+            }         
+        }, deferred.reject);
+        return deferred.promise;
+    }
+
+    resource.getLTVValue = function(request) {
+        var deferred = $q.defer();
+        resource.getResult("LTV.list", request).then(function(records) {
             if (records && records.results) {
                 var result = {
                     headers: {

@@ -35,6 +35,83 @@ define([], function () {
             var overridesFields = function (model) {
                 return {};
             }
+            var showDscResponse = function(model,resp){
+                if (resp.loanCustomerRelations && resp.loanCustomerRelations.length > 0) {
+                    model.loanAccount.loanCustomerRelations = resp.loanCustomerRelations;
+                    model.customer.coapplicants = [];
+                    model.customer.guarantors = [];
+                    var i;
+                    for (i = 0; i < model.loanAccount.loanCustomerRelations.length; i++) {
+                        if (model.loanAccount.loanCustomerRelations[i].relation == 'Applicant') {
+                            PageHelper.showLoader();
+                            console.log("Model fromDSCCC");
+                            console.log(model);
+                            (function(index){
+                            Enrollment.getCustomerById({ id: model.loanAccount.loanCustomerRelations[i].customerId })
+                                .$promise
+                                .then(function (res) {
+                                    model.customer.applicantname = res.firstName;
+                                },
+                                    function (httpRes) {
+                                        PageHelper.showErrors(httpRes);
+                                    })
+                                .finally(function () {
+                                    PageHelper.hideLoader();
+                                })
+                            model.customer.applicantid = model.loanAccount.loanCustomerRelations[i].customerId;
+                            model.customer.loanAmount = model.loanAccount.loanAmountRequested;
+                            model.customer.loanPurpose1 = model.loanAccount.loanPurpose1;
+                            model.customer.loanSaved = true;
+                            model.customer.dscStatus = model.loanAccount.loanCustomerRelations[index].dscStatus;
+                            })(i);
+                        }
+                        else if (model.loanAccount.loanCustomerRelations[i].relation == 'Co-Applicant') {
+                            temp = model.loanAccount.loanCustomerRelations[i].dscStatus;
+                            (function(index){
+                            Enrollment.getCustomerById({ id: model.loanAccount.loanCustomerRelations[i].customerId })
+                                .$promise
+                                .then(function (res) {
+                                    model.customer.coapplicants.push({
+                                        "coapplicantid": res.id,
+                                        "coapplicantname": res.firstName,
+                                        "loanAmount": model.loanAccount.loanAmountRequested,
+                                        "loanPurpose1": model.loanAccount.loanPurpose1,
+                                        "dscStatus": model.loanAccount.loanCustomerRelations[index].dscStatus
+                                    });
+                                    model.customer.loanSaved = true;
+
+                                }, function (httpRes) {
+                                    PageHelper.showErrors(httpRes);
+                                })
+                                .finally(function () {
+                                    PageHelper.hideLoader();
+                                })})(i);
+                        }
+                        else if (model.loanAccount.loanCustomerRelations[i].relation == 'Guarantor') {
+                            (function (index){
+                            Enrollment.getCustomerById({ id: model.loanAccount.loanCustomerRelations[i].customerId })
+                                .$promise
+                                .then(function (res) {
+                                    model.customer.guarantors.push({
+                                        "guarantorid": res.id,
+                                        "guarantorname": res.firstName,
+                                        "loanAmount": model.loanAccount.loanAmountRequested,
+                                        "loanPurpose1": model.loanAccount.loanPurpose1,
+                                        "dscStatus": model.loanAccount.loanCustomerRelations[index].dscStatus
+                                    });
+                                    model.customer.loanSaved = true;
+
+                                }, function (httpRes) {
+                                    PageHelper.showErrors(httpRes);
+                                })
+                                .finally(function () {
+                                    PageHelper.hideLoader();
+                                })})(i);
+                        }
+                    }
+                }
+                return
+            }
 
             return {
                 "type": "schema-form",
@@ -99,17 +176,31 @@ define([], function () {
                                     model.customer.loanAmount = model.loanAccount.loanAmountRequested;
                                     model.customer.loanPurpose1 = model.loanAccount.loanPurpose1;
                                     model.customer.loanSaved = true;
+                                    model.customer.dscStatus = model.loanAccount.loanCustomerRelations[i].dscStatus;
                                 }
                                 else if (model.loanAccount.loanCustomerRelations[i].relation == 'Co-Applicant') {
+                                    (function(index){
                                     Enrollment.getCustomerById({ id: model.loanAccount.loanCustomerRelations[i].customerId })
                                         .$promise
                                         .then(function (res) {
+                                            if(typeof model.loanAccount.loanCustomerRelations[index].dscStatus !="undefined"){
                                             model.customer.coapplicants.push({
                                                 "coapplicantid": res.id,
                                                 "coapplicantname": res.firstName,
                                                 "loanAmount": model.loanAccount.loanAmountRequested,
                                                 "loanPurpose1": model.loanAccount.loanPurpose1,
+                                                "dscStatus": model.loanAccount.loanCustomerRelations[index].dscStatus
                                             });
+                                        }
+                                        else{
+                                            model.customer.coapplicants.push({
+                                                "coapplicantid": res.id,
+                                                "coapplicantname": res.firstName,
+                                                "loanAmount": model.loanAccount.loanAmountRequested,
+                                                "loanPurpose1": model.loanAccount.loanPurpose1,
+                                                "dscStatus": null
+                                            });
+                                        }
                                             model.customer.loanSaved = true;
 
                                         }, function (httpRes) {
@@ -118,17 +209,30 @@ define([], function () {
                                         .finally(function () {
                                             PageHelper.hideLoader();
                                         })
+                                    })(i)
                                 }
                                 else if (model.loanAccount.loanCustomerRelations[i].relation == 'Guarantor') {
                                     Enrollment.getCustomerById({ id: model.loanAccount.loanCustomerRelations[i].customerId })
                                         .$promise
                                         .then(function (res) {
-                                            model.customer.guarantors.push({
-                                                "guarantorid": res.id,
-                                                "guarantorname": res.firstName,
-                                                "loanAmount": model.loanAccount.loanAmountRequested,
-                                                "loanPurpose1": model.loanAccount.loanPurpose1,
-                                            });
+                                            if(typeof model.loanAccount.loanCustomerRelations[index].dscStatus !="undefined"){
+                                                model.customer.coapplicants.push({
+                                                    "coapplicantid": res.id,
+                                                    "coapplicantname": res.firstName,
+                                                    "loanAmount": model.loanAccount.loanAmountRequested,
+                                                    "loanPurpose1": model.loanAccount.loanPurpose1,
+                                                    "dscStatus": model.loanAccount.loanCustomerRelations[index].dscStatus
+                                                });
+                                            }
+                                            else{
+                                                model.customer.coapplicants.push({
+                                                    "coapplicantid": res.id,
+                                                    "coapplicantname": res.firstName,
+                                                    "loanAmount": model.loanAccount.loanAmountRequested,
+                                                    "loanPurpose1": model.loanAccount.loanPurpose1,
+                                                    "dscStatus": null
+                                                });
+                                            }
                                             model.customer.loanSaved = true;
 
                                         }, function (httpRes) {
@@ -151,6 +255,11 @@ define([], function () {
                     ]
                 },
                 eventListeners: {
+
+                    "new-loan-customer-relation": function(bundleModel,model,params){
+                        showDscResponse(model,params);
+                    },
+
                     "new-applicant": function (bundleModel, model, params) {
                         $log.info("Inside new-applicant of DscCheck");
                         model.customer.applicantname = params.customer.firstName;
@@ -245,7 +354,7 @@ define([], function () {
 
                                     },{
                                             title: "DSC_STATUS",
-                                            key: "model.customer.dscStatus",
+                                            key: "customer.dscStatus",
                                             readonly: true,
                                             type: "string",
                                     },
@@ -266,7 +375,7 @@ define([], function () {
                                         },
                                         {
                                             title: "DSC_STATUS",
-                                            key: "model.customer.dscStatus ",
+                                            key: "customer.coapplicants[].dscStatus",
                                             readonly: true,
                                             type: "string",
                                         },
@@ -289,7 +398,7 @@ define([], function () {
                                         },
                                         {
                                             title: "DSC_STATUS",
-                                            key: "model.customer.dscStatus",
+                                            key: "customer.guarantors[].dscStatus",
                                             readonly: true,
                                             type: "string",
                                         },
@@ -316,7 +425,7 @@ define([], function () {
                                         "type": "button",
                                         "condition" : "model.customer.loanSaved && model.loanAccount.currentStage == 'LoanInitiation' ",  
                                         "title": "DSC_REQUEST",
-                                        "onClick": "actions.getDscDetails(model.loanAccount.id)"
+                                        "onClick": "actions.getDscDetails(model,model.loanAccount.id)"
                                     },
                                 ]
                             }
@@ -351,16 +460,28 @@ define([], function () {
                             PageHelper.hideLoader();
                         }
                     },
-                    getDscDetails: function (loanid) {
+                    getDscDetails: function (model,loanid) {
                         PageHelper.showLoader();
                         PageHelper.clearErrors();   
                         IndividualLoan.individualLoanDsc({ loanId:loanid
                         },{},function(res) {
                             $log.info(res);
                             PageHelper.hideLoader();       
+                            if(res.length > 0){
+                                for (i = 0;i<res.length;i++){
+                                    if(res[i].dscStatus == "FAILURE"){
+                                        irfProgressMessage.pop("dsc-check", "Dsccheck Succeeded", 2000);
+                                    }
+                                }
+                            }
                             irfProgressMessage.pop("dsc-check", "Dsccheck Succeeded", 2000);
-                            model.loanAccount.dscStatus =  res.dscStatus;
-                            BundleManager.broadcastEvent('dsc_status',model);    
+                           IndividualLoan.get({id:loanid},{},function(resp){
+                               if(resp.loanCustomerRelations && resp.loanCustomerRelations.length > 0){
+                                   model.customer.dscStatus = "SUCCESS";
+                                   showDscResponse(model,resp);
+                                BundleManager.pushEvent('dsc-status',resp.loanCustomerRelations);    
+                               }
+                           })
 
                         },function(res) {
                             $log.error(res);
