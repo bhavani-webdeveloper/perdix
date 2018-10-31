@@ -929,6 +929,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "ContactInformation": {
                                         "readonly": true
                                     },
+                                    "IndividualReferences": {
+                                        "readonly": true
+                                    },
+                                    "TangibleNetWorth": {
+                                        "readonly": true
+                                    },
+                                    "enterpriseDocuments": {
+                                        "readonly": true
+                                    },
+                                    "CommercialCBCheck": {
+                                        "readonly": true
+                                    },
                                     "BusinessVerification": {
                                         "readonly": true
                                     }
@@ -1422,7 +1434,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     {
                                         "type": "actionbox",
-                                        "condition": "model.customer.currentStage && (model.loanProcess.loanAccount.currentStage=='Screening' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation1' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation2' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation3' || model.loanProcess.loanAccount.currentStage=='TeleVerification' || model.loanProcess.loanAccount.currentStage=='CreditAppraisal' || model.loanProcess.loanAccount.currentStage=='Application')",
+                                        "condition": "model.customer.currentStage && model.currentStage!='loanView' && (model.loanProcess.loanAccount.currentStage=='Screening' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation1' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation2' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation3' || model.loanProcess.loanAccount.currentStage=='TeleVerification' || model.loanProcess.loanAccount.currentStage=='CreditAppraisal' || model.loanProcess.loanAccount.currentStage=='Application')",
                                         "orderNo": 1200,
                                         "items": [
                                             {

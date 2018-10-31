@@ -658,34 +658,37 @@ define(
                                },
                                "VehicleLoanIncomesInformation":{
                                 "readonly": true,
-                            },
-                            "VehicleLoanIncomesInformation1":{
-                                "readonly": true,
-                            },
-                            "VehicleExpensesInformation":{
-                                "readonly": true,
-                            },
-                            "NewVehicleDetails":{
-                                "readonly": true,
-                            },
-                            "VehicleViability":{
-                                "readonly": true,
-                            },
-                            "VehicleAssetUse":{
-                                "readonly": true,
-                            },
-                            "VehicleRouteDetails":{
-                                "readonly": true,
-                            },
-                            "vehicleLoanDocuments":{
-                                "readonly": true,
-                            },
-                            "VehiclePhotoCaptures":{
-                                "readonly": true,
-                            },
-                            "calculateVehicleDetails":{
-                                "readonly": true,
-                            }
+                                },
+                                "VehicleLoanIncomesInformation1":{
+                                    "readonly": true,
+                                },
+                                "VehicleExpensesInformation":{
+                                    "readonly": true,
+                                },
+                                "VehicleViability":{
+                                    "readonly": true,
+                                },
+                                "VehicleViability1":{
+                                    "readonly": true,
+                                },
+                                "VehicleAssetUse":{
+                                    "readonly": true,
+                                },
+                                "VehicleRouteDetails":{
+                                    "readonly": true,
+                                },
+                                "vehicleLoanDocuments":{
+                                    "readonly": true,
+                                },
+                                "VehiclePhotoCaptures":{
+                                    "readonly": true,
+                                },
+                                "calculateVehicleDetails":{
+                                    "readonly": true,
+                                },
+                                "calculateVehicleDetails1":{
+                                    "readonly": true,
+                                }
                             }
                         }
                     }

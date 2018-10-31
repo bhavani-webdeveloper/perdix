@@ -15,6 +15,7 @@ define(["perdix/domain/model/loan/LoanProcess",
             return {
                 "type": "page-bundle",
                 "title": "LOAN_VIEW",
+                "readonly": true,
                 "subTitle": "LOAN_BOOKING_BUNDLE_SUB_TITLE",
                 "bundleDefinitionPromise": function() {
                     return $q.resolve([
@@ -31,7 +32,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             title: 'CO_APPLICANT',
                             pageClass: 'co-applicant',
                             minimum: 0,
-                            maximum: 4,
+                            maximum: 1,
                             order:20
                         },
                         {
@@ -39,7 +40,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             title: 'GUARANTOR',
                             pageClass: 'guarantor',
                             minimum: 0,
-                            maximum: 3,
+                            maximum: 1,
                             order:30
                         },
                         {
@@ -51,9 +52,9 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:40
                         },
                         {
-                            pageName: 'witfin.customer.VehicleValuation',
-                            title: 'VEHICLE_VALUATION',
-                            pageClass: 'vehicle-valuation',
+                            pageName: 'witfin.loans.individual.screening.LoanRequest',
+                            title: 'LOAN_REQUEST',
+                            pageClass: 'loan-request',
                             minimum: 1,
                             maximum: 1,
                             order:50
@@ -67,33 +68,36 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:55
                         },
                         {
-                            pageName: 'loans.individual.screening.Review',
-                            title: 'REVIEW',
-                            pageClass: 'loan-review',
+                            pageName: 'witfin.loans.individual.screening.vehiclevaluation.VehicleValuation',
+                            title: 'VEHICLE_VALUATION',
+                            pageClass: 'vehicle-valuation',
                             minimum: 1,
                             maximum: 1,
-                            order:70
-                        },
-                        {
-                            pageName: 'witfin.loans.individual.screening.LoanRequest',
-                            title: 'LOAN_REQUEST',
-                            pageClass: 'loan-request',
-                            minimum: 1,
-                            maximum: 1,
-                            order:60
+                            order:57
                         },
                         {
                             pageName: 'loans.individual.screening.CreditBureauView',
                             title: 'CREDIT_BUREAU',
                             pageClass: 'cbview',
                             minimum: 1,
-                            maximum: 1
-                        },{
-                            pageName: 'loans.individual.screening.Summary',
-                            title: 'SUMMARY',
-                            pageClass: 'summary',
+                            maximum: 1,
+                            order:70
+                        },
+                        {
+                            pageName: 'loans.individual.screening.Review',
+                            title: 'REVIEW',
+                            pageClass: 'loan-review',
                             minimum: 1,
-                            maximum: 1
+                            maximum: 1,
+                            order:80
+                        },
+                        {
+                            pageName: 'witfin.loans.individual.screening.detail.Scoring',
+                            title: 'Cam',
+                            pageClass: 'scoring',
+                            minimum: 1,
+                            maximum: 1,
+                            order: 5
                         }
                     ]);
                 },
@@ -177,6 +181,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             .subscribe(function(loanProcess){
                             bundleModel.loanProcess = loanProcess;
                             bundleModel.loanProcess.loanAccount.isReadOnly = "Yes";
+                            bundleModel.loanProcess.loanAccount.isValuator = "Yes";
                                var loanAccount = loanProcess;
                                 // loanAccount.applicantEnrolmentProcess.customer.customerId = loanAccount.loanAccount.customerId;
                                     if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
@@ -256,14 +261,21 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         loanProcess: loanProcess
                                     }
                                 });
+                                $this.bundlePages.push({
+                                    pageClass: 'cbview',
+                                    model: {
+                                        loanAccount: loanProcess.loanAccount
+                                    }
+                                });
                                 
                                 $this.bundlePages.push({
-                                    pageClass: 'summary',
+                                    pageClass: 'scoring',
                                     model: {
                                         cbModel: {
                                             customerId: loanAccount.customerId,
-                                            loanId: loanAccount.id,
-                                            scoreName: 'RiskScore3'
+                                            loanId: loanProcess.loanAccount.id,
+                                            scoreName: 'ConsolidatedScore',
+                                            customerDetail: bundleModel.customer_detail
                                         }
                                     }
                                 });
@@ -320,14 +332,17 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         loanAccount: loanProcess.loanAccount
                                     }
                                 });
-
                                 $this.bundlePages.push({
-                                    pageClass: 'cb-check',
+                                    pageClass: 'scoring',
                                     model: {
-                                        loanAccount: loanProcess.loanAccount
+                                        cbModel: {
+                                            customerId: loanAccount.customerId,
+                                            loanId: loanProcess.loanAccount.id,
+                                            scoreName: 'ConsolidatedScore',
+                                            customerDetail: bundleModel.customer_detail
+                                        }
                                     }
                                 });
-
                                 deferred.resolve();
                             });
                     }
@@ -430,18 +445,6 @@ define(["perdix/domain/model/loan/LoanProcess",
                             BundleManager.broadcastEvent('cb-check-update', cbCustomer);
                         }
                     }
-                },
-                preSave: function(offlineData) {
-                    var defer = $q.defer();
-                    for (var i=0; i<offlineData.bundlePages.length; i++){
-                        var page = offlineData.bundlePages[i];
-                        if (page.pageClass == "applicant" && !page.model.customer.firstName){
-                            PageHelper.showProgress("screening", "Applicant first name is required to save offline", 5000);
-                            defer.reject();
-                        }
-                    }
-                    defer.resolve();
-                    return defer.promise;
                 }
             }
         }

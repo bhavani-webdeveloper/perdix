@@ -180,6 +180,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             LoanProcessts.get(bundleModel.loanId)
                             .subscribe(function(loanProcess){
                                 var loanAccount = loanProcess;
+                                loanProcess.loanAccount.isValuator = "Yes";
                                 loanAccount.applicantEnrolmentProcess.customer.customerId = loanAccount.customerId;
 
                                 // $this.bundlePages.push({

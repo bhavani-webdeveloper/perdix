@@ -513,6 +513,54 @@ define(
                                 }
                             }
                         }
+                    },
+                    "loanProcess.loanAccount.isValuator": {
+                        "Yes": {
+                            "excludes": [
+                                "actionbox"
+                            ],
+                            "overrides": {
+                                "VehiclePrimaryInfo":{
+                                    "readonly": true
+                                },
+                                "VehicleValuationPriliminaryInformation":{
+                                    "readonly": true
+                                },
+                                "VehicleInspectionDetails":{
+                                    "readonly": true
+                                },
+                                "VehicleIdentityDetails":{
+                                    "readonly": true
+                                },
+                                "VehicleRegistrationDetails":{
+                                    "readonly": true
+                                },
+                                "VehiclePermitAndTaxDetails":{
+                                    "readonly": true
+                                },
+                                "VehicleInsuranceDetails":{
+                                    "readonly": true
+                                },
+                                "VehicleOtherRemarks":{
+                                    "readonly": true
+                                },
+                                "VehicleAsset":{
+                                    "readonly": true
+                                },
+                                "VehicleAccessories":{
+                                    "readonly": true
+                                },
+                                "VehicleValuation":{
+                                    "readonly": true
+                                },
+                                "VehiclePhotoCaptures":{
+                                    "readonly": true
+                                },
+                                "VehicleRecommendation":{
+                                    "readonly": true
+                                }
+                            }
+                        }
                     }
                 }
             }

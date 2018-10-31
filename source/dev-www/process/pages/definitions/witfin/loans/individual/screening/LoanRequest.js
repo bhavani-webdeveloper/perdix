@@ -625,17 +625,13 @@ define([], function() {
                     "loanProcess.loanAccount.isReadOnly": {
                         "Yes": {
                             "excludes": [
-                                "PreliminaryInformation.calculateEmi",
                                 "actionbox"
                             ],
                             "overrides": {
                                 "PreliminaryInformation": {
                                     "readonly": true
                                 },
-                                "VehicleAssetViability": {
-                                    "readonly": true
-                                },
-                                "VehiclePhotoCaptures": {
+                                "LoanCustomerRelations": {
                                     "readonly": true
                                 },
                                 "DeductionsFromLoan": {
@@ -645,35 +641,14 @@ define([], function() {
                                     "readonly": true
                                 },
                                 "PayerDetails": {
-                                "readonly": true
-                            },
-                            "LoanCustomerRelations": {
-                                "orderNo": 2
-                            },
-                            "LoanCustomerRelations.loanCustomerRelations": {
-                                "add": null,
-                                "remove": null,
-                                "startEmpty": true
-                            },
-                            "LoanCustomerRelations.loanCustomerRelations.customerId": {
-                               "readonly": true
-                            },
-                            "LoanCustomerRelations.loanCustomerRelations.urn": {
-                               "readonly": true
-                            },
-                            "LoanCustomerRelations.loanCustomerRelations.name": {
-                               "readonly": true
-                            },
-                            "LoanCustomerRelations.loanCustomerRelations.relation": {
-                               "readonly": true
-                            },
-                            "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
-                               "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
-                               "required": true
-                            },
-                            "LoanRecommendation": {
-                                "readonly": true
-                            }
+                                    "readonly": true
+                                },
+                                "LoanRecommendation": {
+                                    "readonly": true
+                                },
+                                "FieldInvestigationDetails": {
+                                    "readonly": true
+                                }
                             }
                         }
                     }
