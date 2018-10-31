@@ -344,7 +344,9 @@ function fetchIncomingData() {
                                         ->where([['customer_id', $customer_id],
                                                 ['processing_status', '=', 'REQUESTCOMPLETE']
                                             ])
-                                        ->update(['response_status' => $customer_integration_status]);
+                                        ->update(['response_status' => $customer_integration_status,
+                                                  'processing_status' => "RESPONSECOMPLETE",
+                                        ]);
                                     } 
                                 }catch(Exception $e){
                                     echo "Uanble to process xlx response file from trackwizz " .$e."\n";
