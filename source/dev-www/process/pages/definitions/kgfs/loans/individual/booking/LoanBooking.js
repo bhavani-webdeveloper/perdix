@@ -149,7 +149,7 @@ define([], function () {
                                     },
                                 },
                                 "LoanDetails.loanProductName":{
-                                    "orderNo":5
+                                    "orderNo":4
                                 },
                                 "LoanDetails.interestRate":{
                                     "orderNo":6
@@ -428,7 +428,7 @@ define([], function () {
                                             model.loanAccount.nominees[context.arrayIndex] = [];
                                         }
                                         model.loanAccount.nominees[context.arrayIndex].guardianFirstName = valueObj.name;
-                                        model.loanAccount.nominees[context.arrayIndex].guardianRelationWithMinor = "Relative";
+                                        model.loanAccount.nominees[context.arrayIndex].guardianRelationWithMinor = valueObj.relationship;
                                         model.loanAccount.nominees[context.arrayIndex].guardianGender = valueObj.gender;
                                     },
                                     getListDisplayItem: function (item, index) {
@@ -458,12 +458,6 @@ define([], function () {
                                             key: "loanAccount.nominees[].guardianPincode"
                                         }
                                     },
-                                    outputMap: {
-                                        "division": "loanAccount.nominees[arrayIndex].guardianLocality",
-                                        "pincode": "loanAccount.nominees[arrayIndex].guardianPincode",
-                                        "district": "loanAccount.nominees[arrayIndex].guardianDistrict",
-                                        "state": "loanAccount.nominees[arrayIndex].guardianState"
-                                    },
                                     searchHelper: formHelper,
                                     // initialize: function(inputModel, form, model, context) {
                                     //     inputModel.pincode = model.loanAccount.nominees[context.arrayIndex].guardianPincode;
@@ -474,6 +468,12 @@ define([], function () {
                                             inputModel.district,
                                             inputModel.state
                                         );
+                                    },
+                                    onSelect : function(valueObj,model,context){
+                                        model.loanAccount.nominees[context.arrayIndex].guardianLocality = valueObj.region, 
+                                        model.loanAccount.nominees[context.arrayIndex].guardianPincode =  valueObj.pincode.toString(),
+                                        model.loanAccount.nominees[context.arrayIndex].guardianDistrict = valueObj.district,
+                                        model.loanAccount.nominees[context.arrayIndex].guardianState = valueObj.state
                                     },
                                     getListDisplayItem: function (item, index) {
                                         return [
