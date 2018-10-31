@@ -294,8 +294,8 @@ irf.pages.factory('BundleLog', ['$log', function($log){
 }]);
 
 irf.pages.controller("PageBundleCtrl",
-["$log", "$filter", "$scope", "$state", "$stateParams", "$injector", "$q", "entityManager", "$timeout", "BundleManager", "BundleLog", "OfflineManager", "PageHelper", "Utils", "SessionStore",
-function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManager, $timeout, BundleManager, BundleLog, OfflineManager, PageHelper, Utils, SessionStore) {
+["$log", "$filter", "$scope", "$state", "$stateParams", "$injector", "$q", "Locking", "irfNavigator", "irfProgressMessage", "$timeout", "BundleManager", "BundleLog", "OfflineManager", "PageHelper", "Utils", "SessionStore",
+function($log, $filter, $scope, $state, $stateParams, $injector, $q, Locking, irfNavigator, irfProgressMessage, $timeout, BundleManager, BundleLog, OfflineManager, PageHelper, Utils, SessionStore) {
     var self = this;
 
     $scope.pages = [];
@@ -535,6 +535,39 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
                 }
                 return deferred.promise;
             })
+            //Locking starts
+            .then(function() {
+                var deferred = $q.defer();
+                $scope.bundlePage.locked = false;
+                var lockingRequired = false;
+                if (SessionStore.getGlobalSetting("lockingRequired") == "true" && $scope.bundlePage.lockingRequired && $scope.bundlePage.processType && $scope.bundlePage.processName && $scope.pageId) {
+                    if (angular.isFunction($scope.bundlePage.lockingRequired)) {
+                        lockingRequired = $scope.bundlePage.lockingRequired();
+                    } else {
+                        lockingRequired = !!$scope.bundlePage.lockingRequired;
+                    }
+                    if (lockingRequired) {
+                        Locking.lock({
+                            "processType": $scope.bundlePage.processType,
+                            "processName": $scope.bundlePage.processName,
+                            "recordId": $scope.pageId
+                        }).$promise.then(function() {
+                            $scope.bundlePage.locked = true;
+                            deferred.resolve();
+                        }, function(err) {
+                            irfProgressMessage.pop("Locking","Locking failed for " + $scope.pageId, 6000);
+                            irfNavigator.goBack();
+                            deferred.reject();
+                        });
+                    } else {
+                        deferred.resolve();
+                    }
+                } else {
+                    deferred.resolve();
+                }
+                return deferred.promise;
+            })
+            //Locking ends
             .then(function(){
                 /* Done loading the page. */
                 BundleLog.info("Bundle Page Loaded");
