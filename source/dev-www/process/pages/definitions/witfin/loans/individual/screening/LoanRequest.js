@@ -716,6 +716,8 @@ define([], function() {
                     "FieldInvestigationDetails",
                     "FieldInvestigationDetails.fieldInvestigationDecision",
                     "FieldInvestigationDetails.fieldInvestigationReason",
+                    "deviationsMitigants",
+                    "deviationsMitigants.deviationDetails",
                     "actionbox",
                     "actionbox.submit",
                     "actionbox.save",
@@ -1138,9 +1140,33 @@ define([], function() {
                                             "parentValueExpr": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf2"
                                         }
                                     }
+                                },
+                                "deviationsMitigants": {
+                                    "type": "box",
+                                    "orderNo": 310,
+                                    "colClass": "col-sm-12",
+                                    "title": "DEVIATION_AND_MITIGATIONS",
+                                    "condition": "model.currentStage != 'Screening'",
+                                    "items": {
+                                        "deviationDetails": {
+                                            "type": "section",
+                                            "colClass": "col-sm-12",
+                                            "html": '<table class="table"><colgroup><col width="20%"><col width="5%"><col width="20%"></colgroup><thead><tr><th>Parameter Name</th><th></th><th>Actual Value</th><th>Mitigant</th></tr></thead><tbody>' +
+                                                '<tr ng-repeat="item in model.deviationDetails">' +
+                                                '<td>{{ item["parameter"] }}</td>' +
+                                                '<td> <span class="square-color-box" style="background: {{ item.color_hexadecimal }}"> </span></td>' +
+                                                '<td>{{ item["deviation"] }}</td>' +
+                                                '<td><ul class="list-unstyled">' +
+                                                '<li ng-repeat="m in item.mitigants " id="{{m.mitigant}}">' +
+                                                '<input type="checkbox"  ng-model="m.selected" ng-checked="m.selected"> {{ m.mitigant }}' +
+                                                '</li></ul></td></tr></tbody></table>'
+
+                                        }
+                                    }
                                 }
                             },
-                            "additions": [{
+                            "additions": [
+                                {
                                 "type": "box",
                                 "orderNo": 999,
                                 "title": "POST_REVIEW",
@@ -1276,70 +1302,70 @@ define([], function() {
                                         }
                                     ]
                                 }]
-                            },
-        {
-            "type": "box",
-            "title": "REVERT_REJECT",
-            "condition": "model.currentStage=='Rejected'",
-            "items": [{
-                    type: "section",
-                    items: [{
-                        title: "REMARKS",
-                        key: "loanProcess.remarks",
-                        type: "textarea",
-                        required: true
-                    }, {
-                        title: "Reject Reason",
-                        key: "loanAccount.rejectReason",
-                        readonly: true,
-                        type: "textarea",
-                    }, {
-                        key: "loanProcess.stage",
-                        title: "SEND_BACK_TO_STAGE",
-                        type: "lov",
-                        lovonly:true,
-                        autolov: true,
-                        required: true,
-                        searchHelper: formHelper,
-                        search: function(inputModel, form, model, context) {
-                            var stage1 = model.review.preStage;
-                            var targetstage = formHelper.enum('targetstage').data;
-                            var out = [{'name': stage1, 'value': stage1}];
-                            for (var i = 0; i < targetstage.length; i++) {
-                                var t = targetstage[i];
-                                if (t.field1 == stage1) {
-                                    out.push({
-                                        name: t.name,
-                                        value: t.code
-                                    })
-                                }
-                            }
-                            return $q.resolve({
-                                headers: {
-                                    "x-total-count": out.length
                                 },
-                                body: out
-                            });
-                        },
-                        onSelect: function(valueObj, model, context) {
-                            model.review.targetStage1 = valueObj.name;
-                            model.loanProcess.stage = valueObj.value;
-                        },
-                        getListDisplayItem: function(item, index) {
-                            return [
-                                item.name
-                            ];
-                        }
-                    }, {
-                        key: "review.sendBackButton",
-                        type: "button",
-                        title: "SEND_BACK",
-                        onClick: "actions.sendBack(model, formCtrl, form, $event)"
-                    }]
-                },
-            ]
-        }
-                        ]
+                                {
+                                    "type": "box",
+                                    "title": "REVERT_REJECT",
+                                    "condition": "model.currentStage=='Rejected'",
+                                    "items": [{
+                                            type: "section",
+                                            items: [{
+                                                title: "REMARKS",
+                                                key: "loanProcess.remarks",
+                                                type: "textarea",
+                                                required: true
+                                            }, {
+                                                title: "Reject Reason",
+                                                key: "loanAccount.rejectReason",
+                                                readonly: true,
+                                                type: "textarea",
+                                            }, {
+                                                key: "loanProcess.stage",
+                                                title: "SEND_BACK_TO_STAGE",
+                                                type: "lov",
+                                                lovonly:true,
+                                                autolov: true,
+                                                required: true,
+                                                searchHelper: formHelper,
+                                                search: function(inputModel, form, model, context) {
+                                                    var stage1 = model.review.preStage;
+                                                    var targetstage = formHelper.enum('targetstage').data;
+                                                    var out = [{'name': stage1, 'value': stage1}];
+                                                    for (var i = 0; i < targetstage.length; i++) {
+                                                        var t = targetstage[i];
+                                                        if (t.field1 == stage1) {
+                                                            out.push({
+                                                                name: t.name,
+                                                                value: t.code
+                                                            })
+                                                        }
+                                                    }
+                                                    return $q.resolve({
+                                                        headers: {
+                                                            "x-total-count": out.length
+                                                        },
+                                                        body: out
+                                                    });
+                                                },
+                                                onSelect: function(valueObj, model, context) {
+                                                    model.review.targetStage1 = valueObj.name;
+                                                    model.loanProcess.stage = valueObj.value;
+                                                },
+                                                getListDisplayItem: function(item, index) {
+                                                    return [
+                                                        item.name
+                                                    ];
+                                                }
+                                            }, {
+                                                key: "review.sendBackButton",
+                                                type: "button",
+                                                title: "SEND_BACK",
+                                                onClick: "actions.sendBack(model, formCtrl, form, $event)"
+                                            }]
+                                        },
+                                    ]
+                                }
+                            ]
                         }
                     };
                     var p1 = UIRepository.getLoanProcessUIRepository().$promise;
@@ -1361,156 +1387,190 @@ define([], function() {
                     ]
                 },
                 eventListeners: {
-                    "new-applicant": function(bundleModel, model, params){
+                        "new-applicant": function(bundleModel, model, params){
 
-                        $log.info(model.loanAccount.loanCustomerRelations);
-        
-                        $log.info("Inside new-applicant of LoanRequest");
-                        var addToRelation = true;
-                        for (var i=0;i<model.loanAccount.loanCustomerRelations.length; i++){
-                            if (model.loanAccount.loanCustomerRelations[i].customerId == params.customer.id) {
-                                addToRelation = false;
-                                if (params.customer.urnNo)
-                                    model.loanAccount.loanCustomerRelations[i].urn =params.customer.urnNo;
-                                    model.loanAccount.loanCustomerRelations[i].name =params.customer.firstName;
-                                break;
+                            $log.info(model.loanAccount.loanCustomerRelations);
+            
+                            $log.info("Inside new-applicant of LoanRequest");
+                            var addToRelation = true;
+                            for (var i=0;i<model.loanAccount.loanCustomerRelations.length; i++){
+                                if (model.loanAccount.loanCustomerRelations[i].customerId == params.customer.id) {
+                                    addToRelation = false;
+                                    if (params.customer.urnNo)
+                                        model.loanAccount.loanCustomerRelations[i].urn =params.customer.urnNo;
+                                        model.loanAccount.loanCustomerRelations[i].name =params.customer.firstName;
+                                    break;
+                                }
                             }
-                        }
-        
-                        if (addToRelation){
-                            model.loanAccount.loanCustomerRelations.push({
-                                'customerId': params.customer.id,
-                                'relation': "Applicant",
-                                'urn':params.customer.urnNo,
-                                'name':params.customer.firstName
-                            });
-                            model.loanAccount.applicant = params.customer.urnNo;
-                        }
-                        model.applicant = params.customer;
-                        model.applicant.age1 = moment().diff(moment(model.applicant.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-                    },
-                    "lead-loaded": function(bundleModel, model, obj) {
-                        model.lead = obj;
-                        model.loanAccount.loanAmountRequested = obj.loanAmountRequested;
-                        model.loanAccount.loanPurpose1 = obj.loanPurpose1;
-                        model.loanAccount.loanPurpose2 = obj.loanPurpose2;
-                        model.loanAccount.vehicleLoanDetails.registrationNumber = obj.vehicleRegistrationNumber;
-                        model.loanAccount.screeningDate = obj.screeningDate || moment().format("YYYY-MM-DD");
-                        model.loanAccount.parentLoanAccount = obj.parentLoanAccount;
+            
+                            if (addToRelation){
+                                model.loanAccount.loanCustomerRelations.push({
+                                    'customerId': params.customer.id,
+                                    'relation': "Applicant",
+                                    'urn':params.customer.urnNo,
+                                    'name':params.customer.firstName
+                                });
+                                model.loanAccount.applicant = params.customer.urnNo;
+                            }
+                            model.applicant = params.customer;
+                            model.applicant.age1 = moment().diff(moment(model.applicant.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                        },
+                        "lead-loaded": function(bundleModel, model, obj) {
+                            model.lead = obj;
+                            model.loanAccount.loanAmountRequested = obj.loanAmountRequested;
+                            model.loanAccount.loanPurpose1 = obj.loanPurpose1;
+                            model.loanAccount.loanPurpose2 = obj.loanPurpose2;
+                            model.loanAccount.vehicleLoanDetails.registrationNumber = obj.vehicleRegistrationNumber;
+                            model.loanAccount.screeningDate = obj.screeningDate || moment().format("YYYY-MM-DD");
+                            model.loanAccount.parentLoanAccount = obj.parentLoanAccount;
 
-                        if(model.loanAccount.loanPurpose1 == 'Purchase - New Vehicle'){
-                            model.loanAccount.vehicleLoanDetails.vehicleType = 'New';
-                        }else if (model.loanAccount.loanPurpose1 == 'Purchase - Used Vehicle'){
-                            model.loanAccount.vehicleLoanDetails.vehicleType = 'Used';
-                        }
-                        
-                    },
-                    "new-co-applicant": function(bundleModel, model, params){
-                        $log.info("Insdie new-co-applicant of LoanRequest");
-                        // model.loanAccount.coApplicant = params.customer.id;
-                        var addToRelation = true;
-                        for (var i=0;i<model.loanAccount.loanCustomerRelations.length; i++){
-                            if (model.loanAccount.loanCustomerRelations[i].customerId == params.customer.id) {
-                                addToRelation = false;
-                                if (params.customer.urnNo)
-                                    model.loanAccount.loanCustomerRelations[i].urn =params.customer.urnNo;
-                                    model.loanAccount.loanCustomerRelations[i].name =params.customer.firstName;
-                                break;
+                            if(model.loanAccount.loanPurpose1 == 'Purchase - New Vehicle'){
+                                model.loanAccount.vehicleLoanDetails.vehicleType = 'New';
+                            }else if (model.loanAccount.loanPurpose1 == 'Purchase - Used Vehicle'){
+                                model.loanAccount.vehicleLoanDetails.vehicleType = 'Used';
                             }
-                        }
-        
-                        if (addToRelation) {
-                            model.loanAccount.loanCustomerRelations.push({
-                                'customerId': params.customer.id,
-                                'relation': "Co-Applicant",
-                                'urn':params.customer.urnNo,
-                                'name':params.customer.firstName
-                            })
-                        }
-                    },
-                    "new-guarantor": function(bundleModel, model, params){
-                        $log.info("Insdie guarantor of LoanRequest");
-                        // model.loanAccount.coApplicant = params.customer.id;
-                        var addToRelation = true;
-                        for (var i=0;i<model.loanAccount.loanCustomerRelations.length; i++){
-                            if (model.loanAccount.loanCustomerRelations[i].customerId == params.customer.id) {
-                                addToRelation = false;
-                                if (params.customer.urnNo)
-                                    model.loanAccount.loanCustomerRelations[i].urn =params.customer.urnNo;
-                                    model.loanAccount.loanCustomerRelations[i].name =params.customer.firstName;
-                                break;
+                            
+                        },
+                        "new-co-applicant": function(bundleModel, model, params){
+                            $log.info("Insdie new-co-applicant of LoanRequest");
+                            // model.loanAccount.coApplicant = params.customer.id;
+                            var addToRelation = true;
+                            for (var i=0;i<model.loanAccount.loanCustomerRelations.length; i++){
+                                if (model.loanAccount.loanCustomerRelations[i].customerId == params.customer.id) {
+                                    addToRelation = false;
+                                    if (params.customer.urnNo)
+                                        model.loanAccount.loanCustomerRelations[i].urn =params.customer.urnNo;
+                                        model.loanAccount.loanCustomerRelations[i].name =params.customer.firstName;
+                                    break;
+                                }
                             }
-                        }
-        
-                        if (addToRelation) {
-                            model.loanAccount.loanCustomerRelations.push({
-                                'customerId': params.customer.id,
-                                'relation': "Guarantor",
-                                'urn': params.customer.urnNo,
-                                'name':params.customer.firstName
-                            })
-                        };
-        
-                        model.loanAccount.guarantors = model.loanAccount.guarantors || [];
-        
-                        var existingGuarantorIndex = _.findIndex(model.loanAccount.guarantors, function(g){
-                            if (g.guaUrnNo == params.customer.urnNo || g.guaCustomerId == params.customer.id)
-                                return true;
-                        })
-        
-                        if (existingGuarantorIndex<0){
-                            model.loanAccount.guarantors.push({
-                                'guaCustomerId': params.customer.id,
-                                'guaUrnNo': params.customer.urnNo
-                            });
-                        } else {
-                            if (!model.loanAccount.guarantors[existingGuarantorIndex].guaUrnNo){
-                                model.loanAccount.guarantors[existingGuarantorIndex].guaUrnNo = params.customer.urnNo;
-                            }
-                        }
-        
-        
-                    },
-                    "remove-customer-relation": function(bundleModel, model, enrolmentDetails){
-                        $log.info("Inside enrolment-removed");
-                        /**
-                         * Following should happen
-                         *
-                         * 1. Remove customer from Loan Customer Relations
-                         * 2. Remove custoemr from the placeholders. If Applicant, remove from applicant. If Guarantor, remove from guarantors.
-                         */
-        
-                        // 1.
-                        _.remove(model.loanAccount.loanCustomerRelations, function(customer){
-                            return (customer.customerId==enrolmentDetails.customerId && customer.relation == getRelationFromClass(enrolmentDetails.customerClass)) ;
-                        })
-        
-                        // 2.
-                        switch(enrolmentDetails.customerClass){
-                            case 'guarantor':
-                                _.remove(model.loanAccount.guarantors, function(guarantor){
-                                    return (guarantor.guaCustomerId == enrolmentDetails.customerId)
+            
+                            if (addToRelation) {
+                                model.loanAccount.loanCustomerRelations.push({
+                                    'customerId': params.customer.id,
+                                    'relation': "Co-Applicant",
+                                    'urn':params.customer.urnNo,
+                                    'name':params.customer.firstName
                                 })
-                                break;
-                            case 'applicant':
-        
-                                break;
-                            case 'co-applicant':
-        
-                                break;
-        
-                        }
-                    },
-                    "cb-check-update": function(bundleModel, model, params){
-                        $log.info("Inside cb-check-update of LoanRequest");
-                        for (var i=0;i<model.loanAccount.loanCustomerRelations.length; i++){
-                            if (model.loanAccount.loanCustomerRelations[i].customerId == params.customerId) {
-                                if(params.cbType == 'BASE')
-                                    model.loanAccount.loanCustomerRelations[i].highmarkCompleted = true;
-                                else if(params.cbType == 'CIBIL')
-                                    model.loanAccount.loanCustomerRelations[i].cibilCompleted = true;
                             }
-                        }
+                        },
+                        "new-guarantor": function(bundleModel, model, params){
+                            $log.info("Insdie guarantor of LoanRequest");
+                            // model.loanAccount.coApplicant = params.customer.id;
+                            var addToRelation = true;
+                            for (var i=0;i<model.loanAccount.loanCustomerRelations.length; i++){
+                                if (model.loanAccount.loanCustomerRelations[i].customerId == params.customer.id) {
+                                    addToRelation = false;
+                                    if (params.customer.urnNo)
+                                        model.loanAccount.loanCustomerRelations[i].urn =params.customer.urnNo;
+                                        model.loanAccount.loanCustomerRelations[i].name =params.customer.firstName;
+                                    break;
+                                }
+                            }
+            
+                            if (addToRelation) {
+                                model.loanAccount.loanCustomerRelations.push({
+                                    'customerId': params.customer.id,
+                                    'relation': "Guarantor",
+                                    'urn': params.customer.urnNo,
+                                    'name':params.customer.firstName
+                                })
+                            };
+            
+                            model.loanAccount.guarantors = model.loanAccount.guarantors || [];
+            
+                            var existingGuarantorIndex = _.findIndex(model.loanAccount.guarantors, function(g){
+                                if (g.guaUrnNo == params.customer.urnNo || g.guaCustomerId == params.customer.id)
+                                    return true;
+                            })
+            
+                            if (existingGuarantorIndex<0){
+                                model.loanAccount.guarantors.push({
+                                    'guaCustomerId': params.customer.id,
+                                    'guaUrnNo': params.customer.urnNo
+                                });
+                            } else {
+                                if (!model.loanAccount.guarantors[existingGuarantorIndex].guaUrnNo){
+                                    model.loanAccount.guarantors[existingGuarantorIndex].guaUrnNo = params.customer.urnNo;
+                                }
+                            }
+            
+            
+                        },
+                        "remove-customer-relation": function(bundleModel, model, enrolmentDetails){
+                            $log.info("Inside enrolment-removed");
+                            /**
+                             * Following should happen
+                             *
+                             * 1. Remove customer from Loan Customer Relations
+                             * 2. Remove custoemr from the placeholders. If Applicant, remove from applicant. If Guarantor, remove from guarantors.
+                             */
+            
+                            // 1.
+                            _.remove(model.loanAccount.loanCustomerRelations, function(customer){
+                                return (customer.customerId==enrolmentDetails.customerId && customer.relation == getRelationFromClass(enrolmentDetails.customerClass)) ;
+                            })
+            
+                            // 2.
+                            switch(enrolmentDetails.customerClass){
+                                case 'guarantor':
+                                    _.remove(model.loanAccount.guarantors, function(guarantor){
+                                        return (guarantor.guaCustomerId == enrolmentDetails.customerId)
+                                    })
+                                    break;
+                                case 'applicant':
+            
+                                    break;
+                                case 'co-applicant':
+            
+                                    break;
+            
+                            }
+                        },
+                        "cb-check-update": function(bundleModel, model, params){
+                            $log.info("Inside cb-check-update of LoanRequest");
+                            for (var i=0;i<model.loanAccount.loanCustomerRelations.length; i++){
+                                if (model.loanAccount.loanCustomerRelations[i].customerId == params.customerId) {
+                                    if(params.cbType == 'BASE')
+                                        model.loanAccount.loanCustomerRelations[i].highmarkCompleted = true;
+                                    else if(params.cbType == 'CIBIL')
+                                        model.loanAccount.loanCustomerRelations[i].cibilCompleted = true;
+                                }
+                            }
+                        },
+                        "financial-summary": function(bundleModel, model, params) {
+                            model._scores = params;
+                            model._deviationDetails = model._scores[6].data;
+                            model.deviationDetails = [];
+                            var allMitigants = {};
+                            model.allMitigants = allMitigants;
+                            for (i in model._deviationDetails) {
+                                var item = model._deviationDetails[i];
+                                var mitigants = item.Mitigant.split('|');
+                                for (j in mitigants) {
+                                    allMitigants[mitigants[j]] = {
+                                        mitigant: mitigants[j],
+                                        parameter: item.Parameter,
+                                        score: item.ParameterScore,
+                                        selected: false
+                                    };
+                                    mitigants[j] = allMitigants[mitigants[j]];
+                                }
+                                if (item.ChosenMitigant && item.ChosenMitigant != null) {
+                                    var chosenMitigants = item.ChosenMitigant.split('|');
+                                    for (j in chosenMitigants) {
+                                        allMitigants[chosenMitigants[j]].selected = true;
+                                    }
+                                }
+                                model.deviationDetails.push({
+                                    parameter: item.Parameter,
+                                    score: item.ParameterScore,
+                                    deviation: item.Deviation,
+                                    mitigants: mitigants,
+                                    color_english: item.color_english,
+                                    color_hexadecimal: item.color_hexadecimal
+                                });
+                            }                       
                     }
                 },
                 form: [],
@@ -1534,6 +1594,14 @@ define([], function() {
                         if (PageHelper.isFormInvalid(formCtrl)) {
                             return false;
                         }
+
+                        model.loanAccount.loanMitigants = [];
+                        _.forOwn(model.allMitigants, function(v, k) {
+                            if (v.selected) {
+                                model.loanAccount.loanMitigants.push(v);
+                            }
+                        });
+
                         if (!model.loanAccount.id) {
                             model.loanAccount.isRestructure = false;
                             model.loanAccount.documentTracking = "PENDING";
@@ -1619,6 +1687,14 @@ define([], function() {
                             PageHelper.showErrors({"data": {"error":"Vehicle Valuation should be done"}});
                             return false;
                         }
+
+                        model.loanAccount.loanMitigants = [];
+                        _.forOwn(model.allMitigants, function(v, k) {
+                            if (v.selected) {
+                                model.loanAccount.loanMitigants.push(v);
+                            }
+                        });
+
                         PageHelper.showLoader();
                         model.loanProcess.proceed()
                             .finally(function() {
