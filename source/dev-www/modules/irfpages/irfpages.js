@@ -218,10 +218,10 @@ irf.pages.constant('ALLOWED_STATES', ['Login', 'Reset']);
 irf.pages.run(
 ["$rootScope", "$log", "$timeout", "$q", "$state", "authService", "$location", "ALLOWED_STATES",
 "irfStorageService", "entityManager", "SessionStore", "irfElementsConfig", "irfOfflineFileRegistry",
-"PageHelper", "$translate", "$injector", "irfLazyLoader", "$filter", "formHelper",
+"PageHelper", "$translate", "$injector", "Locking", "$filter", "formHelper",
 function($rootScope, $log, $timeout, $q, $state, authService, $location, ALLOWED_STATES,
 	irfStorageService, entityManager, SessionStore, irfElementsConfig, irfOfflineFileRegistry,
-	PageHelper, $translate, $injector, irfLazyLoader, $filter, formHelper){
+	PageHelper, $translate, $injector, Locking, $filter, formHelper){
 
 	$rootScope.$on("irf-login-success", function() {
 		var userRole = SessionStore.getUserRole(); var fullAccess = false;
@@ -306,17 +306,9 @@ function($rootScope, $log, $timeout, $q, $state, authService, $location, ALLOWED
         /* Hiding Loader */
         PageHelper.hideLoader();
 
-        // if (toState.name === 'Page.Engine' || toState.name === 'Page.Bundle'){
-        // 	/* Checking Existence of the page */
-	       //  var pageAvailable = $injector.has(irf.page(toParams.pageName));
-	       //  $log.info("Destination page (" + toParams.pageName + ") is already loaded? " + pageAvailable);
-
-	       //  /* If Page is not available. Load it using the RequireJS */
-	       //  if (false == pageAvailable){
-	       //  	event.preventDefault();
-	       //  	return irfLazyLoader.loadPage(toState, toParams, options);
-	       //  }	
-        // }
+		if (SessionStore.getGlobalSetting("lockingRequired") == "true") {
+			Locking.unlock();
+		}
 
 		if (fromState.name === 'Page.Engine' && fromParams && fromParams.pageName) {
 			var model = entityManager.getModel(fromParams.pageNam);
