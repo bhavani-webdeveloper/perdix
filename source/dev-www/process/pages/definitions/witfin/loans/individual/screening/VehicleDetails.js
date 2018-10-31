@@ -38,7 +38,19 @@ define(
             //         return 'Co-Applicant';
             //     }
             // };
-
+            var calculateKmPerMonth = function(modelValue, form, model) {
+                if( model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].routesKms && model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].trips){
+                    model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].kmPerMonth = model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].routesKms * model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].trips;
+                }
+                else {
+                    PageHelper.showErrors({
+                        data: {
+                            error: "Please Enter Required Values for calculating kmPerMonth."
+                        }
+                    });
+                    return false;
+                }
+            }
 
 
             var configFile = function() {
@@ -633,8 +645,52 @@ define(
                                     "readonly": true
                                 }
                             }
-                        },
-
+                        }
+                    },
+                    "loanProcess.loanAccount.isReadOnly": {
+                        "Yes": {
+                            "excludes": [
+                                 "actionbox"
+                            ],
+                            "overrides": {
+                               "NewVehicleDetails":{
+                                   "readonly": true
+                               },
+                               "VehicleLoanIncomesInformation":{
+                                "readonly": true,
+                                },
+                                "VehicleLoanIncomesInformation1":{
+                                    "readonly": true,
+                                },
+                                "VehicleExpensesInformation":{
+                                    "readonly": true,
+                                },
+                                "VehicleViability":{
+                                    "readonly": true,
+                                },
+                                "VehicleViability1":{
+                                    "readonly": true,
+                                },
+                                "VehicleAssetUse":{
+                                    "readonly": true,
+                                },
+                                "VehicleRouteDetails":{
+                                    "readonly": true,
+                                },
+                                "vehicleLoanDocuments":{
+                                    "readonly": true,
+                                },
+                                "VehiclePhotoCaptures":{
+                                    "readonly": true,
+                                },
+                                "calculateVehicleDetails":{
+                                    "readonly": true,
+                                },
+                                "calculateVehicleDetails1":{
+                                    "readonly": true,
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -687,7 +743,6 @@ define(
                     "VehicleViability.fcfToEmi",
                     "VehicleViability.totalMonthlyExpense",
                     "VehicleViability1",
-                    "VehicleViability1.grossVehicleWeight1",
                     "VehicleViability1.payLoad1",
                     "VehicleViability1.typeofLoad1",
                     "VehicleViability1.ratePerTrip1",
@@ -782,6 +837,22 @@ define(
                             },
                             "vehicleLoanDocuments.vehicleLoanDocuments.fileId": {
                                 // "required": true
+                            },
+                            "vehicleLoanDocuments.vehicleLoanDocuments.issueDate":{
+                                "onChange": function (modelValue, form, model) {
+                                    if (moment(model.loanAccount.vehicleLoanDetails.vehicleLoanDocuments[form.arrayIndex].expiryDate).format('YYYY-MM-DD') < moment(model.loanAccount.vehicleLoanDetails.vehicleLoanDocuments[form.arrayIndex].issueDate).format('YYYY-MM-DD')) {
+                                        model.loanAccount.vehicleLoanDetails.vehicleLoanDocuments[form.arrayIndex].issueDate = null;
+                                        PageHelper.showProgress('date', 'Please enter a date lesser than expiry date', 5000);
+                                    } 
+                                }
+                            },
+                            "vehicleLoanDocuments.vehicleLoanDocuments.expiryDate":{
+                                "onChange": function (modelValue, form, model) {
+                                    if (moment(model.loanAccount.vehicleLoanDetails.vehicleLoanDocuments[form.arrayIndex].expiryDate).format('YYYY-MM-DD') < moment(model.loanAccount.vehicleLoanDetails.vehicleLoanDocuments[form.arrayIndex].issueDate).format('YYYY-MM-DD')) {
+                                        model.loanAccount.vehicleLoanDetails.vehicleLoanDocuments[form.arrayIndex].expiryDate = null;
+                                        PageHelper.showProgress('date', 'Please enter a date greater than issue date', 5000);
+                                    }
+                                }
                             },
                             "VehicleRouteDetails": {
                                 "condition": "(model.loanAccount.loanPurpose1 == 'Purchase - New Vehicle' || model.loanAccount.loanPurpose1 == 'Purchase - Used Vehicle' || model.loanAccount.loanPurpose1 == 'Refinance')&& (model.loanAccount.vehicleLoanDetails.segment.toLowerCase() == 'goods')"
@@ -980,7 +1051,14 @@ define(
                                 "key": "loanAccount.vehicleLoanDetails.yearOfManufacture",
                                 "title": "MANUFACTURER_YEAR",
                                 "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'NO'",
-                                "required": true
+                                "required": true,
+                                "onChange": function(modelValue, form, model){
+                                    var d = new Date();
+                                    if(model.loanAccount.vehicleLoanDetails.yearOfManufacture < 1990 || model.loanAccount.vehicleLoanDetails.yearOfManufacture > d.getFullYear()) {
+                                        model.loanAccount.vehicleLoanDetails.yearOfManufacture = null;
+                                        PageHelper.showProgress('date', 'Please enter a valid year', 5000);
+                                    }
+                                }
                             },
                             "NewVehicleDetails.assetDetails": {
                                 "orderNo": 90
@@ -1390,6 +1468,9 @@ define(
                                     "items": {
                                         "vehicleRouteDetails": {
                                             "items": {
+                                                "routesKms":{
+                                                    "onChange":calculateKmPerMonth
+                                                },
                                                 "kmPerMonth": {
                                                     "type": "string",
                                                     "key": "loanAccount.vehicleLoanDetails.vehicleRouteDetails[].kmPerMonth",

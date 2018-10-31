@@ -1,8 +1,8 @@
 define({
     pageUID: "loans.individual.collections.DepositStageDetail",
     pageType: "Engine",
-    dependencies: ["$log","CustomerBankBranch","SessionStore", "formHelper", "$stateParams", "PageHelper", "Utils", "LoanCollection", "irfNavigator","Queries","Files"],
-    $pageFn: function ($log,CustomerBankBranch,SessionStore, formHelper, $stateParams, PageHelper, Utils, LoanCollection, irfNavigator, Queries, Files) {
+    dependencies: ["$log","Queries", "CustomerBankBranch","SessionStore", "formHelper", "$stateParams", "PageHelper", "Utils", "LoanCollection", "irfNavigator","Queries","Files"],
+    $pageFn: function ($log,Queries, CustomerBankBranch,SessionStore, formHelper, $stateParams, PageHelper, Utils, LoanCollection, irfNavigator, Queries, Files) {
         return {
             "type": "schema-form",
             "title": "DEPOSIT_STAGE_DETAIL",
@@ -18,6 +18,10 @@ define({
                 model.branchname = SessionStore.getCurrentBranch().branchId;
                 model.depositDetails = $stateParams.pageData;
                 //model.depositDetails.ifscCode = model.depositDetails.collectionDetail.ifscCode;
+               Queries.getLoanCollectionDepositSum(model.depositDetails.id).then(function(response){
+                model.demandDeposit=response[0]['SUM(`demand_amount`)'];
+
+                })
             },
             form: [{
                 "type": "box",
@@ -28,7 +32,7 @@ define({
                         "title": "DEPOSIT_ID",
                         "readonly":true
                     },{
-                        "key":"depositDetails.collectionDetail.totalAmount",
+                        "key":"demandDeposit",
                         "title": "TOTAL_TO_BE_DEPOSITED",
                         "readonly":true
                     },
@@ -299,9 +303,11 @@ define({
                     // 1)cash collection details to be deposited
                         if(model.depositDetails && model.depositDetails.instrumentType.toLowerCase()=='cash'){
                     //UPDATE API to update deposit summary details
+                            PageHelper.showLoader();
                             LoanCollection.updateDeposiSummary(model.depositDetails.collectionDetail).$promise
                                 .then(function (res, head) {
-                                    PageHelper.showProgress('Deposit-Stage', 'Successfully Updated', 5000);
+                                    PageHelper.showLoader();
+                                    PageHelper.showProgress('Deposit-Stage', 'Successfully Updated', 1000);
                                     let cashProceedData = {
                                         "loanCollectionSummaryDTOs": [{
                                             "depositId_loanAccountNumber": model.depositDetails.id
@@ -309,20 +315,21 @@ define({
                                         "remarks": model.review.remarks,
                                         "repaymentProcessAction": "PROCEED"
                                     }
+                                    PageHelper.showLoader();
                     //batchRepay to proceed loancollection account associated with bankSummaryID
                                     LoanCollection.batchUpdate(cashProceedData).$promise
                                         .then(function (res, head) {
-                                            PageHelper.showProgress('Deposit-Stage', 'Successfully proceeded to BRSValidation', 5000);
+                                            PageHelper.showProgress('Deposit-Stage', 'Successfully proceeded to BRSValidation', 1000);
                                             irfNavigator.goBack();
                                         }, function (httpres) {
                                             PageHelper.showProgress("Deposit-Stage", "Error in Proceeding to next stage", 5000);
                                         })
                                 }, function (httpres) {
                                     PageHelper.showProgress("Deposit-Stage", "Error in updating the deposit data", 5000);
-
                                 })
                                 .finally(function () {
                                     PageHelper.hideBlockingLoader();
+                                    PageHelper.hideLoader();
                                 })
                         }else if(model.depositDetails && (model.depositDetails.instrumentType.toLowerCase()=='chq' || model.depositDetails.instrumentType.toLowerCase() == 'cheque')){
                             var chequeDepositData = {

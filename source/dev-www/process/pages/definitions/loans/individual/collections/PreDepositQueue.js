@@ -69,7 +69,9 @@ define({
                         'currentStage':"PreDeposit",
                         'accountBranchId': searchOptions.branchName,
                         'accountCentreId': searchOptions.centreName,
-                        'instrumentType': temp
+                        'instrumentType': temp,
+                        'page': pageOpts.pageNo,
+	                    'per_page': pageOpts.itemsPerPage
                     }).$promise;
 
                     return promise;

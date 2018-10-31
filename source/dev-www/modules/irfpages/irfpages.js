@@ -62,6 +62,7 @@ irf.pageCollection.config(["$provide", function($provide){
 	}
 }])
 
+
 var pages = irf.pages = angular.module("IRFPages", ["irf.elements", "IRFPageCollection","nvd3", "ngSanitize","ui.bootstrap"], function ($compileProvider) {
 	$compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|geo):/);
 });
@@ -234,6 +235,7 @@ function($rootScope, $log, $timeout, $q, $state, authService, $location, ALLOWED
 			for (var i = 0; i < banks.length; i++){
 				if(banks[i].name == bankName){
 					bankId = banks[i].value;
+					SessionStore.setBankId(bankId);
 					break;
 				}
 			}
@@ -241,6 +243,18 @@ function($rootScope, $log, $timeout, $q, $state, authService, $location, ALLOWED
 			branches = $filter('filter')(branches, {"bankId" : bankId}, true);
 			if(branches && branches.length && branches.length > 0) {
 				SessionStore.setItem('UserAllowedBranches', branches);
+			}
+		}
+		else {
+			var bankName = SessionStore.getBankName();
+			var banks = formHelper.enum('bank').data;
+			var bankId = null;
+			for (var i = 0; i < banks.length; i++){
+				if(banks[i].name == bankName){
+					bankId = banks[i].value;
+					SessionStore.setBankId(bankId);
+					break;
+				}
 			}
 		}
 	});
@@ -284,6 +298,7 @@ function($rootScope, $log, $timeout, $q, $state, authService, $location, ALLOWED
         /* Clearing page errors */
         PageHelper.clearErrors();
         PageHelper.clearWarnings();
+        PageHelper.clearInfo();
 
         /* Gracefully clearing progress messages */
         PageHelper.gracefulClearProgress();

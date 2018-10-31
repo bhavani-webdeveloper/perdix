@@ -315,7 +315,7 @@ export class LoanProcess {
     }
 
     reject(): any {
-        this.stage = "REJECTED";
+        this.stage = "Rejected";
         this.loanProcessAction = "PROCEED";
         let pmBeforeUpdate: PolicyManager<LoanProcess> = new PolicyManager(this, LoanPolicyFactory.getInstance(), 'beforeReject', LoanProcess.getProcessConfig());
         let obs1 = pmBeforeUpdate.applyPolicies();

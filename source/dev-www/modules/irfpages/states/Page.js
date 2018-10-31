@@ -49,6 +49,10 @@ function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPop
             $scope.warnings = args;
         });
 
+        $scope.$on('server-info', function (event, args) {
+            $scope.info = args;
+        });
+
         $scope.$on('page-loader', function(event, arg){
             $log.info("Inside listener for show-loader");
             $scope.showSectionFarLoader = !!arg;
@@ -131,6 +135,7 @@ function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPop
          */
         var errors = [];
         var warnings = [];
+        var info = [];
 
         var clearErrorsFn = function(){
             errors = [];
@@ -142,10 +147,16 @@ function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPop
             $rootScope.$broadcast('server-warnings', warnings);
         }
 
+        var clearInfoFn = function(){
+            info = [];
+            $rootScope.$broadcast('server-info', info);
+        }
+
         /* Add `clearErrors` method on $rootScope */
 
         $rootScope.clearErrors = clearErrorsFn;
         $rootScope.clearWarnings = clearWarningsFn;
+        $rootScope.clearInfo = clearInfoFn;
 
         return {
             clearErrors: clearErrorsFn,
@@ -188,6 +199,23 @@ function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPop
             scrollToWarnings: function () {
                 jQuery('html, body').animate({
                     scrollTop: $("#warnings-wrapper").offset().top - 50
+                }, 500);
+            },
+            clearInfo: clearInfoFn,
+            setInfo: function (i) {
+                $log.info("Inside setinfo");
+                $log.info(i);
+                info = [i];
+                $rootScope.$broadcast('server-info', info);
+                this.scrollToInfo();
+            },
+            getInfo: function () {
+                $log.info("Inside getInfo");
+                return errors;
+            },
+            scrollToInfo: function () {
+                jQuery('html, body').animate({
+                    scrollTop: $("#info-wrapper").offset().top - 50
                 }, 500);
             },
             scrollToTop: function(){

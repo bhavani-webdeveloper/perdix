@@ -142,8 +142,7 @@ define(
                             "grossVehicleWeight":{
                                 "key": "loanAccount.vehicleLoanDetails.grossVehicleWeight",
                                 "title": "GROSS_VEHICLE_WEIGHT",
-                                "inputmode": "number",
-                                "numberType": "number"
+                                "type": "number"
                             },
                             "noOfAxles":{
                                 "key": "loanAccount.vehicleLoanDetails.noOfAxles",
@@ -266,6 +265,7 @@ define(
                         "VehicleValuation.futureLife",
                         "VehicleValuation.currentMarketValue",
                         "VehicleValuation.distressValue",
+                        "VehicleValuation.valuationUpload",
                         "VehiclePhotoCaptures",
                         "VehiclePhotoCaptures.vehiclePhotoCaptures",
                         "VehiclePhotoCaptures.vehiclePhotoCaptures.photoFileId",
@@ -281,8 +281,289 @@ define(
 
                 var configFile = function() {
                     return {
+                        "loanProcess.loanAccount.currentStage": {
+                        "BusinessApproval1": {
+                            "excludes": [
+                            ],
+                            "overrides": {
+                                "VehiclePrimaryInfo":{
+                                    "readonly": true
+                                },
+                                "VehicleValuationPriliminaryInformation":{
+                                    "readonly": true
+                                },
+                                "VehicleInspectionDetails":{
+                                    "readonly": true
+                                },
+                                "VehicleIdentityDetails":{
+                                    "readonly": true
+                                },
+                                "VehicleRegistrationDetails":{
+                                    "readonly": true
+                                },
+                                "VehiclePermitAndTaxDetails":{
+                                    "readonly": true
+                                },
+                                "VehicleInsuranceDetails":{
+                                    "readonly": true
+                                },
+                                "VehicleOtherRemarks":{
+                                    "readonly": true
+                                },
+                                "VehicleAsset":{
+                                    "readonly": true
+                                },
+                                "VehicleAccessories":{
+                                    "readonly": true
+                                },
+                                "VehicleValuation":{
+                                    "readonly": true
+                                },
+                                "VehiclePhotoCaptures":{
+                                    "readonly": true
+                                },
+                                "VehicleRecommendation":{
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "BusinessApproval2": {
+                            "excludes": [
+                            ],
+                            "overrides": {
+                                "VehiclePrimaryInfo":{
+                                    "readonly": true
+                                },
+                                "VehicleValuationPriliminaryInformation":{
+                                    "readonly": true
+                                },
+                                "VehicleInspectionDetails":{
+                                    "readonly": true
+                                },
+                                "VehicleIdentityDetails":{
+                                    "readonly": true
+                                },
+                                "VehicleRegistrationDetails":{
+                                    "readonly": true
+                                },
+                                "VehiclePermitAndTaxDetails":{
+                                    "readonly": true
+                                },
+                                "VehicleInsuranceDetails":{
+                                    "readonly": true
+                                },
+                                "VehicleOtherRemarks":{
+                                    "readonly": true
+                                },
+                                "VehicleAsset":{
+                                    "readonly": true
+                                },
+                                "VehicleAccessories":{
+                                    "readonly": true
+                                },
+                                "VehicleValuation":{
+                                    "readonly": true
+                                },
+                                "VehiclePhotoCaptures":{
+                                    "readonly": true
+                                },
+                                "VehicleRecommendation":{
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "TeleVerification": {
+                            "excludes": [
+                            ],
+                            "overrides": {
+                            }
+                        },
+                        "CreditApproval1": {
+                            "excludes": [
+                            ],
+                            "overrides": {
+                                "VehiclePrimaryInfo":{
+                                    "readonly": true
+                                },
+                                "VehicleValuationPriliminaryInformation":{
+                                    "readonly": true
+                                },
+                                "VehicleInspectionDetails":{
+                                    "readonly": true
+                                },
+                                "VehicleIdentityDetails":{
+                                    "readonly": true
+                                },
+                                "VehicleRegistrationDetails":{
+                                    "readonly": true
+                                },
+                                "VehiclePermitAndTaxDetails":{
+                                    "readonly": true
+                                },
+                                "VehicleInsuranceDetails":{
+                                    "readonly": true
+                                },
+                                "VehicleOtherRemarks":{
+                                    "readonly": true
+                                },
+                                "VehicleAsset":{
+                                    "readonly": true
+                                },
+                                "VehicleAccessories":{
+                                    "readonly": true
+                                },
+                                "VehicleValuation":{
+                                    "readonly": true
+                                },
+                                "VehiclePhotoCaptures":{
+                                    "readonly": true
+                                },
+                                "VehicleRecommendation":{
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "CreditApproval2": {
+                            "excludes": [
+                            ],
+                            "overrides": {
+                                "VehiclePrimaryInfo":{
+                                    "readonly": true
+                                },
+                                "VehicleValuationPriliminaryInformation":{
+                                    "readonly": true
+                                },
+                                "VehicleInspectionDetails":{
+                                    "readonly": true
+                                },
+                                "VehicleIdentityDetails":{
+                                    "readonly": true
+                                },
+                                "VehicleRegistrationDetails":{
+                                    "readonly": true
+                                },
+                                "VehiclePermitAndTaxDetails":{
+                                    "readonly": true
+                                },
+                                "VehicleInsuranceDetails":{
+                                    "readonly": true
+                                },
+                                "VehicleOtherRemarks":{
+                                    "readonly": true
+                                },
+                                "VehicleAsset":{
+                                    "readonly": true
+                                },
+                                "VehicleAccessories":{
+                                    "readonly": true
+                                },
+                                "VehicleValuation":{
+                                    "readonly": true
+                                },
+                                "VehiclePhotoCaptures":{
+                                    "readonly": true
+                                },
+                                "VehicleRecommendation":{
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "CreditApproval3": {
+                            "excludes": [
+                            ],
+                            "overrides": {
+                                "VehiclePrimaryInfo":{
+                                    "readonly": true
+                                },
+                                "VehicleValuationPriliminaryInformation":{
+                                    "readonly": true
+                                },
+                                "VehicleInspectionDetails":{
+                                    "readonly": true
+                                },
+                                "VehicleIdentityDetails":{
+                                    "readonly": true
+                                },
+                                "VehicleRegistrationDetails":{
+                                    "readonly": true
+                                },
+                                "VehiclePermitAndTaxDetails":{
+                                    "readonly": true
+                                },
+                                "VehicleInsuranceDetails":{
+                                    "readonly": true
+                                },
+                                "VehicleOtherRemarks":{
+                                    "readonly": true
+                                },
+                                "VehicleAsset":{
+                                    "readonly": true
+                                },
+                                "VehicleAccessories":{
+                                    "readonly": true
+                                },
+                                "VehicleValuation":{
+                                    "readonly": true
+                                },
+                                "VehiclePhotoCaptures":{
+                                    "readonly": true
+                                },
+                                "VehicleRecommendation":{
+                                    "readonly": true
+                                }
+                            }
+                        }
+                    },
+                    "loanProcess.loanAccount.isValuator": {
+                        "Yes": {
+                            "excludes": [
+                                "actionbox"
+                            ],
+                            "overrides": {
+                                "VehiclePrimaryInfo":{
+                                    "readonly": true
+                                },
+                                "VehicleValuationPriliminaryInformation":{
+                                    "readonly": true
+                                },
+                                "VehicleInspectionDetails":{
+                                    "readonly": true
+                                },
+                                "VehicleIdentityDetails":{
+                                    "readonly": true
+                                },
+                                "VehicleRegistrationDetails":{
+                                    "readonly": true
+                                },
+                                "VehiclePermitAndTaxDetails":{
+                                    "readonly": true
+                                },
+                                "VehicleInsuranceDetails":{
+                                    "readonly": true
+                                },
+                                "VehicleOtherRemarks":{
+                                    "readonly": true
+                                },
+                                "VehicleAsset":{
+                                    "readonly": true
+                                },
+                                "VehicleAccessories":{
+                                    "readonly": true
+                                },
+                                "VehicleValuation":{
+                                    "readonly": true
+                                },
+                                "VehiclePhotoCaptures":{
+                                    "readonly": true
+                                },
+                                "VehicleRecommendation":{
+                                    "readonly": true
+                                }
+                            }
+                        }
                     }
                 }
+            }
                 return {
                     "type": "schema-form",
                     "title": "VEHICLE_VALUATION",
@@ -362,9 +643,23 @@ define(
                                             "title": "RECOMMENDED"
                                         },
                                         "recommendationRemarks": {
-                                            "key": "loanProcess.remarks",
+                                            "key": "loanAccount.vehicleLoanDetails.recommendationRemarks",
                                             "required": true,
                                             "title": "REMARKS"
+                                        }
+                                    }
+                                },
+                                "VehicleValuation": {
+                                    "items": {
+                                        "valuationUpload": {
+                                            title: "VALUATION_UPLOAD",
+                                            key: "loanAccount.vehicleLoanDetails.vehicleValuationReportId",
+                                            "required": true,
+                                            type: "file",
+                                            fileType: "application/pdf",
+                                            category: "Loan",
+                                            subCategory: "DOC1",
+                                            using: "scanner"
                                         }
                                     }
                                 },
@@ -454,6 +749,8 @@ define(
                             if(PageHelper.isFormInvalid(formCtrl)) {
                                 return false;
                             }
+                            var vehicleValuationDoneAt_time=new Date();
+                            model.loanAccount.vehicleLoanDetails.vehicleValuationDoneAt=vehicleValuationDoneAt_time;
                             PageHelper.showProgress('loan-process', 'Updating Loan');
                             model.loanProcess.save()
                                 .finally(function () {

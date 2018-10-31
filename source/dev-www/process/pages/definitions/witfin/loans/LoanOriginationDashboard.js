@@ -32,7 +32,11 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
                 "Page/Engine/witfin.loans.individual.screening.CreditApproval2Queue",
                 "Page/Engine/witfin.loans.individual.screening.CreditApproval3Queue",
                 "Page/Engine/witfin.loans.individual.screening.BusinessApproval2Queue",
-                "Page/Engine/witfin.loans.individual.screening.RejectedQueue"
+                "Page/Engine/witfin.loans.individual.screening.RejectedQueue",
+                "Page/Engine/loans.individual.screening.BranchNewConversationQueue",
+                "Page/Engine/loans.individual.screening.BranchRepliedConversationQueue",
+                "Page/Engine/loans.individual.screening.SpokeRepliedConversationQueue",
+                "Page/Engine/loans.individual.screening.SpokeNewConversationQueue",
               ]
         };
 
@@ -606,6 +610,78 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
                     rjqMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
                     rjqMenu.data = '-';
+                });
+            }
+
+            var bncqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/loans.individual.screening.BranchNewConversationQueue"];
+            if (bncqMenu) {
+                IndividualLoan.search({
+                    'stage': 'BranchNewConversation',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                }).$promise.then(function(response, headerGetter) {
+                    bncqMenu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    bncqMenu.data = '-';
+                });
+            }
+
+            var brcqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/loans.individual.screening.BranchRepliedConversationQueue"];
+            if (brcqMenu) {
+                IndividualLoan.search({
+                    'stage': 'BranchRepliedConversation',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                }).$promise.then(function(response, headerGetter) {
+                    brcqMenu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    brcqMenu.data = '-';
+                });
+            }
+
+            var srcqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/loans.individual.screening.SpokeRepliedConversationQueue"];
+            if (srcqMenu) {
+                IndividualLoan.search({
+                    'stage': 'SpokeRepliedConversation',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                }).$promise.then(function(response, headerGetter) {
+                    srcqMenu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    srcqMenu.data = '-';
+                });
+            }
+
+            var sncqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/loans.individual.screening.SpokeNewConversationQueue"];
+            if (sncqMenu) {
+                IndividualLoan.search({
+                    'stage': 'SpokeNewConversation',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                }).$promise.then(function(response, headerGetter) {
+                    sncqMenu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    sncqMenu.data = '-';
                 });
             }
 

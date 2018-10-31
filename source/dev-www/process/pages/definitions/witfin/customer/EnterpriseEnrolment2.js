@@ -25,16 +25,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
             var calculateVehiclesFree = function(modelValue, form, model) {
                 if( model.customer.vehiclesOwned >= model.customer.vehiclesFinanced){
                     model.customer.vehiclesFree = model.customer.vehiclesOwned - model.customer.vehiclesFinanced;
-                }
-                else {
-                    PageHelper.showErrors({
-                        data: {
-                            error: "No of vehicle financed cannot be greater than no of vehicle owned."
-                        }
-                    });
-                    return false;
-                }
-            }
+                }            }
 
 
             var getLocation = function() {
@@ -426,6 +417,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "BusinessVerification": {
                                         "readonly": true
+                                    },
+                                    "IndividualReferences":{
+                                        "readonly": true
                                     }
                                 },
                                 "excludes": [
@@ -459,6 +453,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                       "readonly": true
                                     },
                                     "BusinessVerification": {
+                                        "readonly": true
+                                    },
+                                    "IndividualReferences":{
                                         "readonly": true
                                     }
                                 },
@@ -494,6 +491,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "BusinessVerification": {
                                         "readonly": true
+                                    },
+                                    "IndividualReferences":{
+                                        "readonly": true
                                     }
                                 },
                                 "excludes": [
@@ -525,6 +525,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "TangibleNetWorth": {
                                       "readonly": true
+                                    },
+                                    "IndividualReferences":{
+                                        "readonly": true
                                     }
                                 },
                                 "excludes": [
@@ -590,6 +593,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "BusinessVerification": {
                                         "readonly": true
+                                    },
+                                    "IndividualReferences":{
+                                        "readonly": true
                                     }
                                 },
                                 "excludes": [
@@ -623,6 +629,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                       "readonly": true
                                     },
                                     "BusinessVerification": {
+                                        "readonly": true
+                                    },
+                                    "IndividualReferences":{
                                         "readonly": true
                                     }
                                 },
@@ -658,6 +667,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "BusinessVerification": {
                                         "readonly": true
+                                    },
+                                    "IndividualReferences":{
+                                        "readonly": true
                                     }
                                 },
                                 "excludes": [
@@ -689,6 +701,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "TangibleNetWorth": {
                                       "readonly": true
+                                    },
+                                    "IndividualReferences":{
+                                        "readonly": true
                                     }
                                 },
                                 "excludes": [
@@ -720,11 +735,21 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "TangibleNetWorth": {
                                       "readonly": true
+                                    },
+                                    "IndividualReferences":{
+                                        "readonly": true
                                     }
                                 },
                                 "excludes": [
                                     
                                 ]
+                            },
+                            "TeleVerification": {
+                                "overrides": {
+                                    "IndividualReferences":{
+                                        "readonly": true
+                                    }
+                                }
                             },
                             // "ApplicationReview": {
                             //     "overrides": {
@@ -902,6 +927,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "readonly": true
                                     },
                                     "ContactInformation": {
+                                        "readonly": true
+                                    },
+                                    "IndividualReferences": {
+                                        "readonly": true
+                                    },
+                                    "TangibleNetWorth": {
+                                        "readonly": true
+                                    },
+                                    "enterpriseDocuments": {
+                                        "readonly": true
+                                    },
+                                    "CommercialCBCheck": {
                                         "readonly": true
                                     },
                                     "BusinessVerification": {
@@ -1130,6 +1167,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                                 "add": null,
                                                 "remove": null,
                                                 "view": "fixed",
+                                                "startEmpty": true,
                                                 "items": {
                                                     "personMet": { 
                                                         "key": "customer.fieldInvestigationDetails[].category",
@@ -1396,7 +1434,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     {
                                         "type": "actionbox",
-                                        "condition": "model.customer.currentStage && (model.loanProcess.loanAccount.currentStage=='Screening' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation1' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation2' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation3' || model.loanProcess.loanAccount.currentStage=='TeleVerification' || model.loanProcess.loanAccount.currentStage=='CreditAppraisal' || model.loanProcess.loanAccount.currentStage=='Application')",
+                                        "condition": "model.customer.currentStage && model.currentStage!='loanView' && (model.loanProcess.loanAccount.currentStage=='Screening' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation1' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation2' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation3' || model.loanProcess.loanAccount.currentStage=='TeleVerification' || model.loanProcess.loanAccount.currentStage=='CreditAppraisal' || model.loanProcess.loanAccount.currentStage=='Application')",
                                         "orderNo": 1200,
                                         "items": [
                                             {
@@ -1446,6 +1484,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     },
                     "guarantor-updated": function(bundleModel, model, params){
                         model.enrolmentProcess.refreshEnterpriseCustomerRelations(model.loanProcess);
+                    },
+                    "remove-customer-relation": function(bundleModel, model, enrolmentDetails){
+                        $log.info("Inside remove-customer-relation of EnterpriseEnrolment2");
+                        /**
+                         * Following to be Done
+                         *
+                         * 1. Remove customer from Enterprise Customer Relation if exists.
+                         */
+
+                        model.enrolmentProcess.removeEnterpriseCustomerRelations(model.loanProcess, enrolmentDetails);
                     }
                 },
                 form: [
@@ -1474,6 +1522,19 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                         if(PageHelper.isFormInvalid(form)) {
                             return false;
                         }
+
+                        if( model.customer.vehiclesOwned >= model.customer.vehiclesFinanced){
+                            model.customer.vehiclesFree = model.customer.vehiclesOwned - model.customer.vehiclesFinanced;
+                        }
+                        else {
+                            PageHelper.showErrors({
+                                data: {
+                                    error: "No of vehicle financed cannot be greater than no of vehicle owned."
+                                }
+                            });
+                            return false;
+                        }
+                        
                         PageHelper.showProgress('enrolment', 'Updating Customer');
                         PageHelper.showLoader();
 

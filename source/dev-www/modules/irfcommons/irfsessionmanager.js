@@ -10,10 +10,10 @@ irfSessionManager.factory('SessionStore', ["$log", "$window", "dateFormats", fun
 		//photo: "//bit.ly/1SEDKqa",
 		//photo: '//bit.ly/1V4DF1Z',
 		status: "invalid",
-
 		activated:false,
 		agentAmtLimit:null,
 		bankName:null,
+		bankId : null,
 		branchName:"Karambayam",
 		branchSetCode:null,
 		email:null,
@@ -117,6 +117,13 @@ irfSessionManager.factory('SessionStore', ["$log", "$window", "dateFormats", fun
 		return session.bankName;
 	};
 
+	self.getBankId = function() {
+		return session.bankId;
+	};
+	self.setBankId = function(id) {
+		self.session.bankId = id;
+	};
+
 	self.getCentres = function() {
 		return session.centres;
 	}
@@ -141,8 +148,16 @@ irfSessionManager.factory('SessionStore', ["$log", "$window", "dateFormats", fun
 		return session.cbsDate;
 	}
 
+	self.getSystemDate = function() {
+		return session.systemDate;
+	}
+
 	self.getFormatedCBSDate = function() {
 		return moment(session.cbsDate, self.getSystemDateFormat()).format(self.getDateFormat());
+	}
+
+	self.getFormatedSystemDate = function() {
+		return moment(session.systemDate, self.getSystemDateFormat()).format(self.getDateFormat());
 	}
 
 	self.getGlobalSetting = function(key) {

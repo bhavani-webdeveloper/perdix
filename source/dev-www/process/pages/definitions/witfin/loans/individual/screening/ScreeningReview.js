@@ -302,6 +302,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 if (!_.hasIn(bundleModel, 'guarantors')){
                                     bundleModel.guarantors = [];
                                 }
+                                BundleManager.broadcastEvent('new-guarantor', params);
                                 bundleModel.guarantors.push(params.guarantor);
                                 break;
                                 case 'business':
@@ -317,6 +318,9 @@ define(["perdix/domain/model/loan/LoanProcess",
                         },
                         "deviation-loaded":function(pageObj, bundleModel, params){
                             BundleManager.broadcastEvent("load-deviation", params);
+                        },
+                        "financialSummary": function(pageObj, bundleModel, params) {
+                            BundleManager.broadcastEvent("financial-summary", params);
                         }
                     }
 

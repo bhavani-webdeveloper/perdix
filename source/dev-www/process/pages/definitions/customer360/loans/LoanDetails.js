@@ -430,7 +430,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                                     }else {
                                                         model.loanDocuments.existingDocuments = existingDocuments;
                                                     }
-                                                            
+
                                                     _.forEach(model.loanDocuments.existingDocuments, function (obj, i) {
                                                                 if(i<=docsForProduct.length){
                                                                 obj.$downloadRequired = docsForProduct[i].download_required,
@@ -438,7 +438,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                                                     obj.disbursementId = docsForProduct[i].id
                                                                 }
                                                         })
-                                                
+
                                                 };
 
                                                 PageHelper.hideLoader();
@@ -504,7 +504,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                             }
                         }
                         $q.all(promiseArray).finally(function() {
-                            
+
                         PageHelper.hideLoader();
                         })
                     }, function(err){
@@ -537,7 +537,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                         "readonly": true,
                         title: "BASE_LOAN_ACCOUNT",
                         condition:"model.loanAccount.transactionType.toLowerCase() == 'renewal'"
-                       
+
                     },
                     {
                         key: "loanAccount.linkedAccountNumber",
@@ -653,7 +653,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                     },
                     {
                         "key": "cbsLoan.nextDemandScheduledDate",
-                        "title": "NEXT_DEMAND_RUN_DATE",
+                        "title": "NEXT_DEMAND_SCHEDULED_DATE",
                         "required":false,
                         "type": ["string","null"]
                     },
@@ -679,7 +679,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
             },
             {
                 "type": "box",
-                "title": "LOAN_OVERVIEW",
+                "title": "LOAN_FINANCIALS",
                 "condition" : "",
                 "readonly": true,
                 "items": [
@@ -1067,7 +1067,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                             "required":false,
                             "readonly": true,
                             "condition": "model.loanAccount.loanType != 'JLG'"
-                        }, 
+                        },
                         {
                             "type": "fieldset",
                             "title": "COAPPLICANTS",
@@ -1184,11 +1184,6 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                 "required":false,
                                 type: "amount"
                             }, {
-                                "key": "additional.loanAmount",
-                                "required":false,
-                                "type": "amount",
-                                "title": "NET_DISBURSEMENT_AMOUNT"
-                            }, {
                                 "key": "loanAccount.interestRate",
                                 "required":false,
                                 "type": "number"
@@ -1201,7 +1196,6 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                 "key": "loanAccount.loanPurpose1",
                                 "required":false,
                                 "title": "LOAN_PURPOSE",
-                                "type": "select"
                             }
                             /*,
                                                                  {
@@ -1242,7 +1236,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                             type: "string",
                             title: "INSTRUMENT_TYPE",
                             condition: "model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Scheduled' || model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Scheduled Demand'"
-                        },
+                            },
                             {
                                 key: "loanRepaymentReminderHistory[].repaymentAmountInPaisa",
                                 type: "string",
@@ -1254,6 +1248,12 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                 type: "string",
                                 title: "AMOUNT",
                                 condition: "model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Reminder'"
+                            },
+                            {
+                                key: "loanRepaymentReminderHistory[].repaymentAmountInPaisa",
+                                type: "string",
+                                title: "OD_AMOUNT",
+                                condition: "model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Promise to Pay'"
                             },
                             {
                                 key: "loanRepaymentReminderHistory[].repaymentDate",
@@ -1284,7 +1284,25 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                 type: "string",
                                 title: "CALL_STATUS",
                                 condition: "model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Reminder'"
-                            }]
+                            },
+                            {
+                                key: "loanRepaymentReminderHistory[].repaymentDate",
+                                type: "string",
+                                title: "P2P_DATE",
+                                condition: "model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Promise to Pay'"
+                            },
+                            {
+                                key: "loanRepaymentReminderHistory[].reminderStatus",
+                                type: "string",
+                                title: "RECOVERY_ATTEMPT",
+                                condition: "model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Promise to Pay'"
+                            },
+                            {
+                                key: "loanRepaymentReminderHistory[].reason",
+                                type: "string",
+                                title: "REASON",
+                                condition: "model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Promise to Pay'"
+                            },]
                     }]
                 },
                 {
@@ -1925,7 +1943,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                             }]
                         }]
                     }]
-                }, 
+                },
                 {
                     "type": "box",
                     "title": "LOAN_DOCUMENTS",
@@ -2200,7 +2218,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                         }
                     ]
                 },
-                //submit is hidden by default for irep now 
+                //submit is hidden by default for irep now
                 /*{
                     "type": "actionbox",
                     "condition": "model.siteCode == 'IREPDhan'",
@@ -2319,7 +2337,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                     return deferred.promise;
                 },
                 update: function(model, formCtrl, form, $event){
-                    /* 1)This update is used to update the Existing Document section , 
+                    /* 1)This update is used to update the Existing Document section ,
                     2) separate pageConfig is required to enable this button as it is role specific
                     */
                     $log.info(model);
@@ -2365,7 +2383,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                     $log.info(model);
                     PageHelper.clearErrors();
                     // if(model.loanAccount.guarantors){
-                    //    delete model.loanAccount.guarantors; 
+                    //    delete model.loanAccount.guarantors;
                     // }
                     model.reqData.loanAccount = _.cloneDeep(model.loanAccount);
                     //alert(model.reqData.loanAccount.loanDocuments.length);
@@ -2393,7 +2411,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                         PageHelper.hideLoader();
                     }).finally(function() {
                         PageHelper.hideLoader();
-                    });;
+                    });
 
                 }
             }

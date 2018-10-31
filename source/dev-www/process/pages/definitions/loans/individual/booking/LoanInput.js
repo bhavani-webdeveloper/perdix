@@ -263,9 +263,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     });
                     //model.loanAccount.partnerCode = model.loanAccount.partnerCode || "Kinara";
                     model.loanAccount.loanCustomerRelations = model.loanAccount.loanCustomerRelations || [];
-                    model.loanAccount.coBorrowers = [];
-                    model.loanAccount.guarantors = [];
+                    model.loanAccount.coBorrowers = model.loanAccount.coBorrowers ||[];
+                    model.loanAccount.guarantors = model.loanAccount.guarantors ||[];
                     model.showLoanBookingDetails = showLoanBookingDetails;
+
                     if(model.siteCode == 'IREPDhan'){
                         model.loanAccount.commercialCibilCharge = 0;
                         model.loanAccount.processingFeePercentage = 1.75;
@@ -273,8 +274,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         model.loanAccount.otherFee = 0;
                         model.loanAccount.interestRate = 26;
                     }
+
                     PagesDefinition.getPageConfig("Page/Engine/loans.individual.booking.LoanInput").then(function(data){
                         $log.info(data);
+                        model.pageConfig = data;
                         if(data.showLoanBookingDetails != undefined && data.showLoanBookingDetails !== null && data.showLoanBookingDetails !=""){
                             model.showLoanBookingDetails = data.showLoanBookingDetails;
                             model.BackedDatedDisbursement=data.BackedDatedDisbursement;
@@ -290,17 +293,21 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         }
                         else if (model.loanAccount.loanCustomerRelations[i].relation === 'COAPPLICANT' ||
                             model.loanAccount.loanCustomerRelations[i].relation === 'Co-Applicant') {
-                            model.loanAccount.coBorrowers.push({
+                            if(!model.loanAccount.coBorrowers.length){
+                                model.loanAccount.coBorrowers.push({
                                 coBorrowerUrnNo:model.loanAccount.loanCustomerRelations[i].urn,
                                 customerId:model.loanAccount.loanCustomerRelations[i].customerId
                             });
+                            }  
                         }
                         else if(model.loanAccount.loanCustomerRelations[i].relation === 'GUARANTOR' ||
-                                model.loanAccount.loanCustomerRelations[i].relation === 'Guarantor'){
-                            model.loanAccount.guarantors.push({
+                            model.loanAccount.loanCustomerRelations[i].relation === 'Guarantor'){
+                            if(!model.loanAccount.guarantors.length){
+                                model.loanAccount.guarantors.push({
                                 guaUrnNo:model.loanAccount.loanCustomerRelations[i].urn,
                                 customerId:model.loanAccount.loanCustomerRelations[i].customerId
-                            });
+                                });
+                            }
                         }
                     }
                     /*for (var i in model.loanAccount.loanCustomerRelations) {
@@ -844,7 +851,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             {
                                 key:"loanAccount.commercialCibilCharge",
                                 type:"amount",
-                                "condition" : "model.siteCode != 'IREPDhan'",
+                                "condition" : "model.siteCode != 'IREPDhan' && model.siteCode != 'pahal'",
                                 onChange:function(value,form,model){
                                     getSanctionedAmount(model);
                                 }
@@ -1534,7 +1541,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
             {
                 "type":"box",
                 "title":"HYPOTHECATION",
-                "condition": "model.siteCode != 'IFMRCapital' && model.siteCode != 'IREPDhan' && model.siteCode != 'witfin'",
+                "condition": "model.siteCode != 'IFMRCapital' && model.siteCode != 'IREPDhan'",
                 "items":[
                     {
                         "key":"loanAccount.collateral",
@@ -1561,6 +1568,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "parentValueExpr":"model.loanAccount.collateral[arrayIndex].collateralCategory"
                             },
                             {
+                                "key":"loanAccount.collateral[].electricityAvailable",
+                                "condition": "model.pageConfig.CollateralUDFs.electricityAvailable",
+                                "title":"SEGMENT"
+                            },
+                            {
                                 "key":"loanAccount.collateral[].collateralDescription",
                                 "title":"HYPOTHECATION_DESCRIPTION"
                             },
@@ -1575,6 +1587,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             },
                             {
                                 "key":"loanAccount.collateral[].modelNo"
+                            },
+                            {
+                                "key":"loanAccount.collateral[].udf1",
+                                "condition": "model.pageConfig.CollateralUDFs.udf1",
+                                "type": "string",
+                                "title": "YEAR_OF_MANUFACTURE"
                             },
                             {
                                 "key":"loanAccount.collateral[].machineOld"
@@ -1618,69 +1636,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "fileType":"image/*",
                                 "title":"PHOTO"
                             }*/
-                        ]
-                    }
-                ]
-            },
-            {
-                "type":"box",
-                "title":"COLLATERAL",
-                "condition": "model.siteCode == 'witfin'",
-                "items":[
-                    {
-                        "key":"loanAccount.collateral",
-                        "title":"COLLATERAL",
-                        "type":"array",
-                        "items":[
-                            {
-                                "key":"loanAccount.collateral[].collateralCategory",
-                                "type":"select",
-                                "enumCode":"collateral_type_witfin",
-                                "title":"COLLATERAL_TYPE",
-                                "readonly": true
-                            },
-                            {
-                                "key":"loanAccount.collateral[].collateralDescription",
-                                "title":"COLLATERAL_DESCRIPTION",
-                                "readonly": true
-                            },
-                            {
-                                "key":"loanAccount.collateral[].collateralValue",
-                                "type":"amount",
-                                "title":"COLLATERAL_VALUE"
-                            },
-                            {
-                                "key":"loanAccount.collateral[].manufacturer",
-                                "title": "MANUFACTURER",
-                                "readonly": true
-                            },
-                            {
-                                "title": "MODEL",
-                                "key":"loanAccount.collateral[].modelNo",
-                                "readonly": true
-                            },
-                            {
-                                "key":"loanAccount.collateral[].machineOld",
-                                "type": "checkbox",
-                                "title": "USED_ASSET"
-                            },
-                            {
-                                "key": "loanAccount.collateral[].electricityAvailable",
-                                "title": "SEGMENT",
-                                "readonly": true
-                            },
-                            {
-                                "key": "loanAccount.collateral[].expectedPurchaseDate",
-                                "type": "string",
-                                "title": "YEAR_OF_MANUFACTURE",
-                                "readonly": true
-                            },
-                            {
-                                "key": "loanAccount.collateral[].serialNo",
-                                "type": "string",
-                                "title": "REGISTRATION_NUMBER",
-                                "readonly": true
-                            }
                         ]
                     }
                 ]

@@ -18,13 +18,17 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
             promise.then(function (data) { /* SUCCESS */
                 model.P2PUpdate = data;
                 console.log(data);
+
+                model.siteCode = SessionStore.getGlobalSetting("siteCode");
+
                 model.promise = model.promise || {};
                 model.promise.customerName=data.customer1FirstName;
                 model.promise.applicant = data.customer2FirstName;
                 model.promise.productCode=data.productCode;
+                model.promise.customer1Phone1=data.customer1Phone1;
                 //model.promise.customerCategoryLoanOfficer=data.customerCategoryLoanOfficer;
                 //model.promise.urnNo=data.customerId1;
-                //model.promise.instrument='CASH_IN'; 
+                //model.promise.instrument='CASH_IN';
                 model.promise.authorizationUsing="";
                 model.promise.remarks='';
                 model.promise.accountNumber = data.accountId;
@@ -33,13 +37,13 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                 model.promise.repaymentDate = currDate;
                 model.promise.transactionDate = currDate;
                 model.promise.visitedDate=SessionStore.getCBSDate();
-                
-                LoanProcess.p2pKGFSList({"accountNumber":model.promise.accountNumber}, 
+
+                LoanProcess.p2pKGFSList({"accountNumber":model.promise.accountNumber},
                     function(response){
                         if (response.body.length){
-                        model.previousPromise = response.body[0]; 
-                        
-                model.promise.latitude = response.body[0].latitude;                
+                        model.previousPromise = response.body[0];
+
+                model.promise.latitude = response.body[0].latitude;
                 model.promise.longitude = response.body[0].longitude;
                     }
                 });
@@ -66,7 +70,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
             }
 
 
-           
+
            /* if (!model._bounce) {
                 $state.go('Page.Engine', {pageName: 'loans.individual.collections.BounceQueue', pageId: null});
             } else {
@@ -78,7 +82,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                 model.promise.accountNumber = model._bounce.accountId;
                 model.promise.transactionDate = Utils.getCurrentDate();
                 model.promise.scheduledDate = Utils.getCurrentDate();
-                
+
             }
             */
         },
@@ -193,6 +197,12 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                         readonly:true
                     },
                     {
+                        key: "promise.customer1Phone1",
+                        title: "MOBILE_PHONE",
+                        "condition": "model.siteCode == 'witfin'",
+                        readonly: true
+                    },
+                    {
                         key:"promise.visitedDate",
                         title:"VISITED_DATE",
                         type:"date",
@@ -219,7 +229,25 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                         latitude: "promise.latitude",
                         longitude: "promise.longitude"
                     },
- {
+                    {
+                        key: "customer.isBusinessRunning",
+                        type: "radios",
+                        title: "BUSINESS_RUNNING",
+                        "titleMap": {
+                            "YES": "YES",
+                            "NO": "NO"
+                        }
+                    },
+                    {
+                        key: "customer.isCollateralAvailable",
+                        type: "radios",
+                        title: "COLLATERAL_AVAILABLE",
+                        "titleMap": {
+                            "YES": "YES",
+                            "NO": "NO"
+                        }
+                    },
+                    {
                                 "type": "fieldset",
                                 "title": "COLLECTION_STATUS_DETAILS",
                                 "items": [
@@ -397,7 +425,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                                         type: "textarea",
 
                                     }]
-                            }   
+                            }
 				]
 			}
 			,
@@ -423,21 +451,21 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                 if(siteCode == "witfin"){
 
                     var selecteddate = model.promise.promiseToPayDate;
-                    var currentdate = moment(new Date()).format("YYYY-MM-DD");                
-                    var fivedays = moment(new Date(new Date().getTime()+(5*24*60*60*1000))).format("YYYY-MM-DD");  
-                    var fivedaysvalidate = moment(new Date(new Date().getTime()+(5*24*60*60*1000))).format("DD-MM-YYYY");               
+                    var currentdate = moment(new Date()).format("YYYY-MM-DD");
+                    var fivedays = moment(new Date(new Date().getTime()+(5*24*60*60*1000))).format("YYYY-MM-DD");
+                    var fivedaysvalidate = moment(new Date(new Date().getTime()+(5*24*60*60*1000))).format("DD-MM-YYYY");
                     var oneday = moment(new Date(new Date().getTime()+(1*24*60*60*1000))).format("DD-MM-YYYY");
-                    var currentmonth = moment(new Date()).format("MM");  
+                    var currentmonth = moment(new Date()).format("MM");
                     var selectedmonth = moment(new Date(selecteddate)).format("MM");
-                    var date = new Date();                
-                    var currentday = moment(new Date()).format("DD"); 
-                    var lastday =  moment(new Date(date.getFullYear(), date.getMonth() + 1, 0)).format("DD");                
+                    var date = new Date();
+                    var currentday = moment(new Date()).format("DD");
+                    var lastday =  moment(new Date(date.getFullYear(), date.getMonth() + 1, 0)).format("DD");
                     var lastfullday =  moment(new Date(date.getFullYear(), date.getMonth() + 1, 0)).format("DD-MM-YYYY");
                     var daydiff = lastday - currentday;
 
                     if(daydiff < 4 && daydiff > 1){
-                        var remain = "Only Select Date Between "+ oneday +" To "+ lastfullday;                    
-                    }                    
+                        var remain = "Only Select Date Between "+ oneday +" To "+ lastfullday;
+                    }
                     if(daydiff == 1){
                         var remain = "You have To select "+ lastfullday +" From This Month";
                     }
@@ -445,7 +473,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                         var remain = "No Days Left For Select From Current Month";
                     }
                     if(daydiff > 5){
-                        var remain = "Only Select Date Between "+ oneday +" To "+ fivedaysvalidate;                    
+                        var remain = "Only Select Date Between "+ oneday +" To "+ fivedaysvalidate;
                     }
 
                     if(selecteddate <= currentdate ||  selecteddate > fivedays || currentmonth != selectedmonth){
@@ -455,7 +483,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                 }
 
                 PageHelper.showLoader();
-                        
+
                         delete model.promise.udf1;
                         delete model.promise.udf2;
                         delete model.promise.promiseToPayDate;
@@ -480,6 +508,8 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                             if (model.additional.currentCollectionStatus == 'Contact Again')
                                 model.promise.scheduledDate = model.additional.scheduledDate;
                         }
+
+                model.promise.overdueAmount=model.promise.amount;
 
                 $log.info("going to submit");
                 $log.info(model._screen);

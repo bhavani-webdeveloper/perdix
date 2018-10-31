@@ -32,6 +32,10 @@ let config = {
                     {
                         "name": "DefaultVehicleDocumentsPolicy",
                         "arguments": {}
+                    },
+                    {
+                        "name": "LoanVirtualFieldsPolicy",
+                        "arguments": {}
                     }
                 ],
                 "overrides": [
@@ -94,6 +98,10 @@ let config = {
                     {
                         "name": "DefaultVehicleDocumentsPolicy",
                         "arguments": {}
+                    },
+                    {
+                        "name": "LoanVirtualFieldsPolicy",
+                        "arguments": {}
                     }
                 ],
                 "overrides": [
@@ -142,17 +150,6 @@ let config = {
                                 "name": "OriginationToBookingPolicy",
                                 "arguments": {
                                     "postStage":"LoanInitiation"
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        "type": "expr",
-                        "expr": "this.loanAccount.currentStage=='TeleVerification'",
-                        "add": [
-                            {
-                                "name": "VehicleValuationDone",
-                                "arguments": {
                                 }
                             }
                         ]

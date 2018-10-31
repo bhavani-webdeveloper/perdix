@@ -545,6 +545,9 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalApprove"),
                             var proof ={};
                             if(model.customer.isAddressChanged=='YES'){
                                 proof["addressProofImageId"]=model.customer.addressProofImageId;
+                                if(model.customer.customerType=="Enterprise"){
+                                    updatedModel.customer.enterprise.landmark=updatedModel.customer.landmark;
+                                }
                             }
                             if(model.customer.isDateOfBirthChanged=='YES'){
                                 updatedModel.customer.dateOfBirth=updatedModel.customer.newDateOfBirth;
@@ -561,7 +564,6 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalApprove"),
                                 updatedModel.customer.ownership=updatedModel.customer.newOwnership;
                                 if(model.customer.customerType=="Enterprise"){
                                     updatedModel.customer.enterprise.ownership=updatedModel.customer.newOwnership;
-                                    updatedModel.customer.enterprise.landmark=updatedModel.customer.landmark;
                                 }
                             }
 
