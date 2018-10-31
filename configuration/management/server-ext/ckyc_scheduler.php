@@ -62,10 +62,7 @@ function rcopy($src, $dst) {
 
 function rdeleteContent($dir){
     $di = new RecursiveDirectoryIterator($dir, FilesystemIterator::SKIP_DOTS);
-    print_r($di);
     $ri = new RecursiveIteratorIterator($di, RecursiveIteratorIterator::CHILD_FIRST);
-    print_r($ri);
-
     foreach ( $ri as $file ) {
         $file->isDir() ?  rmdir($file) : unlink($file);
     }
@@ -101,6 +98,7 @@ $DIR= getcwd();
 $GLOBALS['outgoingDir']      =  $DIR.DIRECTORY_SEPARATOR."cersai".DIRECTORY_SEPARATOR."outgoing";
 $GLOBALS['outgoingTempDir']  =  $DIR.DIRECTORY_SEPARATOR."cersai".DIRECTORY_SEPARATOR."outgoing_temp";
 $GLOBALS['trackwizDir']      =  $DIR.DIRECTORY_SEPARATOR."cersai".DIRECTORY_SEPARATOR."incoming" ;
+$GLOBALS['trackwizHistDir']  =  $DIR.DIRECTORY_SEPARATOR."cersai".DIRECTORY_SEPARATOR."incomingHistory" ;
 $GLOBALS['trackwizTempDir']  =  $DIR.DIRECTORY_SEPARATOR."cersai".DIRECTORY_SEPARATOR."incoming_temp" ;
 $GLOBALS['VALID_CUSTOMER_DATA']=array(
     "gender"=>array(
@@ -315,6 +313,7 @@ function fetchIncomingData() {
                 if (!is_dir($GLOBALS['trackwizTempDir'])) {
                     mkdir($GLOBALS['trackwizTempDir'], 0777, true);
                 }
+                $GLOBALS['trackwizHistDir'] ;
                 rcopy($GLOBALS['trackwizDir'], $GLOBALS['trackwizTempDir']);
                 $fileTemp = new DirectoryIterator($GLOBALS['trackwizTempDir']);
                 foreach($fileTemp as $file){
@@ -401,10 +400,18 @@ function fetchIncomingData() {
                         } 
                     }
                 }
+                if (!is_dir($GLOBALS['trackwizHistDir'])) {
+                    mkdir($GLOBALS['trackwizHistDir'], 0777, true);
+                }
+                $subHistoryFolder = $GLOBALS['trackwizHistDir'].DIRECTORY_SEPARATOR.date('Y-m-d');
+                    if (!is_dir($subHistoryFolder)) {
+                        mkdir($subHistoryFolder, 0777, true);
+                    }
+                rcopy($GLOBALS['trackwizDir'],$subHistoryFolder);
+                rdeleteContent($GLOBALS['trackwizDir']);
+                rrmdir($GLOBALS['trackwizTempDir']);
             }
         }
-        rdeleteContent($GLOBALS['trackwizDir']);
-        rrmdir($GLOBALS['trackwizTempDir']);
     
     } catch(Exception $e){
         echo "some error occured in response reading part \n";
