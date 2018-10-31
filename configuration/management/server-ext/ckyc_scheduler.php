@@ -94,7 +94,7 @@ function validateCustomerData($data){
 /* 
     create folder Directories if not already present 
 */
-$DIR= getcwd();
+$DIR= getenv('TRACKWIZZ_DIR');// from .env
 $GLOBALS['outgoingDir']      =  $DIR.DIRECTORY_SEPARATOR."cersai".DIRECTORY_SEPARATOR."outgoing";
 $GLOBALS['outgoingTempDir']  =  $DIR.DIRECTORY_SEPARATOR."cersai".DIRECTORY_SEPARATOR."outgoing_temp";
 $GLOBALS['trackwizDir']      =  $DIR.DIRECTORY_SEPARATOR."cersai".DIRECTORY_SEPARATOR."incoming" ;
