@@ -147,7 +147,8 @@ if($val['parameter']=="Incoming"){
 }else if($val['parameter']=="Outgoing"){
     prepareOutgoingData();
 }else {
-    echo "not a valid argument passed thorugh cmd \n";
+    echo "php File called without parameter , so by default reading response from trackwizz \n";
+    fetchIncomingData();
 }
 
 function prepareOutgoingData() {
