@@ -73,6 +73,8 @@ $settings = [
         'username' => getenv('PERDIX_USERNAME'),
         'password' => getenv('PERDIX_PASSWORD'),
         'customer_upload_path' => getenv('CUSTOMER_UPLOAD_BASE_DIR'),
+        'kyc_upload_path' => getenv('KYC_UPLOAD_BASE_DIR'),
+        'max_upload_size' => getenv('MAX_UPLOAD_UPLOAD_SIZE'),
         'individual_loan_upload_path' => getenv('LOAN_UPLOAD_BASE_DIR'),
         'par_upload_path' => getenv('PAR_UPLOAD_PATH')
     ],
@@ -82,6 +84,9 @@ $settings = [
     'mail_sender' => [
         'name' => getenv('MAIL_SENDER_NAME'),
         'mail' => getenv('MAIL_SENDER')
+    ],
+    'paths' => [
+        'sms_template_path' => getenv('SMS_TEMPLATE_PATH')
     ]
 ];
 
