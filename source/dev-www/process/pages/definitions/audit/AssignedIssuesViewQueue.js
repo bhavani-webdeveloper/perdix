@@ -63,54 +63,20 @@ irf.pageCollection.factory(irf.page("audit.AssignedIssuesViewQueue"), ["$log","P
                     return formHelper;
                 },
                 getResultsPromise: function(searchOptions, pageOpts) {
-                    var deferred = $q.defer();
-                    $q.all([
-                        Audit.online.getIssuesList({
-                            'branch_id': searchOptions.branch_id,
-                            'issue_status': "A",
-                            'bank_id': searchOptions.bankId,
-                            'page': pageOpts.pageNo,
-                            'per_page': pageOpts.itemsPerPage
-                        }).$promise,
-                        Audit.online.getIssuesList({
-                            'branch_id': searchOptions.branch_id,
-                            'bank_id': searchOptions.bankId,
-                            'issue_status': "P",
-                            'page': pageOpts.pageNo,
-                            'per_page': pageOpts.itemsPerPage
-                        }).$promise
-                    ]).then(function(data) {
-                        var returnObj = {
-                            headers: {},
-                            body: data[0].body
-                        };
-                        returnObj.headers['max-total-count'] = 0;
-                        if (data[0].headers['x-total-count']) {
-                            var c1 = Number(data[0].headers['x-total-count']);
-                            returnObj.headers['x-total-count'] = c1;
-                            returnObj.headers['max-total-count'] = c1;
-                        }
-                        if (data[1].headers['x-total-count']) {
-                            var c1 = returnObj.headers['max-total-count'];
-                            var c2 = Number(data[1].headers['x-total-count']);
-                            if (c2 > c1) {
-                                returnObj.headers['max-total-count'] = c2;
-                            }
-                            returnObj.headers['x-total-count'] += c2;
-                        }
-                        returnObj.body.push.apply(returnObj.body, data[1].body);
-                        deferred.resolve(returnObj);
-                    }, function(data) {
-                        deferred.reject(data[0]);
-                    });
-                    return deferred.promise;
+                    return Audit.online.getIssuesList({
+                        'bank_id': searchOptions.bankId,
+                        'branch_id': searchOptions.branch_id,
+                        'current_stage': "assign",
+                        'page': pageOpts.pageNo,
+                        'per_page': pageOpts.itemsPerPage
+                    }).$promise;
                 },
                 paginationOptions: {
                     "getItemsPerPage": function(response, headers) {
                         return 15;
                     },
                     "getTotalItemsCount": function(response, headers) {
-                        return headers['max-total-count']
+                        return headers['x-total-count']
                     }
                 },
                 listOptions: {
@@ -163,7 +129,7 @@ irf.pageCollection.factory(irf.page("audit.AssignedIssuesViewQueue"), ["$log","P
                             title: 'BRANCH_NAME',
                             data: 'branch_id',
                             render: function(data, type, full, meta) {
-                                return master.branch_name[full.branch_id].node_code;
+                                return master.branch_name[full.branch_id]? master.branch_name[full.branch_id].node_code: data;
                             }
                         }, {
                             title: 'CLOSED_ON',

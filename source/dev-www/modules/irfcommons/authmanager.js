@@ -56,8 +56,9 @@ function(Auth, Account, $q, $log, SessionStore, irfStorageService, AuthTokenHelp
 			}, function(err){
 				loginError = { 'statusText': 'Centre not available for the user branch' };
 				$log.error(err);
-			}).then(function(cbsDate) {
-				accountResponse.cbsDate = cbsDate;
+			}).then(function(currentDates) {
+				accountResponse.cbsDate = currentDates.cbsDate;
+				accountResponse.systemDate = currentDates.systemDate;
 				return Account.getUserRole({'userId':accountResponse.login}).$promise;
 			}, function(err) {
 				loginError = { 'statusText': 'Failed to load CBS Date' };

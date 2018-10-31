@@ -152,7 +152,7 @@ irf.pageCollection.factory(irf.page("audit.PublishedAuditsQueue"), ["$log", "Uti
                 },
                 getResultsPromise: function(searchOptions, pageOpts) {
                     if (SessionStore.session.offline) {
-                        return Audit.utils.processDisplayRecords();
+                        return Audit.utils.processDisplayRecords(null, 1, null, 'publish');
                     }
                     var deferred = $q.defer();
                     Audit.online.getAuditList({
@@ -167,7 +167,7 @@ irf.pageCollection.factory(irf.page("audit.PublishedAuditsQueue"), ["$log", "Uti
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage
                     }).$promise.then(function(res) {
-                        Audit.utils.processDisplayRecords(res.body).then(deferred.resolve, deferred.reject);
+                        Audit.utils.processDisplayRecords(res.body, 1, null, 'publish').then(deferred.resolve, deferred.reject);
                     });
                     return deferred.promise;
                 },

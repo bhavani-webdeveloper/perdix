@@ -1,12 +1,14 @@
 irf.pages.controller("PageCtrl",
 ["$log", "$scope", "$stateParams", "$q", "$http", "$uibModal", "authService", "AuthPopup", "PageHelper",
-"SessionStore", "$window", "$rootScope", "irfNavigator",
+"SessionStore", "$window", "$rootScope", "irfNavigator", "$timeout",
 function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPopup, PageHelper,
-    SessionStore, $window, $rootScope, irfNavigator) {
+    SessionStore, $window, $rootScope, irfNavigator, $timeout) {
         $log.info("Page.html loaded $uibModal");
         var self = this;
 
-        $rootScope.$broadcast('irf-login-success');
+        $timeout(function() {
+            $rootScope.$broadcast('irf-login-success');
+        });
 
         $scope.loginPipe = AuthPopup.promisePipe;
 
@@ -41,7 +43,11 @@ function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPop
 
         $scope.$on('server-error', function (event, args) {
             $scope.errors = args;
-        })
+        });
+
+        $scope.$on('server-warnings', function (event, args) {
+            $scope.warnings = args;
+        });
 
         $scope.$on('page-loader', function(event, arg){
             $log.info("Inside listener for show-loader");
@@ -75,6 +81,7 @@ function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPop
         self.loginSuccess = false;
         self.launchRelogin = function () {
             var def = $q.defer();
+            $scope.username = authService.getUserData().login;
             var modalWindow = $uibModal.open({
                 templateUrl: "modules/irfpages/templates/modals/Relogin.html",
                 windowTopClass: "relogin-window",
@@ -89,19 +96,14 @@ function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPop
 
                     $scope.relogin = function (username, password) {
                         $log.info("Inside onlineLogin");
-                        if (!username || !password) {
-                            return false;
-                        }
-                        var userData = authService.getUserData();
-                        if (username.toLowerCase() !== userData.login.toLowerCase()) {
-                            $scope.errorMessage = "Only current user can login";
+                        if (!password) {
+                            $scope.errorMessage = "Password cannot be empty";
                             return false;
                         }
                         $scope.errorMessage = null;
                         authService.login(username, password)
                             .then(function (arg) { // Success callback
                                 modalWindow.close();
-                                // TODO
                                 def.resolve();
                             }, function (arg) { // Error callback
                                 $scope.showLoading = false;
@@ -113,6 +115,7 @@ function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPop
 
                 }
             });
+            modalWindow.rendered.then(function() { $('.relogin #inputPassword3').focus() });
             return def.promise;
         };
     }])
@@ -127,15 +130,22 @@ function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPop
          * @type {Array}
          */
         var errors = [];
+        var warnings = [];
 
         var clearErrorsFn = function(){
             errors = [];
             $rootScope.$broadcast('server-error', errors);
         }
 
+        var clearWarningsFn = function(){
+            warnings = [];
+            $rootScope.$broadcast('server-warnings', warnings);
+        }
+
         /* Add `clearErrors` method on $rootScope */
 
         $rootScope.clearErrors = clearErrorsFn;
+        $rootScope.clearWarnings = clearWarningsFn;
 
         return {
             clearErrors: clearErrorsFn,
@@ -159,6 +169,27 @@ function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPop
                     scrollTop: $("#errors-wrapper").offset().top - 50
                 }, 500);
             },
+            clearWarnings: clearWarningsFn,
+            setWarning: function (warning) {
+                $log.info("Inside setWarning");
+                $log.info(warning);
+                this.setWarnings([warning]);
+            },
+            setWarnings: function (newWarnings) {
+                $log.info("Inside setWarnings");
+                warnings = _.concat(warnings, newWarnings);
+                $rootScope.$broadcast('server-warnings', warnings);
+                this.scrollToWarnings();
+            },
+            getWarnings: function () {
+                $log.info("Inside getWarnings");
+                return warnings;
+            },
+            scrollToWarnings: function () {
+                jQuery('html, body').animate({
+                    scrollTop: $("#warnings-wrapper").offset().top - 50
+                }, 500);
+            },
             scrollToTop: function(){
                 jQuery('html, body').animate({
                     scrollTop: 0
@@ -180,7 +211,7 @@ function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPop
                 irfProgressMessage.gracefulClearAll(2000);
             },
             showErrors: function(res){
-                this.clearErrors();
+                clearErrorsFn();
                 try {
                     var data = res.data;
                     var errors = [];
@@ -200,6 +231,30 @@ function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPop
                 }catch(err){
                     $log.error(err);
                 }
+            },
+            showWarnings: function(res){
+                this.clearWarnings();
+                try {
+                    var data = res.data;
+                    var warnings = [];
+                    if (_.hasIn(data, 'warnings')) {
+                        _.forOwn(data.warnings, function (keyWarnings, key) {
+                            var keyWarningsLength = keyWarnings.length;
+                            for (var i = 0; i < keyWarningsLength; i++) {
+                                var error = {"message": "<strong>" + key + "</strong>: " + keyWarnings[i]};
+                                warnings.push(error);
+                            }
+                        });
+
+                    }
+                    if (_.hasIn(data, 'warning')) {
+                        warnings.push({message: data.warning});
+                    }
+                    this.setWarnings(warnings);
+                }catch(err){
+                    $log.error(err);
+                }
+
             },
             navigateGoBack: function(){
                 return window.history.back();
