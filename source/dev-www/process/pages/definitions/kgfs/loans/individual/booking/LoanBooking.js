@@ -22,8 +22,7 @@ define([], function () {
                     "LoanDetails.loanType",
                     "LoanDetails.partner",
                     "LoanDetails.frequency",
-                    "LoanDetails.loanProductCategory",
-                    "LoanDetails.loanProductCode",
+                    "LoanDetails.loanProductName",
                     "LoanDetails.loanApplicationDate",
                     "LoanDetails.loanAmountRequested",
                     "LoanDetails.requestedTenure",
@@ -115,7 +114,7 @@ define([], function () {
                                 },
                                 "LoanDetails.partner": {
                                     "orderNo": 2,
-                                    "enumCode": "partner"
+                                    "enumCode": "loan_partner"
                                 },
                                 "LoanDetails.frequency": {
                                     "enumCode": "loan_product_frequency"
@@ -142,12 +141,15 @@ define([], function () {
                                     },
                                     getListDisplayItem: function (item, index) {
                                         return [
-                                            item.productCode
+                                            item.productCode 
                                         ];
                                     },
                                     onChange: function (value, form, model) {
                                         // getProductDetails(value, model);
                                     },
+                                },
+                                "LoanDetails.loanProductName":{
+                                    "orderNo":4
                                 },
                                 "LoanDetails.interestRate":{
                                     "orderNo":6
@@ -426,7 +428,7 @@ define([], function () {
                                             model.loanAccount.nominees[context.arrayIndex] = [];
                                         }
                                         model.loanAccount.nominees[context.arrayIndex].guardianFirstName = valueObj.name;
-                                        model.loanAccount.nominees[context.arrayIndex].guardianRelationWithMinor = "Relative";
+                                        model.loanAccount.nominees[context.arrayIndex].guardianRelationWithMinor = valueObj.relationship;
                                         model.loanAccount.nominees[context.arrayIndex].guardianGender = valueObj.gender;
                                     },
                                     getListDisplayItem: function (item, index) {
@@ -456,12 +458,6 @@ define([], function () {
                                             key: "loanAccount.nominees[].guardianPincode"
                                         }
                                     },
-                                    outputMap: {
-                                        "division": "loanAccount.nominees[arrayIndex].guardianLocality",
-                                        "pincode": "loanAccount.nominees[arrayIndex].guardianPincode",
-                                        "district": "loanAccount.nominees[arrayIndex].guardianDistrict",
-                                        "state": "loanAccount.nominees[arrayIndex].guardianState"
-                                    },
                                     searchHelper: formHelper,
                                     // initialize: function(inputModel, form, model, context) {
                                     //     inputModel.pincode = model.loanAccount.nominees[context.arrayIndex].guardianPincode;
@@ -472,6 +468,12 @@ define([], function () {
                                             inputModel.district,
                                             inputModel.state
                                         );
+                                    },
+                                    onSelect : function(valueObj,model,context){
+                                        model.loanAccount.nominees[context.arrayIndex].guardianLocality = valueObj.region, 
+                                        model.loanAccount.nominees[context.arrayIndex].guardianPincode =  valueObj.pincode.toString(),
+                                        model.loanAccount.nominees[context.arrayIndex].guardianDistrict = valueObj.district,
+                                        model.loanAccount.nominees[context.arrayIndex].guardianState = valueObj.state
                                     },
                                     getListDisplayItem: function (item, index) {
                                         return [
@@ -780,6 +782,40 @@ define([], function () {
                                         "LoanDetails": {
                                             "orderNo": 7,
                                             "items": {
+                                                "loanProductName":{
+                                                    "title": "PRODUCT_NAME",
+                                                    "type": "lov",
+                                                    "key": "loanAccount.productName",
+                                                    bindMap: {
+                                                        "Partner": "loanAccount.partnerCode",
+                                                        // "ProductCategory": "loanAccount.productCategory",
+                                                        "Frequency": "loanAccount.frequency",
+                                                        "loanType": "loanAccount.loanType"
+                                                    },
+                                                    autolov: true,
+                                                    required: true,
+                                                    searchHelper: formHelper,
+                                                    search: function (inputModel, form, model, context) {
+                
+                                                        return Queries.getLoanProductDetails(model.loanAccount.loanType, model.loanAccount.partnerCode, model.loanAccount.frequency);
+                                                    },
+                                                    onSelect: function (valueObj, model, context) {
+                                                        model.loanAccount.productName = valueObj.product_name;
+                                                        model.loanAccount.productCode = valueObj.productCode;
+                                                        model.additions.tenurePlaceHolder = valueObj.tenure_from + '-' + valueObj.tenure_to;
+                                                        model.additions.amountPlaceHolder = valueObj.amount_from + '-' + valueObj.amount_to;
+                                                    },
+                                                    getListDisplayItem: function (item, index) {
+                                                        return [
+                                                            item.productCode,
+                                                            item.product_name 
+                                                        ];
+                                                    },
+                                                    onChange: function (value, form, model) {
+                                                        // getProductDetails(value, model);
+                                                    },
+                                            
+                                                },
                                                 "borrowers": {
                                                     "title": "BORROWERS",
                                                     "type": "radios",
@@ -809,14 +845,14 @@ define([], function () {
                                                     }
                                                 },
                                                 "borrowersHusbandName": {
-                                                    "orderNo": 9,
+                                                    "orderNo": 8,
                                                     "title": "HUSBAND_NAME",
                                                     "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf4 == 'Husband'",
                                                     "type": "text",
                                                     "key": "loanAccount.husbandOrFatherFirstName",
                                                 },
                                                 "borrowersFatherName": {
-                                                    "orderNo": 9,
+                                                    "orderNo": 8,
                                                     "title": "FATHER_NAME",
                                                     "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf4 == 'Father'",
                                                     "type": "text",

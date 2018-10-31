@@ -819,22 +819,31 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
             },
             {
             "type": "box",
-            "title": "APPLICANT_CO_APPLICANT_DETAILS",
+            "title": "APPLICANT & CO-APPLICANT DETAILS",
             "readonly": true,
-            "items": [{
-                    "key": "loanAccount.applicant",
-                    "title": "APPLICANT_URN_NO",
-                    "type":"text",                    
-                },
+            "items": [
                 {
-                    "key":"loanAccount.applicantName",
-                    "title":"APPLICANT_NAME",
-                    "readonly": true
-                },
-                {
-                    "key":"loanAccount.applicantId",
-                    "title":"APPLICANT_ID",
-                    "readonly": true
+                    "type": "fieldset",
+                    "title": "APPLICANTS",
+                    // condition:"!model.loanAccount.coBorrowers[].length == 0",
+                    "readonly": true,
+                    "items": [
+                        {
+                            "key": "loanAccount.applicant",
+                            "title": "APPLICANT_URN_NO",
+                            "type":"text",                    
+                        },
+                        {
+                            "key":"loanAccount.applicantName",
+                            "title":"APPLICANT_NAME",
+                            "readonly": true
+                        },
+                        {
+                            "key":"loanAccount.applicantId",
+                            "title":"APPLICANT_ID",
+                            "readonly": true
+                        },
+                    ]
                 },
                 {
                     "type": "fieldset",
@@ -862,10 +871,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                                     title:"NAME",
                                     "readonly": true
                                 }
-            ]
+                            ]
                         }
                     ]
-                }, {
+                },
+                {
                     "type":"fieldset",
                      // condition:"!model.loanAccount.guarantors[].length > 0",
 

@@ -860,6 +860,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true,
                                     "title": "HOUSEHOLD_DETAILS"
                                 },
+                                "IndividualFinancials":{
+                                    "readonly": true
+                                },
                                 "Liabilities": {
                                     "readonly": true
                                 },
@@ -1812,7 +1815,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             "additions": [
                                 {
                                     "type": "actionbox",
-                                    "condition": "!model.customer.currentStage",
+                                    "condition": "!model.customer.currentStage && model.loanProcess.loanAccount.isReadOnly !='Yes'",
                                     "orderNo": 1200,
                                     "items": [
                                         {
@@ -1836,7 +1839,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 {
                                     "type": "actionbox",
-                                    "condition": "model.customer.currentStage && (model.loanProcess.loanAccount.currentStage=='Screening' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation1' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation2' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation3' || model.loanProcess.loanAccount.currentStage=='CreditAppraisal' || model.loanProcess.loanAccount.currentStage=='TeleVerification')",
+                                    "condition": "model.customer.currentStage && model.loanProcess.loanAccount.isReadOnly !='Yes' && (model.loanProcess.loanAccount.currentStage=='Screening' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation1' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation2' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation3' || model.loanProcess.loanAccount.currentStage=='CreditAppraisal' || model.loanProcess.loanAccount.currentStage=='TeleVerification')",
                                     "orderNo": 1200,
                                     "items": [
                                         {

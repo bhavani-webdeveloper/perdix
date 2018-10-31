@@ -40,7 +40,30 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                     }
 
                 }
-
+                
+                var finalCustomerChange = function(applicantData,model){
+                    if(applicantData != null){
+                        if(model.coApplicantGuarantor.length > 0){
+                            model.loanProcess.loanAccount.loanCustomerRelations = [];
+                            model.loanProcess.loanAccount.loanCustomerRelations.push(applicantData);
+                            model.loanProcess.loanAccount.loanCustomerRelations = model.loanProcess.loanAccount.loanCustomerRelations.concat(model.coApplicantGuarantor);
+                        }
+                        else{
+                            model.loanProcess.loanAccount.loanCustomerRelations = [];
+                            model.loanProcess.loanAccount.loanCustomerRelations.push(applicantData);
+                        }
+                    }
+                    else{
+                        if(model.coApplicantGuarantor.length > 0){
+                            model.loanProcess.loanAccount.loanCustomerRelations = [];
+                            model.loanProcess.loanAccount.loanCustomerRelations.push(model.coApplicantGuarantor);
+                        }
+                        else{
+                            model.loanProcess.loanAccount.loanCustomerRelations = [];
+                        }
+                    }
+                    return model.loanProcess.loanAccount;
+                };
 
 
                 var configFile = function () {
@@ -1555,60 +1578,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                         "FamilyDetails.familyMembers.incomes.incomeEarned",
                         "FamilyDetails.familyMembers.incomes.frequency",
                         "FamilyDetails.familyMembers.noOfDependents",
-
-
-                        // "Liabilities",
-                        // "Liabilities.liabilities",
-                        // "Liabilities.liabilities.loanSource",
-                        // "Liabilities.liabilities.loanAmountInPaisa",
-                        // "Liabilities.liabilities.installmentAmountInPaisa",
-                        // "Liabilities.liabilities.outstandingAmountInPaisa",
-                        // "Liabilities.liabilities.startDate",
-                        // "Liabilities.liabilities.maturityDate",
-                        // "Liabilities.liabilities.noOfInstalmentPaid",
-                        // "Liabilities.liabilities.frequencyOfInstallment",
-                        // "Liabilities.liabilities.liabilityLoanPurpose",
-                        // "Liabilities.liabilities.interestOnly",
-                        // "Liabilities.liabilities.interestRate",
-
-                        // "BankAccounts",
-                        // "BankAccounts.customerBankAccounts",
-                        // "BankAccounts.customerBankAccounts.ifscCode",
-                        // "BankAccounts.customerBankAccounts.customerBankName",
-                        // "BankAccounts.customerBankAccounts.customerBankBranchName",
-                        // "BankAccounts.customerBankAccounts.customerNameAsInBank",
-                        // "BankAccounts.customerBankAccounts.accountNumber",
-                        // "BankAccounts.customerBankAccounts.accountType",
-                        // "BankAccounts.customerBankAccounts.bankingSince",
-                        // "BankAccounts.customerBankAccounts.netBankingAvailable",
-                        // "BankAccounts.customerBankAccounts.bankStatements",
-                        // "BankAccounts.customerBankAccounts.bankStatements.startMonth",
-                        // "BankAccounts.customerBankAccounts.bankStatements.openingBalance",
-                        // "BankAccounts.customerBankAccounts.bankStatements.closingBalance",
-                        // "BankAccounts.customerBankAccounts.bankStatements.emiAmountdeducted",
-                        // "BankAccounts.customerBankAccounts.bankStatements.totalDeposits",
-                        // "BankAccounts.customerBankAccounts.bankStatements.totalWithdrawals",
-                        // "BankAccounts.customerBankAccounts.bankStatements.balanceAsOn15th",
-                        // "BankAccounts.customerBankAccounts.bankStatements.noOfChequeBounced",
-                        // "BankAccounts.customerBankAccounts.bankStatements.noOfEmiChequeBounced",
-                        // "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto",
-                        // "BankAccounts.customerBankAccounts.isDisbersementAccount",
-
-                        // "PhysicalAssets",
-                        // "PhysicalAssets.physicalAssets",
-                        // "PhysicalAssets.physicalAssets.nameOfOwnedAsset",
-                        // "PhysicalAssets.physicalAssets.vehicleModel",
-                        // "PhysicalAssets.physicalAssets.registeredOwner",
-                        // "PhysicalAssets.physicalAssets.ownedAssetValue",
-                        // "PhysicalAssets.physicalAssets.unit",
-                        // "PhysicalAssets.financialAssets",
-                        // "PhysicalAssets.financialAssets.instrumentType",
-                        // "PhysicalAssets.financialAssets.nameOfInstitution",
-                        // "PhysicalAssets.financialAssets.instituteType",
-                        // "PhysicalAssets.financialAssets.amount",
-                        // "PhysicalAssets.financialAssets.frequencyOfDeposite",
-                        // "PhysicalAssets.financialAssets.startDate",
-                        // "PhysicalAssets.financialAssets.maturityDate",
                     ];
 
                 }
@@ -1660,7 +1629,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                             if (member.incomes && member.incomes.length == 0)
                                 model.UIUDF.family_fields.dependent_family_member++;
                         });
-
                         /* Form rendering starts */
                         var self = this;
                         var formRequest = {
@@ -1725,176 +1693,73 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                                     }
                                 },
                                 "additions": [
-                                    {
+                                    {   
+                                        "title": "CO-APPLICANT-GUARANTOR",
                                         "type": "box",
-                                        "items": [
+                                        items: [
                                             {
-
-                                                "type": "fieldset",
-                                                "title": "COAPPLICANTS",
-                                                "items": [
-                                                    {
-                                                        "key": "loanProcess.coApplicantsEnrolmentProcesses",
-                                                        "title": "COAPPLICANTS",
-                                                        "titleExpr": "model.loanProcess.coApplicantsEnrolmentProcesses[arrayIndex].customer.id + ': ' + model.loanProcess.coApplicantsEnrolmentProcesses[arrayIndex].customer.firstName",
-                                                        "type": "array",
-                                                        "startEmpty": true,
-                                                        "schema": {
-                                                            "maxItems": 4
-                                                        },
-                                                        "items": [
-                                                            {
-                                                                "key": "loanProcess.coApplicantsEnrolmentProcesses[].customer.urnNo",
-                                                                "title": "CO_APPLICANT_URN_NO",
-                                                                "type": "lov",
-                                                                bindMap: {},
-                                                                "lovonly": true,
-                                                                "inputMap": {
-
-                                                                    "firstName": {
-                                                                        "key": "customer.firstName",
-                                                                        "title": "CUSTOMER_NAME"
-                                                                    },
-                                                                    "branch": {
-                                                                        "key": "customer.customerBranchId",
-                                                                        "type": "select",
-                                                                        "screenFilter": true
-                                                                    },
-                                                                    "centreId": {
-                                                                        "key": "customer.centreId",
-                                                                        "type": "select",
-                                                                        "screenFilter": true
-                                                                    }
-                                                                },
-                                                                "outputMap": {
-                                                                    "id": "loanProcess.coApplicantsEnrolmentProcesses[arrayIndex].customer.id",
-                                                                    "urnNo": "loanProcess.coApplicantsEnrolmentProcesses[arrayIndex].customer.urnNo",
-                                                                    "firstName": "loanProcess.coApplicantsEnrolmentProcesses[arrayIndex].customer.firstName"
-                                                                },
-                                                                "searchHelper": formHelper,
-                                                                "search": function (inputModel, form, model) {
-                                                                    $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
-                                                                    var promise = Enrollment.search({
-                                                                        'branchName': inputModel.branch || SessionStore.getBranch(),
-                                                                        'firstName': inputModel.firstName,
-                                                                        'centreId': inputModel.centreId,
-                                                                        'customerType': "individual",
-
-                                                                    }).$promise;
-                                                                    return promise;
-                                                                },
-                                                                getListDisplayItem: function (data, index) {
-                                                                    return [
-                                                                        [data.firstName, data.fatherFirstName].join(' | '),
-                                                                        data.id,
-                                                                        data.urnNo
-                                                                    ];
-                                                                },
-                                                                onSelect: function (valueObj, model, context) {
-                                                                    console.log("Hello this model");
-                                                                    console.log(model);
-                                                                    model.loanProcess.setRelatedCustomerWithRelation(model.enrolmentProcess, "Co-applicant");
-                                                                    BundleManager.broadcastEvent('new-co-applicant',{customer:model.enrolmentProcess.customer});
-                                                                    // EnrolmentProcess.fromCustomerID(valueObj.id)
-                                                                    //     .finally(function () {
-                                                                    //         PageHelper.showProgress('customer-load', 'Done.', 5000);
-                                                                    //     })
-                                                                    //     .subscribe(function (enrolmentProcess) {
-                                                                    //         /* Setting on the current page */
-                                                                    //         console.log("Model from Individual Enrollment from Fuck");
-
-                                                                    //         // mode.loanAccount.coBorrowers = enrolmentProcess.customer;
-                                                                    //         console.log(model);
-                                                                    //         model.loanProcess.removeRelatedEnrolmentProcess(model.enrolmentProcess, LoanCustomerRelationTypes.CO_APPLICANT);
-                                                                    //         model.loanProcess.setRelatedCustomerWithRelation(enrolmentProcess,LoanCustomerRelationTypes.CO_APPLICANT);
-                                                                    //         if (model.customer.dateOfBirth) {
-                                                                    //             model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-                                                                    //         }
-
-
-                                                                    //     })
-                                                                },
-                                                            }
-                                                        ]
-                                                    }
-                                                ]
-                                            },{
+                                            key: "coApplicantGuarantor",
+                                            type: "pivotarray",
+                                            startEmpty: false,
+                                            view: "fixed",
+                                            addButtonExpr: " ('ADD'| translate ) + ' ' + (pivotValue | translate)",
+                                            pivotFieldEnumCode: 'subcustomer_type',
+                                            pivotField: "relation",
+                                            title: "SUB_CUSTMOER",
+                                            items:[
+                                                {
+                                                    "title": "NAME",
+                                                    "key": "coApplicantGuarantor[].firstName",
+                                                    "type":"lov",
+                                                    searchHelper: formHelper,
+                                                    search: function (inputModel, form, model, context) {
+                                                        var out = [];
+                                                        if (!model.customer.familyMembers) {
+                                                            return out;
+                                                        }
                 
-                                                "type": "fieldset",
-                                                "title": "GUARANTORS",
-                                                "items": [
-                                                    {
-                                                        "title": "GUARANTORS",
-                                                        "titleExpr": "model.loanProcess.guarantorsEnrolmentProcesses[arrayIndex].customer.id + ': ' + model.loanProcess.guarantorsEnrolmentProcesses[arrayIndex].customer.firstName",
-                                                        "type": "array",
-                                                        "startEmpty": true,
-                                                        "schema": {
-                                                            "maxItems": 4
-                                                        },
-                                                        "items": [
-                                                            {
-                                                                "key": "loanProcess.guarantorsEnrolmentProcesses[].customer.urnNo",
-                                                                "title": "URN_NO",
-                                                                "type": "lov",
-                                                                bindMap: {},
-                                                                "lovonly": true,
-                                                                "inputMap": {
-
-                                                                    "firstName": {
-                                                                        "key": "customer.firstName",
-                                                                        "title": "CUSTOMER_NAME"
-                                                                    },
-                                                                    "branch": {
-                                                                        "key": "customer.customerBranchId",
-                                                                        "type": "select",
-                                                                        "screenFilter": true
-                                                                    },
-                                                                    "centreId": {
-                                                                        "key": "customer.centreId",
-                                                                        "type": "select",
-                                                                        "screenFilter": true
-                                                                    }
-                                                                },
-                                                                "outputMap": {
-                                                                    "id": "loanProcess.guarantorsEnrolmentProcesses[arrayIndex].customer.id",
-                                                                    "urnNo": "loanProcess.guarantorsEnrolmentProcesses[arrayIndex].customer.urnNo",
-                                                                    "firstName": "loanProcess.guarantorsEnrolmentProcesses[arrayIndex].customer.firstName"
-                                                                },
-                                                                "searchHelper": formHelper,
-                                                                "search": function (inputModel, form, model) {
-                                                                    $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
-                                                                    var promise = Enrollment.search({
-                                                                        'branchName': inputModel.branch || SessionStore.getBranch(),
-                                                                        'firstName': inputModel.firstName,
-                                                                        'centreId': inputModel.centreId,
-                                                                        'customerType': "individual",
-
-                                                                    }).$promise;
-                                                                    return promise;
-                                                                },
-                                                                getListDisplayItem: function (data, index) {
-                                                                    return [
-                                                                        [data.firstName, data.fatherFirstName].join(' | '),
-                                                                        data.id,
-                                                                        data.urnNo
-                                                                    ];
-                                                                },
-                                                                onSelect: function (valueObj, model, context) {
-                                                                    console.log("Hello this model");
-                                                                    console.log(model);
-                                                                    var obj = {};
-                                                                    obj.customer = valueObj;
-                                                                    model.loanProcess.setRelatedCustomerWithRelation(obj, "Guarantor");
-                                                                    BundleManager.broadcastEvent('new-guarantor',{customer:obj});
-                                                                },
-                                                                
-                                                            }
-                                                        ]
+                                                        for (var i = 0; i < model.customer.familyMembers.length; i++) {
+                                                            out.push({
+                                                                name: model.customer.familyMembers[i].familyMemberFirstName,
+                                                                urnNo: model.customer.familyMembers[i].enrolledUrnNo,
+                                                                id: model.customer.familyMembers[i].customerId,
+                                                            })
+                                                        }
+                                                        return $q.resolve({
+                                                            headers: {
+                                                                "x-total-count": out.length
+                                                            },
+                                                            body: out
+                                                        });
+                                                    },
+                                                    onSelect: function (valueObj, model, context) {
+                                                        //add to the witnees array.
+                                                        model.coApplicantGuarantor[context.arrayIndex].firstName = valueObj.name;
+                                                        model.coApplicantGuarantor[context.arrayIndex].urn = valueObj.urnNo;
+                                                        model.coApplicantGuarantor[context.arrayIndex].customerId = valueObj.id;
+                                                    },
+                                                    getListDisplayItem: function (item, index) {
+                                                        return [
+                                                            item.name
+                                                        ];
                                                     }
-                                                ]
-                                            },      
-                                        ]
-                                    }
+
+                                                },
+                                                {
+                                                    "title":"URN_NO",
+                                                    "key":"coApplicantGuarantor[].urn",
+                                                    "readonly":true,
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "type": "button",
+                                            "title": "UPDATE",
+                                            "onClick": "actions.updateCoapplicantGuarantor(model)"
+                                        },
+                                    ]
+
+                                    },
                                 ]
                             }
                         };
@@ -2082,7 +1947,22 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                                     PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                     PageHelper.hideLoader();
                                 });
+                        },
+                        updateCoapplicantGuarantor : function(model){
+                            // remove fro loan customer relations ship
+                            var elemment = model.loanProcess.loanAccount.loanCustomerRelations;
+                            var applicantData = null;
+                            for(var i =0; i< elemment.length;i++){
+                                if(elemment[i].relation== 'Applicant'){
+                                    applicantData = elemment[i];
+                                    break;
+                                } 
+                            }
+                            // call final update function;
+                            var newCustomerRelation = finalCustomerChange(applicantData,model);
+                            BundleManager.broadcastEvent('new-loan-customer-relation',newCustomerRelation);
                         }
+
                     }
                 };
             }

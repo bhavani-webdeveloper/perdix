@@ -153,13 +153,14 @@ define(["perdix/domain/model/loan/LoanProcess",
 
                                 var newBundle = {
                                     enrolmentProcess: loanProcess.applicantEnrolmentProcess,
-                                    loanProcess: loanProcess
+                                    coApplicantGuarantor : [],
+                                    loanProcess: loanProcess        
                                 };
                                 if (_.hasIn(loanAccount, 'coApplicantsEnrolmentProcesses')) {
-                                    newBundle.coApplicantsEnrolmentProcesses = loanProcess.coApplicantsEnrolmentProcesses;
+                                    newBundle.coApplicantGuarantor = newBundle.coApplicantGuarantor.concat(loanProcess.coApplicantsEnrolmentProcesses);
                                 }
                                 if (_.hasIn(loanAccount, 'guarantorsEnrolmentProcesses')) {
-                                    newBundle.guarantorsEnrolmentProcesses = loanProcess.guarantorsEnrolmentProcesses;
+                                    newBundle.coApplicantGuarantor = newBundle.coApplicantGuarantor.concat(loanProcess.guarantorsEnrolmentProcesses);
                                 }
 
 
@@ -217,6 +218,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         pageClass: "applicant",
                                         model: {
                                             enrolmentProcess: loanProcess.applicantEnrolmentProcess,
+                                            coApplicantGuarantor: [],
                                             loanProcess: loanProcess
                                         }
                                     });
