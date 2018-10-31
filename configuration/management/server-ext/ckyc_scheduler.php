@@ -60,6 +60,18 @@ function rcopy($src, $dst) {
     else if (file_exists($src)) copy($src, $dst);
 }
 
+function rdeleteContent($dir){
+    $di = new RecursiveDirectoryIterator($dir, FilesystemIterator::SKIP_DOTS);
+    print_r($di);
+    $ri = new RecursiveIteratorIterator($di, RecursiveIteratorIterator::CHILD_FIRST);
+    print_r($ri);
+
+    foreach ( $ri as $file ) {
+        $file->isDir() ?  rmdir($file) : unlink($file);
+    }
+
+}
+
 function writeError( $customer_id, $processing_status, $error) {
     DB::table('customer_external_interface')
     ->where('customer_id', $customer_id)
@@ -86,10 +98,10 @@ function validateCustomerData($data){
     create folder Directories if not already present 
 */
 $DIR= getcwd();
-$GLOBALS['outgoingTempDir']  =  $DIR.DIRECTORY_SEPARATOR."cersai".DIRECTORY_SEPARATOR."outgoing_temp";
 $GLOBALS['outgoingDir']      =  $DIR.DIRECTORY_SEPARATOR."cersai".DIRECTORY_SEPARATOR."outgoing";
-$GLOBALS['trackwizTempDir']  =  $DIR.DIRECTORY_SEPARATOR."cersai".DIRECTORY_SEPARATOR."incoming_temp" ;
+$GLOBALS['outgoingTempDir']  =  $DIR.DIRECTORY_SEPARATOR."cersai".DIRECTORY_SEPARATOR."outgoing_temp";
 $GLOBALS['trackwizDir']      =  $DIR.DIRECTORY_SEPARATOR."cersai".DIRECTORY_SEPARATOR."incoming" ;
+$GLOBALS['trackwizTempDir']  =  $DIR.DIRECTORY_SEPARATOR."cersai".DIRECTORY_SEPARATOR."incoming_temp" ;
 $GLOBALS['VALID_CUSTOMER_DATA']=array(
     "gender"=>array(
         "male"=>"M",
@@ -281,8 +293,7 @@ function prepareOutgoingData() {
         if (!is_dir($GLOBALS['outgoingDir'])) {
             mkdir($GLOBALS['outgoingDir'], 0777, true);
         }else {
-            rrmdir($GLOBALS['outgoingDir']);
-            mkdir($GLOBALS['outgoingDir'], 0777, true);
+            rdeleteContent($GLOBALS['outgoingDir']);
         }
         rcopy($GLOBALS['outgoingTempDir'], $GLOBALS['outgoingDir']);
         rrmdir($GLOBALS['outgoingTempDir']); 
@@ -392,7 +403,7 @@ function fetchIncomingData() {
                 }
             }
         }
-        rrmdir($GLOBALS['trackwizDir']);
+        rdeleteContent($GLOBALS['trackwizDir']);
         rrmdir($GLOBALS['trackwizTempDir']);
     
     } catch(Exception $e){
