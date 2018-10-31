@@ -9,8 +9,6 @@
                 "title": "TRANSACTION_NAME",
                 "type":"lov",
                 "resolver": "JournalTransactionLOVConfiguration",
-                "lovonly": "true",
-                "autolov": "true",
                 "orderNo": 10
             },
             "transactionDescription": {
