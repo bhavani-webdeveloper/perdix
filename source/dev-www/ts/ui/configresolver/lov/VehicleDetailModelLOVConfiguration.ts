@@ -20,7 +20,7 @@ export class VehicleDetailModelLOVConfiguration extends LOVElementConfiguration 
         var vehicleDetails = model.vehicleDetails;
         var out = [];
         var res = $filter('filter')(vehicleDetails, {
-            'segment': inputModel.segment1,
+            'segment': inputModel.vehicle_segment1,
             'category': inputModel.vehicle_category1,
             'manufacturer': inputModel.vehicle_make1
         }, false);

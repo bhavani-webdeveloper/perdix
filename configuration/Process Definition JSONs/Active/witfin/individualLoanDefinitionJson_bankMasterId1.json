@@ -5610,13 +5610,16 @@
                     "minLength":1,
                     "maxLength":100,
                     "captureStages":[
-                       "Screening",
-                       "VehicleValuation",
-                       "FieldInvestigation1",
-                       "FieldInvestigation2",
-                       "FieldInvestigation3",
-                       "TeleVerification",
-                       "LoanInitiation"
+                        "ScreeningReview",
+                        "FieldInvestigation1",
+                        "FieldInvestigation2",
+                        "FieldInvestigation3",
+                        "TeleVerification",
+                        "BusinessApproval1",
+                        "CreditApproval1",
+                        "CreditApproval2",
+                        "CreditApproval3",
+                        "BusinessApproval2"
                     ]
                  },
                  "mitigant":{
@@ -5625,13 +5628,16 @@
                     "minimum":1,
                     "maximum":100000000,
                     "captureStages":[
-                       "Screening",
-                       "VehicleValuation",
-                       "FieldInvestigation1",
-                       "FieldInvestigation2",
-                       "FieldInvestigation3",
-                       "TeleVerification",
-                       "LoanInitiation"
+                        "ScreeningReview",
+                        "FieldInvestigation1",
+                        "FieldInvestigation2",
+                        "FieldInvestigation3",
+                        "TeleVerification",
+                        "BusinessApproval1",
+                        "CreditApproval1",
+                        "CreditApproval2",
+                        "CreditApproval3",
+                        "BusinessApproval2"
                     ]
                  },
                  "riskScore":{
@@ -5640,13 +5646,16 @@
                     "minimum":1,
                     "maximum":100000000,
                     "captureStages":[
-                       "Screening",
-                       "VehicleValuation",
-                       "FieldInvestigation1",
-                       "FieldInvestigation2",
-                       "FieldInvestigation3",
-                       "TeleVerification",
-                       "LoanInitiation"
+                        "ScreeningReview",
+                        "FieldInvestigation1",
+                        "FieldInvestigation2",
+                        "FieldInvestigation3",
+                        "TeleVerification",
+                        "BusinessApproval1",
+                        "CreditApproval1",
+                        "CreditApproval2",
+                        "CreditApproval3",
+                        "BusinessApproval2"
                     ]
                  }
               }

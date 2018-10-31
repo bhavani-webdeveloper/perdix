@@ -153,7 +153,8 @@ define(["perdix/domain/model/loan/LoanProcess",
 
                                 var newBundle = {
                                     enrolmentProcess: loanProcess.applicantEnrolmentProcess,
-                                    loanProcess: loanProcess
+                                    coApplicantGuarantor : [],
+                                    loanProcess: loanProcess        
                                 };
                                 if (_.hasIn(loanAccount, 'coApplicantsEnrolmentProcesses')) {
                                     newBundle.coApplicantGuarantor = newBundle.coApplicantGuarantor.concat(loanProcess.coApplicantsEnrolmentProcesses);

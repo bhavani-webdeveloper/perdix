@@ -1629,7 +1629,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                             if (member.incomes && member.incomes.length == 0)
                                 model.UIUDF.family_fields.dependent_family_member++;
                         });
-                        model.coApplicantGuarantor = [];
                         /* Form rendering starts */
                         var self = this;
                         var formRequest = {

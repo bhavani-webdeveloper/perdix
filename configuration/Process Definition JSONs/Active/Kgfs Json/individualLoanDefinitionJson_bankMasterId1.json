@@ -557,7 +557,7 @@
                    "captureStages":[
                       "Screening", "LoanInitiation"
                    ],
-                   "refCodeCategory":"relationship"
+                   "refCodeCategory":"relation"
                 },
                 "witnessFirstName":{
                    "title":"Witness First Name",

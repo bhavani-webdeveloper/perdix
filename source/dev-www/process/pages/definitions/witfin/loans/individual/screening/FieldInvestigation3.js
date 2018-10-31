@@ -173,6 +173,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             .subscribe(function(loanProcess){
                                 bundleModel.loanProcess=loanProcess;
                                 var loanAccount = loanProcess;
+                                bundleModel.loanProcess.loanAccount.isValuator = "Yes";
                                 loanAccount.applicantEnrolmentProcess.customer.customerId = loanAccount.customerId;
 
                                 // $this.bundlePages.push({
@@ -348,6 +349,9 @@ define(["perdix/domain/model/loan/LoanProcess",
                         },
                         "deviation-loaded":function(pageObj, bundleModel, params){
                             BundleManager.broadcastEvent("load-deviation", params);
+                        },
+                        "financialSummary": function(pageObj, bundleModel, params) {
+                            BundleManager.broadcastEvent("financial-summary", params);
                         }
                     }
 
