@@ -1,9 +1,9 @@
 define({
     pageUID: "witfin.loans.individual.booking.DocumentUpload",
     pageType: "Engine",
-    dependencies:  ["$log", "Enrollment", "SessionStore", "$state", '$stateParams', 'PageHelper', 'IndividualLoan', 'Queries', 'Utils', 'formHelper', "LoanProcess", "CustomerBankBranch", "SchemaResource", "LoanAccount", "irfNavigator", "PagesDefinition",
+    dependencies:  ["$q","$log", "Enrollment", "SessionStore", "$state", '$stateParams', 'PageHelper', 'IndividualLoan', 'Queries', 'Utils', 'formHelper', "LoanProcess", "CustomerBankBranch", "SchemaResource", "LoanAccount", "irfNavigator", "PagesDefinition",
     "PageHelper", "Utils", "PagesDefinition", "Queries", "$stateParams", "Queries", "DeathMarking"],
-    $pageFn:function($log, Enrollment, SessionStore, $state, $stateParams, PageHelper, IndividualLoan, Queries, Utils, formHelper, LoanProcess, CustomerBankBranch, SchemaResource, LoanAccount, irfNavigator, PagesDefinition) {
+    $pageFn:function($q,$log, Enrollment, SessionStore, $state, $stateParams, PageHelper, IndividualLoan, Queries, Utils, formHelper, LoanProcess, CustomerBankBranch, SchemaResource, LoanAccount, irfNavigator, PagesDefinition) {
             var getDocument = function(docsArr, docCode) {
             var i = 0;
             for (i = 0; i < docsArr.length; i++) {
@@ -612,12 +612,12 @@ define({
                                 bindMap: {},
                                 searchHelper: formHelper,
                                 search: function(inputModel, form, model, context) {
-                                    var stage1 = model.currentStage;
+                                    var stage1 = model.loanAccount.currentStage;
 
-                                    if (model.currentStage == 'Application' || model.currentStage == 'ApplicationReview') {
+                                    if (model.loanAccount.currentStage == 'Application' || model.loanAccount.currentStage == 'ApplicationReview') {
                                         stage1 = "Application";
                                     }
-                                    if (model.currentStage == 'FieldAppraisal' || model.currentStage == 'FieldAppraisalReview') {
+                                    if (model.loanAccount.currentStage == 'FieldAppraisal' || model.loanAccount.currentStage == 'FieldAppraisalReview') {
                                         stage1 = "FieldAppraisal";
                                     }
 
