@@ -28,7 +28,7 @@ export class JournalTransactionLOVConfiguration extends LOVElementConfiguration 
                     id: value.id
                 }, function(res) {
 
-                    if (res.journalBranches && res.journalBranches) {
+                    if (res.journalBranches && res.journalBranches && res.isApplicable) {
                         for (let k = 0; k < res.journalBranches.length; k++) {
                             if (_.hasIn(res.journalBranches[k], 'branchId') && res.journalBranches[k].branchId == model.journal.journalEntryDto.branchId) {
                                 ret.push(value);

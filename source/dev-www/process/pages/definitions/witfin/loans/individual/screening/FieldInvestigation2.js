@@ -349,6 +349,9 @@ define(["perdix/domain/model/loan/LoanProcess",
                         },
                         "deviation-loaded":function(pageObj, bundleModel, params){
                             BundleManager.broadcastEvent("load-deviation", params);
+                        },
+                        "financialSummary": function(pageObj, bundleModel, params) {
+                            BundleManager.broadcastEvent("financial-summary", params);
                         }
                     }
 

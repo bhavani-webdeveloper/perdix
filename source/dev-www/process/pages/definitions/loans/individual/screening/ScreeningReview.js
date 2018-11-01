@@ -11,6 +11,9 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ScreeningReview'
         		"title": "SCREENING_REVIEW",
         		"subTitle": "LOAN_BOOKING_BUNDLE_SUB_TITLE",
                 "readonly": true,
+                "processType": "Loan",
+                "processName": "Origination",
+                "lockingRequired": true,
                 "bundleDefinition": [
                     {
                         pageName: 'customer.IndividualEnrolment2',
