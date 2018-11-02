@@ -65,9 +65,8 @@ irf.pageCollection.factory(irf.page("audit.UnconfirmedIssuesQueue"), ["$log", "f
                 },
                 getResultsPromise: function(searchOptions, pageOpts) {
                     return Audit.online.getIssuesList({
-                        'branch_id': searchOptions.branch_id,
-                        'confirmity_status': "2",
                         'bank_id': searchOptions.bankId,
+                        'branch_id': searchOptions.branch_id,
                         'issue_status': "P",
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage
@@ -123,7 +122,7 @@ irf.pageCollection.factory(irf.page("audit.UnconfirmedIssuesQueue"), ["$log", "f
                             title: 'BRANCH_NAME',
                             data: 'branch_id',
                             render: function(data, type, full, meta) {
-                                return master.branch_name[full.branch_id].node_code;
+                                return master.branch_name[full.branch_id]? master.branch_name[full.branch_id].node_code: data;
                             }
                         }, {
                             title: 'CLOSED_ON',

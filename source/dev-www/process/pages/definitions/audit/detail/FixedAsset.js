@@ -1,21 +1,26 @@
 irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"),
 ["$log", "PageHelper", "irfNavigator", "$stateParams", "Audit",
     function($log, PageHelper, irfNavigator, $stateParams, Audit) {
-        var validateAsset = function(asset) {
-            if (asset.quantity_on_record < asset.quantity_on_hand) {
-                if (asset.quantity_on_record != asset.quantity_on_hand - asset.excess_quantity) {
-                    throw "Available & excess should add up to quantity on record";
-                } else if (asset.lost_quantity !== 0 || asset.transferred_quantity !== 0) {
+        var validateAsset = function(a) {
+            if (!(a.quantity_on_record >= 0 && a.quantity_on_hand >= 0 && a.lost_quantity >=0 && a.transferred_quantity >= 0 && a.excess_quantity)) {
+                throw "Quantities cannot be empty or nagative";
+            }
+            if (a.quantity_on_record < a.quantity_on_hand) {
+                if (a.quantity_on_record != a.quantity_on_hand - a.excess_quantity) {
+                    throw "Excess & quantity on record should add up to available";
+                } else if (a.lost_quantity != 0 || a.transferred_quantity != 0) {
                     throw "Lost & transfer should be zero";
+                } else if (a.excess_quantity > a.quantity_on_hand) {
+                    throw "Excess quantity should not be greater than available quantity";
                 }
-            } else if (asset.quantity_on_record > asset.quantity_on_hand) {
-                if (asset.quantity_on_record == asset.quantity_on_hand + asset.lost_quantity + asset.transferred_quantity) {
+            } else if (a.quantity_on_record > a.quantity_on_hand) {
+                if (a.quantity_on_record == a.quantity_on_hand + a.lost_quantity + a.transferred_quantity) {
                     throw "Available, lost & transferred should add up to quantity on record";
-                } else if (asset.excess_quantity !== 0) {
-                    throw "Excess should be zero";
+                } else if (a.excess_quantity != 0) {
+                    throw "Excess quantity should be zero";
                 }
-            } else if (asset.quantity_on_record == asset.quantity_on_hand) {
-                if (asset.excess_quantity !== 0 || asset.transferred_quantity !== 0 || asset.lost_quantity !== 0) {
+            } else if (a.quantity_on_record == a.quantity_on_hand) {
+                if (a.excess_quantity != 0 || a.transferred_quantity != 0 || a.lost_quantity != 0) {
                     throw "Excess, transfer & lost should be zero";
                 }
             }

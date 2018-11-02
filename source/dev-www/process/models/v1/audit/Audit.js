@@ -35,7 +35,7 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
                 });
                 return rating;
             },
-            processDisplayRecords: function(onlineAudits, audit_type) {
+            processDisplayRecords: function(onlineAudits, queue_type, queue_status, queue_stage) {
                 var deferred = $q.defer();
                 var displayAudits = {
                     headers: {
@@ -54,6 +54,8 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
                                 } else {
                                     offlineAuditInfo._sync = false;
                                 }
+                                offlineAuditInfo._online = true;
+                                ret.offline.setAuditInfo(offlineAuditInfo.audit_id, offlineAuditInfo);
                                 offlineAuditInfo.$picked = true;
                                 onlineAuditInfo = offlineAuditInfo;
                             }
@@ -63,7 +65,9 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
                         }
                     }
                     angular.forEach(offlineAudits, function(v, k) {
-                        if (!v.$picked && (_.isNil(audit_type) || audit_type == v.audit_type)) {
+                        if (!v.$picked && v.audit_type == queue_type && (queue_status && v.status == queue_status || queue_stage && v.current_stage == queue_stage)) {
+                            v._online = false;
+                            ret.offline.setAuditInfo(v.audit_id, v);
                             displayAudits.body.push(v);
                             displayAudits.headers['x-total-count']++;
                         }

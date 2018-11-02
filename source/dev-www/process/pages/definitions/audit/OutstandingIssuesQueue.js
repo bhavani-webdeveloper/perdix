@@ -65,8 +65,7 @@ irf.pageCollection.factory(irf.page("audit.OutstandingIssuesQueue"), ["$log", "f
                     return Audit.online.getIssuesList({
                         'bank_id': searchOptions.bankId,
                         'branch_id': searchOptions.branch_id,
-                        'confirmity_status': "NULL",
-                        'issue_status': 'X',
+                        'current_stage': "close",
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage,
                     }).$promise;
@@ -121,7 +120,7 @@ irf.pageCollection.factory(irf.page("audit.OutstandingIssuesQueue"), ["$log", "f
                             title: 'BRANCH_NAME',
                             data: 'branch_id',
                             render: function(data, type, full, meta) {
-                                return master.branch_name[full.branch_id].node_code;
+                                return master.branch_name[full.branch_id]? master.branch_name[full.branch_id].node_code: data;
                             }
                         }, {
                             title: 'CLOSED_ON',

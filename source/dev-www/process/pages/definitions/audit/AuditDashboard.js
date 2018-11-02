@@ -233,84 +233,48 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 }
 
                 if (aiq) {
-                    $q.all([
-                        Audit.online.getIssuesList({
-                            'issue_status': "A",
-                            'assignee_designation_id': role_id,
-                            'page': 1,
-                            'per_page': 100
-                        }).$promise,
-                        Audit.online.getIssuesList({
-                            'issue_status': "P",
-                            'assignee_designation_id': role_id,
-                            'page': 1,
-                            'per_page': 100
-                        }).$promise
-                    ]).then(function(data) {
-                        aiq.data = data[0].body.length + data[1].body.length;
+                    Audit.online.getIssuesList({
+                        'current_stage': "assign",
+                        "assignee_designation_id": role_id
+                    }).$promise.then(function(data) {
+                        aiq.data = Number(data.headers['x-total-count']) || data.body.length;
                     });
                 }
-                
+
                 if (aivq) {
-                    $q.all([
-                        Audit.online.getIssuesList({
-                            'issue_status': "A",
-                            'assignee_designation_id': role_id,
-                            'page': 1,
-                            'per_page': 100
-                        }).$promise,
-                        Audit.online.getIssuesList({
-                            'issue_status': "P",
-                            'assignee_designation_id': role_id,
-                            'page': 1,
-                            'per_page': 100
-                        }).$promise
-                    ]).then(function(data) {
-                        aivq.data = data[0].body.length + data[1].body.length;
+                    Audit.online.getIssuesList({
+                        'current_stage': "assign"
+                    }).$promise.then(function(data) {
+                        aivq.data = Number(data.headers['x-total-count']) || data.body.length;
                     });
                 }
- 
+
                 if (oiq || oivq) {
                     Audit.online.getIssuesList({
-                        'confirmity_status': "NULL",
-                        'issue_status': 'X',
+                        'current_stage': 'close'
                     }).$promise.then(function(data) {
                         if (oiq) {
-                            oiq.data = data.body.length;
+                            oiq.data = Number(data.headers['x-total-count']) || data.body.length;
                         }
                         if (oivq) {
-                            oivq.data = data.body.length;
+                            oivq.data = Number(data.headers['x-total-count']) || data.body.length;
                         }
                     });
                 }
- 
+
                 if (ciq) {
                     Audit.online.getIssuesList({
-                        'confirmity_status': "1",
-                        'issue_status': "X",
+                        'current_stage': "confirm",
                     }).$promise.then(function(data) {
-                        var returnObj = {
-                            headers: {
-                                'x-total-count': data.headers['x-total-count']
-                            },
-                            body: data.body
-                        };
-                        ciq.data = data.body.length;
+                        ciq.data = Number(data.headers['x-total-count']) || data.body.length;
                     });
                 }
- 
+
                 if (uciq) {
                     Audit.online.getIssuesList({
-                        'confirmity_status': "2",
                         'issue_status': "P",
                     }).$promise.then(function(data) {
-                        var returnObj = {
-                            headers: {
-                                'x-total-count': data.headers['x-total-count']
-                            },
-                            body: data.body
-                        };
-                        uciq.data = data.body.length;
+                        uciq.data = Number(data.headers['x-total-count']) || data.body.length;
                     });
                 }
             }

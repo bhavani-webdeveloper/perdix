@@ -27,6 +27,10 @@ define({
 				}, {
 					"key": "partner",
 					"condition": "model.isPartnerChangeAllowed"
+				},{
+					"key":"groupCode",
+					"title": "GROUP_CODE",
+					"type": ["string", "null"]
 				}],
 				autoSearch: true,
 				searchSchema: {
@@ -34,7 +38,7 @@ define({
 					"title": 'SearchOptions',
 					"properties": {
 						"partner": {
-							"type": "string",
+							"type": ["string", "null"],
 							"title": "PARTNER",
 							"x-schema-form": {
 								"type": "select",
@@ -52,6 +56,7 @@ define({
 					return GroupProcess.search({
 						'branchId': branchId,
 						'partner': searchOptions.partner,
+						'groupCode': searchOptions.groupCode,
 						'groupStatus': true,
 						'currentStage': "CGT2",
 						'page': pageOpts.pageNo,
@@ -92,6 +97,9 @@ define({
 							title: 'GROUP_ID',
 							data: 'id'
 						}, {
+							title: 'GROUP_CODE',
+							data: 'groupCode'
+						},{
 							title: 'PARTNER_CODE',
 							data: 'partnerCode'
 						}, {

@@ -35,7 +35,11 @@ irf.models.factory('BankMaster',
 			var results = results.body;
 			if (results && results.length > 0){
 				var result = results[0];
-				deferred.resolve(result.current_working_date);
+				var currentDates={
+					cbsDate:result.current_working_date,
+					systemDate:result.current_system_date
+				};
+				deferred.resolve(currentDates);
 
 			} else {
 				deferred.reject("Date not available");
