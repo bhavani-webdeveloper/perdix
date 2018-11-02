@@ -122,7 +122,8 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 			},
 			"Page/CustomerHistory",
 			"Page/Engine/customer360.Recapture",
-			"Page/Engine/customer360.CustomerSummaryView"
+			"Page/Engine/customer360.CustomerSummaryView",
+			"Page/Engine/customer360.CustomerDeathMarking"
 
 		]
 	};
