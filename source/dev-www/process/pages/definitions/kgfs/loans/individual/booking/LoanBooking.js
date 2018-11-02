@@ -22,7 +22,7 @@ define([], function () {
                     "LoanDetails.loanType",
                     "LoanDetails.partner",
                     "LoanDetails.frequency",
-                    "LoanDetails.loanProductName",
+                    "LoanDetails.loanProductCode",
                     "LoanDetails.loanApplicationDate",
                     "LoanDetails.loanAmountRequested",
                     "LoanDetails.requestedTenure",
@@ -141,7 +141,8 @@ define([], function () {
                                     },
                                     getListDisplayItem: function (item, index) {
                                         return [
-                                            item.productCode 
+                                            item.productCode, 
+                                            item.product_name
                                         ];
                                     },
                                     onChange: function (value, form, model) {
@@ -526,6 +527,9 @@ define([], function () {
                                     "orderNo": 1,
                                     "readonly": true
                                 },
+                                "LoanSanction":{
+                                    "readonly":true,
+                                },
                                 "LoanDetails.frequency": {
                                     "enumCode": "loan_product_frequency"
                                 },
@@ -563,6 +567,9 @@ define([], function () {
                                 "LoanDetails": {
                                     "orderNo": 1,
                                     "readonly": true
+                                },
+                                "LoanSanction":{
+                                    "readonly":true,
                                 },
                                 "LoanDetails.frequency": {
                                     "enumCode": "loan_product_frequency"
@@ -603,6 +610,9 @@ define([], function () {
                                     "orderNo": 1,
                                     "readonly": true
                                 },
+                                "LoanSanction":{
+                                    "readonly":true
+                                },
                                 "LoanDetails.frequency": {
                                     "enumCode": "loan_product_frequency"
                                 },
@@ -641,6 +651,9 @@ define([], function () {
                                 "LoanDetails": {
                                     "orderNo": 1,
                                     "readonly": true
+                                },
+                                "LoanSanction":{
+                                    "readonly":true
                                 },
                                 "LoanDetails.frequency": {
                                     "enumCode": "loan_product_frequency"

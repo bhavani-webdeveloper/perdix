@@ -5,11 +5,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
         return {
             pageUID: "kgfs.customer.IndividualEnrollment",
             pageType: "Engine",
-            dependencies: ["$log", "$state", "$stateParams", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper",
+            dependencies: ["$log","$state", "$stateParams", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper",
                 "$q", "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries",
                 "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository"],
 
-            $pageFn: function ($log, $state, $stateParams, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q,
+            $pageFn: function ($log,$state, $stateParams, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q,
                 PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch,
                 BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository) {
 
@@ -64,6 +64,39 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                     }
                     return model.loanProcess.loanAccount;
                 };
+                var coApplicantLovResolver = function(familyMembers){
+                    var deffered = $q.defer();
+                    var out=[];
+                    var atleastOne = false;
+                    var promiseCount=0; 
+                    for (var i=0;i<familyMembers.length;i++){
+                        if(familyMembers[i].enrolledUrnNo !=null){
+                            atleastOne = true;
+                            promiseCount = promiseCount+1;
+                            (function(item){
+                                var temp = Enrollment.query({
+                                    urnNo: familyMembers[item].enrolledUrnNo}).$promise;
+                                temp.then(function(resp){
+                                    promiseCount = promiseCount -1;
+                                    out.push({
+                                          id:resp[0].id,
+                                          firstName:resp[0].firstName,
+                                          urnNo:resp[0].urnNo
+                                    })
+                                    if(promiseCount == 0){
+                                        deffered.resolve(out);
+                                    }
+                                })
+                                
+                            })(i)
+                        }
+                    }
+                    if(atleastOne == false){
+                        deffered.resolve(out);
+                    }
+                    return deffered.promise;            
+                    
+                }
 
 
                 var configFile = function () {
@@ -1714,40 +1747,51 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                                                     searchHelper: formHelper,
                                                     search: function (inputModel, form, model, context) {
                                                         var out = [];
+                                                        var customerId;
                                                         if (!model.customer.familyMembers) {
                                                             return out;
-                                                        }
-                
-                                                        for (var i = 0; i < model.customer.familyMembers.length; i++) {
-                                                            out.push({
-                                                                name: model.customer.familyMembers[i].familyMemberFirstName,
-                                                                urnNo: model.customer.familyMembers[i].enrolledUrnNo,
-                                                                id: model.customer.familyMembers[i].customerId,
+                                                        }  
+                                                        if(model.coApplicantGuarantor[context.arrayIndex].relation == "Co-Applicant"){
+                                                            var defer=$q.defer();
+                                                              
+                                                            var result = coApplicantLovResolver(model.customer.familyMembers);
+                                                            result.then(function(value){
+                                                                var out = {
+                                                                    body:value
+                                                                }
+                                                                defer.resolve(out);
                                                             })
+                                                            return defer.promise;
+                                                            // var out= coApplicantLovResolver(model.customer.familyMembers).$promise;
+                                                            // return out;     
                                                         }
-                                                        return $q.resolve({
-                                                            headers: {
-                                                                "x-total-count": out.length
-                                                            },
-                                                            body: out
-                                                        });
+                                                        else{
+                                                            var promise = Enrollment.search({
+                                                                'branchName': inputModel.branch || SessionStore.getBranch(),
+                                                                'firstName': inputModel.firstName,
+                                                                'centreId': inputModel.centreId,
+                                                                'customerType': "individual",
+
+                                                            }).$promise;
+                                                            return promise;
+                                                        }
                                                     },
                                                     onSelect: function (valueObj, model, context) {
                                                         //add to the witnees array.
-                                                        model.coApplicantGuarantor[context.arrayIndex].firstName = valueObj.name;
-                                                        model.coApplicantGuarantor[context.arrayIndex].urn = valueObj.urnNo;
+                                                        model.coApplicantGuarantor[context.arrayIndex].firstName = valueObj.firstName;
+                                                        model.coApplicantGuarantor[context.arrayIndex].urnNo = valueObj.urnNo;
                                                         model.coApplicantGuarantor[context.arrayIndex].customerId = valueObj.id;
                                                     },
                                                     getListDisplayItem: function (item, index) {
                                                         return [
-                                                            item.name
+                                                            item.firstName
                                                         ];
                                                     }
 
                                                 },
                                                 {
                                                     "title":"URN_NO",
-                                                    "key":"coApplicantGuarantor[].urn",
+                                                    "key":"coApplicantGuarantor[].urnNo",
                                                     "readonly":true,
                                                 }
                                             ]

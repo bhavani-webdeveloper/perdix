@@ -157,10 +157,29 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     loanProcess: loanProcess        
                                 };
                                 if (_.hasIn(loanAccount, 'coApplicantsEnrolmentProcesses')) {
-                                    newBundle.coApplicantGuarantor = newBundle.coApplicantGuarantor.concat(loanProcess.coApplicantsEnrolmentProcesses);
+                                    var temp = [];
+                                    for (var i =0;i<loanAccount.coApplicantsEnrolmentProcesses.length;i++){
+                                        temp.push({
+                                            customerId:loanAccount.coApplicantsEnrolmentProcesses[0].customer.id,
+                                            firstName:loanAccount.coApplicantsEnrolmentProcesses[0].customer.firstName,
+                                            urnNo: loanAccount.coApplicantsEnrolmentProcesses[0].customer.urnNo,
+                                            relation:"Co-Applicant"
+                                        });
+                                    }
+                                    newBundle.coApplicantGuarantor = newBundle.coApplicantGuarantor.concat(temp);
                                 }
                                 if (_.hasIn(loanAccount, 'guarantorsEnrolmentProcesses')) {
-                                    newBundle.coApplicantGuarantor = newBundle.coApplicantGuarantor.concat(loanProcess.guarantorsEnrolmentProcesses);
+                                    var temp = [];
+                                    for (var i =0;i<loanAccount.guarantorsEnrolmentProcesses.length;i++){
+                                        
+                                        temp.push({
+                                            customerId:loanAccount.guarantorsEnrolmentProcesses[0].customer.id,
+                                            firstName:loanAccount.guarantorsEnrolmentProcesses[0].customer.firstName,
+                                            urnNo: loanAccount.guarantorsEnrolmentProcesses[0].customer.urnNo,
+                                            relation:"Guarantor"
+                                        });
+                                    }
+                                    newBundle.coApplicantGuarantor = newBundle.coApplicantGuarantor.concat(temp);
                                 }
 
 
