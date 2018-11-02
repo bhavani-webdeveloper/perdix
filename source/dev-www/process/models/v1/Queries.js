@@ -44,6 +44,136 @@ irf.models.factory('Queries', [
             }, deferred.reject);
             return deferred.promise;
         };
+          resource.searchMachineDescription = function() {
+            var deferred = $q.defer();
+            var request = {}
+            resource.getResult("machineDescription.list",request).then(function(records) {
+                if (records && records.results) {
+                    var result = {
+                        headers: {
+                            "x-total-count": records.results.length
+                        },
+                        body: records.results
+                    };
+                    deferred.resolve(result);
+                }
+            }, deferred.reject);
+            return deferred.promise;
+        };
+
+        resource.searchMachineName = function(machineDescription) {
+            var deferred = $q.defer();
+            var request = {
+                "machineDescription": machineDescription
+            };
+            resource.getResult("machineName.list", request).then(function(records) {
+                if (records && records.results) {
+                    var result = {
+                        headers: {
+                            "x-total-count": records.results.length
+                        },
+                        body: records.results
+                    };
+                    deferred.resolve(result);
+                }
+            }, deferred.reject);
+            return deferred.promise;
+        };
+
+         resource.searchMachineType = function(machineDescription, machineName) {
+            var deferred = $q.defer();
+            var request = {
+                "machineDescription": machineDescription,
+                "machineName" : machineName
+            };
+            resource.getResult("machineType.list", request).then(function(records) {
+                if (records && records.results) {
+                    var result = {
+                        headers: {
+                            "x-total-count": records.results.length
+                        },
+                        body: records.results
+                    };
+                    deferred.resolve(result);
+                }
+            }, deferred.reject);
+            return deferred.promise;
+        };
+        resource.searchMachineWorkProcess = function(machineDescription, machineName, machineType) {
+            var deferred = $q.defer();
+            var request = {
+                "machineDescription": machineDescription,
+                "machineName" : machineName,
+                "machineType": machineType
+            };
+            resource.getResult("machineWorkProcess.list", request).then(function(records) {
+                if (records && records.results) {
+                    var result = {
+                        headers: {
+                            "x-total-count": records.results.length
+                        },
+                        body: records.results
+                    };
+                    deferred.resolve(result);
+                }
+            }, deferred.reject);
+            return deferred.promise;
+        };
+        resource.searchDepreciation = function(machineDescription) {
+            var deferred = $q.defer();
+            var request = machineDescription;
+            
+            resource.getResult("machineDepreciation.list", request).then(function(records) {
+                if (records && records.results) {
+                    var result = {
+                        headers: {
+                            "x-total-count": records.results.length
+                        },
+                        body: records.results
+                    };
+                    deferred.resolve(result);
+                }
+            }, deferred.reject);
+            return deferred.promise;
+        };
+         resource.searchMachineMaster = function() {
+            var deferred = $q.defer();
+            var request = {};
+            
+            resource.getResult("machineMaster.list", request).then(function(records) {
+                if (records && records.results) {
+                    var result = {
+                        headers: {
+                            "x-total-count": records.results.length
+                        },
+                        body: records.results
+                    };
+                    deferred.resolve(result);
+                }
+            }, deferred.reject);
+            return deferred.promise;
+        };
+        resource.searchMachineModel = function(machineDescription, machineName,machineType,workProcess) {
+            var deferred = $q.defer();
+            var request = {
+                "machineDescription": machineDescription,
+                "machineName" : machineName,
+                "machineType": machineType,
+                "workProcess": workProcess
+            };
+            resource.getResult("machineModel.list", request).then(function(records) {
+                if (records && records.results) {
+                    var result = {
+                        headers: {
+                            "x-total-count": records.results.length
+                        },
+                        body: records.results
+                    };
+                    deferred.resolve(result);
+                }
+            }, deferred.reject);
+            return deferred.promise;
+        };
 
         resource.searchPincodeMaster = function(pincode, district, state, division, region, taluk) {
             var deferred = $q.defer();
