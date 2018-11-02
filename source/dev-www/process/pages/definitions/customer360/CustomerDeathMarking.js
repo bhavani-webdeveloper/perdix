@@ -11,15 +11,16 @@ irf.pageCollection.factory(irf.page("customer360.CustomerDeathMarking"), ["$log"
                 PageHelper.showLoader();              
                     var defered = $q.defer();                     
                 model.deathMarking = {}; 
-                 var customerId = $stateParams.pageId.split(':');
+                 var customerId = $stateParams.pageId.split(':')[0];
                 Enrollment.getCustomerById({
                     id: customerId
                 }).$promise.then(function(resp) {
                                   
                     model.deathMarking.familyMemberName = resp.firstName;
-                    model.deathMarking.familyMembers = resp.familyMembers;                    
+                    model.deathMarking.familyMembers = resp.familyMembers;
+                    if(resp.familyMembers && resp.familyMembers.length) {
                         for(var i=0; i<resp.familyMembers.length; i++){
-                            if(resp.familyMembers[i].relationShip == "self"){                               
+                            if((resp.familyMembers[i].relationShip).toUpperCase() == "SELF"){                               
                                 model.deathMarking.dateOfBirth = resp.familyMembers[i].dateOfBirth;
                                 model.deathMarking.familyMemberRelation = resp.familyMembers[i].relationShip;
                                 model.deathMarking.familyMemberId = resp.familyMembers[i].familySequenceId;
@@ -45,7 +46,9 @@ irf.pageCollection.factory(irf.page("customer360.CustomerDeathMarking"), ["$log"
                                     PageHelper.hideLoader();
                                 });                
                             }                           
-                        }      
+                        } 
+                    }                   
+                    PageHelper.hideLoader();         
                 }, function(errResp) {
                     PageHelper.showErrors(errResp);
                     PageHelper.hideLoader();
