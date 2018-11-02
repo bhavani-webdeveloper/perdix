@@ -630,7 +630,6 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
                             type: "select",
                             condition: "model.siteCode == 'IREPDhan'",
                             titleMap: {
-                                "Individual": "Individual",
                                 "Enterprise": "Individual and Enterprise"
                             },
 
