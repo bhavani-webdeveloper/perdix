@@ -2,9 +2,7 @@ import {IPolicy} from "../../../shared/IPolicy";
 import {LoanProcess} from "../LoanProcess";
 import {Observable} from "@reactivex/rxjs";
 import LoanCentre = require("../LoanCentre");
-/**
- * Created by shahalpk on 11/01/18.
- */
+import AngularResourceService = require("../../../../infra/api/AngularResourceService");
 
 export class LoanVirtualFieldsPolicy extends IPolicy<LoanProcess> {
 
@@ -24,6 +22,8 @@ export class LoanVirtualFieldsPolicy extends IPolicy<LoanProcess> {
         		loanProcess.loanAccount.vExpectedProcessingFee = Math.round(((loanProcess.loanAccount.expectedProcessingFeePercentage / 100) * loanProcess.loanAccount.loanAmountRequested)* 100) / 100;
 	        }
         }
+
+        let Queries = AngularResourceService.getInstance().getNGService("Queries");
 
         return Observable.of(loanProcess);
     }
