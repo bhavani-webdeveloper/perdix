@@ -55,17 +55,15 @@ function($resource,$httpParamSerializer,BASE_URL, $q, SessionStore, formHelper, 
     resource.getCentresForUser = function(branchId, userId) {
         var deferred = $q.defer();
         resource.getCentresForBranch({"branchId":branchId}).$promise.then(function(response) {
-            if (response && response.length) {
-                var centres = [];
+            var centres = [];
+            if (response && response.length>=0) {
                 for (var i = 0; i < response.length; i++) {
-                    if (response[i].employee == userId) {
+                    if (response[i].employee == userId && response[i].status != 'INACTIVE') {
                         centres.push(_.clone(response[i]));
                     }
                 };
-                deferred.resolve(centres);
-            } else {
-                deferred.reject(response);
             }
+            deferred.resolve(centres);
         }, deferred.reject);
         return deferred.promise;
     },
