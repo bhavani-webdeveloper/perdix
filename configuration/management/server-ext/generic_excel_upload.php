@@ -6,6 +6,8 @@ $response = get_response_obj();
 
 $queryString = $_SERVER['QUERY_STRING'];
 $key = $_GET["key"];
+$isTruncate = $_GET["isTruncate"];
+
 
 try {
     // reading the json
@@ -46,6 +48,9 @@ try {
 
     DB::beginTransaction();
     try {
+        if ($isTruncate) {
+            DB::delete('DELETE FROM '. $tableName);
+        }
         for ($n = 0; $n < sizeOf($rowData); $n++) {
             $values = [];
             for ($x = 0; $x < sizeOf($jsonColumns); $x++) {

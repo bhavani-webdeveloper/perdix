@@ -87,7 +87,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "FamilyDetails": {
                                     "readonly": true,
-                                    "title": "HOUSEHOLD_DETAILS"
+                                    "title": "T_FAMILY_DETAILS"
                                 },
                                 "Liabilities": {
                                     "readonly": true
@@ -126,7 +126,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "FamilyDetails": {
                                     "readonly": true,
-                                    "title": "HOUSEHOLD_DETAILS"
+                                    "title": "T_FAMILY_DETAILS"
                                 },
                                 "Liabilities": {
                                     "readonly": true
@@ -164,7 +164,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "FamilyDetails": {
                                     "readonly": true,
-                                    "title": "HOUSEHOLD_DETAILS"
+                                    "title": "T_FAMILY_DETAILS"
                                 },
                                 "Liabilities": {
                                     "readonly": true
@@ -192,7 +192,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "FieldInvestigation1": {
                             "overrides": {
                                 "FamilyDetails": {
-                                    "title": "HOUSEHOLD_DETAILS"
+                                    "title": "T_FAMILY_DETAILS"
                                 },
                                 "KYC.customerId": {
                                     "readonly": true
@@ -206,7 +206,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "FieldInvestigation2": {
                             "overrides": {
                                 "FamilyDetails": {
-                                    "title": "HOUSEHOLD_DETAILS"
+                                    "title": "T_FAMILY_DETAILS"
                                 },
                                 "KYC.customerId": {
                                     "readonly": true
@@ -220,7 +220,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "FieldInvestigation3": {
                             "overrides": {
                                 "FamilyDetails": {
-                                    "title": "HOUSEHOLD_DETAILS"
+                                    "title": "T_FAMILY_DETAILS"
                                 },
                                 "KYC.customerId": {
                                     "readonly": true
@@ -276,7 +276,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "FamilyDetails": {
                                     "readonly": true,
-                                    "title": "HOUSEHOLD_DETAILS"
+                                    "title": "T_FAMILY_DETAILS"
                                 },
                                 "Liabilities": {
                                     "readonly": true
@@ -320,7 +320,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "FamilyDetails": {
                                     "readonly": true,
-                                    "title": "HOUSEHOLD_DETAILS"
+                                    "title": "T_FAMILY_DETAILS"
                                 },
                                 "Liabilities": {
                                     "readonly": true
@@ -364,7 +364,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "FamilyDetails": {
                                     "readonly": true,
-                                    "title": "HOUSEHOLD_DETAILS"
+                                    "title": "T_FAMILY_DETAILS"
                                 },
                                 "Liabilities": {
                                     "readonly": true
@@ -408,7 +408,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "FamilyDetails": {
                                     "readonly": true,
-                                    "title": "HOUSEHOLD_DETAILS"
+                                    "title": "T_FAMILY_DETAILS"
                                 },
                                 "Liabilities": {
                                     "readonly": true
@@ -454,7 +454,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "FamilyDetails": {
                                     "readonly": true,
-                                    "title": "HOUSEHOLD_DETAILS"
+                                    "title": "T_FAMILY_DETAILS"
                                 },
                                 "Liabilities": {
                                     "readonly": true
@@ -498,7 +498,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "FamilyDetails": {
                                     "readonly": true,
-                                    "title": "HOUSEHOLD_DETAILS"
+                                    "title": "T_FAMILY_DETAILS"
                                 },
                                 "Liabilities": {
                                     "readonly": true
@@ -542,7 +542,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "FamilyDetails": {
                                     "readonly": true,
-                                    "title": "HOUSEHOLD_DETAILS"
+                                    "title": "T_FAMILY_DETAILS"
                                 },
                                 "Liabilities": {
                                     "readonly": true
@@ -586,7 +586,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "FamilyDetails": {
                                     "readonly": true,
-                                    "title": "HOUSEHOLD_DETAILS"
+                                    "title": "T_FAMILY_DETAILS"
                                 },
                                 "Liabilities": {
                                     "readonly": true
@@ -630,7 +630,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "FamilyDetails": {
                                     "readonly": true,
-                                    "title": "HOUSEHOLD_DETAILS"
+                                    "title": "T_FAMILY_DETAILS"
                                 },
                                 "Liabilities": {
                                     "readonly": true
@@ -674,7 +674,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "FamilyDetails": {
                                     "readonly": true,
-                                    "title": "HOUSEHOLD_DETAILS"
+                                    "title": "T_FAMILY_DETAILS"
                                 },
                                 "Liabilities": {
                                     "readonly": true
@@ -718,7 +718,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "FamilyDetails": {
                                     "readonly": true,
-                                    "title": "HOUSEHOLD_DETAILS"
+                                    "title": "T_FAMILY_DETAILS"
                                 },
                                 "Liabilities": {
                                     "readonly": true
@@ -762,7 +762,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "FamilyDetails": {
                                     "readonly": true,
-                                    "title": "HOUSEHOLD_DETAILS"
+                                    "title": "T_FAMILY_DETAILS"
                                 },
                                 "Liabilities": {
                                     "readonly": true
@@ -806,7 +806,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "FamilyDetails": {
                                     "readonly": true,
-                                    "title": "HOUSEHOLD_DETAILS"
+                                    "title": "T_FAMILY_DETAILS"
                                 },
                                 "Liabilities": {
                                     "readonly": true
@@ -858,7 +858,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "FamilyDetails": {
                                     "readonly": true,
-                                    "title": "HOUSEHOLD_DETAILS"
+                                    "title": "T_FAMILY_DETAILS"
                                 },
                                 "IndividualFinancials":{
                                     "readonly": true

@@ -8,13 +8,20 @@ irf.models.factory('ExcelUpload', [
             getLeadSchema: {
                 method: 'GET',
                 url: 'process/schemas/Leadgeneration.json'
+            },
+            getExcelUploadJson:{
+
+                method: 'GET',
+               // url: managementUrl + '/server-ext/excel_upload_definition.json'
+                url: 'process/schemas/excel_upload_definition.json'
             }
+
         });
 
-        resource.ExcelFileUpload = function(file, progress, key) {
+        resource.ExcelFileUpload = function(file, progress, key, isTruncate) {
             var deferred = $q.defer();
             Upload.upload({
-                url: managementUrl + "/server-ext/generic_excel_upload.php?key=" + key,
+                url: managementUrl + "/server-ext/generic_excel_upload.php?key=" + key + '&isTruncate=' +  isTruncate,
                 data: {
                     "file": file
                 }

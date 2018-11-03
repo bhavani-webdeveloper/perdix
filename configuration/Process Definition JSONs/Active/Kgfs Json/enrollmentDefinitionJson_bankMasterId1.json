@@ -931,7 +931,7 @@
             "type": "string",
             "format": "date",
             "captureStages": [
-              "Stage01"
+              "Stage01","Completed"
             ]
           },
           "religion": {

@@ -253,13 +253,14 @@ irf.pageCollection.factory(irf.page("bi.BIReports"), ["$log", "RolesPages", "BIR
                             });
                             var link = document.getElementById("reportdownloader");
                             link.href = window.URL.createObjectURL(blob);
-                            link.click();
+                            
                             if (headers["content-disposition"] && headers["content-disposition"].split('filename=').length == 2) {
                                 var filename = headers["content-disposition"].split('filename=')[1];
                                 link.download = filename.replace(/"/g, "");
                             } else {
                                 link.download = SessionStore.getLoginname() + '_' + model.selectedReport.name + '_' + moment().format('YYYYMMDDhhmmss');
-                            }                            
+                            }           
+                            link.click();                 
                             irfProgressMessage.pop("Reports", "Report downloaded.", 5000);
                         }, function(err) {
                             var decodedString = String.fromCharCode.apply(null, new Uint8Array(err.data));

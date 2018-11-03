@@ -102,6 +102,36 @@
                         }
                     }
                 },
+                "fixedAssetsMachinaries": {
+                    "type": "array",
+                    "title": "FIXED_ASSET_MACHINARIES",
+                    "items": {
+                        "type":"object",
+                        "properties": {
+                            "machineDescription": {
+                                "type": ["string","null"],
+                                "title": "MACHINE_DESCRIPTION"
+                                
+                            },
+                            "manufacturerName": {
+                                "type": ["string","null"],
+                                "title": "MANUFACTURER_NAME"
+                            },
+                            "machineType": {
+                                "type": ["string","null"],
+                                "title": "MACHINE_TYPE"
+                            },
+                            "workProcess": {
+                                "type": ["string","null"],
+                                "title": "WORK_PROCESS"
+                            },
+                            "model": {
+                                "type": ["string","null"],
+                                "title": "MODEL"
+                            }
+                        }
+                    }
+                },
                 "addressProof": {
                     "type": ["string","null"],
                     "title": "ADDRESS_PROOF",

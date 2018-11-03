@@ -34,6 +34,25 @@ define([], function() {
                 }
             };
 
+            var isVehcileDetailsSaved = function(model) {
+                var failed = false;
+                var pageClassList = ['vehicle-details'];
+
+                BundleManager.broadcastSchemaFormValidate(pageClassList);
+                vehicleValidityState = BundleManager.getBundlePagesFormValidity(pageClassList);
+
+                keys = Object.keys(vehicleValidityState);
+                for(var idx = 0; idx < keys.length; idx++) {
+                    if(vehicleValidityState[keys[idx]].invalid){
+                        PageHelper.showProgress("LoanRequest","Some of the mandatory information of " + $filter('translate')(keys[idx].split("@")[0]) + " is not filled and submitted." , 5000);
+                        failed = true;
+                        break;
+                    }
+                }
+                BundleManager.resetBundlePagesFormState(pageClassList);
+                return failed;
+            }
+
             var excelRate = function(nper, pmt, pv, fv, type, guess) {
                 // Sets default values for missing parameters
                 fv = typeof fv !== 'undefined' ? fv : 0;
@@ -1003,7 +1022,9 @@ define([], function() {
                                                     var frequency;
                                                     var frequencyRequested;
                                                     var advanceEmi = model.loanAccount.estimatedEmi;
-                                                    processFee = (model.loanAccount.expectedProcessingFeePercentage / 100) * model.loanAccount.loanAmountRequested;
+
+                                                    processFee = Math.round(((model.loanAccount.expectedProcessingFeePercentage / 100) * model.loanAccount.loanAmountRequested)* 100) / 100;
+                                                    
                                                     dsaPayout = (model.loanAccount.dsaPayout / 100) * model.loanAccount.loanAmountRequested;
                                                     frankingCharge = model.loanAccount.fee3;
                                                     model.loanAccount.vExpectedProcessingFee = processFee;
@@ -1109,7 +1130,7 @@ define([], function() {
 
                                                     model.loanAccount.vProcessingFee = null;
                                                     if(model.loanAccount.loanAmount && model.loanAccount.processingFeePercentage) {
-                                                        model.loanAccount.vProcessingFee = (model.loanAccount.processingFeePercentage / 100) * model.loanAccount.loanAmount;
+                                                        model.loanAccount.vProcessingFee = Math.round(((model.loanAccount.processingFeePercentage / 100) * model.loanAccount.loanAmount)* 100) / 100;
                                                     }
                                                 } catch (e){
                                                     console.log(e);
@@ -1681,6 +1702,10 @@ define([], function() {
                     proceed: function(model, formCtrl, form, $event) {
                         if (PageHelper.isFormInvalid(formCtrl)) {
                             return false;
+                        }
+
+                        if(model.loanProcess.loanAccount.currentStage == 'Screening' && isVehcileDetailsSaved(model)){
+                            return;
                         }
 
                         if(model.loanProcess.loanAccount.currentStage=='TeleVerification' && (model.loanProcess.loanAccount.loanPurpose1 == 'Purchase - Used Vehicle' || model.loanProcess.loanAccount.loanPurpose1 == 'Refinance') && (!_.hasIn(model.loanProcess.loanAccount.vehicleLoanDetails, 'vehicleValuationDoneAt') || model.loanProcess.loanAccount.vehicleLoanDetails.vehicleValuationDoneAt === null)) {

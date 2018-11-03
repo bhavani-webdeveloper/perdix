@@ -1443,7 +1443,6 @@
         "maxItems": null,
         "items": null,
         "required": [
-          "panNo",
           "addressProofNo",
           "addressProof",
           "identityProofNo"

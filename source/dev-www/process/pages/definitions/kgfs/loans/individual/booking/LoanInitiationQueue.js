@@ -48,10 +48,6 @@ define({
                             "title": "CUSTOMER_ID",
                             "type": "number"
                         },
-                        "accountNumber": {
-                            "title": "ACCOUNT_NUMBER",
-                            "type": "string"
-                        }
                     },
                     "required": ["stage"]
                 },
@@ -66,7 +62,6 @@ define({
                         'branchId': searchOptions.branch,
                         'centreCode': searchOptions.centre,
                         'customerId': searchOptions.customerId,
-                        'accountNumber': searchOptions.accountNumber,
                         'page': pageOpts.pageNo
                     }).$promise;
                     return promise;
@@ -99,7 +94,6 @@ define({
                             "{{'LOAN_AMOUNT'|translate}} : " + item.loanAmount,
                             "{{'LOAN_TYPE'|translate}} : " + item.loanType,
                             "{{'PARTNER_CODE'|translate}} : " + item.partnerCode,
-                            "{{'PROCESS_TYPE'|translate}} : " + item.processType
 
                         ]
                     },
@@ -115,9 +109,13 @@ define({
 							title: 'LOAN_ID',
 							data: 'id'
                         }, {
-							title: 'ACCOUNT_NUMBER',
-							data: 'accountNumber'
-                        }, 
+							title: 'CUSTOMER_ID',
+							data: 'customerId'
+                        },
+                        {
+                            title: 'URN_NO',
+                            data: 'urnNo'
+                        },
                         {
                             title: 'ENTITY_NAME',
                             data: 'customerName'
