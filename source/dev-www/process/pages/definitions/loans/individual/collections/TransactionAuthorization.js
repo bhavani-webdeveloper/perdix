@@ -482,7 +482,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                     sendBack: function(model, form, formName){
                         $log.info("Inside sendBack()");
                         if(model._transAuth.transactionName == 'PenalInterestPayment'){
-                            model._transAuth.bookedNotDuePenalInterest= model.loanAccount.bookedNotDuePenalInterest ||0;
+                            model._transAuth.bookedNotDuePenalInterest= model._transAuth.repaymentAmount ||0;
                         }
                         var loanCollection = _.cloneDeep(model._transAuth);
                         var reqParams = {};
@@ -529,7 +529,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                         }
 
                         if(model._transAuth.transactionName == 'PenalInterestPayment'){
-                            model._transAuth.bookedNotDuePenalInterest= model.loanAccount.bookedNotDuePenalInterest ||0;
+                            model._transAuth.bookedNotDuePenalInterest= model._transAuth.repaymentAmount || 0;
                         }
 
                         if(model._transAuth.transactionName == 'Fee Payment'){
