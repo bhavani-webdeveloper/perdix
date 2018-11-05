@@ -10,13 +10,14 @@ define({
             Enrollment.EnrollmentById({ id: result.id }, function (resp, header) {
                 PageHelper.hideLoader();
                 model.customer = _.cloneDeep(resp);
-                
+
 
                 model.customer.isGpsChanged = "NO"; //flag for gps updation
                 model.customer.isFingerPrintChanged = "NO"; //flag for updation of finger prints
                 model.customer.biometricCaptured = "Captured";
                 model.customer.fingerPrintUpdated = "Updated"; //flag for displaying the updated finger prints
                 model.customer.biometricNotCaptured = "Not Captured";
+                model.customer.isPhotoImageIdChanged = "NO";
                 model.customer.newLeftHandThumpImageId = model.customer.leftHandThumpImageId;
                 model.customer.newLeftHandIndexImageId = model.customer.leftHandIndexImageId;
                 model.customer.newLeftHandMiddleImageId = model.customer.leftHandMiddleImageId;
@@ -56,6 +57,13 @@ define({
                     model.customer.newLatitude = model.UpdatedWorkflow.customer.latitude;
                     model.customer.newLongitude = model.UpdatedWorkflow.customer.longitude;
                 }
+                if(model.customer.photoImageId == model.UpdatedWorkflow.customer.photoImageId ){
+                    model.customer.isPhotoImageIdChanged = "NO";
+                }
+                else{
+                    model.customer.isPhotoImageIdChanged = "YES";
+                    model.customer.newPhotoImageId = model.UpdatedWorkflow.customer.photoImageId;
+                }
                 if (model.customer.leftHandThumpImageId == model.UpdatedWorkflow.customer.leftHandThumpImageId &&
                     model.customer.leftHandIndexImageId == model.UpdatedWorkflow.customer.leftHandIndexImageId &&
                     model.customer.leftHandMiddleImageId == model.UpdatedWorkflow.customer.leftHandMiddleImageId &&
@@ -88,19 +96,6 @@ define({
                 PageHelper.hideLoader();
             });
         }
-
-        var overridesFields = function (bundlePageObj) {
-            return {};
-        }
-
-        var getIncludes = function (model) {
-            return [
-            ];
-        }
-        var configFile = function () {
-            return {};
-        }
-
         return {
             "name": "GPS_FINGERPRINT_APPROVAL",
             "type": "schema-form",
@@ -147,6 +142,34 @@ define({
                             key: "customer.firstName",
                             title: "FULL_NAME",
                             readonly: true
+                        },
+                        {
+                            key: "customer.photoImageId",
+                            title: "CUSTOMER_PHOTO",
+                            readonly: true,
+                            type: "file",
+                            "fileType": "image/*",
+                            "category": "CustomerEnrollment",
+                            "subCategory": "PHOTO"
+                        }, {
+                            key: "customer.isPhotoImageIdChanged",
+                            readonly: true,
+                            type: "radios",
+                            title: "UPDATE_PHOTO",
+                            "titleMap": {
+                                "YES": "YES",
+                                "NO": "NO"
+                            }
+                        }, {
+                            condition: "model.customer.isPhotoImageIdChanged == 'YES'",
+                            readonly: true,
+                            key: "customer.newPhotoImageId",
+                            title: "CUSTOMER_PHOTO",
+                            required: true,
+                            type: "file",
+                            "fileType": "image/*",
+                            "category": "CustomerEnrollment",
+                            "subCategory": "PHOTO"
                         },
                         {
                             type: "fieldset",
@@ -371,15 +394,15 @@ define({
                         }
                     ]
 
-                },{
+                }, {
                     "type": "box",
                     colClass: "col-sm-12",
                     "title": "REVIEW",
                     "items": [
                         {
                             "title": "COMMENTS",
-                            "key" : "UpdatedWorkflow.remarks",
-                            readonly : true
+                            "key": "UpdatedWorkflow.remarks",
+                            readonly: true
                         },
                         {
                             key: "action",
@@ -415,84 +438,107 @@ define({
                         "type": "object",
                         "properties": {
                             "id": {
-                                "type": "number",
-                                "title": "CUSTOMER_ID"
+                                "type": ["number","null"],
+                                "title": "CUSTOMER_ID",
+                                "captureStages": ["Init"]
                             },
                             "urnNo": {
-                                "type": "string",
-                                "title": "URNNO"
+                                "type": ["string","null"],
+                                "title": "URNNO",
+                                "captureStages": ["Init"]
                             },
                             "firstName": {
-                                "type": "string",
-                                "title": "FIRST_NAME"
+                                "type": ["string","null"],
+                                "title": "FIRST_NAME",
+                                "captureStages": ["Init"]
                             },
                             "branchName": {
-                                "type": "string",
-                                "title": "BRANCH_NAME"
+                                "type": ["string","null"],
+                                "title": "BRANCH_NAME",
+                                "captureStages": ["Init"]
                             },
                             "latitude": {
                                 "title": "GPS_LOCATION",
                                 "type": "geotag",
+                                "captureStages": ["Init"]
+                            },
+                            "photoImageId": {
+                                "title": "CUSTOMER_PHOTO",
+                                "type": "file",
+                                "fileType": "image/*",
+                                "category": "CustomerEnrollment",
+                                "subCategory": "PHOTO",
+                                "captureStages": ["Init"]
                             },
                             "leftHandThumpImageId": {
                                 "type": ["string", "null"],
                                 "title": "FINGERPRINT",
                                 "category": "CustomerEnrollment",
-                                "subCategory": "FINGERPRINT"
+                                "subCategory": "FINGERPRINT",
+                                "captureStages": ["Init"]
                             },
                             "leftHandIndexImageId": {
                                 "type": ["string", "null"],
                                 "title": "FINGERPRINT",
                                 "category": "CustomerEnrollment",
-                                "subCategory": "FINGERPRINT"
+                                "subCategory": "FINGERPRINT",
+                                "captureStages": ["Init"]
                             },
                             "leftHandMiddleImageId": {
                                 "type": ["string", "null"],
                                 "title": "FINGERPRINT",
                                 "category": "CustomerEnrollment",
-                                "subCategory": "FINGERPRINT"
+                                "subCategory": "FINGERPRINT",
+                                "captureStages": ["Init"]
                             },
                             "leftHandRingImageId": {
                                 "type": ["string", "null"],
                                 "title": "FINGERPRINT",
                                 "category": "CustomerEnrollment",
-                                "subCategory": "FINGERPRINT"
+                                "subCategory": "FINGERPRINT",
+                                "captureStages": ["Init"]
                             },
                             "leftHandSmallImageId": {
                                 "type": ["string", "null"],
                                 "title": "FINGERPRINT",
                                 "category": "CustomerEnrollment",
-                                "subCategory": "FINGERPRINT"
+                                "subCategory": "FINGERPRINT",
+                                "captureStages": ["Init"]
                             },
                             "rightHandThumpImageId": {
                                 "type": ["string", "null"],
                                 "title": "FINGERPRINT",
                                 "category": "CustomerEnrollment",
-                                "subCategory": "FINGERPRINT"
+                                "subCategory": "FINGERPRINT",
+                                "captureStages": ["Init"]
                             },
                             "rightHandIndexImageId": {
                                 "type": ["string", "null"],
                                 "title": "FINGERPRINT",
                                 "category": "CustomerEnrollment",
-                                "subCategory": "FINGERPRINT"
+                                "subCategory": "FINGERPRINT",
+                                "captureStages": ["Init"]
                             },
                             "rightHandMiddleImageId": {
                                 "type": ["string", "null"],
                                 "title": "FINGERPRINT",
                                 "category": "CustomerEnrollment",
-                                "subCategory": "FINGERPRINT"
+                                "subCategory": "FINGERPRINT",
+                                "captureStages": ["Init"]
                             },
                             "rightHandRingImageId": {
                                 "type": ["string", "null"],
                                 "title": "FINGERPRINT",
                                 "category": "CustomerEnrollment",
-                                "subCategory": "FINGERPRINT"
+                                "subCategory": "FINGERPRINT",
+                                "captureStages": ["Init"]
                             },
                             "rightHandSmallImageId": {
                                 "type": ["string", "null"],
                                 "title": "FINGERPRINT",
                                 "category": "CustomerEnrollment",
-                                "subCategory": "FINGERPRINT"
+                                "subCategory": "FINGERPRINT",
+                                "captureStages": ["Init"]
                             },
 
                         }
@@ -514,6 +560,9 @@ define({
                         if (model.customer.isGpsChanged == "YES") {
                             updatedModel.customer.latitude = updatedModel.customer.newLatitude;
                             updatedModel.customer.longitude = updatedModel.customer.newLongitude;
+                        }
+                        if(model.customer.isPhotoImageIdChanged == "YES"){
+                            updatedModel.customer.photoImageId = updatedModel.customer.newPhotoImageId;
                         }
                         if (model.customer.isFingerPrintChanged == "YES") {
                             updatedModel.customer.leftHandThumpImageId = updatedModel.customer.newLeftHandThumpImageId;
@@ -538,9 +587,11 @@ define({
                             "referenceKey": updatedModel.workflow.customer.id,
                         };
                         if (updatedModel.action == "SENDBACK")
-                            reqData.sendbackStage = "Init"
+                            reqData.sendbackStage = "Init";
 
                         Workflow.save(reqData, function (res, headers) {
+                            console.log("this is only the thing");
+                            console.log(reqData);
                             PageHelper.hideLoader();
                             irfProgressMessage.pop('cust-update', 'Done. Customer Updated, ID : ' + res.customer.id, 2000);
                             irfNavigator.goBack();

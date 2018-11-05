@@ -83,6 +83,7 @@
                 "Page/Engine/management.Pages",
                 "Page/Engine/management.UserRoles",
                 "Page/Engine/management.RolesPages",
+                "Page/Engine/management.AdminScreen",
                 "Page/Engine/management.RolesReports",
                 "Page/Engine/management.ScoreMaintenance",
                 "Page/Adhoc/management.product.LoanProductDashboard",

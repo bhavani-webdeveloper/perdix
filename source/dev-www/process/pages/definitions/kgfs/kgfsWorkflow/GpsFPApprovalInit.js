@@ -10,13 +10,14 @@ define({
             Enrollment.EnrollmentById({ id: result.id }, function (resp, header) {
                 PageHelper.hideLoader();
                 model.customer = _.cloneDeep(resp);
-                
+
 
                 model.customer.isGpsChanged = "NO"; //flag for gps updation
                 model.customer.isFingerPrintChanged = "NO"; //flag for updation of finger prints
                 model.customer.biometricCaptured = "Captured";
                 model.customer.fingerPrintUpdated = "Updated"; //flag for displaying the updated finger prints
                 model.customer.biometricNotCaptured = "Not Captured";
+                model.customer.isPhotoImageIdChanged = "NO";
                 model.customer.newLeftHandThumpImageId = model.customer.leftHandThumpImageId;
                 model.customer.newLeftHandIndexImageId = model.customer.leftHandIndexImageId;
                 model.customer.newLeftHandMiddleImageId = model.customer.leftHandMiddleImageId;
@@ -43,13 +44,20 @@ define({
                 model.customer = model.workflow.customer;
                 model.customer.biometricNotCaptured = "Not Captured";
                 model.customer.biometricCaptured = "Captured";
-                
+
                 if (model.customer.latitude == model.UpdatedWorkflow.customer.latitude && model.customer.longitude == model.UpdatedWorkflow.customer.longitude) {
                     model.customer.isGpsChanged = "NO";
                 } else {
                     model.customer.isGpsChanged = "YES";
                     model.customer.newLatitude = model.UpdatedWorkflow.customer.latitude;
                     model.customer.newLongitude = model.UpdatedWorkflow.customer.longitude;
+                }
+                if(model.customer.photoImageId == model.UpdatedWorkflow.customer.photoImageId ){
+                    model.customer.isPhotoImageIdChanged = "NO";
+                }
+                else{
+                    model.customer.isPhotoImageIdChanged = "YES";
+                    model.customer.newPhotoImageId = model.UpdatedWorkflow.customer.photoImageId;
                 }
                 if (model.customer.leftHandThumpImageId == model.UpdatedWorkflow.customer.leftHandThumpImageId &&
                     model.customer.leftHandIndexImageId == model.UpdatedWorkflow.customer.leftHandIndexImageId &&
@@ -104,7 +112,6 @@ define({
                 $log.info("User Maintanance loaded");
                 var workflowId = $stateParams.pageId;
                 $log.info("Loading data for Cust ID " + workflowId);
-
                 model._screenMode = 'VIEW';
                 PageHelper.showLoader();
                 irfProgressMessage.pop("cust-load", "Loading Customer Data...");
@@ -137,7 +144,6 @@ define({
                             readonly: true,
                             condition: "model.workflow",
                         },
-                       
                         {
                             key: "customer.id",
                             type: "lov",
@@ -187,7 +193,32 @@ define({
                         {
                             key: "customer.firstName",
                             title: "FULL_NAME",
-                            readonly : true,
+                            readonly: true,
+                        },
+                        {
+                            key: "customer.photoImageId",
+                            title: "CUSTOMER_PHOTO",
+                            type : "file",
+                            "fileType": "image/*",
+                            "category": "CustomerEnrollment",
+                            "subCategory": "PHOTO"                        
+                        },{
+                            key: "customer.isPhotoImageIdChanged",
+                            type: "radios",
+                            title: "UPDATE_PHOTO",
+                            "titleMap": {
+                                "YES": "YES",
+                                "NO": "NO"
+                            }
+                        },{
+                            condition: "model.customer.isPhotoImageIdChanged == 'YES'",
+                            key: "customer.newPhotoImageId",
+                            title: "CUSTOMER_PHOTO",
+                            required : true,
+                            type : "file",
+                            "fileType": "image/*",
+                            "category": "CustomerEnrollment",
+                            "subCategory": "PHOTO"                        
                         },
                         {
                             type: "fieldset",
@@ -197,7 +228,7 @@ define({
                                     "key": "customer.latitude",
                                     "title": "GPS_LOCATION",
                                     "type": "geotag",
-                                    "readonly" : true,
+                                    "readonly": true,
                                     "latitude": "customer.latitude",
                                     "longitude": "customer.longitude"
                                 },
@@ -428,12 +459,12 @@ define({
                             "AUTHENTICATED": "AUTHENTICATED"
                         }
                     },
-                ]
+                    ]
                 },
                 {
                     "type": "actionbox",
                     "items": [
-                        
+
                         {
                             "type": "submit",
                             "title": "SAVE"
@@ -448,84 +479,107 @@ define({
                         "type": "object",
                         "properties": {
                             "id": {
-                                "type": "number",
-                                "title": "CUSTOMER_ID"
+                                "type": ["number","null"],
+                                "title": "CUSTOMER_ID",
+                                "captureStages": ["Init"]
                             },
                             "urnNo": {
-                                "type": "string",
-                                "title": "URNNO"
+                                "type": ["string", "null"],
+                                "title": "URNNO",
+                                "captureStages": ["Init"]
                             },
                             "firstName": {
-                                "type": "string",
-                                "title": "FIRST_NAME"
+                                "type": ["string", "null"],
+                                "title": "FIRST_NAME",
+                                "captureStages": ["Init"]
                             },
                             "branchName": {
-                                "type": "string",
-                                "title": "BRANCH_NAME"
+                                "type": ["string", "null"],
+                                "title": "BRANCH_NAME",
+                                "captureStages": ["Init"]
                             },
                             "latitude": {
                                 "title": "GPS_LOCATION",
                                 "type": "geotag",
+                                "captureStages": ["Init"]
+                            },
+                            "photoImageId": {
+                                "title" : "CUSTOMER_PHOTO",
+                                "type": "file",
+                                "fileType": "image/*",
+                                "category": "CustomerEnrollment",
+                                "subCategory": "PHOTO",
+                                "captureStages": ["Init"]
                             },
                             "leftHandThumpImageId": {
                                 "type": ["string", "null"],
                                 "title": "FINGERPRINT",
                                 "category": "CustomerEnrollment",
-                                "subCategory": "FINGERPRINT"
+                                "subCategory": "FINGERPRINT",
+                                "captureStages": ["Init"]
                             },
                             "leftHandIndexImageId": {
                                 "type": ["string", "null"],
                                 "title": "FINGERPRINT",
                                 "category": "CustomerEnrollment",
-                                "subCategory": "FINGERPRINT"
+                                "subCategory": "FINGERPRINT",
+                                "captureStages": ["Init"]
                             },
                             "leftHandMiddleImageId": {
                                 "type": ["string", "null"],
                                 "title": "FINGERPRINT",
                                 "category": "CustomerEnrollment",
-                                "subCategory": "FINGERPRINT"
+                                "subCategory": "FINGERPRINT",
+                                "captureStages": ["Init"]
                             },
                             "leftHandRingImageId": {
                                 "type": ["string", "null"],
                                 "title": "FINGERPRINT",
                                 "category": "CustomerEnrollment",
-                                "subCategory": "FINGERPRINT"
+                                "subCategory": "FINGERPRINT",
+                                "captureStages": ["Init"]
                             },
                             "leftHandSmallImageId": {
                                 "type": ["string", "null"],
                                 "title": "FINGERPRINT",
                                 "category": "CustomerEnrollment",
-                                "subCategory": "FINGERPRINT"
+                                "subCategory": "FINGERPRINT",
+                                "captureStages": ["Init"]
                             },
                             "rightHandThumpImageId": {
                                 "type": ["string", "null"],
                                 "title": "FINGERPRINT",
                                 "category": "CustomerEnrollment",
-                                "subCategory": "FINGERPRINT"
+                                "subCategory": "FINGERPRINT",
+                                "captureStages": ["Init"]
                             },
                             "rightHandIndexImageId": {
                                 "type": ["string", "null"],
                                 "title": "FINGERPRINT",
                                 "category": "CustomerEnrollment",
-                                "subCategory": "FINGERPRINT"
+                                "subCategory": "FINGERPRINT",
+                                "captureStages": ["Init"]
                             },
                             "rightHandMiddleImageId": {
                                 "type": ["string", "null"],
                                 "title": "FINGERPRINT",
                                 "category": "CustomerEnrollment",
-                                "subCategory": "FINGERPRINT"
+                                "subCategory": "FINGERPRINT",
+                                "captureStages": ["Init"]
                             },
                             "rightHandRingImageId": {
                                 "type": ["string", "null"],
                                 "title": "FINGERPRINT",
                                 "category": "CustomerEnrollment",
-                                "subCategory": "FINGERPRINT"
+                                "subCategory": "FINGERPRINT",
+                                "captureStages": ["Init"]
                             },
                             "rightHandSmallImageId": {
                                 "type": ["string", "null"],
                                 "title": "FINGERPRINT",
                                 "category": "CustomerEnrollment",
-                                "subCategory": "FINGERPRINT"
+                                "subCategory": "FINGERPRINT",
+                                "captureStages": ["Init"]
                             },
 
                         }
@@ -538,11 +592,14 @@ define({
 
             },
             actions: {
+                captureBiometric: function (model, form, formName) {
+
+                },
                 submit: function (model, form, formName) {
                     var out = model.customer.$fingerprint;
 
                     if (window.confirm("Update - Are You Sure?")) {
-                       
+
                         PageHelper.showLoader();
                         irfProgressMessage.pop('workflow-update', 'Working...');
                         $log.info(model);
@@ -550,6 +607,9 @@ define({
                         if (model.customer.isGpsChanged == "YES") {
                             updatedModel.customer.latitude = updatedModel.customer.newLatitude;
                             updatedModel.customer.longitude = updatedModel.customer.newLongitude;
+                        }
+                        if(model.customer.isPhotoImageIdChanged == "YES"){
+                            updatedModel.customer.photoImageId = updatedModel.customer.newPhotoImageId;
                         }
                         if (model.customer.isFingerPrintChanged == "YES") {
                             updatedModel.customer.leftHandThumpImageId = updatedModel.customer.newLeftHandThumpImageId;
@@ -616,10 +676,10 @@ define({
                                 return;
                             }
                         })
-                        
+
                         Workflow.save(reqData, function (res, headers) {
                             console.log("this is only the thing");
-                        console.log(reqData);
+                            console.log(reqData);
                             PageHelper.hideLoader();
                             irfProgressMessage.pop('cust-update', 'Done. Customer Updated, ID : ' + res.customer.id, 2000);
                             irfNavigator.goBack();
