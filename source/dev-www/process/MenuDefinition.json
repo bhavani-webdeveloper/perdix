@@ -89,6 +89,7 @@
                 "Page/Adhoc/management.product.LoanProductDashboard",
                 "Page/Engine/management.SpokeMerger/interbranch",
                 "Page/Engine/management.SpokeMerger/intrabranch",
+                "Page/Engine/management.MachineMaster",
                 "Page/Engine/management.BranchMerger",
                 "Page/Engine/management.MasterDataMaintenance",
                 "Page/Engine/management.TaggingMaintenance",

@@ -1022,7 +1022,9 @@ define([], function() {
                                                     var frequency;
                                                     var frequencyRequested;
                                                     var advanceEmi = model.loanAccount.estimatedEmi;
-                                                    processFee = (model.loanAccount.expectedProcessingFeePercentage / 100) * model.loanAccount.loanAmountRequested;
+
+                                                    processFee = Math.round(((model.loanAccount.expectedProcessingFeePercentage / 100) * model.loanAccount.loanAmountRequested)* 100) / 100;
+                                                    
                                                     dsaPayout = (model.loanAccount.dsaPayout / 100) * model.loanAccount.loanAmountRequested;
                                                     frankingCharge = model.loanAccount.fee3;
                                                     model.loanAccount.vExpectedProcessingFee = processFee;
@@ -1128,7 +1130,7 @@ define([], function() {
 
                                                     model.loanAccount.vProcessingFee = null;
                                                     if(model.loanAccount.loanAmount && model.loanAccount.processingFeePercentage) {
-                                                        model.loanAccount.vProcessingFee = (model.loanAccount.processingFeePercentage / 100) * model.loanAccount.loanAmount;
+                                                        model.loanAccount.vProcessingFee = Math.round(((model.loanAccount.processingFeePercentage / 100) * model.loanAccount.loanAmount)* 100) / 100;
                                                     }
                                                 } catch (e){
                                                     console.log(e);
