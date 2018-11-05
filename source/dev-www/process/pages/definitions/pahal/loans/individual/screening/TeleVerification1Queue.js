@@ -6,7 +6,7 @@ define({
         var branch = SessionStore.getBranch();
         return {
             "type": "search-list",
-            "title": "TELE_VERIFICATION_QUEUE",
+            "title": "TELE_VERIFICATION_1_QUEUE",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 // model.branch = branch;

@@ -208,6 +208,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 ]
                             },
 
+                            "TeleVerification1": {
+                                "overrides": {
+                                    
+                                },
+                                "excludes": [
+                                    "IndividualReferences"                                    
+                                ]
+                            },
+
                             "GoNoGoApproval1": {
                                 "overrides": {
                                     "EnterpriseInformation": {

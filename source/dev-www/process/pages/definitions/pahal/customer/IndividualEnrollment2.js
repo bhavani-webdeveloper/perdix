@@ -71,43 +71,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "ResidenceVerification"
                             ]
                         },
-                        "ScreeningReview": {
-                            "overrides": {
-                                "KYC": {
-                                    "readonly": true
-                                },
-                                "IndividualInformation": {
-                                    "readonly": true
-                                },
-                                "ContactInformation": {
-                                    "readonly": true
-                                },
-                                "FamilyDetails": {
-                                    "readonly": true,
-                                    "title": "HOUSEHOLD_DETAILS"
-                                },
-                                "Liabilities": {
-                                    "readonly": true
-                                },
-                                "HouseVerification": {
-                                    "readonly": true
-                                },
-                                "CustomerDocumentUpload": {
-                                    "readonly": true
-                                },
-                                "CustomerLicenceDetails":{
-                                    "readonly": true
-                                },
-                                "BankAccounts": {
-                                    "readonly": true
-                                }
-                            },
+                        "TeleVerification1": {
                             "excludes": [
+                                "PhysicalAssets",
+                                "ResidenceVerification",
                                 "EnterpriseReferences",
                                 "IndividualReferences",
-                                "PhysicalAssets",
-                                "ResidenceVerification"
-                            ]
+                            ],
+                            "overrides": {
+                                
+                            }
                         },
                         "GoNoGoApproval1": {
                             "overrides": {
@@ -234,15 +207,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "ResidenceVerification"
                             ]
                         },
-                        "TeleVerification": {
+                        "TeleVerification2": {
                             "overrides": {
                             },
                             "excludes": [
-                                "ContactInformation.location",
-                                "EnterpriseReferences",
-                                "PhysicalAssets",
-                                "ResidenceVerification",
-                                "IndividualReferences"
                             ]
                         },
                         "FieldInvestigation1": {

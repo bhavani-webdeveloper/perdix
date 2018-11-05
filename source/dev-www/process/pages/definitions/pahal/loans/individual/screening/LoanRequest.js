@@ -201,7 +201,16 @@ define([], function() {
                                 "LoanRecommendation.commercialCibilCharge"
                             ],
                             "overrides": {
-                                "FieldInvestigationDetails": {
+                                "PreliminaryInformation": {
+                                    "readonly": true
+                                },
+                                "DeductionsFromLoan": {
+                                    "readonly": true
+                                },
+                                "LoanDocuments": {
+                                    "readonly": true
+                                },
+                                "PayerDetails": {
                                     "readonly": true
                                 }
                             }
@@ -211,9 +220,9 @@ define([], function() {
                                 "LoanRecommendation.commercialCibilCharge"
                             ],
                             "overrides": {
-                                // "LoanRecommendation": {
-                                //     "readonly": true
-                                // }
+                                "LoanRecommendation": {
+                                    "readonly": true
+                                }
                             }
                         },
                         "FieldInvestigation2": {
@@ -221,9 +230,9 @@ define([], function() {
                                 "LoanRecommendation.commercialCibilCharge"
                             ],
                             "overrides": {
-                                // "LoanRecommendation": {
-                                //     "readonly": true
-                                // }
+                                "LoanRecommendation": {
+                                    "readonly": true
+                                }
                             }
                         },
                         "FieldInvestigation3": {
@@ -231,9 +240,9 @@ define([], function() {
                                 "LoanRecommendation.commercialCibilCharge"
                             ],
                             "overrides": {
-                                // "LoanRecommendation": {
-                                //     "readonly": true
-                                // }
+                                "LoanRecommendation": {
+                                    "readonly": true
+                                }
                             }
                         },
                         "GoNoGoApproval1": {
@@ -301,15 +310,20 @@ define([], function() {
                                 "LoanRecommendation.commercialCibilCharge"
                             ],
                             "overrides": {
-                                "FieldInvestigationDetails": {
+                                "PreliminaryInformation": {
+                                    "readonly": true
+                                },
+                                "DeductionsFromLoan": {
+                                    "readonly": true
+                                },
+                                "LoanDocuments": {
+                                    "readonly": true
+                                },
+                                "PayerDetails": {
                                     "readonly": true
                                 }
-                                // "LoanRecommendation": {
-                                //     "readonly": true
-                                // }
                             }
                         },
-                        
                         "CreditAppraisal":  {
                             "excludes": [
                                 "VehicleRouteDetails",
