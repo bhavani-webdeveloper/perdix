@@ -330,14 +330,14 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             {
                                 key: "repayment.bookedNotDuePenalInterest",
                                 readonly: true,
-                                condition: "model.repayment.transactionName=='PenalInterestPayment'||model.repayment.transactionName=='Scheduled Demand'",
+                                condition: "model.repayment.transactionName=='PenalInterestPayment'",
                                 title: "BOOKED_NOT_DUE_PENAL_INTEREST",
                                 type: "amount"
                             },
                             {
                                 key: "repayment.totalPenalInterestDue",
                                 readonly: true,
-                                condition: "model.repayment.transactionName=='PenalInterestPayment'||model.repayment.transactionName=='Scheduled Demand'",
+                                condition: "model.repayment.transactionName=='Scheduled Demand'",
                                 title: "TOTAL_PENAL_INTEREST_DUE",
                                 type: "amount"
                             },
@@ -896,16 +896,26 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             return false;
                         }
 
-                        if (model.repayment.transactionName == 'Pre-closure' && model.repayment.totalDemandDue > 0){
-                            PageHelper.showProgress("loan-repay", "Preclosure not allowed. Demand of " + model.repayment.totalDemandDue + " is due.", 5000);
+                        if (model.repayment.transactionName == 'Pre-closure' && Math.round(model.repayment.netPayoffAmount) > Math.round(model.repayment.amount)) {
+                            PageHelper.showProgress("loan-repay", "Preclosure not allowed. Still " + model.repayment.netPayoffAmount - model.repayment.amount + " due is there", 5000);
+                            return false;
                         }
 
-                        if (model.repayment.transactionName == 'PenalInterestPayment' && (model.repayment.amount > model.repayment.bookedNotDuePenalInterest)){
+                        if (model.repayment.transactionName == 'Pre-closure' && Math.round(model.repayment.netPayoffAmount) < Math.round(model.repayment.amount)) {
+                            PageHelper.showProgress("loan-repay", "Preclosure not allowed. Execess of " + model.repayment.amount - model.repayment.netPayoffAmount + " amount paying", 5000);
+                            return false;
+                        }
+
+                        if (model.repayment.transactionName == 'PenalInterestPayment' && Math.round(model.repayment.amount) > Math.round(model.cbsLoanData.bookedNotDuePenalInterest)  ) {
                             PageHelper.clearErrors();
                             PageHelper.setError({
-                                message: "Repayment amount should not be greater then " +" " + model.repayment.bookedNotDuePenalInterest
+                                message: "Repayment amount should not be greater then " +" " + model.cbsLoanData.bookedNotDuePenalInterest
                             });
                             return false;
+                        }
+
+                        if (model.repayment.transactionName == 'PenalInterestPayment'){
+                            model.repayment.bookedNotDuePenalInterest = model.repayment.amount;
                         }
 
                         if (Utils.compareDates(model.repayment.repaymentDate, model.workingDate) == 1){
