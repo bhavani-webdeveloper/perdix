@@ -18,7 +18,7 @@ irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"),
                     throw "Excess quantity should not be greater than available quantity";
                 }
             } else if (a.quantity_on_record > a.quantity_on_hand) {
-                if (a.quantity_on_record == a.quantity_on_hand + a.lost_quantity + a.transferred_quantity) {
+                if (a.quantity_on_record != a.quantity_on_hand + a.lost_quantity + a.transferred_quantity) {
                     throw "Available, lost & transferred should add up to quantity on record";
                 } else if (a.excess_quantity != 0) {
                     throw "Excess quantity should be zero";
