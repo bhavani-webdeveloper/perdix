@@ -552,7 +552,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 searchHelper: formHelper,
                                 search: function(inputModel, form, model, context) {
 
-                                   return Queries.getLoanProductCode(model.loanAccount.productCategory,model.loanAccount.frequency,model.loanAccount.partnerCode);
+                                   return Queries.getLoanProductCode(model.loanAccount.productCategory,model.loanAccount.frequency,model.loanAccount.partnerCode,model.loanAccount.bankId);
                                 },
                                 onSelect: function(valueObj, model, context) {
                                     model.loanAccount.productCode = valueObj.productCode;

@@ -316,12 +316,13 @@ irf.models.factory('Queries', [
             return deferred.promise;
         }
 
-        resource.getLoanProductCode = function(productCategory,frequency,partner) {
+        resource.getLoanProductCode = function(productCategory,frequency,partner,bankId) {
             var deferred = $q.defer();
             var request = {};
             request.partner=partner;
             request.productCategory=productCategory;
             request.frequency=frequency;
+            request.bankId = bankId;
 
             resource.getResult("loanProductCode.list", request).then(function(records) {
                 if (records && records.results) {
