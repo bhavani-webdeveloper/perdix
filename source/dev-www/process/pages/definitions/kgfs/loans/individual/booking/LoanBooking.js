@@ -1090,10 +1090,13 @@ define([], function () {
                         "condition": "model.loanAccount.id"
                     },
                     "LoanSanction.numberOfDisbursements": {
-                        
+                        orderNo:1,
+                    },
+                    "LoanSanction.disbursementSchedules":{
+                        orderNo:2,
                     },
                     "LoanSanction.customerSignatureDate": {
-                        
+                        orderNo :3,
                         onChange: function (modelValue, form, model) {
                             if (modelValue) {
                                 model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate = modelValue;
@@ -1101,6 +1104,7 @@ define([], function () {
                         }
                     },
                     "LoanSanction.firstRepaymentDate": {
+                        orderNo : 5,
                         onChange: function (value, form, model, event) {
                             var repaymentDate = moment(model.loanAccount.firstRepaymentDate, SessionStore.getSystemDateFormat());
                             var applicationDate = moment(model.loanAccount.loanApplicationDate, SessionStore.getSystemDateFormat());
@@ -1112,6 +1116,7 @@ define([], function () {
 
                     },
                     "LoanSanction.scheduleDisbursementDate": {
+                        orderNo : 4,
                         onChange: function (value, form, model) {
                             var repaymentDate = moment(model.loanAccount.firstRepaymentDate, SessionStore.getSystemDateFormat());
                             var disbursementSchedules = moment(model.loanAccount.disbursementSchedules[form.arrayIndex].scheduledDisbursementDate, SessionStore.getSystemDateFormat());

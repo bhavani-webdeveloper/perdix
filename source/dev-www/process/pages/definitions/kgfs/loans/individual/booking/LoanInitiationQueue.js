@@ -89,7 +89,6 @@ define({
                     getListItem: function (item) {
                         return [
 
-                            "{{'ACCOUNT_NUMBER'|translate}} : " + item.accountNumber,
                             "{{'ENTITY_NAME'|translate}} : " + item.customerName,
                             "{{'LOAN_AMOUNT'|translate}} : " + item.loanAmount,
                             "{{'LOAN_TYPE'|translate}} : " + item.loanType,
@@ -108,13 +107,10 @@ define({
 						return [{
 							title: 'LOAN_ID',
 							data: 'id'
-                        }, {
-							title: 'CUSTOMER_ID',
-							data: 'customerId'
                         },
                         {
                             title: 'URN_NO',
-                            data: 'urnNo'
+                            data: 'urn'
                         },
                         {
                             title: 'ENTITY_NAME',
