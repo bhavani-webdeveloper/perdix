@@ -44,7 +44,7 @@ irf.templateUrl = function(path) {
 
 irf.pageNameHtml = function(pageName) {
 	var pns = pageName.split('.');
-	for (i in pns) {
+	for (var i = 0; i < pns.length; i++) {
 		pns[i] = pns[i].replace(/([A-Z])/g, ' $1').trim();
 		pns[i] = irf.initCap(pns[i]);
 	}
