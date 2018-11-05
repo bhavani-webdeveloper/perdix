@@ -2,7 +2,11 @@ irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"),
 ["$log", "PageHelper", "irfNavigator", "$stateParams", "Audit",
     function($log, PageHelper, irfNavigator, $stateParams, Audit) {
         var validateAsset = function(a) {
-            if (!(a.quantity_on_record >= 0 && a.quantity_on_hand >= 0 && a.lost_quantity >=0 && a.transferred_quantity >= 0 && a.excess_quantity)) {
+            if (!((a.quantity_on_record > 0 || a.quantity_on_record === 0)
+                && (a.quantity_on_hand > 0 || a.quantity_on_hand === 0)
+                && (a.lost_quantity > 0 || a.lost_quantity === 0)
+                && (a.transferred_quantity > 0 || a.transferred_quantity === 0)
+                && (a.excess_quantity > 0 || a.excess_quantity === 0))) {
                 throw "Quantities cannot be empty or nagative";
             }
             if (a.quantity_on_record < a.quantity_on_hand) {
