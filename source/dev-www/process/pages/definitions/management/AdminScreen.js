@@ -1,8 +1,8 @@
 define({
     pageUID: "management.AdminScreen",
     pageType: "Engine",
-    dependencies: ["$q", "$log", "irfNavigator", "formHelper", "entityManager", "IndividualLoan", "$state", "SessionStore", "Utils", "Locking"],
-    $pageFn: function ($q, $log, irfNavigator, formHelper, EntityManager, IndividualLoan, $state, SessionStore, Utils, Locking) {
+    dependencies: ["$q", "$log", "irfNavigator", "formHelper", "entityManager", "IndividualLoan", "$state", "SessionStore", "Utils", "Locking", "PageHelper", 'irfProgressMessage'],
+    $pageFn: function ($q, $log, irfNavigator, formHelper, EntityManager, IndividualLoan, $state, SessionStore, Utils, Locking, PageHelper, irfProgressMessage) {
         var branch = SessionStore.getBranch();
         return {
             "type": "search-list",
@@ -10,7 +10,6 @@ define({
             "subTitle": "",
             initialize: function (model, form, formCtrl) {
                 model.siteCode = SessionStore.getGlobalSetting("siteCode");
-                model.branch = SessionStore.getCurrentBranch().branchId;
             },
             definition: {
                 title: "SEARCH",
@@ -27,14 +26,35 @@ define({
                             'title': "BRANCH_NAME",
                             "type": ["string", "null"],
                             "x-schema-form": {
-                                "type": "select",
-                                "screenFilter": true,
-                                "enumCode": "branch"
+                                type: "lov",
+                                autolov: true,
+                                bindMap: {},
+                                searchHelper: formHelper,
+                                lovonly: true,
+                                search: function (inputModel, form, model, context) {
+                                    var branches = [],
+                                        branches = formHelper.enum('branch').data;
+                                    if (!branches.length) {
+                                        branches.push({ name: "No Records" })
+                                    }
+                                    return $q.resolve({
+                                        headers: {
+                                            "x-total-count": branches.length
+                                        },
+                                        body: branches
+                                    });
+                                },
+                                onSelect: function (valueObj, model, context) {
+                                    model.branch = valueObj.name;
+                                    model.branchId = valueObj.code;
+                                },
+                                getListDisplayItem: function (item, index) {
+                                    return [
+                                        item.name,
+                                        item.code
+                                    ];
+                                }
                             }
-                        },
-                        'loanId': {
-                            'title': "RECORD_ID",
-                            "type": "number"
                         },
                         "centre": {
                             "title": "CENTRE",
@@ -72,6 +92,27 @@ define({
                                 }
                             }
                         },
+                        'loanId': {
+                            'title': "RECORD_ID",
+                            "type": "number"
+                        },
+                        'currentStage': {
+                            'title': "CURRENT_STAGE",
+                            "type": ["string", "null"],
+                            "x-schema-form": {
+                                "enumCode": "loan_stage",
+                                "type": "select",
+                                "screenFilter": true
+                            }
+                        }, 'productCode': {
+                            'title': "PRODUCT_CODE",
+                            "type": ["string", "null"],
+                            "x-schema-form": {
+                                "enumCode": "loan_product",
+                                "type": "select",
+                                "screenFilter": true
+                            }
+                        },
                         'customerId': {
                             "title": "CUSTOMER_ID",
                             "type": "number"
@@ -93,6 +134,7 @@ define({
                         'branchName': searchOptions.branch,
                         'customerId': searchOptions.customerId,
                         'centreCode': searchOptions.centreCode,
+                        'currentStage': searchOptions.currentStage,
                         'accountNumber': searchOptions.accountNumber,
                         'page': pageOpts.pageNo
                     }).$promise;
@@ -134,17 +176,27 @@ define({
                     getColumns: function () {
                         return [
                             {
+                                title: "CUSTOMER_ID",
+                                data: "customerId"
+                            },
+                            {
                                 title: 'RECORD_ID',
-                                data: 'loanId'
-                            },{
+                                data: 'recordId'
+                            },
+                            {
+                                title: "LOCKED_BY",
+                                data: "lockedBy"
+                            },
+
+                            {
                                 title: 'ACCOUNT_NUMBER',
                                 data: 'accountNumber'
-                            }, 
+                            },
                         ]
                     },
                     getActions: function () {
                         return [
-                            ];
+                        ];
                     },
                     getBulkActions: function () {
                         return [
@@ -153,15 +205,29 @@ define({
                                 desc: "",
                                 htmlClass: "style='margin-left:10px'",
                                 fn: function (items) {
+
                                     if (items.length == 0) {
                                         PageHelper.showProgress("Select atleast one item for Unlocking", 5000);
                                         return false;
                                     }
-                                    Locking.clearlocks(items).then(function (resp) {
-                                        PageHelper.showProgress("Selected Pages are Unlocked", "Done.", 5000);
-                                    }, function (err) {
-                                        PageHelper.showProgress("Selected Pages", "error in Unlocking", 5000);
+                                    recordIds = [];
+                                    for (i = 0; i < items.length; i++) {
+                                        recordIds.push(items[i].id);
+                                    } console.log("Item from Bulk Actions");
+                                    console.log(recordIds);
+                                    Utils.confirm("Are you sure?").then(function () {
+                                        Locking.clearlocks({ recordIdList: recordIds }, {}, function (resp, headers) {
+
+                                            irfProgressMessage.pop("Selected list", "List of recordId's Unlocked", 2000);
+                                            irfNavigator.goBack();
+                                        }, function (resp) {
+                                            $log.error(resp);
+                                            PageHelper.hideLoader();
+                                            irfProgressMessage.pop("Sorry", "An error occurred. Please Try Again", 2000);
+                                            PageHelper.showErrors(resp);
+                                        });
                                     });
+
                                 },
                                 isApplicable: function () {
                                     return true;

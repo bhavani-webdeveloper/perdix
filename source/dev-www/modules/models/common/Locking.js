@@ -17,7 +17,7 @@ function($resource, BASE_URL, searchResource) {
         }),
         clearlocks: {
             method: 'GET',
-            url: endpoint + "/findLocks"
+            url: endpoint + "/ClearLocks"
         },
     });
 }]);
