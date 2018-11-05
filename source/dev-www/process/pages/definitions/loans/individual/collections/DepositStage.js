@@ -171,20 +171,6 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
                 "html":"<hr>"
             },
             {
-                "type":"section",
-                "htmlClass": "row",
-                "items": [{
-                    "type": "section",
-                    "htmlClass": "col-sm-12",
-                    "items": [{
-                        "type": "amount",
-                        "key": "totalAmount",
-                        "title":"TOTAL_TO_BE_DEPOSITED",
-                        "readonly":true
-                    }]
-                }]
-            },
-            {
                 "key":"bankDepositSummary.totalAmount",
                 "type":"amount",
                 "title":"AMOUNT_DEPOSITED",
