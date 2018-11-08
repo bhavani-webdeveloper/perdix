@@ -1133,13 +1133,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 },
                                 "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerName" :{
                                     "readonly": true
-                                },
+                                }
+                                /*,
                                 "BusinessVerification":{
                                     "condition": "model.customer.enterprise.enterpriseType=='Enterprise'" 
                                 },
                                 "BusinessVerification.businessVerification.personName":{
                                     "condition": "model.customer.fieldInvestigationDetails[0].category=='Business Partner' || model.customer.fieldInvestigationDetails[0].category == 'Others'" 
-                                }
+                                }*/
                             },
                             "includes": getIncludes(model),
                             "excludes": [
@@ -1160,6 +1161,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "type": "box",
                                         "title": "BUSINESS_VERIFICATION",
                                         "orderNo": 130,
+                                        "condition": "model.customer.enterprise.enterpriseType=='Enterprise'",
                                         "items": {
                                             "businessVerification": {
                                                 "key": "customer.fieldInvestigationDetails",
@@ -1167,7 +1169,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                                 "add": null,
                                                 "remove": null,
                                                 "view": "fixed",
-                                                "startEmpty": true,
+                                                //"startEmpty": true,
                                                 "items": {
                                                     "personMet": { 
                                                         "key": "customer.fieldInvestigationDetails[].category",
@@ -1180,7 +1182,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                                         "key": "customer.fieldInvestigationDetails[].name",
                                                         "title": "PERSON_NAME",
                                                         "type": "text",
-                                                        "required": "true"
+                                                        "required": "true",
+                                                        "condition": "model.customer.fieldInvestigationDetails[0].category=='Business Partner' || model.customer.fieldInvestigationDetails[0].category == 'Others'" 
                                                     },
                                                     "noOfEmployeesWorking":{
                                                         "key": "customer.enterprise.noOfRegularEmployees",
