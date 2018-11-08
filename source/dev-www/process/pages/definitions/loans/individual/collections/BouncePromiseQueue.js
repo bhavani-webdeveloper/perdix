@@ -58,10 +58,10 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q,U
             },
             paginationOptions: {
                 "getItemsPerPage": function(response, headers){
-                    return 10;
+                    return 100;
                 },
                 "getTotalItemsCount": function(response, headers){
-                    return headers && headers['x-total-count'] || 10;
+                    return headers && headers['x-total-count'];
                 }
             },
             listOptions: {
