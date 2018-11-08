@@ -1,6 +1,6 @@
 irf.pages.controller("PageEngineCtrl",
-["$log", "$scope", "$state", "$stateParams", "$injector", "$q", "entityManager", "formHelper", "$timeout", "PageHelper", "elementsUtils",
-function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formHelper, $timeout, PageHelper, elementsUtils) {
+["$log", "$scope", "$state", "$stateParams", "$injector", "$q", "entityManager", "formHelper", "$timeout", "PageHelper", "elementsUtils", "Locking", "SessionStore", "irfProgressMessage", "irfNavigator",
+function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formHelper, $timeout, PageHelper, elementsUtils, Locking, SessionStore, irfProgressMessage, irfNavigator) {
 	var self = this;
 
 	$scope.boxHeads = [];
@@ -71,6 +71,38 @@ function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formH
 	/* =================================================================================== */
 	$log.info("Page.Engine.html loaded");
 	/* =================================================================================== */
+
+	function aquireLock() {
+		var deferred = $q.defer();
+		$scope.page.locked = false;
+		var lockingRequired = false;
+		if (SessionStore.getGlobalSetting("lockingRequired") == "true" && $scope.page.lockingRequired && $scope.page.processType && $scope.page.processName && $scope.pageId) {
+			if (angular.isFunction($scope.page.lockingRequired)) {
+				lockingRequired = $scope.page.lockingRequired();
+			} else {
+				lockingRequired = !!$scope.page.lockingRequired;
+			}
+			if (lockingRequired) {
+				Locking.lock({
+					"processType": $scope.page.processType,
+					"processName": $scope.page.processName,
+					"recordId": $scope.pageId
+				}).$promise.then(function() {
+					$scope.page.locked = true;
+					deferred.resolve();
+				}, function(err) {
+					irfProgressMessage.pop("Locking","Locking failed for " + $scope.pageId, 6000);
+					irfNavigator.goBack();
+					deferred.reject();
+				});
+			} else {
+				deferred.resolve();
+			}
+		} else {
+			deferred.resolve();
+		}
+		return deferred.promise;
+	};
 
 	function setupPage () {
 		if ($scope.page) {
@@ -149,7 +181,7 @@ function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formH
 	$scope.error = false;
 	try {
 		$scope.page = $injector.get(irf.page($scope.pageName));
-		setupPage();
+		aquireLock.then(setupPage);
 	} catch (e) {
 		if (e.message.startsWith("[$injector:unpr] Unknown provider: "+irf.page($scope.pageName)+"Provider")) {
 			$log.error("Loading Dynamic page...");
@@ -166,7 +198,7 @@ function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formH
 
 				try {
 					$scope.page = $injector.get(irf.page($scope.pageName));
-					setupPage();
+					aquireLock.then(setupPage);
 					PageHelper.hideLoader();
 				} catch (e) {
 					$log.error(e);
