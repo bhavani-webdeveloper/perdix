@@ -4589,6 +4589,43 @@
                 "Completed"
               ]
             },
+	"workProcess": {
+              "title": "workProcess",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+"depreciationPercentage": {
+              "title": "depreciationPercentage",
+              "type": "number",
+              
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+"marketPrice": {
+              "title": "marketPrice",
+              "type": "number",
+              
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+"finalPrice": {
+              "title": "finalPrice",
+              "type": "number",
+              
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
             "manufacturerName": {
               "title": "Manufacturer Name",
               "type": "string",
