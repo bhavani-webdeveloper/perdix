@@ -69,6 +69,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 order:55
                             },
                             {
+                                pageName: 'pahal.customer.VehicleValuation',
+                                title: 'VEHICLE_VALUATION',
+                                pageClass: 'vehicle-valuation',
+                                minimum: 1,
+                                maximum: 1,
+                                order:57
+                            },
+                            {
                                 pageName: 'loans.individual.screening.CBCheck',
                                 title: 'CB_CHECK',
                                 pageClass: 'cb-check',

@@ -16,7 +16,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                 return {
                     "type": "page-bundle",
                     "title": "TELE_VERIFICATION_2",
-                    "subTitle": "LOAN_BOOKING_BUNDLE_SUB_TITLE",
+                    "subTitle": "TELE_VERIFICATION_2",
                     "readonly": true,
                     "bundleDefinitionPromise": function() {
                         return $q.resolve([

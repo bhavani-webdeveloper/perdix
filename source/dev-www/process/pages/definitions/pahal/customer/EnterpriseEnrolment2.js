@@ -210,7 +210,39 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
 
                             "TeleVerification1": {
                                 "overrides": {
-                                    
+                                    "EnterpriseInformation": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseInformation.enterpriseType" : {
+                                        "readonly": true
+                                    },
+                                    "CommercialCBCheck.enterpriseBureauDetails":{
+                                        "readonly": true
+                                    },
+                                    "Liabilities": {
+                                        "readonly": true
+                                    },
+                                    "TrackDetails":{
+                                        "readonly": true
+                                    },
+                                    "EnterpriseAssets": {
+                                        "readonly": true
+                                    },
+                                    "BankAccounts": {
+                                        "readonly": true
+                                    },
+                                    "ContactInformation": {
+                                        "readonly": true
+                                    },
+                                    "TangibleNetWorth": {
+                                      "readonly": true
+                                    },
+                                    "IndividualReferences":{
+                                        "readonly": true 
+                                    },
+                                    "EnterpriseAssets": {
+                                        "readonly": true
+                                    }
                                 },
                                 "excludes": [
                                     "IndividualReferences"                                    
@@ -299,6 +331,47 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 "excludes": [
                                                                         
                                 ]
+                            },
+
+                            "TeleVerification2" : {
+                                "overrides": {
+                                   "EnterpriseInformation": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseInformation.enterpriseType" : {
+                                        "readonly": true
+                                    },
+                                    "CommercialCBCheck.enterpriseBureauDetails":{
+                                        "readonly": true
+                                    },
+                                    "Liabilities": {
+                                        "readonly": true
+                                    },
+                                    "TrackDetails":{
+                                        "readonly": true
+                                    },
+                                    "EnterpriseAssets": {
+                                        "readonly": true
+                                    },
+                                    "BankAccounts": {
+                                        "readonly": true
+                                    },
+                                    "ContactInformation": {
+                                        "readonly": true
+                                    },
+                                    "TangibleNetWorth": {
+                                      "readonly": true
+                                    },
+                                    "IndividualReferences":{
+                                        "readonly": true 
+                                    },
+                                    "EnterpriseAssets": {
+                                        "readonly": true
+                                    } 
+                                },
+                                "excludes": {
+
+                                }
                             },
 
                             "CreditApproval": {
