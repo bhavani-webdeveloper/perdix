@@ -1273,6 +1273,16 @@ irf.models.factory('Queries', [
         }, deferred.reject);
         return deferred.promise;
     }
+    resource.getGoldRate = function(){
+        var deferred = $q.defer();
+        resource.getResult("goldRateDetails").then(function(value){
+            if(value){
+                var result = value;
+                deferred.resolve(result);
+            }            
+        },deferred.reject);
+        return deferred.promise;
+    }
     return resource;
     
     }
