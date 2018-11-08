@@ -1,62 +1,62 @@
 [
   {
     "displayName": "loanAmount",
-    "ruleParam": "loanAccount.loanAmount",
+    "ruleParam": "loanAccount.?loanAmount",
     "type": "number"
   },
   {
     "displayName": "productCategory",
-    "ruleParam": "loanAccount.productCategory",
+    "ruleParam": "loanAccount.?productCategory",
     "type": "string"
   },
   {
     "displayName": "linkedAccountNumber",
-    "ruleParam": "loanAccount.linkedAccountNumber",
+    "ruleParam": "loanAccount.?linkedAccountNumber",
     "type": "string"
   },
   {
     "displayName": "transactionType",
-    "ruleParam": "loanAccount.transactionType",
+    "ruleParam": "loanAccount.?transactionType",
     "type": "string"
   },
   {
     "displayName": "maritalStatus",
-    "ruleParam": "applicant.maritalStatus",
+    "ruleParam": "applicant.?maritalStatus",
     "type": "string"
   },
   {
     "displayName": "literateWitnessMiddleName",
-    "ruleParam": "loanAccount.literateWitnessMiddleName",
+    "ruleParam": "loanAccount.?literateWitnessMiddleName",
     "type": "string"
   },
   {
     "displayName": "literateWitnessFirstName",
-    "ruleParam": "loanAccount.literateWitnessFirstName",
+    "ruleParam": "loanAccount.?literateWitnessFirstName",
     "type": "string"
   },
   {
     "displayName": "paymentPurpose",
-    "ruleParam": "paymentsDTO.paymentPurpose",
+    "ruleParam": "paymentsDTO.?paymentPurpose",
     "type": "string"
   },
   {
     "displayName": "paymentAmount",
-    "ruleParam": "paymentsDTO.amount",
+    "ruleParam": "paymentsDTO.?amount",
     "type": "number"
   },
   {
     "displayName": "loanAmountRequested",
-    "ruleParam": "loanAccount.loanAmountRequested",
+    "ruleParam": "loanAccount.?loanAmountRequested",
     "type": "number"
   },
   {
     "displayName": "loanPurpose",
-    "ruleParam": "loanAccount.loanPurpose1",
+    "ruleParam": "loanAccount.?loanPurpose1",
     "type": "string"
   },
   {
     "displayName": "loanChannels",
-    "ruleParam": "loanAccount.loanChannels",
+    "ruleParam": "loanAccount.?loanChannels",
     "type": "string"
   }
 ]
