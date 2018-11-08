@@ -31,7 +31,7 @@ define({
 
         $log.info("Inside submit()");
         PageHelper.showLoader();
-        loanPurpose = model.loanAccount.loanPurpose1 || 'Business Loan - General';
+        loanPurpose = model.loanAccount.loanPurpose3 || 'Business Loan - General';
         //loanPurpose = 'Agriculture';
         PageHelper.clearErrors();
         if (CBType != 'CHMHUB') {
