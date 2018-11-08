@@ -181,7 +181,7 @@ function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formH
 	$scope.error = false;
 	try {
 		$scope.page = $injector.get(irf.page($scope.pageName));
-		aquireLock.then(setupPage);
+		aquireLock().then(setupPage);
 	} catch (e) {
 		if (e.message.startsWith("[$injector:unpr] Unknown provider: "+irf.page($scope.pageName)+"Provider")) {
 			$log.error("Loading Dynamic page...");
@@ -198,7 +198,7 @@ function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formH
 
 				try {
 					$scope.page = $injector.get(irf.page($scope.pageName));
-					aquireLock.then(setupPage);
+					aquireLock().then(setupPage);
 					PageHelper.hideLoader();
 				} catch (e) {
 					$log.error(e);
