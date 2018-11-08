@@ -851,7 +851,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             {
                                 key:"loanAccount.commercialCibilCharge",
                                 type:"amount",
-                                "condition" : "model.siteCode != 'IREPDhan' && model.siteCode != 'pahal'",
+                                "condition" : "model.siteCode != 'IREPDhan' && model.siteCode != 'pahal' && model.siteCode != 'witfin'",
                                 onChange:function(value,form,model){
                                     getSanctionedAmount(model);
                                 }
