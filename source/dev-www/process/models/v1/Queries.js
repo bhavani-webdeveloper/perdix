@@ -1275,10 +1275,9 @@ irf.models.factory('Queries', [
     }
     resource.getGoldRate = function(){
         var deferred = $q.defer();
-        resource.getResult("goldRateDetails").then(function(value){
-            if(value){
-                var result = value;
-                deferred.resolve(result);
+        resource.getResult("goldRateDetails",{}).then(function(value){
+            if(value && value.results.length > 0){
+                deferred.resolve(value.results[0].goldRate);
             }            
         },deferred.reject);
         return deferred.promise;
