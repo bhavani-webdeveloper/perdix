@@ -54,6 +54,41 @@ define(
                             }
                         },
 
+                        "TeleVerification1" : {
+                            "excludes": [
+                                "VehicleViability.calculateVehicleDetails",
+                            ],
+                            "overrides": {
+                                "VehicleLoanIncomesInformation": {
+                                    "readonly": true
+                                },
+                                "VehicleExpensesInformation": {
+                                    "readonly": true
+                                },
+                                "VehicleViability": {
+                                    "readonly": true
+                                },
+                                "VehicleViability1": {
+                                    "readonly": true
+                                },
+                                "NewVehicleDetails": {
+                                    "readonly": true
+                                },
+                                "VehicleAssetUse": {
+                                    "readonly": true
+                                },
+                                "VehicleRouteDetails": {
+                                    "readonly": true
+                                },
+                                "vehicleLoanDocuments": {
+                                    "readonly": true
+                                },
+                                "VehiclePhotoCaptures": {
+                                    "readonly": true
+                                }
+                            }      
+                        },
+
                         "GoNoGoApproval1": {
                             "excludes": [
                                 "VehicleViability.calculateVehicleDetails",
@@ -98,14 +133,42 @@ define(
                             }
                         },
 
-                        "TeleVerification": {
+                        "TeleVerification2": {
                             "excludes": [
-
+                                "VehicleViability.calculateVehicleDetails",
                             ],
                             "overrides": {
-
+                                "VehicleLoanIncomesInformation": {
+                                    "readonly": true
+                                },
+                                "VehicleExpensesInformation": {
+                                    "readonly": true
+                                },
+                                "VehicleViability": {
+                                    "readonly": true
+                                },
+                                "VehicleViability1": {
+                                    "readonly": true
+                                },
+                                "NewVehicleDetails": {
+                                    "readonly": true
+                                },
+                                "VehicleAssetUse": {
+                                    "readonly": true
+                                },
+                                "VehicleRouteDetails": {
+                                    "readonly": true
+                                },
+                                "vehicleLoanDocuments": {
+                                    "readonly": true
+                                },
+                                "VehiclePhotoCaptures": {
+                                    "readonly": true
+                                }
                             }
-                        },
+
+                        }, 
+
                         "CreditAppraisal": {
                             "excludes": [
 

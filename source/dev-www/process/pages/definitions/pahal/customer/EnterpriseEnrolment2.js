@@ -329,7 +329,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     }
                                 },
                                 "excludes": [
-                                                                        
+                                     "IndividualReferences"                                   
                                 ]
                             },
 
@@ -369,9 +369,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "readonly": true
                                     } 
                                 },
-                                "excludes": {
+                                "excludes": [
 
-                                }
+                                ]
                             },
 
                             "CreditApproval": {
