@@ -244,8 +244,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "readonly": true
                                     }
                                 },
-                                "excludes": [
-                                    "IndividualReferences"                                    
+                                "excludes": [                                   
                                 ]
                             },
 
@@ -280,7 +279,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     }
                                 },
                                 "excludes": [
-                                "IndividualReferences"                                
+                                    "IndividualReferences"                                
                                 ]
                             },
 
@@ -448,6 +447,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             }
 
                         },
+                        
                         "loanProcess.loanAccount.isReadOnly": {
                             "Yes": {
                                 "overrides": {
@@ -480,7 +480,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             }
                         }
                     }
-            }
+                }
 
             return {
                 "type": "schema-form",
