@@ -1280,15 +1280,15 @@ define([], function () {
                             if(model.loanAccount.loanCustomerRelations && model.loanAccount.loanCustomerRelations.length > 0){
                                 for(i = 0; i< model.loanAccount.loanCustomerRelations.length;i++){
                                     if(typeof model.loanAccount.loanCustomerRelations[i].dscStatus == "undefined" || model.loanAccount.loanCustomerRelations[i].dscStatus == ""){
-                                        model.loanProcess.loanAccount.dscOverride = null
+                                        model.loanProcess.loanAccount.dscOverride = false
                                         break;
                                     }
                                     if(model.loanAccount.loanCustomerRelations[i].dscStatus == "FAILURE"){
-                                        model.loanProcess.loanAccount.dscOverride = true
+                                        model.loanProcess.loanAccount.dscOverride = false
                                         break;
                                     }
                                     else{
-                                        model.loanProcess.loanAccount.dscOverride = true
+                                        model.loanProcess.loanAccount.dscOverride = false
                                     }
                                     
                                 }
