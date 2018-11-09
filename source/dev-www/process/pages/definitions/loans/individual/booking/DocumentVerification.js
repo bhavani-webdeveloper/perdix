@@ -10,6 +10,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
             "type": "schema-form",
             "title": "DOCUMENT_VERIFICATION",
             "subTitle": " ",
+            "processType": "Loan",
+            "processName": "Origination",
+            "lockingRequired": true,
             initialize: function(model, form, formCtrl) {
                 $log.info("Demo Customer Page got initialized");
                 model.loanView = SessionStore.getGlobalSetting("LoanViewPageName");

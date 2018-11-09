@@ -52,6 +52,9 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
         "type": "schema-form",
         "title": "SANCTION",
         "subTitle": "BUSINESS",
+        "processType": "Loan",
+        "processName": "Origination",
+        "lockingRequired": true,
         initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
             model.currentStage = bundleModel.currentStage;
             if (_.hasIn(model, 'loanAccount')){

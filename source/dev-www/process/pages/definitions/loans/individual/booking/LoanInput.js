@@ -235,6 +235,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
             "type": "schema-form",
             "title": "LOAN_INPUT",
             "subTitle": "",
+            "processType": "Loan",
+            "processName": "Origination",
+            "lockingRequired": true,
             initialize: function (model, form, formCtrl) {
                 // TODO default values needs more cleanup
                 model.currentStage = 'LoanInitiation';

@@ -196,6 +196,27 @@ define({
                     },
                     getActions: function () {
                         return [
+                            {
+                                name: "UNLOCK",
+                                desc: "",
+                                icon: "fa fa-book",
+                                fn: function (items) {
+                                    Utils.confirm("Are you sure?").then(function () {
+                                        Locking.clearlocks({ recordIdList: items.id }, {}, function (resp, headers) {
+
+                                            irfProgressMessage.pop("Selected list", "Unlocked", 2000);
+                                            irfNavigator.goBack();
+                                        }, function (resp) {
+                                            $log.error(resp);
+                                            PageHelper.hideLoader();
+                                            irfProgressMessage.pop("Sorry", "An error occurred. Please Try Again", 2000);
+                                            PageHelper.showErrors(resp);
+                                        });
+                                    });
+                                },isApplicable: function () {
+                                    return true;
+                                }
+                            }
                         ];
                     },
                     getBulkActions: function () {
@@ -207,7 +228,7 @@ define({
                                 fn: function (items) {
 
                                     if (items.length == 0) {
-                                        PageHelper.showProgress("Select atleast one item for Unlocking", 5000);
+                                        irfProgressMessage.pop("", "Select Atleast one Item for Unlocking", 5000);
                                         return false;
                                     }
                                     recordIds = [];
