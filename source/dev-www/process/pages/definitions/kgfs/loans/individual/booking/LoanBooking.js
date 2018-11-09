@@ -13,7 +13,21 @@ define([], function () {
             BundleManager, PsychometricTestService, LeadHelper, Message, $filter, Psychometric, IrfFormRequestProcessor, UIRepository, $injector, irfNavigator) {
             var branch = SessionStore.getBranch();
             var podiValue = SessionStore.getGlobalSetting("percentOfDisposableIncome");
-            //PMT calculation
+            //Rate and Market value calculation
+            var getGoldRate = function(model){
+                var value = Queries.getGoldRate();
+                value.then(function(resp){
+                    model.additions.goldRate = resp;
+                    model.additions.goldRatePerCarat = resp/22;
+                })
+                
+            }
+            var setRateMarketValue = function(weight,carat,model,index){
+                var dynamicRate = model.additions.goldRatePerCarat * carat;
+                var dynamicMarketValue = dynamicRate * weight;
+                model.loanAccount.ornamentsAppraisals[index].ratePerGramInPaisa = dynamicRate;
+                model.loanAccount.ornamentsAppraisals[index].marketValueInPaisa = dynamicMarketValue;
+            };
             var self;
             var getIncludes = function (model) {
                 return [
@@ -201,7 +215,10 @@ define([], function () {
                     "LoanDetails.loanType": {
                         "orderNo": 2,
                         "required": true,
-                        "enumCode": "booking_loan_type"
+                        "enumCode": "booking_loan_type",
+                        onChange: function(valueObj,model,context){
+                            getGoldRate(model);
+                        }
                     },
                     "LoanDetails.partner": {
                         "orderNo": 2,
@@ -391,6 +408,22 @@ define([], function () {
                     "JewelDetails": {
                         "orderNo": 2,
                         "condition": "model.loanAccount.loanType == 'JEWEL'"
+                    },
+                    "JewelDetails.netWeight":{
+                        onChange:function(valueObj,model,context){
+                            var carat = model.loanAccount.ornamentsAppraisals[context.arrayIndex].qualityInCarats;
+                            if(carat){
+                                setGoldRate(valueObj,carat,model,context.arrayIndex);
+                            }
+                        }
+                    },
+                    "JewelDetails.carat":{
+                        onChange:function(valueObj,model,context){
+                            var netWeight = model.loanAccount.ornamentsAppraisals[context.arrayIndex].netWeightInGrams;
+                            if(carat){
+                                setGoldRate(netWeight,valueObj,model,context.arrayIndex);
+                            }
+                        }
                     },
                     "NomineeDetails.nominees.nomineeFirstName": {
                         "orderNo": 1,
