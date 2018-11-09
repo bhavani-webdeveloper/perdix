@@ -6,7 +6,7 @@ irf.pageCollection.factory(irf.page("audit.RejectedAuditsQueue"), ["$log", "Quer
             "title": "REJECTED_AUDITS",
             initialize: function(model, form, formCtrl) {
                 model.Audits = model.Audits || {};
-                model.branch = SessionStore.getCurrentBranch().branchId;
+                // model.branch = SessionStore.getCurrentBranch().branchId;
                 var bankName = SessionStore.getBankName();
                 var banks = formHelper.enum('bank').data;
                 for (var i = 0; i < banks.length; i++) {

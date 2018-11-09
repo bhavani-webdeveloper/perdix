@@ -5,7 +5,7 @@ irf.pageCollection.factory(irf.page("audit.ScheduledAuditsViewQueue"), ["$log", 
             "title": "SCHEDULED_AUDITS_VIEW",
             initialize: function(model, form, formCtrl) {
                 model.Audits = model.Audits || {};
-                model.branch = SessionStore.getCurrentBranch().branchId;
+                // model.branch = SessionStore.getCurrentBranch().branchId;
                 localFormController = formCtrl;
                 syncCheck = false;
                 if ($stateParams.pageData && $stateParams.pageData.page) {
