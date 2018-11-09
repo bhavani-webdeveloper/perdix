@@ -77,7 +77,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.Application'),
                 ],
         		"bundlePages": [],
                 "offline": true,
-                "offlineStrategy" : window.cordova.platformId =="android" ?  "SQLITE" : undefined,
+                // "offlineStrategy" : window.cordova.platformId =="android" ?  "SQLITE" : undefined,
                 "getOfflineDisplayItem": function(value, index){
                     var out = new Array(2);
                     for (var i=0; i<value.bundlePages.length; i++){

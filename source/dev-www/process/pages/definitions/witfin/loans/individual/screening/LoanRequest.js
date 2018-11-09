@@ -1022,9 +1022,7 @@ define([], function() {
                                                     var frequency;
                                                     var frequencyRequested;
                                                     var advanceEmi = model.loanAccount.estimatedEmi;
-
                                                     processFee = Math.round(((model.loanAccount.expectedProcessingFeePercentage / 100) * model.loanAccount.loanAmountRequested)* 100) / 100;
-                                                    
                                                     dsaPayout = (model.loanAccount.dsaPayout / 100) * model.loanAccount.loanAmountRequested;
                                                     frankingCharge = model.loanAccount.fee3;
                                                     model.loanAccount.vExpectedProcessingFee = processFee;

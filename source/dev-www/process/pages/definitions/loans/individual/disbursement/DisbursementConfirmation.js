@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementConfirmation"),
-    ["$log", "Enrollment","GroupProcess","LoanAccount", "SessionStore","$state", "$stateParams", "PageHelper", "IndividualLoan", "SchemaResource","Utils",
-        function($log, Enrollment,GroupProcess,LoanAccount, SessionStore,$state,$stateParams, PageHelper, IndividualLoan, SchemaResource,Utils){
+    ["$log", "Enrollment","GroupProcess","LoanAccount", "SessionStore","$state", "$stateParams", "PageHelper", "IndividualLoan", "SchemaResource","Utils","Locking",
+        function($log, Enrollment,GroupProcess,LoanAccount, SessionStore,$state,$stateParams, PageHelper, IndividualLoan, SchemaResource,Utils,Locking){
 
         var branch = SessionStore.getBranch();
         var backToQueue = function(){
@@ -15,6 +15,20 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
             "title": "DISBURSEMENT_CONFIRMATION",
             "subTitle": "",
             initialize: function (model, form, formCtrl) {
+                var recordId = ($stateParams['pageId'].split('.'))[0];
+
+                Locking.lock({
+                    "processType": "Loan",
+                    "processName": "Origination",
+                    "recordId": recordId
+                }).$promise.then(function () {
+                    $state.page.locked = true;
+                    deferred.resolve();
+                }, function (err) {
+                    irfProgressMessage.pop("Locking", "Locking failed for " + $state.pageId, 6000);
+                    irfNavigator.goBack();
+                    deferred.reject();
+                });
                 model.loanacount=model.loanacount||{};
                 model.siteCode = SessionStore.getGlobalSetting("siteCode");
                 try {

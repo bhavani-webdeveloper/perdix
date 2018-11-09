@@ -167,11 +167,11 @@ define({
                             desc: "",
                             icon: "fa fa-pencil-square-o",
                             fn: function(item, index) {
-                                entityManager.setModel('pahal.loans.individual.screening.TeleVerification2', {
+                                entityManager.setModel('pahal.loans.individual.screening.TeleVerification1', {
                                     _request: item
                                 });
                                 $state.go("Page.Bundle", {
-                                    pageName: "pahal.loans.individual.screening.TeleVerification2",
+                                    pageName: "pahal.loans.individual.screening.TeleVerification1",
                                     pageId: item.loanId
                                 });
                             },
