@@ -1334,6 +1334,7 @@
                  "type":"number",
                  "captureStages":[
                     "Screening",
+                    "ScreeningReview",
                     "VehicleValuation",
                     "FieldInvestigation1",
                     "FieldInvestigation2",

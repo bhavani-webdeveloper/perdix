@@ -160,7 +160,7 @@ let config = {
                         "add": [{
                             "name": "CollateralFieldPolicy",
                             "arguments": {
-                                "postStage": "LoanInitiation"
+                                "ltv": "true"
                             }
                         }]
                     }
