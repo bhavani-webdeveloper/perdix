@@ -22,13 +22,15 @@ export class EnrolmentRepository implements IEnrolmentRepository {
     }
 
     updateEnrollment(enrolmentProcess: EnrolmentProcess): Observable<EnrolmentProcess> {
-        let promise = this.enrolmentService.updateEnrollment(enrolmentProcess).$promise;
-        return Observable.fromPromise(promise)
+       // let promise = this.enrolmentService.updateEnrollment(enrolmentProcess).$promise;
+        return Observable.defer(()=> {
+            return Observable.fromPromise(this.enrolmentService.updateEnrollment(enrolmentProcess).$promise)
             .map((obj: any) => {
                 let customer: Customer = <Customer>plainToClass<Customer, Object>(Customer, obj.customer);
                 _.merge(enrolmentProcess.customer, customer);
                 return enrolmentProcess;
             });
+        });
     }
 
 }

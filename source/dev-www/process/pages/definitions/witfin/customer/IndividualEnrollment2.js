@@ -2011,7 +2011,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         //     !_.isNull(model.enrolmentProcess.customer.identityProof)) {
                         //     model.enrolmentProcess.customer.panNo = model.enrolmentProcess.customer.identityProof;
                         // }
-
+                        
                         PageHelper.showLoader();
 
                         adharAndPanVAlidation(model.enrolmentProcess.customer,model);
@@ -2035,13 +2035,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 PageHelper.showErrors(err);
                                 PageHelper.hideLoader();
                             });
-                    },
+                    },  
                     proceed: function(model, form, formName){
                         PageHelper.clearErrors();
                         if(PageHelper.isFormInvalid(form)) {
                             return false;
                         }
-                        PageHelper.showProgress('enrolment', 'Updating Customer');
+                        PageHelper.showProgress('enrolment', 'Updating Customer', 5000);
                         PageHelper.showLoader();
                         //EnrollmentHelper.fixData(reqData);
                         // if (model.enrolmentProcess.customer.addressProof == 'Aadhar Card' &&
@@ -2066,7 +2066,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
                                 BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
                             }, function (err) {
-                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                PageHelper.showErrors({
+                                    data: {
+                                        error: err
+                                    }
+                                });
+                                //throw new Error('err');
+                                return false;
+                            //    PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                 PageHelper.showErrors(err);
                                 PageHelper.hideLoader();
                             });
