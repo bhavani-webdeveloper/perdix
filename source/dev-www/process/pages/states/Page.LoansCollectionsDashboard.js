@@ -73,7 +73,7 @@ function($log, $scope, PagesDefinition,formHelper, SessionStore, LoanProcess,Rep
             var centres = SessionStore.getCentres();
             bqMenu.data = 0;
             for (var i = 0; i < centres.length; i++) {
-                LoanProcess.bounceCollectionDemand({ 'branchId': branchId, 'centreId': centres[i].id }).$promise.then(function(response,headerGetter){
+                LoanProcess.bounceCollectionDemand({ 'branchId': branchId, 'centreId': centres[i].id , 'assignedTo': SessionStore.getLoginname() }).$promise.then(function(response,headerGetter){
                     bqMenu.data += response.body.length; // Number(headerGetter()['x-total-count']);
                 }, function() {
                     bqMenu.data = '-';

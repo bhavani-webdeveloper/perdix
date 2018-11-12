@@ -5,7 +5,7 @@ irf.pageCollection.factory(irf.page("audit.AuditDumpsQueue"), ["$log","Queries",
             "type": "search-list",
             "title": "AUDIT_DUMPS",
             initialize: function(model, form, formCtrl) {
-                model.branch = SessionStore.getCurrentBranch().branchId;
+                // model.branch = SessionStore.getCurrentBranch().branchId;
                 var bankName = SessionStore.getBankName();
                 var banks = formHelper.enum('bank').data;
                 for (var i = 0; i < banks.length; i++) {

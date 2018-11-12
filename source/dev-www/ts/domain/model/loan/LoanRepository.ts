@@ -26,22 +26,26 @@ class LoanRepository implements ILoanRepository {
 	}
 
 	create(loanProcess: any): Observable<any> {
-		return Ro.fromPromise(this.individualLoanService.create(loanProcess).$promise)
+		return Observable.defer(()=> {
+			return Ro.fromPromise(this.individualLoanService.create(loanProcess).$promise)
             .map( (obj:any) => {
                 let loanAccount:LoanAccount = <LoanAccount>plainToClass<LoanAccount, Object>(LoanAccount, obj.loanAccount);
                 _.merge(loanProcess.loanAccount, loanAccount);
                 return loanProcess;
-            })
+            });
+        });
 
 	}
 
 	update(loanProcess: LoanProcess): Observable<any> {
-		return Ro.fromPromise(this.individualLoanService.update(loanProcess).$promise)
-            .map((obj:any) => {
-                let loanAccount:LoanAccount = <LoanAccount>plainToClass<LoanAccount, Object>(LoanAccount, obj.loanAccount);
-                _.merge(loanProcess.loanAccount, loanAccount);
-                return loanProcess;
-            });
+		return Observable.defer(()=> {
+			return Ro.fromPromise(this.individualLoanService.update(loanProcess).$promise)
+	            .map((obj:any) => {
+	                let loanAccount:LoanAccount = <LoanAccount>plainToClass<LoanAccount, Object>(LoanAccount, obj.loanAccount);
+	                _.merge(loanProcess.loanAccount, loanAccount);
+	                return loanProcess;
+	            });
+        });
 	}
 
 	closeIndividualLoan(): Observable<any> {

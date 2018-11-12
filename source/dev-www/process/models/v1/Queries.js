@@ -316,12 +316,13 @@ irf.models.factory('Queries', [
             return deferred.promise;
         }
 
-        resource.getLoanProductCode = function(productCategory,frequency,partner) {
+        resource.getLoanProductCode = function(productCategory,frequency,partner,bankId) {
             var deferred = $q.defer();
             var request = {};
             request.partner=partner;
             request.productCategory=productCategory;
             request.frequency=frequency;
+            request.bankId = bankId;
 
             resource.getResult("loanProductCode.list", request).then(function(records) {
                 if (records && records.results) {
@@ -1270,6 +1271,15 @@ irf.models.factory('Queries', [
                 deferred.resolve(result);
             }         
         }, deferred.reject);
+        return deferred.promise;
+    }
+    resource.getGoldRate = function(){
+        var deferred = $q.defer();
+        resource.getResult("goldRateDetails",{}).then(function(value){
+            if(value && value.results.length > 0){
+                deferred.resolve(value.results[0].goldRate);
+            }            
+        },deferred.reject);
         return deferred.promise;
     }
     return resource;

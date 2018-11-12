@@ -220,13 +220,6 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 });
 
                                 $this.bundlePages.push({
-                                    pageClass: 'vehicle-valuation',
-                                    model: {
-                                        loanProcess: loanProcess
-                                    }
-                                });
-
-                                $this.bundlePages.push({
                                     pageClass: 'loan-request',
                                     model: {
                                         loanProcess: loanProcess

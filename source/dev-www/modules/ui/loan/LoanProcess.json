@@ -1855,10 +1855,12 @@
                         "key": "loanAccount.ornamentsAppraisals[].qualityInCarats"
                     },
                     "rate": {
+                        "key": "loanAccount.ornamentsAppraisals[].ratePerGramInPaisa",
                         "title": "RATE",
                         "type": "numeric"
                     },
                     "marketValue": {
+                        "key": "loanAccount.ornamentsAppraisals[].marketValueInPaisa",
                         "title": "MARKET_VALUE",
                         "type": "numeric"
                     }

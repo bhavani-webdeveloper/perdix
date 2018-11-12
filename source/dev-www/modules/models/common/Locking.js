@@ -4,7 +4,7 @@ function($resource, BASE_URL, searchResource) {
     var endpoint = BASE_URL + '/api/workflow';
     return $resource(endpoint, null, {
         lock: {
-            method: 'GET',
+            method: 'POST',
             url: endpoint + "/Lock"
         },
         unlock: {

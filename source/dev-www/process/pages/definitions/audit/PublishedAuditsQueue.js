@@ -7,7 +7,7 @@ irf.pageCollection.factory(irf.page("audit.PublishedAuditsQueue"), ["$log", "Uti
                 model.branch = SessionStore.getCurrentBranch().branchId;
                 var bankName = SessionStore.getBankName();
                 var banks = formHelper.enum('bank').data;
-                model.branch_id = SessionStore.getCurrentBranch().branchId;
+                // model.branch_id = SessionStore.getCurrentBranch().branchId;
                 for (var i = 0; i < banks.length; i++) {
                     if (banks[i].name == bankName) {
                         model.bankId = banks[i].value;

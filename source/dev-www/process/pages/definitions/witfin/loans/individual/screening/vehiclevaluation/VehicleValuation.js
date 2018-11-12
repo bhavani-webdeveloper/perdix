@@ -630,6 +630,34 @@ define(
                                         }
                                     }
                                 },
+                                "VehicleInsuranceDetails": {
+                                    "type": "box",
+                                    "title": "INSURANCE_DETAILS",
+                                    "items": {
+                                        "insuranceValidFrom": {
+                                            "key": "loanAccount.vehicleLoanDetails.insuranceValidFrom",
+                                            "type": "date",
+                                            "title": "INSURANCE_VALID_FROM",
+                                            "onChange": function (modelValue, form, model) {
+                                                if (moment(model.loanAccount.vehicleLoanDetails.insuranceValidTo).format('YYYY-MM-DD') < moment(model.loanAccount.vehicleLoanDetails.insuranceValidFrom).format('YYYY-MM-DD')) {
+                                                        model.loanAccount.vehicleLoanDetails.insuranceValidFrom = null;
+                                                        PageHelper.showProgress('date', 'Please enter a date greater than from date', 5000);
+                                                    }
+                                            }
+                                        },
+                                        "insuranceValidTo": {
+                                            "key": "loanAccount.vehicleLoanDetails.insuranceValidTo",
+                                            "type": "date",
+                                            "title": "INSURANCE_VALID_TO",
+                                            "onChange": function (modelValue, form, model) {
+                                                if (moment(model.loanAccount.vehicleLoanDetails.insuranceValidTo).format('YYYY-MM-DD') < moment(model.loanAccount.vehicleLoanDetails.insuranceValidFrom).format('YYYY-MM-DD')) {
+                                                        model.loanAccount.vehicleLoanDetails.insuranceValidTo = null;
+                                                        PageHelper.showProgress('date', 'Please enter a date greater than from date', 5000);
+                                                    }
+                                            }
+                                        }
+                                    }
+                                },
                                 "VehicleRecommendation": {
                                     "type": "box",
                                     "title": "RECOMMENDATION_STATUS",

@@ -16,7 +16,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                 return {
                     "type": "page-bundle",
                     "title": "TELE_VERIFICATION_2",
-                    "subTitle": "LOAN_BOOKING_BUNDLE_SUB_TITLE",
+                    "subTitle": "TELE_VERIFICATION_2",
                     "readonly": true,
                     "bundleDefinitionPromise": function() {
                         return $q.resolve([
@@ -67,14 +67,6 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 minimum: 1,
                                 maximum: 1,
                                 order:55
-                            },
-                            {
-                                pageName: 'pahal.customer.VehicleValuation',
-                                title: 'VEHICLE_VALUATION',
-                                pageClass: 'vehicle-valuation',
-                                minimum: 1,
-                                maximum: 1,
-                                order:57
                             },
                             {
                                 pageName: 'loans.individual.screening.CBCheck',
@@ -223,13 +215,6 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     pageClass: 'business',
                                     model: {
                                         enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
-                                        loanProcess: loanProcess
-                                    }
-                                });
-
-                                $this.bundlePages.push({
-                                    pageClass: 'vehicle-valuation',
-                                    model: {
                                         loanProcess: loanProcess
                                     }
                                 });

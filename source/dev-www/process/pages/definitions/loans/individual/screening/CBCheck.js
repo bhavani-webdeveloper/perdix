@@ -48,7 +48,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                     PageHelper.showProgress("cb-check", "Failed while placing Credit Bureau Request", 5000);
             });
         } else {
-            model.idenCheck.customerId = model.customer.applicantid;
+            model.idenCheck.customerId = customerId;
             model.idenCheck.type = CBType;
             Enrollment.idenCheckVerification(model.idenCheck).$promise.
             then(function(response) {

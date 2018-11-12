@@ -235,6 +235,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
             "type": "schema-form",
             "title": "LOAN_INPUT",
             "subTitle": "",
+            "processType": "Loan",
+            "processName": "Origination",
+            "lockingRequired": true,
             initialize: function (model, form, formCtrl) {
                 // TODO default values needs more cleanup
                 model.currentStage = 'LoanInitiation';
@@ -552,7 +555,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 searchHelper: formHelper,
                                 search: function(inputModel, form, model, context) {
 
-                                   return Queries.getLoanProductCode(model.loanAccount.productCategory,model.loanAccount.frequency,model.loanAccount.partnerCode);
+                                   return Queries.getLoanProductCode(model.loanAccount.productCategory,model.loanAccount.frequency,model.loanAccount.partnerCode,model.loanAccount.bankId);
                                 },
                                 onSelect: function(valueObj, model, context) {
                                     model.loanAccount.productCode = valueObj.productCode;
@@ -851,7 +854,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             {
                                 key:"loanAccount.commercialCibilCharge",
                                 type:"amount",
-                                "condition" : "model.siteCode != 'IREPDhan' && model.siteCode != 'pahal'",
+                                "condition" : "model.siteCode != 'IREPDhan' && model.siteCode != 'pahal' && model.siteCode != 'witfin'",
                                 onChange:function(value,form,model){
                                     getSanctionedAmount(model);
                                 }

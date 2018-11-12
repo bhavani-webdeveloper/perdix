@@ -125,10 +125,7 @@ define({
                         {
 							title: 'PARTNER_CODE',
 							data: 'partnerCode'
-                        },{
-							title: 'PROCESS_TYPE',
-							data: 'processType'
-                        },
+                        }
                     ]
 					},
                     getActions: function () {

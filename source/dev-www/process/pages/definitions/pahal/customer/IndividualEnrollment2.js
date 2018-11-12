@@ -79,7 +79,34 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualReferences",
                             ],
                             "overrides": {
-                                
+                                "KYC": {
+                                    "readonly": true
+                                },
+                                "IndividualInformation": {
+                                    "readonly": true
+                                },
+                                "ContactInformation": {
+                                    "readonly": true
+                                },
+                                "FamilyDetails": {
+                                    "readonly": true,
+                                    "title": "HOUSEHOLD_DETAILS"
+                                },
+                                "Liabilities": {
+                                    "readonly": true
+                                },
+                                "HouseVerification": {
+                                    "readonly": true
+                                },
+                                "CustomerDocumentUpload": {
+                                    "readonly": true
+                                },
+                                "CustomerLicenceDetails":{
+                                    "readonly": true
+                                },
+                                "BankAccounts": {
+                                    "readonly": true
+                                }
                             }
                         },
                         "GoNoGoApproval1": {
@@ -209,6 +236,34 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         },
                         "TeleVerification2": {
                             "overrides": {
+                                "KYC": {
+                                    "readonly": true
+                                },
+                                "IndividualInformation": {
+                                    "readonly": true
+                                },
+                                "ContactInformation": {
+                                    "readonly": true
+                                },
+                                "FamilyDetails": {
+                                    "readonly": true,
+                                    "title": "HOUSEHOLD_DETAILS"
+                                },
+                                "Liabilities": {
+                                    "readonly": true
+                                },
+                                "HouseVerification": {
+                                    "readonly": true
+                                },
+                                "CustomerDocumentUpload": {
+                                    "readonly": true
+                                },
+                                "CustomerLicenceDetails":{
+                                    "readonly": true
+                                },
+                                "BankAccounts": {
+                                    "readonly": true
+                                }
                             },
                             "excludes": [
                             ]
