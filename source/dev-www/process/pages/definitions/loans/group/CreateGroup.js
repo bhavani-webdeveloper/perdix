@@ -55,6 +55,18 @@ define({
                     if (resp.firstName && resp.firstName.length > 0) {
                         model.group.jlgGroupMembers[key].firstName = resp.firstName;
                     }
+                    var familyMembers = [];
+                    for (i in resp.familyMembers) {
+                        var obj = {};
+                        if (resp.familyMembers[i].enrolledUrnNo !=  resp.urnNo) {
+                            obj.name = resp.familyMembers[i].familyMemberFirstName;
+                            obj.relationShip = resp.familyMembers[i].relationShip;
+                            obj.age = moment().diff(moment(resp.familyMembers[i].dateOfBirth), 'years');
+                            obj.enrolledUrnNo=resp.familyMembers[i].enrolledUrnNo;
+                            familyMembers.push(obj);
+                        }
+                    }
+                    model.group.jlgGroupMembers[key].familyMembers=familyMembers;
                     try {
                         if (resp.middleName && resp.middleName.length > 0)
                             model.group.jlgGroupMembers[key].firstName += " " + resp.middleName;
@@ -131,6 +143,7 @@ define({
                 model.group = model.group || {};
                 model.siteCode = SessionStore.getGlobalSetting("siteCode");
                 model.group.siteCode = SessionStore.getGlobalSetting("siteCode");
+                model.siteCode =SessionStore.getGlobalSetting("siteCode");
                 for (var i = 0; i < banks.length; i++){
                     if(banks[i].name == bankName){
                         model.group.bankId = model.group.bankId || banks[i].value;
@@ -381,9 +394,12 @@ define({
                                  model.group.jlgGroupMembers[context.arrayIndex].loanAmount = res.requestedLoanAmount;
                                  model.group.jlgGroupMembers[context.arrayIndex].spouseDob=res.spouseDateOfBirth;
                                  model.group.jlgGroupMembers[context.arrayIndex].loanPurpose1 = res.requestedLoanPurpose;
+                                 model.group.jlgGroupMembers[context.arrayIndex].witnessFirstName = undefined;
+                                 model.group.jlgGroupMembers[context.arrayIndex].witnessRelationship = undefined;
+
                                 for (i in res.familyMembers) {
                                     var obj = {};
-                                    if (res.familyMembers[i].relationShip != 'Self' || res.familyMembers[i].relationShip != 'self') {
+                                    if(model.group.jlgGroupMembers[context.arrayIndex].urnNo != res.familyMembers[i].enrolledUrnNo){
                                         obj.name = res.familyMembers[i].familyMemberFirstName;
                                         obj.relationShip = res.familyMembers[i].relationShip;
                                         obj.age = res.familyMembers[i].dateOfBirth? moment().diff(moment(res.familyMembers[i].dateOfBirth), 'years'):0;
@@ -520,7 +536,7 @@ define({
                             var familyMembers = [];
                             if(model.group.jlgGroupMembers[context.arrayIndex].familyMembers)
                             for (var idx = 0; idx < model.group.jlgGroupMembers[context.arrayIndex].familyMembers.length; idx++){
-                                if((model.group.jlgGroupMembers[context.arrayIndex].familyMembers[idx].relationShip).toUpperCase() != 'SELF' && 
+                                if( 
                                 (model.group.jlgGroupMembers[context.arrayIndex].familyMembers[idx].age>=18 &&
                                     model.group.jlgGroupMembers[context.arrayIndex].familyMembers[idx].age<=59)
                                 ) {
