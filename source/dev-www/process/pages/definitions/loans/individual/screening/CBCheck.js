@@ -9,7 +9,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
     var fnPost = function(model, customerType, CBType, index){
         var customerId;
         var CBType;
-        var loanAmount = model.loanAmountRequested;
+        var loanAmount = model.loanAccount.loanAmountRequested;
         var loanPurpose;
         if(customerType=='APP'){
             customerId = model.customer.applicantid;
