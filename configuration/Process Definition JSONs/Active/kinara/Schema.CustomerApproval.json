@@ -122,6 +122,111 @@
                     "title": "OWNERSHIP",
                     "enumCode": "ownership",
 					"captureStages": ["Init"]
+                },
+                "photoImageId": {
+                    "title" : "CUSTOMER_PHOTO",
+                    "type": "file",
+                    "fileType": "image/*",
+                    "category": "CustomerEnrollment",
+                    "subCategory": "PHOTO",
+                    "captureStages": ["Init"]
+                },
+                
+                "id": {
+                    "type": ["number","null"],
+                    "title": "CUSTOMER_ID",
+                    "captureStages": ["Init"]
+
+                },
+                "urnNo": {
+                    "type": ["string","null"],
+                    "title": "URNNO",
+                    "captureStages": ["Init"]
+                },
+                "firstName": {
+                    "type": ["string","null"],
+                    "title": "FIRST_NAME",
+                    "captureStages": ["Init"]
+                },
+                "branchName": {
+                    "type": ["string","null"],
+                    "title": "BRANCH_NAME",
+                    "captureStages": ["Init"]
+                },
+                "latitude": {
+                    "title": "GPS_LOCATION",
+                    "type": "geotag",
+                    "captureStages": ["Init"]
+                },
+                "leftHandThumpImageId": {
+                    "type": ["string", "null"],
+                    "title": "FINGERPRINT",
+                    "category": "CustomerEnrollment",
+                    "subCategory": "FINGERPRINT",
+                    "captureStages": ["Init"]
+                },
+                "leftHandIndexImageId": {
+                    "type": ["string", "null"],
+                    "title": "FINGERPRINT",
+                    "category": "CustomerEnrollment",
+                    "subCategory": "FINGERPRINT",
+                    "captureStages": ["Init"]
+                },
+                "leftHandMiddleImageId": {
+                    "type": ["string", "null"],
+                    "title": "FINGERPRINT",
+                    "category": "CustomerEnrollment",
+                    "subCategory": "FINGERPRINT",
+                    "captureStages": ["Init"]
+                },
+                "leftHandRingImageId": {
+                    "type": ["string", "null"],
+                    "title": "FINGERPRINT",
+                    "category": "CustomerEnrollment",
+                    "subCategory": "FINGERPRINT",
+                    "captureStages": ["Init"]
+                },
+                "leftHandSmallImageId": {
+                    "type": ["string", "null"],
+                    "title": "FINGERPRINT",
+                    "category": "CustomerEnrollment",
+                    "subCategory": "FINGERPRINT",
+                    "captureStages": ["Init"]
+                },
+                "rightHandThumpImageId": {
+                    "type": ["string", "null"],
+                    "title": "FINGERPRINT",
+                    "category": "CustomerEnrollment",
+                    "subCategory": "FINGERPRINT",
+                    "captureStages": ["Init"]
+                },
+                "rightHandIndexImageId": {
+                    "type": ["string", "null"],
+                    "title": "FINGERPRINT",
+                    "category": "CustomerEnrollment",
+                    "subCategory": "FINGERPRINT",
+                    "captureStages": ["Init"]
+                },
+                "rightHandMiddleImageId": {
+                    "type": ["string", "null"],
+                    "title": "FINGERPRINT",
+                    "category": "CustomerEnrollment",
+                    "subCategory": "FINGERPRINT",
+                    "captureStages": ["Init"]
+                },
+                "rightHandRingImageId": {
+                    "type": ["string", "null"],
+                    "title": "FINGERPRINT",
+                    "category": "CustomerEnrollment",
+                    "subCategory": "FINGERPRINT",
+                    "captureStages": ["Init"]
+                },
+                "rightHandSmallImageId": {
+                    "type": ["string", "null"],
+                    "title": "FINGERPRINT",
+                    "category": "CustomerEnrollment",
+                    "subCategory": "FINGERPRINT",
+                    "captureStages": ["Init"]
                 }
 			}
 		}

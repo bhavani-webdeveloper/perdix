@@ -678,8 +678,6 @@ define({
                         })
 
                         Workflow.save(reqData, function (res, headers) {
-                            console.log("this is only the thing");
-                            console.log(reqData);
                             PageHelper.hideLoader();
                             irfProgressMessage.pop('cust-update', 'Done. Customer Updated, ID : ' + res.customer.id, 2000);
                             irfNavigator.goBack();
