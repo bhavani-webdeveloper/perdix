@@ -63,7 +63,7 @@ irf.pageCollection.config(["$provide", function($provide){
 }])
 
 
-var pages = irf.pages = angular.module("IRFPages", ["irf.elements", "IRFPageCollection","nvd3", "ngSanitize","ui.bootstrap"], function ($compileProvider) {
+var pages = irf.pages = angular.module("IRFPages", ["irf.elements", "IRFPageCollection","nvd3", "ngSanitize","ui.bootstrap","queryBuilder"], function ($compileProvider) {
 	$compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|geo):/);
 });
 
