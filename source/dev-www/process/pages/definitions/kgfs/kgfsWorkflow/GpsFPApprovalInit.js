@@ -485,7 +485,7 @@ define({
                             },
                             "urnNo": {
                                 "type": ["string", "null"],
-                                "title": "URNNO",
+                                "title": "URN_NO",
                                 "captureStages": ["Init"]
                             },
                             "firstName": {
@@ -500,13 +500,12 @@ define({
                             },
                             "latitude": {
                                 "title": "GPS_LOCATION",
-                                "type": "geotag",
+                                "type": ["string","null"],
                                 "captureStages": ["Init"]
                             },
                             "photoImageId": {
                                 "title" : "CUSTOMER_PHOTO",
-                                "type": "file",
-                                "fileType": "image/*",
+                                "type":["string","null"],
                                 "category": "CustomerEnrollment",
                                 "subCategory": "PHOTO",
                                 "captureStages": ["Init"]
