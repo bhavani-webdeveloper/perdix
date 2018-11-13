@@ -1,8 +1,8 @@
 define({
      pageUID: "witfin.loans.individual.screening.vehiclevaluation.ReassignVehicleValuationQueue",
     pageType: "Engine",
-    dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons"],
-    $pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
+    dependencies: ["Queries","$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons"],
+    $pageFn: function(Queries,$log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
         var branch = SessionStore.getBranch();
         var centres = SessionStore.getCentres();
         var centreId=[];
@@ -30,14 +30,6 @@ define({
                     "type": 'object',
                     "title": 'SEARCH_OPTIONS',
                     "properties": {
-                        "applicantName": {
-                            "title": "APPLICANT_NAME",
-                            "type": "string"
-                        },
-                        "businessName": {
-                            "title": "BUSINESS_NAME",
-                            "type": "string"
-                        },
                         'branch': {
                             'title': "BRANCH",
                             "type": ["string", "null"],
@@ -46,32 +38,6 @@ define({
                                 "type": "select",
                                 "screenFilter": true
                             }
-                        },
-                        "centre": {
-                            "title": "CENTRE",
-                            "type": ["integer", "null"],
-                            "x-schema-form": {
-                                "type": "select",
-                                "enumCode": "centre",
-                                "parentEnumCode": "branch",
-                                "screenFilter": true
-                            }
-                        },
-                        "customerId": {
-                            "title": "CUSTOMER_ID",
-                            "type": "string"
-                        },
-                        "area": {
-                            "title": "AREA",
-                            "type": "string"
-                        },
-                        "cityTownVillage": {
-                            "title": "CITY_TOWN_VILLAGE",
-                            "type": "string"
-                        },
-                         "pincode": {
-                            "title": "PIN_CODE",
-                            "type": "string"
                         }
                     },
                     "required": []
@@ -83,21 +49,9 @@ define({
                     if (_.hasIn(searchOptions, 'centreCode')){
                         searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
                     }
-                    var branchId = SessionStore.getBranchId();
-                    return IndividualLoan.search({
-                        'branchName':searchOptions.branch,
-                        'stage': ['FieldInvestigation1','FieldInvestigation2','FieldInvestigation3','TeleVerification'],
-                        'enterprisePincode':searchOptions.pincode,
-                        'applicantName':searchOptions.applicantName,
-                        'area':searchOptions.area,
-                        'villageName':searchOptions.villageName,
-                        'status':searchOptions.status,
-                        'customerName': searchOptions.businessName,
-                        'page': pageOpts.pageNo,
-                        'per_page': pageOpts.itemsPerPage,
-                        'centreCode': searchOptions.centre,
-                        'valuator': SessionStore.session.login
-                    }).$promise;
+ 
+                    return Queries.searchReAssignment(searchOptions.branch);
+
                 },
                 paginationOptions: {
                     "getItemsPerPage": function(response, headers) {
