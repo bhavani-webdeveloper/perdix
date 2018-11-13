@@ -150,15 +150,22 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                                     fn: function(item, index){
                                         var siteCode = SessionStore.getGlobalSetting('siteCode');
                                         if(siteCode == 'witfin') {
-                                        $state.go('Page.Bundle', {
-                                            pageName: 'witfin.loans.individual.screening.LoanView',
-                                            pageId: item.accountId
-                                        })
-                                        } else {
-                                        $state.go('Page.Bundle', {
-                                            pageName: 'loans.individual.screening.LoanViewList',
-                                            pageId: item.accountId
-                                        })
+                                            $state.go('Page.Bundle', {
+                                                pageName: 'witfin.loans.individual.screening.LoanView',
+                                                pageId: item.accountId
+                                            })
+                                        } 
+                                        else if (siteCode == 'pahal') {
+                                            $state.go('Page.Bundle', {
+                                                pageName: 'pahal.loans.individual.screening.LoanView',
+                                                pageId: item.accountId
+                                            })
+                                        }   
+                                        else {
+                                            $state.go('Page.Bundle', {
+                                                pageName: 'loans.individual.screening.LoanViewList',
+                                                pageId: item.accountId
+                                            })
                                         }
                                     },
                                     isApplicable: function(item, index){

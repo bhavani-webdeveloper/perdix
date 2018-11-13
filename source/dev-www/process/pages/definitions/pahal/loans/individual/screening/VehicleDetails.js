@@ -57,6 +57,7 @@ define(
                         "TeleVerification1" : {
                             "excludes": [
                                 "VehicleViability.calculateVehicleDetails",
+                                "calculateVehicleDetails",
                             ],
                             "overrides": {
                                 "VehicleLoanIncomesInformation": {
@@ -92,6 +93,7 @@ define(
                         "GoNoGoApproval1": {
                             "excludes": [
                                 "VehicleViability.calculateVehicleDetails",
+                                "calculateVehicleDetails"
                             ],
                             "overrides": {
                                 "VehicleLoanIncomesInformation": {
@@ -136,6 +138,7 @@ define(
                         "TeleVerification2": {
                             "excludes": [
                                 "VehicleViability.calculateVehicleDetails",
+                                "calculateVehicleDetails"
                             ],
                             "overrides": {
                                 "VehicleLoanIncomesInformation": {
@@ -180,13 +183,59 @@ define(
 
                         "CreditApproval": {
                             "excludes": [
-                              "VehicleViability.calculateVehicleDetails"
+                              "VehicleViability.calculateVehicleDetails",
+                              "calculateVehicleDetails"
                             ],
                             "overrides": {
                                 "VehicleLoanIncomesInformation": {
                                     "readonly": true
                                 },
                                 "VehicleExpensesInformation": {
+                                    "readonly": true
+                                },
+                                "VehicleViability": {
+                                    "readonly": true
+                                },
+                                "VehicleViability1": {
+                                    "readonly": true
+                                },
+                                "NewVehicleDetails": {
+                                    "readonly": true
+                                },
+                                "VehicleAssetUse": {
+                                    "readonly": true
+                                },
+                                "VehicleRouteDetails": {
+                                    "readonly": true
+                                },
+                                "vehicleLoanDocuments": {
+                                    "readonly": true
+                                },
+                                "VehiclePhotoCaptures": {
+                                    "readonly": true
+                                }
+                            }
+                        }
+                    },
+                    "loanProcess.loanAccount.isReadOnly": {
+                        "Yes": {
+                            "excludes": [
+                                "VehicleViability.calculateVehicleDetails",
+                                "calculateVehicleDetails1",
+                                "calculateVehicleDetails",
+                                "actionbox"
+                            ],
+                            "overrides": {
+                                "VehicleLoanIncomesInformation": {
+                                    "readonly": true
+                                },
+                                "VehicleLoanIncomesInformation1": {
+                                    "readonly": true 
+                                },
+                                "VehicleExpensesInformation": {
+                                    "readonly": true
+                                },
+                                "VehicleExpensesInformation1": {
                                     "readonly": true
                                 },
                                 "VehicleViability": {

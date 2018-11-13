@@ -30,16 +30,12 @@ define(["perdix/domain/model/loan/LoanProcess",
                             pageName: 'pahal.customer.IndividualEnrollment2',
                             title: 'CO_APPLICANT',
                             pageClass: 'co-applicant',
-                            minimum: 0,
-                            maximum: 4,
                             order:20
                         },
                         {
                             pageName: 'pahal.customer.IndividualEnrollment2',
                             title: 'GUARANTOR',
                             pageClass: 'guarantor',
-                            minimum: 0,
-                            maximum: 3,
                             order:30
                         },
                         {
@@ -59,21 +55,29 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:50
                         },
                         {
-                            pageName: 'loans.individual.screening.Review',
-                            title: 'REVIEW',
-                            pageClass: 'loan-review',
-                            minimum: 1,
-                            maximum: 1,
-                            order:70
-                        },
-                        {
                             pageName: 'pahal.loans.individual.screening.LoanRequest',
                             title: 'LOAN_REQUEST',
                             pageClass: 'loan-request',
                             minimum: 1,
                             maximum: 1,
                             order:60
-                        }
+                        },
+                        {
+                            pageName: 'pahal.loans.individual.screening.VehicleDetails',
+                            title: 'VEHICLE_DETAILS',
+                            pageClass: 'vehicle-details',
+                            minimum: 1,
+                            maximum: 1,
+                            order:65
+                        },
+                        {
+                            pageName: 'loans.individual.screening.Review',
+                            title: 'REVIEW',
+                            pageClass: 'loan-review',
+                            minimum: 1,
+                            maximum: 1,
+                            order:70
+                        }                        
                     ]);
                 },
                 "bundlePages": [],
@@ -230,9 +234,12 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 });
 
-
-
-                                
+                                $this.bundlePages.push({
+                                    pageClass: 'vehicle-details',
+                                    model: {
+                                        loanProcess: loanProcess
+                                    }
+                                });
 
 
                                 deferred.resolve();
@@ -288,6 +295,13 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     pageClass: 'cb-check',
                                     model: {
                                         loanAccount: loanProcess.loanAccount
+                                    }
+                                });
+
+                                $this.bundlePages.push({
+                                    pageClass: 'vehicle-details',
+                                    model: {
+                                        loanProcess: loanProcess
                                     }
                                 });
 
