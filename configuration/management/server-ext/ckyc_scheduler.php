@@ -95,11 +95,12 @@ function validateCustomerData($data){
     create folder Directories if not already present 
 */
 $DIR= getenv('TRACKWIZZ_DIR');// from .env
-$GLOBALS['outgoingDir']      =  $DIR.DIRECTORY_SEPARATOR."cersai".DIRECTORY_SEPARATOR."outgoing";
-$GLOBALS['outgoingTempDir']  =  $DIR.DIRECTORY_SEPARATOR."cersai".DIRECTORY_SEPARATOR."outgoing_temp";
-$GLOBALS['trackwizDir']      =  $DIR.DIRECTORY_SEPARATOR."cersai".DIRECTORY_SEPARATOR."incoming" ;
-$GLOBALS['trackwizHistDir']  =  $DIR.DIRECTORY_SEPARATOR."cersai".DIRECTORY_SEPARATOR."incomingHistory" ;
-$GLOBALS['trackwizTempDir']  =  $DIR.DIRECTORY_SEPARATOR."cersai".DIRECTORY_SEPARATOR."incoming_temp" ;
+echo $DIR;
+$GLOBALS['outgoingDir']      =  $DIR.DIRECTORY_SEPARATOR."outgoing";
+$GLOBALS['outgoingTempDir']  =  $DIR.DIRECTORY_SEPARATOR."outgoing_temp";
+$GLOBALS['trackwizDir']      =  $DIR.DIRECTORY_SEPARATOR."incoming";
+$GLOBALS['trackwizHistDir']  =  $DIR.DIRECTORY_SEPARATOR."incomingHistory";
+$GLOBALS['trackwizTempDir']  =  $DIR.DIRECTORY_SEPARATOR."incoming_temp";
 $GLOBALS['VALID_CUSTOMER_DATA']=array(
     "gender"=>array(
         "male"=>"M",
@@ -147,18 +148,17 @@ $GLOBALS['IMAGEPROOF']=array(
 );
 
 /*
-    1) Getting parameter from cmd for ckyc_scheduler , it wil be either a)incoming or b)outgoing
+    1) Getting mode from query param for ckyc_scheduler , it wil be either a)incoming or b)outgoing
 */
-$val = getopt(null, ["parameter:"]);
-
-if($val['parameter']=="Incoming"){
+if (!isset($_GET['mode'])) {
+    echo "php File called without mode , so by default reading response from trackwizz \n";
     fetchIncomingData();
-
-}else if($val['parameter']=="Outgoing"){
+} else if($_GET['mode'] == "Incoming") {
+    fetchIncomingData();
+} else if($_GET['mode'] == "Outgoing") {
     prepareOutgoingData();
-}else {
-    echo "php File called without parameter , so by default reading response from trackwizz \n";
-    fetchIncomingData();
+} else {
+    die('Error processing anything');
 }
 
 function prepareOutgoingData() {
