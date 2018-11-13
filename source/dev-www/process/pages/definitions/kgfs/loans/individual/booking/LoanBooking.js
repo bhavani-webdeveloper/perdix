@@ -216,7 +216,13 @@ define([], function () {
                         "required": true,
                         "enumCode": "booking_loan_type",
                         "onChange": function(valueObj,context,model){
-                            getGoldRate(model);
+                            if(valueObj == "JEWEL"){
+                                getGoldRate(model);
+                                model.loanAccount.jewelLoanDetails.jewelPouchLocationType = "BRANCH";
+                            }
+                            else{
+                                model.loanAccount.jewelLoanDetails = {};
+                            }
                         }
                     },
                     "LoanDetails.partner": {
