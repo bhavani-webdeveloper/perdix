@@ -155,7 +155,7 @@
                 },
                 "latitude": {
                     "title": "GPS_LOCATION",
-                    "type": "geotag",
+                    "type": ["string","null"],
                     "captureStages": ["Init"]
                 },
                 "leftHandThumpImageId": {
