@@ -73,11 +73,8 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementD
                                         for (var i = 0; i < loanDocuments.length; i++) {
                                             availableDocCodes.push(loanDocuments[i].document);
                                             var documentObj = getDocument(docsForProduct, loanDocuments[i].document);
-                                            /* To add flag whether to show or not */
-                                            loanDocuments[i].isHidden = false;
-                                            if (loanDocuments[i].documentStatus == 'APPROVED'){
-                                                loanDocuments[i].isHidden = true;
-                                            }
+                                            
+                                            loanDocuments[i].isHidden = true;
 
                                             if (documentObj != null) {
                                                 loanDocuments[i].$title = documentObj.docTitle;
@@ -202,7 +199,6 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementD
                                     },
                                     {
                                         "key": "loanAccount.loanDocuments[].$title",
-
                                         "notitle": true,
                                         "title": " ",
                                         "condition": "!model.loanAccount.loanDocuments[arrayIndex].$downloadRequired",

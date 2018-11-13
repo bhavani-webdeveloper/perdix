@@ -22,7 +22,8 @@ $api_url = $settings['perdix']['v8_url'];
 $authHeader = "Bearer ". $settings['perdix']['token'];
 $url = $settings['perdix']['v8_url'] . "/api/enrollments";
 $fileUploadUrl = $api_url."/api/files/upload?category=Customer&subCategory=AGEPROOF";
-$filePath=$settings['perdix']['kyc_upload_path'];
+$filePath=$settings['perdix']['partner_upload_path'];
+$sheetBasePath=$settings['perdix']['partner_sheet_path'];
 $MAX_SIZE=$settings['perdix']['max_upload_size'];
 
 $address_proof = collect([]);
@@ -36,12 +37,12 @@ foreach ($proofTypeNames as $proofTypeName){
 }
 echo $authHeader;
 
-$baseUrl = $settings['perdix']['customer_upload_path'];
+//$baseUrl = $settings['perdix']['customer_upload_path'];
 
-$tempToBeProcessed = $baseUrl . DIRECTORY_SEPARATOR . "to_be_processed" . DIRECTORY_SEPARATOR;
-$tempWipDir = $baseUrl . DIRECTORY_SEPARATOR . "wip" . DIRECTORY_SEPARATOR;
-$tempRejectedDir = $baseUrl . DIRECTORY_SEPARATOR . "rejected" . DIRECTORY_SEPARATOR;
-$tempCompletedDir = $baseUrl . DIRECTORY_SEPARATOR . "completed" . DIRECTORY_SEPARATOR;
+$tempToBeProcessed = $sheetBasePath . DIRECTORY_SEPARATOR . "to_be_processed" . DIRECTORY_SEPARATOR;
+$tempWipDir = $sheetBasePath . DIRECTORY_SEPARATOR . "wip" . DIRECTORY_SEPARATOR;
+$tempRejectedDir = $sheetBasePath . DIRECTORY_SEPARATOR . "rejected" . DIRECTORY_SEPARATOR;
+$tempCompletedDir = $sheetBasePath . DIRECTORY_SEPARATOR . "completed" . DIRECTORY_SEPARATOR;
 
 
 function formatValidation($extension){
@@ -71,7 +72,7 @@ function getFileByType($type, $customer){
     global $identity_prof;
     global $filePath;
     $absolutepath="";
-    $path = $filePath . "/" . "to_be_processed" . "/".$customer['old_customer_id']."/";
+    $path = $filePath . "/" .$customer['old_customer_id']."/";
     
     switch ($type) {
         case "Photo":
@@ -190,7 +191,7 @@ foreach ($files as $file) {
                     $customer = new Customer();
                     $customer = $customer::where('old_customer_id', '=', $rowData[1])->firstOrFail();
 
-                    $path = $filePath . "/" . "to_be_processed" . "/".$rowData[1];
+                    $path = $filePath . "/" .$rowData[1];
                     if(!file_exists($path))
                         throw new PDOException($rowData[1].' Folder not Exist');
 
