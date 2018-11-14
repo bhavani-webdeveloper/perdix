@@ -75,10 +75,10 @@ accountOverrideStatus.list= select override_status,account_number,urn_no,product
 
 machineDescription.list=SELECT distinct machine_description as `machineDescription` from machine_master 
 machineName.list=SELECT distinct machine_name as `machineName` from machine_master where machine_description = :machineDescription
-machineType.list=SELECT distinct machine_type as `machineType`,depreciation_percentage as `depreciation`  from machine_master where machine_description = :machineDescription and machine_name = :machineName
+machineType.list=SELECT distinct machine_type as `machineType`,depreciation_percentage as `depreciationPercentage`  from machine_master where machine_description = :machineDescription and machine_name = :machineName
 machineWorkProcess.list=SELECT distinct work_process as `workProcess` from machine_master where machine_description = :machineDescription and machine_name = :machineName and machine_type = :machineType
 machineModel.list=SELECT distinct model as `machineModel` from machine_master where machine_description = :machineDescription and machine_name = :machineName and machine_type = :machineType and work_process = :workProcess
-machineDepreciation.list=SELECT distinct depreciation_percentage as `depreciation` from machine_master where machine_description = :machineDescription and machine_name = :machineName and machine_type = :machineType
+machineDepreciation.list=SELECT distinct depreciation_percentage as `depreciationPercentage` from machine_master where machine_description = :machineDescription and machine_name = :machineName and machine_type = :machineType
 machineMaster.list=SELECT machine_description as `machineDescription`, machine_name as `machineName`, machine_type as `machineType`,work_process as `workProcess`, model as `model`, depreciation_percentage as `depreciation`, year_of_manufacturing as `yearOfManufacturing` from machine_master
 
 
