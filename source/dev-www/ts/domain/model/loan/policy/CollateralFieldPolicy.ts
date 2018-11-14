@@ -27,7 +27,7 @@ export class CollateralFieldPolicy extends IPolicy<LoanProcess> {
     run(loanProcess: LoanProcess): Observable<LoanProcess> {
         let Queries = AngularResourceService.getInstance().getNGService("Queries");
 
-        if(_.hasIn(loanProcess.loanAccount, "collateral") && loanProcess.loanAccount.collateral.length == 0) {
+       if(_.hasIn(loanProcess.loanAccount, "collateral") && loanProcess.loanAccount.collateral.length == 0) {
             let ltv = null;
             
             if(this.args && this.args.ltv && this.args.ltv == true) {
@@ -96,5 +96,6 @@ export class CollateralFieldPolicy extends IPolicy<LoanProcess> {
                 return Observable.of(loanProcess);
            }
        }
+       return Observable.of(loanProcess);
     }
 }
