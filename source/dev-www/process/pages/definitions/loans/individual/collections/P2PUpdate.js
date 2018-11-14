@@ -450,7 +450,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
 
                 if(siteCode == "witfin"){
 
-                    var selecteddate = model.promise.promiseToPayDate;
+                    var selecteddate = model.additional.promiseToPayDate;
                     var currentdate = moment(new Date()).format("YYYY-MM-DD");
                     var fivedays = moment(new Date(new Date().getTime()+(5*24*60*60*1000))).format("YYYY-MM-DD");
                     var fivedaysvalidate = moment(new Date(new Date().getTime()+(5*24*60*60*1000))).format("DD-MM-YYYY");
@@ -528,13 +528,15 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                 $log.info(model.promise.customerCategoryHubManager);
 
                 LoanProcess.p2pUpdate(model.promise, function(response){
-                    PageHelper.hideLoader();
                     if(model._screen && model._screen == "BouncePromiseQueue")
                         $state.go('Page.Engine', {pageName: 'loans.individual.collections.BouncePromiseQueue', pageId: null});
                     else if(model._screen && model._screen == "BounceRecoveryQueue")
                         $state.go('Page.Engine', {pageName: 'loans.individual.collections.BounceRecoveryQueue', pageId: null});
                     else if(model._screen && model._screen == "BounceQueue")
                         $state.go('Page.Engine', {pageName: 'loans.individual.collections.BounceQueue', pageId: null});
+
+                    PageHelper.hideLoader();
+                    irfNavigator.goBack();
 
                 }, function(errorResponse){
                     PageHelper.hideLoader();

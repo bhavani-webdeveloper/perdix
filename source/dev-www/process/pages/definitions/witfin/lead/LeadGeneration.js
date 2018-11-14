@@ -49,7 +49,7 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                         "required": true
                     },
                     "sourceDetails.agentName": {
-                        "condition": "model.lead.leadSource.toUpperCase() == 'BUYING/SELLING AGENT(BROKER)'",
+                        "condition": "model.lead.leadSource.toUpperCase() == 'BUYING / SELLING AGENT(BROKER)'",
                         "enumCode": "agent"
                     },
                     "sourceDetails.referredBy2": {
