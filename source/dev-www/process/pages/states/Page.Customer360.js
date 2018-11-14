@@ -459,6 +459,12 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 			return $q.resolve(menu);
 		};
 
+		if ($scope.dashboardDefinition.$menuMap['Page/Adhoc/customer360.FinancialWellbeingReport'])
+		$scope.dashboardDefinition.$menuMap['Page/Adhoc/customer360.FinancialWellbeingReport'].onClick = function(event, menu) {
+			menu.stateParams.pageId = $scope.customerId;
+			return $q.resolve(menu);
+		};
+
 
 		if ($scope.dashboardDefinition.$menuMap['Page/Engine/customer360.CustomerSummaryView'])
 		$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.CustomerSummaryView'].onClick = function(event, menu) {
