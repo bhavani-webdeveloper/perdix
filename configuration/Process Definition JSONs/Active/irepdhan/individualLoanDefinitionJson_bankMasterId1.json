@@ -94,6 +94,54 @@
        },
        {
           "order":8,
+          "code":"IrepDhanApprovalReview",
+          "name":"IrepDhanApprovalReview",
+          "stageType":"CAPTURE",
+          "sendSms":"Yes",
+          "smsCategory":"Approval",
+          "isAccountOpening":false,
+          "allowedRoles":[
+             "WM"
+          ]
+       },
+       {
+          "order":9,
+          "code":"IrepCCRiskApprovalReview",
+          "name":"IrepCCRiskApprovalReview",
+          "stageType":"CAPTURE",
+          "sendSms":"Yes",
+          "smsCategory":"Approval",
+          "isAccountOpening":false,
+          "allowedRoles":[
+             "WM"
+          ]
+       },
+       {
+          "order":10,
+          "code":"IrepCCOpsConfirmation",
+          "name":"IrepCCOpsConfirmation",
+          "stageType":"CAPTURE",
+          "sendSms":"Yes",
+          "smsCategory":"Approval",
+          "isAccountOpening":false,
+          "allowedRoles":[
+             "WM"
+          ]
+       },
+       {
+          "order":11,
+          "code":"CreditConfirmation",
+          "name":"CreditConfirmation",
+          "stageType":"CAPTURE",
+          "sendSms":"Yes",
+          "smsCategory":"Approval",
+          "isAccountOpening":false,
+          "allowedRoles":[
+             "WM"
+          ]
+       },
+       {
+          "order":12,
           "code":"GuarantorAddition",
           "name":"Guarantor Addition",
           "stageType":"CAPTURE",
@@ -105,7 +153,7 @@
           ]
        },
        {
-          "order":9,
+          "order":13,
           "code":"Sanction",
           "name":"Sanction",
           "stageType":"CAPTURE",
@@ -117,7 +165,7 @@
           ]
        },
        {
-          "order":10,
+          "order":14,
           "code": "Rejected",
           "name": "Rejected",
           "stageType": "CAPTURE",
@@ -129,7 +177,7 @@
           ]
        },
        {
-          "order":11,
+          "order":15,
           "code":"LoanInitiation",
           "name":"Loan Input",
           "stageType":"CAPTURE",
@@ -141,7 +189,7 @@
           ]
        },
        {
-          "order":12,
+          "order":16,
           "code":"LoanBooking",
           "name":"Loan Booking",
           "stageType":"CAPTURE",
@@ -153,7 +201,7 @@
           ]
        },
        {
-          "order":13,
+          "order":17,
           "code":"DocumentUpload",
           "name":"Document Download and Upload",
           "stageType":"CAPTURE",
@@ -165,7 +213,7 @@
           ]
        },
        {
-          "order":14,
+          "order":18,
           "code":"DocumentVerification",
           "name":"Document Verification",
           "stageType":"CAPTURE",
@@ -177,7 +225,7 @@
           ]
        },
        {
-          "order":15,
+          "order":19,
           "code":"Completed",
           "name":"Completed",
           "stageType":"CAPTURE",
