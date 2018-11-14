@@ -20,9 +20,9 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
     function priceCalculation(modelValue, form, model) {
         if (model.customer.fixedAssetsMachinaries[model.arrayIndex].purchasePrice &&
          model.customer.fixedAssetsMachinaries[model.arrayIndex].machinePurchasedYear &&
-         model.customer.fixedAssetsMachinaries[model.arrayIndex].depreciation) {
+         model.customer.fixedAssetsMachinaries[model.arrayIndex].depreciationPercentage) {
             var machineCost = model.customer.fixedAssetsMachinaries[model.arrayIndex].purchasePrice;
-            var depreciationPercentage = model.customer.fixedAssetsMachinaries[model.arrayIndex].depreciation;
+            var depreciationPercentage = model.customer.fixedAssetsMachinaries[model.arrayIndex].depreciationPercentage;
             var amount = machineCost - (machineCost*Math.ceil(new Date().getFullYear() - model.customer.fixedAssetsMachinaries[model.arrayIndex].machinePurchasedYear)*(depreciationPercentage/100));
             model.customer.fixedAssetsMachinaries[model.arrayIndex].marketPrice = amount;
         }
@@ -1473,7 +1473,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                         model.customer.fixedAssetsMachinaries[context.arrayIndex].machineType=null;                                  
                                         model.customer.fixedAssetsMachinaries[context.arrayIndex].workProcess=null;                                  
                                         model.customer.fixedAssetsMachinaries[context.arrayIndex].machineModel=null;
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].depreciation=null;
+                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].depreciationPercentage=null;
                                         model.customer.fixedAssetsMachinaries[context.arrayIndex].marketPrice=null;
                                         model.customer.fixedAssetsMachinaries[context.arrayIndex].finalPrice=null;
 
@@ -1507,7 +1507,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                         model.customer.fixedAssetsMachinaries[context.arrayIndex].machineType=null;                                  
                                         model.customer.fixedAssetsMachinaries[context.arrayIndex].workProcess=null;                                  
                                         model.customer.fixedAssetsMachinaries[context.arrayIndex].machineModel=null;
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].depreciation=null;
+                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].depreciationPercentage=null;
                                         model.customer.fixedAssetsMachinaries[context.arrayIndex].marketPrice=null;
                                         model.customer.fixedAssetsMachinaries[context.arrayIndex].finalPrice=null;
                                    }
@@ -1524,7 +1524,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                
                                 outputMap: {
                                      "machineType": "customer.fixedAssetsMachinaries[arrayIndex].machineType",
-                                     "depreciation": "customer.fixedAssetsMachinaries[arrayIndex].depreciation"
+                                     "depreciationPercentage": "customer.fixedAssetsMachinaries[arrayIndex].depreciationPercentage"
                                  },
                                 search: function(inputModel, form, model) {
                                     
@@ -1534,7 +1534,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 getListDisplayItem: function(item, index) {
                                     return [
                                         item.machineType,
-                                        item.depreciation
+                                        item.depreciationPercentage
                                     ];
                                 },
                                 onSelect: function(result, model, context) {
@@ -1574,7 +1574,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 onSelect: function(result, model, context) {
                                    if(model.customer.fixedAssetsMachinaries[context.arrayIndex].machineModel){
                                         model.customer.fixedAssetsMachinaries[context.arrayIndex].machineModel=null;
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].depreciation=null;
+                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].depreciationPercentage=null;
                                         model.customer.fixedAssetsMachinaries[context.arrayIndex].marketPrice=null;
                                         model.customer.fixedAssetsMachinaries[context.arrayIndex].finalPrice=null;
                                    }
@@ -1651,7 +1651,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                     }
                             },
                             {
-                                key: "customer.fixedAssetsMachinaries[].depreciation",
+                                key: "customer.fixedAssetsMachinaries[].depreciationPercentage",
                                 readonly:true,
                                 title:"DEPRECIATION_PERCENTAGE"
 
