@@ -6,9 +6,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidati
         return {
             "type": "schema-form",
             "title": "PAYMENT_DETAILS_FOR_LOAN",
-            "processType": "Loan",
-            "processName": "Origination",
-            "lockingRequired": true,
+           
             initialize: function (model, form, formCtrl) {
                 $log.info("Credit Validation Page got initialized");
                 if (!model._credit) {
