@@ -218,6 +218,7 @@ define([], function () {
                         "onChange": function(valueObj,context,model){
                             if(valueObj == "JEWEL"){
                                 getGoldRate(model);
+                                model.loanAccount.jewelLoanDetails = {};
                                 model.loanAccount.jewelLoanDetails.jewelPouchLocationType = "BRANCH";
                             }
                             else{
