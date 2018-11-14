@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidationQueue"),
-["$log", "formHelper", "LoanCollection", "$state", "SessionStore", "$q", "entityManager","irfProgressMessage","Locking",
-function($log, formHelper, LoanCollection, $state, SessionStore, $q, entityManager,irfProgressMessage,Locking){
+["$log", "formHelper", "LoanCollection", "$state", "SessionStore", "$q", "entityManager",
+function($log, formHelper, LoanCollection, $state, SessionStore, $q, entityManager){
     return {
         "type": "search-list",
         "title": "CREDIT_VALIDATION_QUEUE",
@@ -104,21 +104,8 @@ function($log, formHelper, LoanCollection, $state, SessionStore, $q, entityManag
                             name: "Credit Validation",
                             desc: "",
                             fn: function(item, index){
-                                Locking.findlocks({}, {}, function (resp, headers) {
-                                    var i;
-                                    for (i = 0; i < resp.body.length; i++) {
-                                        if (item.loanId == resp.body[i].recordId)
-                                            var def = true;
-                                    }
-                                    if (def) 
-                                        irfProgressMessage.pop("Selected list", "File is Locked, Please unlock from AdminScreen", 4000);
-                                    else {
-                                        entityManager.setModel('loans.individual.collections.CreditValidation', {_credit:item});
-                                        $state.go('Page.Engine', {pageName: 'loans.individual.collections.CreditValidation', pageId: item.id});
-                                    }
-                                }, function (resp) {
-                                    $log.error(resp);
-                                });
+                                entityManager.setModel('loans.individual.collections.CreditValidation', {_credit:item});
+                                $state.go('Page.Engine', {pageName: 'loans.individual.collections.CreditValidation', pageId: item.id});
                             },
                             isApplicable: function(item, index){
                                 return true;

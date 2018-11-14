@@ -1475,7 +1475,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                         model.customer.fixedAssetsMachinaries[context.arrayIndex].machineModel=null;
                                         model.customer.fixedAssetsMachinaries[context.arrayIndex].depreciation=null;
                                         model.customer.fixedAssetsMachinaries[context.arrayIndex].marketPrice=null;
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].finalprice=null;
+                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].finalPrice=null;
 
                                    }
                                    $log.info(result);
@@ -1509,7 +1509,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                         model.customer.fixedAssetsMachinaries[context.arrayIndex].machineModel=null;
                                         model.customer.fixedAssetsMachinaries[context.arrayIndex].depreciation=null;
                                         model.customer.fixedAssetsMachinaries[context.arrayIndex].marketPrice=null;
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].finalprice=null;
+                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].finalPrice=null;
                                    }
                                     $log.info(result);
                                 }
@@ -1544,7 +1544,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                         model.customer.fixedAssetsMachinaries[context.arrayIndex].machineModel=null;
                                        
                                         model.customer.fixedAssetsMachinaries[context.arrayIndex].marketPrice=null;
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].finalprice=null;
+                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].finalPrice=null;
                                    }
                                     $log.info(result);
                                 }
@@ -1576,7 +1576,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                         model.customer.fixedAssetsMachinaries[context.arrayIndex].machineModel=null;
                                         model.customer.fixedAssetsMachinaries[context.arrayIndex].depreciation=null;
                                         model.customer.fixedAssetsMachinaries[context.arrayIndex].marketPrice=null;
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].finalprice=null;
+                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].finalPrice=null;
                                    }
                                     $log.info(result);
                                 }
@@ -1646,7 +1646,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 "onChange": function(modelValue, form, model) {
                                         if (model.customer.fixedAssetsMachinaries[model.arrayIndex].marketPrice && model.customer.fixedAssetsMachinaries[model.arrayIndex].presentValue) {
                                             
-                                            model.customer.fixedAssetsMachinaries[model.arrayIndex].finalprice = (model.customer.fixedAssetsMachinaries[model.arrayIndex].presentValue+model.customer.fixedAssetsMachinaries[model.arrayIndex].marketPrice) /2;
+                                            model.customer.fixedAssetsMachinaries[model.arrayIndex].finalPrice = (model.customer.fixedAssetsMachinaries[model.arrayIndex].presentValue+model.customer.fixedAssetsMachinaries[model.arrayIndex].marketPrice) /2;
                                         }
                                     }
                             },
@@ -1663,7 +1663,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
 
                             },
                             {
-                                key: "customer.fixedAssetsMachinaries[].finalprice",
+                                key: "customer.fixedAssetsMachinaries[].finalPrice",
                                 readonly:true,
                                 title:"FINAL_PRICE"
 

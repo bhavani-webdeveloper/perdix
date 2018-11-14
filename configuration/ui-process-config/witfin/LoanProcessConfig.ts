@@ -134,9 +134,6 @@ let config = {
             beforeProceed: {
                 "defaults": [
                     {
-                        "name":"LoanDerivedFieldsUpdation",
-                        "arguments": null
-                    }, {
                         "name": "CustomerEnrolmentCompletedPolicy",
                         "arguments": {}
                     }

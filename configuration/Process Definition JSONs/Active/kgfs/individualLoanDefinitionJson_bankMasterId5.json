@@ -285,7 +285,9 @@
        "required":[
           "accountDetails",
           "loanCustomerRelations",
-          "loanCentre"
+          "loanCentre",
+          "jewelLoanDetails",
+          "ornaments"
         
        ],
        "properties":{

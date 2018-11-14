@@ -178,15 +178,9 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ScreeningReviewQ
 								desc: "",
 								icon: "fa fa-pencil-square-o",
 								fn: function (item, index) {
-									Locking.findlocks({}, {}, function (resp, headers) {
-										var i;
-										for (i = 0; i < resp.body.length; i++) {
-											if (item.loanId == resp.body[i].recordId) {
-												var def = true;
-											}
-										}
-										if (def) {
-											irfProgressMessage.pop("Selected list", "File is Locked, Please unlock from AdminScreen", 4000);
+									Locking.findlocks({recordId : item.loanId }, {}, function (resp, headers) {
+											if (resp.body.length != 0 && item.loanId == resp.body[0].recordId) {
+												irfProgressMessage.pop("Selected list", "File is Locked, Please unlock from AdminScreen", 4000);
 										}
 										else {
 											entityManager.setModel('loans.individual.screening.ScreeningReview', {

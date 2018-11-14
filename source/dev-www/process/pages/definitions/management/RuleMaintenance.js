@@ -9,34 +9,97 @@ define({
 
 
     var NewRuleForm = [{
-		"key": "item.processName",
+        "key": "item.processName",
+        "readonly":true,
 		"title": "Process name",
 		"type": "text"
 	},{
-		"key": "item.ruleName",
+        "key": "item.ruleName",
+        "required":true,
 		"title": "Rule name",
 		"type": "text"
 	},{
-		"key": "item.ruleDescription",
+        "key": "item.ruleDescription",
+        "required":true,
 		"title": "Rule Description",
 		"type": "text"
 	},{
-		"key": "item.order",
+        "key": "item.order",
+        "required":true,
 		"title": "Order",
 		"type": "text"
 	},{
-		"key": "item.fromStage",
+        "key": "item.fromStage",
+        "required":true,
 		"title": "From Stage",
-		"type": "text"
+		type: "lov",
+        searchHelper: formHelper,
+        search: function(inputModel, form, model) {
+            var targetstage = formHelper.enum('targetstage').data;
+            var out=[];
+            for (var i = 0; i < targetstage.length; i++) {
+                var t = targetstage[i];
+                    out.push({
+                        name: t.name,
+                        value:t.code,
+                        field1:t.field1
+                    })
+            }
+            out= _.uniqBy(out, 'field1');
+            return $q.resolve({
+                headers: {
+                    "x-total-count": out.length
+                },
+                body: out
+            });
+        },
+        getListDisplayItem: function(item, index) {
+            return [
+                item.field1
+            ];
+        },
+        onSelect: function(result, model, context) {
+            model.item.fromStage=result.field1;
+        }
 	}, {
-		"key": "item.toStage",
+        "key": "item.toStage",
+        "required":true,
 		"title": "To stage",
-		"type": "text"
+        type: "lov",
+        searchHelper: formHelper,
+        search: function(inputModel, form, model) {
+            var targetstage = formHelper.enum('targetstage').data;
+            var out=[];
+            for (var i = 0; i < targetstage.length; i++) {
+                var t = targetstage[i];
+                    out.push({
+                        name: t.name,
+                        value:t.code,
+                        field1:t.field1
+                    })
+            }
+            out= _.uniqBy(out, 'field1');
+            return $q.resolve({
+                headers: {
+                    "x-total-count": out.length
+                },
+                body: out
+            });
+        },
+        getListDisplayItem: function(item, index) {
+            return [
+                item.field1
+            ];
+        },
+        onSelect: function(result, model, context) {
+            model.item.toStage=result.field1;
+        }
     },
     {
 		"key": "item.userExpression",
-		"title": "Rule Expression",
-		"type": "testarea"
+        "title": "Rule Expression",
+        "readonly":true,
+		"type": "textarea"
     },
     {
         type: "section",
@@ -244,10 +307,13 @@ define({
                                         processName: res.body[i].processName,
                                         ruleDescription: res.body[i].ruleDescription,
                                         ruleName: res.body[i].ruleName,
-                                        toStage: res.body[i].toStage,
-                                        userExpression: res.body[i].userExpression||res.body[i].expression
-                                        
+                                        toStage: res.body[i].toStage  
                                     };
+                                    if(res.body[i].userExpression){
+                                        a.userExpression=res.body[i].userExpression;
+                                    }else{
+                                        a.userExpression=res.body[i].expression;
+                                    }
                                     a.ruleExpression = {
                                         group: {
                                           operator: model.options.operators[0], rules: []
@@ -296,14 +362,24 @@ define({
                                 for (var i = 0; i < res.body.length; i++) {
                                     var a = {
                                         id: res.body[i].id,
+                                        version: res.body[i].version,
                                         expression: res.body[i].expression,
                                         fromStage: res.body[i].fromStage,
                                         order: res.body[i].order,
                                         processName: res.body[i].processName,
                                         ruleDescription: res.body[i].ruleDescription,
                                         ruleName: res.body[i].ruleName,
-                                        toStage: res.body[i].toStage,
-                                        userExpression: res.body[i].userExpression
+                                        toStage: res.body[i].toStage  
+                                    };
+                                    if(res.body[i].userExpression){
+                                        a.userExpression=res.body[i].userExpression;
+                                    }else{
+                                        a.userExpression=res.body[i].expression;
+                                    }
+                                    a.ruleExpression = {
+                                        group: {
+                                          operator: model.options.operators[0], rules: []
+                                        }
                                     };
                                     model.rule.rules.push(a);
                                 };
@@ -364,6 +440,7 @@ define({
                                     irfProgressMessage.pop('Rule-Delete', 'Deleting Rule...');
                                     RuleMaintenance.DeleteRules(item).$promise.then(function(res){
                                         $log.info(res);
+                                        PageHelper.showProgress("Rule-Delete", "Rule deleted successfully ,Please reload the page", 5000);
                                         PageHelper.hideLoader();
                                     },function(err){
                                         $log.info(err);
@@ -421,6 +498,8 @@ define({
                 createRule:function(model, form, formName) {
                     RuleModel.model.item={};
                     RuleModel.model.type="Create";
+                    RuleModel.model.item.processName=model.rule.processName;
+                    RuleModel.model.item.fromStage=model.rule.fromStage;
                     RuleModel.model.item.ruleExpression = {
                         group: {
                           operator: model.options.operators[0], rules: []
@@ -429,25 +508,46 @@ define({
                     irfSimpleModal('Create Rule',simpleSchemaFormHtml,RuleModel,{"size":"lg"});
                 },
                 createNewRule:function(model, form, formName) {
+                   
                     PageHelper.showProgress("new rule Save", "rule Creating" , 3000);
                     $log.info("Inside submit()");
-                    var rules=[];var reqData={};
-                    rules.push(model.item);
-                    reqData.rules=rules;
+                    var reqData={};
+                    if(model.rule && model.rule.rules && model.rule.rules.length>0) {
+                        reqData.rules=model.rule.rules; 
+                        reqData.rules.push(model.item);
+                    }else{
+                        reqData.rules=[];
+                        reqData.rules.push(model.item);
+                    }
+                    PageHelper.showLoader();
                     RuleMaintenance.save(reqData).$promise.then(function(res){
+                        PageHelper.hideLoader();
+                        PageHelper.showProgress("new rule Save", "rule Creation success" , 3000);
+                        model.rule.rules=res;
                         $log.info(res);
                     },function(err){
+                        PageHelper.hideLoader();
+                        PageHelper.clearErrors();
+                        PageHelper.showProgress("new rule Save", "rule Creation failed" , 3000);
+                        PageHelper.showErrors(err);
                         $log.info(err);
                     })
                 },
                 saveRule: function(model, form, formName) {
-                    PageHelper.showProgress("Branch Save", "Scoring Details Updated" , 3000);
+                    PageHelper.showProgress("new rule Save", "Updating rule.." , 3000);
                     $log.info("Inside submit()");
                     var reqData={};
                     reqData.rules=model.rule.rules;
+                    PageHelper.showLoader();
                     RuleMaintenance.save(reqData).$promise.then(function(res){
+                        PageHelper.hideLoader();
+                        model.rule.rules=res;
+                        PageHelper.showProgress("new rule Save", "rule updation success" , 3000);
                         $log.info(res);
                     },function(err){
+                        PageHelper.hideLoader();
+                        PageHelper.showErrors(err);
+                        PageHelper.showProgress("new rule Save", "rule updation failed" , 3000);
                         $log.info(err);
                     })
                 },
@@ -463,7 +563,8 @@ define({
                         PageHelper.showProgress("rule validate", "Rule is valid" , 3000);
                     },function(err){
                         $log.info(err);
-                        PageHelper.showProgress("rule validate", "Rule is invalid" +  err, 3000);
+                        PageHelper.showErrors(err);
+                        PageHelper.showProgress("rule validate", "Rule is invalid", 3000);
                     })
                 },
             }
