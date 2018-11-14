@@ -1,240 +1,253 @@
 irf.pageCollection.factory(irf.page("loans.individual.collections.BounceQueue"),
-["$log", "formHelper", "LoanProcess", "$state", "SessionStore", "$q", "entityManager", "Utils", "PagesDefinition", "$stateParams",
-function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager, Utils, PagesDefinition, $stateParams){
-        return {
-        "type": "search-list",
-        "title": "BOUNCED_PAYMENTS",
-        initialize: function (model, form, formCtrl) {
-            $log.info("search-list sample got initialized");
-            model.branch = SessionStore.getCurrentBranch().branchId;
-            model.pageConfig = {
-                isAllBranchAllowed: false,
-                centresRestricted: false
-            };
+    ["$log", "formHelper", "LoanProcess", "$state", "SessionStore", "$q", "entityManager", "Utils", "PagesDefinition", "$stateParams",
+        function ($log, formHelper, LoanProcess, $state, SessionStore, $q, entityManager, Utils, PagesDefinition, $stateParams) {
+            return {
+                "type": "search-list",
+                "title": "BOUNCED_PAYMENTS",
+                initialize: function (model, form, formCtrl) {
+                    $log.info("search-list sample got initialized");
+                    model.branch = SessionStore.getCurrentBranch().branchId;
+                    model.pageConfig = {
+                        isAllBranchAllowed: false,
+                        centresRestricted: false
+                    };
 
-            console.log($stateParams);
-            PagesDefinition.getRolePageConfig("Page/Engine/loans.individual.collections.BounceQueue")
-                .then(
-                function(config){
-                    console.log("shahal1");
-                    if (config && _.hasIn(config, 'all_branch_allowed') && config['all_branch_allowed']) {
-                        model.pageConfig.isAllBranchAllowed = true;
-                    }
+                    console.log($stateParams);
+                    PagesDefinition.getRolePageConfig("Page/Engine/loans.individual.collections.BounceQueue")
+                        .then(
+                            function (config) {
+                                console.log("shahal1");
+                                if (config && _.hasIn(config, 'all_branch_allowed') && config['all_branch_allowed']) {
+                                    model.pageConfig.isAllBranchAllowed = true;
+                                }
 
-                    if (model.pageConfig.isAllBranchAllowed === false){
-                        model.centres = SessionStore.getCurrentBranch().centresMappedToUser;
+                                if (model.pageConfig.isAllBranchAllowed === false) {
+                                    model.centres = SessionStore.getCurrentBranch().centresMappedToUser;
 
-                        /* Default centre */
-                        if (model.centres && model.centres.length>0){
-                            model.centre = model.centres[0].centreCode;
-                            model.centreName = model.centres[0].centreName;
-                        }
-                    }
-                }, function(err){
-                    model.pageConfig.isAllBranchAllowed = false;
-                }
-            );
-
-            PagesDefinition.getPageConfig("Page/Engine/loans.individual.collections.BounceQueue")
-            .then(function(data){
-                console.log(data);
-                var defaultConfig = {
-                    IncludeUserFilter: false
-                };
-                _.defaults(data, defaultConfig);
-                model.pageConfig = _.extend(model.pageConfig, data);
-                if (model.pageConfig.IncludeUserFilter)
-                    model.assignedTo = SessionStore.getLoginname();
-            });
-        },
-        definition: {
-            title: "SEARCH_BOUNCED_PAYMENTS",
-            autoSearch: false,
-            sorting:true,
-            sortByColumns:{
-                "name":"Customer Name",
-                "centre_name":"Centre",
-                "sanction_date":"Sanction Date"
-            },
-            searchForm: [
-                "loan_no",
-                "first_name",
-                {
-                    "key": "branch",
-                    "condition": "model.pageConfig.isAllBranchAllowed"
-                },
-                {
-                    "key": "centre",
-                    "condition": "model.pageConfig.isAllBranchAllowed"
-                },
-                {
-                    key: "centreName",
-                    type: "lov",
-                    autolov: false,
-                    required:true,
-                    title:"CENTRE",
-                    condition: "model.pageConfig.isAllBranchAllowed===false",
-                    bindMap: {
-                    },
-                    searchHelper: formHelper,
-                    search: function(inputModel, form, model, context) {
-                        var centres = SessionStore.getCentres();
-                        return $q.resolve({
-                            headers: {
-                                "x-total-count": centres.length
-                            },
-                            body: centres
-                        });
-                    },
-                    onSelect: function(valueObj, model, context){
-                        model.centre = valueObj.centreCode;
-                        model.centreName = valueObj.centreName;
-                    },
-                    getListDisplayItem: function(item, index) {
-                        return [
-                            item.centreName
-                        ];
-                    }
-                },
-                {
-                    "key": "promisreToPayDate"
-                }
-            ],
-            searchSchema: {
-                "type": 'object',
-                "properties": {
-                    "loan_no": {
-                        "title": "LOAN_ACCOUNT_NUMBER",
-                        "type": "string",
-                        "pattern": "^[0-9a-zA-Z]+$"
-                    },
-                    "first_name": {
-                        "title": "CUSTOMER_NAME",
-                        "type": "string"
-                    },
-                    "branch": {
-                        'title': "BRANCH",
-                        "type": ["string", "null"],
-                        "x-schema-form": {
-                            "type":"userbranch",
-                            "screenFilter": true
-                        }
-                    },
-                    "centre": {
-                        "title": "CENTRE",
-                        "type": ["integer", "null"],
-                        "x-schema-form": {
-                            "type": "select",
-                            "enumCode": "centre",
-                            "parentEnumCode": "branch_id",
-                            "parentValueExpr": "model.branch",
-                            "screenFilter": true
-                        }
-                    },
-                    "promisreToPayDate":{
-                        "title": "PROMISE_TO_PAY_DATE",
-                        "type": "string",
-                        "x-schema-form": {
-                            "type": "date"
-                        }
-                    }
-                }
-            },
-            getSearchFormHelper: function() {
-                return formHelper;
-            },
-
-            getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
-                var promise = LoanProcess.bounceCollectionDemand({
-                    'accountNumbers': searchOptions.loan_no,
-                    /*Service missing_27082016*/
-                    'branchId': searchOptions.branch || SessionStore.getBranchId(),
-                    'centreId': searchOptions.centre,
-                    'customerName': searchOptions.first_name,
-                    'promiseToPayDate': searchOptions.promisreToPayDate,
-                    'page': pageOpts.pageNo,
-                    'per_page': pageOpts.itemsPerPage,
-                    'assignedTo': searchOptions.assignedTo
-                }).$promise;
-                return promise;
-            },
-
-            paginationOptions: {
-                "getItemsPerPage": function(response, headers){
-                    return 100;
-                },
-                "getTotalItemsCount": function(response, headers){
-                    return headers && headers['x-total-count'];
-                }
-            },
-            listOptions: {
-                expandable: true,
-                getItems: function(response, headers){
-                    if (response!=null && response.length && response.length!=0){
-                        return response;
-                    }
-                    return [];
-                },
-                getListItem: function(item){
-                    if (_.hasIn(item, 'amount1') && _.isString(item['amount1'])){
-                        item.amount1 = parseFloat(item['amount1']);
-                    }
-                    if (_.hasIn(item, 'amount3') && _.isString(item['amount3'])){
-                        item.amount3 = parseFloat(item['amount3']);
-                    }
-                    if (_.hasIn(item, 'amount2') && _.isString(item['amount2'])){
-                        item.amount2 = parseFloat(item['amount2']);
-                    }
-                    if (_.hasIn(item, 'part5') && _.isString(item['part5'])){
-                        item.part5 = parseFloat(item['part5']);
-                    }
-                    return [
-                        item.customerName,
-                        "{{'LOAN_ACCOUNT_NUMBER'|translate}}: " + item.accountId,
-                        "{{'TOTAL_AMOUNT_DUE'|translate}}: " + Utils.ceil(item.amount1 + item.amount2 + item.amount3 + item.part5),
-                        "{{'PRINCIPAL_DUE'|translate}}: " + item.part1,
-                        "{{'INTEREST_DUE'|translate}}: " + item.part2,
-                        "{{'PENAL_INTEREST'|translate}}: " + item.part3,
-                        "{{'BOOKED_NOT_DUE_PENAL_INTEREST'|translate}}:" + item.part5,
-                        "{{'FEES_DUE'|translate}}: " + item.amount2,
-                        "{{'UNAPPROVED_AMOUNT'|translate}}: " + item.repaidAmountSum
-                    ]
-                },
-                getActions: function(){
-                    return [
-                        {
-                            name: "COLLECT_PAYMENT",
-                            desc: "",
-                            fn: function(item, index){
-                                entityManager.setModel('loans.LoanRepay', {_bounce:item,_screen:"BounceQueue"});
-                                $state.go('Page.Engine',
-                                    {
-                                        pageName: 'loans.LoanRepay',
-                                        pageId: item.accountId,
-                                        pageData: {
-                                            'onlyDemandAllowed': true
-                                        }
+                                    /* Default centre */
+                                    if (model.centres && model.centres.length > 0) {
+                                        model.centre = model.centres[0].centreCode;
+                                        model.centreName = model.centres[0].centreName;
                                     }
-                                );
+                                }
+                            }, function (err) {
+                                model.pageConfig.isAllBranchAllowed = false;
+                            }
+                        );
+
+                    PagesDefinition.getPageConfig("Page/Engine/loans.individual.collections.BounceQueue")
+                        .then(function (data) {
+                            console.log(data);
+                            var defaultConfig = {
+                                IncludeUserFilter: false
+                            };
+                            _.defaults(data, defaultConfig);
+                            model.pageConfig = _.extend(model.pageConfig, data);
+                            if (model.pageConfig.IncludeUserFilter)
+                                model.assignedTo = SessionStore.getLoginname();
+                        });
+                },
+                definition: {
+                    title: "SEARCH_BOUNCED_PAYMENTS",
+                    autoSearch: false,
+                    sorting: true,
+                    sortByColumns: {
+                        "name": "Customer Name",
+                        "centre_name": "Centre",
+                        "sanction_date": "Sanction Date"
+                    },
+                    searchForm: [
+                        "loan_no",
+                        "first_name",
+                        {
+                            "key": "branch",
+                            "condition": "model.pageConfig.isAllBranchAllowed"
+                        },
+                        {
+                            "key": "centre",
+                            "condition": "model.pageConfig.isAllBranchAllowed"
+                        },
+                        {
+                            key: "centreName",
+                            type: "lov",
+                            autolov: false,
+                            required: true,
+                            title: "CENTRE",
+                            condition: "model.pageConfig.isAllBranchAllowed===false",
+                            bindMap: {
                             },
-                            isApplicable: function(item, index){
-                                return true;
+                            searchHelper: formHelper,
+                            search: function (inputModel, form, model, context) {
+                                var centres = SessionStore.getCentres();
+                                return $q.resolve({
+                                    headers: {
+                                        "x-total-count": centres.length
+                                    },
+                                    body: centres
+                                });
+                            },
+                            onSelect: function (valueObj, model, context) {
+                                model.centre = valueObj.centreCode;
+                                model.centreName = valueObj.centreName;
+                            },
+                            getListDisplayItem: function (item, index) {
+                                return [
+                                    item.centreName
+                                ];
                             }
                         },
                         {
-                            name: "COLLECTION_STATUS",
-                            desc: "",
-                            fn: function(item, index){
-                                entityManager.setModel('loans.individual.collections.P2PUpdate', {_bounce:item,_screen:"BounceQueue"});
-                                $state.go('Page.Engine', {pageName: 'loans.individual.collections.P2PUpdate', pageId: item.accountId});
+                            "key": "promisreToPayDate"
+                        }
+                    ],
+                    searchSchema: {
+                        "type": 'object',
+                        "properties": {
+                            "loan_no": {
+                                "title": "LOAN_ACCOUNT_NUMBER",
+                                "type": "string",
+                                "pattern": "^[0-9a-zA-Z]+$"
                             },
-                            isApplicable: function(item, index){
-                                return true;
+                            "first_name": {
+                                "title": "CUSTOMER_NAME",
+                                "type": "string"
+                            },
+                            "branch": {
+                                'title': "BRANCH",
+                                "type": ["string", "null"],
+                                "x-schema-form": {
+                                    "type": "userbranch",
+                                    "screenFilter": true
+                                }
+                            },
+                            "centre": {
+                                "title": "CENTRE",
+                                "type": ["integer", "null"],
+                                "x-schema-form": {
+                                    "type": "select",
+                                    "enumCode": "centre",
+                                    "parentEnumCode": "branch_id",
+                                    "parentValueExpr": "model.branch",
+                                    "screenFilter": true
+                                }
+                            },
+                            "promisreToPayDate": {
+                                "title": "PROMISE_TO_PAY_DATE",
+                                "type": "string",
+                                "x-schema-form": {
+                                    "type": "date"
+                                }
                             }
                         }
-                    ];
+                    },
+                    getSearchFormHelper: function () {
+                        return formHelper;
+                    },
+
+                    getResultsPromise: function (searchOptions, pageOpts) {      /* Should return the Promise */
+                        var promise = LoanProcess.bounceCollectionDemand({
+                            'accountNumbers': searchOptions.loan_no,
+                            /*Service missing_27082016*/
+                            'branchId': searchOptions.branch || SessionStore.getBranchId(),
+                            'centreId': searchOptions.centre,
+                            'customerName': searchOptions.first_name,
+                            'promiseToPayDate': searchOptions.promisreToPayDate,
+                            'page': pageOpts.pageNo,
+                            'per_page': pageOpts.itemsPerPage,
+                            'assignedTo': searchOptions.assignedTo
+                        }).$promise;
+                        return promise;
+                    },
+
+                    paginationOptions: {
+                        "getItemsPerPage": function (response, headers) {
+                            return 100;
+                        },
+                        "getTotalItemsCount": function (response, headers) {
+                            return headers && headers['x-total-count'];
+                        }
+                    },
+                    listOptions: {
+                        expandable: true,
+                        getItems: function (response, headers) {
+                            if (response != null && response.length && response.length != 0) {
+                                return response;
+                            }
+                            return [];
+                        },
+                        getListItem: function (item) {
+                            if (_.hasIn(item, 'amount1') && _.isString(item['amount1'])) {
+                                item.amount1 = parseFloat(item['amount1']);
+                            }
+                            if (_.hasIn(item, 'amount3') && _.isString(item['amount3'])) {
+                                item.amount3 = parseFloat(item['amount3']);
+                            }
+                            if (_.hasIn(item, 'amount2') && _.isString(item['amount2'])) {
+                                item.amount2 = parseFloat(item['amount2']);
+                            }
+                            if (_.hasIn(item, 'part5') && _.isString(item['part5'])) {
+                                item.part5 = parseFloat(item['part5']);
+                            }
+                            return [
+                                item.customerName,
+                                "{{'LOAN_ACCOUNT_NUMBER'|translate}}: " + item.accountId,
+                                "{{'TOTAL_AMOUNT_DUE'|translate}}: " + Utils.ceil(item.amount1 + item.amount2 + item.amount3 + item.part5),
+                                "{{'PRINCIPAL_DUE'|translate}}: " + item.part1,
+                                "{{'INTEREST_DUE'|translate}}: " + item.part2,
+                                "{{'PENAL_INTEREST'|translate}}: " + item.part3,
+                                "{{'BOOKED_NOT_DUE_PENAL_INTEREST'|translate}}:" + item.part5,
+                                "{{'FEES_DUE'|translate}}: " + item.amount2,
+                                "{{'UNAPPROVED_AMOUNT'|translate}}: " + item.repaidAmountSum
+                            ]
+                        },
+                        getActions: function () {
+                            return [
+                                {
+                                    name: "COLLECT_PAYMENT",
+                                    desc: "",
+                                    fn: function (item, index) {
+                                        Locking.findlocks({}, {}, function (resp, headers) {
+                                            var i;
+                                            for (i = 0; i < resp.body.length; i++) {
+                                                if (item.loanId == resp.body[i].recordId)
+                                                    var def = true;
+                                            }
+                                            if (def)
+                                                irfProgressMessage.pop("Selected list", "File is Locked, Please unlock from AdminScreen", 4000);
+                                            else {
+                                                entityManager.setModel('loans.LoanRepay', { _bounce: item, _screen: "BounceQueue" });
+                                                $state.go('Page.Engine',
+                                                    {
+                                                        pageName: 'loans.LoanRepay',
+                                                        pageId: item.accountId,
+                                                        pageData: {
+                                                            'onlyDemandAllowed': true
+                                                        }
+                                                    }
+                                                );
+                                            }
+                                        }, function (resp) {
+                                            $log.error(resp);
+                                        });
+                                    },
+                                    isApplicable: function (item, index) {
+                                        return true;
+                                    }
+                                },
+                                {
+                                    name: "COLLECTION_STATUS",
+                                    desc: "",
+                                    fn: function (item, index) {
+                                        entityManager.setModel('loans.individual.collections.P2PUpdate', { _bounce: item, _screen: "BounceQueue" });
+                                        $state.go('Page.Engine', { pageName: 'loans.individual.collections.P2PUpdate', pageId: item.accountId });
+                                    },
+                                    isApplicable: function (item, index) {
+                                        return true;
+                                    }
+                                }
+                            ];
+                        }
+                    }
                 }
-            }
-        }
-    };
-}]);
+            };
+        }]);
