@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.screening.CreditCommitteeReviewQueue"), 
-	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons", "irfNavigator",
-	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons, irfNavigator) {
+	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons", "irfNavigator","irfProgressMessage","Locking",
+	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons, irfNavigator,irfProgressMessage,Locking) {
 		
 		return {
 			"type": "search-list",
@@ -183,17 +183,33 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.CreditCommitteeR
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('loans.individual.screening.CreditCommitteeReview', {
-									_request: item
+								Locking.findlocks({}, {}, function (resp, headers) {
+									var i;
+									for (i = 0; i < resp.body.length; i++) {
+										if (item.loanId == resp.body[i].recordId) {
+											var def = true;
+										}
+									}
+									if (def) {
+										irfProgressMessage.pop("Selected list", "File is Locked, Please unlock from AdminScreen", 4000);
+									}
+									else {
+										entityManager.setModel('loans.individual.screening.CreditCommitteeReview', {
+											_request: item
+										});
+										irfNavigator.go({
+											state: "Page.Bundle",
+											pageName: "loans.individual.screening.CreditCommitteeReview",
+											pageId: item.loanId
+										}, {
+											state: 'Page.Engine',
+											pageName: "loans.individual.screening.CreditCommitteeReviewQueue"
+										});
+									}
+								}, function (resp) {
+									$log.error(resp);
 								});
-								irfNavigator.go({
-									state: "Page.Bundle",
-									pageName: "loans.individual.screening.CreditCommitteeReview",
-									pageId: item.loanId
-								}, {
-									state: 'Page.Engine',
-                                    pageName: "loans.individual.screening.CreditCommitteeReviewQueue"
-								});
+								
 							},
 							isApplicable: function(item, index) {
 
