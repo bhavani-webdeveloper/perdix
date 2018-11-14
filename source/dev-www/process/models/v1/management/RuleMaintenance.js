@@ -19,6 +19,7 @@
             },       
             validateRule:{
                 method:'POST',
+                isArray:true,
                 url: endpoint + '/validate'
             },
             DeleteRules:{
@@ -84,12 +85,8 @@
                     dataString = group.rules[i].data;
                 }
                 str += group.rules[i].group ?
-                resource.asString(group.rules[i].group) :(group.rules[i].comparator.value=='==' ?(  (group.rules[i].field.type=='number'?dataString:("\'" + dataString + "\'")) + group.rules[i].comparator.value + group.rules[i].field.value ):(group.rules[i].field.value + group.rules[i].comparator.value + (group.rules[i].field.type=='number'?dataString:("\'" + dataString + "\'"))));
-                        
+                resource.asString(group.rules[i].group) :(group.rules[i].field.value + group.rules[i].comparator.value + (group.rules[i].field.type=='number'?dataString:("\'" + dataString + "\'")));    
             }
-
-            
-    
             return str + "}";
         }
         

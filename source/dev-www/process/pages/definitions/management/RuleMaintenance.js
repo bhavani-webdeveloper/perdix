@@ -317,7 +317,7 @@ define({
                     condition: "model.rule.rules.length",
                     type: "tableview",
                     listStyle: "table",
-                    selectable: true,
+                    selectable: false,
                     editable: true,
                     paginate: false,
                     searching: false,
@@ -348,7 +348,7 @@ define({
                                 fn: function(item, model) {
                                     $log.info(RuleModel);
                                     RuleModel.model.item=item;
-                                    irfSimpleModal('EDIT Rule',simpleSchemaFormHtml,RuleModel);
+                                    irfSimpleModal('EDIT Rule',simpleSchemaFormHtml,RuleModel,{"size":"lg"});
                                 },
                                 isApplicable: function (item) {
                                     return true;
@@ -426,7 +426,7 @@ define({
                           operator: model.options.operators[0], rules: []
                         }
                     };
-                    irfSimpleModal('Create Rule',simpleSchemaFormHtml,RuleModel);
+                    irfSimpleModal('Create Rule',simpleSchemaFormHtml,RuleModel,{"size":"lg"});
                 },
                 createNewRule:function(model, form, formName) {
                     PageHelper.showProgress("new rule Save", "rule Creating" , 3000);
