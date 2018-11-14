@@ -263,6 +263,7 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                                         })
                                 } else {
                                     /* New User */
+                                    model.user.changePasswordOnLogin = true;
                                     User.create(model.user)
                                         .$promise
                                         .then(function(response){

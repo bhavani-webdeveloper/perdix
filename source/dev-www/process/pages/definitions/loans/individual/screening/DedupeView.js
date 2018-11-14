@@ -297,6 +297,9 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.DedupeView'),
                     },
                     "deviation-loaded":function(pageObj, bundleModel, params){
                         BundleManager.broadcastEvent("load-deviation", params);
+                    },
+                    "dedupe-customer-list":function(pageObj, bundleModel, params){
+                        BundleManager.broadcastEvent("dedupe-list", params);
                     }
                 }
             }
