@@ -485,7 +485,7 @@ define({
                             },
                             "urnNo": {
                                 "type": ["string", "null"],
-                                "title": "URNNO",
+                                "title": "URN_NO",
                                 "captureStages": ["Init"]
                             },
                             "firstName": {
@@ -500,13 +500,12 @@ define({
                             },
                             "latitude": {
                                 "title": "GPS_LOCATION",
-                                "type": "geotag",
+                                "type": ["string","null"],
                                 "captureStages": ["Init"]
                             },
                             "photoImageId": {
                                 "title" : "CUSTOMER_PHOTO",
-                                "type": "file",
-                                "fileType": "image/*",
+                                "type":["string","null"],
                                 "category": "CustomerEnrollment",
                                 "subCategory": "PHOTO",
                                 "captureStages": ["Init"]
@@ -678,8 +677,6 @@ define({
                         })
 
                         Workflow.save(reqData, function (res, headers) {
-                            console.log("this is only the thing");
-                            console.log(reqData);
                             PageHelper.hideLoader();
                             irfProgressMessage.pop('cust-update', 'Done. Customer Updated, ID : ' + res.customer.id, 2000);
                             irfNavigator.goBack();

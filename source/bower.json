@@ -50,7 +50,8 @@
     "mathjs": "^3.8.1",
     "angular-sanitize": "1.6.1",
     "class-transformer": "https://github.com/typestack/class-transformer/commit/bfee63f5672aaad60c749e0f31c37140c368fca2",
-    "lz-string": "^1.4.4"
+    "lz-string": "^1.4.4",
+    "myforce-angularjs-query-builder":"latest"
   },
   "overrides": {
     "admin-lte": {

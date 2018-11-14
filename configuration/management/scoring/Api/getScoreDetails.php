@@ -158,20 +158,20 @@ if (isset($_GET)) {
         $partiesArray=explode(",",$value);
         if(!is_null($value)){
             if (in_array('Applicant', $partiesArray)) {
-                array_push($relations,'applicant','sole proprieter');
+                array_push($relations,"'applicant'","'sole proprieter'");
             }
             if (in_array('Co-Applicant', $partiesArray)) {
-                array_push($relations,'coapplicant','Co-Applicant');
+                array_push($relations,"'coapplicant'","'Co-Applicant'");
             }
             if (in_array('Guarantor', $partiesArray)) {
-                array_push($relations,'Guarantor');
+                array_push($relations,"'Guarantor'");
             }
 
         }else 
-            array_push($relations,"Applicant","Co-Applicant");
+            array_push($relations,"'Applicant'","'Co-Applicant'");
     
 	} catch(PDOException $e) {
-        array_push($relations,"Applicant","Co-Applicant");
+        array_push($relations,"'Applicant'","'Co-Applicant'");
 	}
     $relationsStr = implode(',', $relations);
     //get all applicant and co-applicant details

@@ -1,5 +1,5 @@
-irf.pageCollection.controller(irf.controller("witfin.loans.VehicleValuationDashboard"), ['$log', '$scope', "formHelper", "$state", "$q", "Utils", 'PagesDefinition', 'SessionStore', "entityManager", "IndividualLoan", "LoanBookingCommons", "Lead", "PageHelper",
-    function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionStore, entityManager, IndividualLoan, LoanBookingCommons, Lead, PageHelper) {
+irf.pageCollection.controller(irf.controller("witfin.loans.VehicleValuationDashboard"), ['$log', '$scope', "formHelper", "$state", "$q", "Utils", 'PagesDefinition', 'SessionStore', "entityManager", "IndividualLoan", "LoanBookingCommons", "Lead", "PageHelper","Queries",
+    function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionStore, entityManager, IndividualLoan, LoanBookingCommons, Lead, PageHelper,Queries) {
         $scope.$templateUrl = "process/pages/templates/Page.VehicleValuationDashboard.html";
         var currentBranch = SessionStore.getCurrentBranch();
         PageHelper.clearErrors();
@@ -18,10 +18,10 @@ irf.pageCollection.controller(irf.controller("witfin.loans.VehicleValuationDashb
             var branchName = SessionStore.getBranch();
             var centres = SessionStore.getCentres();
 
-            var prqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening..vehiclevaluation.VehicleValuationQueue"];
+            var prqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.vehiclevaluation.VehicleValuationQueue"];
             if (prqMenu) {
                 IndividualLoan.search({
-                    'stage': 'VehicleValuation',
+                    'stage': ['FieldInvestigation1','FieldInvestigation2','FieldInvestigation3','TeleVerification'],
                     'enterprisePincode': '',
                     'applicantName': '',
                     'area': '',
@@ -29,6 +29,7 @@ irf.pageCollection.controller(irf.controller("witfin.loans.VehicleValuationDashb
                     'customerName': '',
                     'page': 1,
                     'per_page': 1,
+                    'valuator': SessionStore.session.login
                 }).$promise.then(function(response, headerGetter) {
                     prqMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
@@ -37,16 +38,9 @@ irf.pageCollection.controller(irf.controller("witfin.loans.VehicleValuationDashb
             }
             var rjqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.vehiclevaluation.ReassignVehicleValuationQueue"];
             if (rjqMenu) {
-                IndividualLoan.search({
-                    'stage': 'Rejected',
-                    'enterprisePincode': '',
-                    'applicantName': '',
-                    'area': '',
-                    'villageName': '',
-                    'customerName': '',
-                    'page': 1,
-                    'per_page': 1,
-                }).$promise.then(function(response, headerGetter) {
+
+                Queries.searchReAssignment(branchName).then(function(response, headerGetter) {
+                    debugger;
                     rjqMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
                     rjqMenu.data = '-';

@@ -9,19 +9,19 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
     var fnPost = function(model, customerType, CBType, index){
         var customerId;
         var CBType;
-        var loanAmount;
+        var loanAmount = model.loanAccount.loanAmountRequested;
         var loanPurpose;
         if(customerType=='APP'){
             customerId = model.customer.applicantid;
-            loanAmount = model.customer.loanAmount;
+            // loanAmount = model.customer.loanAmount;
         }
         else if(customerType == 'CO-APP'){
             customerId = model.customer.coapplicants[index].coapplicantid;
-            loanAmount = model.customer.coapplicants[index].loanAmount || model.customer.loanAmount;
+            // loanAmount = model.customer.coapplicants[index].loanAmount || model.customer.loanAmount;
         }
         else if(customerType == 'GUARANTOR'){
             customerId = model.customer.guarantors[index].guarantorid;
-            loanAmount = model.customer.guarantors[index].loanAmount || model.customer.loanAmount;
+            // loanAmount = model.customer.guarantors[index].loanAmount || model.customer.loanAmount;
         }
 
         $log.info("Inside submit()");
@@ -464,6 +464,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             },
             "new-loan": function(bundleModel, model, params){
                 $log.info("Inside new-loan of CBCheck");
+                model.loanAmountRequested = params.loanAccount.loanAmountRequested;
                 model.customer.loanSaved = true;
                 model.customer.loanAmount = params.loanAccount.loanAmountRequested;
                 model.customer.loanPurpose1 = params.loanAccount.loanPurpose1;

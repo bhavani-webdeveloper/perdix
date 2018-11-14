@@ -23,7 +23,7 @@ $authHeader = "Bearer ". $settings['perdix']['token'];
 $url = $settings['perdix']['v8_url'] . "/api/enrollments";
 $fileUploadUrl = $api_url."/api/files/upload?category=Customer&subCategory=AGEPROOF";
 $filePath=$settings['perdix']['partner_upload_path'];
-$sheetBasePath=$settings['perdix']['partner_sheet_path'];
+
 $MAX_SIZE=$settings['perdix']['max_upload_size'];
 
 $address_proof = collect([]);
@@ -38,12 +38,6 @@ foreach ($proofTypeNames as $proofTypeName){
 echo $authHeader;
 
 //$baseUrl = $settings['perdix']['customer_upload_path'];
-
-$tempToBeProcessed = $sheetBasePath . DIRECTORY_SEPARATOR . "to_be_processed" . DIRECTORY_SEPARATOR;
-$tempWipDir = $sheetBasePath . DIRECTORY_SEPARATOR . "wip" . DIRECTORY_SEPARATOR;
-$tempRejectedDir = $sheetBasePath . DIRECTORY_SEPARATOR . "rejected" . DIRECTORY_SEPARATOR;
-$tempCompletedDir = $sheetBasePath . DIRECTORY_SEPARATOR . "completed" . DIRECTORY_SEPARATOR;
-
 
 function formatValidation($extension){
     return ( strcasecmp("pdf",$extension)==0 || 
@@ -72,8 +66,8 @@ function getFileByType($type, $customer){
     global $identity_prof;
     global $filePath;
     $absolutepath="";
-    $path = $filePath . "/" .$customer['old_customer_id']."/";
-    
+    $path = $filePath . DIRECTORY_SEPARATOR .$customer['partner_code']. DIRECTORY_SEPARATOR . $customer['old_customer_id']. DIRECTORY_SEPARATOR ;
+    //echo "<br/> Path : ".$path;
     switch ($type) {
         case "Photo":
             $absolutepath = $path."Photo.*";
@@ -113,7 +107,7 @@ function uploadFile ($path)  {
         ]);
         $responseBody = $reqRes->getBody()->getContents();
         $parsedArr = \GuzzleHttp\json_decode($responseBody, true);
-        echo "<br/> success" . "\n";
+        //echo "<br/> success" . "\n";
         return $parsedArr['fileId'];
 
     } catch (Exception $e) {
@@ -123,141 +117,199 @@ function uploadFile ($path)  {
 
 }
 
-$files = new DirectoryIterator($tempToBeProcessed);
 
-foreach ($files as $file) {
-    echo $tempToBeProcessed . $file->getFilename();
-    if ($file->isFile()) {
-        echo "temp : ". $tempCompletedDir;
-        $source = $tempToBeProcessed . $file->getFilename();
-        $dest = $tempWipDir . $file->getFilename();
-
-        copy($source, $dest);
-        unlink($source);
-        $inputFileName = $tempWipDir . $file->getFilename();
-
-        print_r( "<br/>inputFileName : ".$inputFileName);
+$tempWipDir = $filePath . DIRECTORY_SEPARATOR . "Internal". DIRECTORY_SEPARATOR . "wip" . DIRECTORY_SEPARATOR;
+$tempRejectedDir = $filePath . DIRECTORY_SEPARATOR . "Internal". DIRECTORY_SEPARATOR . "rejected" . DIRECTORY_SEPARATOR;
+$tempCompletedDir = $filePath . DIRECTORY_SEPARATOR . "Internal". DIRECTORY_SEPARATOR . "completed" . DIRECTORY_SEPARATOR;
 
 
-        $ext = pathinfo($inputFileName, PATHINFO_EXTENSION);
-        echo $ext . "\n";
-        if ($ext != "xlsx") {
-            $source = $tempWipDir . $file->getFilename();
-            $dest = $tempRejectedDir . $file->getFilename();
+if (!is_dir($tempWipDir )) {
+    mkdir($tempWipDir, 0777, true);
+}
+if (!is_dir($tempRejectedDir )) {
+    mkdir($tempRejectedDir, 0777, true);
+}
+if (!is_dir($tempCompletedDir )) {
+    mkdir($tempCompletedDir, 0777, true);
+}
+
+$partners = array_filter(glob($filePath.'/*'), 'is_dir');
+
+foreach ($partners as $partner) {
+
+    echo "<br/> partner :  $partner <br/>";
+
+    if($partner=="Internal")
+        continue;
+
+    $files = new DirectoryIterator($partner);
+
+    foreach ($files as $file) {
+        //echo $partner . $file->getFilename();
+        if ($file->isFile()) {
+            //echo "<br/> temp : ". $tempCompletedDir;
+            $source = $partner . DIRECTORY_SEPARATOR . $file->getFilename();
+            $dest = $tempWipDir . $file->getFilename();
+            
             copy($source, $dest);
             unlink($source);
-            continue;
-        }
-        try {
-            $inputFileType = PHPExcel_IOFactory::identify($inputFileName);
-            $objReader = PHPExcel_IOFactory::createReader($inputFileType);
+            $inputFileName = $tempWipDir . $file->getFilename();
+            echo "<br/>".$file." File Moved to ".$dest;
+            //print_r( "<br/>inputFileName : ".$inputFileName);
 
-            $objPHPExcel = $objReader->load($inputFileName);
-            $sheet = $objPHPExcel->getSheet(0);
-            $highestRow = $sheet->getHighestRow();
-            $highestColumn = $sheet->getHighestColumn();
+            $ext = pathinfo($inputFileName, PATHINFO_EXTENSION);
+            echo $ext . "\n";
+            if ($ext == "txt" )
+                continue;
 
-            // if ($highestColumn != "G") {
-            //     $source = $tempWipDir . $file->getFilename();
-            //     $dest = $tempRejectedDir . $file->getFilename();
-            //     copy($source, $dest);
-            //     unlink($source);
-            //     continue;
-            // }
+            if ($ext != "xlsx" ) {
+                $source = $tempWipDir .$file->getFilename();
+                $dest = $tempRejectedDir . date("d-m-Y")."__". $file->getFilename();
 
-            $kycUploadMaster = new KycUploadMaster();
-            $kycUploadMaster->filename = $inputFileName;
-            $kycUploadMaster->total_records = ($highestRow - 1);
-            $kycUploadMaster->failed_records = 0;
-            $kycUploadMaster->status = 'PROCESSING';
-            $kycUploadMaster->save();
+                copy($source, $dest);
+                unlink($source);
+                echo "<br/>".$file." File Moved to ".$dest;
+                continue;
+            }
+            try {
+                $inputFileType = PHPExcel_IOFactory::identify($inputFileName);
+                $objReader = PHPExcel_IOFactory::createReader($inputFileType);
 
-            $failedCount = 0;
-            $IdGenerated = $kycUploadMaster->id;
-            //var_dump($customerUploadMaster->toArray());
+                $objPHPExcel = $objReader->load($inputFileName);
+                $sheet = $objPHPExcel->getSheet(0);
+                $highestRow = $sheet->getHighestRow();
+                $highestColumn = $sheet->getHighestColumn();
 
-            echo "<br/> File Upload for : " . $inputFileName . "\n";
+                // if ($highestColumn != "G") {
+                //     $source = $tempWipDir . $file->getFilename();
+                //     $dest = $tempRejectedDir . $file->getFilename();
+                //     copy($source, $dest);
+                //     unlink($source);
+                //     continue;
+                // }
 
-            for ($row = 2; $row <= $highestRow; $row++) {
-                //echo '<br/> A' . $row . ':' . $highestColumn . $row;
-                $matrixData = $sheet->rangeToArray('A' . $row . ':' . $highestColumn . $row,
-                    NULL,
-                    TRUE,
-                    FALSE);
-                $rowData = $matrixData[0];
+                $kycUploadMaster = new KycUploadMaster();
+                $kycUploadMaster->filename = $inputFileName;
+                $kycUploadMaster->total_records = ($highestRow - 1);
+                $kycUploadMaster->failed_records = 0;
+                $kycUploadMaster->status = 'PROCESSING';
+                $kycUploadMaster->save();
 
-                try{
+                $failedCount = 0;
+                $IdGenerated = $kycUploadMaster->id;
+                //var_dump($customerUploadMaster->toArray());
 
-                    $customer = new Customer();
-                    $customer = $customer::where('old_customer_id', '=', $rowData[1])->firstOrFail();
+                //echo "<br/> File Upload for : " . $inputFileName . "\n";
 
-                    $path = $filePath . "/" .$rowData[1];
-                    if(!file_exists($path))
-                        throw new PDOException($rowData[1].' Folder not Exist');
+                $content="";
 
-                    $photoPath = getFileByType("Photo",$customer);
-                    if($photoPath)
-                        $customer->photo_image_id = uploadFile($photoPath);
+                for ($row = 2; $row <= $highestRow; $row++) {
+                    //echo '<br/> A' . $row . ':' . $highestColumn . $row;
+                    $matrixData = $sheet->rangeToArray('A' . $row . ':' . $highestColumn . $row,
+                        NULL,
+                        TRUE,
+                        FALSE);
+                    $rowData = $matrixData[0];
+
+                    try{
+
+                        $customer = new Customer();
+                        $customer = $customer::where('old_customer_id', '=', $rowData[1])->firstOrFail();
+                        echo "<br/><br/> Customer : ".$rowData[1];  
+                        $content=$content. PHP_EOL . PHP_EOL . "Customer : ".$rowData[1];
+                        $path = $partner . DIRECTORY_SEPARATOR .$rowData[1];
+                        if(!file_exists($path))
+                            throw new PDOException($rowData[1].' Folder not Exist');
+
+                        $photoPath = getFileByType("Photo",$customer);
+                        if($photoPath){
+                            echo "<br/>".$photoPath;
+                            $customer->photo_image_id = uploadFile($photoPath);
+                        }   
           
-                    $address_proof_path = getFileByType("address_proof",$customer);
-                    if($address_proof_path)
-                        $customer->address_proof_image_id =uploadFile($address_proof_path);
+                        $address_proof_path = getFileByType("address_proof",$customer);
+                        if($address_proof_path){
+                            echo "<br/>".$address_proof_path;
+                            $customer->address_proof_image_id =uploadFile($address_proof_path);
+                        }
                 
-                    $identityPath = getFileByType("identity_prof",$customer);
-                    if($identityPath)
-                        $customer->identity_proof_image_id =uploadFile($identityPath);
+                        $identityPath = getFileByType("identity_prof",$customer);
+                        if($identityPath){
+                            echo "<br/>".$identityPath;
+                            $customer->identity_proof_image_id =uploadFile($identityPath);
+                        }
                 
-                    $customer->save();
+                        $customer->save();
 
 
-                    $kycUploadDetail = new KycUploadDetail();
-                    $kycUploadDetail->master_id = $IdGenerated;
-                    $kycUploadDetail->customer_id = $customer["old_customer_id"];
-                    $kycUploadDetail->customer_name = $customer["first_name"];
-                    $kycUploadDetail->is_processed = true;
-                    $kycUploadDetail->status = 'SUCCESS';
-                    $kycUploadDetail->request_json = 'NA';
-                    $kycUploadDetail->error_response = 'NA';
-                    $kycUploadDetail->save();
+                        $kycUploadDetail = new KycUploadDetail();
+                        $kycUploadDetail->master_id = $IdGenerated;
+                        $kycUploadDetail->customer_id = $customer["old_customer_id"];
+                        $kycUploadDetail->customer_name = $customer["first_name"];
+                        $kycUploadDetail->is_processed = true;
+                        $kycUploadDetail->status = 'SUCCESS';
+                        $kycUploadDetail->request_json = 'NA';
+                        $kycUploadDetail->error_response = 'NA';
+                        $kycUploadDetail->save();
+                        $content=$content. PHP_EOL . "Status : Success";
     
-                }catch(Exception $e1)
-                {
-                    echo "error".$e1;
-                    $kycUploadDetail = new KycUploadDetail();
-                    $kycUploadDetail->master_id = $IdGenerated;
-                    $kycUploadDetail->customer_id = $customer["old_customer_id"];
-                    $kycUploadDetail->customer_name = $customer["first_name"];
-                    $kycUploadDetail->is_processed = true;
-                    $kycUploadDetail->status = 'FAILED';
-                    $kycUploadDetail->request_json = json_encode($customer);
-                    $kycUploadDetail->error_response = $e1;
-                    $kycUploadDetail->save();
-                    //var_dump($customerUploadDetail->toArray());
-                    $failedCount++;
+                    }catch(Exception $e1)
+                    {
+                        echo "<br/> error".$e1->getMessage();
+                        $kycUploadDetail = new KycUploadDetail();
+                        $kycUploadDetail->master_id = $IdGenerated;
+                        $kycUploadDetail->customer_id = $customer["old_customer_id"];
+                        $kycUploadDetail->customer_name = $customer["first_name"];
+                        $kycUploadDetail->is_processed = true;
+                        $kycUploadDetail->status = 'FAILED';
+                        $kycUploadDetail->request_json = json_encode($customer);
+                        $kycUploadDetail->error_response = $e1->getMessage();
+                        $kycUploadDetail->save();
+                        //var_dump($customerUploadDetail->toArray());
+                        $failedCount++;
+                        $content=$content. PHP_EOL . "Status : Fails";
+                        $content=$content. PHP_EOL . "Error  : ".$e1->getMessage();
 
-                    //json_encode($customer);
+                        //json_encode($customer);
+                    }
+                };
+                // End LooP
+                $kycUploadMaster->failed_records = $failedCount;
+                $kycUploadMaster->status = 'PROCESSED';
+                $kycUploadMaster->save();
+
+                $tempPartnerCompleteDir=$tempCompletedDir .$rowData[0]. DIRECTORY_SEPARATOR;
+                if (!is_dir($tempPartnerCompleteDir )) {
+                    mkdir($tempPartnerCompleteDir, 0777, true);
                 }
-            };
-            // End LooP
 
-            $kycUploadMaster->failed_records = $failedCount;
-            $kycUploadMaster->status = 'PROCESSED';
-            $kycUploadMaster->save();
+                $source = $tempWipDir . $file->getFilename();
+                $dest = $tempPartnerCompleteDir .date("d-m-Y")."__".$file->getFilename();
+                copy($source, $dest);
+                unlink($source);
+                echo "<br/>".$file." File Moved to ".$dest;
 
-            $source = $tempWipDir . $file->getFilename();
-            $dest = $tempCompletedDir . $file->getFilename();
-            copy($source, $dest);
-            unlink($source);
+                $reportFilepath = $partner . DIRECTORY_SEPARATOR . $file->getFilename();    
+                $extension= pathinfo($reportFilepath, PATHINFO_EXTENSION);
+                $reportFileName= str_replace('.'.$extension, '__'.date("d-m-Y").'.txt', $reportFilepath);
 
-        } catch (Exception $e) {
-            $source = $tempWipDir . $file->getFilename();
-            $dest = $tempRejectedDir . $file->getFilename();
-            copy($source, $dest);
-            unlink($source);
-            continue;
-            //throw $e;
+                $fp = fopen($reportFileName,"wb");
+                fwrite($fp,$content);
+                fclose($fp);
+
+
+            } catch (Exception $e) {
+                $source = $tempWipDir . $file->getFilename();
+                $dest = $tempRejectedDir . $file->getFilename();
+                copy($source, $dest);
+                unlink($source);
+                echo "<br/>".$file." File Moved to ".$dest;
+                continue;
+                //throw $e;
+            }
+
         }
-
     }
+
 }
 

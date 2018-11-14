@@ -6,7 +6,13 @@ define({
     $pageFn: function($log,Utils,PagesDefinition,Queries,Lead, $q, PageHelper, formHelper, irfProgressMessage,
         SessionStore, $state, $stateParams, RuleMaintenance,irfSimpleModal) {
 
+
+
     var NewRuleForm = [{
+		"key": "item.processName",
+		"title": "Process name",
+		"type": "text"
+	},{
 		"key": "item.ruleName",
 		"title": "Rule name",
 		"type": "text"
@@ -26,24 +32,29 @@ define({
 		"key": "item.toStage",
 		"title": "To stage",
 		"type": "text"
-	},{
+    },
+    {
+		"key": "item.userExpression",
+		"title": "Rule Expression",
+		"type": "testarea"
+    },
+    {
         type: "section",
-        htmlClass: "col-sm-6",
-        html: '<div class="form-inline">'+
-        '<select ng-options="o.name as o.name for o in operators" ng-model="group.operator" class="form-control input-sm"></select>'+
-        '<button style="margin-left: 2px" ng-click="addCondition()" class="btn btn-sm btn-success"><span class="glyphicon glyphicon-plus-sign"></span> Add Condition</button>'+
-        '<button style="margin-left: 2px" ng-click="addGroup()" class="btn btn-sm btn-success"><span class="glyphicon glyphicon-plus-sign"></span> Add Group</button>'+
-        '<button style="margin-left: 2px" ng-click="removeGroup()" class="btn btn-sm btn-danger"><span class="glyphicon glyphicon-minus-sign"></span> Remove Group</button>'+
-    '</div>'
-    },{
+        "key":"item.userquery",
+        html:"<query-builder title='query-builder' fields='model.options.fields' operators='model.options.operators' comparators='model.options.comparators' group='model.item.ruleExpression.group' settings='model.options.settings' ></query-builder>"
+    },
+    {
 		"type": "button",
-		"title": "validate Rule",
-		"onClick": "actions.validateRule(model, formCtrl, form, $event)"
-    },{
+		"title": "Generate Expression",
+		"onClick": "actions.validateRule(model.item.ruleExpression.group,model)"
+    },
+    {
 		"type": "button",
-		"title": "Save Rule",
-		"onClick": "actions.saveRule(model, formCtrl, form, $event)"
-    }];
+        "title": "Create Rule",
+        "condition":"model.type=='Create'",
+		"onClick": "actions.createNewRule(model)"
+    }, 
+];
 
     var Ruleschema= {
         "$schema": "http://json-schema.org/draft-04/schema#",
@@ -69,6 +80,9 @@ define({
             }
         }
     };
+
+    
+   
 
     var initialize= function(model) {
         $log.info(model);
@@ -107,8 +121,74 @@ define({
                 RuleModel.model= model;
                 RuleModel.actions= self.actions;
                 RuleModel.initialize=initialize;
-
                 $log.info(model.createConversationModel);
+
+                model.options = {};
+
+                RuleMaintenance.getRuleParams().$promise.then(function(res){
+                    console.log(res);
+                    for(i in res){
+                        res[i].id= Number(i)+1;
+                        res[i].name=res[i].displayName;
+                        res[i].value='${'+res[i].displayName+'}';
+                    }
+                    model.options.fields= res;
+                },function(err){
+                    console.log(err);
+                    model.options.fields = [
+                        {
+                          id: 1,
+                          value:'${Gender}',
+                          name: 'Gender',
+                          options: [
+                            { name: 'male', id: 1,value:'male'},
+                            { name: 'female', id: 2,value:'female'}
+                          ],
+                          disabledComparators: [
+                            3, 4, 5, 6
+                          ]
+                        },
+                        {
+                          id: 2,
+                          value:'${Age}',
+                          name: 'Age'
+                        },
+                        {
+                          name: 'Favorite city', id: 3,
+                          value:'${Favorite city}',
+                          options: [
+                            { name: 'paris', id: 1 ,value:'paris'},
+                            { name: 'london', id: 2 ,value:'london'},
+                            { name: 'brussels', id: 3 ,value:'brussels'}
+                          ],
+                          disabledComparators: [
+                            3, 4, 5, 6
+                          ]
+                        }
+                      ];
+                });
+
+                 model.options.comparators = [
+                    { id: 1, name: 'equal to', value: '=='},
+                    { id: 2, name: 'not equal to', value: '!=' },
+                    { id: 3, name: 'smaller than', value: '<' },
+                    { id: 4, name: 'smaller than or equal to', value: '<=' },
+                    { id: 5, name: 'greater than', value: '>' },
+                    { id: 6, name: 'greater than or equal to', value: '>=' },
+                  ];
+                  
+                 model.options.operators = [
+                    { name: 'AND', value: '&&' },
+                    { name: 'OR', value: '||' }
+                  ];
+                  
+                 model.options.settings = {
+                    nesting: true,
+                    addIconClass: 'glyphicon glyphicon-plus',
+                    removeIconClass: 'glyphicon glyphicon-minus',
+                    addButtonClass: 'btn btn-sm btn-success',
+                    removeButtonClass: 'btn btn-sm btn-danger'
+                  }     
             },
 
             form: [
@@ -157,6 +237,7 @@ define({
                                 for (var i = 0; i < res.body.length; i++) {
                                     var a = {
                                         id: res.body[i].id,
+                                        version: res.body[i].version,
                                         expression: res.body[i].expression,
                                         fromStage: res.body[i].fromStage,
                                         order: res.body[i].order,
@@ -164,7 +245,13 @@ define({
                                         ruleDescription: res.body[i].ruleDescription,
                                         ruleName: res.body[i].ruleName,
                                         toStage: res.body[i].toStage,
-                                        userExpression: res.body[i].userExpression
+                                        userExpression: res.body[i].userExpression||res.body[i].expression
+                                        
+                                    };
+                                    a.ruleExpression = {
+                                        group: {
+                                          operator: model.options.operators[0], rules: []
+                                        }
                                     };
                                     model.rule.rules.push(a);
                                     model.rule.stages.push({'fromStage':a.fromStage});
@@ -230,7 +317,7 @@ define({
                     condition: "model.rule.rules.length",
                     type: "tableview",
                     listStyle: "table",
-                    selectable: true,
+                    selectable: false,
                     editable: true,
                     paginate: false,
                     searching: false,
@@ -261,7 +348,7 @@ define({
                                 fn: function(item, model) {
                                     $log.info(RuleModel);
                                     RuleModel.model.item=item;
-                                    irfSimpleModal('EDIT Rule',simpleSchemaFormHtml,RuleModel);
+                                    irfSimpleModal('EDIT Rule',simpleSchemaFormHtml,RuleModel,{"size":"lg"});
                                 },
                                 isApplicable: function (item) {
                                     return true;
@@ -316,11 +403,13 @@ define({
             {
                 "type": "actionbox",
                 "items": [{
-                    "type": "submit",
-                    "title": "SUBMIT"
+                    "type": "button",
+                    "title": "Update Rule",
+                    "onClick": "actions.saveRule(model, form, formName)"
                 },{
                     "type": "button",
-                    "title": "Add New Rule"
+                    "title": "Add New Rule",
+                    "onClick": "actions.createRule(model, form, formName)"
                 }]
             }],
             schema: function() {
@@ -328,24 +417,55 @@ define({
             },
             actions: {
                 submit: function(model, form, formName) {
-                    PageHelper.showProgress("Branch Save", "Scoring Details Updated" , 3000);
+                },
+                createRule:function(model, form, formName) {
+                    RuleModel.model.item={};
+                    RuleModel.model.type="Create";
+                    RuleModel.model.item.ruleExpression = {
+                        group: {
+                          operator: model.options.operators[0], rules: []
+                        }
+                    };
+                    irfSimpleModal('Create Rule',simpleSchemaFormHtml,RuleModel,{"size":"lg"});
+                },
+                createNewRule:function(model, form, formName) {
+                    PageHelper.showProgress("new rule Save", "rule Creating" , 3000);
                     $log.info("Inside submit()");
-                    RuleMaintenance.save(model.rule.rules).$promise.then(function(res){
+                    var rules=[];var reqData={};
+                    rules.push(model.item);
+                    reqData.rules=rules;
+                    RuleMaintenance.save(reqData).$promise.then(function(res){
                         $log.info(res);
                     },function(err){
                         $log.info(err);
                     })
                 },
-                validateRule:function(model, form, formName) {
+                saveRule: function(model, form, formName) {
+                    PageHelper.showProgress("Branch Save", "Scoring Details Updated" , 3000);
+                    $log.info("Inside submit()");
+                    var reqData={};
+                    reqData.rules=model.rule.rules;
+                    RuleMaintenance.save(reqData).$promise.then(function(res){
+                        $log.info(res);
+                    },function(err){
+                        $log.info(err);
+                    })
+                },
+                validateRule:function(group,model) {
                     PageHelper.showProgress("rule validate", "validating Rule" , 3000);
-                    RuleMaintenance.validateRule(model.item).$promise.then(function(res){
+                    var query= RuleMaintenance.asString(group);
+                    model.item.userExpression=query;
+                    var rules=[];var reqData={};
+                    rules.push(model.item);
+                    reqData.rules=rules;
+                    RuleMaintenance.validateRule(reqData).$promise.then(function(res){
                         $log.info(res);
                         PageHelper.showProgress("rule validate", "Rule is valid" , 3000);
                     },function(err){
                         $log.info(err);
                         PageHelper.showProgress("rule validate", "Rule is invalid" +  err, 3000);
                     })
-                }  
+                },
             }
         };
     }
