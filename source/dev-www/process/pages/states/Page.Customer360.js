@@ -120,6 +120,7 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 					"Page/Engine/customer360.RequestRecaptureGPS"
 				]
 			},
+			"Page/Adhoc/customer360.FinancialWellbeingReport",
 			"Page/CustomerHistory",
 			"Page/Engine/customer360.Recapture",
 			"Page/Engine/customer360.CustomerSummaryView",
