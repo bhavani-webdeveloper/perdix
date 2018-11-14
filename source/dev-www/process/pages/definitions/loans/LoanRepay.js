@@ -43,9 +43,6 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                 "type": "schema-form",
                 "title": "LOAN_REPAYMENT",
                 "subTitle": "",
-                "processType": "Loan",
-                "processName": "Origination",
-                "lockingRequired": true,
                 initialize: function (model, form, formCtrl) {
 
                     pageInit();
