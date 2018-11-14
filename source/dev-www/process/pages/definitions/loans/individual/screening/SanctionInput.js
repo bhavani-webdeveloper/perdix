@@ -8,7 +8,10 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.SanctionInput'),
         	return {
         		"type": "page-bundle",
         		"title": "SANCTION",
-        		"subTitle": "",
+                "subTitle": "",
+                "processType": "Loan",
+                "processName": "Origination",
+                "lockingRequired": true,
                 "bundleDefinition": [
                     {
                         pageName: 'loans.individual.screening.Summary',

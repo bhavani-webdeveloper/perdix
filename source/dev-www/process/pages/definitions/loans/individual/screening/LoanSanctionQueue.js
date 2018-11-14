@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.screening.LoanSanctionQueue"), 
-	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons", "irfNavigator",
-	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons, irfNavigator) {
+	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons", "irfNavigator","irfProgressMessage","Locking",
+	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons, irfNavigator,irfProgressMessage,Locking) {
 		var branch = SessionStore.getBranch();
 		return {
 			"type": "search-list",
@@ -173,17 +173,25 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.LoanSanctionQueu
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('loans.individual.screening.SanctionInput', {
-									_request: item
-								});
-								irfNavigator.go({
-									state: "Page.Bundle",
-									pageName: "loans.individual.screening.SanctionInput",
-									pageId: item.loanId
-								}, {
-									state: 'Page.Engine',
-                                    pageName: "loans.individual.screening.LoanSanctionQueue"
-								});
+								Locking.findlocks({recordId : item.loanId }, {}, function (resp, headers) {
+									if (resp.body.length != 0 && item.loanId == resp.body[0].recordId) {
+										irfProgressMessage.pop("Selected list", "File is Locked, Please unlock from AdminScreen", 4000);
+								}else {
+										entityManager.setModel('loans.individual.screening.SanctionInput', {
+											_request: item
+										});
+										irfNavigator.go({
+											state: "Page.Bundle",
+											pageName: "loans.individual.screening.SanctionInput",
+											pageId: item.loanId
+										}, {
+											state: 'Page.Engine',
+											pageName: "loans.individual.screening.LoanSanctionQueue"
+										});
+									}
+								}, function (resp) {
+									$log.error(resp);
+								});	
 							},
 							isApplicable: function(item, index) {
 

@@ -1232,6 +1232,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                         'loanProcessAction': 'PROCEED',
                         'remarks': model.review.remarks
                     };
+                    reqData.loanAccount.status = null;
                     PageHelper.showProgress('update-loan', 'Working...');
                     PageHelper.showLoader();
                     return IndividualLoan.update(reqData)

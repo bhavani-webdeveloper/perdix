@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.booking.InitiationQueue"),
-["$log","irfNavigator", "formHelper","entityManager", "IndividualLoan","$state", "SessionStore", "Utils",
-function($log, irfNavigator, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Utils){
+["$log","irfNavigator", "formHelper","entityManager", "IndividualLoan","$state", "SessionStore", "Utils","irfProgressMessage","Locking",
+function($log, irfNavigator, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Utils,irfProgressMessage,Locking){
 
 	var branch = SessionStore.getBranch();
 
@@ -110,12 +110,21 @@ function($log, irfNavigator, formHelper,EntityManager, IndividualLoan,$state, Se
 						desc: "",
 						icon: "fa fa-book",
 						fn: function(item, index){
-							irfNavigator.go({
-                                'state': 'Page.Engine',
-                                'pageName': 'loans.individual.booking.LoanInput',
-                                'pageId': item.loanId,
-                                'pageData': item
-                            });							
+							Locking.findlocks({recordId : item.loanId }, {}, function (resp, headers) {
+								if (resp.body.length != 0 && item.loanId == resp.body[0].recordId) {
+									irfProgressMessage.pop("Selected list", "File is Locked, Please unlock from AdminScreen", 4000);
+							}else {
+									irfNavigator.go({
+										'state': 'Page.Engine',
+										'pageName': 'loans.individual.booking.LoanInput',
+										'pageId': item.loanId,
+										'pageData': item
+									});
+								}
+							}, function (resp) {
+								$log.error(resp);
+							});
+														
 						},
 						isApplicable: function(item, model){
 							return model.searchOptions.siteCode != 'sambandh';

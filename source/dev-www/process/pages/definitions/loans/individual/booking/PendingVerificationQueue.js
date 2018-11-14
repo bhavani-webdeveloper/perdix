@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.booking.PendingVerificationQueue"),
-["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q", "IndividualLoan", "entityManager", "LoanBookingCommons", "irfNavigator","$filter",
-function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan, entityManager, LoanBookingCommons, irfNavigator, $filter){
+["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q", "IndividualLoan", "entityManager", "LoanBookingCommons", "irfNavigator","$filter","irfProgressMessage","Locking",
+function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan, entityManager, LoanBookingCommons, irfNavigator, $filter,irfProgressMessage,Locking){
     return {
         "type": "search-list",
         "title": "LOAN_PENDING_VERIFICATION_QUEUE",
@@ -141,43 +141,50 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan,
                             name: "VERIFY_DOCUMENT",
                             desc: "",
                             fn: function(item, index){
-                                if (siteCode == 'pahal') {
-                                    entityManager.setModel('pahal.loans.individual.booking.DocumentVerification', {_queue:item});
-                                    irfNavigator.go({
-                                        state: 'Page.Engine', 
-                                        pageName: 'pahal.loans.individual.booking.DocumentVerification', 
-                                        pageId: item.loanId,
-                                        pageData: item
-                                    },
-                                    {
-                                        state: 'Page.Engine',
-                                        pageName: "loans.individual.booking.PendingVerificationQueue"
-                                    });   
-                                } else if (siteCode == 'witfin') {
-                                    entityManager.setModel('witfin.loans.individual.booking.DocumentVerification', {_queue:item});
-                                    irfNavigator.go({
-                                        state: 'Page.Engine', 
-                                        pageName: 'witfin.loans.individual.booking.DocumentVerification', 
-                                        pageId: item.loanId,
-                                        pageData: item
-                                    },
-                                    {
-                                        state: 'Page.Engine',
-                                        pageName: "loans.individual.booking.PendingVerificationQueue"
-                                    });   
-                                } else {
-                                    entityManager.setModel('loans.individual.booking.DocumentVerification', {_queue:item});
-                                    irfNavigator.go({
-                                        state: 'Page.Engine', 
-                                        pageName: 'loans.individual.booking.DocumentVerification', 
-                                        pageId: item.loanId
-                                    },
-                                    {
-                                        state: 'Page.Engine',
-                                        pageName: "loans.individual.booking.PendingVerificationQueue"
-                                    }); 
-                                }
-                                
+                                Locking.findlocks({recordId : item.loanId }, {}, function (resp, headers) {
+                                    if (resp.body.length != 0 && item.loanId == resp.body[0].recordId) {
+                                        irfProgressMessage.pop("Selected list", "File is Locked, Please unlock from AdminScreen", 4000);
+                                }else {
+                                        if (siteCode == 'pahal') {
+                                            entityManager.setModel('pahal.loans.individual.booking.DocumentVerification', {_queue:item});
+                                            irfNavigator.go({
+                                                state: 'Page.Engine', 
+                                                pageName: 'pahal.loans.individual.booking.DocumentVerification', 
+                                                pageId: item.loanId,
+                                                pageData: item
+                                            },
+                                            {
+                                                state: 'Page.Engine',
+                                                pageName: "loans.individual.booking.PendingVerificationQueue"
+                                            });   
+                                        } else if (siteCode == 'witfin') {
+                                            entityManager.setModel('witfin.loans.individual.booking.DocumentVerification', {_queue:item});
+                                            irfNavigator.go({
+                                                state: 'Page.Engine', 
+                                                pageName: 'witfin.loans.individual.booking.DocumentVerification', 
+                                                pageId: item.loanId,
+                                                pageData: item
+                                            },
+                                            {
+                                                state: 'Page.Engine',
+                                                pageName: "loans.individual.booking.PendingVerificationQueue"
+                                            });   
+                                        } else {
+                                            entityManager.setModel('loans.individual.booking.DocumentVerification', {_queue:item});
+                                            irfNavigator.go({
+                                                state: 'Page.Engine', 
+                                                pageName: 'loans.individual.booking.DocumentVerification', 
+                                                pageId: item.loanId
+                                            },
+                                            {
+                                                state: 'Page.Engine',
+                                                pageName: "loans.individual.booking.PendingVerificationQueue"
+                                            }); 
+                                        }
+                                    }
+                                }, function (resp) {
+                                    $log.error(resp);
+                                });
                             },
                             isApplicable: function(item, index){
                                 return true;
