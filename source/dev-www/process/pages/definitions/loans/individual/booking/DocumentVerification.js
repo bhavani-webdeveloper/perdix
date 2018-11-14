@@ -679,11 +679,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                     if (PageHelper.isFormInvalid(form)){
                         return false;
                     }
-
+                    
                     var reqData = {
                         'loanAccount': _.cloneDeep(model.loanAccount),
-                        'loanProcessAction': 'PROCEED'
+                        'loanProcessAction': 'PROCEED',
                     };
+                    reqData.loanAccount.status = null;
                     var docStatuses = [];
                     var allowedStatues = ['APPROVED', 'REJECTED'];
                     var redirectToUploadFlag = false;
