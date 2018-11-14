@@ -3009,6 +3009,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     if (!_.hasIn(model.loanAccount, 'loanAmountRequested') || _.isNull(model.loanAccount.loanAmountRequested)){
                         model.loanAccount.loanAmountRequested = model.loanAccount.loanAmount;
                     }
+                    
                     if (!preLoanSaveOrProceed(model)){
                         return;
                     }
@@ -3021,6 +3022,14 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                            return;
                         }
                     }
+
+                    if (model.loanAccount.loanApplicationDate > model.loanAccount.sanctionDate) {
+                        PageHelper.setError({
+                                message: "Loan Application Date should not be greater than Loan Sanction Date"
+                            });
+                        return;
+                    }
+
                     populateLoanCustomerRelations(model);
                     Utils.confirm("Are You Sure?")
                     .then(function(){
@@ -3087,6 +3096,13 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     PageHelper.clearErrors();
 
                     if (!validateForm(formCtrl)){
+                        return;
+                    }
+
+                    if (model.loanAccount.loanApplicationDate > model.loanAccount.sanctionDate) {
+                        PageHelper.setError({
+                                message: "Loan Application Date should not be greater than Loan Sanction Date"
+                            });
                         return;
                     }
 
