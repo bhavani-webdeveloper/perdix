@@ -228,7 +228,9 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             }
                         }
                     )
-
+                    console.log("************");
+                    console.log(model);
+                    console.log("************");
                 },
                 offline: false,
                 form: [

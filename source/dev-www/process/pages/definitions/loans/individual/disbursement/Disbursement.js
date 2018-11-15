@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"),
-    ["$log", "Enrollment", "BiometricService", "elementsUtils", "SessionStore", "$state", "$stateParams", "PageHelper", "IndividualLoan", "SchemaResource", "Utils", "LoanAccount", "formHelper", "Queries", "LoanAccount","Locking",
-        function ($log, Enrollment, BiometricService, elementsUtils, SessionStore, $state, $stateParams, PageHelper, IndividualLoan, SchemaResource, Utils, LoanAccount, formHelper, Queries, LoanAccount,Locking) {
+    ["$log", "$q", "Enrollment", "BiometricService", "elementsUtils", "SessionStore", "$state", "$stateParams", "PageHelper", "IndividualLoan", "SchemaResource", "Utils", "LoanAccount", "formHelper", "Queries", "LoanAccount", "Locking", "irfProgressMessage", "irfNavigator",
+        function ($log, $q, Enrollment, BiometricService, elementsUtils, SessionStore, $state, $stateParams, PageHelper, IndividualLoan, SchemaResource, Utils, LoanAccount, formHelper, Queries, LoanAccount, Locking, irfProgressMessage, irfNavigator) {
 
             var branch = SessionStore.getBranch();
             var siteCode = SessionStore.getGlobalSetting("siteCode");
@@ -17,22 +17,24 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                 "type": "schema-form",
                 "title": "DISBURSE_LOAN",
                 "subTitle": "",
+                "processType": "Loan",
+                "processName": "Disbursement",
+                "lockingRequired": true,
                 initialize: function (model, form, formCtrl) {
                     $log.info("Disbursement Page got initialized");
-                    var recordId = ($stateParams['pageId'].split('.'))[0];
+                   // var recordId = ($stateParams['pageId'].split('.'))[0];
 
-                    Locking.lock({
-                        "processType": "Loan",
-                        "processName": "Origination",
-                        "recordId": recordId
-                    }).$promise.then(function () {
-                        $state.page.locked = true;
-                        deferred.resolve();
-                    }, function (err) {
-                        irfProgressMessage.pop("Locking", "Locking failed for " + $state.pageId, 6000);
-                        irfNavigator.goBack();
-                        deferred.reject();
-                    });
+                    // Locking.lock({
+                    //     "processType": "Loan",
+                    //     "processName": "Disbursement",
+                    //     "recordId": recordId
+                    // },{},function(resp,header){
+                    //     $state.page.locked = true;
+                    // },function(resp){
+                    //     irfProgressMessage.pop("Locking", "Locking failed for " + recordId, 6000);
+                    //     irfNavigator.goBack();
+                    // });
+
                     model.customer = model.customer || {};
                     model.loanAccountDisbursementSchedule = model.loanAccountDisbursementSchedule || {};
                     model.fee = model.fee || {};

@@ -173,25 +173,17 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.LoanSanctionQueu
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								Locking.findlocks({recordId : item.loanId }, {}, function (resp, headers) {
-									if (resp.body.length != 0 && item.loanId == resp.body[0].recordId) {
-										irfProgressMessage.pop("Selected list", "File is Locked, Please unlock from AdminScreen", 4000);
-								}else {
-										entityManager.setModel('loans.individual.screening.SanctionInput', {
-											_request: item
-										});
-										irfNavigator.go({
-											state: "Page.Bundle",
-											pageName: "loans.individual.screening.SanctionInput",
-											pageId: item.loanId
-										}, {
-											state: 'Page.Engine',
-											pageName: "loans.individual.screening.LoanSanctionQueue"
-										});
-									}
-								}, function (resp) {
-									$log.error(resp);
-								});	
+								entityManager.setModel('loans.individual.screening.SanctionInput', {
+									_request: item
+								});
+								irfNavigator.go({
+									state: "Page.Bundle",
+									pageName: "loans.individual.screening.SanctionInput",
+									pageId: item.loanId
+								}, {
+									state: 'Page.Engine',
+									pageName: "loans.individual.screening.LoanSanctionQueue"
+								});
 							},
 							isApplicable: function(item, index) {
 

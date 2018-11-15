@@ -206,6 +206,8 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager, 
                             name: "COLLECT_PAYMENT",
                             desc: "",
                             fn: function(item, index){
+                                console.log("Th9s os yessssss");
+                                console.log(item);
                                 entityManager.setModel('loans.LoanRepay', {_bounce:item,_screen:"BounceQueue"});
                                 $state.go('Page.Engine',
                                     {

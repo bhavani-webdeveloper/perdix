@@ -82,16 +82,18 @@ function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formH
 			} else {
 				lockingRequired = !!$scope.page.lockingRequired;
 			}
+			var recordId = $scope['pageId'].split('.')[0];
+
 			if (lockingRequired) {
 				Locking.lock({
 					"processType": $scope.page.processType,
 					"processName": $scope.page.processName,
-					"recordId": $scope.pageId
+					"recordId": recordId
 				}).$promise.then(function() {
 					$scope.page.locked = true;
 					deferred.resolve();
 				}, function(err) {
-					irfProgressMessage.pop("Locking","Locking failed for " + $scope.pageId, 6000);
+					irfProgressMessage.pop("Locking","Locking failed for " + recordId, 6000);
 					irfNavigator.goBack();
 					deferred.reject();
 				});
