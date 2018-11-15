@@ -450,10 +450,10 @@ define({
                         "items": [{
                             "key": "loanAccount.nominees[0].nomineeRelationship",
                             "title": "Relationship To Insured"
-                        }, {
+                        }/* , {
                             "key": "",
                             "title": "Address"
-                        }]
+                        } */]
                     }]
                 }]
             }, {
