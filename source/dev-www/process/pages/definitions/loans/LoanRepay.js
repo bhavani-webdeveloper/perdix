@@ -1,8 +1,9 @@
 irf.pageCollection.factory(irf.page('loans.LoanRepay'),
     ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager","formHelper", "$stateParams", "Enrollment"
         ,"LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
-        "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch","Queries", "Utils", "IndividualLoan","LoanCollection","PagesDefinition","irfNavigator",
-        function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch,Queries, Utils, IndividualLoan,LoanCollection,PagesDefinition,irfNavigator) {
+        "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch","Queries", "Utils", "IndividualLoan","LoanCollection","PagesDefinition","irfNavigator","Locking",
+        function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, 
+            Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch,Queries, Utils, IndividualLoan,LoanCollection,PagesDefinition,irfNavigator,Locking) {
 
             function backToLoansList(){
                 try {
@@ -44,7 +45,6 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                 "title": "LOAN_REPAYMENT",
                 "subTitle": "",
                 initialize: function (model, form, formCtrl) {
-
                     pageInit();
 
                     PagesDefinition.getPageConfig("Page/Engine/loans.LoanRepay")
@@ -188,7 +188,9 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                     IndividualLoan.search({
                         'accountNumber': loanAccountNo,
                         'stage' : 'Completed'
-                    }).$promise.then(
+                    })
+                    .$promise
+                    .then(
                         function(res){
                             if (_.isArray(res.body) && res.body.length>0){
                                 var item = res.body[0];
@@ -223,14 +225,23 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                             )
                                         }
                                     )
+                                    .then(function(){
+                                        Locking.lock({
+                                            "processType": "Loan",
+                                            "processName": "Collections",
+                                            "recordId": model.loanAccount.id
+                                        }).$promise.then(function() {
+
+                                        }, function(err) {
+                                            irfProgressMessage.pop("Locking","Locking failed for " + model.loanAccount.id, 6000);
+                                            irfNavigator.goBack();
+                                        });
+                                    })
                             } else {
                                 /* Loan Account not in perdix. Go back to Collections Dashboard */
                             }
                         }
                     )
-                    console.log("************");
-                    console.log(model);
-                    console.log("************");
                 },
                 offline: false,
                 form: [
