@@ -3499,7 +3499,7 @@
             "title": "monthlyTurnover",
             "type": "number",
             "minimum": 0,
-            "maximum": 10000000,
+            "maximum": 100000000,
             "captureStages": [
               "BasicEnrolment",
               "Completed"
@@ -3509,7 +3509,7 @@
             "title": "monthlyBusinessExpenses",
             "type": "number",
             "minimum": 0,
-            "maximum": 10000000,
+            "maximum": 100000000,
             "captureStages": [
               "BasicEnrolment",
               "Completed"
@@ -3539,7 +3539,7 @@
             "title": "avgMonthlyNetIncome",
             "type": "number",
             "minimum": 0,
-            "maximum": 10000000,
+            "maximum": 100000000,
             "captureStages": [
               "BasicEnrolment",
               "Completed"
@@ -3972,7 +3972,7 @@
             "title": "limit",
             "type": "number",
             "minimum": 0,
-            "maximum": 10000000,
+            "maximum": 100000000,
             "captureStages": [
               "BasicEnrolment",
               "Stage02",
@@ -4072,7 +4072,7 @@
             "title": "sanctionedAmount",
             "type": "number",
             "minimum": 0,
-            "maximum": 10000000,
+            "maximum": 100000000,
             "captureStages": [
               "BasicEnrolment",
               "Stage02",
@@ -4210,7 +4210,7 @@
               "title": "Total Deposits",
               "type": "number",
               "minimum": 0,
-              "maximum": 10000000,
+              "maximum": 100000000,
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"
@@ -4220,7 +4220,7 @@
               "title": "Total Wihdrawals",
               "type": "number",
               "minimum": 0,
-              "maximum": 10000000,
+              "maximum": 100000000,
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"
@@ -4230,7 +4230,7 @@
               "title": "Balance As On 15th",
               "type": "number",
               "minimum": 0,
-              "maximum": 10000000,
+              "maximum": 100000000,
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"
@@ -4471,7 +4471,7 @@
               "title": "Amount",
               "type": "number",
               "minimum": 0,
-              "maximum": 10000000,
+              "maximum": 100000000,
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"

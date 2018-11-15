@@ -303,10 +303,9 @@ define({
                     // 1)cash collection details to be deposited
                         if(model.depositDetails && model.depositDetails.instrumentType.toLowerCase()=='cash'){
                     //UPDATE API to update deposit summary details
-                            PageHelper.showLoader();
+                            PageHelper.showLoader();    
                             LoanCollection.updateDeposiSummary(model.depositDetails.collectionDetail).$promise
                                 .then(function (res, head) {
-                                    PageHelper.showLoader();
                                     PageHelper.showProgress('Deposit-Stage', 'Successfully Updated', 1000);
                                     let cashProceedData = {
                                         "loanCollectionSummaryDTOs": [{
@@ -315,7 +314,6 @@ define({
                                         "remarks": model.review.remarks,
                                         "repaymentProcessAction": "PROCEED"
                                     }
-                                    PageHelper.showLoader();
                     //batchRepay to proceed loancollection account associated with bankSummaryID
                                     LoanCollection.batchUpdate(cashProceedData).$promise
                                         .then(function (res, head) {
@@ -323,12 +321,11 @@ define({
                                             irfNavigator.goBack();
                                         }, function (httpres) {
                                             PageHelper.showProgress("Deposit-Stage", "Error in Proceeding to next stage", 5000);
+                                        }) .finally(function () {
+                                            PageHelper.hideLoader();
                                         })
                                 }, function (httpres) {
                                     PageHelper.showProgress("Deposit-Stage", "Error in updating the deposit data", 5000);
-                                })
-                                .finally(function () {
-                                    PageHelper.hideBlockingLoader();
                                     PageHelper.hideLoader();
                                 })
                         }else if(model.depositDetails && (model.depositDetails.instrumentType.toLowerCase()=='chq' || model.depositDetails.instrumentType.toLowerCase() == 'cheque')){

@@ -135,8 +135,8 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHClearingCollecti
                     "getListDisplayItem": function(item, index) {
                         return [
                             '{{"ACCOUNT_NUMBER"|translate}}: ' + item.accountNumber,
-                            '<i class="fa fa-rupee"></i> ' + item.demandAmount,
-                            '{{"ENTITY_NAME"|translate}}: ' + item.customerName
+                            '<i class="fa fa-rupee"></i> ' + item.demandAmount
+                        //    '{{"ENTITY_NAME"|translate}}: ' + item.customerName
                         ];
                     },
                     "onSelect": function(result, model, context) {

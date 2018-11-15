@@ -25,8 +25,8 @@ define([], function () {
             var setGoldRate = function(weight,carat,model,index){
                 var dynamicRate = model.additions.goldRatePerCarat * carat;
                 var dynamicMarketValue = dynamicRate * weight;
-                model.loanAccount.ornamentsAppraisals[index].ratePerGramInPaisa = dynamicRate/100 + 0.0;
-                model.loanAccount.ornamentsAppraisals[index].marketValueInPaisa = dynamicMarketValue/100 + 0.0;
+                model.loanAccount.ornamentsAppraisals[index].ratePerGramInPaisa = 100;
+                model.loanAccount.ornamentsAppraisals[index].marketValueInPaisa = 100;
             };
             var getIncludes = function (model) {
                 return [
@@ -219,6 +219,7 @@ define([], function () {
                             if(valueObj == "JEWEL"){
                                 getGoldRate(model);
                                 model.loanAccount.jewelLoanDetails = {};
+                                model.loanAccount.jewelLoanDetails.encoreClosed = false;
                                 model.loanAccount.jewelLoanDetails.jewelPouchLocationType = "BRANCH";
                             }
                             else{
@@ -1128,6 +1129,7 @@ define([], function () {
                     "new-applicant": function (bundleModel, model, obj) {
                         model.customer = obj.customer;
                         model.loanAccount.customerId = model.customer.id;
+                        model.loanAccount.urnNo = model.customer.urnNo;
                     },
                     "dsc-response": function(bundleModel,model,obj){
                         model.loanAccount.loanCustomerRelations = obj;
