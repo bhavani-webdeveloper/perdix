@@ -653,6 +653,14 @@ define({
                             }, {
                                 "title": "Model No.",
                                 "data": "machineModel",
+                            },
+                            {
+                                "title": "Work Process",
+                                "data": "workProcess",
+                            },
+                            {
+                                "title": "Depreciation%",
+                                "data": "depreciationPercentage",
                             }, {
                                 "title": "Purchase Year",
                                 "data": "machinePurchasedYear"
@@ -674,6 +682,20 @@ define({
                             }, {
                                 "title": "Present Value",
                                 "data": "presentValue",
+                                render: function(data, type, full, meta) {
+                                    return irfCurrencyFilter(data);
+                                }
+                            },
+                            {
+                                "title": "Market Price",
+                                "data": "marketPrice",
+                                render: function(data, type, full, meta) {
+                                    return irfCurrencyFilter(data);
+                                }
+                            },
+                            {
+                                "title": "Fixed Price",
+                                "data": "finalPrice",
                                 render: function(data, type, full, meta) {
                                     return irfCurrencyFilter(data);
                                 }

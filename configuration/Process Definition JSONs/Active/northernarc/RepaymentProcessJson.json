@@ -1,0 +1,46 @@
+{
+   "stages":[
+      {
+         "order":1,
+         "code":"Initiation",
+         "name":"Initiation",
+         "stageType":"CAPTURE",
+         "isBankAccountReversal":true,
+         "allowedRoles":[
+            "WM"
+         ]
+      },
+      {
+         "order":2,
+         "code":"Deposit",
+         "name":"Deposit",
+         "stageType":"DEPOSIT",
+         "sendSms":"Yes",
+         "smsCategory":"ODCollection",
+         "isBankAccountReversal":true,
+         "allowedRoles":[
+            "APPROVER"
+         ]
+      },
+      {
+         "order":3,
+         "code":"CreditValidation",
+         "name":"Credit Validation",
+         "stageType":"CAPTURE",
+         "isBankAccountReversal":true,
+         "allowedRoles":[
+            "WM"
+         ]
+      },
+      {
+         "order":4,
+         "code":"PartialPayment",
+         "name":"PartialPayment",
+         "stageType":"CAPTURE",
+         "isBankAccountReversal":true,
+         "allowedRoles":[
+            "APPROVER"
+         ]
+      }
+   ]
+}
