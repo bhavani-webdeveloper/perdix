@@ -1826,7 +1826,7 @@
                     "ornamentDescription": {
                         "title": "ORNAMENT_DESCRIPTION",
                         "type": "text",
-                        "key": "loanAccount.ornamentsAppraisals[].ornamentDescription"
+                        "key": "loanAccount.ornamentsAppraisals[].ornamentsDescription"
                     },
                     "stoneDescription": {
                         "title": "STONE_DESCRIPTION",
