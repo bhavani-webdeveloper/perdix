@@ -556,7 +556,7 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, Locking, ir
                             $scope.bundlePage.locked = true;
                             deferred.resolve();
                         }, function(err) {
-                            irfProgressMessage.pop("Locking","Locking failed for " + recordId, 6000);
+                            irfProgressMessage.pop("Locking",err.data.error, 6000);
                             irfNavigator.goBack();
                             deferred.reject();
                         });

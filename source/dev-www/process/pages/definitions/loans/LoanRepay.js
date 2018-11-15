@@ -233,7 +233,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                         }).$promise.then(function() {
 
                                         }, function(err) {
-                                            irfProgressMessage.pop("Locking","Locking failed for " + model.loanAccount.id, 6000);
+                                            irfProgressMessage.pop("Locking",err.data.error, 6000);
                                             irfNavigator.goBack();
                                         });
                                     })
