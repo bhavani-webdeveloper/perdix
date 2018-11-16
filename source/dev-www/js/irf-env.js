@@ -1,5 +1,4 @@
 
-
 var irf = irf || {};
 irf.BASE_URL = 'http://devkinara.perdix.in:8080/perdix-server';
 irf.MANAGEMENT_BASE_URL = 'http://devkinara.perdix.in:8081/management';
@@ -248,3 +247,13 @@ irf.FWR_BASE_URL = 'http://perdix.kgfs.co.in/fwr_dev';
 // irf.BI_BASE_URL = 'http://sit.perdix.co.in:8081/sit_kgfs_bi';
 // irf.AUDIT_API_URL = 'http://sit.perdix.co.in.in:82';
 // irf.CAMS_EKYC_INTEG_URL = "https://eiscuat1.camsonline.com/ekycuat3/eKYCVal_Aadhar.aspx";
+
+
+var irf = irf || {};
+irf.BASE_URL = 'http://uat.witfin.perdix.co.in:8080/uat_witfin_perdix-server';
+irf.MANAGEMENT_BASE_URL = 'http://uat.witfin.perdix.co.in:8081/uat_witfin_management';
+irf.FORM_DOWNLOAD_URL = 'http://uat.witfin.perdix.co.in:8080/uat_witfin_forms/formPrint.jsp';
+irf.BI_BASE_URL = "http://uat.witfin.perdix.co.in:8081/uat_witfin_bi";
+irf.PSYCHOMETRIC_BASE_URL = "http://uat.witfin.perdix.co.in:8080/uat_witfin_psychometric";
+irf.ANALYTICS_WEB_URL = 'http://34.202.113.237:12345';
+irf.ANALYTICS_API_URL = 'http://34.202.113.237:1337';
