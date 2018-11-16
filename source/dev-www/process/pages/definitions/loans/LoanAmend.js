@@ -185,7 +185,7 @@ irf.pageCollection.factory(irf.page('loans.LoanAmend'), ["$log", "$q", "$timeout
                     }]
                 }, {
                     key: "amand.submit",
-                    condition:"!model.amand.totalDemandDue",
+                //    condition:"!model.amand.totalDemandDue",
                     title: "SUBMIT",
                     type: "button",
                     onClick: function(model) {
@@ -235,7 +235,7 @@ irf.pageCollection.factory(irf.page('loans.LoanAmend'), ["$log", "$q", "$timeout
                     condition: "model.amand.tenuredownload",
                     title: "DOWNLOAD_NEW_TENURE",
                     items: [{
-                        "title": "DOWNLOAD",
+                        "title": "DOWNLOAD NEW SCHEDULE",
                         "htmlClass": "btn-block",
                         "icon": "fa fa-download",
                         "type": "button",
