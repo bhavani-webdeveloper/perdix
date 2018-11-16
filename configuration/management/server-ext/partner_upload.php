@@ -42,7 +42,7 @@ foreach ($proofTypeNames as $proofTypeName){
 }
 //echo $authHeader;
 
-if ( 0777 !== (fileperms($filePath) & 0777)) {
+if ( 0777 == (fileperms($filePath) & 0777)) {
     die( "<br/> file is not writable and it has the following file permissions : $filePath" );
 } 
 
@@ -208,7 +208,14 @@ foreach ($partners as $partner) {
             $dest = $tempWipDir . $file->getFilename();
             
             copy($source, $dest);
-            unlink($source);
+            $do =unlink($source);
+            if($do=="1"){ 
+                echo "<br/> The file was deleted successfully. : ".$source; 
+            } else { 
+                echo "<br/> There was an error trying to delete the file. : ".$source; 
+            } 
+
+
             $inputFileName = $tempWipDir . $file->getFilename();
             echo "<br/>".$file." File Moved to ".$dest;
             //print_r( "<br/>inputFileName : ".$inputFileName);
@@ -350,8 +357,12 @@ foreach ($partners as $partner) {
                 $extension= pathinfo($reportFilepath, PATHINFO_EXTENSION);
                 $reportFileName= str_replace('.'.$extension, '__'.date("d-m-Y").'.txt', $reportFilepath);
 
-                $fp = fopen($reportFileName,"wb");
-                fwrite($fp,$content);
+                $fp = fopen($reportFileName,"w");
+                if ($fp === false) {
+                    echo "<br/> Fail to create file : '$reportFileName' ";
+                }else if (fwrite($fp, $content)){       
+                    echo "<br/> Log File Created : ". $reportFileName;
+                }
                 fclose($fp);
 
 
