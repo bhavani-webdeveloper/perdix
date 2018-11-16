@@ -47,7 +47,7 @@ function(IndividualLoan, $log, $state, Enrollment, EnrollmentHelper, SessionStor
                     })
                     .then(function(d){
                         if(d.length != 0){
-                            BundleManager.pushEvent('dedupe-customer-list', model._bundlePageObj, {"K": false});
+                            BundleManager.pushEvent('dedupe-customer-list', model._bundlePageObj, {"showActionBox": false});
                         }
                         var dedupeIds = [];
                         $log.info("p1_2 is resolved");
