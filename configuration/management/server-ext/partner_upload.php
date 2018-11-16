@@ -40,11 +40,10 @@ foreach ($proofTypeNames as $proofTypeName){
     else  if("identity_prof"==$proofTypeName->type)
         $identity_prof->put($proofTypeName->name, $proofTypeName->filename);
 }
-echo $authHeader;
+//echo $authHeader;
 
-
-if (!is_writable($filePath)) {
-    die( "file is not writable and it has the following file permissions : $filePath" );
+if ( 0777 !== (fileperms($filePath) & 0777)) {
+    die( "<br/> file is not writable and it has the following file permissions : $filePath" );
 } 
 
 
