@@ -40,7 +40,8 @@ define({
 				var promise = ScoresMaintenance.scoreSearch({
 					'scoreName': searchOptions.scoreName,
 					'per_page': pageOpts.itemsPerPage,
-					'page': pageOpts.pageNo
+					'page': pageOpts.pageNo,
+					'status': 'ACTIVE'
 				}).$promise;
 				console.log(promise);
 				return promise;
