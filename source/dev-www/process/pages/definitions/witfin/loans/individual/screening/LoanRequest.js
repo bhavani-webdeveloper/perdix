@@ -219,7 +219,7 @@ define([], function() {
                                     "readonly": true
                                 },
                                 "LoanRecommendation":{
-                                    "orderNo":50
+                                    "orderNo":60
                                 }
                             }
                         },
@@ -376,7 +376,7 @@ define([], function() {
                                     "readonly": true
                                 },
                                 "LoanRecommendation":{
-                                    "orderNo":50
+                                    "orderNo":60
                                 }
                             }
                         },
@@ -401,7 +401,7 @@ define([], function() {
                                     "readonly": true
                                 },
                                 "LoanRecommendation":{
-                                    "orderNo":50
+                                    "orderNo":60
                                 }
                             }
                         },
@@ -426,7 +426,7 @@ define([], function() {
                                     "readonly": true
                                 },
                                 "LoanRecommendation":{
-                                    "orderNo":50
+                                    "orderNo":60
                                 }
                             }
                         },
@@ -501,7 +501,7 @@ define([], function() {
                                     "readonly": true
                                 },
                                 "LoanRecommendation":{
-                                    "orderNo":50
+                                    "orderNo":60
                                 }
                             }
                         },
@@ -526,7 +526,7 @@ define([], function() {
                                     "readonly": true
                                 },
                                 "LoanRecommendation":{
-                                    "orderNo":50
+                                    "orderNo":60
                                 }
                             }
                         },
@@ -551,7 +551,7 @@ define([], function() {
                                     "readonly": true
                                 },
                                 "LoanRecommendation":{
-                                    "orderNo":50
+                                    "orderNo":60
                                 }
                             }
                         },
@@ -958,13 +958,16 @@ define([], function() {
                                 },
                                 
                                 "DeductionsFromLoan": {
-                                    "orderNo": 60,
+                                    "orderNo": 40,
                                     "items": {
                                         "dsaPayout": {
                                             "key": "loanAccount.dsaPayout",
                                             "type": "number",
                                             "title": "DSA_PAYOUT_IN_PERCENTAGE",
-                                            "orderNo": 30
+                                            "orderNo": 30,
+                                            onChange: function(modelValue, form, model) {
+                                                model.loanAccount.dsaPayoutFee = (model.loanAccount.dsaPayout / 100) * model.loanAccount.loanAmountRequested;
+                                            }
                                         },
                                         "fee3": {
                                             "key": "loanAccount.fee3",
@@ -1098,6 +1101,7 @@ define([], function() {
                                     }
                                 },
                                 "LoanRecommendation": {
+                                    "orderNo": 60,
                                     "items": {
                                         "udf6": {
                                             "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6",

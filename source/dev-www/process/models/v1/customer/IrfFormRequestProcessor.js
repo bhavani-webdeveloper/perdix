@@ -2674,7 +2674,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     },
                     "referredBy1": {
                         "key": "lead.referredBy",
-                        "condition": "model.lead.leadSource.toUpperCase() == 'EXISTING CUSTOMER REFERRAL'",
+                        "condition": "model.lead.leadSource.toUpperCase() == 'EXISTING CUSTOMER REFERRAL' && model.siteCode != 'witfin'",
                         "type": "lov",
 
                         "lovonly": true,
@@ -2771,6 +2771,128 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             }
                             var promise = Enrollment.search({
                                 'branchName': branchName || SessionStore.getBranch(),
+                                'firstName': inputModel.firstName,
+                                'centreId': inputModel.centreId,
+                                'customerType': "individual",
+                                'urnNo': inputModel.urnNo
+                            }).$promise;
+                            return promise;
+                        },
+                        getListDisplayItem: function (data, index) {
+                            return [
+                                [data.firstName, data.fatherFirstName].join(' | '),
+                                data.id,
+                                data.urnNo
+                            ];
+                        },
+                        onSelect: function (valueObj, model, context) {
+
+                        }
+
+                    },
+                    "referredBy1": {
+                        "key": "lead.referredBy",
+                        "condition": "model.lead.leadSource.toUpperCase() == 'EXISTING CUSTOMER REFERRAL' && model.siteCode == 'witfin'",
+                        "type": "lov",
+
+                        "lovonly": true,
+                        // initialize: function(model, form, parentModel, context) {
+
+                        //     model.lead.branchId = parentModel.lead.branchId;
+                        //     model.lead.centreId = parentModel.lead.centreId;
+                        //     var centreCode = formHelper.enum('centre').data;
+
+                        //     var centreName = $filter('filter')(centreCode, {value: parentModel.customer.centreId}, true);
+                        //     if(centreName && centreName.length > 0) {
+                        //         model.lead.centreName = centreName[0].name;
+                        //     }
+
+                        // },
+                        "inputMap": {
+                            "firstName": {
+                                "key": "lead.customerFirstName"
+
+                            },
+                            "urnNo": {
+                                "key": "lead.urnNo",
+
+                            },
+                            "branchId": {
+                                "key": "lead.branchId",
+                                "type": "select",
+                                "screenFilter": true,
+                                //"readonly": true
+                            },
+                            "centreName": {
+                                "key": "lead.centreName",
+                                "type": "string",
+                                //"readonly": true,
+
+                            },
+                            "centreId": {
+                                key: "lead.centreId",
+                                type: "select",
+                                title: "CENTRE_NAME",
+                                filter: {
+                                    "parentCode": "branch_id"
+                                },
+                                parentEnumCode: "branch_id",
+                                parentValueExpr: "lead.branchId",
+
+                                /*
+                                type: "lov",
+                                autolov: true,
+                                lovonly: true,
+                                bindMap: {},
+                                searchHelper: formHelper,
+                                search: function (inputModel, form, model, context) {
+                                    var centres = SessionStore.getCentres();
+                                    // $log.info("hi");
+                                    // $log.info(centres);
+
+                                    var centreCode = formHelper.enum('centre').data;
+                                    var out = [];
+                                    if (centres && centres.length) {
+                                        for (var i = 0; i < centreCode.length; i++) {
+                                            for (var j = 0; j < centres.length; j++) {
+                                                if (centreCode[i].value == centres[j].id) {
+
+                                                    out.push({
+                                                        name: centreCode[i].name,
+                                                        id: centreCode[i].value
+                                                    })
+                                                }
+                                            }
+                                        }
+                                    }
+                                    return $q.resolve({
+                                        headers: {
+                                            "x-total-count": out.length
+                                        },
+                                        body: out
+                                    });
+                                },
+                                onSelect: function (valueObj, model, context) {
+                                    model.lead.centreId = valueObj.id;
+                                    model.lead.centreName = valueObj.name;
+                                },
+                                getListDisplayItem: function (item, index) {
+                                    return [
+                                        item.name
+                                    ];
+                                }
+                                */
+                            },
+                        },
+                        "outputMap": {
+
+                            "firstName": "lead.referredBy"
+                        },
+                        "searchHelper": formHelper,
+                        "search": function (inputModel, form) {
+                            
+                            var promise = Enrollment.search({
+                                'branchId': inputModel.branchId || SessionStore.getBranch(),
                                 'firstName': inputModel.firstName,
                                 'centreId': inputModel.centreId,
                                 'customerType': "individual",
