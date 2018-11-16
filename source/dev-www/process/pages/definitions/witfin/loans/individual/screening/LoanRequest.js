@@ -964,7 +964,10 @@ define([], function() {
                                             "key": "loanAccount.dsaPayout",
                                             "type": "number",
                                             "title": "DSA_PAYOUT_IN_PERCENTAGE",
-                                            "orderNo": 30
+                                            "orderNo": 30,
+                                            onChange: function(modelValue, form, model) {
+                                                model.loanAccount.dsaPayoutFee = (model.loanAccount.dsaPayout / 100) * model.loanAccount.loanAmountRequested;
+                                            }
                                         },
                                         "fee3": {
                                             "key": "loanAccount.fee3",
