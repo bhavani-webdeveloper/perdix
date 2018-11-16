@@ -459,6 +459,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
             model.review = model.review|| {};
             model.temp=model.temp||{}
             model.linkedAccount={};
+            model.show = true;
             if (_.hasIn(model, 'loanAccount')){
                 $log.info('Printing Loan Account');
                 $log.info(model.loanAccount);
