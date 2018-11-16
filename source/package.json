@@ -26,7 +26,6 @@
     "gulp": "^3.9.1",
     "gulp-cheerio": "^0.6.2",
     "gulp-inject": "^4.2.0",
-    "gulp-install": "^1.1.0",
     "gulp-json-modify": "^1.0.2",
     "irf-bluetooth-plugin": "^1.2.0",
     "js-logger": "^1.4.1",
