@@ -45,7 +45,7 @@ let config = {
                 "overrides": [
                     {
                         "type": "expr",
-                        "expr": "this.lead.currentStage!='Inprocess' && this.lead.interestedInProduct && this.lead.interestedInProduct.toUpperCase() == 'NO' || this.lead.eligibleForProduct == 'NO'",
+                        "expr": "(this.lead.currentStage!='Inprocess' || this.lead.leadStatus == 'Reject' ) && this.lead.interestedInProduct && this.lead.interestedInProduct.toUpperCase() == 'NO' || this.lead.eligibleForProduct == 'NO'",
                         "add": [
                             {
                                 "name": "LeadRejectPolicy",
