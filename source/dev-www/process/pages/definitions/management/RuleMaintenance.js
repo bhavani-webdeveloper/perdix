@@ -8,7 +8,25 @@ define({
 
 
 
-    var NewRuleForm = [{
+    var NewRuleForm = [
+    {
+        type: "section",
+        "key":"item.issue",
+        html: '<div id="errors-wrapper">'+
+        '<div class="errors-container" ng-show="model.item.errors.length>0" style="padding: 0">'+
+           ' <div class="alert alert-danger alert-dismissible" style="border-radius: 0; margin-bottom: 0; background: linear-gradient(to bottom, #ff3019 0%,#cf0404 100%);">'+
+               ' <button type="button" class="close" ng-click="model.item.errors=[]" aria-hidden="true">×</button>'+
+               ' <h4><i class="icon fa fa-ban"></i> Errors</h4>'+
+               ' <ol>'+
+                   ' <li ng-repeat="error in model.item.errors">'+
+                       ' <span ng-bind-html="error.message"></span>'+
+                   ' </li>'+
+               ' </ol>'+
+          '  </div>'+
+       ' </div>'+
+    '  </div>'
+    },
+    {
         "key": "item.processName",
         "readonly":true,
 		"title": "Process name",
@@ -150,8 +168,10 @@ define({
     var initialize= function(model) {
         $log.info(model);
     };
-    
-    	var simpleSchemaFormHtml =
+
+
+        var simpleSchemaFormHtml =
+        
         '    <section class="content">                               '+
         '        <div class="row">                                   '+
         '            <irf-sf                                         '+
@@ -176,6 +196,8 @@ define({
             initialize: function(model, form, formCtrl) {
                 model.rule=model.rule||{};
                 var self=this;
+
+                
                 $log.info("Create Branch Page loaded");
                 RuleModel.formName= 'NewRuleForm';
                 RuleModel.formHelper= formHelper;
@@ -423,6 +445,7 @@ define({
                                 icon: "fa fa-pencil-square-o",
                                 fn: function(item, model) {
                                     $log.info(RuleModel);
+                                    item.errors=[];
                                     RuleModel.model.item=item;
                                     irfSimpleModal('EDIT Rule',simpleSchemaFormHtml,RuleModel,{"size":"lg"});
                                 },
@@ -512,8 +535,9 @@ define({
                     PageHelper.showProgress("new rule Save", "rule Creating" , 3000);
                     $log.info("Inside submit()");
                     var reqData={};
+                    
                     if(model.rule && model.rule.rules && model.rule.rules.length>0) {
-                        reqData.rules=model.rule.rules; 
+                        reqData.rules=_.cloneDeep(model.rule.rules);;
                         reqData.rules.push(model.item);
                     }else{
                         reqData.rules=[];
@@ -529,7 +553,27 @@ define({
                         PageHelper.hideLoader();
                         PageHelper.clearErrors();
                         PageHelper.showProgress("new rule Save", "rule Creation failed" , 3000);
-                        PageHelper.showErrors(err);
+                        try {
+                            var data = err.data;
+                            var errors = [];
+                            if (_.hasIn(data, 'errors')) {
+                                _.forOwn(data.errors, function (keyErrors, key) {
+                                    var keyErrorsLength = keyErrors.length;
+                                    for (var i = 0; i < keyErrorsLength; i++) {
+                                        var error = {"message": "<strong>" + key + "</strong>: " + keyErrors[i]};
+                                        errors.push(error);
+                                    }
+                                });
+                            }
+                            if (_.hasIn(data, 'error')) {
+                                errors.push({message: data.error});
+                            }
+                            model.item.error=[];
+                            model.item.errors=errors;
+
+                        }catch(err){
+                            $log.error(err);
+                        }
                         $log.info(err);
                     })
                 },
@@ -562,8 +606,27 @@ define({
                         $log.info(res);
                         PageHelper.showProgress("rule validate", "Rule is valid" , 3000);
                     },function(err){
-                        $log.info(err);
-                        PageHelper.showErrors(err);
+                        try {
+                            var data = err.data;
+                            var errors = [];
+                            if (_.hasIn(data, 'errors')) {
+                                _.forOwn(data.errors, function (keyErrors, key) {
+                                    var keyErrorsLength = keyErrors.length;
+                                    for (var i = 0; i < keyErrorsLength; i++) {
+                                        var error = {"message": "<strong>" + key + "</strong>: " + keyErrors[i]};
+                                        errors.push(error);
+                                    }
+                                });
+                            }
+                            if (_.hasIn(data, 'error')) {
+                                errors.push({message: data.error});
+                            }
+                            model.item.error=[];
+                            model.item.errors=errors;
+
+                        }catch(err){
+                            $log.error(err);
+                        }
                         PageHelper.showProgress("rule validate", "Rule is invalid", 3000);
                     })
                 },
