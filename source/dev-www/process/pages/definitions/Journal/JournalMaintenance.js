@@ -34,7 +34,7 @@ define({
 
                 if (!(model && model.journal && model.journal.id && model.$$STORAGE_KEY$$)) {
                     PageHelper.showLoader();
-                    PageHelper.showProgress("page-init", "Loading...");
+                    PageHelper.showProgress("page-init", "Loading...", 5000);
 
                     if (!journalId) {
                         PageHelper.hideLoader();
@@ -384,6 +384,7 @@ define({
                     $log.info("Inside submit()");
                     // PageHelper.showLoader();
                     model.journal.transactionType = "Entry";
+                    model.journal.isApplicable=1;
                     var branches = [];
                     model.journal.journalBranches.map(function(item) {
                         if(_.hasIn(item, '$selected') && item.$selected) {

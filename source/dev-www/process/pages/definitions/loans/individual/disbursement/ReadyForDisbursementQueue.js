@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbursementQueue"),
-    ["$log", "formHelper", "$state", "SessionStore", "$q", "IndividualLoan","PageHelper","entityManager",
-        function($log, formHelper,  $state, SessionStore, $q, IndividualLoan,PageHelper,entityManager){
+    ["$log", "formHelper", "$state", "SessionStore", "$q", "IndividualLoan","PageHelper","entityManager","irfProgressMessage","Locking",
+        function($log, formHelper,  $state, SessionStore, $q, IndividualLoan,PageHelper,entityManager,irfProgressMessage,Locking){
             return {
                 "type": "search-list",
                 "title": "READY_FOR_DISBURSEMENT_QUEUE",
@@ -122,7 +122,6 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
                                             pageName:"loans.individual.disbursement.Disbursement",
                                             pageId:[item.loanId,item.id].join(".")
                                         });
-
                                       },
                                     isApplicable: function(item, index){
                                         return true;

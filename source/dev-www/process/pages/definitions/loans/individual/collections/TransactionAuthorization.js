@@ -2,11 +2,14 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
     ["$log", "$q", 'Pages_ManagementHelper', 'LoanCollection', 'LoanAccount', 'entityManager', 'PageHelper', 'formHelper', 'irfProgressMessage',
         'SessionStore', "$state", "$stateParams", "Masters", "authService", "Utils",
         function ($log, $q, ManagementHelper, LoanCollection, LoanAccount, entityManager, PageHelper, formHelper, irfProgressMessage,
-                  SessionStore, $state, $stateParams, Masters, authService, Utils) {
+            SessionStore, $state, $stateParams, Masters, authService, Utils) {
 
             return {
                 "type": "schema-form",
                 "title": "PAYMENT_DETAILS_FOR_LOAN",
+                "processType": "Loan",
+                "processName": "Collections",
+                "lockingRequired": true,
                 initialize: function (model, form, formCtrl) {
                     $log.info("Transaction Authorization Page got initialized");
 
@@ -29,7 +32,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                     model.workingDate = SessionStore.getCBSDate();
 
                     model.transAuth = model.transAuth || {};
-                    model._input = {isPenalInterestWaivedOff: false, isFeeWaivedOff: false};
+                    model._input = { isPenalInterestWaivedOff: false, isFeeWaivedOff: false };
                     PageHelper.showLoader();
 
                     //PageHelper.showLoader();
@@ -41,13 +44,13 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                     var p2 = LoanCollection.get({
                         id: collectionId
                     }).$promise.then(
-                        function(resp) {
+                        function (resp) {
                             model.Collection = resp;
                             loanAccountNo = model.Collection.accountNumber;
                             if (model.Collection.instrumentType == 'CASH') {
                                 LoanCollection.getDepositSummary({
                                     depositSummaryId: model.Collection.bankDepositSummaryId
-                                }).$promise.then(function(info) {
+                                }).$promise.then(function (info) {
                                     model.Collection.depositsummary = info;
                                     $log.info(model.Collection);
                                 })
@@ -55,7 +58,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                             LoanAccount.get({
                                 accountId: loanAccountNo
                             }).$promise.then(
-                                function(data) {
+                                function (data) {
                                     model.loanAccount = data;
                                     model.transAuth = model.transAuth || {};
                                     model.transAuth.customer_name = data.customer1FirstName;
@@ -99,12 +102,12 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                                         var amountAvailable = model._transAuth.repaymentAmount;
 
                                         /* Allocating Security EMI Demand */
-                                        if(amountAvailable>0 && model.loanAccount.totalSecurityDepositDue>0){
-                                            if(amountAvailable>model.loanAccount.totalSecurityDepositDue) {
+                                        if (amountAvailable > 0 && model.loanAccount.totalSecurityDepositDue > 0) {
+                                            if (amountAvailable > model.loanAccount.totalSecurityDepositDue) {
                                                 model._transAuth.securityEmiAmount = model.loanAccount.totalSecurityDepositDue;
                                                 amountAvailable = amountAvailable - model._transAuth.securityEmiAmount;
                                             }
-                                            else{
+                                            else {
                                                 model._transAuth.securityEmiAmount = amountAvailable;
                                                 amountAvailable = amountAvailable - model._transAuth.securityEmiAmount;
                                             }
@@ -123,8 +126,8 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                                                 model._transAuth.penalInterestWaiverAmount = 0;
                                             }
                                         }
-                                        
-                                        if(amountAvailable > 0 && model.EMIAllocation){
+
+                                        if (amountAvailable > 0 && model.EMIAllocation) {
                                             model._transAuth.bookedNotDuePenalInterest = Utils.roundToDecimal(Math.min(amountAvailable, model.loanCollection.bookedNotDuePenalInterest));
                                             amountAvailable = Utils.roundToDecimal(amountAvailable - model._transAuth.bookedNotDuePenalInterest);
                                         }
@@ -142,7 +145,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                                     irfProgressMessage.pop('loading-loan-details', 'Loaded.', 2000);
                                     PageHelper.hideLoader();
                                 },
-                                function(resData) {
+                                function (resData) {
                                     irfProgressMessage.pop('loading-loan-details', 'Error loading Loan details.', 4000);
                                     PageHelper.showErrors(resData);
                                     backToLoansList();
@@ -150,374 +153,374 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                         })
 
                     $q.all([p2])
-                        .finally(function(){
+                        .finally(function () {
                             if (Utils.compareDates(model.workingDate, model._transAuth.repaymentDate) == 1) {
                                 model.transInfo.backDatedTransaction = true;
                             }
 
-                            if (model._transAuth.unapprovedAmount>0){
+                            if (model._transAuth.unapprovedAmount > 0) {
                                 model.transInfo.unApprovedPaymentExists = true;
                             }
                         })
                 },
 
-                form: 
-                [
-                    
-                    {
-                        "type": "box",
-                        "title": "PAYMENT",
-                        "items": [
-                            {
-                                "type": "section",
-                                "htmlClass": "alert alert-warning",
-                                "condition": "model.transInfo.backDatedTransaction == true",
-                                "html":"<h4><i class='icon fa fa-warning'></i>Backdated transaction</h4>This is a backdated transaction."
-                            },
-                            {
-                                "type": "section",
-                                "htmlClass": "alert alert-warning",
-                                "condition": "model.transInfo.unApprovedPaymentExists == true",
-                                "html":"<h4><i class='icon fa fa-warning'></i>Unappoved Payments exist during this Transaction</h4>There were some unapproved payments while this transaction was done."
-                            },
-                            {
-                                key: "transAuth.customer_name",
-                                title: "ENTERPRISE_NAME",
-                                readonly: true
-                            },
-                            {
-                                key: "_transAuth.transactionName",
-                                title: "TRANSACTION_NAME",
-                                readonly: true
-                            },
-                            {
-                                key: "_transAuth.repaymentDate",
-                                title: "REPAYMENT_DATE",
-                                type: "date"
-                            },
-                            {
-                                title: "DETAILS",
-                                type: "fieldset",
-                                condition: "model._transAuth.transactionName == 'Scheduled Demand'",
-                                items: [
-                                    {
-                                        key: "_transAuth.principalDue",
-                                        title: "PRINCIPAL",
-                                        readonly: true,
-                                        type: "amount"
-                                    },
-                                    {
-                                        key: "_transAuth.interestAmount",
-                                        title: "INTEREST",
-                                        readonly: true,
-                                        type: "amount"
-                                    },
-                                    {
-                                        key: "loanAccount.totalSecurityDepositDue",
-                                        title: "TOTAL_SECURITY_DEPOSIT_DUE",
-                                        readonly: true,
-                                        type: "amount"
-                                    },
-                                    {
-                                        key: "_transAuth.penalInterestDue",
-                                        title: "PENAL_INTEREST",
-                                        readonly: true,
-                                        type: "amount"
-                                    },
-                                    {
-                                        "key": "loanCollection.bookedNotDuePenalInterest",
-                                        "title": "BOOKED_NOT_DUE_PENAL_INTEREST",
-                                        "type": "amount",
-                                        readonly: true,
-                                    },
-                                    {
-                                        key: "_transAuth.feeDue",
-                                        title: "FEES_AND_OTHER_CHARGES",
-                                        readonly: true,
-                                        type: "amount"
-                                    },
-                                    {
-                                        key: "_transAuth.demandAmount",
-                                        title: "AMOUNT_DUE",
-                                        readonly: true,
-                                        type: "amount"
-                                    },
-                                    {
-                                        key: "transAuth.amountCollected",
-                                        title: "AMOUNT_COLLECTED",
-                                        readonly: true,
-                                        type: "amount"
-                                    },
-                                    {
-                                        key: "_transAuth.penalInterestWaiverAmount",
-                                        title: "WAIVE_PENAL",
-                                        type: "number"
-                                    },
-                                    {
-                                        key: "_transAuth.feeWaiverAmount",
-                                        title: "WAIVE_FEE_CHARGE",
-                                        type: "number"
-                                    },
-                                    {
-                                        "type": "fieldset",
-                                        "title": "AMOUNT_ALLOCATION",
-                                        "items": [
-                                            {
-                                                "key": "_transAuth.securityEmiAmount",
-                                                "title": "SECURITY_EMI_AMOUNT",
-                                                "type": "number"
-                                            },
-                                            {
-                                                "key": "_transAuth.feeAmount",
-                                                "title": "FEE_AMOUNT",
-                                                "type": "number"
-                                            },
-                                            {
-                                                "key": "_transAuth.scheduleDemandAmount",
-                                                "title": "DEMAND_AMOUNT",
-                                                "type": "number"
-                                            },
-                                            {
-                                                "key": "_transAuth.bookedNotDuePenalInterest",
-                                                "title": "BOOKED_NOT_DUE_PENAL_INTEREST",
-                                                "type": "number"
-                                            }    
-                                        ]
-                                    }
-                                ]
-                            },
-                            {
-                                type: "fieldset",
-                                condition: "model._transAuth.transactionName == 'Pre-closure' || model._transAuth.transactionName == 'PenalInterestPayment'",
-                                items: [
-                                    {
-                                        key: "_transAuth.demandAmount",
-                                        title: "AMOUNT_DUE",
-                                        readonly: true,
-                                        type: "amount"
-                                    },
-                                    {
-                                        type: "fieldset",
-                                        title: "PRECLOSURE_BREAKUP",
-                                        condition: "model._transAuth.transactionName=='Pre-closure' || model._transAuth.transactionName=='PenalInterestPayment' ",
-                                        items: [
-                                            {
-                                                key: "loanAccount.principalNotDue",
-                                                readonly: true,
-                                                title: "PRINCIPAL_NOT_DUE",
-                                                type: "amount"
-                                            },
-                                            {
-                                                key: "loanAccount.bookedNotDueNormalInterest",
-                                                readonly: true,
-                                                title: "BOOKED_NOT_DUE_NORMAL_INTEREST",
-                                                type: "amount"
-                                            },
-                                            {
-                                                key: "loanAccount.bookedNotDuePenalInterest",
-                                                readonly: true,
-                                                title: "BOOKED_NOT_DUE_PENAL_INTEREST",
-                                                type: "amount"
-                                            },
-                                            {
-                                                key: "loanAccount.recoverableInterest",
-                                                readonly: true,
-                                                title: "RECOVERABLE_INTEREST",
-                                                type: "amount"
-                                            },
-                                            {
-                                                key: "loanAccount.securityDeposit",
-                                                readonly: true,
-                                                title: "SECURITY_DEPOSIT",
-                                                type: "amount"
-                                            },
-                                            {
-                                                key: "loanAccount.preclosureFee",
-                                                readonly: true,
-                                                title: "PRECLOSURE_FEE",
-                                                type: "amount"
-                                            },
-                                            {
-                                                key: "loanAccount.totalFeeDue",
-                                                readonly: true,
-                                                title: "TOTAL_FEE_DUE",
-                                                type: "amount"
-                                            },
-                                            {
-                                                key: "loanAccount.netPayoffAmount",
-                                                readonly: true,
-                                                title: "NET_PAYOFF_AMOUNT",
-                                                type: "amount"
-                                            },
-                                            {
-                                                type: "section",
-                                                html: "<hr />"
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        key: "_transAuth.feeDue",
-                                        title: "FEES_AND_OTHER_CHARGES",
-                                        readonly: true,
-                                        type: "amount"
-                                    },
-                                    {
-                                        key: "transAuth.amountCollected",
-                                        title: "AMOUNT_COLLECTED",
-                                        readonly: true,
-                                        type: "amount"
-                                    },
-                                    {
-                                        key: "_transAuth.feeWaiverAmount",
-                                        title: "WAIVE_FEE_CHARGE",
-                                        type: "number"
-                                    }
-                                ]
-                            },
-                            {
-                                type: "fieldset",
-                                condition: "model._transAuth.transactionName == 'Fee Payment'",
-                                items: [
-                                    {
-                                        key: "_transAuth.feeDue",
-                                        title: "FEES_AND_OTHER_CHARGES",
-                                        readonly: true,
-                                        type: "amount"
-                                    },
-                                    {
-                                        key: "transAuth.amountCollected",
-                                        title: "AMOUNT_COLLECTED",
-                                        readonly: true,
-                                        type: "amount"
-                                    },
-                                    {
-                                        key: "_transAuth.feeWaiverAmount",
-                                        title: "WAIVE_FEE_CHARGE",
-                                        type: "number"
-                                    }
-                                ]
-                            },
-                            {
-                                type: "fieldset",
-                                condition: "model._transAuth.transactionName == 'Prepayment' || mode._transAuth.transactionName =='Advance Repayment'",
-                                items: [
-                                    {
-                                        key: "transAuth.amountCollected",
-                                        title: "AMOUNT_COLLECTED",
-                                        readonly: true,
-                                        type: "amount"
-                                    }
-                                ]
-                            }
-                        ]
-                    },
+                form:
+                    [
 
-                    {
-                        type: "box",
-                        title: "LOAN_COLLECTIONS",
-                        condition: "model._credit.instrumentType=='CASH'",
-                        items: [{
-                            key: "Collection.depositsummary.loanCollections",
-                            type: "array",
-                            "titleExpr": "model.Collection.depositsummary.loanCollections[arrayIndex].customerName",
-                            add: null,
-                            remove: null,
+                        {
+                            "type": "box",
+                            "title": "PAYMENT",
+                            "items": [
+                                {
+                                    "type": "section",
+                                    "htmlClass": "alert alert-warning",
+                                    "condition": "model.transInfo.backDatedTransaction == true",
+                                    "html": "<h4><i class='icon fa fa-warning'></i>Backdated transaction</h4>This is a backdated transaction."
+                                },
+                                {
+                                    "type": "section",
+                                    "htmlClass": "alert alert-warning",
+                                    "condition": "model.transInfo.unApprovedPaymentExists == true",
+                                    "html": "<h4><i class='icon fa fa-warning'></i>Unappoved Payments exist during this Transaction</h4>There were some unapproved payments while this transaction was done."
+                                },
+                                {
+                                    key: "transAuth.customer_name",
+                                    title: "ENTERPRISE_NAME",
+                                    readonly: true
+                                },
+                                {
+                                    key: "_transAuth.transactionName",
+                                    title: "TRANSACTION_NAME",
+                                    readonly: true
+                                },
+                                {
+                                    key: "_transAuth.repaymentDate",
+                                    title: "REPAYMENT_DATE",
+                                    type: "date"
+                                },
+                                {
+                                    title: "DETAILS",
+                                    type: "fieldset",
+                                    condition: "model._transAuth.transactionName == 'Scheduled Demand'",
+                                    items: [
+                                        {
+                                            key: "_transAuth.principalDue",
+                                            title: "PRINCIPAL",
+                                            readonly: true,
+                                            type: "amount"
+                                        },
+                                        {
+                                            key: "_transAuth.interestAmount",
+                                            title: "INTEREST",
+                                            readonly: true,
+                                            type: "amount"
+                                        },
+                                        {
+                                            key: "loanAccount.totalSecurityDepositDue",
+                                            title: "TOTAL_SECURITY_DEPOSIT_DUE",
+                                            readonly: true,
+                                            type: "amount"
+                                        },
+                                        {
+                                            key: "_transAuth.penalInterestDue",
+                                            title: "PENAL_INTEREST",
+                                            readonly: true,
+                                            type: "amount"
+                                        },
+                                        {
+                                            "key": "loanCollection.bookedNotDuePenalInterest",
+                                            "title": "BOOKED_NOT_DUE_PENAL_INTEREST",
+                                            "type": "amount",
+                                            readonly: true,
+                                        },
+                                        {
+                                            key: "_transAuth.feeDue",
+                                            title: "FEES_AND_OTHER_CHARGES",
+                                            readonly: true,
+                                            type: "amount"
+                                        },
+                                        {
+                                            key: "_transAuth.demandAmount",
+                                            title: "AMOUNT_DUE",
+                                            readonly: true,
+                                            type: "amount"
+                                        },
+                                        {
+                                            key: "transAuth.amountCollected",
+                                            title: "AMOUNT_COLLECTED",
+                                            readonly: true,
+                                            type: "amount"
+                                        },
+                                        {
+                                            key: "_transAuth.penalInterestWaiverAmount",
+                                            title: "WAIVE_PENAL",
+                                            type: "number"
+                                        },
+                                        {
+                                            key: "_transAuth.feeWaiverAmount",
+                                            title: "WAIVE_FEE_CHARGE",
+                                            type: "number"
+                                        },
+                                        {
+                                            "type": "fieldset",
+                                            "title": "AMOUNT_ALLOCATION",
+                                            "items": [
+                                                {
+                                                    "key": "_transAuth.securityEmiAmount",
+                                                    "title": "SECURITY_EMI_AMOUNT",
+                                                    "type": "number"
+                                                },
+                                                {
+                                                    "key": "_transAuth.feeAmount",
+                                                    "title": "FEE_AMOUNT",
+                                                    "type": "number"
+                                                },
+                                                {
+                                                    "key": "_transAuth.scheduleDemandAmount",
+                                                    "title": "DEMAND_AMOUNT",
+                                                    "type": "number"
+                                                },
+                                                {
+                                                    "key": "_transAuth.bookedNotDuePenalInterest",
+                                                    "title": "BOOKED_NOT_DUE_PENAL_INTEREST",
+                                                    "type": "number"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    type: "fieldset",
+                                    condition: "model._transAuth.transactionName == 'Pre-closure' || model._transAuth.transactionName == 'PenalInterestPayment'",
+                                    items: [
+                                        {
+                                            key: "_transAuth.demandAmount",
+                                            title: "AMOUNT_DUE",
+                                            readonly: true,
+                                            type: "amount"
+                                        },
+                                        {
+                                            type: "fieldset",
+                                            title: "PRECLOSURE_BREAKUP",
+                                            condition: "model._transAuth.transactionName=='Pre-closure' || model._transAuth.transactionName=='PenalInterestPayment' ",
+                                            items: [
+                                                {
+                                                    key: "loanAccount.principalNotDue",
+                                                    readonly: true,
+                                                    title: "PRINCIPAL_NOT_DUE",
+                                                    type: "amount"
+                                                },
+                                                {
+                                                    key: "loanAccount.bookedNotDueNormalInterest",
+                                                    readonly: true,
+                                                    title: "BOOKED_NOT_DUE_NORMAL_INTEREST",
+                                                    type: "amount"
+                                                },
+                                                {
+                                                    key: "loanAccount.bookedNotDuePenalInterest",
+                                                    readonly: true,
+                                                    title: "BOOKED_NOT_DUE_PENAL_INTEREST",
+                                                    type: "amount"
+                                                },
+                                                {
+                                                    key: "loanAccount.recoverableInterest",
+                                                    readonly: true,
+                                                    title: "RECOVERABLE_INTEREST",
+                                                    type: "amount"
+                                                },
+                                                {
+                                                    key: "loanAccount.securityDeposit",
+                                                    readonly: true,
+                                                    title: "SECURITY_DEPOSIT",
+                                                    type: "amount"
+                                                },
+                                                {
+                                                    key: "loanAccount.preclosureFee",
+                                                    readonly: true,
+                                                    title: "PRECLOSURE_FEE",
+                                                    type: "amount"
+                                                },
+                                                {
+                                                    key: "loanAccount.totalFeeDue",
+                                                    readonly: true,
+                                                    title: "TOTAL_FEE_DUE",
+                                                    type: "amount"
+                                                },
+                                                {
+                                                    key: "loanAccount.netPayoffAmount",
+                                                    readonly: true,
+                                                    title: "NET_PAYOFF_AMOUNT",
+                                                    type: "amount"
+                                                },
+                                                {
+                                                    type: "section",
+                                                    html: "<hr />"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            key: "_transAuth.feeDue",
+                                            title: "FEES_AND_OTHER_CHARGES",
+                                            readonly: true,
+                                            type: "amount"
+                                        },
+                                        {
+                                            key: "transAuth.amountCollected",
+                                            title: "AMOUNT_COLLECTED",
+                                            readonly: true,
+                                            type: "amount"
+                                        },
+                                        {
+                                            key: "_transAuth.feeWaiverAmount",
+                                            title: "WAIVE_FEE_CHARGE",
+                                            type: "number"
+                                        }
+                                    ]
+                                },
+                                {
+                                    type: "fieldset",
+                                    condition: "model._transAuth.transactionName == 'Fee Payment'",
+                                    items: [
+                                        {
+                                            key: "_transAuth.feeDue",
+                                            title: "FEES_AND_OTHER_CHARGES",
+                                            readonly: true,
+                                            type: "amount"
+                                        },
+                                        {
+                                            key: "transAuth.amountCollected",
+                                            title: "AMOUNT_COLLECTED",
+                                            readonly: true,
+                                            type: "amount"
+                                        },
+                                        {
+                                            key: "_transAuth.feeWaiverAmount",
+                                            title: "WAIVE_FEE_CHARGE",
+                                            type: "number"
+                                        }
+                                    ]
+                                },
+                                {
+                                    type: "fieldset",
+                                    condition: "model._transAuth.transactionName == 'Prepayment' || mode._transAuth.transactionName =='Advance Repayment'",
+                                    items: [
+                                        {
+                                            key: "transAuth.amountCollected",
+                                            title: "AMOUNT_COLLECTED",
+                                            readonly: true,
+                                            type: "amount"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+
+                        {
+                            type: "box",
+                            title: "LOAN_COLLECTIONS",
+                            condition: "model._credit.instrumentType=='CASH'",
                             items: [{
-                                key: "Collection.depositsummary.loanCollections[].accountNumber",
-                                title: "LOAN_ACCOUNT_NUMBER",
-                                readonly: true,
-                            }, {
-                                key: "Collection.depositsummary.loanCollections[].customerName",
-                                title: "ENTERPRISE_NAME",
-                                readonly: true,
-                            }, {
-                                key: "Collection.depositsummary.loanCollections[].repaymentAmount",
-                                title: "AMOUNT_COLLECTED",
-                                readonly: true,
-                            }, {
-                                key: "Collection.depositsummary.loanCollections[].transactionName",
-                                "title": "TRANSACTION_NAME",
-                                readonly: true,
-                            }, {
-                                key: "Collection.depositsummary.loanCollections[].repaymentDate",
-                                type: "date",
-                                "title": "REPAYMENT_DATE",
-                                readonly: true,
+                                key: "Collection.depositsummary.loanCollections",
+                                type: "array",
+                                "titleExpr": "model.Collection.depositsummary.loanCollections[arrayIndex].customerName",
+                                add: null,
+                                remove: null,
+                                items: [{
+                                    key: "Collection.depositsummary.loanCollections[].accountNumber",
+                                    title: "LOAN_ACCOUNT_NUMBER",
+                                    readonly: true,
+                                }, {
+                                    key: "Collection.depositsummary.loanCollections[].customerName",
+                                    title: "ENTERPRISE_NAME",
+                                    readonly: true,
+                                }, {
+                                    key: "Collection.depositsummary.loanCollections[].repaymentAmount",
+                                    title: "AMOUNT_COLLECTED",
+                                    readonly: true,
+                                }, {
+                                    key: "Collection.depositsummary.loanCollections[].transactionName",
+                                    "title": "TRANSACTION_NAME",
+                                    readonly: true,
+                                }, {
+                                    key: "Collection.depositsummary.loanCollections[].repaymentDate",
+                                    type: "date",
+                                    "title": "REPAYMENT_DATE",
+                                    readonly: true,
+                                }]
                             }]
-                        }]
-                    },
-                    // {
-                    //     "type": "box",
-                    //     "title": "LOAN_OVERVIEW",
-                    //     "items": [
-                    //         {
-                    //             key: "loanAccount.securityDeposit"
-                    //         },
-                    //         {
-                    //             key: "loanAccount.totalDemandDue"
-                    //         },
-                    //         {
-                    //             key: "loanAccount.totalFeeDue"
-                    //         }
-                    //     ]
-                    // },
-                    {
-                        "type": "actionbox",
-                        "items": [
-                            {
-                                "type": "submit",
-                                "title": "SUBMIT"
-                            },
-                            {
-                                "type": "button",
-                                "title": "SEND_BACK",
-                                "onClick": "actions.sendBack(model, formCtrl, form, $event)"
-                            }
-                        ]
-                    }],
+                        },
+                        // {
+                        //     "type": "box",
+                        //     "title": "LOAN_OVERVIEW",
+                        //     "items": [
+                        //         {
+                        //             key: "loanAccount.securityDeposit"
+                        //         },
+                        //         {
+                        //             key: "loanAccount.totalDemandDue"
+                        //         },
+                        //         {
+                        //             key: "loanAccount.totalFeeDue"
+                        //         }
+                        //     ]
+                        // },
+                        {
+                            "type": "actionbox",
+                            "items": [
+                                {
+                                    "type": "submit",
+                                    "title": "SUBMIT"
+                                },
+                                {
+                                    "type": "button",
+                                    "title": "SEND_BACK",
+                                    "onClick": "actions.sendBack(model, formCtrl, form, $event)"
+                                }
+                            ]
+                        }],
                 schema: function () {
                     return ManagementHelper.getVillageSchemaPromise();
                 },
                 actions: {
-                    sendBack: function(model, form, formName){
+                    sendBack: function (model, form, formName) {
                         $log.info("Inside sendBack()");
-                        if(model._transAuth.transactionName == 'PenalInterestPayment'){
-                            model._transAuth.bookedNotDuePenalInterest= model._transAuth.repaymentAmount ||0;
+                        if (model._transAuth.transactionName == 'PenalInterestPayment') {
+                            model._transAuth.bookedNotDuePenalInterest = model._transAuth.repaymentAmount || 0;
                         }
                         var loanCollection = _.cloneDeep(model._transAuth);
                         var reqParams = {};
                         reqParams.loanCollection = loanCollection;
                         reqParams.repaymentProcessAction = "PROCEED",
-                        reqParams.stage = "CreditValidation";
+                            reqParams.stage = "CreditValidation";
                         PageHelper.showLoader();
                         PageHelper.showProgress("move-to-credit-validation", "Working...");
-                        LoanCollection.update(reqParams, function(res){
+                        LoanCollection.update(reqParams, function (res) {
                             PageHelper.showProgress("move-to-credit-validation", "Done", 5000);
                             $state.go('Page.Engine', {
                                 pageName: 'loans.individual.collections.TransactionAuthorizationQueue',
                                 pageId: null
                             });
-                        }, function(httpRes){
+                        }, function (httpRes) {
                             PageHelper.showProgress("move-to-credit-validation", "Some Error Occured", 5000);
                             PageHelper.showErrors(httpRes);
                         })
-                        .$promise.finally(function(){
-                            PageHelper.hideLoader();
-                        })
+                            .$promise.finally(function () {
+                                PageHelper.hideLoader();
+                            })
 
                     },
                     submit: function (model, form, formName) {
                         $log.info("Inside submit()");
                         if (model.loanCollection.transactionName == 'Scheduled Demand') {
-                            if(model._transAuth.penalInterestWaiverAmount > model._transAuth.penalInterestDue){
-                                PageHelper.showProgress("waiver","Penal Interest waiver amount is more than the Penal Interest to be collected",5000);
+                            if (model._transAuth.penalInterestWaiverAmount > model._transAuth.penalInterestDue) {
+                                PageHelper.showProgress("waiver", "Penal Interest waiver amount is more than the Penal Interest to be collected", 5000);
                                 return false;
                             }
-                            if(model._transAuth.feeWaiverAmount > model._transAuth.feeDue){
-                                PageHelper.showProgress("waiver","Fees * Charges waiver amount is more than the Fees & Charges to be collected",5000);
+                            if (model._transAuth.feeWaiverAmount > model._transAuth.feeDue) {
+                                PageHelper.showProgress("waiver", "Fees * Charges waiver amount is more than the Fees & Charges to be collected", 5000);
                                 return false;
                             }
-                            if ( math.add(math.bignumber(model._transAuth.feeAmount), math.bignumber(model._transAuth.scheduleDemandAmount), math.bignumber(model._transAuth.securityEmiAmount), math.bignumber(model._transAuth.bookedNotDuePenalInterest) ).toNumber() != model.loanCollection.repaymentAmount) {
+                            if (math.add(math.bignumber(model._transAuth.feeAmount), math.bignumber(model._transAuth.scheduleDemandAmount), math.bignumber(model._transAuth.securityEmiAmount), math.bignumber(model._transAuth.bookedNotDuePenalInterest)).toNumber() != model.loanCollection.repaymentAmount) {
                                 PageHelper.showProgress("waiver", "Amount mismatch. Please verify the amount allocation breakup and amount collected.", 5000);
                                 return false;
                             }
@@ -528,12 +531,12 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                             }
                         }
 
-                        if(model._transAuth.transactionName == 'PenalInterestPayment'){
-                            model._transAuth.bookedNotDuePenalInterest= model._transAuth.repaymentAmount || 0;
+                        if (model._transAuth.transactionName == 'PenalInterestPayment') {
+                            model._transAuth.bookedNotDuePenalInterest = model._transAuth.repaymentAmount || 0;
                         }
 
-                        if(model._transAuth.transactionName == 'Fee Payment'){
-                            model._transAuth.feeAmount= model._transAuth.repaymentAmount ||0;
+                        if (model._transAuth.transactionName == 'Fee Payment') {
+                            model._transAuth.feeAmount = model._transAuth.repaymentAmount || 0;
                         }
 
                         Utils.confirm("Are You Sure?")
@@ -544,15 +547,15 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                                 reqParams.loanCollection = loanCollection;
                                 reqParams.repaymentProcessAction = "PROCEED";
                                 reqParams.stage = "Completed";
-                                LoanCollection.update(reqParams,function(resp,header){
+                                LoanCollection.update(reqParams, function (resp, header) {
                                     PageHelper.hideLoader();
                                     $state.go('Page.Engine', {
                                         pageName: 'loans.individual.collections.TransactionAuthorizationQueue',
                                         pageId: null
                                     });
-                                },function(resp){
+                                }, function (resp) {
                                     PageHelper.showErrors(resp);
-                                }).$promise.finally(function(){
+                                }).$promise.finally(function () {
                                     PageHelper.hideLoader();
                                 });
                                 /*if (model._input.isFeeWaivedOff === true || model._input.isPenalInterestWaivedOff === true) {

@@ -459,6 +459,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
             model.review = model.review|| {};
             model.temp=model.temp||{}
             model.linkedAccount={};
+            model.show = true;
             if (_.hasIn(model, 'loanAccount')){
                 $log.info('Printing Loan Account');
                 $log.info(model.loanAccount);
@@ -842,6 +843,9 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                             model.loanAccount.loanCustomerRelations[i].cibilCompleted = true;
                     }
                 }
+            },
+            "dedupe-list": function(bundleModel, model, params){
+                model.show = params.showActionBox;
             }
         },
         form: [
@@ -2533,7 +2537,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
         {
             "type": "box",
             "title": "POST_REVIEW",
-            "condition": "model.loanAccount.id && model.currentStage !== 'Rejected'&& model.currentStage !== 'loanView' && model.currentStage !=='Dedupe'",
+            "condition": "model.loanAccount.id && model.currentStage !== 'Rejected'&& model.currentStage !== 'loanView' && model.show",
             "items": [{
                     key: "review.action",
                     condition: "model.currentStage !== 'Screening'",

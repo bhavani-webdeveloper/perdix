@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.screening.LoanSanctionQueue"), 
-	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons", "irfNavigator",
-	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons, irfNavigator) {
+	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons", "irfNavigator","irfProgressMessage","Locking",
+	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons, irfNavigator,irfProgressMessage,Locking) {
 		var branch = SessionStore.getBranch();
 		return {
 			"type": "search-list",
@@ -182,7 +182,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.LoanSanctionQueu
 									pageId: item.loanId
 								}, {
 									state: 'Page.Engine',
-                                    pageName: "loans.individual.screening.LoanSanctionQueue"
+									pageName: "loans.individual.screening.LoanSanctionQueue"
 								});
 							},
 							isApplicable: function(item, index) {

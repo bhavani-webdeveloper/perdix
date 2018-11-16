@@ -27,6 +27,10 @@ irf.pageCollection.controller(irf.controller("irep.loans.LoanOriginationDashboar
                 "Page/Engine/irep.loans.individual.origination.TeleverificationQueue",
                 "Page/Engine/irep.loans.individual.origination.EvaluationReviewQueue",
                 "Page/Engine/irep.loans.individual.origination.CreditCommitteeReviewQueue",
+                "Page/Engine/irep.loans.individual.origination.IrepDhanApprovalQueue",
+                "Page/Engine/irep.loans.individual.origination.IrepCCRiskApprovalReviewQueue",
+                "Page/Engine/irep.loans.individual.origination.IrepCCOpsConfirmationQueue",
+                "Page/Engine/irep.loans.individual.origination.CreditConfirmationQueue",
                 "Page/Engine/irep.loans.individual.origination.GuarantorAdditionQueue",                                
                 "Page/Engine/irep.loans.individual.origination.LoanSanctionQueue",
                 "Page/Engine/irep.loans.individual.origination.RejectedAdminQueue"
@@ -179,6 +183,79 @@ irf.pageCollection.controller(irf.controller("irep.loans.LoanOriginationDashboar
                     ccrqMenu.data = '-';
                 });
             }
+
+            var idaqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/irep.loans.individual.origination.IrepDhanApprovalQueue"];
+            if (idaqMenu) {
+                IndividualLoan.search({
+                    'stage': 'IrepDhanApprovalReview',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1
+                }).$promise.then(function(response, headerGetter) {
+                    idaqMenu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    idaqMenu.data = '-';
+                });
+            }
+
+            var idcrqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/irep.loans.individual.origination.IrepCCRiskApprovalReviewQueue"];
+            if (idcrqMenu) {
+                IndividualLoan.search({
+                    'stage': 'IrepCCRiskApprovalReview',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1
+                }).$promise.then(function(response, headerGetter) {
+                    idcrqMenu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    idcrqMenu.data = '-';
+                });
+            }
+
+            var idcoqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/irep.loans.individual.origination.IrepCCOpsConfirmationQueue"];
+            if (idcoqMenu) {
+                IndividualLoan.search({
+                    'stage': 'IrepCCOpsConfirmation',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1
+                }).$promise.then(function(response, headerGetter) {
+                    idcoqMenu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    idcoqMenu.data = '-';
+                });
+            }
+
+            var ccqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/irep.loans.individual.origination.CreditConfirmationQueue"];
+            if (ccqMenu) {
+                IndividualLoan.search({
+                    'stage': 'CreditConfirmation',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1
+                }).$promise.then(function(response, headerGetter) {
+                    ccqMenu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    ccqMenu.data = '-';
+                });
+            }
+
 
 
             var gaqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/irep.loans.individual.origination.GuarantorAdditionQueue"];

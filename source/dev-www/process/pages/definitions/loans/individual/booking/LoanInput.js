@@ -236,7 +236,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
             "title": "LOAN_INPUT",
             "subTitle": "",
             "processType": "Loan",
-            "processName": "Origination",
+            "processName": "Booking",
             "lockingRequired": true,
             initialize: function (model, form, formCtrl) {
                 // TODO default values needs more cleanup
@@ -3009,6 +3009,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     if (!_.hasIn(model.loanAccount, 'loanAmountRequested') || _.isNull(model.loanAccount.loanAmountRequested)){
                         model.loanAccount.loanAmountRequested = model.loanAccount.loanAmount;
                     }
+                    
                     if (!preLoanSaveOrProceed(model)){
                         return;
                     }
@@ -3021,6 +3022,41 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                            return;
                         }
                     }
+
+                    if (model.loanAccount.loanApplicationDate > model.loanAccount.sanctionDate) {
+                        PageHelper.setError({
+                                message: "Loan Application Date should not be greater than Loan Sanction Date"
+                            });
+                        return;
+                    }
+
+                    var trancheTotalAmount=0;
+                    if(model.loanAccount.disbursementSchedules && model.loanAccount.disbursementSchedules.length){
+                        model.loanAccount.disbursementSchedules[0].customerAccountNumber = model.loanAccount.customerBankAccountNumber;
+                        model.loanAccount.disbursementSchedules[0].ifscCode = model.loanAccount.customerBankIfscCode;
+                        model.loanAccount.disbursementSchedules[0].customerBankName = model.loanAccount.customerBank;
+                        model.loanAccount.disbursementSchedules[0].customerBankBranchName = model.loanAccount.customerBranch;
+                        model.loanAccount.disbursementSchedules[0].party = 'CUSTOMER';
+                        model.loanAccount.disbursementSchedules[0].customerNameInBank = model.loanAccount.customerNameAsInBank;
+                        for (var i = model.loanAccount.disbursementSchedules.length - 1; i >= 0; i--) {
+                            model.loanAccount.disbursementSchedules[i].modeOfDisbursement = "CASH";
+                            trancheTotalAmount+=(model.loanAccount.disbursementSchedules[i].disbursementAmount || 0);
+                        }
+                        if (model.additional.product && model.additional.product.productType != 'OD' && trancheTotalAmount > model.loanAccount.loanAmount){
+                            PageHelper.showProgress("loan-create","Total tranche amount is more than the Loan amount",5000);
+                            return false;
+                        }
+                        if (model.additional.product && model.additional.product.productType != 'OD' && trancheTotalAmount < model.loanAccount.loanAmount){
+                            PageHelper.showProgress("loan-create","Total tranche amount should match with the Loan amount",5000);
+                            return false;
+                        }
+                        if (model.additional.product && model.additional.product.productType == 'OD' && model.loanAccount.numberOfDisbursements > 1){
+                            PageHelper.showProgress("loan-create","For LOC type product, number of disbursement cannot be more than one during loan booking",5000);
+                            return false;
+                        }
+
+                    }
+                    
                     populateLoanCustomerRelations(model);
                     Utils.confirm("Are You Sure?")
                     .then(function(){
@@ -3087,6 +3123,13 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     PageHelper.clearErrors();
 
                     if (!validateForm(formCtrl)){
+                        return;
+                    }
+
+                    if (model.loanAccount.loanApplicationDate > model.loanAccount.sanctionDate) {
+                        PageHelper.setError({
+                                message: "Loan Application Date should not be greater than Loan Sanction Date"
+                            });
                         return;
                     }
 

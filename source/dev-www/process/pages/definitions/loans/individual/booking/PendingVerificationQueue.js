@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.booking.PendingVerificationQueue"),
-["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q", "IndividualLoan", "entityManager", "LoanBookingCommons", "irfNavigator","$filter",
-function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan, entityManager, LoanBookingCommons, irfNavigator, $filter){
+["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q", "IndividualLoan", "entityManager", "LoanBookingCommons", "irfNavigator","$filter","irfProgressMessage","Locking",
+function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan, entityManager, LoanBookingCommons, irfNavigator, $filter,irfProgressMessage,Locking){
     return {
         "type": "search-list",
         "title": "LOAN_PENDING_VERIFICATION_QUEUE",
@@ -177,7 +177,6 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan,
                                         pageName: "loans.individual.booking.PendingVerificationQueue"
                                     }); 
                                 }
-                                
                             },
                             isApplicable: function(item, index){
                                 return true;

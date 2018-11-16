@@ -106,7 +106,8 @@
                     ]
                 },
                 "Page/ManagementReportDashboard",
-                "Page/Engine/management.DeathMarkingSearch"
+                "Page/Engine/management.DeathMarkingSearch",
+                "Page/Engine/management.RuleMaintenance"
             ]
         }, {
             "title": "PSYCHOMETRIC",

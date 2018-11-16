@@ -25,10 +25,9 @@ define([], function () {
             var setGoldRate = function(weight,carat,model,index){
                 var dynamicRate = model.additions.goldRatePerCarat * carat;
                 var dynamicMarketValue = dynamicRate * weight;
-                model.loanAccount.ornamentsAppraisals[index].ratePerGramInPaisa = dynamicRate/100 + 0.0;
-                model.loanAccount.ornamentsAppraisals[index].marketValueInPaisa = dynamicMarketValue/100 + 0.0;
+                model.loanAccount.ornamentsAppraisals[index].ratePerGramInPaisa = dynamicRate/100+ 0.00;
+                model.loanAccount.ornamentsAppraisals[index].marketValueInPaisa = dynamicMarketValue/100 + 0.00;
             };
-            var self;
             var getIncludes = function (model) {
                 return [
                     "LoanDetails",
@@ -106,7 +105,7 @@ define([], function () {
                     "LoanSanction.disbursementSchedules.disbursementAmount",
 
                 ]
-            }
+            };
             var configFile = function (model) {
                 return {
                     "loanProcess.loanAccount.currentStage": {
@@ -200,7 +199,7 @@ define([], function () {
                         }
                     }
                 }
-            }
+            };
             var overridesFields = function (model) {
                 return {
                     "LoanDetails": {
@@ -217,7 +216,15 @@ define([], function () {
                         "required": true,
                         "enumCode": "booking_loan_type",
                         "onChange": function(valueObj,context,model){
-                            getGoldRate(model);
+                            if(valueObj == "JEWEL"){
+                                getGoldRate(model);
+                                model.loanAccount.jewelLoanDetails = {};
+                                model.loanAccount.jewelLoanDetails.encoreClosed = false;
+                                model.loanAccount.jewelLoanDetails.jewelPouchLocationType = "BRANCH";
+                            }
+                            else{
+                                model.loanAccount.jewelLoanDetails = {};
+                            }
                         }
                     },
                     "LoanDetails.partner": {
@@ -654,17 +661,14 @@ define([], function () {
                         }
                     }
                 }
-            }
+            };
+            var self;
 
             return {
                 "type": "schema-form",
                 "title": "LOAN_REQUEST",
                 "subTitle": "BUSINESS",
                 initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
-                    // AngularResourceService.getInstance().setInjector($injector);
-                    console.log("test");
-                    console.log(model);
-                    var familyDetails = [];
                     model.customer = {};
                     model.additions = {};
                     model.loanAccount = model.loanProcess.loanAccount;
@@ -736,6 +740,7 @@ define([], function () {
                             trancheNumber  : 1
                         })
                     }
+                    // Hard Coded value have to fix this
                     model.loanAccount.securityEmiRequired = "No";
             
                     self = this;
@@ -1124,11 +1129,7 @@ define([], function () {
                     "new-applicant": function (bundleModel, model, obj) {
                         model.customer = obj.customer;
                         model.loanAccount.customerId = model.customer.id;
-                        // $q.when(Enrollment.get({
-                        //     'id': model.loanAccount.customerId
-                        // })).then(function (resp) {
-                        //     model.customer = resp;
-                        // })
+                        model.loanAccount.urnNo = model.customer.urnNo;
                     },
                     "dsc-response": function(bundleModel,model,obj){
                         model.loanAccount.loanCustomerRelations = obj;
