@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("management.ScoreCreation"),
-["$log", "$state","ScoresMaintenance", "formHelper", "$q", "irfProgressMessage","ReportMaintenance","PageHelper", "Utils", "irfNavigator",
-function($log, $state, ScoresMaintenance, formHelper, $q, irfProgressMessage,ReportMaintenance,PageHelper, Utils, irfNavigator){
+["$log", "$state","ScoresMaintenance", "formHelper", "$q", "irfProgressMessage","ReportsMaintenance","PageHelper", "Utils", "irfNavigator",
+function($log, $state, ScoresMaintenance, formHelper, $q, irfProgressMessage,ReportsMaintenance,PageHelper, Utils, irfNavigator){
 
     return {
         "type": "schema-form",
@@ -221,7 +221,7 @@ function($log, $state, ScoresMaintenance, formHelper, $q, irfProgressMessage,Rep
             }
         ],
         schema: function() {
-            return ReportMaintenance.getConfigurationJson({name:"reportManagementInformation.json"}).$promise;
+            return ReportsMaintenance.getConfigurationJson({name:"reportManagementInformation.json"}).$promise;
         },
         actions: {
             submit: function(model, form, formName){

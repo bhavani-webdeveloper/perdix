@@ -2,8 +2,7 @@ define({
 	pageUID: "management.ScoreCreationSearch",
     pageType: "Engine",
     dependencies: ["$log","formHelper","CentreCreationResource","$state","ScoresMaintenance","SessionStore","Utils","irfNavigator"],
-    $pageFn: 
-    function($log, formHelper, CentreCreationResource,$state, ScoresMaintenance,SessionStore, Utils, irfNavigator){
+    $pageFn: function($log, formHelper, CentreCreationResource,$state, ScoresMaintenance,SessionStore, Utils, irfNavigator){
 	var branch = SessionStore.getBranch();
 	return {
 		"type": "search-list",
