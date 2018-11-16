@@ -42,7 +42,7 @@ foreach ($proofTypeNames as $proofTypeName){
 }
 //echo $authHeader;
 
-if ( 0777 == (fileperms($filePath) & 0777)) {
+if ( 0777  !== (fileperms($filePath) & 0777)) {
     die( "<br/> file is not writable and it has the following file permissions : $filePath" );
 } 
 
