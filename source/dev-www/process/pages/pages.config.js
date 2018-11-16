@@ -132,6 +132,11 @@ irf.pages.config([
 		templateUrl: "process/pages/templates/Page.Dashboard.html",
 		controller: "DocumentTrackingDashboardCtrl"
 	},{
+		name: "Page.ScoreParameterMaintenanceDashboard",
+		url: "/ScoreParameterMaintenanceDashboard",
+		templateUrl: "process/pages/templates/Page.Dashboard.html",
+		controller: "ScoreParameterMaintenanceDashboardCtrl"
+	},{
 		name: "Page.CentreCreationDashboard",
 		url: "/CentreCreationDashboard",
 		templateUrl: "process/pages/templates/Page.Dashboard.html",
