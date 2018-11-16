@@ -111,7 +111,7 @@ try {
 	->join("$db.branch_master as bm", "bm.id", "=", "la.branch_id")
 	->join("$db.loan_centre as lc", "lc.loan_id", "=", "la.id")
 	->join("$db.centre_master as cm", "cm.id", "=", "lc.centre_id")
-	->where("mc.process_type", "=", "LOAN");
+	->where([["mc.process_type", "=", "LOAN"],["la.current_stage", "!=", "Rejected"]]);
 	if(isset($query['branchId']) && !empty($query['branchId'])){
 		$userBranchId = $query['branchId'];
 		$branchList = "(SELECT $userBranchId
