@@ -1,10 +1,10 @@
 <?php
 
-/*if (empty($_SERVER['HTTP_ORIGIN'])) {
+if (empty($_SERVER['HTTP_ORIGIN'])) {
 	ini_set('display_errors', 1);
 	ini_set('display_startup_errors', 1);
 	error_reporting(E_ALL);
-}*/
+}
 
 ob_start("ob_gzhandler");
 //header("Access-Control-Allow-Credentials: true");
