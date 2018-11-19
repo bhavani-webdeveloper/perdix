@@ -86,14 +86,6 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ScreeningReview'
                         minimum: 1,
                         maximum: 1,
                         order: 80
-                    },
-                    {
-                        pageName: 'loans.individual.misc.BalanceSheetHistory',
-                        title: 'BALANCE_SHEET_HISTORY',
-                        pageClass: 'balance-sheet-history',
-                        minimum: 1,
-                        maximum: 1,
-                        order: 90
                     }
                 ],
         		"bundlePages": [],
