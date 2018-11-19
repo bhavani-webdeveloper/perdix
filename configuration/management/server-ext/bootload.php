@@ -74,7 +74,6 @@ $settings = [
         'password' => getenv('PERDIX_PASSWORD'),
         'partner_upload_path' => getenv('PARTNER_UPLOAD_BASE_DIR'),
         'kyc_upload_path' => getenv('KYC_UPLOAD_BASE_DIR'),
-        'max_upload_size' => getenv('MAX_UPLOAD_UPLOAD_SIZE'),
         'individual_loan_upload_path' => getenv('LOAN_UPLOAD_BASE_DIR'),
         'par_upload_path' => getenv('PAR_UPLOAD_PATH')
     ],

@@ -1,5 +1,12 @@
 <?php
 
+
+// Setting up config for PHP
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+// error_reporting(0);
+
 include_once("bootload.php");
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\RequestOptions as MULTIPART;
@@ -24,8 +31,6 @@ $url = $settings['perdix']['v8_url'] . "/api/enrollments";
 $fileUploadUrl = $api_url."/api/files/upload?category=Customer&subCategory=AGEPROOF";
 $filePath=$settings['perdix']['partner_upload_path'];
 
-$MAX_SIZE=$settings['perdix']['max_upload_size'];
-
 $address_proof = collect([]);
 $identity_prof = collect([]);
 $proofTypeNames = KycUploadProofMaster::all();
@@ -35,7 +40,12 @@ foreach ($proofTypeNames as $proofTypeName){
     else  if("identity_prof"==$proofTypeName->type)
         $identity_prof->put($proofTypeName->name, $proofTypeName->filename);
 }
-echo $authHeader;
+//echo $authHeader;
+
+if ( 0777  !== (fileperms($filePath) & 0777)) {
+    die( "<br/> file is not writable and it has the following file permissions : $filePath" );
+} 
+
 
 //$baseUrl = $settings['perdix']['customer_upload_path'];
 
@@ -48,7 +58,7 @@ function formatValidation($extension){
 }
 
 function sizeValidation($path){
-    global $MAX_SIZE;
+    $MAX_SIZE=20971520;
     return filesize($path)<$MAX_SIZE;
 }
 
@@ -58,7 +68,7 @@ function validation($type, $path) {
     $extension= pathinfo($path, PATHINFO_EXTENSION);
     $basename=pathinfo($path, PATHINFO_BASENAME);
     $filename= str_replace('.'.$extension, '', $basename);
-    return formatValidation($extension) && sizeValidation($path);
+    return formatValidation($extension) ;
 }
 
 function getFileByType($type, $customer){
@@ -73,17 +83,18 @@ function getFileByType($type, $customer){
             $absolutepath = $path."Photo.*";
             break;
         case "address_proof": 
-            $absolutepath =  $path."/".$address_proof->get($customer[$type]).".*";
+            $absolutepath =  $path .$address_proof->get($customer[$type]).".*";
             break;
         case "identity_prof": 
-            $absolutepath =  $path."/".$identity_prof->get($customer[$type]).".*";
+            $absolutepath =  $path .$identity_prof->get($customer[$type]).".*";
             break;
     }
-    //echo "<br/> absolutepath : ".$absolutepath;
+    echo "<br/> absolutepath : ".$absolutepath;
     $isFormatMissmatch=false;
     foreach(glob($absolutepath) as $filename){
-        if(validation($type,$filename))
+        if(validation($type,$filename)){
             return $filename;
+        }
     }
     throw new PDOException($type.' Not found Or File format is Mismatch');
 }
@@ -115,6 +126,51 @@ function uploadFile ($path)  {
     }
     return;
 
+}
+
+
+function getCustomer($id){
+    global $url;
+    global $authHeader;
+    
+    $client = new GuzzleClient();
+	$reqRes = $client->request('GET', $url."/".$id, [
+		    'headers' => [
+			    'Authorization' => $authHeader
+		    ],
+		    'connect_timeout' => 3600,
+		    'timeout' => 3600
+	    ]);
+    $responseBody = $reqRes->getBody()->getContents();
+    $parsedArr = \GuzzleHttp\json_decode($responseBody);
+    return $parsedArr;
+   
+}
+
+function saveCustomer($customer){
+    global $url;
+    global $authHeader;
+    //var_dump($customer);
+    //$customer->partnerCode="Kinara";
+    $reqBody = (object) [
+        'customer' => $customer,
+        'enrollmentAction' => "PROCEED"];
+
+    //var_dump(json_encode($reqBody)); 
+    $client = new GuzzleClient();
+    $reqRes = $client->request('PUT', $url, [
+            'headers' => [
+                'Authorization' => $authHeader,
+                'content-type' => 'application/json'
+            ],
+            'body' => json_encode($reqBody),
+            'connect_timeout' => 3600,
+            'timeout' => 3600
+        ]);
+    $responseBody = $reqRes->getBody()->getContents();
+    $parsedArr = \GuzzleHttp\json_decode($responseBody, true);
+    return $parsedArr;
+   
 }
 
 
@@ -152,7 +208,14 @@ foreach ($partners as $partner) {
             $dest = $tempWipDir . $file->getFilename();
             
             copy($source, $dest);
-            unlink($source);
+            $do =unlink($source);
+            if($do=="1"){ 
+                echo "<br/> The file was deleted successfully. : ".$source; 
+            } else { 
+                echo "<br/> There was an error trying to delete the file. : ".$source; 
+            } 
+
+
             $inputFileName = $tempWipDir . $file->getFilename();
             echo "<br/>".$file." File Moved to ".$dest;
             //print_r( "<br/>inputFileName : ".$inputFileName);
@@ -215,6 +278,11 @@ foreach ($partners as $partner) {
 
                         $customer = new Customer();
                         $customer = $customer::where('old_customer_id', '=', $rowData[1])->firstOrFail();
+
+                        //echo $customer;
+                        $apiCustomer = getCustomer($customer['id']);
+                        //print_r($apiCustomer);
+
                         echo "<br/><br/> Customer : ".$rowData[1];  
                         $content=$content. PHP_EOL . PHP_EOL . "Customer : ".$rowData[1];
                         $path = $partner . DIRECTORY_SEPARATOR .$rowData[1];
@@ -223,24 +291,20 @@ foreach ($partners as $partner) {
 
                         $photoPath = getFileByType("Photo",$customer);
                         if($photoPath){
-                            echo "<br/>".$photoPath;
-                            $customer->photo_image_id = uploadFile($photoPath);
+                            $apiCustomer->photoImageId = uploadFile($photoPath);
                         }   
           
                         $address_proof_path = getFileByType("address_proof",$customer);
                         if($address_proof_path){
-                            echo "<br/>".$address_proof_path;
-                            $customer->address_proof_image_id =uploadFile($address_proof_path);
+                            $apiCustomer->addressProofImageId =uploadFile($address_proof_path);
                         }
                 
                         $identityPath = getFileByType("identity_prof",$customer);
                         if($identityPath){
-                            echo "<br/>".$identityPath;
-                            $customer->identity_proof_image_id =uploadFile($identityPath);
+                            $apiCustomer->identityProofImageId =uploadFile($identityPath);
                         }
                 
-                        $customer->save();
-
+                        saveCustomer($apiCustomer);
 
                         $kycUploadDetail = new KycUploadDetail();
                         $kycUploadDetail->master_id = $IdGenerated;
@@ -255,7 +319,7 @@ foreach ($partners as $partner) {
     
                     }catch(Exception $e1)
                     {
-                        echo "<br/> error".$e1->getMessage();
+                        echo "<br/> error ".$e1->getMessage();
                         $kycUploadDetail = new KycUploadDetail();
                         $kycUploadDetail->master_id = $IdGenerated;
                         $kycUploadDetail->customer_id = $customer["old_customer_id"];
@@ -293,8 +357,12 @@ foreach ($partners as $partner) {
                 $extension= pathinfo($reportFilepath, PATHINFO_EXTENSION);
                 $reportFileName= str_replace('.'.$extension, '__'.date("d-m-Y").'.txt', $reportFilepath);
 
-                $fp = fopen($reportFileName,"wb");
-                fwrite($fp,$content);
+                $fp = fopen($reportFileName,"w");
+                if ($fp === false) {
+                    echo "<br/> Fail to create file : '$reportFileName' ";
+                }else if (fwrite($fp, $content)){       
+                    echo "<br/> Log File Created : ". $reportFileName;
+                }
                 fclose($fp);
 
 

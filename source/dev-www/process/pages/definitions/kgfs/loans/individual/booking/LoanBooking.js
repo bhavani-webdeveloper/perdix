@@ -25,8 +25,8 @@ define([], function () {
             var setGoldRate = function(weight,carat,model,index){
                 var dynamicRate = model.additions.goldRatePerCarat * carat;
                 var dynamicMarketValue = dynamicRate * weight;
-                model.loanAccount.ornamentsAppraisals[index].ratePerGramInPaisa = 100;
-                model.loanAccount.ornamentsAppraisals[index].marketValueInPaisa = 100;
+                model.loanAccount.ornamentsAppraisals[index].ratePerGramInPaisa = dynamicRate/100+ 0.00;
+                model.loanAccount.ornamentsAppraisals[index].marketValueInPaisa = dynamicMarketValue/100 + 0.00;
             };
             var getIncludes = function (model) {
                 return [
@@ -1281,15 +1281,15 @@ define([], function () {
                             if(model.loanAccount.loanCustomerRelations && model.loanAccount.loanCustomerRelations.length > 0){
                                 for(i = 0; i< model.loanAccount.loanCustomerRelations.length;i++){
                                     if(typeof model.loanAccount.loanCustomerRelations[i].dscStatus == "undefined" || model.loanAccount.loanCustomerRelations[i].dscStatus == ""){
-                                        model.loanProcess.loanAccount.dscOverride = false
+                                        model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5  = null
                                         break;
                                     }
-                                    if(model.loanAccount.loanCustomerRelations[i].dscStatus == "FAILURE"){
-                                        model.loanProcess.loanAccount.dscOverride = false
+                                    if(model.loanAccount.loanCustomerRelations[i].dscStatus == "FAILURE" || model.loanAccount.loanCustomerRelations[i].dscStatus == "DSC_OVERRIDE_REQUIRED"){
+                                        model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5  = "true"
                                         break;
                                     }
                                     else{
-                                        model.loanProcess.loanAccount.dscOverride = false
+                                        model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5  = "false"
                                     }
                                     
                                 }

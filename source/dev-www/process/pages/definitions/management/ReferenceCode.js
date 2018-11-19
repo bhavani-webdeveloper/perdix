@@ -1,8 +1,8 @@
 define({
     pageUID: "management.ReferenceCode",
     pageType: "Engine",
-    dependencies: ["$log", "ReferenceCodeResource", "$q", "PageHelper", "$stateParams"],
-    $pageFn: function ($log, ReferenceCodeResource, $q, PageHelper, $stateParams) {
+    dependencies: ["$log", "ReferenceCodeResource", "$q", "PageHelper", "$stateParams", "irfNavigator"],
+    $pageFn: function ($log, ReferenceCodeResource, $q, PageHelper, $stateParams, irfNavigator) {
         return {
             "type": "schema-form",
             "title": "Demo Form",

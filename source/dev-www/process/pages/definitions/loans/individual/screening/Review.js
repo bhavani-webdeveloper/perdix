@@ -71,14 +71,17 @@ function($log, SchemaResource, PageHelper, Utils, IndividualLoan, Messaging, Ses
 							model.loanSummary[currentStage].hideCreateConversation = true;
 						}
 
-						model.loanSummary[currentStage].isCurrentStage = true;
+						model.loanSummary[currentStage].isCurrentStage = true;	
 						model.loanSummary[currentStage]._conversationExpand = true;	
 
 						Messaging.getConversationStatus({
 		                    'process_id': model.loanAccount.id
 		                }).$promise.then(function(response) {
-		                    model.conversationStatus = response.body;
-
+							model.conversationStatus = response.body;
+							var i =0;
+							for(i in model.conversationStatus){
+								model.conversationStatus[i] = {'sub_process_id' :Number(model.conversationStatus[i].sub_process_id)};
+							}
 							for(var i = 0; i < model.loanSummary.length; i++) {
 								if(model.loanSummary[i].action == 'PROCEED' && (_.find(model.conversationStatus, {'sub_process_id': model.loanSummary[i].id}) || model.loanSummary[i].isCurrentStage)) {
 									model.loanSummary[i].conversationStatus =  true;

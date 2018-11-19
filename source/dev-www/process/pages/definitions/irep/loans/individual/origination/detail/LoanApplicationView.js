@@ -190,31 +190,9 @@ define({
                 BundleManager.pushEvent('loanAccount', model._bundlePageObj, model.loanAccount);
                 model.mitigantsChanged=0;
                 model.loanMitigants= model.loanAccount.loanMitigants;
-                var familyMembers = [];
-                Enrollment.getCustomerById({
-                    id: model.loanAccount.applicantId
-                }).$promise
-                .then(function(res) {
-                    $log.info(res);
-                    $log.info("res");
-                    for (i in res.familyMembers) {
-                        var obj = {};
-                        if (res.familyMembers[i].relationShip != 'Self' || res.familyMembers[i].relationShip != 'self') {
-                            obj.name = res.familyMembers[i].familyMemberFirstName;
-                            obj.relationShip = res.familyMembers[i].relationShip;
-                            obj.dateOfBirth = res.familyMembers[i].dateOfBirth;
-                            obj.gender = res.familyMembers[i].gender;
-                            obj.age = moment().diff(moment(res.familyMembers[i].dateOfBirth), 'years');
-                            familyMembers.push(obj);
-                        }
-                    }
-                    model.loanAccount.familyMembers = familyMembers;
-                }, function(httpRes) {
-                    PageHelper.showErrors(httpRes);
-                })
-                .finally(function() {
-                    PageHelper.hideLoader();
-                })
+
+                
+
             /*Asset details*/
                 if (model.loanAccount.collateral.length != 0) {
                     model.asset_details = [];
@@ -457,27 +435,25 @@ define({
                         "type": "grid",
                         "orientation": "vertical",
                         "items": [{
-                            "key": "loanAccount.familyMembers[0].name",
+                            "key": "loanAccount.nominees[0].nomineeFirstName",
                             "title": "Name"
                         }, {
-                            "key": "loanAccount.familyMembers[0].gender",
+                            "key": "loanAccount.nominees[0].nomineeGender",
                             "title": "Gender"
                         }, {
-                            "key": "loanAccount.familyMembers[0].dateOfBirth",
+                            "key": "loanAccount.nominees[0].nomineeDOB",
                             "title": "Date Of Birth"
                         }]
                     }, {
                         "type": "grid",
                         "orientation": "vertical",
                         "items": [{
-                            "key": "loanAccount.familyMembers[0].relationShip",
+                            "key": "loanAccount.nominees[0].nomineeRelationship",
                             "title": "Relationship To Insured"
-                        }
-                        //  {
-                        //     "key": "",
-                        //     "title": "Address"
-                        // }
-                        ]
+                        }/* , {
+                            "key": "",
+                            "title": "Address"
+                        } */]
                     }]
                 }]
             }, {
