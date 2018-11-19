@@ -181,8 +181,8 @@ define({
                             "name": "Customer",
                             "value": "CUSTOMER"
                         }, {
-                            "name": "Thirdparty",
-                            "value": "THIRDPARTY"
+                            "name": "Vendor",
+                            "value": "VENDOR"
                         }],
                         onChange: function(value, form, model) {
                             model.loanAccount.customerBankAccountNumber = '';
