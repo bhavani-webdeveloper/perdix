@@ -6,7 +6,7 @@ header("Access-Control-Request-Method: GET");
 
 $PM_QUERY = "
 SELECT  *
-FROM ".DB_SCHEMA.".role_report_access rra where rra.role_id = ?";
+FROM ".DB_SCHEMA.".role_report_access rra where rra.role_id = ";
 // "SELECT p.id, p.uri, rpa.id rpa_id, rpa.page_config
 // FROM ".DB_SCHEMA.".pages p
 // LEFT OUTER
@@ -15,15 +15,11 @@ FROM ".DB_SCHEMA.".role_report_access rra where rra.role_id = ?";
 
 $role_id = $_GET['roleId'];
 
-$query = $PM_QUERY;
 if (empty($role_id)) {
 	die('{"error":"Role Id is mandatory"}');
 } else {
-	$stmt = $connection->prepare($query);
-	$stmt->bind_param('d', $role_id);
-	$stmt->execute();
-	$result = $stmt->get_result();
-	$stmt->close();
+	$query = $PM_QUERY . $role_id;
+	$result = $connection->query($query);
 }
 
 if (!$result) {
