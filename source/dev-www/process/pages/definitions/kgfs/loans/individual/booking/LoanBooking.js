@@ -96,7 +96,6 @@ define([], function () {
 
                     "LoanSanction",
                     "LoanSanction.sanctionDate",
-                    "LoanSanction.numberOfDisbursements",
                     "LoanSanction.scheduleDisbursementDate",
                     "LoanSanction.firstRepaymentDate",
                     "LoanSanction.customerSignatureDate",
@@ -254,7 +253,13 @@ define([], function () {
                             model.loanAccount.productCode = valueObj.productCode;
                             model.additions.tenurePlaceHolder = valueObj.tenure_from + '-' + valueObj.tenure_to;
                             model.additions.amountPlaceHolder = valueObj.amount_from + '-' + valueObj.amount_to;
-                            model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5 = valueObj.product_name;
+                            if(valueObj.tenure_from == valueObj.tenure_to){
+                                model.additions.tenurePlaceHolder = valueObj.tenure_from
+                            }
+                            if(valueObj.amount_from == valueObj.amount_to){
+                                model.additions.amountPlaceHolder = valueObj.amount_from;
+                            }
+                            model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = valueObj.product_name;
 
                         },
                         getListDisplayItem: function (item, index) {
@@ -424,12 +429,32 @@ define([], function () {
                         }
                     },
                     "JewelDetails.ornamentDetails.carat":{
+                        "type":"select",
+                        "titleMap": [{
+                                value: 18,
+                                name: "18"
+                            },
+                            {
+                                value: 20,
+                                name: "22"
+                            },
+                            {
+                                value: 24,
+                                name: "24"
+                            }
+                        ],
                         onChange:function(valueObj,context,model){
                             var netWeight = model.loanAccount.ornamentsAppraisals[context.arrayIndex].netWeightInGrams;
                             if(netWeight){
                                 setGoldRate(netWeight,valueObj,model,context.arrayIndex);
                             }
                         }
+                    },
+                    "JewelDetails.ornamentDetails.rate":{
+                        readonly : true
+                    },
+                    "JewelDetails.ornamentDetails.marketValue":{
+                        readonly : true
                     },
                     "NomineeDetails.nominees.nomineeFirstName": {
                         "orderNo": 1,
@@ -628,6 +653,7 @@ define([], function () {
                     },
                     "LoanSanction.disbursementSchedules":{
                         orderNo:2,
+                        readonly : true,
                     },
                     "LoanSanction.customerSignatureDate": {
                         orderNo :3,
@@ -760,7 +786,7 @@ define([], function () {
                                                 "loanProductName":{
                                                     "title": "PRODUCT_NAME",
                                                     "readonly": true,
-                                                    "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5"
+                                                    "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6"
                                             
                                                 },
                                                 "borrowers": {
@@ -1295,7 +1321,7 @@ define([], function () {
                                 }
                             }
                         }
-                        if(typeof model.loanProcess.loanAccount.dscOverride =="undefined" || model.loanProcess.loanAccount.dscOverride == null){
+                        if(typeof model.loanProcess.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5 =="undefined" || model.loanProcess.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5 == null){
                             PageHelper.showErrors({data:{error:"DSC STATUS IS REQUIRED...."}});
                                 PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                 PageHelper.hideLoader();
