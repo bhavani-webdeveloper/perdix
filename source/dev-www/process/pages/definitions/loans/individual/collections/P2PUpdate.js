@@ -304,34 +304,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                                         title: "REASON",
                                         type: "select",
                                         condition: "model.additional.reasonType=='Business' && model.promise.promiseToPay=='YES'",
-                                        titleMap: [{
-                                            "name": "Change in business circumstance due to Govt. order",
-                                            "value": "Change in business circumstance due to Govt. order"
-                                        },
-                                            {
-                                                "name": "Payment held up with Third party ",
-                                                "value": "Payment held up with Third party"
-                                            },
-                                            {
-                                                "name": "Sudden lack of or-ders",
-                                                "value": "Sudden lack of or-ders"
-                                            },
-                                            {
-                                                "name": "Business loss",
-                                                "value": "Business loss"
-                                            },
-                                            {
-                                                "name": "Business dispute in the firm",
-                                                "value": "Business dispute in the firm"
-                                            },
-                                            {
-                                                "name": "Machine Repo and sold ",
-                                                "value": "Machine Repo and sold "
-                                            },
-                                            {
-                                                "name": "Others",
-                                                "value": "Others"
-                                            }],
+                                        enumCode: "business_overdueReasons",
 
                                     },
                                     {
@@ -339,26 +312,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                                         title: "REASON",
                                         type: "select",
                                         condition: "model.additional.reasonType=='Personal' && model.promise.promiseToPay=='YES'",
-                                        titleMap: [{
-                                            "name": "Death in Family",
-                                            "value": "Death in Family "
-                                        },
-                                            {
-                                                "name": "Function in Family",
-                                                "value": "Function in Family"
-                                            },
-                                            {
-                                                "name": "Illness in Family",
-                                                "value": "Illness in Family"
-                                            },
-                                            {
-                                                "name": "Matrimonial disputes ",
-                                                "value": "Matrimonial disputes "
-                                            },
-                                            {
-                                                "name": "Others",
-                                                "value": "Others"
-                                            }],
+                                        enumCode: "personal_overdueReasons",
 
                                     },
                                     {
@@ -366,43 +320,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                                         title: "RECOVERY_ATTEMPT",
                                         type: "select",
                                         "condition": "model.promise.promiseToPay=='NO'",
-                                        titleMap: [{
-                                            "name": "Customer not available",
-                                            "value": "Customer not available"
-                                        },
-                                            {
-                                                "name": "Customer skip and not traceable",
-                                                "value": "Customer skip and not traceable"
-                                            },
-                                            {
-                                                "name": "No Income",
-                                                "value": "No Income"
-                                            },
-                                            {
-                                                "name": "Family Issues",
-                                                "value": "Family Issues"
-                                            },
-                                            {
-                                                "name": "Contact Again",
-                                                "value": "Contact Again"
-                                            },
-                                            {
-                                                "name": "Visited Customer Reference",
-                                                "value": "Visited Customer Reference"
-                                            },
-                                            {
-                                                "name": "Visited Co-applicant/Guarantor",
-                                                "value": "Visited Co-applicant/Guarantor"
-                                            },
-                                            {
-                                                "name": "Visited neighbor",
-                                                "value": "Visited neighbor"
-                                            },
-                                            {
-                                                "name": "Problematic Customer",
-                                                "value": "Problematic Customer"
-                                            }],
-
+                                        enumCode: "recovery_attempt",
                                     },
                                     {
                                         key: "additional.scheduledDate",
