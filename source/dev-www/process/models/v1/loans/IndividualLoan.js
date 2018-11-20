@@ -17,8 +17,7 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource,Upload,$q,PageHe
         },
         overrideDsc:{
             method : 'POST',
-            url : endpoint + '/overridedsc',
-            isArray : true
+            url : endpoint + '/overridedsc'
         },
         update:{
             method:'PUT',
