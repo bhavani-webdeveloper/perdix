@@ -1931,6 +1931,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 model.customer.latitude = obj.latitude;
                                 model.customer.longitude = obj.longitude;
 
+                                
+                                if(obj.licenseType != null &&  model.customer.customerLicenceDetails.length == 0){
+                                    model.customer.customerLicenceDetails.push({
+                                        licence1Type: obj.licenseType,
+                                        licence1ValidFrom: '',
+                                        licence1ValidTo: '',
+                                    });
+                                }
+
                                 for (var i = 0; i < model.customer.familyMembers.length; i++) {
                                     // $log.info(model.customer.familyMembers[i].relationShip);
                                     // model.customer.familyMembers[i].educationStatus = obj.educationStatus;

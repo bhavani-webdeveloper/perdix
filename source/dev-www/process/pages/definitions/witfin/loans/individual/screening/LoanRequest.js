@@ -219,7 +219,7 @@ define([], function() {
                                     "readonly": true
                                 },
                                 "LoanRecommendation":{
-                                    "orderNo":50
+                                    "orderNo":60
                                 }
                             }
                         },
@@ -376,7 +376,7 @@ define([], function() {
                                     "readonly": true
                                 },
                                 "LoanRecommendation":{
-                                    "orderNo":50
+                                    "orderNo":60
                                 }
                             }
                         },
@@ -401,7 +401,7 @@ define([], function() {
                                     "readonly": true
                                 },
                                 "LoanRecommendation":{
-                                    "orderNo":50
+                                    "orderNo":60
                                 }
                             }
                         },
@@ -426,7 +426,7 @@ define([], function() {
                                     "readonly": true
                                 },
                                 "LoanRecommendation":{
-                                    "orderNo":50
+                                    "orderNo":60
                                 }
                             }
                         },
@@ -501,7 +501,7 @@ define([], function() {
                                     "readonly": true
                                 },
                                 "LoanRecommendation":{
-                                    "orderNo":50
+                                    "orderNo":60
                                 }
                             }
                         },
@@ -526,7 +526,7 @@ define([], function() {
                                     "readonly": true
                                 },
                                 "LoanRecommendation":{
-                                    "orderNo":50
+                                    "orderNo":60
                                 }
                             }
                         },
@@ -551,7 +551,7 @@ define([], function() {
                                     "readonly": true
                                 },
                                 "LoanRecommendation":{
-                                    "orderNo":50
+                                    "orderNo":60
                                 }
                             }
                         },
@@ -959,7 +959,7 @@ define([], function() {
                                 },
                                 
                                 "DeductionsFromLoan": {
-                                    "orderNo": 60,
+                                    "orderNo": 40,
                                     "items": {
                                         "dsaPayout": {
                                             "key": "loanAccount.dsaPayout",
@@ -1102,6 +1102,7 @@ define([], function() {
                                     }
                                 },
                                 "LoanRecommendation": {
+                                    "orderNo": 60,
                                     "items": {
                                         "udf6": {
                                             "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6",
