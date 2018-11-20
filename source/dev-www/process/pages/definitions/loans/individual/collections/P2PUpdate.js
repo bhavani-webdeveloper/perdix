@@ -232,6 +232,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                     {
                         key: "customer.isBusinessRunning",
                         type: "radios",
+                        required: true,
                         title: "BUSINESS_RUNNING",
                         "titleMap": {
                             "YES": "YES",
@@ -241,6 +242,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                     {
                         key: "customer.isCollateralAvailable",
                         type: "radios",
+                        required: true,
                         title: "COLLATERAL_AVAILABLE",
                         "titleMap": {
                             "YES": "YES",
@@ -270,6 +272,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                                     {
                                         key: "promise.promiseToPay",
                                         type: "radios",
+                                        required: true,
                                         title: "P2P_DATA_PRODIDED",
                                         "titleMap": {
                                             "YES": "YES",
@@ -280,6 +283,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                                         key: "additional.promiseToPayDate",
                                         title: "NEXT_ACTION_DATE",
                                         readonly: false,
+                                        required: true,
                                         "condition": "model.promise.promiseToPay=='YES'",
                                         type: "date",
 
@@ -288,6 +292,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                                         key: "additional.reasonType",
                                         title: "REASON_FOR_DELAY",
                                         type: "select",
+                                        required: true,
                                         "condition": "model.promise.promiseToPay=='YES'",
                                         titleMap: [{
                                             "name": "Business",
@@ -303,6 +308,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                                         key: "additional.reason",
                                         title: "REASON",
                                         type: "select",
+                                        required: true,
                                         condition: "model.additional.reasonType=='Business' && model.promise.promiseToPay=='YES'",
                                         enumCode: "business_overdue_reasons",
 
@@ -311,6 +317,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                                         key: "additional.reason",
                                         title: "REASON",
                                         type: "select",
+                                        required: true,
                                         condition: "model.additional.reasonType=='Personal' && model.promise.promiseToPay=='YES'",
                                         enumCode: "personal_overdue_reasons",
 
@@ -319,12 +326,14 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                                         key: "additional.currentCollectionStatus",
                                         title: "RECOVERY_ATTEMPT",
                                         type: "select",
+                                        required: true,
                                         "condition": "model.promise.promiseToPay=='NO'",
                                         enumCode: "recovery_attempt",
                                     },
                                     {
                                         key: "additional.scheduledDate",
                                         title: "FOLLOW_UP_DATE",
+                                        required: true,
                                         readonly: false,
                                         "condition": "model.promise.promiseToPay=='NO' && model.additional.currentCollectionStatus=='Contact Again' ",
                                         type: "date",
@@ -334,6 +343,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                                         key: "additional.overdueReasons",
                                         title: "OVERDUE_REASON",
                                         type: "textarea",
+                                        required: true,
                                         "condition": "model.additional.reason=='Others'"
 
                                     },
