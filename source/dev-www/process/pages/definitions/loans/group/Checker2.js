@@ -1714,7 +1714,8 @@ return {
             PageHelper.showLoader();
             irfProgressMessage.pop('Send Back', 'Working...');
             PageHelper.clearErrors();
-            model.groupAction = "PROCEED";                    
+            model.groupAction = "PROCEED";  
+            model.group.endTime= new Date();                  
             var reqData = _.cloneDeep(model);
             reqData.stage = model.review.targetStage;
             GroupProcess.updateGroup(reqData, function(res) {
@@ -1732,6 +1733,7 @@ return {
             if(!validateForm(formCtrl)) 
                 return;
             PageHelper.showLoader();
+            model.group.endTime= new Date();
             model.group.checkerTransactionHistoryDTO.status="REJECT";
             model.group.checkerTransactionHistoryDTO.remarks=model.group.groupRemarks;
             var reqData = _.cloneDeep(model);
@@ -1761,6 +1763,7 @@ return {
             PageHelper.showLoader();
             irfProgressMessage.pop('CHECKER-proceed', 'Working...');
             PageHelper.clearErrors();
+            model.group.endTime= new Date();
             model.group.checkerTransactionHistoryDTO.status="ACCEPT";
             model.group.checkerTransactionHistoryDTO.remarks=model.group.groupRemarks;
             model.groupAction = "PROCEED";
