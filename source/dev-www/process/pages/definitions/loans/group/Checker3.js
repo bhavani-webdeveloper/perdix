@@ -918,7 +918,8 @@ return {
     {
         "type": "box",
         "title": "POST_REVIEW",
-        "items": [{
+        "items": [
+            {
                 key: "action",
                 type: "radios",
                 titleMap: {
@@ -926,6 +927,7 @@ return {
                     "REJECT": "REJECT",
                     "SEND_BACK": "SEND_BACK",
                 },
+                "condition": "model.siteCode != 'KGFS'",
                 onChange: function(modelValue, form, model, formCtrl, event) {
                     if(model.action == 'PROCEED') {
                         return;
@@ -933,12 +935,51 @@ return {
                     var stage1 = model.group.currentStage;
                     var targetstage = formHelper.enum('groupLoanBackStages').data;
                     var out = [];
+                    var cnt = 0;
                     for (var i = 0; i < targetstage.length; i++) {
                         var t = targetstage[i];
-                        if (t.name == stage1 && 'default' == t.field2) {
-                            model.review.targetStage = t.field1;
-                            model.review.rejectStage = "Rejected";
-                            break;
+                        if (t.name == stage1) {
+                            if('default' == t.field2) {
+                                model.review.targetStage = t.field1;
+                                cnt++;
+                            }
+                            if('reject' == t.field2) {
+                                model.review.rejectStage = t.field1;
+                                cnt++;
+                            }
+                            if(cnt == 2) break;
+                        }
+                    }
+                }
+            },
+            {
+                key: "action",
+                type: "radios",
+                titleMap: {
+                    "APPROVE": "Approve",
+                    "REJECT": "REJECT"
+                },
+                "condition": "model.siteCode == 'KGFS'",
+                onChange: function(modelValue, form, model, formCtrl, event) {
+                    if(model.action == 'PROCEED') {
+                        return;
+                    }
+                    var stage1 = model.group.currentStage;
+                    var targetstage = formHelper.enum('groupLoanBackStages').data;
+                    var out = [];
+                    var cnt = 0;
+                    for (var i = 0; i < targetstage.length; i++) {
+                        var t = targetstage[i];
+                        if (t.name == stage1) {
+                            if('default' == t.field2) {
+                                model.review.targetStage = t.field1;
+                                cnt++;
+                            }
+                            if('reject' == t.field2) {
+                                model.review.rejectStage = t.field1;
+                                cnt++;
+                            }
+                            if(cnt == 2) break;
                         }
                     }
                 }
