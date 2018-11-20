@@ -135,7 +135,7 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource, Upload, $q, Pag
             isArray:true
         },
         findPreOpenSummary:{
-            method:'GET',
+            method:'POST',
             url:endpoint+'/findPreOpenSummary'
         }
     });
