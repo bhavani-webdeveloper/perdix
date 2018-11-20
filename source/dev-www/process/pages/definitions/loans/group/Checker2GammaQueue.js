@@ -1,5 +1,5 @@
 define({
-	pageUID: "loans.group.Checker2Queue",
+	pageUID: "loans.group.Checker2GammaQueue",
 	pageType: "Engine",
 	dependencies: ["$log", "$state", "GroupProcess","entityManager", "Enrollment", "CreditBureau", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
 		"PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator","filterFilter"
@@ -28,8 +28,8 @@ define({
 				if(userRole && userRole.accessLevel && userRole.accessLevel === 5){
 					model.fullAccess = true;
 				}
-				model.partner = SessionStore.session.partnerCode;
-				model.isPartnerChangeAllowed = GroupProcess.hasPartnerCodeAccess(model.partner);
+				model.partner = "KGFS"
+				model.isPartnerChangeAllowed = false;
 				$log.info("Checker2 Queue got initialized");
 			},
 			definition: {
@@ -41,12 +41,7 @@ define({
 	                	items: [
 	                	{
 	                		key: "bankId",
-	                		readonly: true, 
-	                		condition: "!model.fullAccess"
-	                	},
-	                	{
-	                		key: "bankId",
-	                		condition: "model.fullAccess"
+	                		"type": "select"
 	                	},
 	                	{
 	                		key: "branchId", 
@@ -72,6 +67,11 @@ define({
 							"type": "string",
 							"title": "PRODUCT",
 							readonly: true
+						},
+						{
+							"key": "groupCode",
+							"type": "string",
+							"title": "GROUP_CODE",
 						}]
 	                }
 				],
@@ -108,7 +108,11 @@ define({
 								"type": "select",
 								"enumCode": "partner"
 							}
-						}, 
+						},
+						"groupCode": {
+							"type": "string",
+							"title": "GROUP_CODE",
+						},
 						"product": {
 							"title": "PRODUCT"
 						}
@@ -126,6 +130,7 @@ define({
 						'branchId': searchOptions.branchId,
 						'partner': searchOptions.partner,
 						'product': searchOptions.product,
+						'groupCode':searchOptions.groupCode,
 						'groupStatus': true,
 						'page': pageOpts.pageNo,
 						'currentStage': "Checker2",
@@ -169,10 +174,10 @@ define({
 						return [{
 							title: 'GROUP_ID',
 							data: 'id'
+						},{
+							title: 'GROUP_CODE',
+							data: 'groupCode'
 						}, {
-                            title: 'GROUP_CODE',
-                            data: 'groupCode'
-                        }, {
 							title: 'GROUP_NAME',
 							data: 'groupName'
 						}, {
