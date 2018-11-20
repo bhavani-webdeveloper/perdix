@@ -1072,17 +1072,48 @@ define([], function() {
                                                     }
 
                                                     LoanProcess.findPreOpenSummary({
-                                                            "loanAmount": model.loanAccount.loanAmountRequested,
-                                                            "tenure": model.loanAccount.tenureRequested,
-                                                            "frequency": frequency,
+                                                            "amountMagnitude": model.loanAccount.loanAmountRequested,
+                                                            "tenureMagnitude": model.loanAccount.tenureRequested,
+                                                            "tenureUnit": frequency,
                                                             "normalInterestRate": model.loanAccount.expectedInterestRate,
                                                             "productCode": "IRRTP",
-                                                            "moratoriumPeriod": "0",
-                                                            "openDate": Utils.getCurrentDate(),
+                                                        //    "moratoriumPeriod": "0",
+                                                            "openedOnDate": Utils.getCurrentDate(),
                                                             "branchId": model.loanAccount.branchId || model.loanProcess.applicantEnrolmentProcess.customer.customerBranchId,
                                                             "firstRepaymentDate": moment().add(frequencyRequested, 'days').format("YYYY-MM-DD"),
                                                             "scheduledDisbursementDate": Utils.getCurrentDate(),
-                                                            "scheduledDisbursementAmount": model.netDisbursementAmount
+                                                            "scheduledDisbursementAmount": model.loanAccount.loanAmountRequested,
+                                                            "userSecurityDeposit": "100",
+                                                            "inputFees": [
+                                                                {
+                                                                "FeeAmount": "900",
+                                                                "Surcharge": "100",
+                                                                "GrossAmount": "1000",
+                                                                "TransactionName": "Processing Fee"
+                                                                }
+                                                            ],
+                                                              "inputMoratoriums": [
+                                                                  {
+                                                                  "accountId": "",
+                                                                  "amendmentType": "",
+                                                                  "amount": "",
+                                                                  "computeStartDate": true,
+                                                                  "feeAmount": "",
+                                                                  "grossAmount": "",
+                                                                  "moratoriumInstallment": "0",
+                                                                  "moratoriumInterestRate": "23.61",
+                                                                  "moratoriumPeriod": "0 NONE",
+                                                                  "repaymentDate": "2017-10-24",
+                                                                  "surcharge": "",
+                                                                  "tenure": "",
+                                                                  "transactionDate": "",
+                                                                  "transactionId": "",
+                                                                  "transactionName": "",
+                                                                  "urnNo": ""
+                                                                }
+                                                              ],
+                                                          "scheduledDisbursements": [],
+                                                          "equatedInstallment": "31000"
                                                         })
                                                         .$promise
                                                         .then(function(resp) {
