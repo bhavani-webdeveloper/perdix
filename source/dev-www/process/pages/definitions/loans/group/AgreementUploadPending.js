@@ -461,7 +461,8 @@ define({
                     PageHelper.showLoader();
                     irfProgressMessage.pop('Send Back', 'Working...');
                     PageHelper.clearErrors();
-                    model.groupAction = "PROCEED";                    
+					model.groupAction = "PROCEED";  
+					model.group.endTime= new Date();                  
                     var reqData = _.cloneDeep(model);
                     reqData.stage = model.review.targetStage;
                     GroupProcess.updateGroup(reqData, function(res) {
@@ -481,7 +482,8 @@ define({
                     }
                     PageHelper.showLoader();
                     irfProgressMessage.pop('Reject', 'Working...');
-                    PageHelper.clearErrors();
+					PageHelper.clearErrors();
+					model.group.endTime= new Date();
                     model.groupAction = "PROCEED";
                     var reqData = _.cloneDeep(model);
                     reqData.stage = model.review.rejectStage;

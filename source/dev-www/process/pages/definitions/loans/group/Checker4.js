@@ -800,7 +800,6 @@ return {
             if(!validateForm(formCtrl)) 
                 return;
             PageHelper.showLoader();
-            model.group.endTime= new Date();
             var reqData = _.cloneDeep(model);
             reqData.groupAction = 'SAVE';
             PageHelper.clearErrors();
@@ -823,6 +822,7 @@ return {
             PageHelper.showLoader();
             irfProgressMessage.pop('Send Back', 'Working...');
             PageHelper.clearErrors();
+            model.group.endTime= new Date();
             model.groupAction = "PROCEED";                    
             var reqData = _.cloneDeep(model);
             reqData.stage = model.review.targetStage;
