@@ -712,7 +712,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 title: "REASON",
                                 type: "select",
                                 condition: "model.repayment.delayReasonType =='Business'",
-                                enumCode: "business_overdueReasons"
+                                enumCode: "business_overdue_reasons"
 
                             },
                             {
@@ -720,7 +720,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 title: "REASON",
                                 type: "select",
                                 condition: "model.repayment.delayReasonType=='Personal'",
-                                enumCode: "personal_overdueReasons"
+                                enumCode: "personal_overdue_reasons"
                             },
                             {
                                 key: "repayment.reasons",

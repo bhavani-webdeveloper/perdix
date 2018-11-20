@@ -304,7 +304,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                                         title: "REASON",
                                         type: "select",
                                         condition: "model.additional.reasonType=='Business' && model.promise.promiseToPay=='YES'",
-                                        enumCode: "business_overdueReasons",
+                                        enumCode: "business_overdue_reasons",
 
                                     },
                                     {
@@ -312,7 +312,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                                         title: "REASON",
                                         type: "select",
                                         condition: "model.additional.reasonType=='Personal' && model.promise.promiseToPay=='YES'",
-                                        enumCode: "personal_overdueReasons",
+                                        enumCode: "personal_overdue_reasons",
 
                                     },
                                     {
