@@ -791,7 +791,8 @@ define([], function() {
                     }
 
                     model.loanAccount.processingFee = (model.loanAccount.expectedProcessingFeePercentage / 100) * model.loanAccount.loanAmountRequested;
-                    model.loanAccount.dsaPayoutFee = (model.loanAccount.dsaPayout / 100) * model.loanAccount.loanAmountRequested;
+                    model.loanAccount.dsaPayoutFee = Math.round(((model.loanAccount.dsaPayout / 100) * model.loanAccount.loanAmountRequested)*100)/100;
+
                     // model.loanAccount.accountUserDefinedFields = model.loanAccount.accountUserDefinedFields || {};
                     if (_.hasIn(model, 'loanAccount.loanCustomerRelations') &&
                         model.loanAccount.loanCustomerRelations!=null &&
@@ -966,7 +967,7 @@ define([], function() {
                                             "title": "DSA_PAYOUT_IN_PERCENTAGE",
                                             "orderNo": 30,
                                             onChange: function(modelValue, form, model) {
-                                                model.loanAccount.dsaPayoutFee = (model.loanAccount.dsaPayout / 100) * model.loanAccount.loanAmountRequested;
+                                                model.loanAccount.dsaPayoutFee = Math.round(((model.loanAccount.dsaPayout / 100) * model.loanAccount.loanAmountRequested)*100)/100;
                                             }
                                         },
                                         "fee3": {
@@ -1026,7 +1027,7 @@ define([], function() {
                                                     var frequencyRequested;
                                                     var advanceEmi = model.loanAccount.estimatedEmi;
                                                     processFee = Math.round(((model.loanAccount.expectedProcessingFeePercentage / 100) * model.loanAccount.loanAmountRequested)* 100) / 100;
-                                                    dsaPayout = (model.loanAccount.dsaPayout / 100) * model.loanAccount.loanAmountRequested;
+                                                    dsaPayout = Math.round(((model.loanAccount.dsaPayout / 100) * model.loanAccount.loanAmountRequested)*100)/100;
                                                     frankingCharge = model.loanAccount.fee3;
                                                     model.loanAccount.vExpectedProcessingFee = processFee;
                                                     model.loanAccount.dsaPayoutFee = dsaPayout;
