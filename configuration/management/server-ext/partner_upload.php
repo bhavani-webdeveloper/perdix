@@ -289,7 +289,7 @@ foreach ($partners as $partner) {
                           ->first([
                               'customer.id',
                               'customer.first_name',
-                              'customer.partner_code',
+                              'customer_partner.partner_code',
                               'customer.address_proof',
                               'customer.identity_prof',
                               'customer_partner.customer_partner_number'
