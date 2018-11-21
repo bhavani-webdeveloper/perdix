@@ -59,7 +59,7 @@ Class Ckyc {
         'SourceSystemCustomerCreationDate' => function($c) { return date("d-M-Y", strtotime($c->created_at)); },
         'ModificationDate' => '',
         'UniqueGlobalCustomerCode' => '',
-        'ConstitutionType' => '1',
+        'ConstitutionType' => '01',
         'Prefix' => function($c) { return $c->gender == 'FEMALE'? ($c->marital_status == 'MARRIED'? 'Mrs': 'Ms'): 'Mr'; },
         'FirstName' => '@first_name',
         'MiddleName' => '',
