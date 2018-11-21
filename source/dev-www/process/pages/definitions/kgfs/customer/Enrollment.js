@@ -7,11 +7,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
             pageType: "Engine",
             dependencies: ["$log", "$state", "$stateParams", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper",
                 "$q", "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries",
-                "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository"],
+                "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository","irfProgressMessage"],
 
             $pageFn: function ($log, $state, $stateParams, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q,
                 PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch,
-                BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository) {
+                BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository,irfProgressMessage) {
 
                 AngularResourceService.getInstance().setInjector($injector);
                 var branch = SessionStore.getBranch();
@@ -804,6 +804,17 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                                 .subscribe(function(enrolmentProcess) {
                                         model.enrolmentProcess=enrolmentProcess;
                                         model.customer=model.enrolmentProcess.customer;
+                                        model.customer.customerType = "Individual";
+                                        var branch1 = formHelper.enum('branch_id').data;
+                                        var allowedBranch = [];
+                                        for (var i = 0; i < branch1.length; i++) {
+                                            if ((branch1[i].name) == SessionStore.getBranch()) {
+                                                allowedBranch.push(branch1[i]);
+                                                break;
+                                            }
+                                        }
+                                        model.customer.customerBranchId = allowedBranch.length ? allowedBranch[0].value : '';
+                                        model.customer.kgfsBankName = SessionStore.getBankName();
                                         self.form = IrfFormRequestProcessor.getFormDefinition('IndividualEnrollment', formRequest, configFile(), model);
                                 });
                             }
@@ -880,7 +891,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                             model.currentStage = obj
                         }
                     },
-                    offline: false,
+                    offline: true,
                     getOfflineDisplayItem: function (item, index) {
                         return [
                             item.customer.urnNo,
