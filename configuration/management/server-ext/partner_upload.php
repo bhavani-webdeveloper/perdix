@@ -32,13 +32,13 @@ $fileUploadUrl = $api_url."/api/files/upload?category=Customer&subCategory=AGEPR
 $filePath=$settings['perdix']['partner_upload_path'];
 
 $address_proof = collect([]);
-$identity_prof = collect([]);
+$identity_proof = collect([]);
 $proofTypeNames = KycUploadProofMaster::all();
 foreach ($proofTypeNames as $proofTypeName){
     if("address_proof"==$proofTypeName->type)
         $address_proof->put($proofTypeName->name, $proofTypeName->filename);
-    else  if("identity_prof"==$proofTypeName->type)
-        $identity_prof->put($proofTypeName->name, $proofTypeName->filename);
+    else  if("identity_proof"==$proofTypeName->type)
+        $identity_proof->put($proofTypeName->name, $proofTypeName->filename);
 }
 //echo $authHeader;
 
@@ -73,7 +73,7 @@ function validation($type, $path) {
 
 function getFileByType($type, $customer){
     global $address_proof;
-    global $identity_prof;
+    global $identity_proof;
     global $filePath;
     $absolutepath="";
     $path = $filePath . DIRECTORY_SEPARATOR .$customer['partner_code']. DIRECTORY_SEPARATOR . $customer['customer_partner_number']. DIRECTORY_SEPARATOR ;
@@ -85,8 +85,8 @@ function getFileByType($type, $customer){
         case "address_proof": 
             $absolutepath =  $path .$address_proof->get($customer[$type]).".*";
             break;
-        case "identity_prof": 
-            $absolutepath =  $path .$identity_prof->get($customer[$type]).".*";
+        case "identity_proof": 
+            $absolutepath =  $path .$identity_proof->get($customer[$type]).".*";
             break;
     }
     echo "<br/> absolutepath : ".$absolutepath;
@@ -291,7 +291,7 @@ foreach ($partners as $partner) {
                               'customer.first_name',
                               'customer_partner.partner_code',
                               'customer.address_proof',
-                              'customer.identity_prof',
+                              'customer.identity_proof',
                               'customer_partner.customer_partner_number'
                           ]);
 
@@ -315,7 +315,7 @@ foreach ($partners as $partner) {
                             $apiCustomer->addressProofImageId =uploadFile($address_proof_path);
                         }
                 
-                        $identityPath = getFileByType("identity_prof",$customer);
+                        $identityPath = getFileByType("identity_proof",$customer);
                         if($identityPath){
                             $apiCustomer->identityProofImageId =uploadFile($identityPath);
                         }
