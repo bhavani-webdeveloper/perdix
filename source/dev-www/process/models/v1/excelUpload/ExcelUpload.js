@@ -12,8 +12,8 @@ irf.models.factory('ExcelUpload', [
             getExcelUploadJson:{
 
                 method: 'GET',
-               // url: managementUrl + '/server-ext/excel_upload_definition.json'
-                url: 'process/schemas/excel_upload_definition.json'
+                  url: managementUrl + '/server-ext/excel_upload_definition.json'
+            //    url: 'process/schemas/excel_upload_definition.json'
             }
 
         });
