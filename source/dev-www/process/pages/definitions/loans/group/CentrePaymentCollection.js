@@ -748,7 +748,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 				"type": "button",
 				"title": "Print",
 				"condition": "model.onlineResponse",
-				"onClick": "actions.OfflinePrint(model, formCtrl, form, $event)"
+				"onClick": "actions.OnlinePrint(model, formCtrl, form, $event)"
 			}]
 		}
 		],
@@ -844,6 +844,70 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 								pageData: print
 							});
 						});
+			},
+
+			OnlinePrint:function(model, formCtrl, form, $event){
+				if(model.onlineresponseData){
+					var requestObj=model.onlineresponseData;
+					var opts = {
+						'centreName': requestObj.collectionDemandSummary.centreName,
+						'branch': requestObj.collectionDemands[0].branchName,
+						'customerBranchId':requestObj.collectionDemandSummary.customerBranchId,
+						'entity_name': SessionStore.getBankName(),
+						'group_name': requestObj.collectionDemands[0].groupName,
+						'group_code': requestObj.collectionDemands[0].groupCode,
+						'demand_date': requestObj.collectionDemands[0].demandDate,
+						'collected': requestObj.collectionDemandSummary.collected,
+						'notcollected': requestObj.collectionDemandSummary.notcollected,
+						'totalToBeCollected': requestObj.collectionDemandSummary.totalToBeCollected,
+						'company_name': "IFMR Rural Channels and Services Pvt. Ltd.",
+						'cin': 'U74990TN2011PTC081729',
+						'address1': 'IITM Research Park, Phase 1, 10th Floor',
+						'address2': 'Kanagam Village, Taramani',
+						'address3': 'Chennai - 600113, Phone: 91 44 66687000',
+						'website': "http://ruralchannels.ifmr.co.in/",
+						'helpline': '18001029370',
+					};
+	
+					var print={};
+					print.paperReceipt= LoanProcess.getWebHeader(opts);
+					print.thermalReceipt= LoanProcess.getThermalHeader(opts);
+	
+					for (i in requestObj.collectionDemands){
+						var cd=requestObj.collectionDemands[i];
+						var repaymentInfo={};
+						repaymentInfo.customerId=cd.customerId;
+						repaymentInfo.customerName=cd.customerName;
+						repaymentInfo.accountNumber=cd.accountNumber;
+						repaymentInfo.installmentAmount=cd.installmentAmount;
+						repaymentInfo.overdueAmount=cd.overdueAmount;
+						repaymentInfo.amountPaid=cd.amountPaid;
+						repaymentInfo.notcollected=cd.notcollected;
+						print.paperReceipt= print.paperReceipt + LoanProcess.getWebReceipt(repaymentInfo);
+						print.thermalReceipt= LoanProcess.getPrintReceipt(repaymentInfo,print.thermalReceipt);
+					}
+	
+					print.paperReceipt= print.paperReceipt + LoanProcess.getWebFooter(opts);
+					print.thermalReceipt= LoanProcess.getThermalFooter(opts,print.thermalReceipt);
+	
+					$log.info(print.paperReceipt);
+					$log.info(print.thermalReceipt);
+	
+					//LoanProcess.PrintReceipt(print.thermalReceipt,print.paperReceipt);
+	
+					Utils.confirm("Please Save the data offline,Page will redirected to Print Preview")
+							.then(function(){
+								irfNavigator.go({
+									state: "Page.Engine",
+									pageName: "management.ReceiptPrint",
+									pageData: print
+								});
+							});
+
+
+				}else{
+					PM.pop('collection-demand', 'No data available to Print', 5000);
+				}
 			},
 			print: function(model){
 				console.log(model);
@@ -1140,6 +1204,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 							function(response){
 								$log.info(response);
 								model.onlineresponse=true;
+								model.onlineresponseData=response;
 
 								PM.pop('collection-demand', 'Collection Submitted Successfully', 3000);
 								if(model.$$STORAGE_KEY$$) {
