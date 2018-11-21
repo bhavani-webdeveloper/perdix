@@ -87,3 +87,5 @@ goldRateDetails = SELECT gold_rate_per_gram_in_paisa as `goldRate` from gold_coi
 reassignment.list = SELECT l.id AS loanId,l.screening_date AS screeningDate,c.first_name AS applicantName,CUSENT.first_name AS customerName,bm.branch_name AS branchName,cm.centre_name AS centreName FROM loan_accounts l INNER JOIN loan_customer_relation lcr ON ( lcr.loan_id = l.id AND lcr.relation = 'APPLICANT' ) INNER JOIN customer c ON ( c.id = lcr.customer_id ) INNER JOIN customer CUSENT ON ( CUSENT.id = l.customer_id AND CUSENT.customer_type = 'Enterprise' ) INNER JOIN branch_master bm ON ( bm.id = l.branch_id ) INNER JOIN loan_centre lc ON ( lc.loan_id = l.id ) INNER JOIN centre_master cm ON ( cm.id = lc.centre_id ) WHERE  ( loan_purpose_1 IN( 'Purchase - Used Vehicle', 'Refinance' ) AND l.current_stage IN( 'FieldInvestigation1', 'FieldInvestigation2', 'FieldInvestigation3','TeleVerification' )) AND ( :branch_name = ''  OR bm.branch_name= :branch_name )
 
 userBasic.one = SELECT id FROM users WHERE user_id = :userId
+
+loanIdByloanCollectionId.one=  select id from loan_accounts where account_number in (select account_number from loan_collections where id = :id)
