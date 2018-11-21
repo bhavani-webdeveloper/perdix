@@ -1215,7 +1215,7 @@ irf.models.factory('Queries', [
               deferred.resolve(response);           
         }, deferred.reject);
         return deferred.promise;
-    }
+    };
     resource.getBankAccountByPartnerForLoanRepay = function(partnerCode) {
         var deferred = $q.defer();
         request = {};
@@ -1232,7 +1232,7 @@ irf.models.factory('Queries', [
             }
         }, deferred.reject);
         return deferred.promise;
-    }
+    };
 
     resource.questionnaireDetails = function(moduleCode, process, stage) {
         var deferred = $q.defer();
@@ -1272,7 +1272,7 @@ irf.models.factory('Queries', [
             }
         )
         return deferred.promise;
-    }
+    };
     resource.getReadyToDisburseAccountDetails = function(urn_no) {
         var deferred = $q.defer();
         var request = {
@@ -1304,6 +1304,17 @@ irf.models.factory('Queries', [
                 };
                 deferred.resolve(result);
             }         
+        }, deferred.reject);
+        return deferred.promise;
+    };
+    resource.getAccountOverridestatus = function(accountNo,urnNo) {
+        var deferred = $q.defer();
+        var request = {
+            "accountNo":accountNo,
+            "urnNo":urnNo,
+        };
+        resource.getResult("accountOverrideStatus.list", request).then(function(response) {
+              deferred.resolve(response);           
         }, deferred.reject);
         return deferred.promise;
     }
