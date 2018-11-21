@@ -252,6 +252,21 @@ irf.models.factory('Queries', [
             )
             return deferred.promise;
         }
+        resource.getLoanIdByLoanCollectionId = function(id) {
+            var deferred = $q.defer();
+            resource.getResult('loanIdByloanCollectionId.one', {
+                id : id
+            }).then(
+                function(res) {
+                    if (res && res.results && res.results.length && res.results.length > 0) {
+                        deferred.resolve(res.results[0]);
+                    } else {
+                        deferred.reject(res);
+                    }
+                }, deferred.reject
+            )
+            return deferred.promise;
+        }
 
         resource.getLoanProductDocuments = function(prodCode, process, stage) {
             var deferred = $q.defer();

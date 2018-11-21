@@ -76,7 +76,7 @@ function getFileByType($type, $customer){
     global $identity_prof;
     global $filePath;
     $absolutepath="";
-    $path = $filePath . DIRECTORY_SEPARATOR .$customer['partner_code']. DIRECTORY_SEPARATOR . $customer['old_customer_id']. DIRECTORY_SEPARATOR ;
+    $path = $filePath . DIRECTORY_SEPARATOR .$customer['partner_code']. DIRECTORY_SEPARATOR . $customer['customer_partner_number']. DIRECTORY_SEPARATOR ;
     //echo "<br/> Path : ".$path;
     switch ($type) {
         case "Photo":
@@ -206,6 +206,11 @@ foreach ($partners as $partner) {
             //echo "<br/> temp : ". $tempCompletedDir;
             $source = $partner . DIRECTORY_SEPARATOR . $file->getFilename();
             $dest = $tempWipDir . $file->getFilename();
+
+            $extSource = pathinfo($source, PATHINFO_EXTENSION);
+    
+            if ($extSource == "txt" )
+                continue;
             
             copy($source, $dest);
             $do =unlink($source);
@@ -221,9 +226,6 @@ foreach ($partners as $partner) {
             //print_r( "<br/>inputFileName : ".$inputFileName);
 
             $ext = pathinfo($inputFileName, PATHINFO_EXTENSION);
-            echo $ext . "\n";
-            if ($ext == "txt" )
-                continue;
 
             if ($ext != "xlsx" ) {
                 $source = $tempWipDir .$file->getFilename();
@@ -277,7 +279,21 @@ foreach ($partners as $partner) {
                     try{
 
                         $customer = new Customer();
-                        $customer = $customer::where('old_customer_id', '=', $rowData[1])->firstOrFail();
+                        //$customer = $customer::where('old_customer_id', '=', $rowData[1])->firstOrFail();
+
+
+                        $customer = $customer::join('customer_partner', function($join) {
+                            $join->on('customer.id', '=', 'customer_partner.customer_id');
+                          })
+                          ->where('customer_partner_number', '=', $rowData[1])
+                          ->first([
+                              'customer.id',
+                              'customer.first_name',
+                              'customer_partner.partner_code',
+                              'customer.address_proof',
+                              'customer.identity_prof',
+                              'customer_partner.customer_partner_number'
+                          ]);
 
                         //echo $customer;
                         $apiCustomer = getCustomer($customer['id']);
@@ -308,7 +324,7 @@ foreach ($partners as $partner) {
 
                         $kycUploadDetail = new KycUploadDetail();
                         $kycUploadDetail->master_id = $IdGenerated;
-                        $kycUploadDetail->customer_id = $customer["old_customer_id"];
+                        $kycUploadDetail->customer_id = $customer["customer_partner_number"];
                         $kycUploadDetail->customer_name = $customer["first_name"];
                         $kycUploadDetail->is_processed = true;
                         $kycUploadDetail->status = 'SUCCESS';
@@ -322,7 +338,7 @@ foreach ($partners as $partner) {
                         echo "<br/> error ".$e1->getMessage();
                         $kycUploadDetail = new KycUploadDetail();
                         $kycUploadDetail->master_id = $IdGenerated;
-                        $kycUploadDetail->customer_id = $customer["old_customer_id"];
+                        $kycUploadDetail->customer_id = $customer["customer_partner_number"];
                         $kycUploadDetail->customer_name = $customer["first_name"];
                         $kycUploadDetail->is_processed = true;
                         $kycUploadDetail->status = 'FAILED';
@@ -355,7 +371,7 @@ foreach ($partners as $partner) {
 
                 $reportFilepath = $partner . DIRECTORY_SEPARATOR . $file->getFilename();    
                 $extension= pathinfo($reportFilepath, PATHINFO_EXTENSION);
-                $reportFileName= str_replace('.'.$extension, '__'.date("d-m-Y").'.txt', $reportFilepath);
+                $reportFileName= str_replace('.'.$extension, '__'.date("Y-m-d--H-i-s").'.txt', $reportFilepath);
 
                 $fp = fopen($reportFileName,"w");
                 if ($fp === false) {
