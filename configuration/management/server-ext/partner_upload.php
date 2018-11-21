@@ -291,7 +291,7 @@ foreach ($partners as $partner) {
                               'customer.first_name',
                               'customer_partner.partner_code',
                               'customer.address_proof',
-                              'customer.identity_proof',
+                              'customer.identity_prof',
                               'customer_partner.customer_partner_number'
                           ]);
 
