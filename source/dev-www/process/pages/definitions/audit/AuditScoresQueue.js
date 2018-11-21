@@ -63,7 +63,9 @@ irf.pageCollection.factory(irf.page("audit.AuditScoresQueue"), ["$log", "$stateP
                             "type": ["null", "number"],
                             "enumCode": "branch_id",
                             "x-schema-form": {
-                                "type": "select"
+                                "type": "select",
+                                "parentEnumCode": "bank",
+                                "parentValueExpr": "model.bankId"
                             }
                         },
                         "from_date": {
