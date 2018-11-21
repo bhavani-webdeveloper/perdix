@@ -2257,7 +2257,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                     },]
                 }, {
                     "type": "actionbox",
-                    "condition": "model.loanAccount.loanType == 'JLG' && model.siteCode=='KGFS'",
+                    "condition": "model.siteCode=='KGFS'",
                     "items": [{
                         "type": "button",
                         "title": "REPAYMENT_SCHEDULE_REPORT",

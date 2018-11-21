@@ -94,22 +94,8 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 		"title": "CUSTOMER_360",
 		"items": [
 			"Page/Engine/customer360.EnrollmentProfile",
-			{
-				"title": "LOANS",
-				"iconClass": "fa fa-key",
-				"items": [
-					{
-						"title": "NEW_LOAN",
-						"iconClass": "fa fa-key",
-						"items": [
-							"Page/Engine/Loans.NewJewel",
-							"Page/Engine/Loans.NewMEL"
-						]
-					},
-					"Page/Engine/customer360.loans.View",
-					"Page/Engine/customer360.loans.Service"
-				]
-			},
+			"Page/Engine/customer360.loans.View",
+			"Page/Engine/customer360.loans.Service",
 			{
 				"title": "REQUEST_RECAPTURE",
 				"shortTitle": "REQUEST",
@@ -122,6 +108,7 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 			},
 			"Page/Adhoc/customer360.FinancialWellbeingReport",
 			"Page/CustomerHistory",
+			"Page/Engine/customer360.CustomerHistorySummary",
 			"Page/Engine/customer360.Recapture",
 			"Page/Engine/customer360.CustomerSummaryView",
 			"Page/Engine/customer360.CustomerDeathMarking"
@@ -500,11 +487,13 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 		if ($scope.dashboardDefinition.$menuMap['Page/Engine/customer360.loans.View'])
 		$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.loans.View'].onClick = function(event, menu) {
 			menu.stateParams.pageId = $scope.model.customer.urnNo;
+			menu.stateParams.pageData = {pageType:'View'};
 			return $q.resolve(menu);
 		};
 
         if ($scope.dashboardDefinition.$menuMap['Page/Engine/customer360.loans.Service'])
 		$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.loans.Service'].onClick = function(event, menu) {
+			menu.stateParams.pageData = {pageType:'Service'};
 			menu.stateParams.pageId = $scope.model.customer.urnNo;
 			return $q.resolve(menu);
 		};
