@@ -232,6 +232,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                     {
                         key: "customer.isBusinessRunning",
                         type: "radios",
+                        required: true,
                         title: "BUSINESS_RUNNING",
                         "titleMap": {
                             "YES": "YES",
@@ -241,6 +242,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                     {
                         key: "customer.isCollateralAvailable",
                         type: "radios",
+                        required: true,
                         title: "COLLATERAL_AVAILABLE",
                         "titleMap": {
                             "YES": "YES",
@@ -270,6 +272,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                                     {
                                         key: "promise.promiseToPay",
                                         type: "radios",
+                                        required: true,
                                         title: "P2P_DATA_PRODIDED",
                                         "titleMap": {
                                             "YES": "YES",
@@ -280,6 +283,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                                         key: "additional.promiseToPayDate",
                                         title: "NEXT_ACTION_DATE",
                                         readonly: false,
+                                        required: true,
                                         "condition": "model.promise.promiseToPay=='YES'",
                                         type: "date",
 
@@ -288,6 +292,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                                         key: "additional.reasonType",
                                         title: "REASON_FOR_DELAY",
                                         type: "select",
+                                        required: true,
                                         "condition": "model.promise.promiseToPay=='YES'",
                                         titleMap: [{
                                             "name": "Business",
@@ -303,110 +308,32 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                                         key: "additional.reason",
                                         title: "REASON",
                                         type: "select",
+                                        required: true,
                                         condition: "model.additional.reasonType=='Business' && model.promise.promiseToPay=='YES'",
-                                        titleMap: [{
-                                            "name": "Change in business circumstance due to Govt. order",
-                                            "value": "Change in business circumstance due to Govt. order"
-                                        },
-                                            {
-                                                "name": "Payment held up with Third party ",
-                                                "value": "Payment held up with Third party"
-                                            },
-                                            {
-                                                "name": "Sudden lack of or-ders",
-                                                "value": "Sudden lack of or-ders"
-                                            },
-                                            {
-                                                "name": "Business loss",
-                                                "value": "Business loss"
-                                            },
-                                            {
-                                                "name": "Business dispute in the firm",
-                                                "value": "Business dispute in the firm"
-                                            },
-                                            {
-                                                "name": "Machine Repo and sold ",
-                                                "value": "Machine Repo and sold "
-                                            },
-                                            {
-                                                "name": "Others",
-                                                "value": "Others"
-                                            }],
+                                        enumCode: "business_overdue_reasons",
 
                                     },
                                     {
                                         key: "additional.reason",
                                         title: "REASON",
                                         type: "select",
+                                        required: true,
                                         condition: "model.additional.reasonType=='Personal' && model.promise.promiseToPay=='YES'",
-                                        titleMap: [{
-                                            "name": "Death in Family",
-                                            "value": "Death in Family "
-                                        },
-                                            {
-                                                "name": "Function in Family",
-                                                "value": "Function in Family"
-                                            },
-                                            {
-                                                "name": "Illness in Family",
-                                                "value": "Illness in Family"
-                                            },
-                                            {
-                                                "name": "Matrimonial disputes ",
-                                                "value": "Matrimonial disputes "
-                                            },
-                                            {
-                                                "name": "Others",
-                                                "value": "Others"
-                                            }],
+                                        enumCode: "personal_overdue_reasons",
 
                                     },
                                     {
                                         key: "additional.currentCollectionStatus",
                                         title: "RECOVERY_ATTEMPT",
                                         type: "select",
+                                        required: true,
                                         "condition": "model.promise.promiseToPay=='NO'",
-                                        titleMap: [{
-                                            "name": "Customer not available",
-                                            "value": "Customer not available"
-                                        },
-                                            {
-                                                "name": "Customer skip and not traceable",
-                                                "value": "Customer skip and not traceable"
-                                            },
-                                            {
-                                                "name": "No Income",
-                                                "value": "No Income"
-                                            },
-                                            {
-                                                "name": "Family Issues",
-                                                "value": "Family Issues"
-                                            },
-                                            {
-                                                "name": "Contact Again",
-                                                "value": "Contact Again"
-                                            },
-                                            {
-                                                "name": "Visited Customer Reference",
-                                                "value": "Visited Customer Reference"
-                                            },
-                                            {
-                                                "name": "Visited Co-applicant/Guarantor",
-                                                "value": "Visited Co-applicant/Guarantor"
-                                            },
-                                            {
-                                                "name": "Visited neighbor",
-                                                "value": "Visited neighbor"
-                                            },
-                                            {
-                                                "name": "Problematic Customer",
-                                                "value": "Problematic Customer"
-                                            }],
-
+                                        enumCode: "recovery_attempt",
                                     },
                                     {
                                         key: "additional.scheduledDate",
                                         title: "FOLLOW_UP_DATE",
+                                        required: true,
                                         readonly: false,
                                         "condition": "model.promise.promiseToPay=='NO' && model.additional.currentCollectionStatus=='Contact Again' ",
                                         type: "date",
@@ -416,6 +343,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                                         key: "additional.overdueReasons",
                                         title: "OVERDUE_REASON",
                                         type: "textarea",
+                                        required: true,
                                         "condition": "model.additional.reason=='Others'"
 
                                     },

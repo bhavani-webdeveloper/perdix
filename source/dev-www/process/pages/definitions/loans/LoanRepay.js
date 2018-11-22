@@ -712,34 +712,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 title: "REASON",
                                 type: "select",
                                 condition: "model.repayment.delayReasonType =='Business'",
-                                titleMap: [{
-                                    "name": "Change in business circumstance due to Govt. order",
-                                    "value": "Change in business circumstance due to Govt. order"
-                                },
-                                    {
-                                        "name": "Payment held up with Third party ",
-                                        "value": "Payment held up with Third party"
-                                    },
-                                    {
-                                        "name": "Sudden lack of or-ders",
-                                        "value": "Sudden lack of or-ders"
-                                    },
-                                    {
-                                        "name": "Business loss",
-                                        "value": "Business loss"
-                                    },
-                                    {
-                                        "name": "Business dispute in the firm",
-                                        "value": "Business dispute in the firm"
-                                    },
-                                    {
-                                        "name": "Machine Repo and sold ",
-                                        "value": "Machine Repo and sold "
-                                    },
-                                    {
-                                        "name": "Others",
-                                        "value": "Others"
-                                    }],
+                                enumCode: "business_overdue_reasons"
 
                             },
                             {
@@ -747,26 +720,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 title: "REASON",
                                 type: "select",
                                 condition: "model.repayment.delayReasonType=='Personal'",
-                                titleMap: [{
-                                    "name": "Death in Family",
-                                    "value": "Death in Family "
-                                },
-                                    {
-                                        "name": "Function in Family",
-                                        "value": "Function in Family"
-                                    },
-                                    {
-                                        "name": "Illness in Family",
-                                        "value": "Illness in Family"
-                                    },
-                                    {
-                                        "name": "Matrimonial disputes ",
-                                        "value": "Matrimonial disputes "
-                                    },
-                                    {
-                                        "name": "Others",
-                                        "value": "Others"
-                                    }],
+                                enumCode: "personal_overdue_reasons"
                             },
                             {
                                 key: "repayment.reasons",

@@ -1,17 +1,16 @@
 irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAuthorization"),
     ["$log", "$q", 'Pages_ManagementHelper', 'LoanCollection', 'LoanAccount', 'entityManager', 'PageHelper', 'formHelper', 'irfProgressMessage',
-        'SessionStore', "$state", "$stateParams", "Masters", "authService", "Utils",
+        'SessionStore', "$state", "$stateParams", "Masters", "authService", "Utils","Queries","Locking","irfNavigator",
         function ($log, $q, ManagementHelper, LoanCollection, LoanAccount, entityManager, PageHelper, formHelper, irfProgressMessage,
-            SessionStore, $state, $stateParams, Masters, authService, Utils) {
+            SessionStore, $state, $stateParams, Masters, authService, Utils,Queries,Locking,irfNavigator) {
 
             return {
                 "type": "schema-form",
                 "title": "PAYMENT_DETAILS_FOR_LOAN",
-                "processType": "Loan",
-                "processName": "Collections",
-                "lockingRequired": true,
                 initialize: function (model, form, formCtrl) {
                     $log.info("Transaction Authorization Page got initialized");
+
+                    var recordId = Queries.getLoanIdByLoanCollectionId($stateParams.pageId);
 
                     model.EMIAllocation = SessionStore.getGlobalSetting("EMIAllocation");
 
@@ -150,6 +149,17 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                                     PageHelper.showErrors(resData);
                                     backToLoansList();
                                 })
+                        }).then(function(){
+                            Locking.lock({
+                                "processType": "Loan",
+                                "processName": "Collections",
+                                "recordId": recordId.$$state.value.id
+                            }).$promise.then(function() {
+
+                            }, function(err) {
+                                irfProgressMessage.pop("Locking",err.data.error, 6000);
+                                irfNavigator.goBack();
+                            });
                         })
 
                     $q.all([p2])

@@ -10,12 +10,9 @@ irf.models.factory('ExcelUpload', [
                 url: 'process/schemas/Leadgeneration.json'
             },
             getExcelUploadJson:{
-
                 method: 'GET',
-               // url: managementUrl + '/server-ext/excel_upload_definition.json'
-                url: 'process/schemas/excel_upload_definition.json'
+                  url: managementUrl + '/server-ext/generic_excel_upload.php?definition=true'
             }
-
         });
 
         resource.ExcelFileUpload = function(file, progress, key, isTruncate) {

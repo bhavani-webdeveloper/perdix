@@ -15,6 +15,7 @@ define({
 				$log.info("View / close group got initialized");
 				model.branchId = SessionStore.getCurrentBranch().branchId;
 				model.siteCode = SessionStore.getGlobalSetting("siteCode");
+				model.groupStatus="true";
                 var bankName = SessionStore.getBankName();
                 var banks = formHelper.enum('bank').data;
                 for (var i = 0; i < banks.length; i++) {
@@ -28,21 +29,55 @@ define({
 			definition: {
 				title: "VIEW_OR_CLOSE_GROUP",
 				searchForm: [
-					"*"
+					{
+						"type": "section",
+						"items":[
+							{
+								key: "branchId",
+							},
+							{
+								key: "centre",
+							},
+							{
+								key: "partner",
+							},
+							{
+								key: "product",
+							},
+							{
+								key: "groupName",
+							},
+							{
+								key: "groupCode",
+							},
+							{
+								key: "stage",
+								"enumCode": "groupLoanStages",
+								"condition": "model.siteCode!='KGFS'",
+							},
+							{
+								key: "stage",
+								"enumCode": "group_Loan_Stages",
+								"condition": "model.siteCode =='KGFS'",
+							},
+							{
+								key: "groupStatus",
+								"type": "select",
+                                "titleMap": {
+                                    true:"Active",
+                                    false:"Closed"
+                                }
+							},
+
+						]
+					}
+					
 				],
 				//autoSearch: true,
 				searchSchema: {
 					"type": 'object',
 					"title": 'SearchOptions',
 					"properties": {
-						"partner": {
-							"type": "string",
-							"title": "PARTNER",
-							"x-schema-form": {
-								"type": "select",
-								"enumCode": "partner"
-							}
-						},
 						"branchId": {
 							"title": "BRANCH_NAME",
 							"type": ["integer", "null"],
@@ -75,6 +110,24 @@ define({
                                 "screenFilter": true
 							}
 						},
+						"partner": {
+							"type": "string",
+							"title": "PARTNER",
+							"x-schema-form": {
+								"type": "select",
+								"enumCode": "partner"
+							}
+						},
+						"product": {
+							"title": "PRODUCT_CATEGORY",
+							"type":["string", "null"],
+							"enumCode": "jlg_loan_product",
+							"x-schema-form": {
+								"type": "select",
+								"parentEnumCode": "partner",
+								"parentValueExpr": "model.partner"
+							}
+						},
 						"groupName": {
 							"title": "GROUP_NAME",
 							"type": ["string", "null"]
@@ -87,20 +140,12 @@ define({
 							"title": "STAGE",
 							"type": ["string", "null"],
 							"x-schema-form": {
-								"type": "select",
-								"enumCode": "groupLoanStages"
+								"type": "select"
 							}
 						},
 						"groupStatus":{
 							"title": "GROUP_STATUS",
-							"type": ["string", "null"],
-							"x-schema-form": {
-								"type": "select",
-                                "titleMap": {
-                                    true:"Active",
-                                    false:"Closed"
-                                }
-							}
+							"type": ["string", "null"]
 						}
 					},
 					"required": []
@@ -116,6 +161,7 @@ define({
 						'partner': searchOptions.partner,
 						//'groupStatus': true,
 						'currentStage': searchOptions.stage,
+						'product':searchOptions.product,
 						'page': pageOpts.pageNo,
 						'per_page': pageOpts.itemsPerPage,
 						'branchId': searchOptions.branchId,

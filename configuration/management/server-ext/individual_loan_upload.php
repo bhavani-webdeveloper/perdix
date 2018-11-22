@@ -192,7 +192,7 @@ foreach ($files as $file) {
 
                 $loanSave = array(
                     'loanAccount' => $loanData,
-                    'loanProcessAction' => "SAVE",
+                    'loanProcessAction' => "PROCEED",
                     'stage'=> "LoanInput"
                 );
 

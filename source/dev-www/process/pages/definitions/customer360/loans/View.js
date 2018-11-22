@@ -45,17 +45,14 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                         }
                     },
                     listOptions: {
+                        selectable: false,
+                        expandable: true,
+                        listStyle: "table",
                         itemCallback: function(item, index) {
 
                         },
                         getItems: function(response, headers){
                             if (response!=null && response.length && response.length!=0){
-                                //var arrLength = response.length;
-                                //for (var i=0; i<arrLength; i++){
-                                //    if (!_.isNull(response[i]) && _.isObject(response[i])){
-                                //        _.remove()
-                                //    }
-                                //}
                                 _.pullAll(response, [null]);
                                 return response;
                             }
@@ -65,6 +62,38 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                             return [
                                 item.accountNumber,
                                 'Type: ' + item.loanType + ', Partner: ' + item.partner + ', Product: ' + item.productCode
+                            ]
+                        },
+                        getTableConfig: function() {
+                            return {
+                                "serverPaginate": true,
+                                "paginate": true,
+                                "pageLength": 10
+                            };
+                        },
+                        getColumns: function(){
+                            var centres = formHelper.enum('centre').data;
+                            return [
+                                {
+                                    title:'NAME',
+                                    data: 'accountNumber',
+                                },
+                                {
+                                    title:'Type',
+                                    data: 'loanType'
+                                },
+                                {
+                                    title:'Partner',	
+                                    data: 'partner'
+                                },
+                                {
+                                    title:'Product',
+                                    data: 'productCode'
+                                },
+                                {
+                                    title:'Application Status',
+                                    data: 'applicationStatus',
+                                }
                             ]
                         },
                         getActions: function(){

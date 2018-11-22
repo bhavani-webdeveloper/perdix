@@ -8,6 +8,10 @@ irf.models.factory('ScoresMaintenance', ["$resource", "$httpParamSerializer", "B
                 method: 'GET',
                 url: endpoint + '/findScoreCriteriaMaster'
             }),
+            allParameterMaster : searchResource({
+                method : 'GET',
+                url : endpoint + '/findScoreParameterMaster'
+            }),
             scoreCreate: searchResource({
                 method: 'POST',
                 url: endpoint + '/createScoreMaster'

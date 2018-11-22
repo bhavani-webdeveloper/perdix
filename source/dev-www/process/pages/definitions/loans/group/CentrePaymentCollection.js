@@ -6,6 +6,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 	$stateParams, LoanProcess, PM, PageHelper, StorageService,
 	$filter, elementsUtils, Utils,PagesDefinition, irfNavigator,GroupProcess ){
 
+
 	return {
 		"id": "CentrePaymentCollection",
 		"type": "schema-form",
@@ -13,6 +14,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 		"title": "CENTRE_PAYMENT_COLLECTION",
 		"subTitle": "",
 		initialize: function (model, form, formCtrl) {
+			model.onlineResponse = false;
 			if (!model.$$STORAGE_KEY$$) {
 				model.showDenomination = false;
 
@@ -68,6 +70,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 			}
 		},
 		offlineInitialize: function (model, form, formCtrl) {
+			model.onlineresponse=false;
 			if (model.$$STORAGE_KEY$$) {
 				//formCtrl.disabled = true;
 				model._mode = 'VIEW';
@@ -727,6 +730,26 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 				"type": "submit",
 				"title": "SUBMIT"
 			}]
+		},
+		{
+			"type": "actionbox",
+			"condition": "!model.onlineResponse",
+			"items": [{
+				"type": "button",
+				"title": "Offline Print",
+				"condition": "model.onlineResponse",
+				"onClick": "actions.OfflinePrint(model, formCtrl, form, $event)"
+			}]
+		},
+		{
+			"type": "actionbox",
+			"condition": "model.onlineResponse",
+			"items": [{
+				"type": "button",
+				"title": "Print",
+				"condition": "model.onlineResponse",
+				"onClick": "actions.OnlinePrint(model, formCtrl, form, $event)"
+			}]
 		}
 		],
 		actions: {
@@ -761,6 +784,130 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 				if(!isNaN(ones)) denominationTotal+=ones;
 				model.collectionDemandSummary._denominationTotal = denominationTotal;
 				return (denominationTotal===model.collected);
+			},
+			OfflinePrint:function(model, formCtrl, form, $event){
+				if (!this.validateCollection(model, formCtrl)) {
+					return;
+				}
+				var requestObj = this.fixData(model, formCtrl, form, $event);
+				var opts = {
+					'centreName': requestObj.collectionDemandSummary.centreName,
+					'branch': requestObj.collectionDemands[0].branchName,
+					'customerBranchId':requestObj.collectionDemandSummary.customerBranchId,
+					'entity_name': SessionStore.getBankName(),
+					'group_name': requestObj.collectionDemands[0].groupName,
+					'group_code': requestObj.collectionDemands[0].groupCode,
+					'demand_date': requestObj.collectionDemands[0].demandDate,
+					'collected': requestObj.collectionDemandSummary.collected,
+					'notcollected': requestObj.collectionDemandSummary.notcollected,
+					'totalToBeCollected': requestObj.collectionDemandSummary.totalToBeCollected,
+					'company_name': "IFMR Rural Channels and Services Pvt. Ltd.",
+					'cin': 'U74990TN2011PTC081729',
+					'address1': 'IITM Research Park, Phase 1, 10th Floor',
+					'address2': 'Kanagam Village, Taramani',
+					'address3': 'Chennai - 600113, Phone: 91 44 66687000',
+					'website': "http://ruralchannels.ifmr.co.in/",
+					'helpline': '18001029370',
+				};
+
+				var print={};
+				print.paperReceipt= LoanProcess.getWebHeader(opts);
+				print.thermalReceipt= LoanProcess.getThermalHeader(opts);
+
+				for (i in requestObj.collectionDemands){
+					var cd=requestObj.collectionDemands[i];
+					var repaymentInfo={};
+					repaymentInfo.customerId=cd.customerId;
+					repaymentInfo.customerName=cd.customerName;
+					repaymentInfo.accountNumber=cd.accountNumber;
+					repaymentInfo.installmentAmount=cd.installmentAmount;
+					repaymentInfo.overdueAmount=cd.overdueAmount;
+					repaymentInfo.amountPaid=cd.amountPaid;
+					repaymentInfo.notcollected=cd.notcollected;
+					print.paperReceipt= print.paperReceipt + LoanProcess.getWebReceipt(repaymentInfo);
+					print.thermalReceipt= LoanProcess.getPrintReceipt(repaymentInfo,print.thermalReceipt);
+				}
+
+				print.paperReceipt= print.paperReceipt + LoanProcess.getWebFooter(opts);
+				print.thermalReceipt= LoanProcess.getThermalFooter(opts,print.thermalReceipt);
+
+				$log.info(print.paperReceipt);
+				$log.info(print.thermalReceipt);
+
+				//LoanProcess.PrintReceipt(print.thermalReceipt,print.paperReceipt);
+
+				Utils.confirm("Please Save the data offline,Page will redirected to Print Preview")
+                        .then(function(){
+							irfNavigator.go({
+								state: "Page.Engine",
+								pageName: "management.ReceiptPrint",
+								pageData: print
+							});
+						});
+			},
+
+			OnlinePrint:function(model, formCtrl, form, $event){
+				if(model.onlineresponseData){
+					var requestObj=model.onlineresponseData;
+					var opts = {
+						'centreName': requestObj.collectionDemandSummary.centreName,
+						'branch': requestObj.collectionDemands[0].branchName,
+						'customerBranchId':requestObj.collectionDemandSummary.customerBranchId,
+						'entity_name': SessionStore.getBankName(),
+						'group_name': requestObj.collectionDemands[0].groupName,
+						'group_code': requestObj.collectionDemands[0].groupCode,
+						'demand_date': requestObj.collectionDemands[0].demandDate,
+						'collected': requestObj.collectionDemandSummary.collected,
+						'notcollected': requestObj.collectionDemandSummary.notcollected,
+						'totalToBeCollected': requestObj.collectionDemandSummary.totalToBeCollected,
+						'company_name': "IFMR Rural Channels and Services Pvt. Ltd.",
+						'cin': 'U74990TN2011PTC081729',
+						'address1': 'IITM Research Park, Phase 1, 10th Floor',
+						'address2': 'Kanagam Village, Taramani',
+						'address3': 'Chennai - 600113, Phone: 91 44 66687000',
+						'website': "http://ruralchannels.ifmr.co.in/",
+						'helpline': '18001029370',
+					};
+	
+					var print={};
+					print.paperReceipt= LoanProcess.getWebHeader(opts);
+					print.thermalReceipt= LoanProcess.getThermalHeader(opts);
+	
+					for (i in requestObj.collectionDemands){
+						var cd=requestObj.collectionDemands[i];
+						var repaymentInfo={};
+						repaymentInfo.customerId=cd.customerId;
+						repaymentInfo.customerName=cd.customerName;
+						repaymentInfo.accountNumber=cd.accountNumber;
+						repaymentInfo.installmentAmount=cd.installmentAmount;
+						repaymentInfo.overdueAmount=cd.overdueAmount;
+						repaymentInfo.amountPaid=cd.amountPaid;
+						repaymentInfo.notcollected=cd.notcollected;
+						print.paperReceipt= print.paperReceipt + LoanProcess.getWebReceipt(repaymentInfo);
+						print.thermalReceipt= LoanProcess.getPrintReceipt(repaymentInfo,print.thermalReceipt);
+					}
+	
+					print.paperReceipt= print.paperReceipt + LoanProcess.getWebFooter(opts);
+					print.thermalReceipt= LoanProcess.getThermalFooter(opts,print.thermalReceipt);
+	
+					$log.info(print.paperReceipt);
+					$log.info(print.thermalReceipt);
+	
+					//LoanProcess.PrintReceipt(print.thermalReceipt,print.paperReceipt);
+	
+					Utils.confirm("Please Save the data offline,Page will redirected to Print Preview")
+							.then(function(){
+								irfNavigator.go({
+									state: "Page.Engine",
+									pageName: "management.ReceiptPrint",
+									pageData: print
+								});
+							});
+
+
+				}else{
+					PM.pop('collection-demand', 'No data available to Print', 5000);
+				}
 			},
 			print: function(model){
 				console.log(model);
@@ -919,6 +1066,75 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 				}
 				return deferred.promise;
 			},
+			fixData:function(model, formCtrl, formName) {
+				var requestObj ={};
+				var cds = model.collectionDemandSummary;
+				var gcd = model.groupCollectionDemand;
+				var cd = [];
+				var cdIds = [];
+				if (cds && gcd && gcd.length) {
+					cds.demandDate = moment(cds.demandDate).format('YYYY-MM-DD') + "T00:00:00Z";
+					_.each(gcd, function(group, gk){
+						_.each(group.collectiondemand, function(v,k){
+							if (v.amountPaid) {
+								cd.push(v);
+								cdIds.push(v.id);
+							}
+						});
+					});
+
+					var cashDenomination = {
+						"denominationFifty": 0,
+						"denominationFive": 0,
+						"denominationFiveHundred": 0,
+						"denominationHundred": 0,
+						"denominationTwoHundred": 0,
+						"denominationOne": 0,
+						"denominationTen": 0,
+						"denominationThousand": 0,
+						"denominationTwenty": 0,
+						"denominationTwo": 0,
+						"denominationTwoThousand": 0
+					};
+
+					var collectionDemandSummary = {};
+					collectionDemandSummary.centreId = cds.centreId;
+					collectionDemandSummary.centreName = cds.centreName;
+					collectionDemandSummary.demandDate = cds.demandDate = moment(cds.demandDate).format('YYYY-MM-DD');
+					collectionDemandSummary.latitude = cds.latitude;
+					collectionDemandSummary.collected = model.collected;
+					collectionDemandSummary.notcollected = model.notcollected;
+					collectionDemandSummary.totalToBeCollected = model.totalToBeCollected;
+					collectionDemandSummary.customerBranchId =model.customerBranchId;
+					collectionDemandSummary.longitude = cds.longitude;
+					collectionDemandSummary.photoOfCentre = cds.photoOfCentre;
+					collectionDemandSummary.totalAmount = cds._denominationTotal;
+					
+					if (model.showDenomination) {
+						cashDenomination.denominationFifty = model.collectionDemandSummary.denominationFifty;
+						cashDenomination.denominationFive = model.collectionDemandSummary.denominationFive;
+						cashDenomination.denominationFiveHundred = model.collectionDemandSummary.denominationFiveHundred;
+						cashDenomination.denominationHundred = model.collectionDemandSummary.denominationHundred;
+						cashDenomination.denominationTwoHundred = model.collectionDemandSummary.denominationTwoHundred;
+						cashDenomination.denominationOne = model.collectionDemandSummary.denominationOne;
+						cashDenomination.denominationTen = model.collectionDemandSummary.denominationTen;
+						cashDenomination.denominationThousand = model.collectionDemandSummary.denominationThousand;
+						cashDenomination.denominationTwoThousand = model.collectionDemandSummary.denominationTwoThousand;
+						cashDenomination.denominationTwenty = model.collectionDemandSummary.denominationTwenty;
+						cashDenomination.denominationTwo = model.collectionDemandSummary.denominationTwo;
+
+						collectionDemandSummary.cashDenomination = cashDenomination;
+					};
+
+					var requestObj = {
+						collectionDemandSummary: collectionDemandSummary,
+						collectionDemands: _.clone(cd)
+					};
+				}else{
+					PM.pop('collection-demand', 'Collection demand missing. Try again with correct centre.', 7000);
+				}
+				return requestObj;
+			},
 			submit: function(model, formCtrl, formName) {
 				if (!this.validateCollection(model, formCtrl)) {
 					return;
@@ -987,6 +1203,9 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 						LoanProcess.collectionDemandUpdate(requestObj,
 							function(response){
 								$log.info(response);
+								model.onlineresponse=true;
+								model.onlineresponseData=response;
+
 								PM.pop('collection-demand', 'Collection Submitted Successfully', 3000);
 								if(model.$$STORAGE_KEY$$) {
 									var fdate = moment(requestObj.collectionDemandSummary.demandDate).format('YYYY-MM-DD');

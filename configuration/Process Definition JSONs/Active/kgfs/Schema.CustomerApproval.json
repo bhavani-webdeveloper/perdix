@@ -1,0 +1,236 @@
+{
+	"type": "object",
+	"properties": {
+		"customer": {
+			"type": "object",
+			"properties": {
+                "doorNo": {
+                    "type": ["string","null"],
+					"title": "DOOR_NO",
+					"captureStages": ["Init"]
+                },
+                "street": {
+                    "type": ["string","null"],
+                    "title": "STREET",
+					"captureStages": ["Init"]
+                },
+                "postOffice": {
+                    "type": ["string","null"],
+                    "title": "POST_OFFICE",
+					"captureStages": ["Init"]
+                },
+                "landmark": {
+                    "type": ["string","null"],
+                    "title": "LANDMARK",
+					"captureStages": ["Init"]
+                },
+                "pincode": {
+                    "type": ["number","null"],
+                    "title": "PIN_CODE",
+                    "minimum": 100000,
+                    "maximum": 999999,
+					"captureStages": ["Init"]
+                },
+                "locality": {
+                    "type": ["string","null"],
+                    "title": "LOCALITY",
+					"captureStages": ["Init"]
+                },
+                "villageName": {
+                    "type": ["string","null"],
+                    "title": "VILLAGE_NAME",
+                    "enumCode": "village",
+					"captureStages": ["Init"]
+                },
+                "district": {
+                    "type": ["string","null"],
+                    "title": "DISTRICT",
+                    "enumCode": "district",
+					"captureStages": ["Init"]
+                },
+                "state": {
+                    "type": ["string","null"],
+                    "title": "STATE",
+                    "enumCode": "state_master",
+					"captureStages": ["Init"]
+                },
+                "mailingDoorNo": {
+                    "type": ["string","null"],
+                    "title": "DOOR_NO",
+					"captureStages": ["Init"]
+                },
+                "mailingStreet": {
+                    "type": ["string","null"],
+                    "title": "STREET",
+					"captureStages": ["Init"]
+                },
+                "mailingPostoffice": {
+                    "type": ["string","null"],
+                    "title": "POST_OFFICE",
+					"captureStages": ["Init"]
+                },
+                "mailingPincode": {
+                    "type": ["string","null"],
+                    "title": "PIN_CODE",
+					"captureStages": ["Init"]
+                },
+                "mailingLocality": {
+                    "type": ["string","null"],
+                    "title": "LOCALITY",
+					"captureStages": ["Init"]
+                },
+                "mailingDistrict": {
+                    "type": ["string","null"],
+                    "title": "DISTRICT",
+                    "enumCode": "district",
+					"captureStages": ["Init"]
+                },
+                "mailingState": {
+                    "type": ["string","null"],
+                    "title": "STATE",
+                    "enumCode": "state_master",
+					"captureStages": ["Init"]
+                },
+                "dateOfBirth": {
+                    "type": ["string","null"],
+                    "title": "DATE_OF_BIRTH",
+                    "format": "date",
+					"captureStages": ["Init"]
+                },
+                "mobilePhone": {
+                    "type": ["string","null"],
+                    "title": "MOBILE_PHONE",
+                    "minLength": 10,
+                    "maxLength": 10,
+					"captureStages": ["Init"]
+                },
+                "landLineNo": {
+                    "type": ["string","null"],
+                    "title": "LANDLINE_NO",
+                    "minLength": 5,
+                    "maxLength": 15,
+					"captureStages": ["Init"]
+                },
+                "gender": {
+                    "type": ["string","null"],
+                    "title": "GENDER",
+                    "enumCode": "gender",
+					"captureStages": ["Init"]
+                },
+                "ownership": {
+                    "type": ["string","null"],
+                    "title": "OWNERSHIP",
+                    "enumCode": "ownership",
+					"captureStages": ["Init"]
+                },
+                "photoImageId": {
+                    "title" : "CUSTOMER_PHOTO",
+                    "type": ["string","null"],
+                    "category": "CustomerEnrollment",
+                    "subCategory": "PHOTO",
+                    "captureStages": ["Init"]
+                },
+                
+                "id": {
+                    "type": ["number","null"],
+                    "title": "CUSTOMER_ID",
+                    "captureStages": ["Init"]
+
+                },
+                "urnNo": {
+                    "type": ["string","null"],
+                    "title": "URN_NO",
+                    "captureStages": ["Init"]
+                },
+                "firstName": {
+                    "type": ["string","null"],
+                    "title": "FIRST_NAME",
+                    "captureStages": ["Init"]
+                },
+                "branchName": {
+                    "type": ["string","null"],
+                    "title": "BRANCH_NAME",
+                    "captureStages": ["Init"]
+                },
+                "latitude": {
+                    "title": "GPS_LOCATION",
+                    "type": ["string","null"],
+                    "captureStages": ["Init"]
+                },
+                "leftHandThumpImageId": {
+                    "type": ["string", "null"],
+                    "title": "FINGERPRINT",
+                    "category": "CustomerEnrollment",
+                    "subCategory": "FINGERPRINT",
+                    "captureStages": ["Init"]
+                },
+                "leftHandIndexImageId": {
+                    "type": ["string", "null"],
+                    "title": "FINGERPRINT",
+                    "category": "CustomerEnrollment",
+                    "subCategory": "FINGERPRINT",
+                    "captureStages": ["Init"]
+                },
+                "leftHandMiddleImageId": {
+                    "type": ["string", "null"],
+                    "title": "FINGERPRINT",
+                    "category": "CustomerEnrollment",
+                    "subCategory": "FINGERPRINT",
+                    "captureStages": ["Init"]
+                },
+                "leftHandRingImageId": {
+                    "type": ["string", "null"],
+                    "title": "FINGERPRINT",
+                    "category": "CustomerEnrollment",
+                    "subCategory": "FINGERPRINT",
+                    "captureStages": ["Init"]
+                },
+                "leftHandSmallImageId": {
+                    "type": ["string", "null"],
+                    "title": "FINGERPRINT",
+                    "category": "CustomerEnrollment",
+                    "subCategory": "FINGERPRINT",
+                    "captureStages": ["Init"]
+                },
+                "rightHandThumpImageId": {
+                    "type": ["string", "null"],
+                    "title": "FINGERPRINT",
+                    "category": "CustomerEnrollment",
+                    "subCategory": "FINGERPRINT",
+                    "captureStages": ["Init"]
+                },
+                "rightHandIndexImageId": {
+                    "type": ["string", "null"],
+                    "title": "FINGERPRINT",
+                    "category": "CustomerEnrollment",
+                    "subCategory": "FINGERPRINT",
+                    "captureStages": ["Init"]
+                },
+                "rightHandMiddleImageId": {
+                    "type": ["string", "null"],
+                    "title": "FINGERPRINT",
+                    "category": "CustomerEnrollment",
+                    "subCategory": "FINGERPRINT",
+                    "captureStages": ["Init"]
+                },
+                "rightHandRingImageId": {
+                    "type": ["string", "null"],
+                    "title": "FINGERPRINT",
+                    "category": "CustomerEnrollment",
+                    "subCategory": "FINGERPRINT",
+                    "captureStages": ["Init"]
+                },
+                "rightHandSmallImageId": {
+                    "type": ["string", "null"],
+                    "title": "FINGERPRINT",
+                    "category": "CustomerEnrollment",
+                    "subCategory": "FINGERPRINT",
+                    "captureStages": ["Init"]
+                }
+			}
+		}
+	},
+	"required": [
+		"customer"
+	]
+}
