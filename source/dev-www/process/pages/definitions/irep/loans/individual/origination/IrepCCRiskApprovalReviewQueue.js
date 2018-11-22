@@ -86,7 +86,7 @@ define({
 				getResultsPromise: function(searchOptions, pageOpts) {
 					
 					return IndividualLoan.search({
-	                    'stage': 'IrepCCRiskApproval',
+	                    'stage': 'IrepCCRiskApprovalReview',
 						'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
