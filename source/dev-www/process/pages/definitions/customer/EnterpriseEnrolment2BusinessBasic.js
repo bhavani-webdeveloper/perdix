@@ -1609,7 +1609,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                     ];
                                 },
                                 onSelect: function(result, model, context) {
-                                    model.customer.fixedAssetsMachinaries[context.arrayIndex].manufacturerName=result.machineName;
+                                    //model.customer.fixedAssetsMachinaries[context.arrayIndex].manufacturerName=result.machineName;
                                     priceCalculation(null, null, model);
                                     if (model.customer.fixedAssetsMachinaries[model.arrayIndex].marketPrice && model.customer.fixedAssetsMachinaries[model.arrayIndex].presentValue) {
                                         model.customer.fixedAssetsMachinaries[model.arrayIndex].finalPrice = Math.round(((model.customer.fixedAssetsMachinaries[model.arrayIndex].presentValue+model.customer.fixedAssetsMachinaries[model.arrayIndex].marketPrice) /2)*100)/100;
