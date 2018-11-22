@@ -85,7 +85,8 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 			},
 			"Page/Engine/customer360.Recapture",
 			"Page/Engine/customer360.CustomerHistorySummary",
-			"Page/Engine/customer360.CustomerDeathMarking"
+			"Page/Engine/customer360.CustomerDeathMarking",
+			"Page/Engine/customer360.loans.CustomerGroupsView"
 		]
 	};
 	//"Page/CustomerHistory",
@@ -111,7 +112,8 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 			"Page/Engine/customer360.CustomerHistorySummary",
 			"Page/Engine/customer360.Recapture",
 			"Page/Engine/customer360.CustomerSummaryView",
-			"Page/Engine/customer360.CustomerDeathMarking"
+			"Page/Engine/customer360.CustomerDeathMarking",
+			"Page/Engine/customer360.loans.CustomerGroupsView"
 
 		]
 	};
@@ -494,6 +496,12 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
         if ($scope.dashboardDefinition.$menuMap['Page/Engine/customer360.loans.Service'])
 		$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.loans.Service'].onClick = function(event, menu) {
 			menu.stateParams.pageData = {pageType:'Service'};
+			menu.stateParams.pageId = $scope.model.customer.urnNo;
+			return $q.resolve(menu);
+		};
+
+		if ($scope.dashboardDefinition.$menuMap['Page/Engine/customer360.loans.CustomerGroupsView'])
+		$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.loans.CustomerGroupsView'].onClick = function(event, menu) {
 			menu.stateParams.pageId = $scope.model.customer.urnNo;
 			return $q.resolve(menu);
 		};

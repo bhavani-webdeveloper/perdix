@@ -89,3 +89,4 @@ reassignment.list = SELECT l.id AS loanId,l.screening_date AS screeningDate,c.fi
 userBasic.one = SELECT id FROM users WHERE user_id = :userId
 
 loanIdByloanCollectionId.one=  select id from loan_accounts where account_number in (select account_number from loan_collections where id = :id)
+getCustomerGroups.list= SELECT j.group_id,g.group_code,g.group_name,g.group_category,g.partner_code,g.branch_id FROM jlg_group_members j left join jlg_groups g on j.group_id=g.id WHERE j.urn_no=:urn_no and g.group_status='1'
