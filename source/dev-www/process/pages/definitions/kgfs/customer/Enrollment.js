@@ -911,6 +911,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                                 });
                             }
 
+                            if(model.$$STORAGE_KEY$$){
+                                $log.info(model);
+                            }
+
                             model.isFPEnrolled = function(fingerId) {
                                 if (model.customer[BiometricService.getFingerTF(fingerId)] != null || (typeof(model.customer.$fingerprint) != 'undefined' && typeof(model.customer.$fingerprint[fingerId]) != 'undefined' && model.customer.$fingerprint[fingerId].data != null)) {
                                     return "fa-check text-success";
@@ -990,6 +994,20 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                             Utils.getFullName(item.customer.firstName, item.customer.middleName, item.customer.lastName),
                             item.customer.villageName
                         ]
+                    },
+                    offlineInitialize: function(model, form, formCtrl) {
+                        $log.info(model);
+                        model.isFPEnrolled = function(fingerId) {
+                            if (model.customer[BiometricService.getFingerTF(fingerId)] != null || (typeof(model.customer.$fingerprint) != 'undefined' && typeof(model.customer.$fingerprint[fingerId]) != 'undefined' && model.customer.$fingerprint[fingerId].data != null)) {
+                                return "fa-check text-success";
+                            }
+                            return "fa-close text-danger";
+                        }
+        
+                        model.getFingerLabel = function(fingerId) {
+                            return BiometricService.getLabel(fingerId);
+                        }
+
                     },
                     form: [],
 
