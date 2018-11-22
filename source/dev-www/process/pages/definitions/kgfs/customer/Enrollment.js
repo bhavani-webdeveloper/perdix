@@ -274,9 +274,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                             },
                         },
                         "familyDetails.familyMembers": {
+                            "startEmpty":true,
                             onArrayAdd: function(value, form, model, formCtrl, event) {
                                 if ((model.customer.familyMembers.length - 1) === 0) {
-                                    model.customer.familyMembers[0].relationShip = 'self';
+                                    model.customer.familyMembers[0].relationShip = 'Self';
                                     model.customer.familyMembers[0].gender = model.customer.gender;
                                     model.customer.familyMembers[0].dateOfBirth = model.customer.dateOfBirth;
                                     model.customer.familyMembers[0].age = model.customer.age;
@@ -298,10 +299,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                             }
                         },
                         "familyDetails.familyMembers.relationShip": {
+                            "condition":"model.customer.familyMembers[arrayIndex].relationShip=='Self'",
+                            "readonly":true
+                        },
+                        "familyDetails.familyMembers.relationShip": {
                             "onChange": function(modelValue, form, model, formCtrl, event) {
-                                if (model.customer.familyMembers[form.arrayIndex].relationShip == 'self') {
+                                if (model.customer.familyMembers[form.arrayIndex].relationShip == 'Self') {
                                     for (var index = 0; index < model.customer.familyMembers.length; index++) {
-                                        if (index != form.arrayIndex && model.customer.familyMembers[index].relationShip == 'self') {
+                                        if (index != form.arrayIndex && model.customer.familyMembers[index].relationShip == 'Self') {
                                             model.customer.familyMembers[form.arrayIndex].relationShip = undefined;
                                             Utils.alert("self relationship is already selected");
                                             return;
@@ -309,7 +314,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                                     }
                                 }
     
-                                if (model.customer.familyMembers[form.arrayIndex].relationShip == 'self') {
+                                if (model.customer.familyMembers[form.arrayIndex].relationShip == 'Self') {
                                     model.customer.familyMembers[form.arrayIndex].gender = model.customer.gender;
                                     model.customer.familyMembers[form.arrayIndex].dateOfBirth = model.customer.dateOfBirth;
                                     model.customer.familyMembers[form.arrayIndex].age = model.customer.age;
@@ -396,45 +401,110 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                         "assets.physicalAssets": {
                             titleExpr: "model.customer.physicalAssets[arrayIndex].assetType",
                         },
-                        "assets.physicalAssets.ownedAssetDetails": {
+                        "assets.physicalAssets.assetType": {
+                            "title": "ASSET_TYPE",
                             type: "lov",
                             autolov: true,
-                            lovonly: true,
+                            lovonly:true,
                             bindMap: {},
                             searchHelper: formHelper,
                             search: function(inputModel, form, model, context) {
-                                var assetType = model.customer.physicalAssets[context.arrayIndex].assetType;
-                                var ownedAssetDetails = formHelper.enum('asset_Details').data;
-                                var out = [];
-                                if (ownedAssetDetails && ownedAssetDetails.length) {
-                                    for (var i = 0; i < ownedAssetDetails.length; i++) {
-    
-                                        if ((ownedAssetDetails[i].parentCode).toUpperCase() == (assetType).toUpperCase()) {
-                                            out.push({
-                                                name: ownedAssetDetails[i].name,
-                                                id: ownedAssetDetails[i].value
-                                            })
-                                        }
-                                    }
-                                }
-                                if (!out.length) {
-                                    out.push({
+                                var assetDetails =[];
+                                assetDetails = formHelper.enum('asset_type').data;
+                                if(!assetDetails.length)
+                                {
+                                    assetDetails.push({
                                         name: "No Records",
                                     })
                                 }
                                 return $q.resolve({
                                     headers: {
-                                        "x-total-count": out.length
+                                        "x-total-count": assetDetails.length
                                     },
-                                    body: out
+                                    body: assetDetails
                                 });
                             },
                             onSelect: function(valueObj, model, context) {
                                 if (valueObj.name == "No Records") {
+                                    model.customer.physicalAssets[context.arrayIndex].assetType = '';
                                     model.customer.physicalAssets[context.arrayIndex].ownedAssetDetails = '';
+                                    model.customer.physicalAssets[context.arrayIndex].unit = '';
+                                    model.customer.ownedAssetDetails = [];
+                                    model.customer.assetunit = [];
                                 } else {
-                                    model.customer.physicalAssets[context.arrayIndex].ownedAssetDetails = valueObj.name;
+                                    var assetType = model.customer.physicalAssets[context.arrayIndex].assetType = valueObj.name;
+                                    model.customer.physicalAssets[context.arrayIndex].ownedAssetDetails = '';
+                                    model.customer.physicalAssets[context.arrayIndex].unit = '';
+                                    var ownedAssetDetails = formHelper.enum('asset_Details').data;
+                                    var assetunit = formHelper.enum('asset_unit').data;
+                                    model.customer.ownedAssetDetails = [];
+                                    model.customer.assetunit = [];
+                                    if (ownedAssetDetails && ownedAssetDetails.length) {
+                                        for (var i = 0; i < ownedAssetDetails.length; i++) {
+
+                                            if ((ownedAssetDetails[i].parentCode).toUpperCase() == (assetType).toUpperCase()) {
+                                                model.customer.ownedAssetDetails.push({
+                                                    name: ownedAssetDetails[i].name,
+                                                    id: ownedAssetDetails[i].value
+                                                })
+                                            }
+                                        }
+                                    }
+                                    if (assetunit && assetunit.length) {
+                                        for (var i = 0; i < assetunit.length; i++) {
+                                            if ((assetunit[i].parentCode).toUpperCase() == (assetType).toUpperCase()) {
+                                                model.customer.assetunit.push({
+                                                    name: assetunit[i].name,
+                                                })
+                                            }
+                                        }
+                                    }
+                                    if (model.customer.ownedAssetDetails.length && model.customer.ownedAssetDetails.length > 0) {
+                                        model.customer.physicalAssets[context.arrayIndex].ownedAssetallowed = true;
+                                        model.customer.physicalAssets[context.arrayIndex].assetunitallowed = false;
+
+                                    }
+                                    if (model.customer.assetunit.length && model.customer.assetunit.length > 0) {
+                                        model.customer.physicalAssets[context.arrayIndex].assetunitallowed = true;
+                                        model.customer.physicalAssets[context.arrayIndex].ownedAssetallowed = false;
+                                    }
                                 }
+                            },
+                            getListDisplayItem: function(item, index) {
+                                return [
+                                    item.name
+                                ];
+                            }
+                        },
+                        "assets.physicalAssets.ownedAssetDetails": {
+                            condition: "model.customer.physicalAssets[arrayIndex].ownedAssetallowed",
+                            "required":true,
+                            type: "lov",
+                            autolov: true,
+                            lovonly:true,
+                            bindMap: {},
+                            searchHelper: formHelper,
+                            search: function(inputModel, form, model, context) {
+                                if(!model.customer.ownedAssetDetails.length)
+                                {
+                                    model.customer.ownedAssetDetails.push({
+                                        name: "No Records",
+                                    })
+                                }
+                                return $q.resolve({
+                                    headers: {
+                                        "x-total-count": model.customer.ownedAssetDetails.length
+                                    },
+                                    body: model.customer.ownedAssetDetails
+                                });
+                            },
+                            onSelect: function(valueObj, model, context) {
+                            if(valueObj.name=="No Records")
+                            {
+                                model.customer.physicalAssets[context.arrayIndex].ownedAssetDetails = ''; 
+                            }else{
+                                model.customer.physicalAssets[context.arrayIndex].ownedAssetDetails = valueObj.name;
+                            }
                             },
                             getListDisplayItem: function(item, index) {
                                 return [
@@ -444,43 +514,34 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                         },
                         "assets.physicalAssets.unit": {
                             "title": "UNIT",
+                            condition: "model.customer.physicalAssets[arrayIndex].assetunitallowed",
+                            "required":true,
                             type: "lov",
                             autolov: true,
-                            lovonly: true,
+                            lovonly:true,
                             bindMap: {},
                             searchHelper: formHelper,
                             search: function(inputModel, form, model, context) {
-                                var assetType = model.customer.physicalAssets[context.arrayIndex].assetType;
-                                var assetunit = formHelper.enum('asset_unit').data;
-                                var out = [];
-                                if (assetunit && assetunit.length) {
-                                    for (var i = 0; i < assetunit.length; i++) {
-    
-                                        if ((assetunit[i].parentCode).toUpperCase() == (assetType).toUpperCase()) {
-                                            out.push({
-                                                name: assetunit[i].name,
-                                            })
-                                        }
-                                    }
-                                }
-                                if (!out.length) {
-                                    out.push({
+                                if(!model.customer.assetunit.length)
+                                {
+                                    model.customer.assetunit.push({
                                         name: "No Records",
                                     })
                                 }
                                 return $q.resolve({
                                     headers: {
-                                        "x-total-count": out.length
+                                        "x-total-count": model.customer.assetunit.length
                                     },
-                                    body: out
+                                    body: model.customer.assetunit
                                 });
                             },
                             onSelect: function(valueObj, model, context) {
-                                if (valueObj.name == "No Records") {
-                                    model.customer.physicalAssets[context.arrayIndex].unit = '';
-                                } else {
-                                    model.customer.physicalAssets[context.arrayIndex].unit = valueObj.name;
-                                }
+                            if(valueObj.name=="No Records")
+                            {
+                                model.customer.physicalAssets[context.arrayIndex].unit = ''; 
+                            }else{
+                                model.customer.physicalAssets[context.arrayIndex].unit = valueObj.name;
+                            }
                             },
                             getListDisplayItem: function(item, index) {
                                 return [
@@ -564,7 +625,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                         },
                         "HouseVerification": {
                             orderNo: 131
+                        },
+                        "bankAccounts.customerBankAccounts.confirmedAccountNumber":{
+                            "title":"Confirm Account Number"
                         }
+
                     }
                 }
                 var getIncludes = function (model) {
@@ -670,6 +735,28 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                     "familyDetails.familyMembers.incomes.incomeEarned",
                     "familyDetails.familyMembers.incomes.frequency",
                     "familyDetails.familyMembers.incomes.monthsPerYear",
+                    "bankAccounts",
+                    "bankAccounts.customerBankAccounts",
+                    "bankAccounts.customerBankAccounts.ifscCode",
+                    "bankAccounts.customerBankAccounts.customerBankName",
+                    "bankAccounts.customerBankAccounts.customerBankBranchName",
+                    "bankAccounts.customerBankAccounts.customerNameAsInBank",
+                    "bankAccounts.customerBankAccounts.accountNumber",
+                    "bankAccounts.customerBankAccounts.confirmedAccountNumber",
+                    "bankAccounts.customerBankAccounts.accountType",
+                    "bankAccounts.customerBankAccounts.bankingSince",
+                    "bankAccounts.customerBankAccounts.netBankingAvailable",
+                    "bankAccounts.customerBankAccounts.sanctionedAmount",
+                    "bankAccounts.customerBankAccounts.limit",
+                    "bankAccounts.customerBankAccounts.bankStatementDocId",
+                    "bankAccounts.customerBankAccounts.bankStatements",
+                    "bankAccounts.customerBankAccounts.bankStatements.startMonth",
+                    "bankAccounts.customerBankAccounts.bankStatements.totalDeposits",
+                    "bankAccounts.customerBankAccounts.bankStatements.totalWithdrawals",
+                    "bankAccounts.customerBankAccounts.bankStatements.balanceAsOn15th",
+                    "bankAccounts.customerBankAccounts.bankStatements.noOfChequeBounced",
+                    "bankAccounts.customerBankAccounts.bankStatements.noOfEmiChequeBounced",
+                    "bankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto",
                     "Liabilities1",
                     "Liabilities1.liabilities",
                     "Liabilities1.liabilities.loanType",
@@ -685,6 +772,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                     "assets.physicalAssets",
                     "assets.physicalAssets.assetType",
                     "assets.physicalAssets.ownedAssetDetails",
+                    "assets.physicalAssets.unit",
                     "assets.physicalAssets.numberOfOwnedAsset",
                     "assets.physicalAssets.ownedAssetValue",
                     "assets.financialAssets",
@@ -792,6 +880,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                                     .subscribe(function(value){
                                         model.enrolmentProcess=value;
                                         model.customer=model.enrolmentProcess.customer;
+                                        model.customer.addressProofSameAsIdProof = (model.customer.title == "true") ? true : false;
+                                        model = EnrollmentHelper.fixData(model);
                                         var deferred = $q.defer();
                                         var promise = deferred.promise;
                                         promise.then(function(resp) {
@@ -815,6 +905,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                                         }
                                         model.customer.customerBranchId = allowedBranch.length ? allowedBranch[0].value : '';
                                         model.customer.kgfsBankName = SessionStore.getBankName();
+                                        model.customer.familyMembers=[];
+                                        model.customer.expenditures=[];
                                         self.form = IrfFormRequestProcessor.getFormDefinition('IndividualEnrollment', formRequest, configFile(), model);
                                 });
                             }
@@ -939,13 +1031,62 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                             var actions = this.actions;
                             $log.info("Inside submit()");
                             $log.warn(model);
+                            model.customer.title = String(model.customer.addressProofSameAsIdProof);
+                            model.customer.miscellaneous = null;
                             if (!EnrollmentHelper.validateData(model)) {
                                 $log.warn("Invalid Data, returning false");
                                 return false;
                             }
+                            if (!EnrollmentHelper.validateBankAccounts(model)) {
+                                $log.warn("Invalid Data, returning false");
+                                PageHelper.hideLoader();
+                                return false;
+                            }
                             model.siteCode = SessionStore.getGlobalSetting('siteCode');
                             var reqData = _.cloneDeep(model);
-                            EnrollmentHelper.fixData(reqData);
+                            var out = model.customer.$fingerprint;
+                            var fpPromisesArr = [];
+                            for (var key in out) {
+                                if (out.hasOwnProperty(key) && out[key].data!=null) {
+                                    (function(obj){
+                                        var promise = Files.uploadBase64({file: obj.data, type: 'CustomerEnrollment', subType: 'FINGERPRINT', extn:'iso'}, {}).$promise;
+                                        promise.then(function(data){
+                                            model.customer[obj.table_field] = data.fileId;
+                                            delete model.customer.$fingerprint[obj.fingerId];
+                                        });
+                                        fpPromisesArr.push(promise);
+                                    })(out[key]);
+                                } else {
+                                    if (out[key].data == null){
+                                        delete out[key];
+                                    }
+            
+                                }
+                            }
+                            $q.all(fpPromisesArr).then(function(){
+                                /** Valid check whether the user have enrolled or fingerprints or not **/
+                                 if (!(_.has(reqData['customer'], 'leftHandThumpImageId') && !_.isNull(reqData['customer']['leftHandThumpImageId']) &&
+                                    _.has(reqData['customer'], 'leftHandIndexImageId') && !_.isNull(reqData['customer']['leftHandIndexImageId']) &&
+                                   _.has(reqData['customer'], 'leftHandMiddleImageId') && !_.isNull(reqData['customer']['leftHandMiddleImageId']) &&
+                                    _.has(reqData['customer'], 'leftHandRingImageId') && !_.isNull(reqData['customer']['leftHandRingImageId']) &&
+                                     _.has(reqData['customer'], 'leftHandSmallImageId') && !_.isNull(reqData['customer']['leftHandSmallImageId']) &&
+                                     _.has(reqData['customer'], 'rightHandThumpImageId') && !_.isNull(reqData['customer']['rightHandThumpImageId']) &&
+                                    _.has(reqData['customer'], 'rightHandIndexImageId') && !_.isNull(reqData['customer']['rightHandIndexImageId']) &&
+                                     _.has(reqData['customer'], 'rightHandMiddleImageId') && !_.isNull(reqData['customer']['rightHandMiddleImageId']) &&
+                                    _.has(reqData['customer'], 'rightHandRingImageId') && !_.isNull(reqData['customer']['rightHandRingImageId']) &&
+                                     _.has(reqData['customer'], 'rightHandSmallImageId') && !_.isNull(reqData['customer']['rightHandSmallImageId'])
+                                 )) {
+                                     PageHelper.showErrors({
+                                        "data": {
+                                            "error": "Fingerprints are not enrolled. Please check"
+                                        }
+                                    });
+                                     PageHelper.hideLoader();
+            
+                                     return;
+                                 }
+                            
+            
         
                             try {
                                 var liabilities = reqData['customer']['liabilities'];
@@ -1018,24 +1159,32 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                                     $state.go('Page.Landing', null);
                                 });
                             } else {
+                                //reqData.customer.currentStage="Stage02";
                                 EnrollmentHelper.saveData(reqData).then(function(res) {
-                                    if (model._lead) {
-                                        var leadReqData = {
-                                            lead: _.cloneDeep(model._lead),
+                                    model.customer = _.clone(res.customer);
+                                    model.customer.addressProofSameAsIdProof = (model.customer.title == "true") ? true : false;
+                                    model = EnrollmentHelper.fixData(model);
+                                    if (model.customer.id && _.hasIn(model, "lead.id")) {
+                                        var reqData = {
+                                            lead: _.cloneDeep(model.lead),
                                             stage: "Completed"
                                         }
-                                        leadReqData.lead.leadStatus = "Complete";
-                                        LeadHelper.proceedData(leadReqData);
+                                        reqData.lead.leadStatus = "Complete";
+                                        LeadHelper.proceedData(reqData)
                                     }
                                     EnrollmentHelper.proceedData(res).then(function(resp) {
                                         PageHelper.showProgress('enrolment', 'Done.', 5000);
-                                        $state.go('Page.Landing', null);
+                                        model.customer = _.clone(res.customer);
+                                        model.customer.addressProofSameAsIdProof = (model.customer.title == "true") ? true : false;
+                                        model = EnrollmentHelper.fixData(model);
+                                        //$state.go('Page.Landing', null);
                                     }, function(err) {
                                         Utils.removeNulls(res.customer, true);
                                         model.customer = res.customer;
                                     });
                                 });
                             }
+                            });
                         },
                         // save: function (model, formCtrl, form, $event) {
                         //     PageHelper.clearErrors();
@@ -1123,6 +1272,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                         //             PageHelper.hideLoader();
                         //         });
                         // }
+                    
                     }
                 };
             }
