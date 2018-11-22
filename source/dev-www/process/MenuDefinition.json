@@ -18,6 +18,7 @@
                 "Page/Engine/CustomerSearch",
                 "Page/Engine/FSOCustomerSearch",
                 "Page/Engine/ProfileInformation",
+                "Page/Engine/kgfs.customer.Enrollment",
                 "Page/Engine/customer.IndividualEnrollment",
                 "Page/Engine/customer.EnterpriseEnrollment",
                 "Page/Engine/customer.IndividualEnrollment3",
@@ -95,6 +96,7 @@
                 "Page/Engine/management.TaggingMaintenance",
                 "Page/ReferenceCodeDashboard",
                 "Page/Adhoc/management.BranchCreationDashboard",
+                "Page/ScoreParameterMaintenanceDashboard",
                 "Page/CentreCreationDashboard",
                 "Page/UserDashboard",
                 "Page/Adhoc/bank.Survey.SurveyDashboard", {

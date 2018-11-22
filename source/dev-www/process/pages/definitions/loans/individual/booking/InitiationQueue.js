@@ -110,21 +110,12 @@ function($log, irfNavigator, formHelper,EntityManager, IndividualLoan,$state, Se
 						desc: "",
 						icon: "fa fa-book",
 						fn: function(item, index){
-							Locking.findlocks({recordId : item.loanId }, {}, function (resp, headers) {
-								if (resp.body.length != 0 && item.loanId == resp.body[0].recordId) {
-									irfProgressMessage.pop("Selected list", "File is Locked, Please unlock from AdminScreen", 4000);
-							}else {
-									irfNavigator.go({
-										'state': 'Page.Engine',
-										'pageName': 'loans.individual.booking.LoanInput',
-										'pageId': item.loanId,
-										'pageData': item
-									});
-								}
-							}, function (resp) {
-								$log.error(resp);
-							});
-														
+							irfNavigator.go({
+								'state': 'Page.Engine',
+								'pageName': 'loans.individual.booking.LoanInput',
+								'pageId': item.loanId,
+								'pageData': item
+							});								
 						},
 						isApplicable: function(item, model){
 							return model.searchOptions.siteCode != 'sambandh';

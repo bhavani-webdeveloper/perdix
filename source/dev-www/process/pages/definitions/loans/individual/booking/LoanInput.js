@@ -236,7 +236,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
             "title": "LOAN_INPUT",
             "subTitle": "",
             "processType": "Loan",
-            "processName": "Origination",
+            "processName": "Booking",
             "lockingRequired": true,
             initialize: function (model, form, formCtrl) {
                 // TODO default values needs more cleanup

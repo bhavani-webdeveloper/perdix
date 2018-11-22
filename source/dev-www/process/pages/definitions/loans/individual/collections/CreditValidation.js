@@ -1,14 +1,18 @@
-irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidation"), ["$log", "$q", 'Pages_ManagementHelper', 'LoanCollection', 'LoanAccount', 'PageHelper', 'formHelper', 'irfProgressMessage',"Locking",
-    'SessionStore', "$state", "$stateParams", "Masters", "authService", "Utils", "Queries",
-    function ($log, $q, ManagementHelper, LoanCollection, LoanAccount, PageHelper, formHelper, irfProgressMessage,Locking,
-        SessionStore, $state, $stateParams, Masters, authService, Utils, Queries) {
+irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidation"), ["$log", "$q", 'Pages_ManagementHelper', 'LoanCollection', 'LoanAccount', 'PageHelper', 'formHelper', 'irfProgressMessage', "Locking",
+    'SessionStore', "$state", "$stateParams", "Masters", "authService", "Utils", "Queries","IndividualLoan","irfNavigator",
+    function ($log, $q, ManagementHelper, LoanCollection, LoanAccount, PageHelper, formHelper, irfProgressMessage, Locking,
+        SessionStore, $state, $stateParams, Masters, authService, Utils, Queries,IndividualLoan,irfNavigator) {
 
         return {
             "type": "schema-form",
             "title": "PAYMENT_DETAILS_FOR_LOAN",
-           
+
             initialize: function (model, form, formCtrl) {
                 $log.info("Credit Validation Page got initialized");
+                var recordId = null;
+                recordId = Queries.getLoanIdByLoanCollectionId($stateParams.pageId);
+                
+
                 if (!model._credit) {
                     $log.info("Screen directly launched hence redirecting to queue screen");
                     $state.go('Page.Engine', {
@@ -30,7 +34,8 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidati
                 }
 
                 model.workingDate = SessionStore.getCBSDate();
-
+                
+               
                 //PageHelper.showLoader();
                 irfProgressMessage.pop('loading-Credit validation-details', 'Loading Credit validation Details');
                 //PageHelper
@@ -62,7 +67,18 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidati
                                     function (response) {
                                         model.loanCustomerRelations = response;
                                     }
-                                )
+                                ).then(function(){
+                                    Locking.lock({
+                                        "processType": "Loan",
+                                        "processName": "Collections",
+                                        "recordId": recordId.$$state.value.id
+                                    }).$promise.then(function() {
+
+                                    }, function(err) {
+                                        irfProgressMessage.pop("Locking",err.data.error, 6000);
+                                        irfNavigator.goBack();
+                                    });
+                                })
                                 model.loanAccount.netPayoffAmount = Utils.roundToDecimal(data.payOffAmount + data.preclosureFee - data.securityDeposit);
                                 model.creditValidation = model.creditValidation || {};
                                 model.creditValidation.enterprise_name = data.customer1FirstName;

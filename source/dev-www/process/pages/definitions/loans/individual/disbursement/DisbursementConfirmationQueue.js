@@ -120,19 +120,11 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
                                     name: "Confirm Disbursement",
                                     desc: "",
                                     fn: function (item, index) {
-                                        Locking.findlocks({recordId : item.loanId }, {}, function (resp, headers) {
-											if (resp.body.length != 0 && item.loanId == resp.body[0].recordId) {
-												irfProgressMessage.pop("Selected list", "File is Locked, Please unlock from AdminScreen", 4000);
-										}else {
-                                                entityManager.setModel('loans.individual.disbursement.DisbursementConfirmation', { _disbursementConfirmation: item });
+                                        entityManager.setModel('loans.individual.disbursement.DisbursementConfirmation', { _disbursementConfirmation: item });
                                                 $state.go("Page.Engine", {
                                                     pageName: "loans.individual.disbursement.DisbursementConfirmation",
                                                     pageId: [item.loanId, item.id].join(".")
                                                 });
-                                            }
-                                        }, function (resp) {
-                                            $log.error(resp);
-                                        });
                                     },
                                     isApplicable: function (item, index) {
                                         return true;

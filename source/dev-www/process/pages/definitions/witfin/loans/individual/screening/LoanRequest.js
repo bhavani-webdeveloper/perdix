@@ -219,7 +219,7 @@ define([], function() {
                                     "readonly": true
                                 },
                                 "LoanRecommendation":{
-                                    "orderNo":50
+                                    "orderNo":60
                                 }
                             }
                         },
@@ -376,7 +376,7 @@ define([], function() {
                                     "readonly": true
                                 },
                                 "LoanRecommendation":{
-                                    "orderNo":50
+                                    "orderNo":60
                                 }
                             }
                         },
@@ -401,7 +401,7 @@ define([], function() {
                                     "readonly": true
                                 },
                                 "LoanRecommendation":{
-                                    "orderNo":50
+                                    "orderNo":60
                                 }
                             }
                         },
@@ -426,7 +426,7 @@ define([], function() {
                                     "readonly": true
                                 },
                                 "LoanRecommendation":{
-                                    "orderNo":50
+                                    "orderNo":60
                                 }
                             }
                         },
@@ -501,7 +501,7 @@ define([], function() {
                                     "readonly": true
                                 },
                                 "LoanRecommendation":{
-                                    "orderNo":50
+                                    "orderNo":60
                                 }
                             }
                         },
@@ -526,7 +526,7 @@ define([], function() {
                                     "readonly": true
                                 },
                                 "LoanRecommendation":{
-                                    "orderNo":50
+                                    "orderNo":60
                                 }
                             }
                         },
@@ -551,7 +551,7 @@ define([], function() {
                                     "readonly": true
                                 },
                                 "LoanRecommendation":{
-                                    "orderNo":50
+                                    "orderNo":60
                                 }
                             }
                         },
@@ -958,13 +958,16 @@ define([], function() {
                                 },
                                 
                                 "DeductionsFromLoan": {
-                                    "orderNo": 60,
+                                    "orderNo": 40,
                                     "items": {
                                         "dsaPayout": {
                                             "key": "loanAccount.dsaPayout",
                                             "type": "number",
                                             "title": "DSA_PAYOUT_IN_PERCENTAGE",
-                                            "orderNo": 30
+                                            "orderNo": 30,
+                                            onChange: function(modelValue, form, model) {
+                                                model.loanAccount.dsaPayoutFee = (model.loanAccount.dsaPayout / 100) * model.loanAccount.loanAmountRequested;
+                                            }
                                         },
                                         "fee3": {
                                             "key": "loanAccount.fee3",
@@ -1069,17 +1072,48 @@ define([], function() {
                                                     }
 
                                                     LoanProcess.findPreOpenSummary({
-                                                            "loanAmount": model.loanAccount.loanAmountRequested,
-                                                            "tenure": model.loanAccount.tenureRequested,
-                                                            "frequency": frequency,
+                                                            "amountMagnitude": model.loanAccount.loanAmountRequested,
+                                                            "tenureMagnitude": model.loanAccount.tenureRequested,
+                                                            "tenureUnit": frequency,
                                                             "normalInterestRate": model.loanAccount.expectedInterestRate,
                                                             "productCode": "IRRTP",
-                                                            "moratoriumPeriod": "0",
-                                                            "openDate": Utils.getCurrentDate(),
+                                                        //    "moratoriumPeriod": "0",
+                                                            "openedOnDate": Utils.getCurrentDate(),
                                                             "branchId": model.loanAccount.branchId || model.loanProcess.applicantEnrolmentProcess.customer.customerBranchId,
                                                             "firstRepaymentDate": moment().add(frequencyRequested, 'days').format("YYYY-MM-DD"),
                                                             "scheduledDisbursementDate": Utils.getCurrentDate(),
-                                                            "scheduledDisbursementAmount": model.netDisbursementAmount
+                                                            "scheduledDisbursementAmount": model.loanAccount.loanAmountRequested,
+                                                            "userSecurityDeposit": "100",
+                                                            "inputFees": [
+                                                                {
+                                                                "FeeAmount": "900",
+                                                                "Surcharge": "100",
+                                                                "GrossAmount": "1000",
+                                                                "TransactionName": "Processing Fee"
+                                                                }
+                                                            ],
+                                                              "inputMoratoriums": [
+                                                                  {
+                                                                  "accountId": "",
+                                                                  "amendmentType": "",
+                                                                  "amount": "",
+                                                                  "computeStartDate": true,
+                                                                  "feeAmount": "",
+                                                                  "grossAmount": "",
+                                                                  "moratoriumInstallment": "0",
+                                                                  "moratoriumInterestRate": "23.61",
+                                                                  "moratoriumPeriod": "0 NONE",
+                                                                  "repaymentDate": "2017-10-24",
+                                                                  "surcharge": "",
+                                                                  "tenure": "",
+                                                                  "transactionDate": "",
+                                                                  "transactionId": "",
+                                                                  "transactionName": "",
+                                                                  "urnNo": ""
+                                                                }
+                                                              ],
+                                                          "scheduledDisbursements": [],
+                                                          "equatedInstallment": "31000"
                                                         })
                                                         .$promise
                                                         .then(function(resp) {
@@ -1098,6 +1132,7 @@ define([], function() {
                                     }
                                 },
                                 "LoanRecommendation": {
+                                    "orderNo": 60,
                                     "items": {
                                         "udf6": {
                                             "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6",

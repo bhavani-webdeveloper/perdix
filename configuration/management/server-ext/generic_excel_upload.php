@@ -7,11 +7,15 @@ $response = get_response_obj();
 $queryString = $_SERVER['QUERY_STRING'];
 $key = $_GET["key"];
 $isTruncate = $_GET["isTruncate"];
-
+$definition = $_GET["definition"];
 
 try {
     // reading the json
     $str = file_get_contents('excel_upload_definition.json');
+    if (isset($definition)) {
+        echo $str;
+        return;
+    }
     $json = json_decode($str, true);
 
     if (!isset($json[$key])) {

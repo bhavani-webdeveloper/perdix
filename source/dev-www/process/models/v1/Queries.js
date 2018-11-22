@@ -252,6 +252,21 @@ irf.models.factory('Queries', [
             )
             return deferred.promise;
         }
+        resource.getLoanIdByLoanCollectionId = function(id) {
+            var deferred = $q.defer();
+            resource.getResult('loanIdByloanCollectionId.one', {
+                id : id
+            }).then(
+                function(res) {
+                    if (res && res.results && res.results.length && res.results.length > 0) {
+                        deferred.resolve(res.results[0]);
+                    } else {
+                        deferred.reject(res);
+                    }
+                }, deferred.reject
+            )
+            return deferred.promise;
+        }
 
         resource.getLoanProductDocuments = function(prodCode, process, stage) {
             var deferred = $q.defer();
@@ -1200,7 +1215,7 @@ irf.models.factory('Queries', [
               deferred.resolve(response);           
         }, deferred.reject);
         return deferred.promise;
-    }
+    };
     resource.getBankAccountByPartnerForLoanRepay = function(partnerCode) {
         var deferred = $q.defer();
         request = {};
@@ -1217,7 +1232,7 @@ irf.models.factory('Queries', [
             }
         }, deferred.reject);
         return deferred.promise;
-    }
+    };
 
     resource.questionnaireDetails = function(moduleCode, process, stage) {
         var deferred = $q.defer();
@@ -1257,7 +1272,7 @@ irf.models.factory('Queries', [
             }
         )
         return deferred.promise;
-    }
+    };
     resource.getReadyToDisburseAccountDetails = function(urn_no) {
         var deferred = $q.defer();
         var request = {
@@ -1291,6 +1306,17 @@ irf.models.factory('Queries', [
             }         
         }, deferred.reject);
         return deferred.promise;
+    };
+    resource.getAccountOverridestatus = function(accountNo,urnNo) {
+        var deferred = $q.defer();
+        var request = {
+            "accountNo":accountNo,
+            "urnNo":urnNo,
+        };
+        resource.getResult("accountOverrideStatus.list", request).then(function(response) {
+              deferred.resolve(response);           
+        }, deferred.reject);
+        return deferred.promise;
     }
     resource.getGoldRate = function(){
         var deferred = $q.defer();
@@ -1299,6 +1325,21 @@ irf.models.factory('Queries', [
                 deferred.resolve(value.results[0].goldRate);
             }            
         },deferred.reject);
+        return deferred.promise;
+    }
+    resource.getCustomerGroups = function(urnNo) {
+        var deferred = $q.defer();
+        resource.getResult("getCustomerGroups.list",{'urn_no':urnNo}).then(function(records) {
+            if (records && records.results) {
+                var result = {
+                    headers: {
+                        "x-total-count": records.results.length
+                    },
+                    body: records.results
+                };
+                deferred.resolve(result);
+            }
+        }, deferred.reject);
         return deferred.promise;
     }
     return resource;

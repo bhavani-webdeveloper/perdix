@@ -13,7 +13,8 @@ define([], function () {
             BundleManager, PsychometricTestService, LeadHelper, Message, $filter, Psychometric, IrfFormRequestProcessor, UIRepository, $injector, irfNavigator) {
             var branch = SessionStore.getBranch();
             var podiValue = SessionStore.getGlobalSetting("percentOfDisposableIncome");
-            //Rate and Market value calculation
+            // Inside Computational functions
+
             var getGoldRate = function(model){
                 var value = Queries.getGoldRate();
                 value.then(function(resp){
@@ -21,13 +22,15 @@ define([], function () {
                     model.additions.goldRatePerCarat = resp/22;
                 })
                 
-            }
+            };
             var setGoldRate = function(weight,carat,model,index){
                 var dynamicRate = model.additions.goldRatePerCarat * carat;
                 var dynamicMarketValue = dynamicRate * weight;
-                model.loanAccount.ornamentsAppraisals[index].ratePerGramInPaisa = 100;
-                model.loanAccount.ornamentsAppraisals[index].marketValueInPaisa = 100;
+                model.loanAccount.ornamentsAppraisals[index].ratePerGramInPaisa = dynamicRate/100+ 0.00;
+                model.loanAccount.ornamentsAppraisals[index].marketValueInPaisa = dynamicMarketValue/100 + 0.00;
             };
+
+            // View Functions
             var getIncludes = function (model) {
                 return [
                     "LoanDetails",
@@ -96,7 +99,6 @@ define([], function () {
 
                     "LoanSanction",
                     "LoanSanction.sanctionDate",
-                    "LoanSanction.numberOfDisbursements",
                     "LoanSanction.scheduleDisbursementDate",
                     "LoanSanction.firstRepaymentDate",
                     "LoanSanction.customerSignatureDate",
@@ -254,7 +256,13 @@ define([], function () {
                             model.loanAccount.productCode = valueObj.productCode;
                             model.additions.tenurePlaceHolder = valueObj.tenure_from + '-' + valueObj.tenure_to;
                             model.additions.amountPlaceHolder = valueObj.amount_from + '-' + valueObj.amount_to;
-                            model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5 = valueObj.product_name;
+                            if(valueObj.tenure_from == valueObj.tenure_to){
+                                model.additions.tenurePlaceHolder = valueObj.tenure_from
+                            }
+                            if(valueObj.amount_from == valueObj.amount_to){
+                                model.additions.amountPlaceHolder = valueObj.amount_from;
+                            }
+                            model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = valueObj.product_name;
 
                         },
                         getListDisplayItem: function (item, index) {
@@ -424,12 +432,32 @@ define([], function () {
                         }
                     },
                     "JewelDetails.ornamentDetails.carat":{
+                        "type":"select",
+                        "titleMap": [{
+                                value: 18,
+                                name: "18"
+                            },
+                            {
+                                value: 20,
+                                name: "22"
+                            },
+                            {
+                                value: 24,
+                                name: "24"
+                            }
+                        ],
                         onChange:function(valueObj,context,model){
                             var netWeight = model.loanAccount.ornamentsAppraisals[context.arrayIndex].netWeightInGrams;
                             if(netWeight){
                                 setGoldRate(netWeight,valueObj,model,context.arrayIndex);
                             }
                         }
+                    },
+                    "JewelDetails.ornamentDetails.rate":{
+                        readonly : true
+                    },
+                    "JewelDetails.ornamentDetails.marketValue":{
+                        readonly : true
                     },
                     "NomineeDetails.nominees.nomineeFirstName": {
                         "orderNo": 1,
@@ -531,9 +559,6 @@ define([], function () {
                             ];
                         }
                     },
-                    "NomineeDetails.nominees.nomineeGuardian": {
-
-                    },
                     "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianFirstName": {
                         "type": "lov",
                         "title": "NAME",
@@ -628,6 +653,7 @@ define([], function () {
                     },
                     "LoanSanction.disbursementSchedules":{
                         orderNo:2,
+                        readonly : true,
                     },
                     "LoanSanction.customerSignatureDate": {
                         orderNo :3,
@@ -746,9 +772,7 @@ define([], function () {
                     self = this;
                     var p1 = UIRepository.getLoanProcessUIRepository().$promise;
                     p1.then(function (repo) {
-                            console.log("Text");
-                            // console.log(repo);                       
-                            var formRequest = {
+                        var formRequest = {
                                 "overrides": overridesFields(model),
                                 "includes": getIncludes(model),
                                 "excludes": [],
@@ -760,7 +784,7 @@ define([], function () {
                                                 "loanProductName":{
                                                     "title": "PRODUCT_NAME",
                                                     "readonly": true,
-                                                    "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5"
+                                                    "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6"
                                             
                                                 },
                                                 "borrowers": {
@@ -812,9 +836,7 @@ define([], function () {
                                                     "readonly": true,
                                                     "key": "yet to decide",
                                                 }
-
                                             }
-
                                         },
                                         "LoanSanction": {
                                             "key": "loanAccount.disbursementSchedules",
@@ -836,7 +858,6 @@ define([], function () {
                                                 }
                                             }
                                         },
-
                                         "NomineeDetails": {
                                             "items": {
                                                 "nominees": {
@@ -852,12 +873,10 @@ define([], function () {
                                                 }
                                             }
                                         }
-
-
-
-
                                     },
-                                    "additions": [{
+                                    "additions": [
+                                        // Remarks History
+                                        {
                                             "title": "REMARKS_HISTORY",
                                             "type": "box",
                                             "orderNo": 10,
@@ -878,6 +897,7 @@ define([], function () {
                                                 }]
                                             }]
                                         },
+                                        // Post review
                                         {
                                             "type": "box",
                                             "title": "POST_REVIEW",
@@ -1097,6 +1117,7 @@ define([], function () {
                                                 }
                                             ]
                                         },
+                                        // Save button
                                         {
                                             "type": "actionbox",
                                             condition: "model.loanAccount.currentStage == 'LoanInitiation'",
@@ -1108,10 +1129,7 @@ define([], function () {
                                     ]
                                 }
                             };
-                            var result = IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model);
-                            console.log(result);
-                            console.log("test");
-                            return result;
+                            return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model);
                         })
                         .then(function (form) {
                             self.form = form;
@@ -1170,35 +1188,13 @@ define([], function () {
                         }
                     }
                 },
-                form: [{
-                    "title": "REMARKS_HISTORY",
-                    "type": "box",
-                    condition: "model.loanAccount.remarksHistory && model.loanAccount.remarksHistory.length > 0",
-                    "items": [{
-                        "key": "loanAccount.remarksHistory",
-                        "type": "array",
-                        "view": "fixed",
-                        add: null,
-                        remove: null,
-                        "items": [{
-                            "type": "section",
-                            "htmlClass": "",
-                            "html": '<i class="fa fa-user text-gray">&nbsp;</i> {{model.loanAccount.remarksHistory[arrayIndex].updatedBy}}\
-                            <br><i class="fa fa-clock-o text-gray">&nbsp;</i> {{model.loanAccount.remarksHistory[arrayIndex].updatedOn}}\
-                            <br><i class="fa fa-commenting text-gray">&nbsp;</i> <strong>{{model.loanAccount.remarksHistory[arrayIndex].remarks}}</strong>\
-                            <br><i class="fa fa-pencil-square-o text-gray">&nbsp;</i>{{model.loanAccount.remarksHistory[arrayIndex].stage}}-{{model.loanAccount.remarksHistory[arrayIndex].action}}<br>'
-                        }]
-                    }]
-                }, ],
+                form: [],
                 schema: function () {
-                    console.log("First thing to excecute I guess");
                     return SchemaResource.getLoanAccountSchema().$promise;
                 },
                 actions: {
                     submit: function (model, formCtrl, form) {
                         /* Loan SAVE */
-                        console.log("Model from Submit from LoanBooking ");
-                        console.log(model);
                         if (typeof model.loanAccount.loanAmount != "undefined") {
                             model.loanAccount.loanAmountRequested = model.loanAccount.loanAmount;
                         }
@@ -1211,7 +1207,6 @@ define([], function () {
                             model.loanAccount.isRestructure = false;
                             model.loanAccount.documentTracking = "PENDING";
                             model.loanAccount.psychometricCompleted = "NO";
-
                         }
                         PageHelper.showProgress('loan-process', 'Updating Loan');
                         model.loanProcess.save()
@@ -1281,21 +1276,21 @@ define([], function () {
                             if(model.loanAccount.loanCustomerRelations && model.loanAccount.loanCustomerRelations.length > 0){
                                 for(i = 0; i< model.loanAccount.loanCustomerRelations.length;i++){
                                     if(typeof model.loanAccount.loanCustomerRelations[i].dscStatus == "undefined" || model.loanAccount.loanCustomerRelations[i].dscStatus == ""){
-                                        model.loanProcess.loanAccount.dscOverride = false
+                                        model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5  = null
                                         break;
                                     }
-                                    if(model.loanAccount.loanCustomerRelations[i].dscStatus == "FAILURE"){
-                                        model.loanProcess.loanAccount.dscOverride = false
+                                    if(model.loanAccount.loanCustomerRelations[i].dscStatus == "FAILURE" || model.loanAccount.loanCustomerRelations[i].dscStatus == "DSC_OVERRIDE_REQUIRED"){
+                                        model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5  = "true"
                                         break;
                                     }
                                     else{
-                                        model.loanProcess.loanAccount.dscOverride = false
+                                        model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5  = "false"
                                     }
                                     
                                 }
                             }
                         }
-                        if(typeof model.loanProcess.loanAccount.dscOverride =="undefined" || model.loanProcess.loanAccount.dscOverride == null){
+                        if(typeof model.loanProcess.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5 =="undefined" || model.loanProcess.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5 == null){
                             PageHelper.showErrors({data:{error:"DSC STATUS IS REQUIRED...."}});
                                 PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                 PageHelper.hideLoader();

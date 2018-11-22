@@ -73,13 +73,6 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisalRe
                 minimum: 1,
                 maximum: 1,
                 order: 80
-            }, {
-                pageName: 'loans.individual.misc.BalanceSheetHistory',
-                title: 'BALANCE_SHEET_HISTORY',
-                pageClass: 'balance-sheet-history',
-                minimum: 1,
-                maximum: 1,
-                order: 90
             }];
             if(SessionStore.getGlobalSetting('siteCode') != 'IREPDhan' || SessionStore.getGlobalSetting('siteCode') == 'IREPDhan') {
                 definition.push({
@@ -261,6 +254,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisalRe
                             $this.bundlePages.push({
                                     pageClass: 'portfolio-analysis',
                                     model: {
+                                        customerUrn: res.urnNo,
                                         cbModel: {
                                             customerId: res.customerId,
                                             loanId: bundleModel.loanId,
@@ -283,14 +277,6 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisalRe
                                 pageClass: 'loan-review',
                                 model: {
                                     loanAccount: res
-                                }
-                            });
-
-                            $this.bundlePages.push({
-                                pageClass: 'balance-sheet-history',
-                                model: {
-                                    customerUrn: res.urnNo,
-                                    loanId: bundleModel.loanId
                                 }
                             });
 

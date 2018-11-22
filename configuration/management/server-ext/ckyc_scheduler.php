@@ -1,4 +1,9 @@
 <?php
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 include_once("bootload.php");
 
 use GuzzleHttp\Client as GuzzleClient;
@@ -8,35 +13,213 @@ use App\Services\Csv;
 use App\Core\Settings;
 
 $settings = Settings::getInstance()->getSettings();
-$GLOBALS['ImageApi'] = $settings['perdix']['v8_url'] . "/api/stream";
+define('PERDIX_FILE_STREAM_API', $settings['perdix']['v8_url']."/api/stream");
+define('CKYC_BASE_DIR', getenv('TRACKWIZZ_DIR'));
+define('CKYC_OUTGOING_DIR', CKYC_BASE_DIR.DIRECTORY_SEPARATOR."outgoing");
+define('CKYC_OUTGOING_TEMP_DIR', CKYC_BASE_DIR.DIRECTORY_SEPARATOR."outgoing_temp");
+define('CKYC_INCOMING_DIR', CKYC_BASE_DIR.DIRECTORY_SEPARATOR."incoming");
+define('CKYC_INCOMING_HISTORY_DIR', CKYC_BASE_DIR.DIRECTORY_SEPARATOR."incoming_history");
+define('CKYC_INCOMING_TEMP_DIR', CKYC_BASE_DIR.DIRECTORY_SEPARATOR."incoming_temp");
 
-/*
-    Utility function 
-        createPipeFile:- toCreatePipe sepearator file ,
-        rrmdir        :- recusrsively remove dir , 
-        rcopy         :- recursively copy dir ,
-        writeError    :- writing error to customer_external_interface table in response_message table,
-        validateCustomer_Data :- to validate the customer data and chnage data accordingly before sending to trackwizz
-*/
-function createPipeFile($data) {
-    try{
-        if(count($data) > 0) {
-            // reset the array keys
-            $tabledata = array_values($data);
-            if($GLOBALS['pipeHeader']){
-                $pipeHeader = array_keys($tabledata[0]);	// get the headers from the array
-                fputcsv($GLOBALS['pipeFile'], $pipeHeader, '|', " ");
-                $GLOBALS['pipeHeader']=false;
-                createPipeFile($data);
-            }else{
-                foreach($tabledata as $val) {
-                    fputcsv($GLOBALS['pipeFile'], $val, '|', " ");
-                }
+Class Ckyc {
+    public static $p2c_filename = [
+        "aadhar card"=>"AadharCard",
+        "voter card"=>"VoterID",
+        "driving licence"=>"DrivingLicence",
+        "passport"=>"Passport",
+        "ration card"=>"RationCard",
+        "water bill"=>"Utilitybill2m",
+        "gas bill"=>"Utilitybill2m",
+        "pan card"=>"PAN"
+    ];
+    public static $p2c_id_proof = [
+        'Pan Card' => 'PAN',
+        'Aadhar Card' => 'AadharCard',
+        'Voter Card' => 'VoterID',
+        'Ration Card' => 'OthersPOACKYCInd',
+        'Driving Licence' => 'DrivingLicence',
+        'Gas Bill' => 'OthersPOICKYCInd',
+        'Passport' => 'Passport'
+    ];
+    public static $p2c_address_proof = [
+        'Pan Card' => 'OthersPOACKYCInd',
+        'Aadhar Card' => 'AadharCard',
+        'Voter Card' => 'VoterID',
+        'Ration Card' => 'OthersPOACKYCInd',
+        'Driving Licence' => 'DrivingLicence'
+    ];
+    public static function CKYC_PERDIX_FIELD_MAP() { return [
+        'TransactionID' => '',
+        'SourceSystemName' => 'Perdix',
+        'SourceSystemCustomerCode' => '@urn_no',
+        'IsSmallCustomer' => 'No',
+        'EkycOTPbased' => 'No',
+        'ImageGenerationType' => '',
+        'TransactionType' => 'New',
+        'SourceSystemCustomerCreationDate' => function($c) { return date("d-M-Y", strtotime($c->created_at)); },
+        'ModificationDate' => '',
+        'UniqueGlobalCustomerCode' => '',
+        'ConstitutionType' => '01',
+        'Prefix' => function($c) { return $c->gender == 'FEMALE'? ($c->marital_status == 'MARRIED'? 'Mrs': 'Ms'): 'Mr'; },
+        'FirstName' => '@first_name',
+        'MiddleName' => '',
+        'LastName' => '',
+        'MaidenPrefix' => '',
+        'MaidenFirstName' => '',
+        'MaidenMiddleName' => '',
+        'MaidenLastName' => '',
+        'FatherPrefix' => 'Mr',
+        'FatherFirstName' => '@father_first_name',
+        'FatherMiddleName' => '',
+        'FatherLastName' => '',
+        'SpousePrefix' => '',
+        'SpouseFirstName' => '',
+        'SpouseMiddleName' => '',
+        'SpouseLastName' => '',
+        'MotherPrefix' => 'Mrs',
+        'MotherFirstName' => '@mother_name',
+        'MotherMiddleName' => '',
+        'MotherLastName' => '',
+        'Gender' => function($c) { return $c->gender == 'FEMALE'? 'F': 'M'; },
+        'MaritalStatus' => function($c) {
+            switch ($c->marital_status) {
+                case 'MARRIED': return '01';
+                case 'UNMARRIED': case 'SINGLE': return '02';
+                case 'DIVORCED': case 'SEPARATED': case 'WIDOWER': return '03';
+            }
+            return '';
+        },
+        'Citizenship' => 'IN',
+        'OccupationType' => function($c) {
+            switch ($c->employment_status) {
+                case 'Salaried': return 'O-02';
+                case 'SELF EMPLOYED': case 'SELFEMPLOYED': return 'O-01';
+            }
+            return '';
+        },
+        'DateofBirth' => function($c) { return date("d-M-Y", strtotime($c->date_of_birth)); },
+        'ResidentialStatus' => '01',
+        'EmailId' => '',
+        'KYCDateOfDeclaration' => function($c) { return date("d-M-Y", strtotime($c->created_at)); },
+        'KYCPlaceOfDeclaration' => 'Chennai',
+        'KYCVerificationDate' => function($c) { return date("d-M-Y", strtotime($c->created_at)); },
+        'KYCEmployeeName' => 'Yuvaraj Sivakumar',
+        'KYCEmployeeDesignation' => 'Associate Vice President',
+        'KYCVerificationBranch' => 'Chennai',
+        'KYCEmployeeCode' => 'C0134',
+        'PermanentCKYCAddType' => '01',
+        'PermanentCountry' => 'IN',
+        'PermanentPin' => '@pincode',
+        'PermanentAddressLine1' => function($c) { return join(',', array_filter([$c->door_no,$c->street,$c->post_office,$c->landmark,$c->locality,$c->district,$c->state])); },
+        'PermanentAddressLine2' => '',
+        'PermanentAddressLine3' => '',
+        'PermanentDistrict' => '',
+        'PermanentCity' => '@village_name',
+        'PermanentState' => '',
+        'PermanentAddressProof' => function($c) { return Ckyc::$p2c_address_proof[$c->address_proof]; },
+        'CorrespondenceGlobalCountry' => 'IN',
+        'CorrespondenceGlobalPin' => '@pincode',
+        'CorrespondenceGlobalAddressLine1' => function($c) { return join(',', array_filter([$c->door_no,$c->street,$c->post_office,$c->landmark,$c->locality,$c->district,$c->state])); },
+        'CorrespondenceGlobalAddressLine2' => '',
+        'CorrespondenceGlobalAddressLine3' => '',
+        'CorrespondenceGlobalDistrict' => '',
+        'CorrespondenceGlobalCity' => '@village_name',
+        'CorrespondenceGlobalState' => '',
+        'JurisdictionOfResidence' => 'IN',
+        'CountryOfBirth' => '',
+        'BirthCity' => '',
+        'TaxIdentificationNumber' => '',
+        'TaxResidencyAddressLine1' => '',
+        'TaxResidencyAddressLine2' => '',
+        'TaxResidencyAddressLine3' => '',
+        'TaxResidencyPin' => '',
+        'TaxResidencyDistrict' => '',
+        'TaxResidencyCity' => '',
+        'TaxResidencyState' => '',
+        'TaxResidencyCountry' => 'IN',
+        'ResidentialSTDCode' => '',
+        'ResidentialTelephoneNumber' => '',
+        'OfficeSTDCode' => '',
+        'OfficeTelephoneNumber' => '',
+        'MobileISD' => '',
+        'MobileNumber' => '@mobile_phone',
+        'FaxSTD' => '',
+        'FaxNumber' => '',
+        'CKYCID' => '',
+        'PassportNumber' => function($c) { return $c->identity_prof == 'Passport'? $c->identity_prof_no: ''; },
+        'PassportExpiryDate' => '',
+        'VoterIdCard' => function($c) { return $c->identity_prof == 'Voter Card'? $c->identity_prof_no: ''; },
+        'PAN' => function($c) { return $c->identity_prof == 'Pan Card'? $c->identity_prof_no: ''; },
+        'DrivingLicenseNumber' => '',
+        'DrivingLicenseExpiryDate' => '',
+        'Aadhaar' => function($c) { return $c->identity_prof == 'Aadhar Card'? $c->identity_prof_no: ''; },
+        'AadhaarVaultReferenceNumber' => '',
+        'AadhaarToken' => '',
+        'AadhaarVirtualId' => '',
+        'NREGA' => '',
+        'CKYCPOIOtherCentralGovtID' => '',
+        'CKYCPOIS01IDNumber' => '',
+        'CKYCPOIS02IDNumber' => '',
+        'ProofOfIDSubmitted' => function($c) { return Ckyc::$p2c_id_proof[$c->identity_prof]; },
+        'CustomerDemiseDate' => '',
+        'Minor' => 'No',
+        'SourcesystemRelatedPartyode' => '',
+        'RelatedPersonType' => '',
+        'RelatedPersonPrefix' => '',
+        'RelatedPersonFirstName' => '',
+        'RelatedPersonMiddleName' => '',
+        'RelatedPersonLastName' => '',
+        'RelatedPersonCKYCID' => '',
+        'RelatedPersonPassportNumber' => '',
+        'RelatedPersonPassportExpiryDate' => '',
+        'RelatedPersonVoterIdCard' => '',
+        'RelatedPersonPAN' => '',
+        'RelatedPersonDrivingLicenseNumber' => '',
+        'RelatedPersonDrivingLicenseExpiryDate' => '',
+        'RelatedPersonAadhaar' => '',
+        'RelatedPersonAadhaarVaultReferenceNumber' => '',
+        'RelatedPersonAadhaarToken' => '',
+        'RelatedPersonAadhaarVirtualId' => '',
+        'RelatedPersonNREGA' => '',
+        'RelatedPersonCKYCPOIOtherCentralGovtID' => '',
+        'RelatedPersonCKYCPOIS01IDNumber' => '',
+        'RelatedPersonCKYCPOIS02IDNumber' => '',
+        'RelatedPersonProofOfIDSubmitted' => '',
+        'SourceSystemSegment' => '',
+        'AppRefNumberforImages' => '',
+        'HolderforImages' => '',
+        'BranchCode' => ''
+    ];}
+}
+
+function prepare_ckyc_data($data) {
+    $ckycData = [];
+    $header = [];
+    foreach (Ckyc::CKYC_PERDIX_FIELD_MAP() as $key => $value) {
+        $header[] = $key;
+    }
+    $ckycData[] = join('|', $header);
+    foreach ($data as $c) {
+        $row = [];
+        foreach (Ckyc::CKYC_PERDIX_FIELD_MAP() as $key => $value) {
+            if (is_callable($value)) {
+                $row[] = $value($c);
+            } else if (strpos($value, '@') === 0) {
+                $row[] = $c->{substr($value, 1)};
+            } else {
+                $row[] = $value;
             }
         }
-    }catch (Exception $e){
-        echo "Error creating pipe file \n";
+        $ckycData[] = join('|', $row);
     }
+    return join("\n", $ckycData);
+}
+
+function write_file($path, $content, $writeMode = 'w') {
+    $myfile = fopen($path, $writeMode) or die("Unable to open file '$path' for writing");
+    fwrite($myfile, $content);
+    fclose($myfile);
+    echo "Wrote to file: $path\n";
 }
 
 function rrmdir($dir) {
@@ -69,7 +252,15 @@ function rdeleteContent($dir){
 
 }
 
-function writeError( $customer_id, $processing_status, $error) {
+function write_cei_status($id, $processing_status, $response_status, $response_message) {
+    DB::table('customer_external_interface')->where('id', $id)->update([
+        'processing_status' => $processing_status,
+        'response_status' => $response_status,
+        'response_message' => $response_message
+    ]);
+}
+
+function writeError($customer_id, $processing_status, $error) {
     DB::table('customer_external_interface')
     ->where('customer_id', $customer_id)
     ->update(['response_message' => $error,
@@ -78,209 +269,88 @@ function writeError( $customer_id, $processing_status, $error) {
     ]);
 }
 
-function validateCustomerData($data){
-    echo "validating data \n";
-    if(null !=$data[0]['gender'])
-        $data[0]['gender'] = $GLOBALS['VALID_CUSTOMER_DATA']['gender'][strtolower($data[0]['gender'])];
-    if(null != $data[0]['marital_status'])
-        $data[0]['marital_status'] = $GLOBALS['VALID_CUSTOMER_DATA']['marital_status'][strtolower($data[0]['marital_status'])];
-    if(null !=$data[0]['address_proof'])
-        $data[0]['address_proof'] = $GLOBALS['VALID_CUSTOMER_DATA']['address_proof'][strtolower($data[0]['address_proof'])];
-    if(null != $data[0]['identity_prof'])
-        $data[0]['identity_prof'] = $GLOBALS['VALID_CUSTOMER_DATA']['identity_prof'][strtolower($data[0]['identity_prof'])];
-    return $data ;
-}
-
-/* 
-    create folder Directories if not already present 
-*/
-$DIR= getenv('TRACKWIZZ_DIR');// from .env
-echo $DIR;
-$GLOBALS['outgoingDir']      =  $DIR.DIRECTORY_SEPARATOR."outgoing";
-$GLOBALS['outgoingTempDir']  =  $DIR.DIRECTORY_SEPARATOR."outgoing_temp";
-$GLOBALS['trackwizDir']      =  $DIR.DIRECTORY_SEPARATOR."incoming";
-$GLOBALS['trackwizHistDir']  =  $DIR.DIRECTORY_SEPARATOR."incomingHistory";
-$GLOBALS['trackwizTempDir']  =  $DIR.DIRECTORY_SEPARATOR."incoming_temp";
-$GLOBALS['VALID_CUSTOMER_DATA']=array(
-    "gender"=>array(
-        "male"=>"M",
-        "female"=>"F"
-    ),
-    "occupation_type"=>array(
-        "salaried"=>"Others - Self Employed",
-        "selfemployed"=>"Others - Professional"
-    ),
-    "marital_status"=>array(
-        "married"=>01,
-        "unmarried"=>02,
-        "divorced"=>03,
-        "single"=>02,
-        "separated"=>03,
-        "widower"=>03
-    ),
-    "address_proof"=>array(
-        "aadhar card"=>"AadharCard",
-        "voter card"=>"VoterID",
-        "driving licence"=>"DrivingLicence",
-        "passport"=>"Passport",
-        "ration card"=>"OthersPOACKYCInd",
-        "pan card"=>"OthersPOICKYCInd"
-    ),
-    "identity_prof"=>array(
-        "aadhar card"=>"AadharCard",
-        "voter card"=>"VoterID",
-        "driving licence"=>"DrivingLicence",
-        "passport"=>"Passport",
-        "ration card"=>"OthersPOACKYCInd",
-        "gas bill"=>"OthersPOICKYCInd",
-        "pan card"=>"PAN"
-    ),
-);
-$GLOBALS['IMAGEPROOF']=array(
-    "aadhar card"=>"AadharCard",
-    "voter card"=>"VoterID",
-    "driving licence"=>"DrivingLicence",
-    "passport"=>"Passport",
-    "ration card"=>"RationCard",
-    "water bill"=>"Utilitybill2m",
-    "gas bill"=>"Utilitybill2m",
-    "pan card"=>"PAN"
-);
-
-/*
-    1) Getting mode from query param for ckyc_scheduler , it wil be either a)incoming or b)outgoing
-*/
-if (!isset($_GET['mode'])) {
-    echo "php File called without mode , so by default reading response from trackwizz \n";
-    fetchIncomingData();
-} else if($_GET['mode'] == "Incoming") {
-    fetchIncomingData();
-} else if($_GET['mode'] == "Outgoing") {
-    prepareOutgoingData();
-} else {
-    die('Error processing anything');
-}
-
-function prepareOutgoingData() {
-    try{
-        if (!is_dir($GLOBALS['outgoingTempDir'])) {
-            echo "creating outgoing temporary directory \n";
-            mkdir($GLOBALS['outgoingTempDir'], 0777, true);
-        }else {
-            rrmdir($GLOBALS['outgoingTempDir']);
-            mkdir($GLOBALS['outgoingTempDir'], 0777, true);
+function recreate_directory($dir) {
+    try {
+        if (is_dir($dir)) {
+            rrmdir($dir);
         }
-        $GLOBALS['filePath']         =  $GLOBALS['outgoingTempDir'].DIRECTORY_SEPARATOR."customerData.txt";
-        $GLOBALS['pipeFile'] = fopen($GLOBALS['filePath'], 'a') or die('Cannot open file:  '.$GLOBALS['filePath']);
-        $GLOBALS['pipeHeader'] = true;
-    }catch(Exception $e){
-        echo "unable to create outgoing Temp Directory \n";
+        mkdir($dir, 0777, true);
+        return true;
+    } catch (Exception $e) {
+        echo $e;
+        return false;
     }
-    
-    $customer_interface_data = DB::table("customer_external_interface")->select('*')
-    ->where([
-        ['processing_status', '=', 'PENDING'],
-        ['response_status', '=', NULL],
-        ['interface_type', '=', 'CKYC'] 
-    ])
-    ->orWhere([
-        ['processing_status', '=', 'RESPONSECOMPLETE'],
-        ['response_status', '=', 'FAILURE'],
-        ['interface_type', '=', 'CKYC']
-    ])
-    ->get();
-    $customer_interface_dataArray = json_decode($customer_interface_data, true);
-    echo "customer interface data fetched \n";
-    
-    foreach ($customer_interface_dataArray as $interface_data) {
-        try{
-            $customer_data = DB::table("customer")->select('*')
-            ->where([
-                ['id', '=', $interface_data['customer_id']]
-            ])
-            ->get();
-            $customer_dataArray = json_decode($customer_data, true);
-            echo "customer data fetched for " . $interface_data['customer_id'] . "\n";
-    
-            if($interface_data['response_status']=='FAILURE' && $customer_dataArray[0]['version']<=$interface_data['customer_version']){
-                echo "skipping customer " . $interface_data['customer_id'] . "\n";
-                continue;
-            }
-            if($interface_data['response_status'] == 'FAILURE' && $customer_dataArray[0]['version']>$interface_data['customer_version']){
-                DB::table('customer_external_interface')
-                ->where('customer_id', $interface_data['customer_id'])
-                ->update(['processing_status' => "RETRY_INITIATED"
+}
+
+function download_customer_file($customer_id, $file_name, $file_id) {
+    if ($file_id) {
+        echo "    Downloading $customer_id $file_name: $file_id\n";
+        file_put_contents(CKYC_OUTGOING_TEMP_DIR.DIRECTORY_SEPARATOR.$customer_id.DIRECTORY_SEPARATOR.$file_name, file_get_contents(PERDIX_FILE_STREAM_API.'/'.$file_id));
+    }
+}
+
+function process_outgoing() {
+    echo "Processing outgoing\n";
+    recreate_directory(CKYC_OUTGOING_TEMP_DIR) or die("unable to create outgoing Temp Directory\n");
+
+    $customer_external_interface = DB::select("SELECT cei.* FROM customer_external_interface cei, customer c WHERE cei.customer_id = c.id AND cei.interface_type = 'CKYC' AND (cei.processing_status = 'PENDING' OR cei.processing_status = 'RESPONSECOMPLETE' AND cei.response_status = 'FAILURE' AND cei.customer_version < c.version)");
+    $customer_ids = [];
+    $customer_interface_data = [];
+    foreach ($customer_external_interface as $cei) {
+        $customer_ids[] = $cei->customer_id;
+        $customer_interface_data[$cei->customer_id] = $cei;
+    }
+    echo 'Customers to be processed: '.json_encode($customer_ids, true)."\n";
+
+    $customer_data = DB::table("customer")->select('*')->whereIn('id', $customer_ids)->get();
+
+    $piped_customer_text = prepare_ckyc_data($customer_data);
+    write_file(CKYC_OUTGOING_TEMP_DIR.DIRECTORY_SEPARATOR."customerData.txt", $piped_customer_text);
+
+    foreach ($customer_data as $customer) {
+        echo "Processing customer: $customer->id\n";
+        if (!recreate_directory(CKYC_OUTGOING_TEMP_DIR.DIRECTORY_SEPARATOR.$customer->id)) {
+            echo "Failed to create directory for customer id: $customer->id\n";
+            continue;
+        }
+        /**
+         * Showing only front image but we neeed to conver front and back to pdf for addrss proof image id nad identiy proof image id
+         */
+        download_customer_file($customer->id, 'customer_photo', $customer->photo_image_id);
+        download_customer_file($customer->id, Ckyc::$p2c_filename[strtolower($customer->address_proof)], $customer->address_proof_image_id);
+        download_customer_file($customer->id, Ckyc::$p2c_filename[strtolower($customer->identity_prof)], $customer->identity_proof_image_id);
+
+        $interface_data = $customer_interface_data[$customer->id];
+        try {
+            /**
+             * updating ProcessingStatus in customer_external_interface table
+             */
+            if ($interface_data->response_status == 'FAILURE') {
+                write_cei_status($interface_data->id, 'RETRIED', $interface_data->response_status, $interface_data->response_message);
+                echo " inserting new for failure\n";
+                $now = date('Y-m-d H:i:s');
+                DB::table('customer_external_interface')->insert([
+                    'version' => NULL,
+                    'customer_id' => $customer->id,
+                    'customer_version' => $customer->version,
+                    'processing_status' => "REQUESTCOMPLETE",
+                    'response_status' => NULL,
+                    'interface_type' => $interface_data->interface_type,
+                    'response_time' => $now,
+                    'loan_amount' => $interface_data->loan_amount,
+                    'loan_purpose' => $interface_data->loan_purpose,
+                    'response_message' => $now,
+                    'created_by' => "SYSTEM",
+                    'created_at' => $now,
+                    'last_edited_by' => "SYSTEM",
+                    'last_edited_at' => $now
                 ]);
-                    
+            } else {
+                write_cei_status($interface_data->id, 'REQUESTCOMPLETE', NULL, NULL);
             }
-            $customer_dataArray = validateCustomerData($customer_dataArray);
-            createPipeFile($customer_dataArray);
-            $customerFolderDir = $GLOBALS['outgoingTempDir'].DIRECTORY_SEPARATOR.$interface_data['customer_id'];
-            if (!is_dir($customerFolderDir)) {
-                mkdir($customerFolderDir, 0777, true);
-            }
-    
-        /*
-            for now we are showing front image but we neeed to conver front and back to pdf 
-            for addrss proof image id nad identiy proof image id ,  
-        */
-            
-            $imageIds = array($customer_dataArray[0]['photo_image_id'], $customer_dataArray[0]['address_proof_image_id'], $customer_dataArray[0]['identity_proof_image_id']);
-            foreach($imageIds as $imageId){
-                if(null ==$imageId){
-                    continue;
-                }
-                $photoImageUrl = $GLOBALS['ImageApi'].'/'.$imageId;
-                $photoImagename = array_keys($customer_dataArray[0], $imageId)[0];
-                switch($photoImagename){
-                    case "address_proof_image_id":
-                            $photoImagename=$GLOBALS['IMAGEPROOF'][strtolower($customer_dataArray[0]['address_proof'])];
-                            break;
-                    case "identity_proof_image_id":
-                            $photoImagename=$GLOBALS['IMAGEPROOF'][strtolower($customer_dataArray[0]['identity_prof'])];
-                            break;
-                    case "photo_image_id":
-                            $photoImagename="customer_photo";
-                            break;
-                    default : echo "No image is there \n";
-                }
-                $photoImage = $customerFolderDir.DIRECTORY_SEPARATOR.$photoImagename;
-                file_put_contents($photoImage, file_get_contents($photoImageUrl));
-            }
-    /*   updating ProcessingStatus in customer_external_interface table
-    */  
-            if($interface_data['response_status'] == 'FAILURE' && $customer_dataArray[0]['version']>$interface_data['customer_version']){
-                echo " inserting new record for case of failure \n";
-                DB::table('customer_external_interface')->insert(
-                    ['version' => NULL,
-                     'customer_id'=> $interface_data['customer_id'],
-                     'customer_version'=> $interface_data['customer_version'],
-                     'processing_status'=> "REQUESTCOMPLETE",
-                     'response_status'=>"FAILURE",
-                     'interface_type'=>$interface_data['interface_type'],
-                     'response_time' => $interface_data['response_time'],
-                     'loan_amount' => $interface_data['loan_amount'],
-                     'loan_purpose'=> $interface_data['loan_purpose'],
-                     'response_message'=>date('Y-m-d H:i:s'),
-                     'created_by'=> "SYSTEM",
-                     'created_at'=>date('Y-m-d H:i:s'),
-                     'last_edited_by'=>"SYSTEM",
-                     'last_edited_at'=>date('Y-m-d H:i:s')
-                    ]
-                );
-                    
-            }else{
-                DB::table('customer_external_interface')
-                ->where('customer_id', $interface_data['customer_id'])
-                ->update(['processing_status' => "REQUESTCOMPLETE",
-                        'response_status' => NULL
-                ]);
-            }
-    
-        }catch(Exception $e) {
+        } catch (Exception $e) {
             echo $e . "\n";
-            writeError($interface_data['customer_id'], "REQUESTFAILURE", $e);
-            fclose($GLOBALS['pipeFile']);
+            write_cei_status($interface_data->id, "REQUESTFAILURE", NULL, $e);
         }
     }
     
@@ -288,38 +358,35 @@ function prepareOutgoingData() {
         move content from temp to incomng for trackwizz and delete the temporary folder
     */
     try{
-        if (!is_dir($GLOBALS['outgoingDir'])) {
-            mkdir($GLOBALS['outgoingDir'], 0777, true);
+        if (!is_dir(CKYC_OUTGOING_DIR)) {
+            mkdir(CKYC_OUTGOING_DIR, 0777, true);
         }else {
-            rdeleteContent($GLOBALS['outgoingDir']);
+            rdeleteContent(CKYC_OUTGOING_DIR);
         }
-        rcopy($GLOBALS['outgoingTempDir'], $GLOBALS['outgoingDir']);
-        rrmdir($GLOBALS['outgoingTempDir']); 
+        rcopy(CKYC_OUTGOING_TEMP_DIR, CKYC_OUTGOING_DIR);
+        rrmdir(CKYC_OUTGOING_TEMP_DIR); 
     
     } catch(Exception $e){
         echo "unable to copy and remove directory or making outgoing directory \n";
-    } 
-    fclose($GLOBALS['pipeFile']);
-
+    }
 };
 
-function fetchIncomingData() {
-        /* Looking for Incoming folder 
-        */ 
-    try{     
-        if(is_dir($GLOBALS['trackwizDir'])){
-            $files = new DirectoryIterator($GLOBALS['trackwizDir']);
+function process_incoming() {
+    echo "Processing incoming \n";
+    try{
+        if(is_dir(CKYC_INCOMING_DIR)){
+            $files = new DirectoryIterator(CKYC_INCOMING_DIR);
             if($files){
-                if (!is_dir($GLOBALS['trackwizTempDir'])) {
-                    mkdir($GLOBALS['trackwizTempDir'], 0777, true);
+                if (!is_dir(CKYC_INCOMING_TEMP_DIR)) {
+                    mkdir(CKYC_INCOMING_TEMP_DIR, 0777, true);
                 }
-                $GLOBALS['trackwizHistDir'] ;
-                rcopy($GLOBALS['trackwizDir'], $GLOBALS['trackwizTempDir']);
-                $fileTemp = new DirectoryIterator($GLOBALS['trackwizTempDir']);
+                CKYC_INCOMING_HISTORY_DIR ;
+                rcopy(CKYC_INCOMING_DIR, CKYC_INCOMING_TEMP_DIR);
+                $fileTemp = new DirectoryIterator(CKYC_INCOMING_TEMP_DIR);
                 foreach($fileTemp as $file){
                     $is_file = $file->isFile();
                     if($is_file){
-                        $inputFileName = $GLOBALS['trackwizTempDir'].DIRECTORY_SEPARATOR.$file->getFilename();
+                        $inputFileName = CKYC_INCOMING_TEMP_DIR.DIRECTORY_SEPARATOR.$file->getFilename();
                         $ext = pathinfo($inputFileName, PATHINFO_EXTENSION);
                         if($ext == "xlsx"){
                             echo "reading xlsx response file \n";
@@ -400,16 +467,16 @@ function fetchIncomingData() {
                         } 
                     }
                 }
-                if (!is_dir($GLOBALS['trackwizHistDir'])) {
-                    mkdir($GLOBALS['trackwizHistDir'], 0777, true);
+                if (!is_dir(CKYC_INCOMING_HISTORY_DIR)) {
+                    mkdir(CKYC_INCOMING_HISTORY_DIR, 0777, true);
                 }
-                $subHistoryFolder = $GLOBALS['trackwizHistDir'].DIRECTORY_SEPARATOR.date('Y-m-d');
+                $subHistoryFolder = CKYC_INCOMING_HISTORY_DIR.DIRECTORY_SEPARATOR.date('Y-m-d');
                     if (!is_dir($subHistoryFolder)) {
                         mkdir($subHistoryFolder, 0777, true);
                     }
-                rcopy($GLOBALS['trackwizDir'],$subHistoryFolder);
-                rdeleteContent($GLOBALS['trackwizDir']);
-                rrmdir($GLOBALS['trackwizTempDir']);
+                rcopy(CKYC_INCOMING_DIR,$subHistoryFolder);
+                rdeleteContent(CKYC_INCOMING_DIR);
+                rrmdir(CKYC_INCOMING_TEMP_DIR);
             }
         }
     
@@ -417,4 +484,12 @@ function fetchIncomingData() {
         echo "some error occured in response reading part \n";
     }
 
+}
+
+if (!isset($_GET['mode']) || $_GET['mode'] == "Incoming") {
+    process_incoming();
+} else if($_GET['mode'] == "Outgoing") {
+    process_outgoing();
+} else {
+    die('Error processing anything');
 }

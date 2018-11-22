@@ -1,8 +1,9 @@
 irf.pageCollection.factory(irf.page('loans.LoanRepay'),
     ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager","formHelper", "$stateParams", "Enrollment"
         ,"LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
-        "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch","Queries", "Utils", "IndividualLoan","LoanCollection","PagesDefinition","irfNavigator",
-        function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch,Queries, Utils, IndividualLoan,LoanCollection,PagesDefinition,irfNavigator) {
+        "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch","Queries", "Utils", "IndividualLoan","LoanCollection","PagesDefinition","irfNavigator","Locking",
+        function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, 
+            Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch,Queries, Utils, IndividualLoan,LoanCollection,PagesDefinition,irfNavigator,Locking) {
 
             function backToLoansList(){
                 try {
@@ -44,7 +45,6 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                 "title": "LOAN_REPAYMENT",
                 "subTitle": "",
                 initialize: function (model, form, formCtrl) {
-
                     pageInit();
 
                     PagesDefinition.getPageConfig("Page/Engine/loans.LoanRepay")
@@ -188,7 +188,9 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                     IndividualLoan.search({
                         'accountNumber': loanAccountNo,
                         'stage' : 'Completed'
-                    }).$promise.then(
+                    })
+                    .$promise
+                    .then(
                         function(res){
                             if (_.isArray(res.body) && res.body.length>0){
                                 var item = res.body[0];
@@ -223,12 +225,23 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                             )
                                         }
                                     )
+                                    .then(function(){
+                                        Locking.lock({
+                                            "processType": "Loan",
+                                            "processName": "Collections",
+                                            "recordId": model.loanAccount.id
+                                        }).$promise.then(function() {
+
+                                        }, function(err) {
+                                            irfProgressMessage.pop("Locking",err.data.error, 6000);
+                                            irfNavigator.goBack();
+                                        });
+                                    })
                             } else {
                                 /* Loan Account not in perdix. Go back to Collections Dashboard */
                             }
                         }
                     )
-
                 },
                 offline: false,
                 form: [
@@ -699,34 +712,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 title: "REASON",
                                 type: "select",
                                 condition: "model.repayment.delayReasonType =='Business'",
-                                titleMap: [{
-                                    "name": "Change in business circumstance due to Govt. order",
-                                    "value": "Change in business circumstance due to Govt. order"
-                                },
-                                    {
-                                        "name": "Payment held up with Third party ",
-                                        "value": "Payment held up with Third party"
-                                    },
-                                    {
-                                        "name": "Sudden lack of or-ders",
-                                        "value": "Sudden lack of or-ders"
-                                    },
-                                    {
-                                        "name": "Business loss",
-                                        "value": "Business loss"
-                                    },
-                                    {
-                                        "name": "Business dispute in the firm",
-                                        "value": "Business dispute in the firm"
-                                    },
-                                    {
-                                        "name": "Machine Repo and sold ",
-                                        "value": "Machine Repo and sold "
-                                    },
-                                    {
-                                        "name": "Others",
-                                        "value": "Others"
-                                    }],
+                                enumCode: "business_overdue_reasons"
 
                             },
                             {
@@ -734,26 +720,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 title: "REASON",
                                 type: "select",
                                 condition: "model.repayment.delayReasonType=='Personal'",
-                                titleMap: [{
-                                    "name": "Death in Family",
-                                    "value": "Death in Family "
-                                },
-                                    {
-                                        "name": "Function in Family",
-                                        "value": "Function in Family"
-                                    },
-                                    {
-                                        "name": "Illness in Family",
-                                        "value": "Illness in Family"
-                                    },
-                                    {
-                                        "name": "Matrimonial disputes ",
-                                        "value": "Matrimonial disputes "
-                                    },
-                                    {
-                                        "name": "Others",
-                                        "value": "Others"
-                                    }],
+                                enumCode: "personal_overdue_reasons"
                             },
                             {
                                 key: "repayment.reasons",

@@ -1,4 +1,11 @@
 <?php
+
+// Setting up config for PHP
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+// error_reporting(0);
+
 // http://devkinara.perdix.in:8081/management/server-ext/repayment_reminder.php?fromDate=03-09-2016&noOfDays=2
 include_once("bootload.php");
 use Illuminate\Database\Capsule\Manager as DB;
@@ -6,16 +13,17 @@ use EllipseSynergie\ApiResponse\Contracts\Response;
 use Illuminate\Validation\Rule;
 use App\Models\RepaymentReminder;
 
-//$sms_template_path = $settings['paths']['sms_template_path'];
+$sms_template_path = $settings['paths']['sms_template_path'];
 
-$sms_template_path ="E:/php";
 $dotEnv =  new Dotenv\Dotenv($sms_template_path,'smsTemplate.txt');
 $dotEnv->load();
 
-$repaymentReminderHistory = DB::table('global_settings')->where('name', 'repaymentReminderHistory')->first();print_r($repaymentReminderHistory);
+$repaymentReminderHistory = DB::table('global_settings')->where('name', 'repaymentReminderHistory')->first();
 //echo $repaymentReminderHistory->value;
 $frequencies= explode(",", $repaymentReminderHistory->value);
+echo "<br/>frequencies : $frequencies";
 foreach ($frequencies as $frequency) {
+    echo "<br/>frequency : $frequency";
     try{
         $fromDate = date("Y-m-d", time());
         $toDate = date('Y-m-d', strtotime($fromDate. ' + '.$frequency.' days')); 
@@ -26,6 +34,8 @@ foreach ($frequencies as $frequency) {
             ->get();
 
         foreach ($reminders as $reminder) {
+            echo "<br/>reminder : ";
+            print_r($reminder);
             $out_going_message = getenv('regular_repayment'.$frequency);
 
             $out_going_message=str_replace('INSTALLMENT_AMOUNT', $reminder->installment_amount, $out_going_message);
