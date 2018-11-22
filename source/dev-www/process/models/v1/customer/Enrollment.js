@@ -549,17 +549,6 @@ function($log, $q, Enrollment,formHelper, PageHelper, irfProgressMessage, Utils,
                 deferred.reject(res);
             });
         }
-        PageHelper.clearErrors();
-            PageHelper.showLoader();
-            res.enrollmentAction = "PROCEED";
-            Enrollment.updateEnrollment(res, function (res, headers) {
-                PageHelper.hideLoader();
-                deferred.resolve(res);
-            }, function (res, headers) {
-                PageHelper.hideLoader();
-                PageHelper.showErrors(res);
-                deferred.reject(res);
-            });
         return deferred.promise;
 
     };

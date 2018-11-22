@@ -1690,6 +1690,10 @@
                     "udf36": {
                         "title": "SPOUSE_ID_PROOF_NUMBER",
                         "captureStages": ["Stage01","Stage02" ,"Completed"]
+                    },
+                    "udf40": {
+                        "title": "Terms",
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     }
                 }
             },

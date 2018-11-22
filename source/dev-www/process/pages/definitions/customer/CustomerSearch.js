@@ -322,7 +322,7 @@ function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionSto
 								else if (item.currentStage === 'EDF') {
 									irfNavigator.go({
 										state: "Page.Engine",
-										pageName: "EDF",
+										pageName: "kgfs.customer.Enrollment",
 										pageId: item.id
 									});
 								}
@@ -339,6 +339,25 @@ function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionSto
 							},
 							isApplicable: function(item, model){
 								return model.siteCode === "KGFS";
+							}
+						},
+						{
+							name: "EDF",
+							desc: "",
+							icon: "fa fa-pencil",
+							fn: function(item, model){
+								
+								if (item.currentStage === 'EDF') {
+									irfNavigator.go({
+										state: "Page.Engine",
+										pageName: "EDF",
+										pageId: item.id
+									});
+								}
+								
+							},
+							isApplicable: function(item, model){
+								return (model.siteCode === "KGFS" && item.currentStage === 'EDF');
 							}
 						},
 						{
