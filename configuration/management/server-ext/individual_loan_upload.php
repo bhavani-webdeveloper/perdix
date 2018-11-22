@@ -122,35 +122,40 @@ foreach ($files as $file) {
                 if (array_key_exists($oldCustomerIds['applicant'], $pCustMapping)){
                     $loanCustomerRelations[] = [
                         'customerId' => $pCustMapping[$oldCustomerIds['applicant']]['id'],
-                        'relation' => 'Applicant'
+                        'relation' => 'Applicant',
+                        'urn' => $pCustMapping[$oldCustomerIds['applicant']]['urn_no']
                     ];
                 }
 
                 if ($oldCustomerIds['co-applicant1']!=null && array_key_exists($oldCustomerIds['co-applicant1'], $pCustMapping)){
                     $loanCustomerRelations[] = [
                         'customerId' => $pCustMapping[$oldCustomerIds['co-applicant1']]['id'],
-                        'relation' => 'Co-Applicant'
+                        'relation' => 'Co-Applicant',
+                        'urn' => $pCustMapping[$oldCustomerIds['co-applicant1']]['urn_no']
                     ];
                 }
 
                 if ($oldCustomerIds['co-applicant2']!=null && array_key_exists($oldCustomerIds['co-applicant2'], $pCustMapping)){
                     $loanCustomerRelations[] = [
                         'customerId' => $pCustMapping[$oldCustomerIds['co-applicant2']]['id'],
-                        'relation' => 'Co-Applicant'
+                        'relation' => 'Co-Applicant',
+                        'urn' => $pCustMapping[$oldCustomerIds['co-applicant2']]['urn_no']
                     ];
                 }
 
                 if ($oldCustomerIds['guarantor1']!=null && array_key_exists($oldCustomerIds['guarantor1'], $pCustMapping)){
                     $loanCustomerRelations[] = [
                         'customerId' => $pCustMapping[$oldCustomerIds['guarantor1']]['id'],
-                        'relation' => 'Guarantor'
+                        'relation' => 'Guarantor',
+                        'urn' => $pCustMapping[$oldCustomerIds['guarantor1']]['urn_no']
                     ];
                 }
 
                 if ($oldCustomerIds['guarantor2']!=null && array_key_exists($oldCustomerIds['guarantor2'], $pCustMapping)){
                     $loanCustomerRelations[] = [
                         'customerId' => $pCustMapping[$oldCustomerIds['guarantor2']]['id'],
-                        'relation' => 'Guarantor'
+                        'relation' => 'Guarantor',
+                        'urn' => $pCustMapping[$oldCustomerIds['guarantor2']]['urn_no']
                     ];
                 }
 
@@ -168,6 +173,7 @@ foreach ($files as $file) {
                     'oldAccountNO' => $rowData[2],
                     'applicant' => $pCustMapping[$oldCustomerIds['applicant']]['urn_no'],
                     'customerId' => $pCustMapping[$oldCustomerIds['customer']]['id'],
+                    'urnNo' => $pCustMapping[$oldCustomerIds['customer']]['urn_no'],
                     'loanApplicationDate' => $rowData[9],
                     'tenure' => $rowData[10],
                     'loanPurpose1' => $rowData[11],
