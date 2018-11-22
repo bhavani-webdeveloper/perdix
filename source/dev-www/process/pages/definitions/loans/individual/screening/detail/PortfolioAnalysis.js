@@ -1,8 +1,8 @@
 define({
     pageUID: "loans.individual.screening.detail.PortfolioAnalysis",
     pageType: "Engine",
-    dependencies: ["$log", "$q", "SchemaResource","PageHelper","Scoring","AuthTokenHelper","Enrollment", "SessionStore","formHelper", "filterFilter", "irfCurrencyFilter", "irfElementsConfig", "Model_ELEM_FC", "BundleManager","$filter"],
-    $pageFn: function ($log, $q, SchemaResource,PageHelper,Scoring, AuthTokenHelper, Enrollment,SessionStore, formHelper, filterFilter, irfCurrencyFilter, irfElementsConfig, Model_ELEM_FC, BundleManager,$filter) {
+    dependencies: ["$log", "$q", "SchemaResource","PageHelper","Scoring","AuthTokenHelper","Enrollment", "SessionStore","formHelper", "filterFilter", "irfCurrencyFilter", "irfElementsConfig", "Model_ELEM_FC", "BundleManager","$filter","Queries"],
+    $pageFn: function ($log, $q, SchemaResource,PageHelper,Scoring, AuthTokenHelper, Enrollment,SessionStore, formHelper, filterFilter, irfCurrencyFilter, irfElementsConfig, Model_ELEM_FC, BundleManager,$filter,Queries) {
         var randomColor = function() {
 			return (function(m,s,c){return (c ? arguments.callee(m,s,c-1) : '#') + s[m.floor(m.random() * s.length)]})(Math,'0123456789ABCDEF',5);
         }
@@ -19,9 +19,9 @@ define({
                 /* form is initialised with ripple loader until we get the data loaded from the event */
                 
                 self.form = [{
-					"type": "section",
-					"html": '<br><div style="text-align:center">Waiting for Customer History ..<br><br><ripple-loader></ripple-loader></div>'
-				}];
+                    "type": "section",
+                    "html": '<br><div style="text-align:center">Waiting for Customer History ..<br><br><ripple-loader></ripple-loader></div>'
+                }];
                 /*--Utility function's for table view --*/
                 self.strongRender = function(data, type, full, meta) {
                     return '<strong>'+data+'</strong>';
@@ -33,8 +33,37 @@ define({
                     return '-'+irfElementsConfig.currency.iconHtml+irfCurrencyFilter(Math.abs(data), null, null, "decimal");
                     else return ''
                 }
-                scoreName = null;
-                switch (model.currentStage) {
+                var deferred = $q.defer();
+                model.customerHistory=[];
+                var p1 = Queries.getLoanAccountsByUrnAndStage(model.customerUrn, ["Completed"]);
+                var promiseArr = [];
+                p1.then(function(_res){
+                var loanIds = [];
+                var res = $filter("orderBy") (_res, ['loanId', 'currentStage']);
+                if(res){
+                    res=(res.length>3)?(_res.slice(-3)):(res);
+                    for (var i=0;i<res.length;i++){
+                        (function(i){
+                            loanIds.push(res[i].loanId);
+                            var promise = Scoring.financialSummarySnapshot({loan_id: res[i].loanId, score_name: "ConsolidatedScore"}).$promise;
+                            promiseArr.push(promise);
+                            promiseArr[i].then(function(resp){
+                            model.customerHistory.push(resp);
+                            },function(){
+                                $log.info("Failed loading financial summary for loan_id::" + res[i].loanId);
+                            });
+                        })(i);
+                    }
+                }
+                $q.all(promiseArr).then(function(){
+
+                }).finally(function(){
+                    deferred.resolve();
+                    BundleManager.pushEvent('customer-history-data', model._bundlePageObj, model.customerHistory);
+                })
+                },function(){})
+                    scoreName = null;
+                    switch (model.currentStage) {
                     case "ScreeningReview":
                         scoreName = "RiskScore1";
                         break;

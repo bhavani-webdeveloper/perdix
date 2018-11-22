@@ -424,21 +424,21 @@
                         "type": "string",
                         "minLength": 16,
                         "maxLength": 16,
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "parentCustomerId": {
                         "title": "Parent Customer Id",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "familyEnrollmentId": {
                         "title": "Family Enrollment Id",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "title": {
                         "title": "Title",
@@ -452,7 +452,7 @@
                         "type": "integer",
                         "minimum": 0,
                         "maximum": 999999,
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "ownership": {
                         "title": "Ownershop",
@@ -466,14 +466,14 @@
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "street": {
                         "title": "Street",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "oldCustomerId": {
                         "title": "Old Customer ID",
@@ -485,28 +485,28 @@
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "locality": {
                         "title": "Locality",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "landmark": {
                         "title": "Landmark",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 45,
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "postOffice": {
                         "title": "Post Office",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "district": {
                         "title": "District",
@@ -520,21 +520,21 @@
                         "type": "number",
                         "minimum": 100000,
                         "maximum": 999999,
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "stdCode": {
                         "title": "STD CODE",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "state": {
                         "title": "State",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "landLineNo": {
                         "title": "LandLine Number",
@@ -560,7 +560,7 @@
                         "type": "string",
                         "minLength": 10,
                         "maxLength": 15,
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "whatsAppMobileNo": {
                         "title": "Whatsapp Mobile No",
@@ -579,28 +579,28 @@
                     "mailSameAsResidence": {
                         "title": "Mail Same as Residence",
                         "type": "boolean",
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "firstName": {
                         "title": "First Name",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "lastName": {
                         "title": "Last Name",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "middleName": {
                         "title": "Middle Name",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "motherName": {
                         "title": "Mother's Name",
@@ -628,19 +628,19 @@
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "gender": {
                         "title": "Gender",
                         "type": "string",
                         "refCodeCategory": "gender",
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "dateOfBirth": {
                         "title": "Date Of Birth",
                         "type": "string",
                         "format": "date",
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "religion": {
                         "title": "Religion",
@@ -669,14 +669,14 @@
                         "title": "Marital Status",
                         "type": "string",
                         "refCodeCategory": "marital_status",
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "spouseFirstName": {
                         "title": "Spouse First Name",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "spouseMiddleName": {
                         "title": "Spouse Middle Name",
@@ -696,7 +696,7 @@
                         "title": "Spouse Date Of Birth",
                         "type": "string",
                         "format": "date",
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "careOf": {
                         "title": "Care Of",
@@ -750,17 +750,17 @@
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "enrolledAs": {
                         "title": "Enrolled as",
                         "type": "string",
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "inviteId": {
                         "title": "Invite Id",
                         "type": "string",
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     }
                 }
             },
@@ -789,165 +789,165 @@
                         "title": "Kyc1 Proof Type",
                         "type": "string",
                         "refCodeCategory": "kyc",
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "kyc1ImagePath": {
                         "title": "Kyc1 Proof Document",
                         "type": "string",
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "kyc1ReverseImagePath": {
                         "title": "Kyc1 Reverse Proof Document",
                         "type": "string",
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "kyc1ProofNumber": {
                         "title": "Kyc1 Proof Number",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "kyc1IssueDate": {
                         "title": "Kyc1 Issue Date",
                         "type": "string",
                         "format": "date",
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "kyc1ValidUptoDate": {
                         "title": "Kyc1 valid upto Date",
                         "type": "string",
                         "format": "date",
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "kyc2ProofType": {
                         "title": "Kyc2 Proof Type",
                         "type": "string",
                         "refCodeCategory": "kyc",
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "kyc2ImagePath": {
                         "title": "Kyc2 Proof Document",
                         "type": "string",
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "kyc2ReverseImagePath": {
                         "title": "Kyc2 Reverse Proof Document",
                         "type": "string",
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "kyc2ProofNumber": {
                         "title": "Kyc2 Proof Number",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "kyc2IssueDate": {
                         "title": "Kyc2 Issue Date",
                         "type": "string",
                         "format": "date",
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "kyc2ValidUptoDate": {
                         "title": "Kyc2 valid upto Date",
                         "type": "string",
                         "format": "date",
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "panNo": {
                         "title": "Pan Number",
                         "type": "string",
                         "minLength": 10,
                         "maxLength": 10,
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "aadhaarNo": {
                         "title": "Aadhaar Number",
                         "type": "string",
                         "minLength": 12,
                         "maxLength": 12,
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "addressProof": {
                         "title": "Address Proof",
                         "type": "string",
                         "refCodeCategory": "address_proof",
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "addressProofImageId": {
                         "title": "Address Proof Image Id",
                         "type": "string",
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "addressProofReverseImageId": {
                         "title": "addressProofReverseImageId",
                         "type": "string",
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "addressProofNo": {
                         "title": "Address Proof Number",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 45,
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "addressProofIssueDate": {
                         "title": "Address Proof Issue Date",
                         "type": "string",
                         "format": "date",
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "addressProofValidUptoDate": {
                         "title": "Address Proof Valid Upto Date",
                         "type": "string",
                         "format": "date",
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "identityProof": {
                         "title": "Identity Proof",
                         "type": "string",
                         "refCodeCategory": "identity_proof",
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "identityProofImageId": {
                         "title": "Identity Proof Image",
                         "type": "string",
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "identityProofReverseImageId": {
                         "title": "identityProofReverseImageId",
                         "type": "string",
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "identityProofNo": {
                         "title": "Identity Proof Number",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 45,
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "idProofValidUptoDate": {
                         "title": "Id Proof Valid Upto Date",
                         "type": "string",
                         "format": "date",
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "idProofIssueDate": {
                         "title": "Id Proof Issue Date",
                         "type": "string",
                         "format": "date",
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "addressProofSameAsIdProof": {
                         "title": "addressProofSameAsIdProof",
                         "type": "string",
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "panCardImageId": {
                         "title": "Pan Card Image",
                         "type": "string",
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "ageProof": {
                         "title": "Age Proof",
@@ -957,7 +957,7 @@
                     "ageProofImageId": {
                         "title": "Age Proof Image",
                         "type": "string",
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "houseNo": {
                         "title": "HouseNo",
@@ -1376,7 +1376,7 @@
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     }
                 }
             },
@@ -1470,7 +1470,7 @@
                     "udf1": {
                         "title": "SPOUSE_LOAN_CONSENT",
                         "type": "boolean",
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "udf2": {
                         "title": "IF_HOUSE_RENTED_NAME_OF_LANDLORD",
@@ -1658,12 +1658,12 @@
                     "udf29": {
                         "title": "ADDRESS_PROOF_BACK_SIDE",
                         "type": "string",
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "udf30": {
                         "title": "ID_PROOF_BACK_SIDE",
                         "type": "string",
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "udf31": {
                         "title": "HOUSE_BUILD_TYPE",
@@ -1677,19 +1677,23 @@
                     },
                     "udf33": {
                         "title": "SPOUSE_ID_PROOF_TYPE",
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "udf34": {
                         "title": "SPOUSE_ID_PROOF_IMAGE_FRONT",
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "udf35": {
                         "title": "SPOUSE_ID_PROOF_IMAGE_BACK",
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "udf36": {
                         "title": "SPOUSE_ID_PROOF_NUMBER",
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
+                    },
+                    "udf40": {
+                        "title": "Terms",
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     }
                 }
             },
@@ -1701,12 +1705,12 @@
                     "udfDate1": {
                         "title": "SPOUSE_ID_PROOF_ISSUE_DATE",
                         "type": "string",
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "udfDate2": {
                         "title": "SPOUSE_ID_PROOF_VALID_UPTO_DATE",
                         "type": "string",
-                        "captureStages": ["Stage01", "Completed"]
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
                     }
                 }
             },
