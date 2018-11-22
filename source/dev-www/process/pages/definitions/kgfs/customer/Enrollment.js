@@ -842,6 +842,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                     "HouseVerification.verifications.referenceFirstName",
                     "HouseVerification.verifications.referenceLastName",
                     "HouseVerification.verifications.relationship",
+                    "HouseVerification.date",
+                    "HouseVerification.place",
                     "actionbox",
                     "actionbox.submit",
                     "actionbox.save"
@@ -1104,8 +1106,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                                      return;
                                  }
                             
-            
-        
                             try {
                                 var liabilities = reqData['customer']['liabilities'];
                                 if (liabilities && liabilities != null && typeof liabilities.length == "number" && liabilities.length > 0) {
@@ -1177,8 +1177,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                                     $state.go('Page.Landing', null);
                                 });
                             } else {
-                                //reqData.customer.currentStage="Stage02";
-                                EnrollmentHelper.saveData(reqData).then(function(res) {
+                                reqData.customer.currentStage="Stage02";
+                                EnrollmentHelper.saveandproceed(reqData).then(function(res) {
                                     model.customer = _.clone(res.customer);
                                     model.customer.addressProofSameAsIdProof = (model.customer.title == "true") ? true : false;
                                     model = EnrollmentHelper.fixData(model);
@@ -1190,107 +1190,20 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                                         reqData.lead.leadStatus = "Complete";
                                         LeadHelper.proceedData(reqData)
                                     }
-                                    EnrollmentHelper.proceedData(res).then(function(resp) {
-                                        PageHelper.showProgress('enrolment', 'Done.', 5000);
-                                        model.customer = _.clone(res.customer);
-                                        model.customer.addressProofSameAsIdProof = (model.customer.title == "true") ? true : false;
-                                        model = EnrollmentHelper.fixData(model);
-                                        //$state.go('Page.Landing', null);
-                                    }, function(err) {
-                                        Utils.removeNulls(res.customer, true);
-                                        model.customer = res.customer;
-                                    });
+                                    // EnrollmentHelper.proceedData(res).then(function(resp) {
+                                    //     PageHelper.showProgress('enrolment', 'Done.', 5000);
+                                    //     model.customer = _.clone(res.customer);
+                                    //     model.customer.addressProofSameAsIdProof = (model.customer.title == "true") ? true : false;
+                                    //     model = EnrollmentHelper.fixData(model);
+                                    //     //$state.go('Page.Landing', null);
+                                    // }, function(err) {
+                                    //     Utils.removeNulls(res.customer, true);
+                                    //     model.customer = res.customer;
+                                    // });
                                 });
                             }
                             });
                         },
-                        // save: function (model, formCtrl, form, $event) {
-                        //     PageHelper.clearErrors();
-                        //     if (PageHelper.isFormInvalid(formCtrl)) {
-                        //         return false;
-                        //     }
-                        //     formCtrl.scope.$broadcast('schemaFormValidate');
-
-                        //     if (formCtrl && formCtrl.$invalid) {
-                        //         PageHelper.showProgress("enrolment", "Your form have errors. Please fix them.", 5000);
-                        //         return false;
-                        //     }
-
-                        //     // $q.all start
-                        //     model.enrolmentProcess.save()
-                        //         .finally(function () {
-                        //             PageHelper.hideLoader();
-                        //         })
-                        //         .subscribe(function (value) {
-                        //             formHelper.resetFormValidityState(formCtrl);
-                        //             Utils.removeNulls(value, true);
-                        //             PageHelper.showProgress('enrolment', 'Customer Saved.', 5000);
-                        //             PageHelper.clearErrors();
-                        //             BundleManager.pushEvent()
-                        //         }, function (err) {
-                        //             PageHelper.showErrors(err);
-                        //             PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
-
-                        //             PageHelper.hideLoader();
-                        //         });
-                        // },
-                        // proceed: function (model, form, formName) {
-                        //     PageHelper.clearErrors();
-                        //     if (PageHelper.isFormInvalid(form)) {
-                        //         return false;
-                        //     }
-                        //     PageHelper.showProgress('enrolment', 'Updating Customer');
-                        //     PageHelper.showLoader();
-                        //     model.enrolmentProcess.proceed()
-                        //         .finally(function () {
-                        //             console.log("Inside hideLoader call");
-                        //             PageHelper.hideLoader();
-                        //         })
-                        //         .subscribe(function (enrolmentProcess) {
-                        //             formHelper.resetFormValidityState(form);
-                        //             PageHelper.showProgress('enrolment', 'Done.', 5000);
-                        //             PageHelper.clearErrors();
-                        //             BundleManager.pushEvent(model.pageClass + "-updated", model._bundlePageObj, enrolmentProcess);
-                        //             BundleManager.pushEvent('new-enrolment', model._bundlePageObj, { customer: model.customer });
-
-                        //         }, function (err) {
-                        //             PageHelper.showErrors(err);
-                        //             PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
-
-                        //         });
-                        // },
-                        // submit: function (model, form, formName) {
-                        //     PageHelper.clearErrors();
-                        //     if (PageHelper.isFormInvalid(form)) {
-                        //         return false;
-                        //     }
-                        //     PageHelper.showProgress('enrolment', 'Updating Customer');
-                        //     PageHelper.showLoader();
-                        //     model.enrolmentProcess.save()
-                        //         .finally(function () {
-                        //             PageHelper.hideLoader();
-                        //         })
-                        //         .subscribe(function (enrolmentProcess) {
-                        //             formHelper.resetFormValidityState(form);
-                        //             PageHelper.showProgress('enrolment', 'Done.', 5000);
-                        //             PageHelper.clearErrors();
-                        //             BundleManager.pushEvent(model.pageClass + "-updated", model._bundlePageObj, enrolmentProcess);
-                        //             BundleManager.pushEvent('new-enrolment', model._bundlePageObj, { customer: model.customer });
-
-                        //             model.enrolmentProcess.proceed()
-                        //                 .subscribe(function (enrolmentProcess) {
-                        //                     PageHelper.showProgress('enrolment', 'Done.', 5000);
-                        //                 }, function (err) {
-                        //                     PageHelper.showErrors(err);
-                        //                     PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
-                        //                 })
-                        //         }, function (err) {
-                        //             PageHelper.showErrors(err);
-                        //             PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
-                        //             PageHelper.hideLoader();
-                        //         });
-                        // }
-                    
                     }
                 };
             }

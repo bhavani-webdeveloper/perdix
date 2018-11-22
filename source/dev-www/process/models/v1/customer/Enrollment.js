@@ -508,6 +508,25 @@ function($log, $q, Enrollment,formHelper, PageHelper, irfProgressMessage, Utils,
     * if cust id set, promise resolved with PROCEED response
     * if error occurs, promise rejected with null.
     * */
+
+    var saveandproceed= function (res){
+        var deferred = $q.defer();
+        $log.info("Attempting Proceed");
+        $log.info(res);
+        PageHelper.clearErrors();
+            PageHelper.showLoader();
+            res.enrollmentAction = "PROCEED";
+            Enrollment.updateEnrollment(res, function (res, headers) {
+                PageHelper.hideLoader();
+                deferred.resolve(res);
+            }, function (res, headers) {
+                PageHelper.hideLoader();
+                PageHelper.showErrors(res);
+                deferred.reject(res);
+            });
+        return deferred.promise;
+
+    };
     var proceedData = function(res){
 
         var deferred = $q.defer();
@@ -530,6 +549,17 @@ function($log, $q, Enrollment,formHelper, PageHelper, irfProgressMessage, Utils,
                 deferred.reject(res);
             });
         }
+        PageHelper.clearErrors();
+            PageHelper.showLoader();
+            res.enrollmentAction = "PROCEED";
+            Enrollment.updateEnrollment(res, function (res, headers) {
+                PageHelper.hideLoader();
+                deferred.resolve(res);
+            }, function (res, headers) {
+                PageHelper.hideLoader();
+                PageHelper.showErrors(res);
+                deferred.reject(res);
+            });
         return deferred.promise;
 
     };
@@ -623,6 +653,7 @@ function($log, $q, Enrollment,formHelper, PageHelper, irfProgressMessage, Utils,
         fixData: fixData,
         saveData: saveData,
         proceedData: proceedData,
+        saveandproceed:saveandproceed,
         validateData: validateData,
         validateDate:validateDate,
         validateBankAccounts:validateBankAccounts,
