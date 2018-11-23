@@ -222,7 +222,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                         'page': 1,
                         'per_page': 100
                     }).$promise.then(function(data) {
-                        asq.data = data.body.length;
+                        asq.data = Number(data.headers['x-total-count']) || data.body.length;
                     });
                 }
 
