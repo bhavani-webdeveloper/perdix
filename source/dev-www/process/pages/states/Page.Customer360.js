@@ -108,10 +108,6 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 				]
 			},
 			"Page/Adhoc/customer360.FinancialWellbeingReport",
-<<<<<<< HEAD
-			"Page/CustomerHistory",
-=======
->>>>>>> #FIXED customer History Summary error
 			"Page/Engine/customer360.CustomerHistorySummary",
 			"Page/Engine/customer360.Recapture",
 			"Page/Engine/customer360.CustomerSummaryView",
