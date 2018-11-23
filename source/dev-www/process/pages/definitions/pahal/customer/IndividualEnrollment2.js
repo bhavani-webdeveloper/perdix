@@ -138,13 +138,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "BankAccounts": {
                                     "readonly": true
+                                },
+                                "EnterpriseReferences": {
+                                    "readonly": true
+                                },
+                                "ResidenceVerification": {
+                                    "readonly": true
+                                },
+                                "PhysicalAssets": {
+                                    "readonly": true
                                 }
                             },
                             "excludes": [
-                                "EnterpriseReferences",
-                                "IndividualReferences",
-                                "PhysicalAssets",
-                                "ResidenceVerification"
                             ]
                         },
                         "GoNoGoApproval2": {
