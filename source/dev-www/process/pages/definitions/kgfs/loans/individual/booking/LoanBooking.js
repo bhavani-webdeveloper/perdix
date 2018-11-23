@@ -439,11 +439,11 @@ define([], function () {
                             },
                             {
                                 value: 20,
-                                name: "22"
+                                name: "20"
                             },
                             {
-                                value: 24,
-                                name: "24"
+                                value: 22,
+                                name: "22"
                             }
                         ],
                         onChange:function(valueObj,context,model){
@@ -462,6 +462,7 @@ define([], function () {
                     "NomineeDetails.nominees.nomineeFirstName": {
                         "orderNo": 1,
                         "type": "lov",
+                        required: true,
                         "title": "NAME",
                         searchHelper: formHelper,
                         search: function (inputModel, form, model, context) {
@@ -473,7 +474,7 @@ define([], function () {
                             for (var i = 0; i < model.customer.familyMembers.length; i++) {
                                 out.push({
                                     name: model.customer.familyMembers[i].familyMemberFirstName,
-                                    // value: model.customer.familyDetails[i].value,
+                                    dob : model.customer.familyMembers[i].dateOfBirth,
                                     relationship: model.customer.familyMembers[i].relationShip,
                                     gender: model.customer.familyMembers[i].gender
                                 })
@@ -493,6 +494,7 @@ define([], function () {
                             model.loanAccount.nominees[context.arrayIndex].nomineeFirstName = valueObj.name;
                             model.loanAccount.nominees[context.arrayIndex].nomineeRelationship = valueObj.relationship;
                             model.loanAccount.nominees[context.arrayIndex].nomineeGender = valueObj.gender;
+                            model.loanAccount.nominees[context.arrayIndex].nomineeDOB = valueObj.dob
                         },
                         getListDisplayItem: function (item, index) {
                             return [
@@ -502,26 +504,22 @@ define([], function () {
 
                     },
                     "NomineeDetails.nominees.nomineeDOB": {
-                        "orderNo": 2
+                        "orderNo": 2,
+                        required:true
                     },
                     "NomineeDetails.nominees.nomineeRelationship": {
                         "readonly": true,
-                        "type": "text"
+                        "type": "text",
                     },
                     "NomineeDetails.nominees.nomineeGender": {
                         "orderNo": 3,
                         "readonly": true,
                         "type": "text"
                     },
-                    "NomineeDetails.nominees.nomineeDoorNo": {
-                        "orderNo": 4
-                    },
-                    "NomineeDetails.nominees.nomineeStreet": {
-                        "orderNo": 5,
-                    },
                     "NomineeDetails.nominees.nomineePincode": {
                         "orderNo": 6,
                         fieldType: "number",
+                        required:true,
                         autolov: true,
                         inputMap: {
                             "district": {
@@ -562,6 +560,7 @@ define([], function () {
                     "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianFirstName": {
                         "type": "lov",
                         "title": "NAME",
+                        required:true,
                         searchHelper: formHelper,
                         search: function (inputModel, form, model, context) {
                             var out = [];
@@ -572,7 +571,7 @@ define([], function () {
                             for (var i = 0; i < model.customer.familyMembers.length; i++) {
                                 out.push({
                                     name: model.customer.familyMembers[i].familyMemberFirstName,
-                                    // value: model.customer.familyDetails[i].value,
+                                    dob : model.customer.familyMembers[i].dateOfBirth,
                                     relationship: model.customer.familyMembers[i].relationShip,
                                     gender: model.customer.familyMembers[i].gender
                                 })
@@ -592,7 +591,9 @@ define([], function () {
                             model.loanAccount.nominees[context.arrayIndex].guardianFirstName = valueObj.name;
                             model.loanAccount.nominees[context.arrayIndex].guardianRelationWithMinor = valueObj.relationship;
                             model.loanAccount.nominees[context.arrayIndex].guardianGender = valueObj.gender;
+                            model.loanAccount.nominees[context.arrayIndex].nomineeDOB = valueObj.dob
                         },
+
                         getListDisplayItem: function (item, index) {
                             return [
                                 item.name
@@ -601,14 +602,17 @@ define([], function () {
                     },
                     "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianGender": {
                         "readonly": true,
-                        "type": "text"
+                        "type": "text",
+                        required:true
                     },
                     "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianRelationship": {
                         "readonly": true,
-                        "type": "text"
+                        "type": "text",
+                        required:true
                     },
                     "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianPincode": {
                         autolov: true,
+                        required:true,
                         inputMap: {
                             "district": {
                                 key: "loanAccount.nominees[].guardianDistrict"
@@ -644,6 +648,15 @@ define([], function () {
                                 item.district + ', ' + item.state
                             ];
                         }
+                    },
+                    "NomineeDetails.nominees.nomineeDistrict":{
+                        required:true
+                    },
+                    "NomineeDetails.nominees.nomineeState":{
+                        required:true
+                    },
+                    "NomineeDetails.nominees.nomineeLocality":{
+                        required:true
                     },
                     "LoanSanction":{
                         "condition": "model.loanAccount.id"
@@ -1300,7 +1313,7 @@ define([], function () {
                         if(model.loanAccount.currentStage=='Checker2'){
                             model.loanProcess.stage='Completed';
                         }
-                        var toStage=model.loanProcess.stage||'';
+                        var toStage=model.loanProcess.stage||null;
                         model.loanProcess.proceed(toStage)
                             .finally(function () {
                                 PageHelper.hideLoader();
