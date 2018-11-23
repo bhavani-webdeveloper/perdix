@@ -1,5 +1,6 @@
 
 import LoanAccount = require("./LoanAccount");
+import {EnrolmentProcess} from "../customer/EnrolmentProcess";
 import {PolicyManager} from "../../shared/PolicyManager";
 import {LoanPolicyFactory} from "./policy/LoanPolicyFactory";
 import {Observable} from "@reactivex/rxjs";
@@ -36,6 +37,16 @@ class LoanProcessFactory {
             lp.loanAccount = new LoanAccount();
             return Observable.of(lp);
         });
+    }
+
+    static plainToClass(loanProcess: LoanProcess): Observable<LoanProcess> {
+        let lp: LoanProcess = new LoanProcess();
+        lp.loanAccount = <LoanAccount>plainToClass<LoanAccount, Object>(LoanAccount, Utils.toJSObj(loanProcess.loanAccount));
+        lp.loanCustomerEnrolmentProcess = <EnrolmentProcess>plainToClass<EnrolmentProcess, Object>(EnrolmentProcess, Utils.toJSObj(loanProcess.loanCustomerEnrolmentProcess));
+        lp.applicantEnrolmentProcess = <EnrolmentProcess>plainToClass<EnrolmentProcess, Object>(EnrolmentProcess, Utils.toJSObj(loanProcess.applicantEnrolmentProcess));
+        lp.coApplicantsEnrolmentProcesses = <EnrolmentProcess>plainToClass<EnrolmentProcess, Object>(EnrolmentProcess, Utils.toJSObj(loanProcess.coApplicantsEnrolmentProcesses));
+        lp.guarantorsEnrolmentProcesses = <EnrolmentProcess>plainToClass<EnrolmentProcess, Object>(EnrolmentProcess, Utils.toJSObj(loanProcess.guarantorsEnrolmentProcesses));
+        return Observable.of(lp);
     }
 }
 
