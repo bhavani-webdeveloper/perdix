@@ -615,7 +615,7 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, Locking, ir
                                     if (!openPage.error && openPage.$initPromise) {
                                         initPromises.push(openPage.$initPromise);
                                     }
-                                    bDef.openPagesCount++;
+                                    // bDef.openPagesCount++;
                                 })
                                 initPromises.push(p);
 
