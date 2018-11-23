@@ -52,7 +52,7 @@ try {
 
     DB::beginTransaction();
     try {
-        if ($isTruncate) {
+        if ($isTruncate == "true") {
             DB::delete('DELETE FROM '. $tableName);
         }
         for ($n = 0; $n < sizeOf($rowData); $n++) {

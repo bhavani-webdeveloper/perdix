@@ -18,7 +18,7 @@ irf.models.factory('ExcelUpload', [
         resource.ExcelFileUpload = function(file, progress, key, isTruncate) {
             var deferred = $q.defer();
             Upload.upload({
-                url: managementUrl + "/server-ext/generic_excel_upload.php?key=" + key + '&isTruncate=' +  isTruncate,
+                url: managementUrl + "/server-ext/generic_excel_upload.php?key=" + key + '&isTruncate=' + !!isTruncate,
                 data: {
                     "file": file
                 }
