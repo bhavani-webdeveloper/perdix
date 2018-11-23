@@ -201,14 +201,7 @@ irf.pageCollection.factory("Pages__ProfileInformation", ["$log", "Lead", "LeadHe
                         };
                     },
                     //"offline": true
-                }, {
-                    key: "customer.centreId",
-                    "required": true,
-                    type: "select",
-                    "enumCode": "centre",
-                    "parentEnumCode": "branch_id",
-                    "parentValueExpr": "model.customer.customerBranchId",
-                }, {
+                },  {
                     key: "customer.enrolledAs",
                     type: "radios"
                 }, {
@@ -307,7 +300,16 @@ irf.pageCollection.factory("Pages__ProfileInformation", ["$log", "Lead", "LeadHe
                             parentCode: 'model.customer.customerBranchId'
                         },
                         screenFilter: true
-                    }, {
+                    }, 
+                    {
+                        key: "customer.centreId",
+                        "required": true,
+                        type: "select",
+                        "enumCode": "centre",
+                        "parentEnumCode": "branch_id",
+                        "parentValueExpr": "model.customer.customerBranchId",
+                    },
+                    {
                         key: "customer.postOffice",
                         required: true
                     }, {
