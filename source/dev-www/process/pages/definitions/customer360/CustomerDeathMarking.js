@@ -128,7 +128,7 @@ irf.pageCollection.factory(irf.page("customer360.CustomerDeathMarking"), ["$log"
                         {
                             key: "deathMarking.urnNo",
                             type: "string",
-                            title:"URN",        
+                            title:"DEATH_MARKING_COLUMN_URN",        
                             readonly:true
                         },
                         {
@@ -148,7 +148,8 @@ irf.pageCollection.factory(irf.page("customer360.CustomerDeathMarking"), ["$log"
                             key: "deathMarking.dateOfDeath",
                             title: "DATE_OF_DEATH",
                             condition:"!model.deathMarking.deathMarkingStatus || model.deathMarking.deathMarkingStatus == 'REJECT'",                                      
-                            type: "date"
+                            type: "date",
+                            required: true
                         },
                         {
                             key: "deathMarking.deathMarkingStatus",
@@ -215,7 +216,8 @@ irf.pageCollection.factory(irf.page("customer360.CustomerDeathMarking"), ["$log"
                             key: "deathMarking.comments",
                             type: "textarea",
                             condition:"!model.deathMarking.deathMarkingStatus || model.deathMarking.deathMarkingStatus == 'REJECT'",
-                            title:"COMMENTS"
+                            title:"COMMENTS",
+                            required: true
                         },
                     ]
                 },
