@@ -1456,6 +1456,7 @@ define(
                                             "key": "loanAccount.vehicleLoanDetails.vehicleUseSubSegment",
                                             "title": "SUB_SEGMENT",
                                             "type": "select",
+                                            "parentEnumCode": "vehicle_use_segment",
                                             "enumCode": "vehicle_use_subsegment",
                                             "orderNo": 10
 
