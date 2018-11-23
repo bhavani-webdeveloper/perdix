@@ -690,12 +690,13 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             {
                                 key:"repayment.visitedDate",
                                 title:"VISITED_DATE",
-                                readonly:true,
+                                required: true,
                                 type:"date"
                             },
                             {
                                 key: "repayment.delayReasonType",
                                 title: "REASON_FOR_DELAY",
+                                required: true,
                                 type: "select",
                                 titleMap: [{
                                     "name": "Business",
@@ -711,6 +712,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 key: "repayment.overdueReasons",
                                 title: "REASON",
                                 type: "select",
+                                required: true,
                                 condition: "model.repayment.delayReasonType =='Business'",
                                 enumCode: "business_overdue_reasons"
 
@@ -719,6 +721,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 key: "repayment.overdueReasons",
                                 title: "REASON",
                                 type: "select",
+                                required: true,
                                 condition: "model.repayment.delayReasonType=='Personal'",
                                 enumCode: "personal_overdue_reasons"
                             },
@@ -726,6 +729,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 key: "repayment.reasons",
                                 title: "OVERDUE_REASON",
                                 type: "textarea",
+                                required: true,
                                 "condition": "model.repayment.overdueReasons=='Others'"
 
                             },
