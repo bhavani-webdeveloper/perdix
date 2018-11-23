@@ -2916,6 +2916,213 @@
                }
             }
          },
+		 "teleCallingDetails": {
+        "title": "teleCallingDetails",
+        "type": "array",
+        "maxItems": 10,
+        "items": {
+          "type": "object",
+          "required": [
+          ],
+          "properties": {
+            "customerCalled": {
+              "title": "customerCalled",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "captureStages":[
+                     "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                  ]
+            },
+            "customerNotCalledReason": {
+              "title": "customerNotCalledReason",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "captureStages":[
+                     "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                  ]
+            },
+            "customerNotCalledRemarks": {
+              "title": "customerNotCalledRemarks",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 500,
+              "captureStages":[
+                     "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                  ]
+            },
+            "customerCalledDate": {
+              "title": "customerCalledDate",
+              "type": "date",
+              
+              "captureStages":[
+                     "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                  ]
+            },
+            "customerCalledBy": {
+              "title": "customerCalledBy",
+              "type": "string",
+              
+              "captureStages":[
+                     "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                  ]
+            },
+            "customerCalledAt": {
+              "title": "customerCalledAt",
+              "type": "date",
+             
+              "captureStages":[
+                     "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                  ]
+            },
+            "customerKnownSinceYears": {
+              "title": "customerKnownSinceYears",
+              "type": "number",
+             
+              "captureStages":[
+                     "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                  ]
+            },
+            "relationshipWithCustomer": {
+              "title": "relationshipWithCustomer",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 20,
+              "captureStages":[
+                     "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                  ]
+            },
+            "referenceOpinionOnCustomer": {
+              "title": "referenceOpinionOnCustomer",
+              "type": "string",
+              "captureStages":[
+                     "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                  ]
+            },
+            "customerFinancialStatus": {
+              "title": "customerFinancialStatus",
+              "type": "string",
+              "captureStages":[
+                     "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                  ]
+            },
+            "telecallingResponse": {
+              "title": "telecallingResponse",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "captureStages":[
+                     "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                  ]
+            },
+            "telecallingRemarks": {
+              "title": "telecallingRemarks",
+              "type": "string",
+              "captureStages":[
+                     "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                  ]
+            },
+            "personContacted": {
+              "title": "personContacted",
+              "type": "string",
+              "captureStages":[
+                     "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                  ]
+            },
+            "contactNumber": {
+              "title": "contactNumber",
+              "type": "string",
+               "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+                    ]
+                  },
+            "occupation": {
+              "title": "occupation",
+              "type": "string",
+               "captureStages":[
+                     "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                  ]
+            },
+            "address": {
+              "title": "address",
+              "type": "string",
+               "captureStages":[
+                     "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                  ]
+            },
+            "personType": {
+              "title": "personType",
+              "type": "string",
+               "captureStages":[
+                     "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                  ]
+            },
+            "partyType": {
+              "title": "partyType",
+              "type": "string",
+               "captureStages":[
+                     "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                  ]
+            },
+			"noOfCallAttempts": {
+              "title": "noOfCallAttempts",
+              "type": "number",
+               "captureStages":[
+                     "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                  ]
+            },
+			"followupCallRequired": {
+              "title": "followupCallRequired",
+              "type": "date",
+               "captureStages":[
+                     "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                  ]
+            }
+          }
+        }
+      },
+      "teleCallingQuestionnaire":{
+             "title":"teleCallingQuestionnaire",
+            "type":"array",
+            "maxItems":null,
+            "items":{
+               "type":"object",
+               "required":[
+
+               ],
+               "properties":{
+                  "question":{
+                     "title":"question",
+                     "type":"string",
+                     "minLength":1,
+                     "maxLength":100,
+                     "captureStages":[
+                     "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                  ]
+                  },
+                  "answer":{
+                     "title":"answer",
+                     "type":"string",
+                     "minLength":1,
+                     "maxLength":1000,
+                      "captureStages":[
+                     "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                  ]
+                  },
+                  "remarks":{
+                     "title":"remarks",
+                    "type":"string",
+                     "minLength":1,
+                     "maxLength":1000,
+                     "captureStages":[
+                     "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                  ]
+                  }
+               }
+            }
+         },
         "vehicleAccessories":{
              "title":"vehicleAccessories",
             "type":"array",
