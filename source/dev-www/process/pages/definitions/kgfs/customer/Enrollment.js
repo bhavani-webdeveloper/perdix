@@ -626,10 +626,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                         "HouseVerification": {
                             orderNo: 131
                         },
+                        "EDF":{
+                            orderNo: 140
+                        },
                         "bankAccounts.customerBankAccounts.confirmedAccountNumber":{
                             "title":"Confirm Account Number"
+                        },
+                        "actionbox":{
+                            "condition":"model.customer.udf.userDefinedFieldValues.udf40=='ACCEPT'"
+                        },
+                        "actionbox1":{
+                            "condition":"model.customer.udf.userDefinedFieldValues.udf40=='REJECT'"
                         }
-
                     }
                 }
                 var getIncludes = function (model) {
@@ -842,9 +850,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                     "HouseVerification.verifications.referenceFirstName",
                     "HouseVerification.verifications.referenceLastName",
                     "HouseVerification.verifications.relationship",
+                    "HouseVerification.date",
+                    "HouseVerification.place",
+                    "EDF",
+                    "EDF.condition",
                     "actionbox",
                     "actionbox.submit",
-                    "actionbox.save"
+                    "actionbox1",
+                    "actionbox1.saveBasicDetails",
+                    "actionbox2",
+                    "actionbox2.save"
                     ];
 
                 }
@@ -876,18 +891,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
 
                             if (!(model && model.customer && model.customer.id && model.$$STORAGE_KEY$$) && $stateParams.pageId) {
                                 var customerId = $stateParams.pageId;
+                                PageHelper.showLoader();
                                 EnrolmentProcess.fromCustomerID(customerId)
                                     .subscribe(function(value){
                                         model.enrolmentProcess=value;
                                         model.customer=model.enrolmentProcess.customer;
                                         model.customer.addressProofSameAsIdProof = (model.customer.title == "true") ? true : false;
                                         model = EnrollmentHelper.fixData(model);
-                                        var deferred = $q.defer();
-                                        var promise = deferred.promise;
-                                        promise.then(function(resp) {
-                                            self.form = IrfFormRequestProcessor.getFormDefinition('IndividualEnrollment', formRequest,configFile(), model);
-                                            PageHelper.hideLoader();
-                                        })
+                                        self.form = IrfFormRequestProcessor.getFormDefinition('IndividualEnrollment', formRequest,configFile(), model);
+                                        PageHelper.hideLoader();
+                                       
                                     });
                             } else {
                                 EnrolmentProcess.createNewProcess()
@@ -909,6 +922,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                                         model.customer.expenditures=[];
                                         self.form = IrfFormRequestProcessor.getFormDefinition('IndividualEnrollment', formRequest, configFile(), model);
                                 });
+                            }
+
+                            if(model.$$STORAGE_KEY$$){
+                                $log.info(model);
                             }
 
                             model.isFPEnrolled = function(fingerId) {
@@ -991,6 +1008,20 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                             item.customer.villageName
                         ]
                     },
+                    offlineInitialize: function(model, form, formCtrl) {
+                        $log.info(model);
+                        model.isFPEnrolled = function(fingerId) {
+                            if (model.customer[BiometricService.getFingerTF(fingerId)] != null || (typeof(model.customer.$fingerprint) != 'undefined' && typeof(model.customer.$fingerprint[fingerId]) != 'undefined' && model.customer.$fingerprint[fingerId].data != null)) {
+                                return "fa-check text-success";
+                            }
+                            return "fa-close text-danger";
+                        }
+        
+                        model.getFingerLabel = function(fingerId) {
+                            return BiometricService.getLabel(fingerId);
+                        }
+
+                    },
                     form: [],
 
                     schema: function () {
@@ -1027,7 +1058,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                                 notify: true
                             });
                         },
-                        submit: function(model, form, formName) {
+                        saveBasicDetails:function(model, form, formName) {
                             var actions = this.actions;
                             $log.info("Inside submit()");
                             $log.warn(model);
@@ -1086,8 +1117,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                                      return;
                                  }
                             
-            
-        
                             try {
                                 var liabilities = reqData['customer']['liabilities'];
                                 if (liabilities && liabilities != null && typeof liabilities.length == "number" && liabilities.length > 0) {
@@ -1159,8 +1188,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                                     $state.go('Page.Landing', null);
                                 });
                             } else {
-                                //reqData.customer.currentStage="Stage02";
-                                EnrollmentHelper.saveData(reqData).then(function(res) {
+                                reqData.customer.currentStage="Stage02";
+                                EnrollmentHelper.saveandproceed(reqData).then(function(res) {
                                     model.customer = _.clone(res.customer);
                                     model.customer.addressProofSameAsIdProof = (model.customer.title == "true") ? true : false;
                                     model = EnrollmentHelper.fixData(model);
@@ -1172,7 +1201,164 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                                         reqData.lead.leadStatus = "Complete";
                                         LeadHelper.proceedData(reqData)
                                     }
-                                    EnrollmentHelper.proceedData(res).then(function(resp) {
+                                    // EnrollmentHelper.proceedData(res).then(function(resp) {
+                                    //     PageHelper.showProgress('enrolment', 'Done.', 5000);
+                                    //     model.customer = _.clone(res.customer);
+                                    //     model.customer.addressProofSameAsIdProof = (model.customer.title == "true") ? true : false;
+                                    //     model = EnrollmentHelper.fixData(model);
+                                    //     //$state.go('Page.Landing', null);
+                                    // }, function(err) {
+                                    //     Utils.removeNulls(res.customer, true);
+                                    //     model.customer = res.customer;
+                                    // });
+                                });
+                            }
+                            });
+                        },
+                        submit: function(model, form, formName) {
+                            var actions = this.actions;
+                            $log.info("Inside submit()");
+                            $log.warn(model);
+                            model.customer.title = String(model.customer.addressProofSameAsIdProof);
+                            model.customer.miscellaneous = null;
+                            if (!EnrollmentHelper.validateData(model)) {
+                                $log.warn("Invalid Data, returning false");
+                                return false;
+                            }
+                            if (!EnrollmentHelper.validateBankAccounts(model)) {
+                                $log.warn("Invalid Data, returning false");
+                                PageHelper.hideLoader();
+                                return false;
+                            }
+                            model.siteCode = SessionStore.getGlobalSetting('siteCode');
+                            var reqData = _.cloneDeep(model);
+                            var out = model.customer.$fingerprint;
+                            var fpPromisesArr = [];
+                            for (var key in out) {
+                                if (out.hasOwnProperty(key) && out[key].data!=null) {
+                                    (function(obj){
+                                        var promise = Files.uploadBase64({file: obj.data, type: 'CustomerEnrollment', subType: 'FINGERPRINT', extn:'iso'}, {}).$promise;
+                                        promise.then(function(data){
+                                            model.customer[obj.table_field] = data.fileId;
+                                            delete model.customer.$fingerprint[obj.fingerId];
+                                        });
+                                        fpPromisesArr.push(promise);
+                                    })(out[key]);
+                                } else {
+                                    if (out[key].data == null){
+                                        delete out[key];
+                                    }
+            
+                                }
+                            }
+                            $q.all(fpPromisesArr).then(function(){
+                                /** Valid check whether the user have enrolled or fingerprints or not **/
+                                 if (!(_.has(reqData['customer'], 'leftHandThumpImageId') && !_.isNull(reqData['customer']['leftHandThumpImageId']) &&
+                                    _.has(reqData['customer'], 'leftHandIndexImageId') && !_.isNull(reqData['customer']['leftHandIndexImageId']) &&
+                                   _.has(reqData['customer'], 'leftHandMiddleImageId') && !_.isNull(reqData['customer']['leftHandMiddleImageId']) &&
+                                    _.has(reqData['customer'], 'leftHandRingImageId') && !_.isNull(reqData['customer']['leftHandRingImageId']) &&
+                                     _.has(reqData['customer'], 'leftHandSmallImageId') && !_.isNull(reqData['customer']['leftHandSmallImageId']) &&
+                                     _.has(reqData['customer'], 'rightHandThumpImageId') && !_.isNull(reqData['customer']['rightHandThumpImageId']) &&
+                                    _.has(reqData['customer'], 'rightHandIndexImageId') && !_.isNull(reqData['customer']['rightHandIndexImageId']) &&
+                                     _.has(reqData['customer'], 'rightHandMiddleImageId') && !_.isNull(reqData['customer']['rightHandMiddleImageId']) &&
+                                    _.has(reqData['customer'], 'rightHandRingImageId') && !_.isNull(reqData['customer']['rightHandRingImageId']) &&
+                                     _.has(reqData['customer'], 'rightHandSmallImageId') && !_.isNull(reqData['customer']['rightHandSmallImageId'])
+                                 )) {
+                                     PageHelper.showErrors({
+                                        "data": {
+                                            "error": "Fingerprints are not enrolled. Please check"
+                                        }
+                                    });
+                                     PageHelper.hideLoader();
+            
+                                     return;
+                                 }
+                            
+                            try {
+                                var liabilities = reqData['customer']['liabilities'];
+                                if (liabilities && liabilities != null && typeof liabilities.length == "number" && liabilities.length > 0) {
+                                    for (var i = 0; i < liabilities.length; i++) {
+                                        var l = liabilities[i];
+                                        l.loanAmountInPaisa = l.loanAmountInPaisa * 100;
+                                        l.installmentAmountInPaisa = l.installmentAmountInPaisa * 100;
+                                    }
+                                }
+                                var financialAssets = reqData['customer']['financialAssets'];
+                                if (financialAssets && financialAssets != null && typeof financialAssets.length == "number" && financialAssets.length > 0) {
+                                    for (var i = 0; i < financialAssets.length; i++) {
+                                        var f = financialAssets[i];
+                                        f.amountInPaisa = f.amountInPaisa * 100;
+                                    }
+                                }
+                            } catch (e) {
+                                $log.info("Error trying to change amount info.");
+                            }
+        
+                            reqData['enrollmentAction'] = 'PROCEED';
+        
+                            irfProgressMessage.pop('enrollment-submit', 'Working... Please wait.', 5000);
+                            reqData.customer.verified = true;
+                            try {
+                                if (reqData.customer.familyMembers) {
+                                    for (var i = 0; i < reqData.customer.familyMembers.length; i++) {
+                                        var incomes = reqData.customer.familyMembers[i].incomes;
+                                        for (var j = 0; j < incomes.length; j++) {
+                                            switch (incomes[i].frequency) {
+                                                case 'M':
+                                                    incomes[i].monthsPerYear = 12;
+                                                    break;
+                                                case 'Monthly':
+                                                    incomes[i].monthsPerYear = 12;
+                                                    break;
+                                                case 'D':
+                                                    incomes[i].monthsPerYear = 365;
+                                                    break;
+                                                case 'Daily':
+                                                    incomes[i].monthsPerYear = 365;
+                                                    break;
+                                                case 'W':
+                                                    incomes[i].monthsPerYear = 52;
+                                                    break;
+                                                case 'Weekly':
+                                                    incomes[i].monthsPerYear = 52;
+                                                    break;
+                                                case 'F':
+                                                    incomes[i].monthsPerYear = 26;
+                                                    break;
+                                                case 'Fornightly':
+                                                    incomes[i].monthsPerYear = 26;
+                                                    break;
+                                                case 'Fortnightly':
+                                                    incomes[i].monthsPerYear = 26;
+                                                    break;
+                                            }
+                                        }
+                                    }
+                                }
+                            } catch (err) {
+                                console.error(err);
+                            }
+                            EnrollmentHelper.fixData(reqData);
+                            if (reqData.customer.id) {
+                                EnrollmentHelper.saveandproceed(reqData).then(function(resp) {
+                                    PageHelper.showProgress('enrolment', 'Done.', 5000);
+                                    $state.go('Page.Landing', null);
+                                });
+                            } else {
+                                reqData.customer.currentStage="Stage02";
+                                EnrollmentHelper.saveandproceed(reqData).then(function(res) {
+                                    model.customer = _.clone(res.customer);
+                                    model.customer.addressProofSameAsIdProof = (model.customer.title == "true") ? true : false;
+                                    model = EnrollmentHelper.fixData(model);
+                                    if (model.customer.id && _.hasIn(model, "lead.id")) {
+                                        var reqData = {
+                                            lead: _.cloneDeep(model.lead),
+                                            stage: "Completed"
+                                        }
+                                        reqData.lead.leadStatus = "Complete";
+                                        LeadHelper.proceedData(reqData)
+                                    }
+                                    EnrollmentHelper.saveandproceed(res).then(function(resp) {
                                         PageHelper.showProgress('enrolment', 'Done.', 5000);
                                         model.customer = _.clone(res.customer);
                                         model.customer.addressProofSameAsIdProof = (model.customer.title == "true") ? true : false;
@@ -1186,93 +1372,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                             }
                             });
                         },
-                        // save: function (model, formCtrl, form, $event) {
-                        //     PageHelper.clearErrors();
-                        //     if (PageHelper.isFormInvalid(formCtrl)) {
-                        //         return false;
-                        //     }
-                        //     formCtrl.scope.$broadcast('schemaFormValidate');
-
-                        //     if (formCtrl && formCtrl.$invalid) {
-                        //         PageHelper.showProgress("enrolment", "Your form have errors. Please fix them.", 5000);
-                        //         return false;
-                        //     }
-
-                        //     // $q.all start
-                        //     model.enrolmentProcess.save()
-                        //         .finally(function () {
-                        //             PageHelper.hideLoader();
-                        //         })
-                        //         .subscribe(function (value) {
-                        //             formHelper.resetFormValidityState(formCtrl);
-                        //             Utils.removeNulls(value, true);
-                        //             PageHelper.showProgress('enrolment', 'Customer Saved.', 5000);
-                        //             PageHelper.clearErrors();
-                        //             BundleManager.pushEvent()
-                        //         }, function (err) {
-                        //             PageHelper.showErrors(err);
-                        //             PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
-
-                        //             PageHelper.hideLoader();
-                        //         });
-                        // },
-                        // proceed: function (model, form, formName) {
-                        //     PageHelper.clearErrors();
-                        //     if (PageHelper.isFormInvalid(form)) {
-                        //         return false;
-                        //     }
-                        //     PageHelper.showProgress('enrolment', 'Updating Customer');
-                        //     PageHelper.showLoader();
-                        //     model.enrolmentProcess.proceed()
-                        //         .finally(function () {
-                        //             console.log("Inside hideLoader call");
-                        //             PageHelper.hideLoader();
-                        //         })
-                        //         .subscribe(function (enrolmentProcess) {
-                        //             formHelper.resetFormValidityState(form);
-                        //             PageHelper.showProgress('enrolment', 'Done.', 5000);
-                        //             PageHelper.clearErrors();
-                        //             BundleManager.pushEvent(model.pageClass + "-updated", model._bundlePageObj, enrolmentProcess);
-                        //             BundleManager.pushEvent('new-enrolment', model._bundlePageObj, { customer: model.customer });
-
-                        //         }, function (err) {
-                        //             PageHelper.showErrors(err);
-                        //             PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
-
-                        //         });
-                        // },
-                        // submit: function (model, form, formName) {
-                        //     PageHelper.clearErrors();
-                        //     if (PageHelper.isFormInvalid(form)) {
-                        //         return false;
-                        //     }
-                        //     PageHelper.showProgress('enrolment', 'Updating Customer');
-                        //     PageHelper.showLoader();
-                        //     model.enrolmentProcess.save()
-                        //         .finally(function () {
-                        //             PageHelper.hideLoader();
-                        //         })
-                        //         .subscribe(function (enrolmentProcess) {
-                        //             formHelper.resetFormValidityState(form);
-                        //             PageHelper.showProgress('enrolment', 'Done.', 5000);
-                        //             PageHelper.clearErrors();
-                        //             BundleManager.pushEvent(model.pageClass + "-updated", model._bundlePageObj, enrolmentProcess);
-                        //             BundleManager.pushEvent('new-enrolment', model._bundlePageObj, { customer: model.customer });
-
-                        //             model.enrolmentProcess.proceed()
-                        //                 .subscribe(function (enrolmentProcess) {
-                        //                     PageHelper.showProgress('enrolment', 'Done.', 5000);
-                        //                 }, function (err) {
-                        //                     PageHelper.showErrors(err);
-                        //                     PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
-                        //                 })
-                        //         }, function (err) {
-                        //             PageHelper.showErrors(err);
-                        //             PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
-                        //             PageHelper.hideLoader();
-                        //         });
-                        // }
-                    
                     }
                 };
             }

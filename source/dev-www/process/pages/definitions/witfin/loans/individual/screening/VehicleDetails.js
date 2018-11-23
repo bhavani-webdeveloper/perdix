@@ -756,8 +756,8 @@ define(
                     "VehicleViability1.freeCashFlow1",
                     "VehicleViability1.totalMonthlyExpense1",
                     "VehicleAssetUse",
-                    "VehicleAssetUse.segment",
-                    "VehicleAssetUse.subSegnment",
+                    "VehicleAssetUse.vehicleUseSegment",
+                    "VehicleAssetUse.vehicleUseSubSegment",
                     "VehicleAssetUse.entityType",
                     "VehicleAssetUse.attachedWith",
                     "VehicleAssetUse.attachedAddress",
@@ -1444,6 +1444,23 @@ define(
                                 },
                                 "VehicleAssetUse": {
                                     "items": {
+                                        "vehicleUseSegment": {
+                                            "key": "loanAccount.vehicleLoanDetails.vehicleUseSegment",
+                                            "title": "INDUSTRY/SEGMENT",
+                                            "type": "select",
+                                            "enumCode": "vehicle_use_segment",
+                                            "orderNo": 5
+
+                                        },
+                                        "vehicleUseSubSegment": {
+                                            "key": "loanAccount.vehicleLoanDetails.vehicleUseSubSegment",
+                                            "title": "SUB_SEGMENT",
+                                            "type": "select",
+                                            "parentEnumCode": "vehicle_use_segment",
+                                            "enumCode": "vehicle_use_subsegment",
+                                            "orderNo": 10
+
+                                        },
                                         "dailyWorkingHours": {
                                             "key":  "loanAccount.vehicleLoanDetails.dailyWorkingHours",
                                             "title": "NO_OF_HOURS_RUNNING_PER_DAY",

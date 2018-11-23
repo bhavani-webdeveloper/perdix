@@ -85,7 +85,7 @@ function getFileByType($type, $customer){
         case "address_proof": 
             $absolutepath =  $path .$address_proof->get($customer[$type]).".*";
             break;
-        case "identity_proof": 
+        case "identity_prof": 
             $absolutepath =  $path .$identity_proof->get($customer[$type]).".*";
             break;
     }
@@ -315,7 +315,7 @@ foreach ($partners as $partner) {
                             $apiCustomer->addressProofImageId =uploadFile($address_proof_path);
                         }
                 
-                        $identityPath = getFileByType("identity_proof",$customer);
+                        $identityPath = getFileByType("identity_prof",$customer);
                         if($identityPath){
                             $apiCustomer->identityProofImageId =uploadFile($identityPath);
                         }

@@ -10,6 +10,7 @@ define({
 
 
         var nDays = 15;
+        var siteCode = SessionStore.getGlobalSetting('siteCode');
 
         function showDscData(dscId) {
             PageHelper.showLoader();
@@ -17,12 +18,17 @@ define({
                 dscId: dscId
             }, function(resp, headers) {
                 PageHelper.hideLoader();
-                /*var dataHtml = "<table class='table table-striped table-bordered table-responsive'>";
+                var dataHtml = "<table class='table table-striped table-bordered table-responsive'>";
                 dataHtml += "<tr><td>Response : </td><td>" + resp.response + "</td></tr>";
                 dataHtml += "<tr><td>Response Message: </td><td>" + resp.responseMessage + "</td></tr>";
                 dataHtml += "<tr><td>Stop Response: </td><td>" + resp.stopResponse + "</td></tr>";
-                dataHtml += "</table>"*/
-                irfSimpleModal('DSC Response', resp.responseMessage);
+                dataHtml += "</table>"
+                if(siteCode=='KGFS'){
+                    irfSimpleModal('DSC Check Details', dataHtml);
+                }else{
+                    irfSimpleModal('DSC Response', resp.responseMessage);
+                }
+                
             }, function(res) {
                 PageHelper.showErrors(res);
                 PageHelper.hideLoader();
@@ -122,6 +128,7 @@ define({
                 model.review = model.review || {};
                 var branch1 = formHelper.enum('branch_id').data;
                 var centres = SessionStore.getCentres();
+                model.group.branchId = model.group.branchId || SessionStore.getCurrentBranch().branchId;
                 for (var i = 0; i < branch1.length; i++) {
                     if ((branch1[i].value) == model.group.branchId) {
                         model.group.branchName = branch1[i].name;
@@ -169,7 +176,8 @@ define({
                     });
                 }
             },
-            form: [{
+            form: [
+                {
                     "type": "box",
                     "readonly": true,
                     "title": "GROUP_DETAILS",
@@ -179,10 +187,9 @@ define({
                     }, {
                         "key": "group.branchId",
                         "title": "BRANCH_NAME",
-                        "type": "select",
+                        "enumCode": "branch_id",
                         "required": true,
                         readonly: true,
-                        "enumCode": "branch_id",
                         "parentEnumCode": "bank",
                         "parentValueExpr": "model.group.bankId",
                     }, {
@@ -212,11 +219,16 @@ define({
                         "title": "FREQUENCY",
                         "type": "select",
                         "enumCode": "loan_product_frequency",
+                        // "titleMap": {
+                        //     "M": "Monthly",
+                        //     "Q": "Quarterly"
+                        // }
                     }, {
                         "key": "group.tenure",
                         "title": "TENURE",
                     }]
-                }, {
+                },
+                 {
                     "type": "box",
                     "title": "GROUP_MEMBERS",
                     "condition": "model.siteCode == 'KGFS'",
@@ -270,7 +282,7 @@ define({
                         }, {
                             "key": "group.jlgGroupMembers[].witnessFirstName",
                             "readonly": true,
-                            "title": "WITNESS_NAME",
+                            "title": "WitnessLastName",
                         }, {
                             "key": "group.jlgGroupMembers[].witnessRelationship",
                             "readonly": true,
@@ -285,48 +297,60 @@ define({
                             items: [{
                                 "key": "group.jlgGroupMembers[].dscStatus",
                                 "title": "DSC_STATUS",
-                                "readonly": true,   
+                                "readonly": true,
                                 "condition": "model.group.jlgGroupMembers[arrayIndex].dscStatus"
-                            }, {
+                            },{
                                 "key": "group.jlgGroupMembers[].dscOverrideRemarks",
-                                "condition":"model.group.jlgGroupMembers[arrayIndex].dscStatus=='DSC_OVERRIDDEN'\
-                                 || model.group.jlgGroupMembers[arrayIndex].dscStatus == 'DSC_OVERRIDE_REQUEST_REJECTED'",
+                                "condition":"model.group.jlgGroupMembers[arrayIndex].dscStatus=='DSC_OVERRIDDEN'",
                                 "title": "DSC_OVERRIDE_REMARKS",
                                 "readonly": true,
-                            }, {
-                                "key": "group.jlgGroupMembers[].requestDSCOverride1",
-                                "type": "button",
-                                "title": "REQUEST_DSC_OVERRIDE",
-                                "icon": "fa fa-reply",
-                                "condition": "model.group.jlgGroupMembers[arrayIndex].dscStatus=='DSC_OVERRIDE_REQUIRED' && \
-                                !model.group.jlgGroupMembers[arrayIndex].showDSCOverride",
-                                "onClick": function(model, formCtrl, form, event) {
-                                    model.group.jlgGroupMembers[form.arrayIndex].showDSCOverride = true;                                    
-                                },
-                            }, {
-                                "key": "group.jlgGroupMembers[].dscOverrideRequestRemarks",
-                                "type": "textarea",
-                                "title": "REQUEST_DSC_OVERRIDE_REMARKS",
-                                "condition": "model.group.jlgGroupMembers[arrayIndex].dscStatus=='DSC_OVERRIDE_REQUIRED' && \
-                                model.group.jlgGroupMembers[arrayIndex].showDSCOverride",
-                            }, {
-                                "key": "group.jlgGroupMembers[].dscOverrideRequestFileId",
-                                "category": "Group",
-                                "subCategory": "DSCREQUESTDOCUMENT",
-                                "title": "REQUEST_DSC_OVERRIDE_FILE",
-                                "type": "file",
-                                "fileType": "application/pdf",
-                                "condition": "model.group.jlgGroupMembers[arrayIndex].dscStatus=='DSC_OVERRIDE_REQUIRED' && \
-                                model.group.jlgGroupMembers[arrayIndex].showDSCOverride",
+                                "condition": "model.group.jlgGroupMembers[arrayIndex].dscStatus"
                             }, {
                                 "key": "group.jlgGroupMembers[].requestDSCOverride",
                                 "type": "button",
                                 "title": "REQUEST_DSC_OVERRIDE",
                                 "icon": "fa fa-reply",
-                                "condition": "model.group.jlgGroupMembers[arrayIndex].dscStatus=='DSC_OVERRIDE_REQUIRED' && \
-                                model.group.jlgGroupMembers[arrayIndex].showDSCOverride",
+                                "condition": "model.group.jlgGroupMembers[arrayIndex].dscStatus=='DSC_OVERRIDE_REQUIRED'",
                                 "onClick": function(model, formCtrl, form, event) {
-                                    giveDSCOverrideRequest(model, formCtrl, form, event);
+                                    console.log(form);
+                                    console.warn(event);
+                                    var i = event['arrayIndex'];
+                                    PageHelper.clearErrors();
+                                    var urnNo = model.group.jlgGroupMembers[i].urnNo;
+                                    PageHelper.showLoader();
+                                    $log.info("Requesting DSC override for ", urnNo);
+                                    irfProgressMessage.pop('group-dsc-override-req', 'Requesting DSC Override');
+                                    Groups.post({
+                                        service: "dscoverriderequest",
+                                        urnNo: urnNo,
+                                        groupCode: model.group.groupCode,
+                                        productCode: model.group.productCode
+                                    }, {}, function(resp, header) {
+                                        $log.warn(resp);
+                                        irfProgressMessage.pop('group-dsc-override-req', 'Almost Done...');
+                                        //var screenMode = model.group.screenMode;
+                                        GroupProcess.getGroup({
+                                            groupId: model.group.id
+                                        }, function(response, headersGetter) {
+                                            PageHelper.hideLoader();
+                                            irfProgressMessage.pop('group-dsc-override-req', 'DSC Override Requested', 2000);
+                                            model.group = _.cloneDeep(response);
+                                            fixData(model);
+                                            fillNames(model);
+                                        }, function(resp) {
+                                            $log.error(resp);
+                                            PageHelper.hideLoader();
+                                            irfProgressMessage.pop("group-dsc-override-req", "Oops. An error occurred", 2000);
+                                            PageHelper.showErrors(resp);
+                                            fixData(model);
+                                            fillNames(model);
+                                        });
+                                    }, function(resp, header) {
+                                        $log.error(resp);
+                                        PageHelper.hideLoader();
+                                        irfProgressMessage.pop("group-dsc-override-req", "Oops. An error occurred", 2000);
+                                        PageHelper.showErrors(resp);
+                                    });
                                 },
                             }, {
                                 "key": "group.jlgGroupMembers[].getDSCData",
@@ -334,7 +358,7 @@ define({
                                 "title": "VIEW_DSC_RESPONSE",
                                 "icon": "fa fa-eye",
                                 "style": "btn-primary",
-                                // "condition": "model.group.jlgGroupMembers[arrayIndex].dscStatus=='DSC_OVERRIDE_REQUIRED'",
+                                //"condition": "model.group.jlgGroupMembers[arrayIndex].dscStatus=='DSC_OVERRIDE_REQUIRED'",
                                 "onClick": function(model, formCtrl, form, event) {
                                     console.log(form);
                                     console.warn(event);
@@ -343,7 +367,7 @@ define({
                                     var dscId = model.group.jlgGroupMembers[i].dscId;
                                     showDscData(dscId);
                                 }
-                            }, /*{
+                            },/*{
                                 "key": "group.jlgGroupMembers[].removeMember",
                                 "condition": "model.group.jlgGroupMembers[arrayIndex].dscStatus=='DSC_OVERRIDE_REQUIRED'",
                                 "type": "button",
@@ -605,7 +629,7 @@ define({
                                 "title": "VIEW_DSC_RESPONSE",
                                 "icon": "fa fa-eye",
                                 "style": "btn-primary",
-                                // "condition": "model.group.jlgGroupMembers[arrayIndex].dscStatus=='DSC_OVERRIDE_REQUIRED'",
+                                //"condition": "model.group.jlgGroupMembers[arrayIndex].dscStatus=='DSC_OVERRIDE_REQUIRED'",
                                 "onClick": function(model, formCtrl, form, event) {
                                     console.log(form);
                                     console.warn(event);
@@ -867,11 +891,16 @@ define({
                         "properties": {
                             "status": {
                                 "title": "STATUS",
-                                "type": "string"
+                                "type": ["string", "null"]
                             },
-                            "branchName": {
+                            "branchId": {
                                 "title": "BRANCH_NAME",
-                                "type": "integer"
+                                "type": ["integer", "null"],
+                                "enumCode": "branch_id",
+                                "x-schema-form": {
+                                    "type": "select",
+                                    "screenFilter": true,
+                                }
                             },
                             "centreId": {
                                 "title": "CENTRE_CODE",
@@ -918,7 +947,7 @@ define({
                                         PageHelper.hideLoader();
                                         irfProgressMessage.pop("group-dsc-check", "Oops. An error occurred", 2000);
                                     });
-                                    var dscFailedStatuses = ['DSC_OVERRIDE_REQUIRED', 'DSC_OVERRIDE_REQUESTED'];
+                                    var dscFailedStatuses = ['DSC_OVERRIDE_REQUIRED', 'DSC_OVERRIDE_REQUESTED','NORESPONSE'];
                                     var allOk = true;
                                     var failedMsg = Array();
                                     angular.forEach(model.group.jlgGroupMembers, function(member) {

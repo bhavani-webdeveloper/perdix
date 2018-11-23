@@ -212,6 +212,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                     {
                         key: "promise.customerAvailable",
                         title: "CUSTOMER_AVAILABLE",
+                        required: true,
                         type: "checkbox",
                         schema: {
                             default: false
@@ -220,6 +221,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                     {
                         key:"promise.contactable",
                         title:"CONTACTABLE",
+                        required: true,
                         "type":"select",
                         "enumCode":"decisionmaker"
                     }, {

@@ -1510,6 +1510,21 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     },
                 }
             },
+            "EDF":{
+                "type": "box",
+                "title": "EDF",
+                "items": {
+                    "condition":{
+                        "key": "customer.udf.userDefinedFieldValues.udf40",
+                        title: "Agree with the terms and conditions",
+                        type: "radios",
+                        titleMap: {
+                            "ACCEPT": "ACCEPT",
+                            "REJECT": "REJECT",
+                        }
+                    },
+                }
+            },
             "assets": {
                 "type": "box",
                 orderNo: 90,
@@ -1926,11 +1941,30 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     "submit": {
                         "type": "submit",
                         "title": "SUBMIT"
-                    },
+                    }
+                }
+            },
+            "actionbox1": {
+                "type": "actionbox",
+                orderNo: 141,
+                //"condition": "model.customer.id",
+                "items": {
+                    "saveBasicDetails": {
+                        "type": "button",
+                        "title": "SUBMIT",
+                        "onClick": "actions.saveBasicDetails(model, formCtrl, form, $event)"
+                    }
+                }
+            },
+            "actionbox2": {
+                "type": "actionbox",
+                orderNo: 142,
+                //"condition": "model.customer.id",
+                "items": {
                     "save": {
                         "type": "save",
                         "title": "OFFLINE_SAVE"
-                    },
+                    }
                 }
             }
         };

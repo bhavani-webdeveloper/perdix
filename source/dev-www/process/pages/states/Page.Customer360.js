@@ -108,7 +108,6 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 				]
 			},
 			"Page/Adhoc/customer360.FinancialWellbeingReport",
-			"Page/CustomerHistory",
 			"Page/Engine/customer360.CustomerHistorySummary",
 			"Page/Engine/customer360.Recapture",
 			"Page/Engine/customer360.CustomerSummaryView",

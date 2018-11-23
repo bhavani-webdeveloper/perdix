@@ -79,7 +79,7 @@ irf.pageCollection.factory(irf.page('loans.group.GroupLoanRepaymentQueue'), ["$l
                         console.log(model);
                         irfNavigator.go({
                             state: "Page.Engine",
-                            pageName: 'loans.groups.GroupLoanRepay',
+                            pageName: 'loans.group.GroupLoanRepay',
                             pageId:[model.partner,model.groupCode,model.isLegacy].join(".")
                         }, {
                             state: "Page.Engine",

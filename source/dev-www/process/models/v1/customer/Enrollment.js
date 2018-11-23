@@ -325,8 +325,8 @@ function($log, $q, Enrollment,formHelper, PageHelper, irfProgressMessage, Utils,
                     }
 
                     if (model.customer.physicalAssets[i].assetType) {
-                        var ownedAssetDetails1 = formHelper.enum('asset_Details')? formHelper.enum('asset_Details').data: null;
-                        var assetunit1 = formHelper.enum('asset_unit')? formHelper.enum('asset_unit').data: null;
+                        var ownedAssetDetails1 = formHelper.enum('asset_Details').data;
+                        var assetunit1 = formHelper.enum('asset_unit').data;
                         var ownedAssetDetails = [];
                         var assetunit = [];
                         if (ownedAssetDetails1 && ownedAssetDetails1.length) {
@@ -508,6 +508,25 @@ function($log, $q, Enrollment,formHelper, PageHelper, irfProgressMessage, Utils,
     * if cust id set, promise resolved with PROCEED response
     * if error occurs, promise rejected with null.
     * */
+
+    var saveandproceed= function (res){
+        var deferred = $q.defer();
+        $log.info("Attempting Proceed");
+        $log.info(res);
+        PageHelper.clearErrors();
+            PageHelper.showLoader();
+            res.enrollmentAction = "PROCEED";
+            Enrollment.updateEnrollment(res, function (res, headers) {
+                PageHelper.hideLoader();
+                deferred.resolve(res);
+            }, function (res, headers) {
+                PageHelper.hideLoader();
+                PageHelper.showErrors(res);
+                deferred.reject(res);
+            });
+        return deferred.promise;
+
+    };
     var proceedData = function(res){
 
         var deferred = $q.defer();
@@ -623,6 +642,7 @@ function($log, $q, Enrollment,formHelper, PageHelper, irfProgressMessage, Utils,
         fixData: fixData,
         saveData: saveData,
         proceedData: proceedData,
+        saveandproceed:saveandproceed,
         validateData: validateData,
         validateDate:validateDate,
         validateBankAccounts:validateBankAccounts,

@@ -14,6 +14,7 @@ define({
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 $log.info("DSC Queue got initialized");
+                model.siteCode = SessionStore.getGlobalSetting('siteCode');
             },
             definition: {
                 title: "DSC QUEUE",
@@ -70,12 +71,7 @@ define({
                         return [{
                             title: 'URN',
                             data: 'jlgGroupMember.urnNo'
-                        }, 
-                        // {
-                        //     title: 'GROUP_MEMBER_NAME',
-                        //     data: 'jlgGroupMember.urnNo'
-                        // }, 
-                        {
+                        }, {
                             title: 'Group ID',
                             data: 'jlgGroup.id'
                         }, {
@@ -109,41 +105,49 @@ define({
                         }]
                     },
                     getActions: function() {
-                        return [{
+                        return [
+                            {
                             name: "Do DSC Override",
                             desc: "",
                             fn: function(item, index) {
                                 PageHelper.showLoader();
-
-                                // var remarks = window.prompt("Enter Remarks", "");
-                                // if (remarks) {
-                                //     irfProgressMessage.pop("dsc-override", "Performing DSC Override");
-                                //     Groups.post({
-                                //         service: "overridedsc",
-                                //         urnNo: item.jlgGroupMember.urnNo,
-                                //         groupCode: item.jlgGroup.groupCode,
-                                //         productCode: item.jlgGroup.productCode,
-                                //         remarks: remarks
-                                //     }, {}, function(resp, headers) {
-                                //         $log.info(resp);
-                                //         PageHelper.hideLoader();
-                                //         irfProgressMessage.pop("dsc-override", "Override Succeeded", 2000);
-                                //         $state.go('Page.Engine', {
-                                //             pageName: "loans.group.DscOverrideQueue"
-                                //         },{
-                                //             reload: true,
-                                //             inherit: false,
-                                //             notify: true
-                                //         });
-                                //     }, function(resp) {
-                                //         $log.error(resp);
-                                //         PageHelper.hideLoader();
-                                //         irfProgressMessage.pop("dsc-override", "An error occurred. Please Try Again", 2000);
-                                //         PageHelper.showErrors(resp);
-                                //     });
-                                // } else {
-                                //     PageHelper.hideLoader();
-                                // }
+                                irfProgressMessage.pop("dsc-override", "Performing DSC Override");
+                                var remarks = window.prompt("Enter Remarks", "");
+                                if (remarks) {
+                                    Groups.post({
+                                        service: "overridedsc",
+                                        urnNo: item.jlgGroupMember.urnNo,
+                                        groupCode: item.jlgGroup.groupCode,
+                                        productCode: item.jlgGroup.productCode,
+                                        remarks: remarks
+                                    }, {}, function(resp, headers) {
+                                        $log.info(resp);
+                                        PageHelper.hideLoader();
+                                        irfProgressMessage.pop("dsc-override", "Override Succeeded", 2000);
+                                        $state.go('Page.Engine', {
+                                            pageName: "loans.group.DscOverrideQueue"
+                                        },{
+                                            reload: true,
+                                            inherit: false,
+                                            notify: true
+                                        });
+                                    }, function(resp) {
+                                        $log.error(resp);
+                                        PageHelper.hideLoader();
+                                        irfProgressMessage.pop("dsc-override", "An error occurred. Please Try Again", 2000);
+                                        PageHelper.showErrors(resp);
+                                    });
+                                } else {
+                                    PageHelper.hideLoader();
+                                }
+                            },
+                            isApplicable: function(item, model) {
+                                return model.siteCode === "KGFS";
+                            }
+                        }, {
+                            name: "Do DSC Override",
+                            desc: "",
+                            fn: function(item, index) {
                                 irfNavigator.go({
                                     state: "Page.Engine",
                                     pageName: "loans.group.DscOverride",
@@ -155,11 +159,10 @@ define({
                                 }, {
                                     state: "Page.Engine",
                                     pageName: "loans.group.DscOverrideQueue",
-                                });
-
+                                });   
                             },
-                            isApplicable: function(item, index) {
-                                return true;
+                            isApplicable: function(item, model) {
+                                return model.siteCode != "KGFS";
                             }
                         }, {
                             name: "View DSC Response",
@@ -177,3 +180,6 @@ define({
         };
     }
 })
+
+
+

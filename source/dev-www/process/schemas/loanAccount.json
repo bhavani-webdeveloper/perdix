@@ -1314,6 +1314,114 @@
                 "startTime": {
                     "type": ["string", "null"]
                 },
+                "telecallingDetails": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "required": [],
+                        "properties": {
+                            "address": {
+                                "type": "string"
+                            },
+                            "contactNumber": {
+                                "type": "string"
+                            },
+                            "customerCalled": {
+                                "type": "string"
+                            },
+                            "customerCalledAt": {
+                                "type": "string"
+                            },
+                            "customerCalledBy": {
+                                "type": "string"
+                            },
+                            "customerCalledDate": {
+                                "type": "string"
+                            },
+                            "customerFinancialStatus": {
+                                "type": "string"
+                            },
+                            "customerId": {
+                                "type": "string"
+                            },
+                            "customerKnownSinceYears": {
+                                "type": "string"
+                            },
+                            "customerNotCalledReason": {
+                                "type": "string"
+                            },
+                            "customerNotCalledRemarks": {
+                                "type": "string"
+                            },
+                            "followupCallRequired": {
+                                "type": "string"
+                            },
+                            "id": {
+                                "type": "string"
+                            },
+                            "noOfCallAttempts": {
+                                "type": "string"
+                            },
+                            "occupation": {
+                                "type": "string"
+                            },
+                            "partyType": {
+                                "type": "string"
+                            },
+                            "personContacted": {
+                                "type": "string"
+                            },
+                            "personType": {
+                                "type": "string"
+                            },
+                            "processId": {
+                                "type": "string"
+                            },
+                            "processType": {
+                                "type": "string"
+                            },
+                            "referenceOpinionOnCustomer": {
+                                "type": "string"
+                            },
+                            "relationshipWithCustomer": {
+                                "type": "string"
+                            },
+                            "telecallingQuestionnaireList": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "required": [],
+                                    "properties": {
+                                        "answer": {
+                                            "type": "string"
+                                        },
+                                        "id": {
+                                            "type": "string"
+                                        },
+                                        "question": {
+                                            "type": "string"
+                                        },
+                                        "telecallingDetailsId": {
+                                            "type": "string"
+                                        },
+                                        "version": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            },
+                            "telecallingRemarks": {
+                                "type": "string"
+                            },
+                            "telecallingResponse": {
+                                "type": "string"
+                            },
+                            "version": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
                 "tenure": {
                     "type": ["integer", "string"],
                     "title":"TENURE",

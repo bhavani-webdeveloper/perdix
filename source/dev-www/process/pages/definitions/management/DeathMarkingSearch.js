@@ -31,7 +31,7 @@ define({
                     }
                 },
                 listOptions: {
-                    selectable: true,
+                  //  selectable: true,
                     expandable: true,
                     listStyle: "table",
                     itemCallback: function(item, index) {},

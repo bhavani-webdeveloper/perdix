@@ -11,6 +11,7 @@
                 "aadhaarNo": {
                     "type": ["string", "null"],
                     "title": "AADHAAR_NO",
+                    "pattern":"^[2-9]{1}[0-9]{11}$",
                     "minLength": 12,
                     "maxLength": 12
                 },
@@ -638,7 +639,7 @@
                                         "incomeEarned": {
                                             "type": ["integer","null"],
                                             "title": "INCOME_EARNED",
-                                            "minimum": 1,
+                                            "minimum": 0,
                                             "maximum": 100000000
                                         },
                                         "incomeSource": {
@@ -653,7 +654,7 @@
                                             "type": ["integer","null"],
                                             "title": "PER_YEAR",
                                             "minimum": 1,
-                                            "maximum": 366,
+                                            "maximum": 12,
                                             "captureStages":[
                                                 "Stage02"
                                             ]
@@ -663,6 +664,7 @@
                                     "required": [
                                         "incomeEarned",
                                         "incomeSource",
+                                        "monthsPerYear",
                                         "frequency"
                                     ]
                                 }
@@ -1016,6 +1018,7 @@
                             "instituteName",
                             "loanSource",
                             "liabilityLoanPurpose",
+                            "loanAmountInPaisa",
                             "loanType",
                             "frequencyOfInstallment"
                         ]
@@ -1631,7 +1634,7 @@
                                 "title": "HOUSE_NO"
                             },
                             "houseNoIsVerified": {
-                                "type": ["boolean","null"],
+                                "type": ["number","null"],
                                 "title": "HOUSE_NO_IS_VERIFIED"
                             },
                             "referenceFirstName": {

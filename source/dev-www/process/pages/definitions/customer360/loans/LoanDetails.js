@@ -2227,25 +2227,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                         "title":"SUBMIT"
                     }]
                 },*/
-                {
-                    "type": "actionbox",
-                    "condition": "model.loanAccount.loanType != 'JLG' && model.siteCode == 'KGFS'",
-                    "items": [{
-                        "type": "button",
-                        "title": "BACK",
-                        "onClick": function(model,formCtrl, form){
-                            irfNavigator.goBack();
-                        }
-                    }, {
-                        "type": "button",
-                        "title": "DOWNLOAD_ALL_DOCS",
-                        "fieldHtmlClass": "pull-right"
-                    },{
-                        "type": "button",
-                        "title": "REPAYMENT_SCHEDULE_REPORT",
-                        "fieldHtmlClass": "pull-right"
-                    },]
-                }, {
+                 {
                     "type": "actionbox",
                     "condition": "model.loanAccount.loanType != 'JLG' && model.siteCode != 'KGFS'",
                     "items": [{

@@ -25,6 +25,9 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
                     model.lead.branchName = SessionStore.getBranch();
                 }
                 model = Utils.removeNulls(model, true);
+                if(model.lead.siteCode == 'sambandh' || model.lead.siteCode == 'KGFS'){
+                    model.lead.customerType = "Individual";
+                }
 
                 if (!(model && model.lead && model.lead.id && model.$$STORAGE_KEY$$) && $stateParams.pageId) {
 
@@ -604,7 +607,7 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
                         },]
                     }, {
                         type: "fieldset",
-                        condition: "model.siteCode == 'sambandh' || model.siteCode == 'saija' || model.siteCode == 'IREPDhan'",
+                        condition: "model.siteCode == 'sambandh' || model.siteCode == 'saija' || model.siteCode == 'IREPDhan'|| model.siteCode == 'KGFS'",
                         title: "LEAD_DETAILS",
                         items: [{
                             key: "lead.leadName",
@@ -1104,7 +1107,7 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
                 }, {
                     type: "box",
                     title: "PRODUCT_DETAILS",
-                    condition: "model.siteCode == 'sambandh' || model.siteCode == 'saija' || model.siteCode == 'IREPDhan'",
+                    condition: "model.siteCode == 'sambandh' || model.siteCode == 'saija' || model.siteCode == 'IREPDhan'||model.siteCode == 'KGFS'",
                     items: [{
                         key: "lead.interestedInProduct",
                         title: "INTERESTED_IN_LOAN_PRODUCT",
@@ -1388,7 +1391,7 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
                         });
                         return out;
                     };
-                    if (model.siteCode == 'sambandh' || model.siteCode == 'saija' || model.siteCode == 'IREPDhan') {
+                    if (model.siteCode == 'sambandh' || model.siteCode == 'saija' || model.siteCode == 'IREPDhan'|| model.siteCode == 'KGFS') {
                         model.lead.customerType = model.lead.customerTypeString;
                     }
                     var reqData = _.cloneDeep(model);

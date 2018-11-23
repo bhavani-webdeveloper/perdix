@@ -1621,6 +1621,14 @@ define(
 
                         },
                         reject: function(model, formCtrl, form, $event) {
+                            if (model.loanProcess.remarks == null || model.loanProcess.remarks == "") {
+                                PageHelper.showProgress("update-loan", "Remarks is mandatory");
+                                return false;
+                            }
+                            if (model.loanAccount.rejectReason == null || model.loanAccount.rejectReason == "") {
+                                PageHelper.showProgress("update-loan", "Reject Reason is mandatory");
+                                return false;
+                            }
                             PageHelper.showLoader();
                             model.loanProcess.reject()
                                 .finally(function() {

@@ -31,7 +31,7 @@ define({
                     type: "select",
                     enumCode: "excel_type",
                     "required": true,
-                    onChange:function(model) {
+                    "onChange":function(valueObj,form,model) {
                         model.excelJson[model.upload.excel_type].enableTruncate;
                     }
                 }, {
