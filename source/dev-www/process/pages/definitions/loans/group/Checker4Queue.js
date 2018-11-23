@@ -30,6 +30,10 @@ define({
 				}
 				model.partner = SessionStore.session.partnerCode;
 				model.isPartnerChangeAllowed = GroupProcess.hasPartnerCodeAccess(model.partner);
+				if(model.siteCode =='KGFS'){
+					model.partner = "AXIS";
+					model.isPartnerChangeAllowed = false;
+				}
 				$log.info("Checker4 Queue got initialized");
 			},
 			definition: {
@@ -72,6 +76,11 @@ define({
 							"type": "string",
 							"title": "PRODUCT",
 							readonly: true
+						},
+						{
+							"key": "groupCode",
+							"type": "string",
+							"title": "GROUP_CODE",
 						}]
 	                }
 				],
@@ -108,7 +117,11 @@ define({
 								"type": "select",
 								"enumCode": "partner"
 							}
-						}, 
+						},
+						"groupCode": {
+							"type": "string",
+							"title": "GROUP_CODE",
+						},
 						"product": {
 							"title": "PRODUCT"
 						}
@@ -126,6 +139,7 @@ define({
 						'branchId': searchOptions.branchId,
 						'partner': searchOptions.partner,
 						'product': searchOptions.product,
+						'groupCode':searchOptions.groupCode,
 						'groupStatus': true,
 						'page': pageOpts.pageNo,
 						'currentStage': "Checker4",
@@ -169,10 +183,10 @@ define({
 						return [{
 							title: 'GROUP_ID',
 							data: 'id'
+						},{
+							title: 'GROUP_CODE',
+							data: 'groupCode'
 						}, {
-                            title: 'GROUP_CODE',
-                            data: 'groupCode'
-                        }, {
 							title: 'GROUP_NAME',
 							data: 'groupName'
 						}, {

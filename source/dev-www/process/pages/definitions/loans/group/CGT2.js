@@ -117,6 +117,17 @@ define({
                     "parentValueExpr": "model.group.branchId",
                 }, {
                     "key": "group.cgt2Photo",
+                    //required: true,
+                    "condition":"model.siteCode == 'KGFS'",
+                    "title": "CGT_2_PHOTO",
+                    "category": "Group",
+                    "subCategory": "CGT1PHOTO",
+                    "type": "file",
+                    "offline": true,
+                    "fileType": "image/*",
+                },{
+                    "key": "group.cgt2Photo",
+                    "condition":"model.siteCode != 'KGFS'",
                     required: true,
                     "title": "CGT_2_PHOTO",
                     "category": "Group",
@@ -129,6 +140,11 @@ define({
                     "title": "START_CGT2",
                     "type":"button",
                     "onClick":"actions.startCGT2(model,form)"   
+                },{
+                    "key": "group.cgtDate2",
+                    "title": "CGT2 Started",
+                    "condition":"model.group.cgtDate2",
+                    "readonly":true
                 }]
 
             },{
@@ -155,6 +171,17 @@ define({
                     "longitude": "group.cgt2Longitude"
                 }, {
                     "key": "group.cgt2EndPhoto",
+                    //required: true,
+                    "condition":"model.siteCode == 'KGFS'",
+                    "title": "CGT_2_PHOTO",
+                    "category": "Group",
+                    "subCategory": "CGT2PHOTO",
+                    "type": "file",
+                    "offline": true,
+                    "fileType": "image/*",
+                },{
+                    "key": "group.cgt2EndPhoto",
+                    "condition":"model.siteCode != 'KGFS'",
                     required: true,
                     "title": "CGT_2_PHOTO",
                     "category": "Group",
@@ -172,7 +199,12 @@ define({
                     key: "group.cgt2Remarks",
                     type: "textarea",
                     required: true
-                },]
+                },{
+                    "key": "group.cgtEndDate2",
+                    "title": "CGT2 Ended",
+                    "condition":"model.group.cgtEndDate2",
+                    "readonly":true
+                }]
             }, { 
                 "type": "box",
                 "title": "GROUP_MEMBERS",

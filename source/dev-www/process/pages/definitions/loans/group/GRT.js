@@ -170,6 +170,17 @@ define({
                 }, {
                     "key": "group.grtPhoto",
                     "title": "GRT_PHOTO",
+                    "condition":"model.siteCode=='KGFS'",
+                    //required: true,
+                    "category": "Group",
+                    "subCategory": "GRTPHOTO",
+                    "type": "file",
+                    "offline": true,
+                    "fileType": "image/*",
+                },{
+                    "key": "group.grtPhoto",
+                    "title": "GRT_PHOTO",
+                    "condition":"model.siteCode !='KGFS'",
                     required: true,
                     "category": "Group",
                     "subCategory": "GRTPHOTO",
@@ -180,9 +191,13 @@ define({
                     "key": "group.Cgtbutton",
                     "title": "START_GRT",
                     "type":"button",
-                    "onClick":"actions.startGRT(model,form)"   
+                    "onClick":"actions.startGRT(model,form)" 
+                },{
+                    "key": "group.grtDate",
+                    "title": "GRT Started",
+                    "condition":"model.group.grtDate",
+                    "readonly":true
                 }]
-
             }, {
                 "type": "box",
                 "title": "END_GRT",
@@ -201,6 +216,17 @@ define({
                     "key": "group.grtEndPhoto",
                     "type": "file",
                     "offline": true,
+                    "condition":"model.siteCode=='KGFS'",
+                    //required: true,
+                    "title": "GRT_PHOTO",
+                    "category": "Group",
+                    "subCategory": "GRTPHOTO",
+                    "fileType": "image/*",
+                },{
+                    "key": "group.grtEndPhoto",
+                    "type": "file",
+                    "offline": true,
+                    "condition":"model.siteCode !='KGFS'",
                     required: true,
                     "title": "GRT_PHOTO",
                     "category": "Group",
@@ -269,6 +295,11 @@ define({
                     "key": "group.grtRemarks",
                     "title": "GRT_REMARKS",
                     "type": "textarea"
+                },{
+                    "key": "group.grtEndDate",
+                    "title": "GRT Ended",
+                    "condition":"model.group.grtEndDate",
+                    "readonly":true
                 }]
             }, {
                 "type": "box",
@@ -795,7 +826,7 @@ define({
                         "onClick": function(model, form, schemaForm, event) {
                             Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=app_Loan&record_id=" + model.group.jlgGroupMembers[event.arrayIndex].loanAccount.id);
                         }
-                    }, {
+                    },{
                         "type": "button",
                         "key": "group.jlgGroupMembers[]",
                         condition: "model.group.partnerCode === 'AXIS'",
@@ -854,20 +885,22 @@ define({
                     }, {
                         "key": "group.jlgGroupMembers[].loanAmountRequested",
                         "readonly": true,
+                        "condition":"model.siteCode !='KGFS'",
                         "title": "LOAN_AMOUNT_REQUESTED_",
                         "type": "amount",
                         "readonly": true
                     }, {
                         "key": "group.jlgGroupMembers[].loanAmountSanctionedInPaisa",
                         "title": "LOAN_AMOUNT_RECOMMENDED_FROM_BRANCH",
+                        "condition":"model.siteCode !='KGFS'",
                         "type": "amount",
                         "readonly": true
-                    }, {
+                    },  {
                         "key": "group.jlgGroupMembers[].loanAmount",
+                        "readonly": true,
                         "title": "LOAN_AMOUNT",
                         "type": "amount",
-                        "readonly": true
-                    },{
+                    }, {
                         "key": "group.jlgGroupMembers[].loanPurpose1",
                         "readonly": true,
                         "title": "LOAN_PURPOSE_1",

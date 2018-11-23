@@ -141,6 +141,17 @@ define({
                     "enumCode": "partner"
                 }, {
                     "key": "group.cgt1Photo",
+                    //required: true,
+                    "condition":"model.siteCode == 'KGFS'",
+                    "title": "CGT_1_PHOTO",
+                    "category": "Group",
+                    "subCategory": "CGT1PHOTO",
+                    "type": "file",
+                    "offline": true,
+                    "fileType": "image/*",
+                },{
+                    "key": "group.cgt1Photo",
+                    "condition":"model.siteCode != 'KGFS'",
                     required: true,
                     "title": "CGT_1_PHOTO",
                     "category": "Group",
@@ -153,6 +164,11 @@ define({
                     "title": "START_CGT1",
                     "type":"button",
                     "onClick":"actions.startCGT1(model,form)"   
+                },{
+                    "key": "group.cgtDate1",
+                    "title": "CGT1 Started",
+                    "condition":"model.group.cgtDate1",
+                    "readonly":true
                 }]
             },
                 {
@@ -179,6 +195,17 @@ define({
                     "longitude": "group.cgt1Longitude"
                 }, {
                     "key": "group.cgt1EndPhoto",
+                    //required: true,
+                    "condition":"model.siteCode == 'KGFS'",
+                    "title": "CGT_1_PHOTO",
+                    "category": "Group",
+                    "subCategory": "CGT1PHOTO",
+                    "type": "file",
+                    "offline": true,
+                    "fileType": "image/*",
+                },{
+                    "key": "group.cgt1EndPhoto",
+                    "condition":"model.siteCode != 'KGFS'",
                     required: true,
                     "title": "CGT_1_PHOTO",
                     "category": "Group",
@@ -196,7 +223,12 @@ define({
                     key: "group.cgt1Remarks",
                     type: "textarea",
                     required: true
-                },]
+                },{
+                    "key": "group.cgtEndDate1",
+                    "title": "CGT1 Ended",
+                    "condition":"model.group.cgtEndDate1",
+                    "readonly":true
+                }]
             }, { 
                 "type": "box",
                 "title": "GROUP_MEMBERS",
@@ -497,7 +529,10 @@ define({
             actions: {
                 // preSave: function(model, form, formName) {},
                 startCGT1: function(model, form) {
-                    
+                    if(model.group.cgtDate1){
+                         irfProgressMessage.pop('CGT-Start', 'CGT start date is already captured', 3000);
+                         return;
+                    }
                     PageHelper.showLoader();
                     $timeout(function() {
                         model.group.cgtDate1 = new Date();
@@ -548,7 +583,7 @@ define({
                     GroupProcess.updateGroup(reqData, function(res) {
                         formHelper.newOffline.deleteOffline($stateParams.pageName, model);
                         PageHelper.hideLoader();
-                        irfProgressMessage.pop('CGT1-proceed', 'Operation Succeeded. Proceeded to CGT 2.', 5000);
+                        irfProgressMessage.pop('CGT1-proceed', 'Operation Succeeded.', 5000);
                         irfNavigator.goBack();
                     }, function(res) {
                         PageHelper.hideLoader();

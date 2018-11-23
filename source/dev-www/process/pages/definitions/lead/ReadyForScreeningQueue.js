@@ -222,7 +222,7 @@ irf.pageCollection.factory(irf.page("lead.ReadyForScreeningQueue"), ["$log", "fo
 								});
 							},
 							isApplicable: function(item, index) {
-								return siteCode !== 'sambandh' && siteCode !== 'saija' && siteCode !== 'IREPDhan' ? true : false;
+								return siteCode !== 'sambandh' && siteCode !== 'saija' && siteCode !== 'IREPDhan' && siteCode !== 'KGFS' ? true : false;
 							}
 						},{
 							name: "Do KYC and CB",
@@ -257,9 +257,25 @@ irf.pageCollection.factory(irf.page("lead.ReadyForScreeningQueue"), ["$log", "fo
 										lead_id: item.id
 									}
 								});
+
+								if (siteCode == 'sambandh' || siteCode == 'saija') {
+									$state.go("Page.Engine", {
+										pageName: "customer.IndividualEnrollment3",
+										pageData: {
+											lead_id: item.id
+										}
+									});
+								} else if (siteCode == 'KGFS') {
+									$state.go("Page.Engine", {
+										pageName: "ProfileInformation",
+										pageData: {
+											lead_id: item.id
+										}
+									});
+								}
 							},
 							isApplicable: function(item, index) {
-								return siteCode == 'sambandh' || siteCode == 'saija' ? true : false;
+								return siteCode == 'sambandh' || siteCode == 'saija' || siteCode =='KGFS'? true : false;
 							}
 						},
 						{

@@ -166,17 +166,6 @@ irf.pageCollection.factory(irf.page('loans.DirectLoanRepay'),
                         },
                         "repayment.repaymentDate",
                         {
-                            key: "repayment.cashCollectionRemark",
-                            type:"select",
-                            required:true,
-                            enumCode:"Cash_collection_remarks"
-                        },
-                        {
-                            key: "repayment.receiptNumber",
-                            "title":"Receipt Number",
-                            condition:"model.repayment.cashCollectionRemark=='Receipt Number'",
-                        },
-                        {
                             "key": "repayment.instrument",
                             "type": "select",
                             "required": true,
@@ -195,6 +184,17 @@ irf.pageCollection.factory(irf.page('loans.DirectLoanRepay'),
                                 }
 
                             ]
+                        },{
+                            key: "repayment.cashCollectionRemark",
+                            condition:"model.repayment.instrument=='CASH'",
+                            type:"select",
+                            required:true,
+                            enumCode:"Cash_collection_remarks"
+                        },
+                        {
+                            key: "repayment.receiptNumber",
+                            "title":"Receipt Number",
+                            condition:"model.repayment.cashCollectionRemark=='Receipt Number'",
                         }, {
                             key: "repayment.reference",
                             title: "CHEQUE_NUMBER",

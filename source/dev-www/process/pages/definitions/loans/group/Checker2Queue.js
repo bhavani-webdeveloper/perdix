@@ -16,6 +16,7 @@ define({
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				model.branchId = SessionStore.getCurrentBranch().branchId;
+				model.siteCode = SessionStore.getGlobalSetting('siteCode');
 				var bankName = SessionStore.getBankName();
 				var banks = formHelper.enum('bank').data;
 				for (var i = 0; i < banks.length; i++){
@@ -30,6 +31,10 @@ define({
 				}
 				model.partner = SessionStore.session.partnerCode;
 				model.isPartnerChangeAllowed = GroupProcess.hasPartnerCodeAccess(model.partner);
+				if(model.siteCode =='KGFS'){
+					model.partner = "AXIS";
+					model.isPartnerChangeAllowed = false;
+				}
 				$log.info("Checker2 Queue got initialized");
 			},
 			definition: {
@@ -42,11 +47,16 @@ define({
 	                	{
 	                		key: "bankId",
 	                		readonly: true, 
-	                		condition: "!model.fullAccess"
+	                		condition: "!model.fullAccess && (model.siteCode != 'KGFS')"
 	                	},
 	                	{
 	                		key: "bankId",
-	                		condition: "model.fullAccess"
+	                		condition: "model.fullAccess && (model.siteCode != 'KGFS')"
+	                	},
+	                	{
+	                		key: "bankId",
+	                		"type": "select",
+	                		condition: "model.siteCode == 'KGFS'"
 	                	},
 	                	{
 	                		key: "branchId", 
@@ -72,6 +82,11 @@ define({
 							"type": "string",
 							"title": "PRODUCT",
 							readonly: true
+						},
+						{
+							"key": "groupCode",
+							"type": "string",
+							"title": "GROUP_CODE",
 						}]
 	                }
 				],
@@ -108,7 +123,11 @@ define({
 								"type": "select",
 								"enumCode": "partner"
 							}
-						}, 
+						},
+						"groupCode": {
+							"type": "string",
+							"title": "GROUP_CODE",
+						},
 						"product": {
 							"title": "PRODUCT"
 						}
@@ -126,6 +145,7 @@ define({
 						'branchId': searchOptions.branchId,
 						'partner': searchOptions.partner,
 						'product': searchOptions.product,
+						'groupCode':searchOptions.groupCode,
 						'groupStatus': true,
 						'page': pageOpts.pageNo,
 						'currentStage': "Checker2",
@@ -169,10 +189,10 @@ define({
 						return [{
 							title: 'GROUP_ID',
 							data: 'id'
+						},{
+							title: 'GROUP_CODE',
+							data: 'groupCode'
 						}, {
-                            title: 'GROUP_CODE',
-                            data: 'groupCode'
-                        }, {
 							title: 'GROUP_NAME',
 							data: 'groupName'
 						}, {

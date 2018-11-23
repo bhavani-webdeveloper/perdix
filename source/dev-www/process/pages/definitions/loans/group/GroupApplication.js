@@ -2,11 +2,11 @@ define({
     pageUID: "loans.group.GroupApplication",
     pageType: "Engine",
     dependencies: ["$log", "LoanProcess", "irfSimpleModal", "Groups", "GroupProcess", "Enrollment", "CreditBureau", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
-        "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator", "LoanAccount",
+        "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"
     ],
 
     $pageFn: function($log, LoanProcess, irfSimpleModal, Groups, GroupProcess, Enrollment, CreditBureau, Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
-        PageHelper, Utils, PagesDefinition, Queries, irfNavigator, LoanAccount) {
+        PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
 
 
         var nDays = 15;
@@ -225,6 +225,7 @@ define({
                         fixData(model);
                         if (model.group.jlgGroupMembers.length > 0) {
                             $q.all(fillNames(model)).then(function(m) {
+                                model = m;
                                 Queries.getGroupLoanRemarksHistoryById(model.group.id).then(function(resp){
                                     for (i = 0; i < resp.length; i++) {
                                         $log.info("hi");
@@ -297,13 +298,17 @@ define({
                         "type": "select",
                         "readonly": true,
                         "enumCode": "loan_product_frequency",
+                        // "titleMap": {
+                        //     "M": "Monthly",
+                        //     "Q": "Quarterly"
+                        // }
                     }, {
                         "key": "group.tenure",
                         "title": "TENURE",
                         "readonly": true,
                     }, {
                         "key": "group.scheduledDisbursementDate",
-                        "required":true,
+                        //"required":true,
                         "title": "SCHEDULED_DISBURSEMENT_DATE",
                         "readonly": true,
                         "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
@@ -312,7 +317,7 @@ define({
                         "key": "group.firstRepaymentDate",
                         "title": "FIRST_REPAYMENT_DATE",
                         "readonly": true,
-                        "required":true,
+                        //"required":true,
                         "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
                         "type": "date",
                     }]
@@ -419,7 +424,7 @@ define({
                             "onClick": function(model, form, schemaForm, event) {
                                     Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=app_Loan&record_id=" + model.group.jlgGroupMembers[event.arrayIndex].loanAccount.id);
                             }
-                        }, {
+                        },{
                             "type": "button",
                             "key": "group.jlgGroupMembers[]",
                             condition: "model.group.partnerCode === 'AXIS'",
@@ -427,7 +432,17 @@ define({
                             "onClick": function(model, form, schemaForm, event) {
                                 Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=agmt_loan&record_id=" + model.group.jlgGroupMembers[event.arrayIndex].loanAccount.id);
                             }
-                        }]
+                        },
+                        {
+                            "type": "button",
+                            "key": "group.jlgGroupMembers[].insurenceForm",
+                            "title": "Download Insurance Form",
+                            "condition": "model.siteCode == 'KGFS'" ,
+                            "onClick": function(model, form, schemaForm, event) {
+                                Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=bajaj_insurance&record_id=" + model.group.jlgGroupMembers[event.arrayIndex].loanAccount.id);
+                            }
+                        }
+                    ]
                     }, {
                         "key": "group.jlgGroupMembers",
                         "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",

@@ -630,6 +630,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                         onArrayAdd: function(value, form, model, formCtrl, event) {
                             if ((model.customer.familyMembers.length - 1) === 0) {
                                 model.customer.familyMembers[0].relationShip = 'self';
+                                model.customer.familyMembers[0].familyMemberFirstName = model.customer.firstName;
                                 model.customer.familyMembers[0].gender = model.customer.gender;
                                 model.customer.familyMembers[0].dateOfBirth = model.customer.dateOfBirth;
                                 model.customer.familyMembers[0].age = model.customer.age;
