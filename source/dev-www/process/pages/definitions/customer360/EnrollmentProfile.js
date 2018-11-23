@@ -28,7 +28,10 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
             $log.info("Profile Page got initialized");
+            console.log(model);
             initData(model);
+            console.log("TEst");
+            console.log(model.customer);
             var enabletrue= false;
             if($stateParams.pageData){
                 if($stateParams.pageData.enabletrue){
@@ -559,9 +562,11 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
             "type": "box",
             "readonly":enabletrue,
             "title": "T_FAMILY_DETAILS",
-            "items": [{
+            "items": [
+                {
                 key:"customer.familyMembers",
                 type:"array",
+                titleExpr: "(model.customer.familyMembers[arrayIndex].relationShip == 'Self'?'Self':'Family Memeber')",
                 startEmpty: true,
                 items: [
                     {
@@ -699,7 +704,8 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                     //     }
                     // },
                 ]
-            }]
+                }  
+        ]
         },
         {
                     type: "box",
