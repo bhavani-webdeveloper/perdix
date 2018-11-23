@@ -192,6 +192,10 @@ define({
                         {
                             title: "LOAN_ACCOUNT_NO",
                             data: "accountNumber"
+                        },
+                        {
+                            title: "NEXT_ACTION_DATE",
+                            data: "promiseToPayDate"
                         }
                         ]
                     },
