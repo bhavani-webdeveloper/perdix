@@ -19,10 +19,10 @@
 								<div class="tip-of-the-day" sg-bind-html="tipOfTheDay" ng-hide="tipOfTheDayLoading"></div>
 							</div>
 						</div>
-						<div class="row" style="margin-top: 15px; margin-bottom: 5px;">
+						<div class="row" style="margin-top: 15px;">
 							<div class="col-sm-12">
-								<button ng-click="loadTipOfTheDay('previous')" class="btn btn-default btn-xs pull-left" style="border: none;">{{'PREVIOUS'|translate}}</button>
-								<button ng-click="loadTipOfTheDay('next')" ng-disabled="!showNextTipButton" class="btn btn-default btn-xs pull-right" style="border: none;">{{'NEXT'|translate}}</button>
+								<button ng-click="loadTipOfTheDay('previous')" class="btn btn-default btn-xs pull-left" style="border: none; background-color: transparent"><i class="fa fa-angle-left"></i> {{'PREVIOUS'|translate}}</button>
+								<button ng-click="loadTipOfTheDay('next')" ng-disabled="!showNextTipButton" class="btn btn-default btn-xs pull-right" style="border: none; background-color: transparent">{{'NEXT'|translate}} <i class="fa fa-angle-right"></i></button>
 							</div>
 						</div>
 					</div>
