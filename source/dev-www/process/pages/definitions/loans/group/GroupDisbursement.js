@@ -156,23 +156,25 @@ define({
                         "readonly": true,
                         "type": "select",
                         "enumCode": "loan_product_frequency",
+                        // "titleMap": {
+                        //     "M": "Monthly",
+                        //     "Q": "Quarterly"
+                        // }
                     }, {
                         "key": "group.tenure",
                         "readonly": true,
                         "title": "TENURE",
                     }, {
                         "key": "group.scheduledDisbursementDate",
-                        "required":true,
                         "readonly": true,
                         "title": "SCHEDULED_DISBURSEMENT_DATE",
-                        "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
+                        "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'||model.siteCode == 'KGFS'",
                         "type": "date",
                     }, {
                         "key": "group.firstRepaymentDate",
                         "title": "FIRST_REPAYMENT_DATE",
-                        "required":true,
                         "readonly": true,
-                        "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
+                        "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'||model.siteCode == 'KGFS'",
                         "type": "date",
                     }, {
                         "key": "group.groupPhotoFileId",
@@ -595,22 +597,22 @@ define({
                 submit: function(model, formCtrl, form) {
                     if(!validateForm(formCtrl)) 
                         return;
-                    if(model.siteCode == 'saija') {
-                        var cbsdate = SessionStore.getCBSDate();
-                        if (model.group.scheduledDisbursementDate && moment(model.group.scheduledDisbursementDate, SessionStore.getSystemDateFormat()).diff(cbsdate, "days") <0) {
-                            PageHelper.showProgress("loan-create", "Scheduled disbursement date should be greater than or equal to system date", 5000);
-                            return false;
+                        if(model.siteCode == 'saija') {
+                            var cbsdate = SessionStore.getCBSDate();
+                            if (model.group.scheduledDisbursementDate && moment(model.group.scheduledDisbursementDate, SessionStore.getSystemDateFormat()).diff(cbsdate, "days") <0) {
+                                PageHelper.showProgress("loan-create", "Scheduled disbursement date should be greater than or equal to system date", 5000);
+                                return false;
+                            }
+    
+                            if (model.group.firstRepaymentDate && moment(model.group.firstRepaymentDate, SessionStore.getSystemDateFormat()).diff(model.group.scheduledDisbursementDate, "days") <=0) {
+                                PageHelper.showProgress("loan-create", "Repayment date should be greater than disbursement date", 5000);
+                                return false;
+                            }
                         }
-
-                        if (model.group.firstRepaymentDate && moment(model.group.firstRepaymentDate, SessionStore.getSystemDateFormat()).diff(model.group.scheduledDisbursementDate, "days") <=0) {
-                            PageHelper.showProgress("loan-create", "Repayment date should be greater than disbursement date", 5000);
-                            return false;
-                        }
-                    }
                     PageHelper.showLoader();
                     irfProgressMessage.pop('Disbursement-proceed', 'Working...');
                     PageHelper.clearErrors();
-                    if(model.siteCode == 'saija') {
+                    if(model.siteCode == 'saija'||model.siteCode == 'KGFS') {
                         model.groupAction = "PROCEED";
                     } else {
                         model.groupAction = "SAVE";
@@ -623,21 +625,23 @@ define({
 
                     GroupProcess.updateGroup(reqData, function(res) {
                         res.groupAction = "PROCEED";
-                        if(model.siteCode == 'saija') {
+                        if(model.siteCode == 'saija' || model.siteCode == 'KGFS') {
                             PageHelper.hideLoader();
                             irfProgressMessage.pop('Disbursement-proceed', 'Operation Succeeded.  Disbursement Complete.', 5000);
                             irfNavigator.goBack();
                             return;
                         }
-                        GroupProcess.groupDisbursement(res, function(resp) {
-                            PageHelper.hideLoader();
-                            irfProgressMessage.pop('Disbursement-proceed', 'Operation Succeeded.  Disbursement Complete.', 5000);
-                            irfNavigator.goBack();
-                        }, function(err) {
-                            PageHelper.hideLoader();
-                            irfProgressMessage.pop('Disbursement-proceed', 'Oops. Some error.', 2000);
-                            PageHelper.showErrors(err);
-                        });
+                        if(model.siteCode != 'KGFS'){
+                            GroupProcess.groupDisbursement(res, function(resp) {
+                                PageHelper.hideLoader();
+                                irfProgressMessage.pop('Disbursement-proceed', 'Operation Succeeded.  Disbursement Complete.', 5000);
+                                irfNavigator.goBack();
+                            }, function(err) {
+                                PageHelper.hideLoader();
+                                irfProgressMessage.pop('Disbursement-proceed', 'Oops. Some error.', 2000);
+                                PageHelper.showErrors(err);
+                            });
+                        }
                     }, function(res) {
                         PageHelper.hideLoader();
                         irfProgressMessage.pop('Disbursement-proceed', 'Oops. Some error.', 2000);

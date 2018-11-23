@@ -17,6 +17,7 @@ define({
 			initialize: function(model, form, formCtrl) {
 				model.branchId = SessionStore.getCurrentBranch().branchId;
 				var bankName = SessionStore.getBankName();
+				model.siteCode = SessionStore.getGlobalSetting('siteCode');
 				var banks = formHelper.enum('bank').data;
 				for (var i = 0; i < banks.length; i++){
 					if(banks[i].name == bankName){
@@ -30,6 +31,10 @@ define({
 				}
 				model.partner = SessionStore.session.partnerCode;
 				model.isPartnerChangeAllowed = GroupProcess.hasPartnerCodeAccess(model.partner);
+				if(model.siteCode =='KGFS'){
+					model.partner = "AXIS";
+					model.isPartnerChangeAllowed = false;
+				}
 				$log.info("Checker1 Queue got initialized");
 			},
 			definition: {
@@ -41,11 +46,11 @@ define({
 						"key": "bankId",
 						"readonly": true,
 						"type": "select",
-						"condition": "!model.fullAccess"
+						"condition": "!model.fullAccess && (model.siteCode != 'KGFS')"
 					}, {
 						"key": "bankId",
 						"type": "select",
-						"condition": "model.fullAccess"
+						"condition": "model.fullAccess && (model.siteCode != 'KGFS')"
 					}, {
 						"key": "branchId",
 						"type": "select",
@@ -73,6 +78,11 @@ define({
 						"type": "string",
 						"title": "PRODUCT",
 						readonly: true
+					},
+					{
+						"key": "groupCode",
+						"type": "string",
+						"title": "GROUP_CODE",
 					}]
 				}],
 				searchSchema: {
@@ -93,6 +103,10 @@ define({
 							"type": "string",
 							"title": "PARTNER",
 							"enumCode": "partner"
+						},
+						"groupCode": {
+							"type": "string",
+							"title": "GROUP_CODE",
 						}, 
 						"product": {
 							"title": "PRODUCT"
@@ -109,6 +123,7 @@ define({
 						'bankId': searchOptions.bankId,
 						'branchId': searchOptions.branchId,
 						'partner': searchOptions.partner,
+						'groupCode':searchOptions.groupCode,
 						'product': searchOptions.product,
 						'groupStatus': true,
 						'currentStage': "Checker1",
@@ -150,10 +165,10 @@ define({
 						return [{
 							title: 'GROUP_ID',
 							data: 'id'
+						},{
+							title: 'GROUP_CODE',
+							data: 'groupCode'
 						}, {
-                            title: 'GROUP_CODE',
-                            data: 'groupCode'
-                        }, {
 							title: 'GROUP_NAME',
 							data: 'groupName'
 						}, {

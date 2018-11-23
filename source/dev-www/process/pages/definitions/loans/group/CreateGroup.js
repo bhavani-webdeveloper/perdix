@@ -7,6 +7,7 @@ define({
 
     $pageFn: function($log, GroupProcess, Enrollment, CreditBureau, Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
         PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
+        
 
         var validateForm = function(formCtrl){
             formCtrl.scope.$broadcast('schemaFormValidate');
@@ -140,6 +141,7 @@ define({
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 model.group = model.group || {};
+                model.siteCode = SessionStore.getGlobalSetting("siteCode");
                 model.group.siteCode = SessionStore.getGlobalSetting("siteCode");
                 model.siteCode =SessionStore.getGlobalSetting("siteCode");
                 for (var i = 0; i < banks.length; i++){
@@ -192,25 +194,24 @@ define({
             form: [{
                 "type": "box",
                 "title": "GROUP_DETAILS",
-                "items": [
-                 {
+                "items": [{
+                    "key": "group.groupName",
+                    "required": true,
+                    "title": "GROUP_NAME",
+                }, {
+                    "key": "group.partnerCode",
+                    "title": "PARTNER",
+                    "required": true,
+                    "type": "select",
+                    "enumCode": "partner"
+                }, {
                     "key": "group.branchId",
                     "title": "BRANCH_NAME",
                     "required": true,
                     readonly: true,
                     "parentEnumCode": "bank",
                     "parentValueExpr": "model.group.bankId",
-                },{
-                    "key": "group.partnerCode",
-                    "title": "PARTNER",
-                    "required": true,
-                    "type": "select",
-                    "enumCode": "partner"
-                },{
-                    "key": "group.groupName",
-                    "required": true,
-                    "title": "GROUP_NAME",
-                },{
+                }, {
                     "key": "group.centreCode",
                     "title": "CENTRE_CODE",
                     "required": true,
@@ -385,6 +386,8 @@ define({
                             $log.info("Hi Selected");
                             var familyMembers = [];
                             model.group.jlgGroupMembers[context.arrayIndex].relation = "Father";
+                            model.group.jlgGroupMembers[context.arrayIndex].witnessFirstName = "";
+                            model.group.jlgGroupMembers[context.arrayIndex].witnessRelationship= "";
                             Enrollment.getCustomerById({id:valueObj.customerId}).$promise
                                  .then(function(res){
                                  model.group.jlgGroupMembers[context.arrayIndex].maritalStatus = res.maritalStatus;
@@ -437,6 +440,7 @@ define({
                         "key": "group.jlgGroupMembers[].outStandingLoanAmount",
                         "condition":"model.group.partnerCode=='AXIS'",
                         "type": "amount",
+                        "required":true,
                         "title": "OUTSTANDING_LOAN_AMOUNT"
                     },{
                         "key": "group.jlgGroupMembers[].loanAmount",
@@ -501,7 +505,9 @@ define({
                             var familyMembers = [];
                             if(model.group.jlgGroupMembers[context.arrayIndex].familyMembers)
                             for (var idx = 0; idx < model.group.jlgGroupMembers[context.arrayIndex].familyMembers.length; idx++){
+                                if(model.group.jlgGroupMembers[context.arrayIndex].familyMembers[idx].name != model.group.jlgGroupMembers[context.arrayIndex].firstName) {
                                     familyMembers.push(model.group.jlgGroupMembers[context.arrayIndex].familyMembers[idx]);
+                                }
                             }
                             return $q.resolve({
                                 headers: {
@@ -577,7 +583,7 @@ define({
                 "condition": "model.group.id",
                 "items": [{
                     "type": "submit",
-                    "title": "SUBMIT"
+                    "title": "EDIT_GROUP"
                 }]
             }],
 
@@ -626,7 +632,9 @@ define({
                     //         break;
                     //     }
                     // }
-
+                    for (var i=0; i< model.group.jlgGroupMembers.length; i++){
+                        model.group.jlgGroupMembers[i].centreCode = model.group.centreCode;
+                    }
                     PageHelper.clearErrors();
                     var reqData = _.cloneDeep(model);
                     Utils.confirm("Please Verify customer/spouse DOB in the system with actual ID Proof. DOB change request will not be allowed afterwards").then(function(){

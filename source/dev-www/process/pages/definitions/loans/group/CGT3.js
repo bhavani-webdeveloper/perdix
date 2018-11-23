@@ -118,6 +118,17 @@ define({
                     "key": "group.cgt3Photo",
                     "title": "CGT_3_PHOTO",
                     required: true,
+                    "condition":"model.siteCode != 'KGFS'",
+                    "category": "Group",
+                    "subCategory": "CGT3PHOTO",
+                    "type": "file",
+                    "offline": true,
+                    "fileType": "image/*",
+                },{
+                    "key": "group.cgt3Photo",
+                    "title": "CGT_3_PHOTO",
+                    //required: true,
+                    "condition":"model.siteCode == 'KGFS'",
                     "category": "Group",
                     "subCategory": "CGT3PHOTO",
                     "type": "file",
@@ -128,6 +139,11 @@ define({
                     "title": "START_CGT3",
                     "type":"button",
                     "onClick":"actions.startCGT3(model,form)"   
+                },{
+                    "key": "group.cgtDate3",
+                    "title": "CGT3 Started",
+                    "condition":"model.group.cgtDate3",
+                    "readonly":true
                 }]
             },{
                 "type": "box",
@@ -154,13 +170,24 @@ define({
                 }, {
                     "key": "group.cgt3EndPhoto",
                     "title": "CGT_3_PHOTO",
-                    required: true,
+                    //required: true,
+                    "condition":"model.siteCode == 'KGFS'",
                     "category": "Group",
                     "subCategory": "CGT3PHOTO",
                     "type": "file",
                     "offline": true,
                     "fileType": "image/*",
                 }, {
+                    "key": "group.cgt3EndPhoto",
+                    "title": "CGT_3_PHOTO",
+                    "condition":"model.siteCode != 'KGFS'",
+                    required: true,
+                    "category": "Group",
+                    "subCategory": "CGT3PHOTO",
+                    "type": "file",
+                    "offline": true,
+                    "fileType": "image/*",
+                },{
                     "key": "group.Cgtbutton",
                     "title": "END_CGT3",
                     "type":"button",
@@ -170,7 +197,12 @@ define({
                     key: "group.cgt3Remarks",
                     type: "textarea",
                     required: true
-                },]
+                },{
+                    "key": "group.cgtEndDate3",
+                    "title": "CGT3 Ended",
+                    "condition":"model.group.cgtEndDate3",
+                    "readonly":true
+                }]
             }, { 
                 "type": "box",
                 "title": "GROUP_MEMBERS",
