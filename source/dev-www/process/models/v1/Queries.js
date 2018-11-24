@@ -627,10 +627,9 @@ irf.models.factory('Queries', [
             return deferred.promise;
         };
 
-        resource.getLoanPurpose3 = function(product, purpose1,purpose2) {
+        resource.getLoanPurpose3 = function(purpose1,purpose2) {
             var deferred = $q.defer();
             resource.getResult("loanpurpose3.list", {
-                "product": product,
                 "purpose1": purpose1,
                 "purpose2": purpose2
             }).then(function(records) {
