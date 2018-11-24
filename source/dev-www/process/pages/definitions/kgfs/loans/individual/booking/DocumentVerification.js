@@ -9,7 +9,7 @@ define({
         });
         return {
             "type": "schema-form",
-            "title": "DOCUMENT_VERIFICATION",
+            "title": "DOCUMENT_VERIFICATIONS",
             "subTitle": " ",
             initialize: function(model, form, formCtrl) {
                 $log.info("Demo Customer Page got initialized");

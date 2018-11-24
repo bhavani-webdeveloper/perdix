@@ -44,8 +44,8 @@ define({
                                 "screenFilter": true
                             }
                         },
-                        "customerId": {
-                            "title": "CUSTOMER_ID",
+                        "customerUrnNo": {
+                            "title": "CUSTOMER_URN_NO",
                             "type": "number"
                         },
                     },
@@ -61,7 +61,7 @@ define({
                         'stage': 'LoanInitiation',
                         'branchId': searchOptions.branch,
                         'centreCode': searchOptions.centre,
-                        'customerId': searchOptions.customerId,
+                        'customerUrnNo': searchOptions.customerUrnNo,
                         'page': pageOpts.pageNo
                     }).$promise;
                     return promise;

@@ -343,7 +343,7 @@ define([], function () {
                         searchHelper: formHelper,
                         search: function (inputModel, form, model) {
                             if (model.loanAccount.productCode != null)
-                                return Queries.getLoanPurpose3(model.loanAccount.productCode, model.loanAccount.loanPurpose1, model.loanAccount.loanPurpose2);
+                                return Queries.getLoanPurpose3(model.loanAccount.loanPurpose1, model.loanAccount.loanPurpose2);
                             else
                                 return Queries.getAllLoanPurpose3(model.loanAccount.loanPurpose1);
                         },

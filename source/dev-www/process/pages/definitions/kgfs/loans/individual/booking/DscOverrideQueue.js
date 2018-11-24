@@ -44,13 +44,9 @@ define({
                                 "screenFilter": true
                             }
                         },
-                        "customerId": {
-                            "title": "CUSTOMER_ID",
+                        "customerUrnNo": {
+                            "title": "CUSTOMER_URN_NO",
                             "type": "number"
-                        },
-                        "accountNumber": {
-                            "title": "ACCOUNT_NUMBER",
-                            "type": "string"
                         }
                     },
                     "required": ["stage"]
@@ -65,7 +61,7 @@ define({
                         'stage': 'DSCOverride',
                         'branchId': searchOptions.branch,
                         'centreCode': searchOptions.centre,
-                        'customerId': searchOptions.customerId,
+                        'customerUrnNo': searchOptions.customerUrnNo,
                         'accountNumber': searchOptions.accountNumber,
                         'page': pageOpts.pageNo
                     }).$promise;
@@ -94,8 +90,8 @@ define({
                     getListItem: function (item) {
                         return [
 
-                            "{{'ACCOUNT_NUMBER'|translate}} : " + item.accountNumber,
                             "{{'ENTITY_NAME'|translate}} : " + item.customerName,
+                            "{{'URN_NO'|translate}} : " + item.urn,
                             "{{'LOAN_AMOUNT'|translate}} : " + item.loanAmount,
                             "{{'LOAN_TYPE'|translate}} : " + item.loanType,
                             "{{'PARTNER_CODE'|translate}} : " + item.partnerCode,
@@ -115,8 +111,8 @@ define({
 							title: 'LOAN_ID',
 							data: 'id'
                         }, {
-							title: 'ACCOUNT_NUMBER',
-							data: 'accountNumber'
+							title: 'URN_NO',
+							data: 'urn'
                         }, 
                         {
                             title: 'ENTITY_NAME',
