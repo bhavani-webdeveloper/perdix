@@ -35,6 +35,13 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
                 });
                 return rating;
             },
+            getRiskLevel: function(riskLevelId) {
+                switch(riskLevelId) {
+                    case 1: return 'High';
+                    case 2: return 'Medium';
+                    case 3: return 'Low';
+                }
+            },
             processDisplayRecords: function(onlineAudits, queue_type, queue_status, queue_stage) {
                 var deferred = $q.defer();
                 var displayAudits = {

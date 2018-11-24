@@ -4,7 +4,7 @@ irf.pageCollection.factory(irf.page("audit.AuditScoresQueue"), ["$log", "$stateP
             "type": "search-list",
             "title": "AUDIT_SCORES",
             initialize: function(model, form, formCtrl) {
-                model.branch_id = SessionStore.getCurrentBranch().branchId;
+                // model.branch_id = SessionStore.getCurrentBranch().branchId;
                 var bankName = SessionStore.getBankName();
                 var banks = formHelper.enum('bank').data;
                 for (var i = 0; i < banks.length; i++) {
@@ -63,7 +63,9 @@ irf.pageCollection.factory(irf.page("audit.AuditScoresQueue"), ["$log", "$stateP
                             "type": ["null", "number"],
                             "enumCode": "branch_id",
                             "x-schema-form": {
-                                "type": "select"
+                                "type": "select",
+                                "parentEnumCode": "bank",
+                                "parentValueExpr": "model.bankId"
                             }
                         },
                         "from_date": {
