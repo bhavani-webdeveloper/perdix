@@ -84,7 +84,6 @@ define([],function(){
 						selectable: false,
 						expandable: true,
 						listStyle: "table",
-						itemCallback: function(item, index) {},
 						getItems: function(response, headers) {
 							if (response != null && response.length && response.length != 0) {
 								return response;
@@ -92,7 +91,11 @@ define([],function(){
 							return [];
 						},
 						getListItem: function(item) {
-							return []
+							return [
+								item.first_name,
+								item.urn_no,
+								item.current_stage
+							]
 						},
 						getTableConfig: function() {
 							return {

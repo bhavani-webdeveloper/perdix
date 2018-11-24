@@ -1124,6 +1124,14 @@ irf.models.factory('Queries', [
                     body: response.results
                 };
                 deferred.resolve(result);
+            } else {
+                var result = {
+                    headers: {
+                        "x-total-count": response.results.length
+                    },
+                    body: response.results
+                };
+                deferred.resolve(result);
             }
         }, deferred.reject)
         return deferred.promise;

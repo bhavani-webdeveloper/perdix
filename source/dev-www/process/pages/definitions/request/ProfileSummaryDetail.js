@@ -109,6 +109,7 @@ define([], function(){
                   promise.then(function(data) {
                     PageHelper.showProgress('request', 'Update Done.', 5000);
                     irfNavigator.goBack();
+                    PageHelper.hideLoader();
                   }, function(err) {
                     PageHelper.showProgress('request', 'Oops. Some error.', 5000);
                     PageHelper.showErrors(err);
