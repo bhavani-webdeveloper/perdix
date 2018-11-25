@@ -157,6 +157,10 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource,Upload,$q,PageHe
             url:endpoint+'/loanActionSummary/:id',
             isArray:true
         },
+        getPortfolioAnalytics: {
+            method: 'GET',
+            url: endpoint + "/getPortfolioAnalytics/:loanId"
+        }
     });
     resource.getAllDocumentsUrl = function(loanId){
         return endpoint + '/documents/loanId?loanId='+loanId;
