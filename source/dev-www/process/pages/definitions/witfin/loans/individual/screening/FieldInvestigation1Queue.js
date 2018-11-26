@@ -116,7 +116,6 @@ define({
                         'stage': 'FieldInvestigation1',
                         //'branchName': branch,
                         'enterprisePincode': searchOptions.pincode,
-                        'enterprisePincode': searchOptions.pincode,
                         'applicantName': searchOptions.applicantName,
                         'area': searchOptions.area,
                         'status': searchOptions.status,
@@ -153,9 +152,7 @@ define({
                             item.applicantName,
                             item.customerName,
                             item.area,
-                            item.villageName,
-                            item.enterprisePincode,
-
+                            item.villageName
                         ]
                     },
                     getTableConfig: function() {
@@ -184,9 +181,6 @@ define({
                         }, {
                             title: 'CITY_TOWN_VILLAGE',
                             data: 'villageName'
-                        }, {
-                            title: 'PIN_CODE',
-                            data: 'enterprisePincode'
                         }]
                     },
                     getActions: function() {

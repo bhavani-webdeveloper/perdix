@@ -61,7 +61,9 @@
                 "Page/Engine/loans.individual.writeoff.WriteOffQueue",
                 "Page/Engine/loans.individual.booking.LoanBookingQueue",
                 "Page/Engine/loans.individual.PendingCashQueue",
-                "Page/Engine/loans.individual.PendingClearingQueue"
+                "Page/Engine/loans.individual.PendingClearingQueue",
+                "Page/Engine/loans.individual.PortfolioInsuranceFeeDownload"
+
             ]
         },
         "Page/LUCDashboard",

@@ -2019,7 +2019,9 @@
               "TeleVerification1", 
              "TeleVerification2",
               "CreditAppraisal",
-              "LoanInitiation"
+              "LoanInitiation",
+              "DocumentUpload",
+              "DocumentVerification"
             ]
           },
           "collectionBankBranchName": {
@@ -2035,7 +2037,9 @@
               "TeleVerification1", 
              "TeleVerification2",
               "CreditAppraisal",
-              "LoanInitiation"
+              "LoanInitiation",
+              "DocumentUpload",
+              "DocumentVerification"
             ]
           },
           "collectionIfscCode": {
@@ -2051,7 +2055,9 @@
               "TeleVerification1", 
              "TeleVerification2",
               "CreditAppraisal",
-              "LoanInitiation"
+              "LoanInitiation",
+              "DocumentUpload",
+              "DocumentVerification"
             ]
           },
           "collectionAccountNumber": {
@@ -2067,7 +2073,9 @@
               "TeleVerification1", 
              "TeleVerification2",
               "CreditAppraisal",
-              "LoanInitiation"
+              "LoanInitiation",
+              "DocumentUpload",
+              "DocumentVerification"
             ]
           },
           "collectionAccountType": {
@@ -2083,7 +2091,9 @@
               "TeleVerification1", 
              "TeleVerification2",
               "CreditAppraisal",
-              "LoanInitiation"
+              "LoanInitiation",
+              "DocumentUpload",
+              "DocumentVerification"
             ]
           },
           "collectionCustomerNameAsInBank": {
@@ -2099,7 +2109,9 @@
               "TeleVerification1", 
              "TeleVerification2",
               "CreditAppraisal",
-              "LoanInitiation"
+              "LoanInitiation",
+              "DocumentUpload",
+              "DocumentVerification"
             ]
           },
           "collectionPaymentType": {
@@ -2115,7 +2127,9 @@
               "TeleVerification1", 
              "TeleVerification2",
               "CreditAppraisal",
-              "LoanInitiation"
+              "LoanInitiation",
+              "DocumentUpload",
+              "DocumentVerification"
             ]
           },
           "scheduleStartDate": {
