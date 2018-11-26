@@ -2,9 +2,9 @@ define({
     pageUID: "management.RuleMaintenance",
     pageType: "Engine",
     dependencies: ["$log","Utils","PagesDefinition","Queries","Lead", "$q",'PageHelper', 'formHelper','irfProgressMessage',
-        'SessionStore', "$state", "$stateParams", "RuleMaintenance",'irfSimpleModal'],
+        'SessionStore', "$state", "$stateParams", "RuleMaintenance",'irfSimpleModal','irfNavigator'],
     $pageFn: function($log,Utils,PagesDefinition,Queries,Lead, $q, PageHelper, formHelper, irfProgressMessage,
-        SessionStore, $state, $stateParams, RuleMaintenance,irfSimpleModal) {
+        SessionStore, $state, $stateParams, RuleMaintenance,irfSimpleModal,irfNavigator) {
 
 
 
@@ -115,18 +115,71 @@ define({
     },
     {
 		"key": "item.userExpression",
-        "title": "Rule Expression",
+        "title": "Rule Definition",
         "readonly":true,
 		"type": "textarea"
     },
     {
+        "type": "radios",
+        "key": "item.ruleApplicable",
+        "title": "Is Rule Definition Applicable?",
+        "titleMap":{
+            "Yes":"YES",
+            "No":"NO"
+        },
+        "onChange": function (modelValue, form, model) {
+            if(model.item.ruleApplicable=='No'){
+                model.item.ruleExpression={
+                    "group":{  
+                       "operator":{  
+                          "name":"AND",
+                          "value":"&&"
+                       },
+                       "rules":[  
+                          {  
+                             "comparator":{  
+                                "id":1,
+                                "name":"equal to",
+                                "value":"=="
+                             },
+                             "field":{  
+                                "id":30,
+                                "value":"1",
+                                "name":1,
+                                "type":"number",
+                                "options":[  
+                                   {  
+                                      "name":"1",
+                                      "id":1,
+                                      "value":"1"
+                                   }
+                                ]
+                             },
+                             "data":{  
+                                "name":"1",
+                                "id":1,
+                                "value":"1"
+                             },
+                             "fieldId":"30"
+                          }
+                       ]
+                    }
+                };
+                //actions.validateRule(model.item.ruleExpression.group,model)
+            }else{
+
+            }
+        },
+    },
+    {
         type: "section",
+        "condition":"model.item.ruleApplicable=='Yes'",
         "key":"item.userquery",
         html:"<query-builder title='query-builder' fields='model.options.fields' operators='model.options.operators' comparators='model.options.comparators' group='model.item.ruleExpression.group' settings='model.options.settings' ></query-builder>"
     },
     {
 		"type": "button",
-		"title": "Generate Expression",
+		"title": "Generate/Validate Expression",
 		"onClick": "actions.validateRule(model.item.ruleExpression.group,model)"
     },
     {
@@ -218,6 +271,16 @@ define({
                         res[i].value='${'+res[i].displayName+'}';
                     }
                     model.options.fields= res;
+                    model.options.fields.push({
+                        id:(model.options.fields.length +1),
+                        value:'1',
+                        name:1,
+                        type:'number',
+                        options: [
+                            { name: '1', id: 1,value:'1'},
+                          ]
+                    });
+
                 },function(err){
                     console.log(err);
                     model.options.fields = [
@@ -230,8 +293,8 @@ define({
                             { name: 'female', id: 2,value:'female'}
                           ],
                           disabledComparators: [
-                            3, 4, 5, 6
-                          ]
+                            2,3, 4, 5, 6
+                          ] 
                         },
                         {
                           id: 2,
@@ -465,6 +528,10 @@ define({
                                         $log.info(res);
                                         PageHelper.showProgress("Rule-Delete", "Rule deleted successfully ,Please reload the page", 5000);
                                         PageHelper.hideLoader();
+                                        irfNavigator.go({
+                                            state: "Page.Landing",
+                                            pageName: ""
+                                        });
                                     },function(err){
                                         $log.info(err);
                                         PageHelper.hideLoader();
