@@ -61,7 +61,7 @@ define({
                         'stage': 'DSCOverride',
                         'branchId': searchOptions.branch,
                         'centreCode': searchOptions.centre,
-                        'customerUrnNo': searchOptions.customerUrnNo,
+                        'urn': searchOptions.customerUrnNo,
                         'accountNumber': searchOptions.accountNumber,
                         'page': pageOpts.pageNo
                     }).$promise;
