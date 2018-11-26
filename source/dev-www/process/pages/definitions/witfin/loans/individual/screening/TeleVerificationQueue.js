@@ -118,7 +118,6 @@ define({
                             item.customerName,
 							item.branchName,
 							item.centreName
-
                         ]
                     },
                     getTableConfig: function() {

@@ -93,7 +93,6 @@ define({
                         'stage': 'FieldInvestigation2',
                         'branchId': searchOptions.branch,
                         'enterprisePincode': searchOptions.pincode,
-                        'enterprisePincode': searchOptions.pincode,
                         'applicantName': searchOptions.applicantName,
                         'area': searchOptions.area,
                         'status': searchOptions.status,
