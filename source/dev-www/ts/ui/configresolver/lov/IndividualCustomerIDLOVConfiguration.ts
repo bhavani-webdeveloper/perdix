@@ -43,7 +43,13 @@ export class IndividualCustomerIDLOVConfiguration extends LOVElementConfiguratio
         let Enrollment = AngularResourceService.getInstance().getNGService("Enrollment");
         let Utils = AngularResourceService.getInstance().getNGService("Utils");
         PageHelper.showProgress('customer-load', 'Loading customer...');
-
+        if(typeof valueObj.urnNo != "undefined"){
+            if(valueObj.urnNo == null || valueObj.urnNo == ""){
+                PageHelper.showProgress('customer-load','Select a customer with URN Number...')
+                model.customer.firstName = null;
+                return false;
+            }
+        }
         var enrolmentDetails = {
             'customerId': model.customer.id,
             'customerClass': model._bundlePageObj.pageClass,
