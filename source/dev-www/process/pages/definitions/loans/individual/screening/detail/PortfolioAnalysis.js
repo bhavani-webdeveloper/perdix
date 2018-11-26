@@ -678,7 +678,7 @@ define({
                             prepareFinancialData['tableData'].push(params[3].tableData);
                             prepareFinancialData['tableRatios'].push(params[3].tableData['ratios']);
                             prepareFinancialData['tableData1'].push(params[4].data[0]);
-                           // prepareFinancialData['tableData2'].push(params[6].data[0]);
+                            prepareFinancialData['tableData2'].push(params[6].data[0]);
 
 
                         });

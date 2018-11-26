@@ -7,10 +7,10 @@
                 method:'GET',
                 url: endpoint + '/fetchDeceasedDetails'
             }),
-            updateDeadMarkingStatus: searchResource({
+            updateDeadMarkingStatus: {
                 method:'POST',
                 url:endpoint+'/updatedDeceasedDetails'
-            }),
+            },
             deathMarkingSchema:{
                 method:'GET',
                 url:'process/schemas/deathMarking.json'
