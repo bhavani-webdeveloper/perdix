@@ -41,27 +41,36 @@ define({
                             "type": ["string", "null"],
                             "x-schema-form": {
                                 "type": "select",
-                                "screenFilter": true
+                                "screenFilter": true,
+                                "enumCode": "booking_loan_type"
                             }
                         },
-                        'productName':
-                        {
-                            'title': "PRODUCT_NAME",
-                            "type": ["string", "null"],
+                        "loan_product": {
+                            "title": "Loan Product",
+                            "type": "string",
+    
                             "x-schema-form": {
-                                "type": "select",
-                                "enumCode": "branch",
-                                "screenFilter": true
-                            }
-                        },
-                        'requestType':
-                        {
-                            'title': "REQUEST_TYPE",
-                            "type": ["string", "null"],
-                            "x-schema-form": {
-                                "type": "select",
-                                "enumCode": "branch",
-                                "screenFilter": true
+                                "type": "lov",
+                                "lovonly": true,
+                                search: function (inputModel, form, model, context) {
+                                    var loanProduct = formHelper.enum('loan_product').data;
+                                    var products = $filter('filter')(loanProduct, {parentCode: model.partner_code ? model.partner_code : undefined}, true);
+    
+                                    return $q.resolve({
+                                        headers: {
+                                            "x-total-count": products.length
+                                        },
+                                        body: products
+                                    });
+                                },
+                                onSelect: function (valueObj, model, context) {
+                                    model.loan_product = valueObj.field1;
+                                },
+                                getListDisplayItem: function (item, index) {
+                                    return [
+                                        item.name
+                                    ];
+                                },
                             }
                         },
                         "accountNumber":

@@ -30,6 +30,24 @@ define([], function () {
                 model.loanAccount.ornamentsAppraisals[index].marketValueInPaisa = dynamicMarketValue/100 + 0.00;
             };
 
+            var addressMapCustomertoNominee= function (customer,nominee){
+                nominee.nomineeState = customer.state || null;
+                nominee.nomineeDistrict = customer.district ||null;
+                nominee.nomineePincode = customer.pincode || null;
+                nominee.nomineeLocality = customer.locality || null;
+                nominee.nomineeStreet = customer.street ||null;
+                nominee.nomineeDoorNo = customer.doorNo ||null;
+            };
+
+            var addressMapCustomertoGuardian= function (customer,guardian){
+                guardian.guardianState = customer.state || null;
+                guardian.guardianDistrict = customer.district|| null;
+                guardian.guardianPincode = customer.pincode || null;
+                guardian.guardianLocality = customer.locality || null;
+                guardian.guardianStreet = customer.street || null;
+                guardian.guardianDoorNo = customer.doorNo || null;
+            }
+
             // View Functions
             var getIncludes = function (model) {
                 return [
@@ -63,7 +81,7 @@ define([], function () {
                     "NomineeDetails.nominees.nomineeGender",
                     "NomineeDetails.nominees.nomineeDOB",
                     "NomineeDetails.nominees.nomineeButton",
-                    // "NomineeDetails.nominees.nomineeAddressSameasBorrower",
+                    "NomineeDetails.nominees.nomineeAddressSameasBorrower",
                     "NomineeDetails.nominees.nomineeDoorNo",
                     "NomineeDetails.nominees.nomineeLocality",
                     "NomineeDetails.nominees.nomineeStreet",
@@ -76,6 +94,7 @@ define([], function () {
                     "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianFirstName",
                     "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianGender",
                     "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianDOB",
+                    "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianAddressSameAsBorrower",
                     "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianDoorNo",
                     "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianLocality",
                     "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianStreet",
@@ -336,9 +355,10 @@ define([], function () {
                     "LoanDetails.loanPurpose3": {
                         "orderNo": 8,
                         "type": "lov",
+                        "lovonly":true,
                         bindMap: {},
                         outputMap: {
-                            "purpose3": "loanAccount.loanPurpose3"
+                            "loan_purpose": "loanAccount.loanPurpose3"
                         },
                         searchHelper: formHelper,
                         search: function (inputModel, form, model) {
@@ -349,7 +369,7 @@ define([], function () {
                         },
                         getListDisplayItem: function (item, index) {
                             return [
-                                item.purpose3
+                                item.loan_purpose
                             ];
                         }
                     },
@@ -649,6 +669,14 @@ define([], function () {
                             ];
                         }
                     },
+                    "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianAddressSameAsBorrower": {
+                        onChange: function(valueObj,form,model){
+                            if(valueObj == true)
+                                addressMapCustomertoGuardian(model.customer,model.loanAccount.nominees[0]);
+                            else
+                                addressMapCustomertoGuardian({},model.loanAccount.nominees[0]);
+                        }
+                    },
                     "NomineeDetails.nominees.nomineeDistrict":{
                         required:true
                     },
@@ -670,6 +698,7 @@ define([], function () {
                     },
                     "LoanSanction.customerSignatureDate": {
                         orderNo :3,
+                        required : true,
                         onChange: function (modelValue, form, model) {
                             if (modelValue) {
                                 model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate = modelValue;
@@ -678,6 +707,7 @@ define([], function () {
                     },
                     "LoanSanction.firstRepaymentDate": {
                         orderNo : 5,
+                        required : true,
                         onChange: function (value, form, model, event) {
                             var repaymentDate = moment(model.loanAccount.firstRepaymentDate, SessionStore.getSystemDateFormat());
                             var applicationDate = moment(model.loanAccount.loanApplicationDate, SessionStore.getSystemDateFormat());
@@ -690,6 +720,7 @@ define([], function () {
                     },
                     "LoanSanction.scheduleDisbursementDate": {
                         orderNo : 4,
+                        required: true,
                         onChange: function (value, form, model) {
                             var repaymentDate = moment(model.loanAccount.firstRepaymentDate, SessionStore.getSystemDateFormat());
                             var disbursementSchedules = moment(model.loanAccount.disbursementSchedules[form.arrayIndex].scheduledDisbursementDate, SessionStore.getSystemDateFormat());
@@ -876,10 +907,17 @@ define([], function () {
                                                 "nominees": {
                                                     "items": {
                                                         "nomineeAddressSameasBorrower": {
+                                                            "key": "loanAccount.nominees[].nomineeAddressSameAsCustomer",                        
                                                             "type": "checkbox",
                                                             "title": "ADDRESS_SAME_AS_BORROWER",
                                                             "schema": {
                                                                 "type": ["boolean", "null"]
+                                                            },
+                                                            onChange: function(valueObj,form,model){
+                                                                if (valueObj == true)
+                                                                    addressMapCustomertoNominee(model.customer,model.loanAccount.nominees[0]);
+                                                                else
+                                                                    addressMapCustomertoNominee({},model.loanAccount.nominees[0]);
                                                             }
                                                         }
                                                     }
@@ -893,7 +931,7 @@ define([], function () {
                                             "title": "REMARKS_HISTORY",
                                             "type": "box",
                                             "orderNo": 10,
-                                            condition: "model.loanAccount.remarksHistory && model.loanAccount.remarksHistory.length > 0",
+                                            condition: "model.loanAccount.remarksHistory && model.loanAccount.remarksHistory.length > 0 && (model.loanAccount.currentStage == 'Checker1' || model.loanAccount.currentStage == 'Checker2')",
                                             "items": [{
                                                 "key": "loanAccount.remarksHistory",
                                                 "type": "array",

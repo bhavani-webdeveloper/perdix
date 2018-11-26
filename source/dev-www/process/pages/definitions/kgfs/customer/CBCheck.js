@@ -599,16 +599,16 @@ define({
                                     readonly: true,
                                     type: "string",
 
-                                }, {
-                                    type: 'button',
-                                    "condition": "model.customer.loanSaved && model.loanAccount.currentStage == 'LoanInitiation'",
-                                    title: 'Submit for CBCheck',
-                                    "onClick": "actions.save(model,'APP', 'BASE',null)"
-                                }, {
+                                },{
                                     "key": "customer.highmarkStatus",
                                     "condition": "model.customer.highmarkStatus",
                                     readonly: true,
                                     title: "Status"
+                                },{
+                                    type: 'button',
+                                    "condition": "model.customer.loanSaved && model.loanAccount.currentStage == 'LoanInitiation'",
+                                    title: 'Submit for CBCheck',
+                                    "onClick": "actions.save(model,'APP', 'BASE',null)"
                                 }, {
                                     type: 'button',
                                     title: 'Retry',

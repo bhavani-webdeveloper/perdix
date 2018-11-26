@@ -1,8 +1,8 @@
 define({
     pageUID: "kgfs.loans.individual.booking.DocumentUploadQueue",
     pageType: "Engine",
-    dependencies: ["$log", "formHelper","IndividualLoan", "SessionStore", "PageHelper", "Groups", "$state", "irfProgressMessage", "irfNavigator"],
-    $pageFn: function($log, formHelper, IndividualLoan,SessionStore, PageHelper, Groups, $state, irfProgressMessage, irfNavigator) {
+    dependencies: ["$log", "formHelper","IndividualLoan", "SessionStore", "PageHelper", "Groups", "$state", "irfProgressMessage", "irfNavigator","$filter","$q"],
+    $pageFn: function($log, formHelper, IndividualLoan,SessionStore, PageHelper, Groups, $state, irfProgressMessage, irfNavigator,$filter,$q) {
 
         var branchId = SessionStore.getBranchId();
         var branchName = SessionStore.getBranch();
@@ -23,12 +23,6 @@ define({
             definition: {
                 title: "LOAN_TYPE",
                 autoSearch: true,
-                sorting:true,
-                sortByColumns:{
-                    "customer name":"Customer Name",
-                    "centre id":"Centre",
-                    "sanction_date":"Sanction Date"
-                },
                 searchForm: [
                     "*"
                 ],
@@ -37,23 +31,14 @@ define({
                     "title": "VIEW_LOANS",
                     "required":["branch"],
                     "properties": {
-                        // "branchName": {
-                        //     "title": "BRANCH_NAME",
-                        //     "type": ["string", "null"],
-                        //     "enumCode": "branch",
-                        //     "x-schema-form": {
-                        //         "type": "select"
-                        //     }
-    
-                        // },
-                        "centreCode": {
-                            "title": "CENTER_NAME",
-                            "type": ["number", "null"],
-                            "enumCode": "centre",
+                        "branchName": {
+                            "title": "BRANCH_NAME",
+                            "type": ["string", "null"],
+                            "enumCode": "branch",
                             "x-schema-form": {
-                                "type": "select",
-                                "parentValueExpr": "model.branchId"
+                                "type": "select"
                             }
+    
                         },
                         "partner_code": {
                             "title": "PARTNER_CODE",

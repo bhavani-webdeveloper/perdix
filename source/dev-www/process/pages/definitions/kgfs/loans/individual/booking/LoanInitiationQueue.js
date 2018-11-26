@@ -33,15 +33,12 @@ define({
                                 "screenFilter": true
                             }
                         },
-                        "centre": {
-                            "title": "CENTRE",
-                            "type": ["integer", "null"],
+                        "partner_code": {
+                            "title": "PARTNER_CODE",
+                            "type":["string","null"],
                             "x-schema-form": {
-                                "type": "select",
-                                "enumCode": "centre",
-                                "parentEnumCode": "branch",
-                                "parentValueExpr": "model.branch",
-                                "screenFilter": true
+                                "type":"select",
+                                "enumCode": "partner"
                             }
                         },
                         "customerUrnNo": {
@@ -60,8 +57,8 @@ define({
                     var promise = IndividualLoan.search({
                         'stage': 'LoanInitiation',
                         'branchId': searchOptions.branch,
-                        'centreCode': searchOptions.centre,
-                        'customerUrnNo': searchOptions.customerUrnNo,
+                        'partnerCode': searchOptions.partner_code,
+                        'urn': searchOptions.customerUrnNo,
                         'page': pageOpts.pageNo
                     }).$promise;
                     return promise;

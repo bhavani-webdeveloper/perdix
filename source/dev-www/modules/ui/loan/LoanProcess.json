@@ -1539,7 +1539,7 @@
                             },
                             "nomineeGuardianDoorNo": {
                                 "key": "loanAccount.nominees[].guardianDoorNo",
-                                "title": "DOOR_NO"
+                                "title": "DOOR"
                             },
                             "nomineeGuardianLocality": {
                                 "key": "loanAccount.nominees[].guardianLocality",
@@ -1567,6 +1567,14 @@
                                 "key": "loanAccount.nominees[].guardianRelationWithMinor",
                                 "type": "select",
                                 "title": "RELATIONSHIP"
+                            },
+                            "nomineeGuardianAddressSameasBorrower":{
+                                "key": "loanAccount.nominees[].guardianAddressSameAsCustomer",                        
+                                "type": "checkbox",
+                                "title": "ADDRESS_SAME_AS_BORROWERs",
+                                "schema": {
+                                    "type": ["boolean", "null"]
+                                }
                             }
                         }
                     }
