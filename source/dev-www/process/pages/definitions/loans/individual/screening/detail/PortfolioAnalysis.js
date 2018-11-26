@@ -357,6 +357,14 @@ define({
                                         data = full['data'][0].Own_capital;
                                         return self.currencyRightRender(data)
                                     }
+                                },
+                                {
+                                    "title": "HypothecationValue:LoanAmount",
+                                    "data": "HypothecationValue:LoanAmount",
+                                    "render": function(data, type, full, meta){
+                                        data = full['data'][0]['HypothecationValue:LoanAmount'];
+                                        return data
+                                    }
                                 }
                             ];
                             },
@@ -436,24 +444,24 @@ define({
                                         return data;
                                     }
                                 },
-                                {
-                                    "title": "Hypothecation Value- Loan Amount",
-                                    "data": "HypothecationValue",
-                                    render: function(data, type, full, meta) {
-                                        if(full.ratios[3]==undefined)
-                                            data= "NA"
-                                        else {
-                                            data= full.ratios[3]['HypothecationValue:LoanAmount'];
-                                                if(data == 0)
-                                                    data = "0"
-                                                if(data == null)
-                                                    data = "NA"
-                                    }
+                                // {
+                                //     "title": "Hypothecation Value- Loan Amount",
+                                //     "data": "HypothecationValue",
+                                //     render: function(data, type, full, meta) {
+                                //         if(full.ratios[3]==undefined)
+                                //             data= "NA"
+                                //         else {
+                                //             data= full.ratios[3]['HypothecationValue:LoanAmount'];
+                                //                 if(data == 0)
+                                //                     data = "0"
+                                //                 if(data == null)
+                                //                     data = "NA"
+                                //     }
                                         
-                                        return data;
+                                //         return data;
                                         
-                                    }
-                                },
+                                //     }
+                                // },
                                 {
                                     "title": "LUC Status",
                                     "data": "luc_status",
@@ -670,7 +678,7 @@ define({
                             prepareFinancialData['tableData'].push(params[3].tableData);
                             prepareFinancialData['tableRatios'].push(params[3].tableData['ratios']);
                             prepareFinancialData['tableData1'].push(params[4].data[0]);
-                            prepareFinancialData['tableData2'].push(params[6].data[0]);
+                           // prepareFinancialData['tableData2'].push(params[6].data[0]);
 
 
                         });
@@ -768,6 +776,7 @@ define({
                                 'Total_Liabilities': balancesheet['Total Liabilities'],
                                 'Own_capital': balancesheet['Own capital'],
                                 'luc_status': params[13].data[0]['luc_status']?params[13].data[0]['luc_status']:"NA",
+                                'HypothecationValue:LoanAmount':(params[13].data[0] && params[13].data[0]['HypothecationValue:LoanAmount'])?params[13].data[0]['HypothecationValue:LoanAmount']:"NA"
                             };
                             var data={
                                 "data":[],
@@ -778,8 +787,6 @@ define({
                                         'DSONonTrading':params[3].data[4]?((params[3].data[4]["Actual Value"])):"NA"
                                     },{
                                         'CurrentRatio':(params[13].data[0] && params[13].data[0]['Current Ratio'])?params[13].data[0]['Current Ratio']:"NA"
-                                    },{
-                                        'HypothecationValue:LoanAmount':(params[13].data[0] && params[13].data[0]['HypothecationValue:LoanAmount'])?params[13].data[0]['HypothecationValue:LoanAmount']:"NA"
                                     }
                                 ]
                             };
