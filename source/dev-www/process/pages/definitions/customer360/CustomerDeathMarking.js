@@ -8,6 +8,7 @@ irf.pageCollection.factory(irf.page("customer360.CustomerDeathMarking"), ["$log"
             "title": "DEATH_MARKING",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {   
+                model.siteCode = SessionStore.getGlobalSetting('siteCode');
                 PageHelper.showLoader();              
                     var defered = $q.defer();                     
                 model.deathMarking = {}; 
@@ -237,6 +238,9 @@ irf.pageCollection.factory(irf.page("customer360.CustomerDeathMarking"), ["$log"
             },
             actions: {
                 submit: function(model, form, formName) { 
+		    if(model.siteCode == 'sambandh'){
+                        model.deathMarking.familyMemberFirstName = model.deathMarking.familyMemberName;
+                    } 
                 
                     var selecteddate = model.deathMarking.dateOfDeath;
                     var currentdate = moment(new Date()).format("YYYY-MM-DD");

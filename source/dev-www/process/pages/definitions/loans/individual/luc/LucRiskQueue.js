@@ -1,5 +1,6 @@
-irf.pageCollection.factory(irf.page("loans.individual.luc.LucRiskQueue"), ["$log", "formHelper", "LUC", "$state", "SessionStore", "Utils",
-	function($log, formHelper, LUC, $state, SessionStore, Utils) {
+irf.pageCollection.factory(irf.page("loans.individual.luc.LucRiskQueue"), 
+["$log", "formHelper", "LUC", "$state", "SessionStore", "Utils","irfNavigator",
+	function($log, formHelper, LUC, $state, SessionStore, Utils,irfNavigator) {
 
 		return {
 			"type": "search-list",
@@ -7,6 +8,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucRiskQueue"), ["$log
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				$log.info("luc Schedule Queue got initialized");
+				model.siteCode = SessionStore.getGlobalSetting("siteCode");
 			},
 			definition: {
 				title: "SEARCH CUSTOMER",
@@ -136,11 +138,25 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucRiskQueue"), ["$log
 									pageId: item.id
 								});
 							},
-							isApplicable: function(item, index) {
-
-								return true;
-							}
-						}];
+							isApplicable: function(item, model) {
+                                return (model.siteCode != "KGFS");
+                            }
+                        },{
+                            name: "Capture LUC Data",
+                            desc: "",
+                            icon: "fa fa-pencil-square-o",
+                            fn: function(item, index) {
+                                irfNavigator.go({
+                                    state: "Page.Engine", 
+                                    pageName: "loans.individual.luc.LucVerification",
+                                    pageId: item.id,
+                                    pageData: {_lucCompleted : true}
+                                });
+                            },
+                            isApplicable: function(item, model) {
+                                return (model.siteCode == "KGFS");
+                            }
+                        }];
 					}
 				}
 			}

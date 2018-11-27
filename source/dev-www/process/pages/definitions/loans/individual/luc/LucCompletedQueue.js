@@ -10,6 +10,7 @@ define({
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 $log.info("luc Schedule Queue got initialized");
+                model.siteCode = SessionStore.getGlobalSetting("siteCode");
             },
             definition: {
                 title: "SEARCH CUSTOMER",
@@ -159,9 +160,23 @@ define({
                                     pageName: "loans.individual.luc.LucCompletedQueue",
                                 });
                             },
-                            isApplicable: function(item, index) {
-
-                                return true;
+                            isApplicable: function(item, model) {
+                                return (model.siteCode != "KGFS");
+                            }
+                        },{
+                            name: "View LUC Data",
+                            desc: "",
+                            icon: "fa fa-pencil-square-o",
+                            fn: function(item, index) {
+                                irfNavigator.go({
+                                    state: "Page.Engine", 
+                                    pageName: "loans.individual.luc.LucVerification",
+                                    pageId: item.id,
+                                    pageData: {_lucCompleted : true}
+                                });
+                            },
+                            isApplicable: function(item, model) {
+                                return (model.siteCode == "KGFS");
                             }
                         }];
                     }

@@ -22,10 +22,11 @@ define({
                     "title": 'SearchOptions',
                     "properties": {
                         "branch": {
-                            'title': "BRANCH",
-                            "type": ["string", "null"],
+                            "title": "BRANCH_NAME",
+                            "type": "integer",
+                            "enumCode": "branch_id",
                             "x-schema-form": {
-                                "type":"userbranch",
+                                "type": "select",
                                 "screenFilter": true
                             }
                         },
@@ -82,7 +83,7 @@ define({
                         'monitoringType': "CM",
                         'currentStage': "Completed",
                         'centreId': searchOptions.centre,
-                        'branchName': searchOptions.branch,
+                        'branchName': branchName,
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage,
                         'applicantName': searchOptions.applicantName,
