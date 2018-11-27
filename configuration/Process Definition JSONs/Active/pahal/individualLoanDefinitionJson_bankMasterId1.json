@@ -83,8 +83,8 @@
       "code": "ApplicationReview",
       "name": "ApplicationReview",
       "stageType": "CAPTURE",
-      "sendSms": "No",
-      "smsCategory": "LoanBooking",
+      "sendSms": "Yes",
+      "smsCategory": "ApplicationReview",
       "isAccountOpening": false,
       "allowedRoles": [
         "WM"
