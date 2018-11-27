@@ -19,19 +19,20 @@ irf.pageCollection.factory(irf.page("loans.individual.creditMonitoring.CreditMon
                     "title": 'SearchOptions',
                     "properties": {
                         "branch": {
-                            'title': "BRANCH",
-                            "type": ["string", "null"],
+                            "title": "BRANCH_NAME",
+                            "type": "integer",
+                            "enumCode": "branch_id",
                             "x-schema-form": {
-                                "type":"userbranch",
+                                "type": "select",
                                 "screenFilter": true
                             }
                         },
                         "centre": {
                             "title": "CENTRE",
                             "type": ["integer", "null"],
+                            "enumCode": "centre",
                             "x-schema-form": {
                                 "type": "select",
-                                "enumCode": "centre",
                                 "parentEnumCode": "branch_id",
                                 "parentValueExpr": "model.branch",
                                 "screenFilter": true
@@ -76,7 +77,7 @@ irf.pageCollection.factory(irf.page("loans.individual.creditMonitoring.CreditMon
                         'monitoringType': "CM",
                         'currentStage': "CMReschedule",
                         'centreId': searchOptions.centre,
-                        'branchName': searchOptions.branch,
+                        'branchName': branchName,
                         'lucRescheduledDate': searchOptions.cmRescheduledDate,
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage,

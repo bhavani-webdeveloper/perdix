@@ -19,19 +19,20 @@ irf.pageCollection.factory(irf.page("loans.individual.creditMonitoring.CreditMon
                     "title": 'SearchOptions',
                     "properties": {
                         "branch": {
-                            'title': "BRANCH",
-                            "type": ["string", "null"],
+                            "title": "BRANCH_NAME",
+                            "type": "integer",
+                            "enumCode": "branch_id",
                             "x-schema-form": {
-                                "type":"userbranch",
+                                "type": "select",
                                 "screenFilter": true
                             }
                         },
                         "centre": {
                             "title": "CENTRE",
                             "type": ["integer", "null"],
+                            "enumCode": "centre",
                             "x-schema-form": {
                                 "type": "select",
-                                "enumCode": "centre",
                                 "parentEnumCode": "branch_id",
                                 "parentValueExpr": "model.branch",
                                 "screenFilter": true
@@ -62,14 +63,22 @@ irf.pageCollection.factory(irf.page("loans.individual.creditMonitoring.CreditMon
                 getSearchFormHelper: function() {
                     return formHelper;
                 },
-                getResultsPromise: function(searchOptions, pageOpts) {                  
+                getResultsPromise: function(searchOptions, pageOpts) {
+                    var branches = formHelper.enum('branch').data;
+                    var branchName = null;
+                    for (var i = 0; i < branches.length; i++) {
+                        var branch = branches[i];
+                        if (branch.code == searchOptions.branch) {
+                            branchName = branch.name;
+                        }
+                    }
                     var promise = LUC.search({
                         'accountNumber': searchOptions.accountNumber,
                         'monitoringType': "CM",
                         'currentStage': "CMSchedule",
                         'lucScheduledDate': searchOptions.cmScheduledDate,
                         'centreId': searchOptions.centre,
-                        'branchName': searchOptions.branch,
+                        'branchName': branchName,
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage,
                         'applicantName': searchOptions.applicationName,
