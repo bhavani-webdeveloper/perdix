@@ -1473,8 +1473,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                 },
                 offlineInitialize: function(model, form, formCtrl, bundlePageObj, bundleModel) {
                     model.loanProcess = bundleModel.loanProcess;
-                    model.enrolmentProcess = model.loanProcess.loanCustomerEnrolmentProcess;
-                    model.customer = model.enrolmentProcess.customer;
+                    if(_.hasIn(model.loanProcess, 'loanCustomerEnrolmentProcess')) {
+                        model.enrolmentProcess = model.loanProcess.loanCustomerEnrolmentProcess;
+                        model.customer = model.enrolmentProcess.customer;
+                    }
                     var p1 = UIRepository.getEnrolmentProcessUIRepository().$promise;
                     var self = this;
                     p1.then(function(repo){

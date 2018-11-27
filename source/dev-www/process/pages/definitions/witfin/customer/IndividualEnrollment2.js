@@ -1967,24 +1967,27 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 offlineInitialize: function(model, form, formCtrl, bundlePageObj, bundleModel) {
                     var self = this;
                     model.loanProcess = bundleModel.loanProcess;
-                    if(model.pageClass == "applicant") {
+                    if(model.pageClass == "applicant" && _.hasIn(model.loanProcess, 'applicantEnrolmentProcess')) {
                         model.enrolmentProcess = model.loanProcess.applicantEnrolmentProcess;
-                    } else if(model.pageClass == "co-applicant") {
+                    } else if(model.pageClass == "co-applicant" && _.hasIn(model.loanProcess, 'coApplicantsEnrolmentProcesses')) {
                         var key = _.findIndex(model.loanProcess.coApplicantsEnrolmentProcesses, function(enrolment) {
-                            return enrolment.customer.id = model.customer.id;
+                            return enrolment.customer.id == model.customer.id;
                         });
                         if(key!=-1) {
                             model.enrolmentProcess = model.loanProcess.coApplicantsEnrolmentProcesses[key];
                         }
-                    } else if(model.pageClass == "guarantor") {
+                    } else if(model.pageClass == "guarantor" && _.hasIn(model.loanProcess, 'guarantorsEnrolmentProcesses')) {
                         var key = _.findIndex(model.loanProcess.guarantorsEnrolmentProcesses, function(enrolment) {
-                            return enrolment.customer.id = model.customer.id;
+                            return enrolment.customer.id == model.customer.id;
                         });
                         if(key!=-1) {
                             model.enrolmentProcess = model.loanProcess.guarantorsEnrolmentProcesses[key];
                         }
                     }
-                    model.customer = model.enrolmentProcess.customer;
+
+                    if(_.hasIn(model, 'enrolmentProcess') && _.hasIn(model.enrolmentProcess, 'customer')) {
+                        model.customer = model.enrolmentProcess.customer;
+                    }
                     
                     UIRepository.getEnrolmentProcessUIRepository().$promise
                         .then(function(repo){
