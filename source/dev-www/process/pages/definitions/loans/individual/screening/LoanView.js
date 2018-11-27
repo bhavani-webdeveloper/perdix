@@ -89,16 +89,6 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.LoanView'), ["$l
                 isApplicable: function(bundleModel) {
                     return true;
                 }
-            }, {
-                name: "Conversation",
-                desc: "",
-                icon: "fa fa-comment",
-                fn: function(bundleModel) {
-                    Message.openOrCreateConversation("Loan", $stateParams.pageId);
-                },
-                isApplicable: function(bundleModel) {
-                    return true;
-                }
             }],
 
             "getOfflineDisplayItem": function(value, index) {
