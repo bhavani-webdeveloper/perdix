@@ -63,7 +63,7 @@
 
         resource.asString=function(group,model) {
             if (!group) return "";
-            for (var str = "{", i = 0; i < group.rules.length; i++) {
+            for (var str = "(", i = 0; i < group.rules.length; i++) {
                 i > 0 && (str += group.operator.value);
                 var dataString = '';
                 if (!!group.rules[i].field && !!group.rules[i].field.options &&
@@ -87,7 +87,7 @@
                 str += group.rules[i].group ?
                 resource.asString(group.rules[i].group) :(group.rules[i].field.value + group.rules[i].comparator.value + (group.rules[i].field.type=='number'?dataString:("\'" + dataString + "\'")));    
             }
-            return str + "}";
+            return str + ")";
         }
         
         return resource;
