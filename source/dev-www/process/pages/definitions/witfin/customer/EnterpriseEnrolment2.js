@@ -1160,7 +1160,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "type": "box",
                                         "title": "BUSINESS_VERIFICATION",
                                         "orderNo": 130,
-                                        "condition": "model.customer.enterprise.enterpriseType=='Enterprise'",
+                                        "condition": "model.customer.enterprise.enterpriseType=='Enterprise' || model.customer.enterprise.enterpriseType.toLowerCase() == 'sole proprietorship'",
                                         "items": {
                                             "businessVerification": {
                                                 "key": "customer.fieldInvestigationDetails",
