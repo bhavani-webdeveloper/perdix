@@ -189,4 +189,8 @@ export class EnrolmentProcess {
     static getProcessConfig() {
         return enrolmentProcessConfig;
     }
+
+    static plainToClass(customer:Object): Observable<EnrolmentProcess> {
+        return EnrolmentProcessFactory.plainToClass(customer);
+    } 
 }

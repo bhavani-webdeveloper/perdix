@@ -1628,7 +1628,9 @@ define([], function() {
                 },
                 offlineInitialize: function(model, form, formCtrl, bundlePageObj, bundleModel) {
                     model.loanProcess = bundleModel.loanProcess;
-                    model.loanAccount = model.loanProcess.loanAccount;
+                    if(_.hasIn(model.loanProcess, 'loanAccount')) {
+                        model.loanAccount = model.loanProcess.loanAccount;
+                    }
                     var self = this;
                     var p1 = UIRepository.getLoanProcessUIRepository().$promise;
                     p1.then(function(repo) {

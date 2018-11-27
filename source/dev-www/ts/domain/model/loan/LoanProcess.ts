@@ -369,8 +369,8 @@ export class LoanProcess {
             });
     }
 
-    static plainToClass(leadObj:Object): Observable<LoanProcess> {
-        return LoanProcessFactory.plainToClass(leadObj);
+    static plainToClass(loanObj:Object): Observable<LoanProcess> {
+        return LoanProcessFactory.plainToClass(loanObj);
     }
 
 
