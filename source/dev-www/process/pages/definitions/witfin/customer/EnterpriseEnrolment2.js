@@ -210,7 +210,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 },
                                 "excludes": [
                                     "IndividualReferences",
-                                    "Liabilities",                                   
+                                    "Liabilities", 
+                                    "BusinessVerification"
                                 ]
                             },
                             "ScreeningReview": {
@@ -238,14 +239,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "TangibleNetWorth": {
                                       "readonly": true
-                                    },
-                                    "BusinessVerification": {
-                                        "readonly": true
                                     }
                                 },
                                 "excludes": [
                                     "IndividualReferences",
-                                    "Liabilities"                                   
+                                    "Liabilities",
+                                    "BusinessVerification"
                                 ]
                             },
                             "GoNoGoApproval1": {

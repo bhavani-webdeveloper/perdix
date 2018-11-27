@@ -1,5 +1,5 @@
-irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashboard"), ['$log', '$scope', "formHelper", "$state", "$q", "Utils", 'PagesDefinition', 'SessionStore', "entityManager", "IndividualLoan", "LoanBookingCommons", "Lead",
-    function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionStore, entityManager, IndividualLoan, LoanBookingCommons, Lead) {
+irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashboard"), ['$log', '$scope', "formHelper", "$state", "$q", "Utils", 'PagesDefinition', 'SessionStore', "entityManager", "IndividualLoan", "LoanBookingCommons", "Lead", "Messaging",
+    function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionStore, entityManager, IndividualLoan, LoanBookingCommons, Lead, Messaging) {
         $log.info("Page.LoanOriginationDashboard.html loaded");
         $scope.$templateUrl = "process/pages/templates/Page.LoanOriginationDashboard.html";
         var currentBranch = SessionStore.getCurrentBranch();
@@ -35,8 +35,8 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
                 "Page/Engine/witfin.loans.individual.screening.RejectedQueue",
                 "Page/Engine/loans.individual.screening.BranchNewConversationQueue",
                 "Page/Engine/loans.individual.screening.BranchRepliedConversationQueue",
-                "Page/Engine/loans.individual.screening.SpokeRepliedConversationQueue",
                 "Page/Engine/loans.individual.screening.SpokeNewConversationQueue",
+                "Page/Engine/loans.individual.screening.SpokeRepliedConversationQueue"
               ]
         };
 
@@ -615,73 +615,66 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
 
             var bncqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/loans.individual.screening.BranchNewConversationQueue"];
             if (bncqMenu) {
-                IndividualLoan.search({
-                    'stage': 'BranchNewConversation',
-                    'enterprisePincode': '',
-                    'applicantName': '',
-                    'area': '',
-                    'villageName': '',
-                    'customerName': '',
+                Messaging.findConversation({
+                    'replied': 'false',
                     'page': 1,
-                    'per_page': 1,
-                }).$promise.then(function(response, headerGetter) {
+                    'per_page': 1
+                }).$promise.then(function (response, headerGetter) {
                     bncqMenu.data = Number(response.headers['x-total-count']);
-                }, function() {
+                }, function () {
                     bncqMenu.data = '-';
                 });
             }
 
             var brcqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/loans.individual.screening.BranchRepliedConversationQueue"];
             if (brcqMenu) {
-                IndividualLoan.search({
-                    'stage': 'BranchRepliedConversation',
-                    'enterprisePincode': '',
-                    'applicantName': '',
-                    'area': '',
-                    'villageName': '',
-                    'customerName': '',
+                Messaging.findConversation({
+                    'replied': 'true',
                     'page': 1,
-                    'per_page': 1,
-                }).$promise.then(function(response, headerGetter) {
+                    'per_page': 1
+                }).$promise.then(function (response, headerGetter) {
                     brcqMenu.data = Number(response.headers['x-total-count']);
-                }, function() {
+                }, function () {
                     brcqMenu.data = '-';
-                });
-            }
-
-            var srcqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/loans.individual.screening.SpokeRepliedConversationQueue"];
-            if (srcqMenu) {
-                IndividualLoan.search({
-                    'stage': 'SpokeRepliedConversation',
-                    'enterprisePincode': '',
-                    'applicantName': '',
-                    'area': '',
-                    'villageName': '',
-                    'customerName': '',
-                    'page': 1,
-                    'per_page': 1,
-                }).$promise.then(function(response, headerGetter) {
-                    srcqMenu.data = Number(response.headers['x-total-count']);
-                }, function() {
-                    srcqMenu.data = '-';
                 });
             }
 
             var sncqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/loans.individual.screening.SpokeNewConversationQueue"];
             if (sncqMenu) {
-                IndividualLoan.search({
-                    'stage': 'SpokeNewConversation',
-                    'enterprisePincode': '',
-                    'applicantName': '',
-                    'area': '',
-                    'villageName': '',
-                    'customerName': '',
+                var centreCode = [];
+                _.forEach(centres, function (centre) {
+                    centreCode.push(centre.centreCode);
+                });
+                centreCode = _.join(centreCode, ',');
+                $log.info(centreCode);
+                Messaging.findConversation({
+                    'replied': 'false',
                     'page': 1,
                     'per_page': 1,
-                }).$promise.then(function(response, headerGetter) {
+                    'centreCode': centreCode
+                }).$promise.then(function (response, headerGetter) {
                     sncqMenu.data = Number(response.headers['x-total-count']);
-                }, function() {
+                }, function () {
                     sncqMenu.data = '-';
+                });
+            }
+
+            var srcqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/loans.individual.screening.SpokeRepliedConversationQueue"];
+            if (srcqMenu) {
+                var centreCode = [];
+                _.forEach(centres, function (centre) {
+                    centreCode.push(centre.centreCode);
+                });
+                centreCode = _.join(centreCode, ',');
+                Messaging.findConversation({
+                    'replied': 'true',
+                    'page': 1,
+                    'per_page': 1,
+                    'centreCode': centreCode
+                }).$promise.then(function (response, headerGetter) {
+                    srcqMenu.data = Number(response.headers['x-total-count']);
+                }, function () {
+                    srcqMenu.data = '-';
                 });
             }
 
