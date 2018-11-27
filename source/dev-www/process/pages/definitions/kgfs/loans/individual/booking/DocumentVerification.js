@@ -77,18 +77,6 @@ define({
                 "title": "DOCUMENT_VERIFICATION",
                 "htmlClass": "text-danger",
                 "items": [
-                     {
-                            "type": "fieldset",
-                            "title": "View Loan Details",
-                            "condition":"model.loanAccount.id",
-                            "items": [{
-                                key: "loanAccount.ViewLoan",
-                                type: "button",
-                                title: "View Loan",
-                                required: true,
-                                onClick: "actions.viewLoan(model, formCtrl, form, $event)"
-                            }]
-                    },
                     {
                         "key": "_queue.centreName",
                         "title": "CENTRE",
@@ -655,33 +643,24 @@ define({
 
                     PageHelper.showProgress('update-loan', 'Working...');
                     PageHelper.showLoader();
-                    console.log(JSON.stringify(reqData));
-                    return IndividualLoan.update(reqData)
-                        .$promise
-                        .then(
-                            function(res) {
-                                PageHelper.showProgress('update-loan', 'Done.', 2000);
-                                if(model.loanAccount.currentStage == "Checker1")
-                               {
-                                $state.go('Page.Engine', {
-                                    pageName: 'kgfs.loans.individual.booking.Checker1Queue'
-                                });
-                               }
-                                if(model.loanAccount.currentStage == "Checker2"){
-                                    $state.go('Page.Engine', {
-                                        pageName: 'kgfs.loans.individual.booking.Checker2Queue'
-                                    }); 
-                                }
-                                return;
-                            },
-                            function(httpRes) {
-                                PageHelper.showProgress('update-loan', 'Unable to proceed.', 2000);
-                                PageHelper.showErrors(httpRes);
-                            }
-                        )
-                        .finally(function() {
+                    if(model.loanAccount.currentStage=='Checker2'){
+                        model.loanProcess.stage='Completed';
+                    }
+                    var toStage=model.loanProcess.stage||null;
+                    model.loanProcess.proceed(toStage)
+                        .finally(function () {
                             PageHelper.hideLoader();
                         })
+                        .subscribe(function (value) {
+                            Utils.removeNulls(value, true);
+                            PageHelper.showProgress('enrolment', 'Done.', 5000);
+                            irfNavigator.goBack();
+                        }, function (err) {
+                            PageHelper.showErrors(err);
+                            PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+
+                            PageHelper.hideLoader();
+                        });
                 },
                 goBack: function(model, formCtrl, form, $event) {
                     // $state.go("Page.Engine", {

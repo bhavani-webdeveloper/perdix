@@ -2865,12 +2865,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                readonly:true,
                 items:[
                     {
-                        key: "customer.enterprise.noOfMaleEmployees",
+                        key: "customer.enterprise.noOfFemaleEmployees",
                         title: "NO_OF_MALE_EMPLOYEES",
                         type: "number"
                     },
                     {
-                        key: "customer.enterprise.noOfFemaleEmployees",
+                        key: "customer.enterprise.noOfMaleEmployees",
                         title: "NO_OF_FEMALE_EMPLOYEES",
                         type: "number"
                     },

@@ -72,6 +72,7 @@ $settings = [
         'v8_url' => getenv('PERDIX_V8_BASE_URL'),
         'username' => getenv('PERDIX_USERNAME'),
         'password' => getenv('PERDIX_PASSWORD'),
+        'disbursement_base_dir' => getenv('DISBURSEMENT_BASE_DIR'),
         'customer_upload_path' => getenv('CUSTOMER_UPLOAD_BASE_DIR'),
         'partner_upload_path' => getenv('PARTNER_UPLOAD_BASE_DIR'),
         'kyc_upload_path' => getenv('KYC_UPLOAD_BASE_DIR'),

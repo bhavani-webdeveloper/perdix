@@ -595,8 +595,11 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, Locking, ir
                         $scope.bundleModel = offlineData.bundleModel;
                         $scope.bundlePage.bundlePages = offlineData.bundlePages;
                         $scope.bundleModel.$$STORAGE_KEY$$ = offlineData.$$STORAGE_KEY$$;
-                        // initPromise = $q.resolve();
-                        initPromise = $q.when($scope.bundlePage.offlineInitialize($scope.bundleModel));
+                        if(angular.isFunction($scope.bundlePage.offlineInitialize)) {
+                            initPromise = $q.when($scope.bundlePage.offlineInitialize($scope.bundleModel));
+                        } else {
+                            initPromise = $q.resolve();
+                        }
                     } else { // Loading online data
                         initPromise = $q.when($scope.bundlePage.pre_pages_initialize($scope.bundleModel));
                     }
