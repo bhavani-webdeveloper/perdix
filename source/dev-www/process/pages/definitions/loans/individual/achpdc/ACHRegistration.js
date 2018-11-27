@@ -156,14 +156,14 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"), 
 									$log.info("response: " + res);
 									model.achACHSearch = res;
 									for (var i = 0; i < model.achACHSearch.body.length; i++) {
-										if ((model.achACHSearch.body[i].accountId == model.ach.accountId) && (!model.achACHSearch.body[i].activeMandate)) {
+										if ((model.achACHSearch.body[i].accountId == model.ach.accountId) && (!model.achACHSearch.body[i].mandateActive)) {
 											PageHelper.showProgress("page-init", "ACH Registration Done for the Account", 5000);
 											$state.go("Page.Engine", {
 												pageName: "loans.individual.achpdc.ACHPDCQueue",
 												pageId: null,
 												pageData: null
 											});
-										} else if ((model.achACHSearch.body[i].accountId == model.ach.accountId) && (model.achACHSearch.body[i].activeMandate)) {
+										} else if ((model.achACHSearch.body[i].accountId == model.ach.accountId) && (model.achACHSearch.body[i].mandateActive)) {
 											model.isRejected = true;
 											angular.extend(model.ach, model.achACHSearch.body[i]);
 											model.ach.mandateStatus = "PENDING";
