@@ -13,6 +13,9 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ScreeningQueue")
             "type": "search-list",
             "title": "SCREENING_QUEUE",
             "subTitle": "",
+            "processType": "Loan",
+            "processName": "Screening",
+            "lockingRequired": true,
             initialize: function(model, form, formCtrl) {
                 model.branch = branch;
                 $log.info("search-list sample got initialized");
