@@ -1252,7 +1252,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                             {
                                 key: "loanRepaymentReminderHistory[].repaymentAmountInPaisa",
                                 type: "string",
-                                title: "OD_AMOUNT",
+                                title: "AMOUNT",
                                 condition: "model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Promise to Pay'"
                             },
                             {
@@ -1288,14 +1288,14 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                             {
                                 key: "loanRepaymentReminderHistory[].repaymentDate",
                                 type: "string",
-                                title: "P2P_DATE",
+                                title: "NEXT_ACTION_DATE",
                                 condition: "model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Promise to Pay'"
                             },
                             {
                                 key: "loanRepaymentReminderHistory[].reminderStatus",
                                 type: "string",
                                 title: "RECOVERY_ATTEMPT",
-                                condition: "model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Promise to Pay'"
+                                condition: "model.loanRepaymentReminderHistory[].reminderStatus  &&  model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Promise to Pay'"
                             },
                             {
                                 key: "loanRepaymentReminderHistory[].reason",
