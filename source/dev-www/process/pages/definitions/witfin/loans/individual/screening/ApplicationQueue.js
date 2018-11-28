@@ -97,11 +97,6 @@ define({
 	                    "cityTownVillage": {
 	                        "title": "CITY_TOWN_VILLAGE",
 	                        "type": "string"
-	                    },
-	                    "pincode": {
-	                        "title": "PINCODE",
-	                        "type": "string",
-
 	                    }
 					},
 					"required": []
@@ -117,7 +112,6 @@ define({
 	                    'stage': 'Application',
 	                    'centreCode':searchOptions.centreCode,
 	                    'branchName':branch,
-	                    'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
 	                    'status':searchOptions.status,

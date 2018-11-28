@@ -120,6 +120,17 @@ define(["perdix/domain/model/loan/LoanProcess",
                     },
                     "bundlePages": [],
                     "offline": true,
+                    "offlineInitialize": function(bundleModel) {
+                        var deferred = $q.defer();
+                        $this = this;
+                        $this.bundleModel = bundleModel;
+                        LoanProcessts.plainToClass(bundleModel.loanProcess)
+                                .subscribe(function(loanProcess){
+                                    $this.bundleModel.loanProcess = loanProcess;
+                                    deferred.resolve();
+                                });
+                        return deferred.promise;
+                    },
                     "getOfflineDisplayItem": function(value, index){
                         var out = new Array(2);
                         for (var i=0; i<value.bundlePages.length; i++){
@@ -179,6 +190,7 @@ define(["perdix/domain/model/loan/LoanProcess",
 
                             LoanProcessts.get(bundleModel.loanId)
                             .subscribe(function(loanProcess){
+                                bundleModel.loanProcess=loanProcess;
                                 var loanAccount = loanProcess;
                                 loanProcess.loanAccount.isValuator = "Yes";
                                 loanAccount.applicantEnrolmentProcess.customer.customerId = loanAccount.customerId;

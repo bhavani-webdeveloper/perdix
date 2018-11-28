@@ -17,6 +17,20 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
         return true;
     }
 
+    var filteredData = function filteredData(model.applicantTelecallingQuestionnaireList, telecallingQuestionnaireList) {
+        const applicantTelecallingQuestionnaireList = model.applicantTelecallingQuestionnaireList.slice();
+        for (let i = 0; i < applicantTelecallingQuestionnaireList.length; i++) {
+            const elem = model.applicantTelecallingQuestionnaireList[i];
+            for (let j = 0; j < telecallingQuestionnaireList.length - 1; j++) {
+                const elem1 = telecallingQuestionnaireList[j];
+                if (elem.question == elem1.question) {
+                    applicantTelecallingQuestionnaireList.splice(i, 1);
+                }
+            }
+        }
+        return applicantTelecallingQuestionnaireList;
+    }
+
 
     return {
         "type": "schema-form",
@@ -101,6 +115,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                     "lovonly": true,
                                     "startEmpty": true,
                                     search: function (inputModel, form, model, context) {
+
                                         return $q.when(model.applicantTelecallingQuestionnaireList).then((res) => {
                                             var out = [];
                                             if (res && res.length && res.length > 0) {
@@ -141,12 +156,28 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                     "key": "loanAccount.telecallingDetails[" +applicantIndex+ "].telecallingQuestionnaireList[].answer",
                                     "title": "Answer",
                                     "type": "select",
+                                    "required": true,
                                     "condition": "model.loanAccount.telecallingDetails[" + applicantIndex + "].telecallingQuestionnaireList[arrayIndex].question && model.loanAccount.telecallingDetails[" +applicantIndex+ "].telecallingQuestionnaireList[arrayIndex].input_type == 'select'"
                                 },
                                 {
                                     "key": "loanAccount.telecallingDetails[" + applicantIndex + "].telecallingQuestionnaireList[].answer",
                                     "title": "Answer",
-                                    "condition": "model.loanAccount.telecallingDetails[" + applicantIndex + "].telecallingQuestionnaireList[arrayIndex].question && model.loanAccount.telecallingDetails[" + applicantIndex+ "].telecallingQuestionnaireList[arrayIndex].input_type != 'select'"
+                                    "required": true,
+                                    "condition": "model.loanAccount.telecallingDetails[" + applicantIndex + "].telecallingQuestionnaireList[arrayIndex].question && model.loanAccount.telecallingDetails[" + applicantIndex+ "].telecallingQuestionnaireList[arrayIndex].input_type == 'string'"
+                                },
+                                {
+                                    "key": "loanAccount.telecallingDetails[" + applicantIndex + "].telecallingQuestionnaireList[].answer",
+                                    "title": "Answer",
+                                    "required": true,
+                                    "type": "number",
+                                    "condition": "model.loanAccount.telecallingDetails[" + applicantIndex + "].telecallingQuestionnaireList[arrayIndex].question && model.loanAccount.telecallingDetails[" + applicantIndex + "].telecallingQuestionnaireList[arrayIndex].input_type == 'number'"
+                                },
+                                {
+                                    "key": "loanAccount.telecallingDetails[" + applicantIndex + "].telecallingQuestionnaireList[].answer",
+                                    "title": "Answer",
+                                    "required": true,
+                                    "type": "date",
+                                    "condition": "model.loanAccount.telecallingDetails[" + applicantIndex + "].telecallingQuestionnaireList[arrayIndex].question && model.loanAccount.telecallingDetails[" + applicantIndex + "].telecallingQuestionnaireList[arrayIndex].input_type == 'date'"
                                 },
                                 {
                                     "key": "loanAccount.telecallingDetails[" +applicantIndex+ "].telecallingQuestionnaireList[].remarks",
@@ -224,12 +255,28 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                     "key": "loanAccount.telecallingDetails[" +loanCustomerIndex+ "].telecallingQuestionnaireList[].answer",
                                     "title": "Answer",
                                     "type": "select",
+                                    "required": true,
                                     "condition": "model.loanAccount.telecallingDetails[" +loanCustomerIndex+ "].telecallingQuestionnaireList[arrayIndex].question && model.loanAccount.telecallingDetails[loanCustomerIndex].telecallingQuestionnaireList[arrayIndex].input_type == 'select'"
                                 },
                                 {
                                     "key": "loanAccount.telecallingDetails[" +loanCustomerIndex+ "].telecallingQuestionnaireList[].answer",
                                     "title": "Answer",
-                                    "condition": "model.loanAccount.telecallingDetails[" +loanCustomerIndex+ "].telecallingQuestionnaireList[arrayIndex].question && model.loanAccount.telecallingDetails[loanCustomerIndex].telecallingQuestionnaireList[arrayIndex].input_type != 'select'"
+                                    "required": true,
+                                    "condition": "model.loanAccount.telecallingDetails[" +loanCustomerIndex+ "].telecallingQuestionnaireList[arrayIndex].question && model.loanAccount.telecallingDetails[loanCustomerIndex].telecallingQuestionnaireList[arrayIndex].input_type == 'string'"
+                                },
+                                {
+                                    "key": "loanAccount.telecallingDetails[" + loanCustomerIndex + "].telecallingQuestionnaireList[].answer",
+                                    "title": "Answer",
+                                    "required": true,
+                                    "type": "number",
+                                    "condition": "model.loanAccount.telecallingDetails[" + loanCustomerIndex + "].telecallingQuestionnaireList[arrayIndex].question && model.loanAccount.telecallingDetails[loanCustomerIndex].telecallingQuestionnaireList[arrayIndex].input_type == 'number'"
+                                },
+                                {
+                                    "key": "loanAccount.telecallingDetails[" + loanCustomerIndex + "].telecallingQuestionnaireList[].answer",
+                                    "title": "Answer",
+                                    "required": true,
+                                    "type": "date",
+                                    "condition": "model.loanAccount.telecallingDetails[" + loanCustomerIndex + "].telecallingQuestionnaireList[arrayIndex].question && model.loanAccount.telecallingDetails[loanCustomerIndex].telecallingQuestionnaireList[arrayIndex].input_type == 'date'"
                                 },
                                 {
                                     "key": "loanAccount.telecallingDetails[" +loanCustomerIndex+ "].telecallingQuestionnaireList[].remarks",
@@ -313,12 +360,28 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                    "key": "loanAccount.telecallingDetails[" +coApplicantIndex+ "].telecallingQuestionnaireList[].answer",
                                    "title": "Answer",
                                    "type": "select",
+                                   "required": true,
                                    "condition": "model.loanAccount.telecallingDetails[" +coApplicantIndex+ "].telecallingQuestionnaireList[arrayIndex].question && model.loanAccount.telecallingDetails[coApplicantIndex].telecallingQuestionnaireList[arrayIndex].input_type == 'select'"
                                },
                                {
                                    "key": "loanAccount.telecallingDetails[" +coApplicantIndex+ "].telecallingQuestionnaireList[].answer",
                                    "title": "Answer",
-                                   "condition": "model.loanAccount.telecallingDetails[" +coApplicantIndex+ "].telecallingQuestionnaireList[arrayIndex].question && model.loanAccount.telecallingDetails[coApplicantIndex].telecallingQuestionnaireList[arrayIndex].input_type != 'select'"
+                                   "required": true,
+                                   "condition": "model.loanAccount.telecallingDetails[" +coApplicantIndex+ "].telecallingQuestionnaireList[arrayIndex].question && model.loanAccount.telecallingDetails[coApplicantIndex].telecallingQuestionnaireList[arrayIndex].input_type == 'string'"
+                               },
+                               {
+                                   "key": "loanAccount.telecallingDetails[" + coApplicantIndex + "].telecallingQuestionnaireList[].answer",
+                                   "title": "Answer",
+                                   "required": true,
+                                   "type": "number",
+                                   "condition": "model.loanAccount.telecallingDetails[" + coApplicantIndex + "].telecallingQuestionnaireList[arrayIndex].question && model.loanAccount.telecallingDetails[coApplicantIndex].telecallingQuestionnaireList[arrayIndex].input_type == 'number'"
+                               },
+                               {
+                                   "key": "loanAccount.telecallingDetails[" + coApplicantIndex + "].telecallingQuestionnaireList[].answer",
+                                   "title": "Answer",
+                                   "required": true,
+                                   "type": "date",
+                                   "condition": "model.loanAccount.telecallingDetails[" + coApplicantIndex + "].telecallingQuestionnaireList[arrayIndex].question && model.loanAccount.telecallingDetails[coApplicantIndex].telecallingQuestionnaireList[arrayIndex].input_type == 'date'"
                                },
                                {
                                    "key": "loanAccount.telecallingDetails[" +coApplicantIndex+ "].telecallingQuestionnaireList[].remarks",
@@ -400,12 +463,28 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                     "key": "loanAccount.telecallingDetails[" +guarantorIndex+ "].telecallingQuestionnaireList[].answer",
                                     "title": "Answer",
                                     "type": "select",
+                                    "required": true,
                                     "condition": "model.loanAccount.telecallingDetails[" +guarantorIndex+ "].telecallingQuestionnaireList[arrayIndex].question && model.loanAccount.telecallingDetails[guarantorIndex].telecallingQuestionnaireList[arrayIndex].input_type == 'select'"
                                 },
                                 {
                                     "key": "loanAccount.telecallingDetails[" +guarantorIndex+ "].telecallingQuestionnaireList[].answer",
                                     "title": "Answer",
-                                    "condition": "model.loanAccount.telecallingDetails[" +guarantorIndex+ "].telecallingQuestionnaireList[arrayIndex].question && model.loanAccount.telecallingDetails[guarantorIndex].telecallingQuestionnaireList[arrayIndex].input_type != 'select'"
+                                    "required": true,
+                                    "condition": "model.loanAccount.telecallingDetails[" +guarantorIndex+ "].telecallingQuestionnaireList[arrayIndex].question && model.loanAccount.telecallingDetails[guarantorIndex].telecallingQuestionnaireList[arrayIndex].input_type == 'string'"
+                                },
+                                {
+                                    "key": "loanAccount.telecallingDetails[" + guarantorIndex + "].telecallingQuestionnaireList[].answer",
+                                    "title": "Answer",
+                                    "required": true,
+                                    "type": "number",
+                                    "condition": "model.loanAccount.telecallingDetails[" + guarantorIndex + "].telecallingQuestionnaireList[arrayIndex].question && model.loanAccount.telecallingDetails[guarantorIndex].telecallingQuestionnaireList[arrayIndex].input_type == 'number'"
+                                },
+                                {
+                                    "key": "loanAccount.telecallingDetails[" + guarantorIndex + "].telecallingQuestionnaireList[].answer",
+                                    "title": "Answer",
+                                    "required": true,
+                                    "type": "date",
+                                    "condition": "model.loanAccount.telecallingDetails[" + guarantorIndex + "].telecallingQuestionnaireList[arrayIndex].question && model.loanAccount.telecallingDetails[guarantorIndex].telecallingQuestionnaireList[arrayIndex].input_type == 'date'"
                                 },
                                 {
                                     "key": "loanAccount.telecallingDetails[" +guarantorIndex+ "].telecallingQuestionnaireList[].remarks",

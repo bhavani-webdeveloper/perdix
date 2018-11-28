@@ -1,6 +1,6 @@
 irf.pages.controller("PageEngineCtrl",
-["$log", "$scope", "$state", "$stateParams", "$injector", "$q", "entityManager", "formHelper", "$timeout", "PageHelper", "elementsUtils", "Locking", "SessionStore", "irfProgressMessage", "irfNavigator",
-function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formHelper, $timeout, PageHelper, elementsUtils, Locking, SessionStore, irfProgressMessage, irfNavigator) {
+["$log", "Utils", "$scope", "$state", "$stateParams", "$injector", "$q", "entityManager", "formHelper", "$timeout", "PageHelper", "elementsUtils", "Locking", "SessionStore", "irfNavigator",
+function($log, Utils, $scope, $state, $stateParams, $injector, $q, entityManager, formHelper, $timeout, PageHelper, elementsUtils, Locking, SessionStore, irfNavigator) {
 	var self = this;
 
 	$scope.boxHeads = [];
@@ -93,9 +93,10 @@ function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formH
 					$scope.page.locked = true;
 					deferred.resolve();
 				}, function(err) {
-					irfProgressMessage.pop("Locking",err.data.error, 6000);
-					irfNavigator.goBack();
-					deferred.reject();
+					Utils.alert(err.data.error).finally(function(){
+						irfNavigator.goBack();
+						deferred.reject();
+					});
 				});
 			} else {
 				deferred.resolve();

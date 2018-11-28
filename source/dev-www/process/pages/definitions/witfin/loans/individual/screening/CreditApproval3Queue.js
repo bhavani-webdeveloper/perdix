@@ -68,10 +68,6 @@ define({
                         "cityTownVillage": {
                             "title": "CITY_TOWN_VILLAGE",
                             "type": "string"
-                        },
-                         "pincode": {
-                            "title": "PIN_CODE",
-                            "type": "string"
                         }
                     },
                     "required": []
@@ -86,7 +82,6 @@ define({
                     return IndividualLoan.search({
                         'branchName':searchOptions.branch,
                         'stage': 'CreditApproval3',
-                        'enterprisePincode':searchOptions.pincode,
                         'applicantName':searchOptions.applicantName,
                         'area':searchOptions.area,
                         'villageName':searchOptions.villageName,

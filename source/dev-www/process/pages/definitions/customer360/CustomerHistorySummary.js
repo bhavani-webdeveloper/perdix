@@ -53,7 +53,7 @@ irf.pageCollection.factory(irf.page("customer360.CustomerHistorySummary"), ["$lo
                         '<td class="col-sm-3" style="text-align: center">{{data1.lastModifiedBy}}</td>' +
                         '<td class="col-sm-3" style="text-align: center">{{data1.lastEditByUserName}}</td>' +
                         '<td class="col-sm-3" style="text-align: center">{{data1.lastModifiedDate}}</td>' +
-                        '<td class="col-sm-3" style="text-align: center"><button ng-hide="$index == model.customerHistory.length-1" class="btn btn-primary" ng-click="model.myFunc(data1,model.customerHistory,$index)">ShowChanges</button></td>' +
+                        '<td class="col-sm-3" style="text-align: center"><button ng-hide="$index == model.customerHistory.length-1" class="btn btn-primary" ng-click="model.myFunc(data1,model.customerHistory,$index)">View</button></td>' +
                         '</tr>' +
                         '</tbody>' +
                         '</table>' +
