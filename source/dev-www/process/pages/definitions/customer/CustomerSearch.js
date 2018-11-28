@@ -171,6 +171,7 @@ function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionSto
 						'centreId': searchOptions.centre,
 						'page': pageOpts.pageNo,
 						'per_page': pageOpts.itemsPerPage,
+						'customerId': searchOptions.customerId,
 						'kycNumber': searchOptions.kyc_no,
 						'lastName': searchOptions.lastName,
 						'urnNo': searchOptions.urnNo,
