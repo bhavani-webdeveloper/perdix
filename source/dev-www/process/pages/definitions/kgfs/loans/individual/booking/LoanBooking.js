@@ -47,6 +47,24 @@ define([], function () {
                 guardian.guardianStreet = customer.street || null;
                 guardian.guardianDoorNo = customer.doorNo || null;
             }
+            var policyBasedOnLoanType = function(loanType,model){
+                if (loanType == "JEWEL"){
+                    if(model.loanAccount.loanAmountRequested >= (model.loanAccount.ornamentsAppraisals[0].marketValueInPaisa/100)*75){
+                        var errMsg = 'Loan amount should be less then ' + ((model.loanAccount.ornamentsAppraisals[0].marketValueInPaisa/100)*75);
+                        PageHelper.showErrors({data:{error:errMsg}});
+                        return false;
+                    }
+                }
+                else if (loanType == "SECURED"){
+                    model.loanAccount.jewelLoanDetails = null;
+                    model.loanAccount.ornamentsAppraisals = [];
+                }
+                else if (loanType == "UNSECURED"){
+                    model.loanAccount.jewelLoanDetails = null;
+                    model.loanAccount.ornamentsAppraisals = [];
+                }
+                return true;
+            }
 
             // View Functions
             var getIncludes = function (model) {
@@ -1260,6 +1278,8 @@ define([], function () {
                             model.loanAccount.psychometricCompleted = "NO";
                         }
                         PageHelper.showProgress('loan-process', 'Updating Loan');
+                        if(!(policyBasedOnLoanType(model.loanAccount.loanType,model)))
+                            return false;
                         model.loanProcess.save()
                             .finally(function () {
                                 PageHelper.hideLoader();
@@ -1348,6 +1368,9 @@ define([], function () {
                                 return false;
                         }
                         
+                        if(!(policyBasedOnLoanType(model.loanAccount.loanType,model)))
+                            return false;
+
                         if(model.loanAccount.currentStage=='Checker2'){
                             model.loanProcess.stage='Completed';
                         }

@@ -103,7 +103,7 @@
          "code":"ReadyForDisbursement",
          "name":"Ready For Disburse",
          "stageType":"DISBURSE",
-         "sendSms":"Yes",
+         "sendSms":"No",
          "smsCategory":"SentForDisbursement",
          "allowedRoles":[
             "WM"
@@ -117,7 +117,7 @@
          "code":"RejectedDisbursement",
          "name":"Rejected Disbursement",
          "stageType":"CAPTURE",
-         "sendSms":"Yes",
+         "sendSms":"No",
          "smsCategory":"RejectedDisbursement",
          "allowedRoles":[
             "WM"
@@ -146,7 +146,7 @@
         "code": "DisbursementDocumentUpload",
         "name": "Disbursement Document Upload",
         "stageType": "CAPTURE",
-        "sendSms": "Yes",
+        "sendSms": "No",
         "smsCategory": "Disbursed",
         "isAccountOpening": false,
         "allowedRoles": [

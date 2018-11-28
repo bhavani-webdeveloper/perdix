@@ -298,8 +298,8 @@ irf.pages.factory('BundleLog', ['$log', function($log){
 }]);
 
 irf.pages.controller("PageBundleCtrl",
-["$log", "$filter", "$scope", "$state", "$stateParams", "$injector", "$q", "Locking", "irfNavigator", "irfProgressMessage", "$timeout", "BundleManager", "BundleLog", "OfflineManager", "PageHelper", "Utils", "SessionStore",
-function($log, $filter, $scope, $state, $stateParams, $injector, $q, Locking, irfNavigator, irfProgressMessage, $timeout, BundleManager, BundleLog, OfflineManager, PageHelper, Utils, SessionStore) {
+["$log", "$filter", "$scope", "$state", "$stateParams", "$injector", "$q", "Locking", "irfNavigator", "$timeout", "BundleManager", "BundleLog", "OfflineManager", "PageHelper", "Utils", "SessionStore",
+function($log, $filter, $scope, $state, $stateParams, $injector, $q, Locking, irfNavigator, $timeout, BundleManager, BundleLog, OfflineManager, PageHelper, Utils, SessionStore) {
     var self = this;
 
     $scope.pages = [];
@@ -560,9 +560,10 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, Locking, ir
                             $scope.bundlePage.locked = true;
                             deferred.resolve();
                         }, function(err) {
-                            irfProgressMessage.pop("Locking",err.data.error, 6000);
-                            irfNavigator.goBack();
-                            deferred.reject();
+                            Utils.alert(err.data.error).finally(function(){
+                                irfNavigator.goBack();
+                                deferred.reject();
+                            });
                         });
                     } else {
                         deferred.resolve();
@@ -595,8 +596,11 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, Locking, ir
                         $scope.bundleModel = offlineData.bundleModel;
                         $scope.bundlePage.bundlePages = offlineData.bundlePages;
                         $scope.bundleModel.$$STORAGE_KEY$$ = offlineData.$$STORAGE_KEY$$;
-                        // initPromise = $q.resolve();
-                        initPromise = $q.when($scope.bundlePage.offlineInitialize($scope.bundleModel));
+                        if(angular.isFunction($scope.bundlePage.offlineInitialize)) {
+                            initPromise = $q.when($scope.bundlePage.offlineInitialize($scope.bundleModel));
+                        } else {
+                            initPromise = $q.resolve();
+                        }
                     } else { // Loading online data
                         initPromise = $q.when($scope.bundlePage.pre_pages_initialize($scope.bundleModel));
                     }

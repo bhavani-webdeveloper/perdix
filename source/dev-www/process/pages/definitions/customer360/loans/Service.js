@@ -138,7 +138,7 @@ irf.pageCollection.factory(irf.page('customer360.loans.Service'),
                                     }
                                 },
                                 {
-                                    name: "COLLECT_ADHOC_CHARGES",
+                                    name: "CHARGE_FEE",
                                     desc: "",
                                     icon: "fa fa-rupee",
                                     fn: function(item, index){

@@ -626,7 +626,7 @@ define({
                     if(model.loanAccount.currentStage=='Checker2'){
                         model.loanProcess.stage='Completed';
                     }
-                    var toStage=model.loanProcess.stage||'';
+                    var toStage=model.loanProcess.stage||null;
                     model.loanProcess.proceed(toStage)
                         .finally(function () {
                             PageHelper.hideLoader();

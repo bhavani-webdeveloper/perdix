@@ -252,7 +252,7 @@ function rdeleteContent($dir){
 
 }
 
-function write_cei_status($id, $processing_status, $response_status, $response_message) {
+function updateInterfaceById($id, $processing_status, $response_status, $response_message) {
     DB::table('customer_external_interface')->where('id', $id)->update([
         'processing_status' => $processing_status,
         'response_status' => $response_status,
@@ -260,12 +260,14 @@ function write_cei_status($id, $processing_status, $response_status, $response_m
     ]);
 }
 
-function writeError($customer_id, $processing_status, $error) {
+function updateInterfaceByCustomerId($customer_id, $processing_status, $response_status, $response_message) {
     DB::table('customer_external_interface')
     ->where('customer_id', $customer_id)
-    ->update(['response_message' => $error,
-              'processing_status' => $processing_status,
-              'response_status' => NULL
+    ->where('interface_type', 'CKYC')
+    ->update([
+        'processing_status' => $processing_status,
+        'response_status' => $response_status,
+        'response_message' => $response_message
     ]);
 }
 
@@ -326,7 +328,7 @@ function process_outgoing() {
              * updating ProcessingStatus in customer_external_interface table
              */
             if ($interface_data->response_status == 'FAILURE') {
-                write_cei_status($interface_data->id, 'RETRIED', $interface_data->response_status, $interface_data->response_message);
+                updateInterfaceById($interface_data->id, 'RETRIED', $interface_data->response_status, $interface_data->response_message);
                 echo " inserting new for failure\n";
                 $now = date('Y-m-d H:i:s');
                 DB::table('customer_external_interface')->insert([
@@ -346,11 +348,11 @@ function process_outgoing() {
                     'last_edited_at' => $now
                 ]);
             } else {
-                write_cei_status($interface_data->id, 'REQUESTCOMPLETE', NULL, NULL);
+                updateInterfaceById($interface_data->id, 'REQUESTCOMPLETE', NULL, NULL);
             }
         } catch (Exception $e) {
             echo $e . "\n";
-            write_cei_status($interface_data->id, "REQUESTFAILURE", NULL, $e);
+            updateInterfaceById($interface_data->id, "REQUESTFAILURE", NULL, $e);
         }
     }
     
@@ -374,112 +376,85 @@ function process_outgoing() {
 function process_incoming() {
     echo "Processing incoming \n";
     try{
-        if(is_dir(CKYC_INCOMING_DIR)){
-            $files = new DirectoryIterator(CKYC_INCOMING_DIR);
-            if($files){
-                if (!is_dir(CKYC_INCOMING_TEMP_DIR)) {
-                    mkdir(CKYC_INCOMING_TEMP_DIR, 0777, true);
-                }
-                CKYC_INCOMING_HISTORY_DIR ;
-                rcopy(CKYC_INCOMING_DIR, CKYC_INCOMING_TEMP_DIR);
-                $fileTemp = new DirectoryIterator(CKYC_INCOMING_TEMP_DIR);
-                foreach($fileTemp as $file){
-                    $is_file = $file->isFile();
-                    if($is_file){
-                        $inputFileName = CKYC_INCOMING_TEMP_DIR.DIRECTORY_SEPARATOR.$file->getFilename();
-                        $ext = pathinfo($inputFileName, PATHINFO_EXTENSION);
-                        if($ext == "xlsx"){
-                            echo "reading xlsx response file \n";
-                            $inputFileType = PHPExcel_IOFactory::identify($inputFileName);
-                            $objReader = PHPExcel_IOFactory::createReader($inputFileType);
-                        
-                            $objPHPExcel = $objReader->load($inputFileName);
-                            $sheet = $objPHPExcel->getSheet(0);
-                            $highestRow = $sheet->getHighestRow();
-                            $highestColumn = $sheet->getHighestColumn();
-                            for ($row = 2; $row <= $highestRow; $row++) {
-                                try{
-                                    $matrixData = $sheet->rangeToArray('A' . $row . ':' . $highestColumn . $row,
-                                                    NULL,
-                                                    TRUE,
-                                                    FALSE);
-                                    $rowData = $matrixData[0];
-                                    $customer_urn = $rowData[2];
-                                    $customer_integration_status = $rowData[115];
-                                    if($customer_integration_status == 'Rejected'){
-                                        $customer_integration_status = "FAILURE";
-                                    }
-                                    $customerId = DB::table("customer")->select('id')
-                                    ->where([
-                                        ['urn_no', '=',$customer_urn]
-                                    ])
-                                ->get();
-                                    $customerId = json_decode($customerId, true);
-                                    if(null != $customerId){
-                                        $customer_id=$customerId[0]['id'];
-                                        $GLOBALS['customer_id'] = $customer_id;
-                                        DB::table('customer_external_interface')
-                                        ->where([['customer_id', $customer_id],
-                                                ['processing_status', '=', 'REQUESTCOMPLETE']
-                                            ])
-                                        ->update(['response_status' => $customer_integration_status,
-                                                  'processing_status' => "RESPONSECOMPLETE",
-                                        ]);
-                                    } 
-                                }catch(Exception $e){
-                                    echo "Uanble to process xlx response file from trackwizz " .$e."\n";
-                                    writeError($GLOBALS['customer_id'], "RESPONSEFAILURE", $e);
-                                }
-                            }
-                        } elseif($ext == "txt"){
-                            echo "Reading response txt file \n";
-                            $finacleFile = fopen($inputFileName, "r") or die("Unable to open file!");
-                            $fileData = fread($finacleFile, filesize($inputFileName));
-                            // print_r($fileData);
-                            // list($RecordType, $sourceSystem, $sourceSystemCustomerCode, $CKYCAccType, $CKYCnumber)=explode('|', $fileData);
-                            //     $vars = explode('|', $fileData);
-                            //     print_r($vars); 
-                            $lines = explode('|', $fileData);
-                            for($i=0; $i < sizeof($lines); $i+=5){
-                                try{
-                                    if($lines[$i] != 200)
-                                        continue;
-                                    $urn_no = $lines[$i+2];
-                                    $GLOBALS['urn_no'] = $urn_no;
-                                    $ckyc_no = $lines[$i+4];
-                                    DB::table('customer')
-                                    ->where('urn_no', $urn_no)
-                                    ->update(['CKYC' => $ckyc_no]); 
-                            } catch(Exception $e){
-                                    echo "unable to process txt file " .$e ."\n";
-                                    $customerId = DB::table("customer")->select('id')
-                                    ->where([
-                                        ['urn_no', '=',$GLOBALS['urn_no']]
-                                    ])
-                                    ->get();
-                                    $customerId = json_decode($customerId, true);
-                                    if(null != $customerId){
-                                        $customer_id=$customerId[0]['id'];
-                                        writeError($customer_id, "RESPONSEFAILURE", $e);
-                                    } 
-                                }   
-                            }
-                        } 
+        is_dir(CKYC_INCOMING_DIR) or die("Incoming directory is invalid, quit");
+        $files = new DirectoryIterator(CKYC_INCOMING_DIR);
+        $files or die("No files present under incoming directory, quit");
+        if (!is_dir(CKYC_INCOMING_TEMP_DIR)) {
+            mkdir(CKYC_INCOMING_TEMP_DIR, 0777, true);
+        }
+        rcopy(CKYC_INCOMING_DIR, CKYC_INCOMING_TEMP_DIR);
+        $fileTemp = new DirectoryIterator(CKYC_INCOMING_TEMP_DIR);
+        foreach ($fileTemp as $file) {
+            echo "    Processing ".$file->getFilename()."\n";
+            if (!$file->isFile()) {
+                echo "        ".$file->getFilename()." is not a file, next\n";
+                continue;
+            }
+            $inputFileName = CKYC_INCOMING_TEMP_DIR.DIRECTORY_SEPARATOR.$file->getFilename();
+            $ext = pathinfo($inputFileName, PATHINFO_EXTENSION);
+            if ($ext == "xlsx") {
+                echo "        Reading excel file\n";
+                $inputFileType = PHPExcel_IOFactory::identify($inputFileName);
+                $objReader = PHPExcel_IOFactory::createReader($inputFileType);
+            
+                $objPHPExcel = $objReader->load($inputFileName);
+                $sheet = $objPHPExcel->getSheet(0);
+                $highestRow = $sheet->getHighestRow();
+                $highestColumn = $sheet->getHighestColumn();
+                for ($row = 2; $row <= $highestRow; $row++) {
+                    try {
+                        $matrixData = $sheet->rangeToArray("A$row:$highestColumn$row", null, true, false);
+                        $rowData = $matrixData[0];
+                        $customer_urn = $rowData[2];
+                        $response_status = $rowData[115] == 'Rejected'? 'FAILURE': $rowData[115];
+                        echo "            Updating URN: '$customer_urn' with status: $response_status\n";
+                        $customer = DB::table("customer")->select('id')->where('urn_no', $customer_urn)->first();
+                        if ($customer) {
+                            echo "                Customer id: $customer->id\n";
+                            DB::table('customer_external_interface')
+                                ->where('customer_id', $customer->id)
+                                ->where('interface_type', 'CKYC')
+                                ->where('processing_status', 'REQUESTCOMPLETE')
+                                ->update(['response_status' => $response_status, 'processing_status' => "RESPONSECOMPLETE"]);
+                        } else {
+                            echo "                Customer URN not found in Customer table\n";
+                        }
+                    } catch(Exception $e) {
+                        echo "Uanble to process excel row:$row\n";
+                        echo "$e\n";
                     }
                 }
-                if (!is_dir(CKYC_INCOMING_HISTORY_DIR)) {
-                    mkdir(CKYC_INCOMING_HISTORY_DIR, 0777, true);
-                }
-                $subHistoryFolder = CKYC_INCOMING_HISTORY_DIR.DIRECTORY_SEPARATOR.date('Y-m-d');
-                    if (!is_dir($subHistoryFolder)) {
-                        mkdir($subHistoryFolder, 0777, true);
+            } elseif ($ext == "txt") {
+                echo "        Reading text file\n";
+                $inputFile = fopen($inputFileName, "r") or die("Unable to open file!");
+                $fileData = fread($inputFile, filesize($inputFileName));
+                fclose($inputFile);
+                foreach (preg_split("/((\r?\n)|(\r\n?))/", $fileData) as $line) {
+                    $bits = explode('|', $line);
+                    if ($bits[0] != '200') continue;
+                    $customer_urn = $bits[2];
+                    $ckyc_number = $bits[4];
+                    echo "            Updating URN: '$customer_urn' with CKYC number: $ckyc_number\n";
+                    if ($ckyc_number) {
+                        DB::table('customer')->where('urn_no', $customer_urn)->update(['ckyc' => $ckyc_number]);
+                    } else {
+                        echo "            CKYC number is not prensent for URN: '$customer_urn'\n";
+                        $customer = DB::table("customer")->select('id')->where('urn_no', $customer_urn)->get();
+                        updateInterfaceByCustomerId($customer->id, "RESPONSEFAILURE", '', 'No CKYC number present in response');
                     }
-                rcopy(CKYC_INCOMING_DIR,$subHistoryFolder);
-                rdeleteContent(CKYC_INCOMING_DIR);
-                rrmdir(CKYC_INCOMING_TEMP_DIR);
+                }
             }
         }
-    
+        if (!is_dir(CKYC_INCOMING_HISTORY_DIR)) {
+            mkdir(CKYC_INCOMING_HISTORY_DIR, 0777, true);
+        }
+        $subHistoryFolder = CKYC_INCOMING_HISTORY_DIR.DIRECTORY_SEPARATOR.date('Y-m-d');
+        if (!is_dir($subHistoryFolder)) {
+            mkdir($subHistoryFolder, 0777, true);
+        }
+        rcopy(CKYC_INCOMING_DIR,$subHistoryFolder);
+        rdeleteContent(CKYC_INCOMING_DIR);
+        rrmdir(CKYC_INCOMING_TEMP_DIR);
     } catch(Exception $e){
         echo "some error occured in response reading part \n";
     }
