@@ -534,6 +534,13 @@
                      "ScreeningReview","Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "LoanInitiation", "FieldAppraisal"
                   ]
                },
+			   "equatedInstallmentAmount":{
+                  "title":"equatedInstallmentAmount",
+                  "type":"decimal",
+                  "captureStages":[
+                     "ScreeningReview","Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "LoanInitiation", "FieldAppraisal"
+                  ]
+               },
                "processingFeeInPaisa":{
                   "title":"Processing Fee In Paisa",
                   "type":"number",
