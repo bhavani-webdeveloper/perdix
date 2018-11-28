@@ -4,82 +4,110 @@ irf.pageCollection.factory(irf.page("audit.AuditScoreDetails"), ["$log", "PageHe
             "type": "schema-form",
             "title": "AUDIT_SCORE_DETAILS",
             initialize: function(model, form, formCtrl) {
-                var self = this;
                 var master = Audit.offline.getAuditMaster();
                 if (!$stateParams.pageData || !$stateParams.pageData.auditScoresheet) {
                     irfNavigator.goBack();
                     return;
                 }
                 model.auditScoresheet = $stateParams.pageData.auditScoresheet;
-                model.master = Audit.offline.getAuditMaster();             
+                model.master = Audit.offline.getAuditMaster();
                 var rate = model.auditScoresheet.audit_score;
                 var rate_flow = parseFloat(rate);
                 var ratingNumber = Math.round(rate_flow);
                 model.auditScoresheet.name = Audit.utils.getRatingByScore(master, ratingNumber);
-                detailScoresHtml = '\
-                <table class="table table-condensed">\
-                  <tr>\
-                    <th>{{"MODULE_SUBMODULE"|translate}}</th>\
-                    <th>{{"SCORE"|translate}}</th>\
-                    <th ng-show= "!model.value">{{"MAXSCORE"|translate}}</th>\
-                    <th ng-hide= "model.value">{{"MAXSCORE"|translate}}</th>\
-                    <th>{{"WEIGHTED_SCORE"|translate}}</th>\
-                  </tr>\
-                  <tr ng-repeat-start="ds in model.auditScoresheet.detail_score">\
-                    <td><strong>{{ds.module_name}}</strong></td>\
-                    <td><strong>{{ds.module_score}}</strong></td>\
-                    <td>&nbsp;</td>\
-                  </tr>\
-                  <tr ng-repeat-end ng-repeat="sms in ds.sub_module_score">\
-                    <td>&nbsp;&nbsp;<i class="fa fa-caret-right">&nbsp;</i>&nbsp;&nbsp; {{sms.sub_module_name}}</td>\
-                    <td>{{sms.awarded_score}}</td>\
-                    <td ng-show= "!model.value">{{sms.max_score}}</td>\
-                    <td ng-hide= "model.value">{{sms.max_score}}</td>\
-                    <td>{{sms.weighted_score}} </td>\
-                  </tr>\
-                </table>';
-                self.form = [{
-                    "type": "box",
-                    "colClass": "col-sm-12",
-                    "title": "SCORESHEET",
-                    "readonly": true,
+            },
+            form: [{
+                "type": "box",
+                "colClass": "col-sm-12",
+                "title": "SCORESHEET",
+                "readonly": true,
+                "items": [{
+                    "type": "section",
+                    "htmlClass": "row",
                     "items": [{
                         "type": "section",
-                        "htmlClass": "row",
+                        "htmlClass": "col-sm-6",
                         "items": [{
-                            "type": "section",
-                            "htmlClass": "col-sm-6",
-                            "items": [{
-                                "key": "auditScoresheet.audit_id",
-                                "title": "AUDIT_ID"
-                            }, {
-                                "key": "auditScoresheet.branch_name",
-                                "title": "BRANCH_NAME"
-                            }, {
-                                "key": "auditScoresheet.start_date",
-                                "title": "START_DATE"
-                            }]
+                            "key": "auditScoresheet.audit_id",
+                            "title": "AUDIT_ID"
                         }, {
-                            "type": "section",
-                            "htmlClass": "col-sm-6",
-                            "items": [{
-                                "key": "auditScoresheet.audit_score",
-                                "title": "AUDIT_SCORE"
-                            }, {
-                                "key": "auditScoresheet.name",
-                                "title": "Rating"
-                            }]
+                            "key": "auditScoresheet.branch_name",
+                            "title": "BRANCH_NAME"
+                        }, {
+                            "key": "auditScoresheet.start_date",
+                            "title": "START_DATE"
                         }]
                     }, {
                         "type": "section",
-                        "html": '<hr>'
-                    }, {
-                        "type": "section",
-                        "html": detailScoresHtml
+                        "htmlClass": "col-sm-6",
+                        "items": [{
+                            "key": "auditScoresheet.audit_score",
+                            "title": "AUDIT_SCORE"
+                        }, {
+                            "key": "auditScoresheet.name",
+                            "title": "Rating"
+                        }]
                     }]
-                }];
-            },
-            form: [],
+                }, {
+                    "type": "tableview",
+                    "key": "auditScoresheet.detail_score",
+                    "title": "Audit Score Sheet",
+                    "searching": false,
+                    "paginate": false,
+                    "tableConfig": {
+                        "searching": false,
+                        "paginate": false,
+                        "responsive": {
+                            "details": {
+                                "display": $.fn.dataTable.Responsive.display.childRowImmediate,
+                                renderer: function(api, rowIdx, columns) {
+                                    var html = '<ul data-dtr-index="' + rowIdx + '" class="dtr-details">';
+                                    var issuesIndex = columns.length - 1;
+                                    for (i in columns) {
+                                        if (columns[i].hidden) {
+                                            if (i != issuesIndex) {
+                                                html += '<li data-dtr-index="' + columns[i].rowIndex + '" data-dt-row="' + rowIdx + '" data-dt-column="' + columns[i].rowIndex + '">' +
+                                                    '<span class="dtr-title">' + columns[i].title + '</span>' +
+                                                    '<span class="dtr-data">' + columns[i].data + '</span>' +
+                                                    '</li>';
+                                            }
+                                        }
+                                    }
+                                    return html + '</ul>' + columns[issuesIndex].data;
+                                }
+                            }
+                        },
+                        "dom": '<"top"pl>rt<"bottom"p><"clear">'
+                    },
+                    getColumns: function() {
+                        return [{
+                            "title": "Module",
+                            "data": "module_name"
+                        }, {
+                            "title": "Module Score",
+                            "data": "module_score"
+                        }, {
+                            "title": "SUBMODULE",
+                            "data": "sub_module_score",
+                            "className": "none",
+                            render: function(data, type, full, meta) {
+                                var table = ['<tr style="border-bottom:1px solid lightgray"><th>&nbsp;' + [
+                                    'Sub Module', 'Risk Level', 'Awarded Score'
+                                ].join('&nbsp;</th><th>&nbsp;') + '&nbsp;</th></tr>'];
+                                for(i in data) {
+                                    table.push('<tr><td>'+[
+                                        data[i].sub_module_name,
+                                        Audit.utils.getRiskLevel(data[i].risk_level_id),
+                                        data[i].awarded_score + ' out of ' + data[i].max_score
+                                    ].join('</td><td>')+'</td></tr>');
+                                }
+                                return data && data.length ? '<table style="border:1px solid lightgray;margin-top:5px;width:100%">' + table.join('') + '</table>' : '';
+                            }
+                        }];
+                    },
+                    getActions: function() { return []; }
+                }]
+            }],
             schema: {
                 "$schema": "http://json-schema.org/draft-04/schema#",
                 "type": "object",

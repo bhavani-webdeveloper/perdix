@@ -2,10 +2,10 @@ define({
 	pageUID: "loans.group.Checker2Queue",
 	pageType: "Engine",
 	dependencies: ["$log", "$state", "GroupProcess","entityManager", "Enrollment", "CreditBureau", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
-		"PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"
+		"PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator","filterFilter"
 	],
 	$pageFn: function($log, $state, GroupProcess,entityManager, Enrollment, CreditBureau, Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
-		PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
+		PageHelper, Utils, PagesDefinition, Queries, irfNavigator,filterFilter) {
 
 		var branchId = SessionStore.getBranchId();
 		var branchName = SessionStore.getBranch();
@@ -35,6 +35,7 @@ define({
 			},
 			definition: {
 				title: "CHECKER2_QUEUE",
+				autoSearch:true,
 				searchForm: [
 					{
 	                	"type": "section",
@@ -180,6 +181,7 @@ define({
 						};
 					},
 					getColumns: function() {
+						var branches = formHelper.enum('branch_id').data;
 						return [{
 							title: 'GROUP_ID',
 							data: 'id'
@@ -192,6 +194,18 @@ define({
 						}, {
 							title: 'PARTNER',
 							data: 'partnerCode'
+						},{
+							title:'BRANCH',
+							data: 'branchId',
+							render: function(data, type, full, meta) {
+	                            if (data) {
+	                                var branchvalue = filterFilter(branches, {
+	                                    "value": Number(full.branchId)
+	                                }, true);
+	                                data = (branchvalue.length>0)?branchvalue[0].name:"";
+	                            }
+	                            return data;
+							}	
 						},{
 							title: 'TRANSACTION_DATE',
 							data: 'endTime',
@@ -215,9 +229,6 @@ define({
 									state: "Page.Engine",
 									pageName: "loans.group.Checker2",
 									pageId:item.id
-								}, {
-									state: "Page.Engine",
-									pageName: "loans.group.Checker2Queue",
 								});
 							},
 							isApplicable: function(item, index) {
