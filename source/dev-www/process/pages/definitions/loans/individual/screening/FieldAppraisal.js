@@ -82,6 +82,13 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisal')
                         minimum: 1,
                         maximum: 1,
                         order:60
+                    }, {
+                        pageName: 'loans.individual.screening.detail.PortfolioAnalyticsView',
+                        title: 'Portfolio Analytics',
+                        pageClass: 'portfolio-analytics',
+                        minimum: 1,
+                        maximum: 1,
+                        order: 90
                     }
                 ],
                 "bundlePages": [],
@@ -214,6 +221,12 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisal')
                                         pageClass: 'loan-review',
                                         model: {
                                             loanAccount: res
+                                        }
+                                    });
+                                    $this.bundlePages.push({
+                                        pageClass: 'portfolio-analytics',
+                                        model: {
+                                            loanId: bundleModel.loanId
                                         }
                                     });
 

@@ -73,17 +73,21 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisalRe
                 minimum: 1,
                 maximum: 1,
                 order: 80
+            }, {
+                pageName: 'loans.individual.screening.detail.SummaryView',
+                title: 'SummaryView',
+                pageClass: 'summaryView',
+                minimum: 1,
+                maximum: 1,
+                order: 5
+            }, {
+                pageName: 'loans.individual.screening.detail.PortfolioAnalyticsView',
+                title: 'Portfolio Analytics',
+                pageClass: 'portfolio-analytics',
+                minimum: 1,
+                maximum: 1,
+                order: 90
             }];
-            if(SessionStore.getGlobalSetting('siteCode') != 'IREPDhan' || SessionStore.getGlobalSetting('siteCode') == 'IREPDhan') {
-                definition.push({
-                    pageName: 'loans.individual.screening.detail.SummaryView',
-                    title: 'SummaryView',
-                    pageClass: 'summaryView',
-                    minimum: 1,
-                    maximum: 1,
-                    order: 5
-                });
-            } 
             return definition;
         };
 
@@ -287,6 +291,12 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisalRe
                                 }
                             });
 
+                            $this.bundlePages.push({
+                                pageClass: 'portfolio-analytics',
+                                model: {
+                                    loanId: bundleModel.loanId
+                                }
+                            });
 
 
                             deferred.resolve();

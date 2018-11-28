@@ -11,6 +11,17 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
             PageHelper.showLoader();
             irfProgressMessage.pop('loading-P2PUpdate', 'Loading P2PUpdate');
             console.log(SessionStore.getRole());
+
+            model.validateP2PDate = function (model) {
+
+                if ((moment(model.additional.promiseToPayDate).isBefore(new Date()))) {
+                    PageHelper.setError({
+                        message: "p2p date should be nore than or equal to current system date" + " " + moment(new Date()).format(SessionStore.getDateFormat())
+                    });
+                    return;
+                }
+            }
+
             //PageHelper
             var loanAccountNo = $stateParams.pageId;
             var promise = LoanAccount.get({accountId: loanAccountNo}).$promise;
@@ -18,6 +29,8 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
             promise.then(function (data) { /* SUCCESS */
                 model.P2PUpdate = data;
                 console.log(data);
+
+
 
                 model.siteCode = SessionStore.getGlobalSetting("siteCode");
 
@@ -288,6 +301,9 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                                         required: true,
                                         "condition": "model.promise.promiseToPay=='YES'",
                                         type: "date",
+                                        "onChange": function (value, form, model, event) {
+                                            model.validateP2PDate(model);
+                                        }
 
                                     },
                                     {
