@@ -223,13 +223,13 @@ foreach ($files as $file) {
                         activateLoanAccounts($rowData[2]);
                         $disbursementsSchedules=searchDisbursementByAccountNumber("accountNumber=".$accountNumber);
                         if(!$disbursementsSchedules[0])
-                            throw new PDOException('Not Found Disbursement by account number : '.$accountNumber);
+                            throw new PDOException('Disbursement is not avaiable in Ready For Disbursement Queue  : '.$accountNumber);
 
                         $loanAccountDisbursementSchedule = $disbursementsSchedules[0];
 
                         $disbursements = getDisbursementListByLoanID($loanId);  
                         if(!$disbursements[0])
-                            throw new PDOException('Not Found Disbursement by loan ID : '.$loanId);
+                            throw new PDOException('Disbursement is not avaiable in Ready For Disbursement Queue  : '.$loanId);
                         
                         $disbursement= $disbursements[0];
                     
