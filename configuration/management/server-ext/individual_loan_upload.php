@@ -193,6 +193,7 @@ foreach ($files as $file) {
                     "loanAmountRequested" => $rowData[14],
                     "isRestructure" => false,
                     "psychometricCompleted" => "N",
+                    "equatedInstallmentAmount" => $rowData[30],
                     "loanCustomerRelations" => $loanCustomerRelations
                 );
 
