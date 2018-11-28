@@ -494,7 +494,7 @@
                "securityEmi":{
                   "title":"Security Emi",
                   "type":"number",
-                  "minimum":1,
+                  "minimum":0,
                   "maximum":10000000,
                   "captureStages":[
                      "Screening", "Sanction", "LoanInitiation"
@@ -530,6 +530,13 @@
                "interestRate":{
                   "title":"Interest Rate",
                   "type":"float",
+                  "captureStages":[
+                     "ScreeningReview","Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "LoanInitiation", "FieldAppraisal"
+                  ]
+               },
+			   "equatedInstallmentAmount":{
+                  "title":"equatedInstallmentAmount",
+                  "type":"decimal",
                   "captureStages":[
                      "ScreeningReview","Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "LoanInitiation", "FieldAppraisal"
                   ]
