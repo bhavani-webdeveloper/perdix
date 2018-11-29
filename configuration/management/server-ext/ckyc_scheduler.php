@@ -311,7 +311,7 @@ function process_outgoing() {
 
     foreach ($customer_data as $customer) {
         echo "Processing customer: $customer->id\n";
-        if (!recreate_directory(CKYC_OUTGOING_TEMP_DIR.DIRECTORY_SEPARATOR.$customer->id)) {
+        if (!recreate_directory(CKYC_OUTGOING_TEMP_DIR.DIRECTORY_SEPARATOR.$customer->urn_no)) {
             echo "Failed to create directory for customer id: $customer->id\n";
             continue;
         }
