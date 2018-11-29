@@ -15,6 +15,7 @@ define(["perdix/domain/model/loan/LoanProcess",
             return {
                 "type": "page-bundle",
                 "title": "DSC_CHECK",
+                "readonly":true,
                 "subTitle": "",
                 "bundleDefinitionPromise": function() {
                     $log.info("inside thee bundle");
@@ -49,23 +50,22 @@ define(["perdix/domain/model/loan/LoanProcess",
                             pageClass: 'loan-booking',
                             minimum: 1,
                             maximum: 1,
-                            order:50
+                            order:40
                         }, {
                             pageName: 'loans.individual.screening.CreditBureauView',
                             title: 'CREDIT_BUREAU',
                             pageClass: 'cbview',
                             minimum: 1,
                             maximum: 1,
-                            order:70
-                        },
-                        
+                            order:50
+                        },   
                         {
                             pageName: 'kgfs.loans.individual.booking.Dsc',
                             title: 'DSC',
                             pageClass: 'dsc-check',
                             minimum: 1,
                             maximum: 1,
-                            order:70
+                            order:60
                         },
                         
                         

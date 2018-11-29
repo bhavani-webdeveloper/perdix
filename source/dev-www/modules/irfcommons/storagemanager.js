@@ -280,7 +280,7 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter, Utils){
 		},
 		cacheAllMaster: function(isServer, forceFetch) {
 			var deferred = $q.defer();
-			if (masters && !_.isEmpty(masters)) {
+			if (masters && !_.isEmpty(masters) && !forceFetch) {
 				$log.info('masters already in memory');
 				deferred.resolve();
 			} else if (isServer) {
@@ -334,14 +334,18 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter, Utils){
 		isMasterLoaded: function() {
 			return masters && !_.isEmpty(masters);
 		},
+		getIrfMasters: function() {
+			return masters;
+		},
 		getMaster: function(classifier) {
 			return masters[classifier];
 		},
 		setMaster: function(classifier, master) {
 			if (classifier && master) {
 				masters[classifier] = master;
-				factoryObj.storeMaster(masters);
+				return factoryObj.storeMaster(masters);
 			}
+			return $q.reject();
 		},
 		onMasterUpdate: function(callback) {
 			var uuid = Utils.generateUUID();
@@ -537,17 +541,19 @@ irf.commons.run(["irfStorageService", "SessionStore", "$q", "$log", "filterFilte
 	function(irfStorageService, SessionStore, $q, $log, filterFilter) {
 		/* Special Handling for custom (derived) enum Codes */
 
+		var masters = null;
 		var createEnum = function(enumCode, copyFrom, converter) {
-			var source = irfStorageService.getMaster(copyFrom);
+			source = masters[copyFrom];
 			if (source && _.isArray(source.data)) {
 				var output = {parentClassifier:source.parentClassifier,data:[]};
 				output.data = _.cloneDeep(source.data);
 				converter(source, output);
-				irfStorageService.setMaster(enumCode, output);
+				masters[enumCode] = output;
 			}
 		};
 
 		irfStorageService.onMasterUpdate(function() {
+			masters = irfStorageService.getIrfMasters();
 			var branchId = ""+SessionStore.getBranchId();
 
 			var codeToValue = function(s, o) {
@@ -636,8 +642,7 @@ irf.commons.run(["irfStorageService", "SessionStore", "$q", "$log", "filterFilte
 			createEnum("lender_product_type", "lender_product_type", codeToValue);
 			createEnum("loan_partner","partner_master",codeToValue);
 
-
-			return $q.resolve();
+			return irfStorageService.storeMaster(masters);
 		});
 	}
 ]);

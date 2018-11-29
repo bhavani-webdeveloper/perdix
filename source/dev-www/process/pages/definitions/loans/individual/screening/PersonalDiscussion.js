@@ -17,21 +17,6 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
         return true;
     }
 
-    var filteredData = function filteredData(model.applicantTelecallingQuestionnaireList, telecallingQuestionnaireList) {
-        const applicantTelecallingQuestionnaireList = model.applicantTelecallingQuestionnaireList.slice();
-        for (let i = 0; i < applicantTelecallingQuestionnaireList.length; i++) {
-            const elem = model.applicantTelecallingQuestionnaireList[i];
-            for (let j = 0; j < telecallingQuestionnaireList.length - 1; j++) {
-                const elem1 = telecallingQuestionnaireList[j];
-                if (elem.question == elem1.question) {
-                    applicantTelecallingQuestionnaireList.splice(i, 1);
-                }
-            }
-        }
-        return applicantTelecallingQuestionnaireList;
-    }
-
-
     return {
         "type": "schema-form",
         "title": "PERSONAL_DISCUSSION",

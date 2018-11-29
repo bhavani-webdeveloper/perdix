@@ -1097,6 +1097,7 @@ define([],function(){
                             model.loanAccount.psychometricCompleted = "NO";
 
                         }
+                        
                         PageHelper.showProgress('loan-process', 'Updating Loan');
                         model.loanProcess.save()
                             .finally(function () {
@@ -1158,6 +1159,24 @@ define([],function(){
                             });
                     },
                     proceed: function(model, formCtrl, form, $event){
+                        var trancheTotalAmount=0;
+                        if(model.loanAccount.disbursementSchedules && model.loanAccount.disbursementSchedules.length){
+                            
+                            for (var i = model.loanAccount.disbursementSchedules.length - 1; i >= 0; i--) {
+                                model.loanAccount.disbursementSchedules[i].modeOfDisbursement = "CASH";
+                                trancheTotalAmount+=(model.loanAccount.disbursementSchedules[i].disbursementAmount || 0);
+                            }
+                            if (trancheTotalAmount > model.loanAccount.loanAmount){
+                                PageHelper.showProgress("loan-create","Total tranche amount is more than the Loan amount",5000);
+                                return false;
+                              }  
+                            
+                            if (trancheTotalAmount < model.loanAccount.loanAmount){
+                                PageHelper.showProgress("loan-create","Total tranche amount should match with the Loan amount",5000);
+                                return false;
+                            }
+                        
+                        }
                         PageHelper.showProgress('enrolment', 'Updating Loan');
                         model.loanProcess.proceed()
                             .finally(function () {
