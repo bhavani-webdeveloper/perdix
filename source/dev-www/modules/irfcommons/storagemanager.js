@@ -280,7 +280,7 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter, Utils){
 		},
 		cacheAllMaster: function(isServer, forceFetch) {
 			var deferred = $q.defer();
-			if (masters && !_.isEmpty(masters)) {
+			if (masters && !_.isEmpty(masters) && !forceFetch) {
 				$log.info('masters already in memory');
 				deferred.resolve();
 			} else if (isServer) {
