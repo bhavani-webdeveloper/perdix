@@ -1166,12 +1166,12 @@ define([],function(){
                                 model.loanAccount.disbursementSchedules[i].modeOfDisbursement = "CASH";
                                 trancheTotalAmount+=(model.loanAccount.disbursementSchedules[i].disbursementAmount || 0);
                             }
-                            if (trancheTotalAmount > model.loanAccount.loanAmountRequested){
+                            if (trancheTotalAmount > model.loanAccount.loanAmount){
                                 PageHelper.showProgress("loan-create","Total tranche amount is more than the Loan amount",5000);
                                 return false;
                               }  
                             
-                            if (trancheTotalAmount < model.loanAccount.loanAmountRequested){
+                            if (trancheTotalAmount < model.loanAccount.loanAmount){
                                 PageHelper.showProgress("loan-create","Total tranche amount should match with the Loan amount",5000);
                                 return false;
                             }
