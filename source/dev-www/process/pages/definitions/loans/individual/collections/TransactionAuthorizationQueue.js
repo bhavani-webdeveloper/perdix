@@ -40,7 +40,7 @@ function($log, formHelper, entityManager, LoanCollection, $state, SessionStore,$
                 "title": 'SEARCH_OPTIONS',
                 "required":["branch"],
                 "properties": {
-                    "loan_no": {
+                    "accountNumber": {
                         "title": "LOAN_ACCOUNT_NUMBER",
                         "type": "string",
                         "pattern": "^[0-9a-zA-Z]+$"
