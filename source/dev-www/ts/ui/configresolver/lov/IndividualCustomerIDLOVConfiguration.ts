@@ -123,6 +123,7 @@ export class IndividualCustomerIDLOVConfiguration extends LOVElementConfiguratio
         },
         "centreId":{
             "key": "customer.centreId",
+            "title": "CENTRE_ID",
             "type": "lov",
             "autolov": true,
             "lovonly": true,

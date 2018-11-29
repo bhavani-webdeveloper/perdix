@@ -417,7 +417,7 @@ define([], function () {
                                             {
                                                 "title": "DSC_OVERRIDE",
                                                 "type": "button",
-                                                "onClick": "actions.doDscOverride(model)"
+                                                "onClick": "actions.doDscOverride(model,model.loanAccount.id)"
                                             }
                                         ]
                                     },
@@ -437,7 +437,7 @@ define([], function () {
                     return SchemaResource.getLoanAccountSchema().$promise;
                 },
                 actions: {
-                    doDscOverride: function (model) {
+                    doDscOverride: function (model,loanid) {
                         if (model.customer.dscOverrideRemarks) {
                             irfProgressMessage.pop("dsc-override", "Performing DSC Override");
                             IndividualLoan.overrideDsc({
@@ -449,6 +449,7 @@ define([], function () {
                                 $log.info(resp);
                                 PageHelper.hideLoader();
                                 irfProgressMessage.pop("dsc-override", "Override Succeeded", 2000);
+                                model.customer.dscStatus = resp.dscStatus;
                                 //irfNavigator.goBack();
                             }, function (resp) {
                                 $log.error(resp);
