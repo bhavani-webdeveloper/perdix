@@ -4670,7 +4670,7 @@
             "machineType": {
               "title": "Machine Type",
               "type": "string",
-              "refCodeCategory": "collateral_type",
+              
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"
