@@ -42,6 +42,8 @@ function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionSto
 	                    key: "lastName",
 	                    condition: "model.siteCode != 'saija'"
 	                }, {
+						key: "customerId"
+					}, {
 	                    key: "kyc_no",
 	                }, {
 	                    key: "urnNo"
@@ -83,6 +85,10 @@ function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionSto
 					"lastName": {
 						"title": "LASTNAME",
 						"type": "string"
+					},
+					"customerId": {
+						"title": "CUSTOMER_ID",
+						"type": "number"
 					},
 					"kyc_no": {
 						"title": "KYC_NO",
@@ -151,6 +157,7 @@ function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionSto
 						'centreId': searchOptions.centre,
 						'page': pageOpts.pageNo,
 						'per_page': pageOpts.itemsPerPage,
+						'customerId': searchOptions.customerId,
 						'kycNumber': searchOptions.kyc_no,
 						'lastName': searchOptions.lastName,
 						'urnNo': searchOptions.urnNo,
@@ -164,6 +171,7 @@ function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionSto
 						'centreId': searchOptions.centre,
 						'page': pageOpts.pageNo,
 						'per_page': pageOpts.itemsPerPage,
+						'customerId': searchOptions.customerId,
 						'kycNumber': searchOptions.kyc_no,
 						'lastName': searchOptions.lastName,
 						'urnNo': searchOptions.urnNo,

@@ -396,8 +396,8 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
                 return deferred.promise;
             },
             setAuditMaster: function(auditMaster) {
-                if (!auditMaster) return;
-                irfStorageService.setMaster("auditMaster", auditMaster);
+                if (!auditMaster) $q.reject();
+                return irfStorageService.setMaster("auditMaster", auditMaster);
             },
             getAuditMaster: function() {
                 var auditMaster = irfStorageService.getMaster("auditMaster");
@@ -590,8 +590,7 @@ irf.pageCollection.run(["irfStorageService", "OfflineManager", "SessionStore", "
                 response.stages = stages;
 
                 PageHelper.showProgress("page-init", "Audit master loaded successfully", 2000);
-                Audit.offline.setAuditMaster(response);
-                deferred.resolve();
+                Audit.offline.setAuditMaster(response).then(deferred.resolve, deferred.reject);
             }, function(error) {
                 PageHelper.showProgress("page-init", "Failed to load audit master", 5000);
                 deferred.reject("Failed to load audit master");

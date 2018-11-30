@@ -6,7 +6,8 @@
         var resource =  $resource(endpoint, null, {
             save: {
                 method:'POST',
-                url:endpoint
+                url:endpoint,
+                isArray:true
             },
             getRules:searchResource({
                 method:'GET',

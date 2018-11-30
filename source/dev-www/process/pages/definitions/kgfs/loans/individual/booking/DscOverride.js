@@ -312,6 +312,14 @@ define([], function () {
                                 $log.info(resp);
                                 PageHelper.hideLoader();
                                 irfProgressMessage.pop("dsc-override", "Override Succeeded", 2000);
+                                IndividualLoan.get({id:loanid},{},function(resp){
+                                    if(resp.loanCustomerRelations && resp.loanCustomerRelations.length > 0){
+                                        model.customer.dscStatus = "SUCCESS";
+                                        showDscResponse(model,resp);
+                                     BundleManager.pushEvent('dsc-status',resp.loanCustomerRelations);    
+                                    }
+                                })
+                                
                                 //irfNavigator.goBack();
                             }, function (resp) {
                                 $log.error(resp);

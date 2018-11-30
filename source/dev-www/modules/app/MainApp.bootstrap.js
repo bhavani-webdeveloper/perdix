@@ -42,6 +42,23 @@ if (navigator.webkitPersistentStorage && window.requestFileSystem) {
 					console.log(results);
 				}, fileSystem.errorHandler);
 			};
+			fileSystem.getMasterJSON = function(cb) {
+				fileSystem.root.getFile('irfMasters', {}, function(fileEntry) {
+					fileEntry.file(function(file) {
+						var reader = new FileReader();
+						reader.onloadend = function(e) {
+							try {
+								var json = JSON.parse(this.result);
+								console.log(json);
+								cb && cb(json);
+							} catch (e) {
+								console.log(e);
+							}
+						};
+						reader.readAsText(file);
+					});
+				});
+			};
 		}, fileSystem.errorHandler);
 	}, function(e) {
 		alert("Storage permission denied, Please approve storage permission for continuous access. " + e);

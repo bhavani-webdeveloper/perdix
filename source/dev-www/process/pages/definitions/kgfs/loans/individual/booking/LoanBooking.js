@@ -65,6 +65,22 @@ define([], function () {
                 }
                 return true;
             }
+            var savePolicies = function(model){
+                var temp = model.loanAccount.loanCustomerRelations;
+                if(temp.length>0){
+                    var hasharray = [];
+                    for(i=0;i<temp.length;i++){
+                        hasharray[temp[i].customerId] = temp[i].customerId;    
+                    }
+                }
+                if(hasharray.length<temp.length)
+                {
+                    var errMsg = 'Applicant , Co-applicant and Gurantor should be different Persons';
+                    PageHelper.showErrors({data:{error:errMsg}});
+                    return false;
+                }
+                return true;
+            }
 
             // View Functions
             var getIncludes = function (model) {
@@ -1278,6 +1294,8 @@ define([], function () {
                             model.loanAccount.psychometricCompleted = "NO";
                         }
                         PageHelper.showProgress('loan-process', 'Updating Loan');
+                        if(!savePolicies(model))
+                            return false;
                         if(!(policyBasedOnLoanType(model.loanAccount.loanType,model)))
                             return false;
                         model.loanProcess.save()
@@ -1373,6 +1391,9 @@ define([], function () {
 
                         if(model.loanAccount.currentStage=='Checker2'){
                             model.loanProcess.stage='Completed';
+                        }
+                        if(model.loanAccount.currentStage=='DSCOverride'){
+                            model.loanProcess.stage='LoanInitiation';
                         }
                         var toStage=model.loanProcess.stage||null;
                         model.loanProcess.proceed(toStage)

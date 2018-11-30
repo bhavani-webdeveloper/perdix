@@ -127,6 +127,7 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
                             "type": "text",
                             "required": true,
                         },
+                        // Score Criteria array
                         {
                             "key": "scoreMaster.scoreCriterias",
                             "type": "array",
@@ -212,7 +213,7 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
                             }]
                         },
                         {
-                            "key": "scoreMaster.scoreParameters",
+                            "key": "scoreMaster.subScore",
                             "type": "array",
                             startEmpty: true,
                             "title": "SUBSCORE",
@@ -229,77 +230,24 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
                                     "type": "integer",
                                     required: true
                                 },
-                                // {
-                                //     "key": "scoreMaster.scoreParameters[].subscoreName",
-                                //     "type": "array",
-                                //     startEmpty : true,
-                                //     "title": "PARAMETERS",
-                                //     "items": [{
-                                //         "key": "scoreMaster.scoreParameters[].subscoreName",
-                                //         "startEmpty": true,
-                                //         "title": "PARAMETER_NAME",
-                                //         "type": "select",
-                                //         "required": true,
-                                //         "onChange": function (modelValue, form, model, formCtrl, event) {
-                                //             for (var i = 0; i < model.scoreMaster.scoreCriterias.length; i++) {
-                                //                 if (i != form.arrayIndex) {
-                                //                     if (model.scoreMaster.scoreCriterias[i].criteriaName == modelValue) {
-                                //                         Utils.alert("already selected");
-                                //                         delete model.scoreMaster.scoreCriterias[form.arrayIndex].criteriaName;
-                                //                     }
-                                //                 }
-                                //             }
-                                //             delete model.scoreMaster.scoreCriterias.criteriaValue;
-                                //         }
-                                //     },
-                                //     {
-                                //         "key": "scoreMaster.scoreCriterias[].criteriaValue",
-                                //         "startEmpty": true,
-                                //         "title": "CRITERIA_VALUE",
-                                //         "type": "lov",
-                                //         "required": true,
-                                //         "condition": "model.scoreMaster.scoreCriterias[arrayIndex].criteriaName",
-                                //         lovonly: true,
-                                //         searchHelper: formHelper,
-                                //         search: function (inputModel, form, model, context) {
-                                //             var defered = $q.defer();
-                                //             ScoresMaintenance.allCriteria().$promise.then(
-                                //                 function (data) {
-                                //                     var resp_array = [];
-                                //                     resp_array = data.body;
-                                //                     var output = [], l = resp_array.length, i;
-                                //                     for (i = 0; i < l; i++) {
-                                //                         if (resp_array[i].criteriaName == model.scoreMaster.scoreCriterias[context.arrayIndex].criteriaName) {
-                                //                             output.push({
-                                //                                 name: resp_array[i].criteriaValue,
-                                //                                 value: resp_array[i].criteriaValue
-                                //                             });
-                                //                         }
-                                //                     }
-                                //                     defered.resolve({
-                                //                         headers: {
-                                //                             "x-total-count": output.length
-                                //                         },
-                                //                         body: output
-                                //                     });
-                                //                 }, function (err) {
-                                //                     defered.reject(err);
-                                //                 });
-                                //             return defered.promise;
-                                //         },
-                                //         getListDisplayItem: function (item, index) {
-                                //             return [
-                                //                 item.name
-                                //             ];
-                                //         },
-                                //         onSelect: function (result, model, context) {
-                                //             model.scoreMaster.scoreCriterias[context.arrayIndex].criteriaValue = result.value;
-                                //             model.scoreMaster.scoreCriterias[context.arrayIndex].status = 'ACTIVE';
-                                //             model.scoreMaster.scoreCriterias[context.arrayIndex].scoreName = model.scoreMaster.scoreName;
-                                //         }
-                                //     }
-                                //     ]
-                                // },
+                                {
+                                    "key": "scoreMaster.subScore[].isIndividualScore",
+                                    "title": "IS_INDIVIDULA_SCORE",
+                                    "type": "radio",
+                                    "titleMap": [{
+                                        value: true,
+                                        name: "Yes"
+                                    },
+                                    {
+                                        value: false,
+                                        name: "No"
+                                    }
+                                    ],
+                                },
+                                {
+                                    "key":"scoreMaster.subScore[]."
+                                }
+                                
 
                             ]
                         },

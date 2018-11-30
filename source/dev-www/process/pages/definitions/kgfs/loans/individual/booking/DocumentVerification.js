@@ -163,19 +163,27 @@ define({
                                         lovonly: true,
                                         searchHelper: formHelper,
                                         search: function(inputModel, form, model, context) {
-                                            var f = $filter('filter')(docRejectReasons, {"document_code": model.loanAccount.loanDocuments[context.arrayIndex].document},true);
+                                            var rejectReason = formHelper.enum('document_reject_reason').data;
+                                            var out = [];
+                                            for (var i = 0; i < rejectReason.length; i++) {
+                                                    out.push({
+                                                        name: rejectReason[i].name,
+                                                        code: rejectReason[i].code
+                                                    })
+                                            }
+
                                             return $q.resolve({
                                                 "header": {
-                                                    "x-total-count": f && f.length
+                                                    "x-total-count": out.length
                                                 },
-                                                "body": f
+                                                "body": out
                                             });
                                         },
                                         getListDisplayItem: function(item, index) {
-                                            return [item.reject_reason];
+                                            return [item.name];
                                         },
                                         onSelect: function(result, model, context) {
-                                            model.loanAccount.loanDocuments[context.arrayIndex].rejectReason = result.reject_reason;
+                                            model.loanAccount.loanDocuments[context.arrayIndex].rejectReason = result.code;
                                         }
                                     }]
                                 }, {
@@ -643,9 +651,6 @@ define({
 
                     PageHelper.showProgress('update-loan', 'Working...');
                     PageHelper.showLoader();
-                    if(model.loanAccount.currentStage=='Checker2'){
-                        model.loanProcess.stage='Completed';
-                    }
                     var toStage=model.loanProcess.stage||null;
                     model.loanProcess.proceed(toStage)
                         .finally(function () {

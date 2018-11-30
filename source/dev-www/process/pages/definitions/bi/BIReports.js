@@ -1,7 +1,7 @@
 irf.pageCollection.factory(irf.page("bi.BIReports"), ["$log", "RolesPages", "BIReports", "SessionStore", "PageHelper", "$httpParamSerializer", "AuthTokenHelper", "$filter", "$q", "$http", "irfProgressMessage",
-    function($log, RolesPages, BIReports, SessionStore, PageHelper, $httpParamSerializer, AuthTokenHelper, $filter, $q, $http, irfProgressMessage) {
+    function ($log, RolesPages, BIReports, SessionStore, PageHelper, $httpParamSerializer, AuthTokenHelper, $filter, $q, $http, irfProgressMessage) {
         var allReportParametersCache = [];
-        var getReportsConfiguration = function(reportName) {
+        var getReportsConfiguration = function (reportName) {
             var defered = $q.defer();
             var result = [];
             if (allReportParametersCache.length != 0) {
@@ -10,12 +10,11 @@ irf.pageCollection.factory(irf.page("bi.BIReports"), ["$log", "RolesPages", "BIR
                         report_name: reportName
                     }, true);
                 } else {
-                    result = allReportParametersCache
+                    result = allReportParametersCach
                 }
-
                 defered.resolve(result);
             } else {
-                BIReports.allReportParameters().$promise.then(function(result) {
+                BIReports.allReportParameters().$promise.then(function (result) {
                     var item;
                     for (var i = 0; i < result.length; i++) {
                         if (result[i].parameter == 'from_date' || result[i].parameter == 'to_date') {
@@ -34,38 +33,39 @@ irf.pageCollection.factory(irf.page("bi.BIReports"), ["$log", "RolesPages", "BIR
                     }
 
                     defered.resolve(result);
-                }, function(err) {
+                }, function (err) {
                     PageHelper.showErrors(err);
                 });
             }
-
             return defered.promise;
         };
+
         getReportsConfiguration();
         return {
             "type": "schema-form",
             "title": "REPORTS",
             "subTitle": "",
-            initialize: function(model, form, formCtrl) {
+            initialize: function (model, form, formCtrl) {
                 model.report = {};
                 model.report.role = SessionStore.getUserRole();
                 $log.info(model.report.role.id);
-                model.done = function(val) {
+                model.done = function (val) {
                     return val === 'true' ? true : false;
                 }
                 var self = this;
                 self.form = [];
 
-                var p2 = BIReports.reportList().$promise.then(function(resp) {
+                var p2 = BIReports.reportList().$promise.then(function (resp) {
                     RolesPages.getReportsByRole({
                         roleId: model.report.role.id
-                    }).$promise.then(function(response) {
+                    }).$promise.then(function (response) {
                         var object = [];
                         for (i in resp) {
                             if (response && response.body && response.body.length) {
                                 for (j in response.body) {
                                     if (resp[i].value == response.body[j].report_name) {
                                         object.push(resp[i]);
+
                                     }
                                 }
                             }
@@ -74,31 +74,35 @@ irf.pageCollection.factory(irf.page("bi.BIReports"), ["$log", "RolesPages", "BIR
                         self.formSource[0].items[0].titleMap = object;
                         model.report.masterData = object;
                         self.form = self.formSource;
+                        $log.info(self.form);
                     });
-                }, function(errResp) {
+                }, function (errResp) {
                     PageHelper.showErrors(errResp);
-                }).finally(function() {
+                }).finally(function () {
 
                     PageHelper.hideLoader();
                 });
 
             },
-            modelPromise: function(pageId, model) {
+            modelPromise: function (pageId, model) {
                 var self = this;
                 var defered = $q.defer();
                 PageHelper.showLoader();
 
                 return defered;
+
             },
+
             form: [],
             formSource: [{
                 "type": "box",
                 "title": "CHOOSE_A_REPORT",
                 colClass: "col-sm-9",
-                "items": [{
+                "items": [
+                    {
                         "key": "bi.report_name",
                         "type": "select",
-                        onChange: function(modelValue, form, model, formCtrl, event) {
+                        onChange: function (modelValue, form, model, formCtrl, event) {
                             var res = $filter('filter')(model.report.masterData, {
                                 'value': model.bi.report_name
                             }, true);
@@ -110,6 +114,7 @@ irf.pageCollection.factory(irf.page("bi.BIReports"), ["$log", "RolesPages", "BIR
                                     model.bi._filterCollection[i] = model.bi._filterCollection[i] || {};
                                     if (model.bi._filterCollection[i]) {
                                         model.bi._filterCollection[i]['filterParameter'] = model.selectedReport.parameters[i];
+
                                     } else {
                                         model.bi._filterCollection[i] = {
                                             filterParameter: model.selectedReport.parameters[i]
@@ -141,10 +146,11 @@ irf.pageCollection.factory(irf.page("bi.BIReports"), ["$log", "RolesPages", "BIR
                             "key": "bi._filterCollection[]",
                             "type": "structeredFilter",
                             "filterParamPreset": true,
-                            "getConfiguration": function(modelValue, form, model, formCtrl, event) {
-                                return getReportsConfiguration(model.bi.report_name);
+                            "getConfiguration": function (modelValue, form, model, formCtrl, event) {
+                                var p1 = getReportsConfiguration(model.bi.report_name);
+                                return p1;
                             }
-                        }]
+                        }],
                     }
                 ]
             }, {
@@ -198,7 +204,7 @@ irf.pageCollection.factory(irf.page("bi.BIReports"), ["$log", "RolesPages", "BIR
                 }
             },
             actions: {
-                submit: function(model, form, formName) {
+                submit: function (model, form, formName) {
                     PageHelper.clearErrors();
                     if (model.selectedReport.parameterized) {
                         var reqData = {}
@@ -223,7 +229,7 @@ irf.pageCollection.factory(irf.page("bi.BIReports"), ["$log", "RolesPages", "BIR
                             reqData, {
                                 responseType: 'arraybuffer'
                             }
-                        ).then(function(response) {
+                        ).then(function (response) {
                             var headers = response.headers();
                             if (headers['content-type'].indexOf('json') != -1 && !headers["content-disposition"]) {
                                 var decodedString = String.fromCharCode.apply(null, new Uint8Array(response.data));
@@ -253,16 +259,16 @@ irf.pageCollection.factory(irf.page("bi.BIReports"), ["$log", "RolesPages", "BIR
                             });
                             var link = document.getElementById("reportdownloader");
                             link.href = window.URL.createObjectURL(blob);
-                            
+
                             if (headers["content-disposition"] && headers["content-disposition"].split('filename=').length == 2) {
                                 var filename = headers["content-disposition"].split('filename=')[1];
                                 link.download = filename.replace(/"/g, "");
                             } else {
                                 link.download = SessionStore.getLoginname() + '_' + model.selectedReport.name + '_' + moment().format('YYYYMMDDhhmmss');
-                            }           
-                            link.click();                 
+                            }
+                            link.click();
                             irfProgressMessage.pop("Reports", "Report downloaded.", 5000);
-                        }, function(err) {
+                        }, function (err) {
                             var decodedString = String.fromCharCode.apply(null, new Uint8Array(err.data));
                             PageHelper.showErrors({
                                 data: {
@@ -270,7 +276,7 @@ irf.pageCollection.factory(irf.page("bi.BIReports"), ["$log", "RolesPages", "BIR
                                 }
                             });
                             irfProgressMessage.pop("Reports", "Report download failed.", 5000);
-                        }).finally(function() {
+                        }).finally(function () {
                             PageHelper.hideLoader();
                         });
 

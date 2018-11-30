@@ -228,9 +228,9 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
                 search: function(inputModel, form) {
                     $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
                     var promise = CustomerBankBranch.search({
-                        'bankName': inputModel.depositBank,
+                        'bankName': inputModel.bankName,
                         'ifscCode': inputModel.ifscCode,
-                        'branchName': inputModel.depositBranch
+                        'branchName': inputModel.branchName
                     }).$promise;
                     return promise;
                 },

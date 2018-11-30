@@ -1,17 +1,19 @@
 irf.pageCollection.factory(irf.page("customer360.Recapture"),
 ["$log", "$q", "Enrollment", "SessionStore", "$state", "entityManager", "formHelper",
-"$stateParams", "irfProgressMessage", "PageHelper", "EnrollmentHelper", "BiometricService", "Files",
+"$stateParams", "irfProgressMessage", "PageHelper", "EnrollmentHelper", "BiometricService", "Files","$window",
 function($log, $q, Enrollment, SessionStore, $state, entityManager, formHelper,
-    $stateParams, irfProgressMessage, PageHelper, EnrollmentHelper, BiometricService, Files){
+    $stateParams, irfProgressMessage, PageHelper, EnrollmentHelper, BiometricService, Files,$window){
 
-    var submit = function(model) {
+        
+    var submit = function (model) {
         $log.debug("REQUEST_TYPE: " + model.recaptureType);
+        var param = {};
+        var reqData = _.cloneDeep(model);
+        param.customer = reqData.customer;
+        param.enrollmentAction = "PROCEED";
         PageHelper.showLoader();
         irfProgressMessage.pop('RECAPTURE', 'Working...');
-        model.enrollmentAction = "SAVE";
-        $log.info(model);
-        var reqData = _.cloneDeep(model);
-        Enrollment.updateEnrollment(reqData, function (res, headers) {
+        Enrollment.updateEnrollment(param, function (res, headers) {
             PageHelper.hideLoader();
             irfProgressMessage.pop('RECAPTURE', 'Done. Customer Updated, ID : ' + res.customer.id, 2000);
             $state.go("Page.Customer360", {
@@ -70,22 +72,6 @@ function($log, $q, Enrollment, SessionStore, $state, entityManager, formHelper,
                     "readonly": "true"
                 },
                 {
-                    "key": "customer.latitude",
-                    "title": "HOUSE_LOCATION",
-                    "type": "geotag",
-                    "latitude": "customer.latitude",
-                    "longitude": "customer.longitude",
-                    "condition": "model.recaptureType === 'GPS'"
-                },
-                {
-                    "key":"customer.photoImageId",
-                    "type":"file",
-                    "fileType":"image/*",
-                    "offline": true,
-                    "condition": "model.recaptureType === 'PHOTO'"
-                },
-                {
-                    "condition": "model.recaptureType === 'FINGERPRINT'",
                     type: "button",
                     title: "CAPTURE_FINGERPRINT",
                     notitle: true,
@@ -93,25 +79,12 @@ function($log, $q, Enrollment, SessionStore, $state, entityManager, formHelper,
                     onClick: function(model, form, formName){
                         var promise = BiometricService.capture(model);
                         promise.then(function(data){
-                            model.customer.rightHandIndexImageId = null;
-                            model.customer.rightHandMiddleImageId = null;
-                            model.customer.rightHandRingImageId = null;
-                            model.customer.rightHandSmallImageId = null;
-                            model.customer.rightHandThumpImageId = null;
-                            model.customer.leftHandIndexImageId = null;
-                            model.customer.leftHandMiddleImageId = null;
-                            model.customer.leftHandRingImageId = null;
-                            model.customer.leftHandSmallImageId = null;
-                            model.customer.leftHandThumpImageId = null;
-
                             model.customer.$fingerprint = data;
                         }, function(reason){
-                            console.log(reason);
                         })
                     }
                 },
                 {
-                    "condition": "model.recaptureType === 'FINGERPRINT'",
                     "type": "section",
                     "html": '<div class="row"> <div class="col-xs-6">' +
                     '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'LeftThumb\')"></i> {{ model.getFingerLabel(\'LeftThumb\') }}</span><br>' +
@@ -130,10 +103,9 @@ function($log, $q, Enrollment, SessionStore, $state, entityManager, formHelper,
             ]
         },{
             "type": "actionbox",
-            // "condition": "model.requestRecaptureType === 'PHOTO'",
             "items": [{
                 "type": "submit",
-                "title": "REQUEST_RECAPTURE"
+                "title": "Update"
             }]
         }],
         schema: function() {

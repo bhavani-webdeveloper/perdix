@@ -290,7 +290,7 @@ irf.pageCollection.factory(irf.page("customer360.CustomerHistory"), ["$log", "En
             form: [{
                 type: "box",
                 colClass: "col-sm-12",
-                title: "Customer Details",
+                title: "CUSTOMER_DETAILS",
                 items: [{
                     type: "section",
                     condition: 'model.customerLogs',
@@ -301,7 +301,7 @@ irf.pageCollection.factory(irf.page("customer360.CustomerHistory"), ["$log", "En
                 type: "box",
                 condition: 'model.udfLogs',
                 colClass: "col-sm-12",
-                title: "udfLogs Details",
+                title: "UDF_DETAILS",
                 items: [{
                     type: "section",
                     colClass: "col-sm-12",
@@ -311,7 +311,7 @@ irf.pageCollection.factory(irf.page("customer360.CustomerHistory"), ["$log", "En
                 type: "box",
                 condition: 'model.familyMemberLogs',
                 colClass: "col-sm-12",
-                title: "familyMemberLogs Details",
+                title: "FAMILY_DETAILS",
                 items: [{
                     type: "section",
                     colClass: "col-sm-12",
@@ -321,7 +321,7 @@ irf.pageCollection.factory(irf.page("customer360.CustomerHistory"), ["$log", "En
                 type: "box",
                 condition: 'model.physicalAssetLogs',
                 colClass: "col-sm-12",
-                title: "physicalAssetLogs Details",
+                title: "PHYSICAL_ASSET_DETAILS",
                 items: [{
                     type: "section",
                     colClass: "col-sm-12",
@@ -331,7 +331,7 @@ irf.pageCollection.factory(irf.page("customer360.CustomerHistory"), ["$log", "En
                 type: "box",
                 condition: 'model.expenditureLogs',
                 colClass: "col-sm-12",
-                title: "expenditureLogs Details",
+                title: "EXPENDITURE_DETAILS",
                 items: [{
                     type: "section",
                     colClass: "col-sm-12",
@@ -341,7 +341,7 @@ irf.pageCollection.factory(irf.page("customer360.CustomerHistory"), ["$log", "En
                 type: "box",
                 condition: 'model.liabilityLogs',
                 colClass: "col-sm-12",
-                title: "liabilityLogs Details",
+                title: "LIABILITY_DETAILS",
                 items: [{
                     type: "section",
                     colClass: "col-sm-12",
@@ -351,7 +351,7 @@ irf.pageCollection.factory(irf.page("customer360.CustomerHistory"), ["$log", "En
                 type: "box",
                 condition: 'model.customerBankAccountLogs',
                 colClass: "col-sm-12",
-                title: "customerBankAccountLogs Details",
+                title: "BANK_ACCOUNT_DETAILS",
                 items: [{
                     type: "section",
                     colClass: "col-sm-12",
@@ -361,7 +361,7 @@ irf.pageCollection.factory(irf.page("customer360.CustomerHistory"), ["$log", "En
                 type: "box",
                 condition: 'model.bankStatementLogs',
                 colClass: "col-sm-12",
-                title: "bankStatementLogs Details",
+                title: "BANK_STATEMENT_DETAILS",
                 items: [{
                     type: "section",
                     colClass: "col-sm-12",
@@ -371,7 +371,7 @@ irf.pageCollection.factory(irf.page("customer360.CustomerHistory"), ["$log", "En
                 type: "box",
                 condition: 'model.miscellaneousLogs',
                 colClass: "col-sm-12",
-                title: "miscellaneousLogs Details",
+                title: "MISCELLANEOUS_DETAILS",
                 items: [{
                     type: "section",
                     colClass: "col-sm-12",
@@ -381,7 +381,7 @@ irf.pageCollection.factory(irf.page("customer360.CustomerHistory"), ["$log", "En
                 type: "box",
                 condition: 'model.enterpriseLogs',
                 colClass: "col-sm-12",
-                title: "enterpriseLogs Details",
+                title: "ENTERPRISE_DETAILS",
                 items: [{
                     type: "section",
                     colClass: "col-sm-12",
@@ -391,7 +391,7 @@ irf.pageCollection.factory(irf.page("customer360.CustomerHistory"), ["$log", "En
                 type: "box",
                 condition: 'model.enterpriseCustomerRelationLogs',
                 colClass: "col-sm-12",
-                title: "enterpriseCustomerRelationLogs Details",
+                title: "ENTERPRISE_CUSTOMER_RELATION_DETAILS",
                 items: [{
                     type: "section",
                     colClass: "col-sm-12",
@@ -401,7 +401,7 @@ irf.pageCollection.factory(irf.page("customer360.CustomerHistory"), ["$log", "En
                 type: "box",
                 condition: 'model.incomeLogs',
                 colClass: "col-sm-12",
-                title: "incomeLogs Details",
+                title: "INCOME_DETAILS",
                 items: [{
                     type: "section",
                     colClass: "col-sm-12",
@@ -411,7 +411,7 @@ irf.pageCollection.factory(irf.page("customer360.CustomerHistory"), ["$log", "En
                 type: "box",
                 condition: 'model.additionalKYCLogs',
                 colClass: "col-sm-12",
-                title: "additionalKYCLogs Details",
+                title: "ADDITIONAL_KYC_DETAILS",
                 items: [{
                     type: "section",
                     colClass: "col-sm-12",
@@ -421,7 +421,7 @@ irf.pageCollection.factory(irf.page("customer360.CustomerHistory"), ["$log", "En
                 type: "box",
                 condition: 'model.incomeLogs',
                 colClass: "col-sm-12",
-                title: "incomeLogs Details",
+                title: "INCOME_DETAILS",
                 items: [{
                     type: "section",
                     colClass: "col-sm-12",
@@ -431,7 +431,7 @@ irf.pageCollection.factory(irf.page("customer360.CustomerHistory"), ["$log", "En
                 type: "box",
                 condition: 'model.financialAssetLogs',
                 colClass: "col-sm-12 ",
-                title: "FinancialAssetLogs Details",
+                title: "FINANCIAL_ASSET_DETAILS",
                 items: [{
                     type: "section",
                     colClass: "col-sm-12",
@@ -441,7 +441,7 @@ irf.pageCollection.factory(irf.page("customer360.CustomerHistory"), ["$log", "En
                 type: "box",
                 condition: 'model.verificationLogs',
                 colClass: "col-sm-12",
-                title: "verificationLogs Details",
+                title: "VERIFICATION_DETAILS",
                 items: [{
                     type: "section",
                     colClass: "col-sm-12",
@@ -451,7 +451,7 @@ irf.pageCollection.factory(irf.page("customer360.CustomerHistory"), ["$log", "En
                 type: "box",
                 condition: 'model.enterpriseRegistrationLogs',
                 colClass: "col-sm-12 ",
-                title: "EnterpriseRegistrationLogs Details",
+                title: "ENTERPRISE_REGISTRATION_DETAILS",
                 items: [{
                     type: "section",
                     colClass: "col-sm-12",
@@ -461,7 +461,7 @@ irf.pageCollection.factory(irf.page("customer360.CustomerHistory"), ["$log", "En
                 type: "box",
                 condition: 'model.enterpriseAssetLogs',
                 colClass: "col-sm-12 ",
-                title: "EnterpriseAssetLogs Details",
+                title: "ENTERPRISE_ASSET_DETAILS",
                 items: [{
                     type: "section",
                     colClass: "col-sm-12",
@@ -471,7 +471,7 @@ irf.pageCollection.factory(irf.page("customer360.CustomerHistory"), ["$log", "En
                 type: "box",
                 condition: 'model.incomeThroughSaleLogs',
                 colClass: "col-sm-12 ",
-                title: "IncomeThroughSaleLogs Details",
+                title: "INCOME_THROUGH_SALES_DETAILS",
                 items: [{
                     type: "section",
                     colClass: "col-sm-12",
@@ -481,7 +481,7 @@ irf.pageCollection.factory(irf.page("customer360.CustomerHistory"), ["$log", "En
                 type: "box",
                 condition: 'model.otherBusinessIncomeLogs',
                 colClass: "col-sm-12",
-                title: "OtherBusinessIncomeLogs Details",
+                title: "OTHER_BUSINESS_INCOME_DETAILS",
                 items: [{
                     type: "section",
                     colClass: "col-sm-12",
@@ -491,7 +491,7 @@ irf.pageCollection.factory(irf.page("customer360.CustomerHistory"), ["$log", "En
                 type: "box",
                 condition: 'model.rawMaterialExpenseLogs',
                 colClass: "col-sm-12",
-                title: "RawMaterialExpenseLogs Details",
+                title: "RAW_MATERIAL_EXPENSES_DETAILS",
                 items: [{
                     type: "section",
                     colClass: "col-sm-12",
@@ -501,7 +501,7 @@ irf.pageCollection.factory(irf.page("customer360.CustomerHistory"), ["$log", "En
                 type: "box",
                 condition: 'model.otherBusinessIncomeLogs',
                 colClass: "col-sm-12",
-                title: "OtherBusinessIncomeLogs Details",
+                title: "OTHER_BUSINESS_INCOME_DETAILS",
                 items: [{
                     type: "section",
                     colClass: "col-sm-12",
@@ -511,7 +511,7 @@ irf.pageCollection.factory(irf.page("customer360.CustomerHistory"), ["$log", "En
                 type: "box",
                 condition: 'model.fixedAssetsMachinaryLogs',
                 colClass: "col-sm-12",
-                title: "FixedAssetsMachinaryLogs Details",
+                title: "FIXED_ASSET_MACHINARY_DETAILS",
                 items: [{
                     type: "section",
                     colClass: "col-sm-12",
@@ -521,7 +521,7 @@ irf.pageCollection.factory(irf.page("customer360.CustomerHistory"), ["$log", "En
                 type: "box",
                 condition: 'model.buyerDetailLogs',
                 colClass: "col-sm-12 ",
-                title: "BuyerDetailLogs Details",
+                title: "BUYER_DETAIL_DETAILS",
                 items: [{
                     type: "section",
                     colClass: "col-sm-12",
@@ -531,7 +531,7 @@ irf.pageCollection.factory(irf.page("customer360.CustomerHistory"), ["$log", "En
                 type: "box",
                 condition: 'model.supplierDetailLogs',
                 colClass: "col-sm-12",
-                title: "SupplierDetailLogs Details",
+                title: "SUPPLIER_DETAIL_DETAILS",
                 items: [{
                     type: "section",
                     colClass: "col-sm-12",
@@ -541,7 +541,7 @@ irf.pageCollection.factory(irf.page("customer360.CustomerHistory"), ["$log", "En
                 type: "box",
                 condition: 'model.financialSummaryLogs',
                 colClass: "col-sm-12",
-                title: "FinancialSummaryLogs Details",
+                title: "FINANCIAL_SUMMARY_DETAILS",
                 items: [{
                     type: "section",
                     colClass: "col-sm-12",
@@ -551,7 +551,7 @@ irf.pageCollection.factory(irf.page("customer360.CustomerHistory"), ["$log", "En
                 type: "box",
                 condition: 'model.enterpriseBureauDetailLogs',
                 colClass: "col-sm-12",
-                title: "enterpriseBureauDetailLogs Details",
+                title: "ENTERPRISE_BUREAU_DETAIL_DETAILS",
                 items: [{
                     type: "section",
                     colClass: "col-sm-12",
@@ -561,7 +561,7 @@ irf.pageCollection.factory(irf.page("customer360.CustomerHistory"), ["$log", "En
                 type: "box",
                 condition: 'model.customerPartnerLogs',
                 colClass: "col-sm-12",
-                title: "customerPartnerLogs Details",
+                title: "CUSTOMER_PARTNER_DETAILS",
                 items: [{
                     type: "section",
                     colClass: "col-sm-12",

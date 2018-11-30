@@ -15,6 +15,7 @@ define(["perdix/domain/model/loan/LoanProcess",
             return {
                 "type": "page-bundle",
                 "title": "DOCUMENT_UPLOAD",
+                "readonly": true,
                 "subTitle": "",
                 "bundleDefinitionPromise": function () {
                     $log.info("inside thee bundle");

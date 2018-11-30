@@ -12,13 +12,13 @@ use App\Services\UploadService;
 use App\Core\Settings;
 
 try {
-        # AUTHENTICATION
-        $perdixService = new PerdixService();
-        $cacheClearOut = $perdixService->clearAllCache();
-        $response = get_response_obj();
-        $response->setStatusCode(200)->json(['message' => 'Cache clear success, http response : ' . $cacheClearOut->getStatusCode()]);
+	# AUTHENTICATION
+	$perdixService = new PerdixService();
+	$cacheClearOut = $perdixService->clearAllCache();
+	$response = get_response_obj();
+	$response->setStatusCode(200)->json(['message' => 'Cache clear success, http response : ' . $cacheClearOut->getStatusCode()]);
 } catch (Exception $e) {
-        $response = get_response_obj();
-        $response->setStatusCode(500)->json(['error'=> $e->getMessage()]);
+	$response = get_response_obj();
+	$response->setStatusCode(500)->json(['error'=> $e->getMessage()]);
     throw $e;
 }

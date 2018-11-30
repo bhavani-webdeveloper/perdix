@@ -111,6 +111,7 @@ define({
                         'branchName': searchOptions.branchName,
                         'centreCode': searchOptions.centreCodeForSearch,
                         'customerId': searchOptions.customerId,
+                        'partnerCode': searchOptions.partner_code,
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage,
                     }).$promise;
