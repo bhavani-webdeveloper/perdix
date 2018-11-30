@@ -145,33 +145,48 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter, Utils){
 		}
 		return classifiers;
 	};
+	var removeMasterFile = function(){
+		var deferred = $q.defer();
+		try {
+			fileSystem.root.getFile('irfMasters', function(fileEntry){
+				fileEntry.remove(deferred.resolve, deferred.reject);
+			}, deferred.reject)
+		} catch (e) {
+			deferred.reject(e);
+		}
+		return deferred.promise;
+	}
 	var factoryObj = {
 		storeMaster: function(value) {
 			if (fileSystem.root) {
 				var deferred = $q.defer();
-				try {
-					fileSystem.root.getFile('irfMasters', {create: true}, function(fileEntry) {
-						fileEntry.createWriter(function(fileWriter) {
-							fileWriter.onwriteend = function() {
-								deferred.resolve();
-							};
-							fileWriter.onerror = function() {
+					removeMasterFile().finally(function (){
+						try {
+							fileSystem.root.getFile('irfMasters', {create: true}, function(fileEntry) {
+								fileEntry.createWriter(function(fileWriter) {
+									fileWriter.onwriteend = function() {
+										deferred.resolve();
+									};
+									fileWriter.onerror = function() {
+										fileSystem.errorHandler(e);
+										deferred.reject(e);
+									};
+									var blob = new Blob([JSON.stringify(value)], {type: 'application/json'});
+									fileWriter.write(blob);
+								}, function(e) {
+									fileSystem.errorHandler(e);
+									deferred.reject(e);
+								});
+							}, function(e) {
 								fileSystem.errorHandler(e);
 								deferred.reject(e);
-							};
-							var blob = new Blob([JSON.stringify(value)], {type: 'application/json'});
-							fileWriter.write(blob);
-						}, function(e) {
-							fileSystem.errorHandler(e);
+							});
+						} catch (e) {
 							deferred.reject(e);
-						});
-					}, function(e) {
-						fileSystem.errorHandler(e);
+						}
+					},function(e){
 						deferred.reject(e);
 					});
-				} catch (e) {
-					deferred.reject(e);
-				}
 				return deferred.promise;
 			} else {
 				return $q.resolve(factoryObj.storeJSON('irfMasters', value));
