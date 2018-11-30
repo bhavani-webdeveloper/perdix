@@ -194,7 +194,7 @@ define({
                             data: "accountNumber"
                         },
                         {
-                            title: "NEXT_ACTION_DATE",
+                            title: "P2P_DATE",
                             data: "promiseToPayDate"
                         }
                         ]

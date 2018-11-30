@@ -1642,6 +1642,36 @@
               "Completed"
             ]
           },
+          "drinkingWater": {
+            "title": "drinkingWater",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "toiletFacilityType": {
+            "title": "toiletFacilityType",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "waterFilter": {
+            "title": "waterFilter",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
           "businessName": {
             "title": "businessName",
             "type": "string",
@@ -3050,6 +3080,16 @@
               "Completed"
             ]
           },
+          "involvedInMarketTransactions":{  
+            "title":"involvedInMarketTransactions",
+            "type":"string",
+            "minLength":1,
+            "maxLength":100,
+            "captureStages":[  
+               "BasicEnrolment",
+               "Completed"
+            ]
+         },
           "businessDescription": {
             "title": "businessDescription",
             "type": "string",

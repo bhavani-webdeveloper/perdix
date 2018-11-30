@@ -296,7 +296,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                                     },
                                     {
                                         key: "additional.promiseToPayDate",
-                                        title: "NEXT_ACTION_DATE",
+                                        title: "P2P_DATE",
                                         readonly: false,
                                         required: true,
                                         "condition": "model.promise.promiseToPay=='YES'",
@@ -356,6 +356,14 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                                         "condition": "model.promise.promiseToPay=='NO' && model.additional.currentCollectionStatus=='Contact Again' ",
                                         type: "date",
 
+                                    },
+                                    {
+                                        key: "additional.collectionSubStatus",
+                                        title: "SUB_STATUS",
+                                        type: "select",
+                                        required: true,
+                                        "condition": "model.promise.promiseToPay=='NO'",
+                                        enumCode: "recovery_attempt",
                                     },
                                     {
                                         key: "additional.overdueReasons",
@@ -450,6 +458,8 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                             else
                                 model.promise.overdueReasons = model.additional.reason;
                         } else {
+
+                            model.promise.collectionSubStatus = model.additional.collectionSubStatus;
                             model.promise.currentCollectionStatus = model.additional.currentCollectionStatus;
                             if (model.additional.currentCollectionStatus == 'Contact Again')
                                 model.promise.scheduledDate = model.additional.scheduledDate;

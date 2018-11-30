@@ -1288,7 +1288,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                             {
                                 key: "loanRepaymentReminderHistory[].repaymentDate",
                                 type: "string",
-                                title: "NEXT_ACTION_DATE",
+                                title: "P2P_DATE",
                                 condition: "model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Promise to Pay'"
                             },
                             {

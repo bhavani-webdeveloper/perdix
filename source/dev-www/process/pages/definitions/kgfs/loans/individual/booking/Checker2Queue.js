@@ -1,8 +1,8 @@
 define({
     pageUID: "kgfs.loans.individual.booking.Checker2Queue",
     pageType: "Engine",
-    dependencies: ["$log", "irfNavigator", "formHelper", "entityManager", "IndividualLoan", "$state", "SessionStore", "Utils"],
-    $pageFn: function ($log, irfNavigator, formHelper, EntityManager, IndividualLoan, $state, SessionStore, Utils) {
+    dependencies: ["$log", "irfNavigator", "formHelper", "entityManager", "IndividualLoan", "$state", "SessionStore", "Utils","$filter","$q"],
+    $pageFn: function ($log, irfNavigator, formHelper, EntityManager, IndividualLoan, $state, SessionStore, Utils,$filter,$q) {
         var branch = SessionStore.getBranch();
         return {
             "type": "search-list",
