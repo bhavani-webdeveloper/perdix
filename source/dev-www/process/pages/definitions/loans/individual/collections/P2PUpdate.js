@@ -307,55 +307,12 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
 
                                     },
                                     {
-                                        key: "additional.reasonType",
-                                        title: "REASON_FOR_DELAY",
-                                        type: "select",
-                                        required: true,
-                                        "condition": "model.promise.promiseToPay=='YES'",
-                                        titleMap: [{
-                                            "name": "Business",
-                                            "value": "Business"
-                                        },
-                                            {
-                                                "name": "Personal",
-                                                "value": "Personal"
-                                            }],
-
-                                    },
-                                    {
-                                        key: "additional.reason",
-                                        title: "REASON",
-                                        type: "select",
-                                        required: true,
-                                        condition: "model.additional.reasonType=='Business' && model.promise.promiseToPay=='YES'",
-                                        enumCode: "business_overdue_reasons",
-
-                                    },
-                                    {
-                                        key: "additional.reason",
-                                        title: "REASON",
-                                        type: "select",
-                                        required: true,
-                                        condition: "model.additional.reasonType=='Personal' && model.promise.promiseToPay=='YES'",
-                                        enumCode: "personal_overdue_reasons",
-
-                                    },
-                                    {
                                         key: "additional.currentCollectionStatus",
                                         title: "RECOVERY_ATTEMPT",
                                         type: "select",
                                         required: true,
                                         "condition": "model.promise.promiseToPay=='NO'",
                                         enumCode: "recovery_attempt",
-                                    },
-                                    {
-                                        key: "additional.scheduledDate",
-                                        title: "FOLLOW_UP_DATE",
-                                        required: true,
-                                        readonly: false,
-                                        "condition": "model.promise.promiseToPay=='NO' && model.additional.currentCollectionStatus=='Contact Again' ",
-                                        type: "date",
-
                                     },
                                     {
                                         key: "additional.collectionSubStatus",
@@ -366,6 +323,22 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                                         enumCode: "recovery_attempt",
                                     },
                                     {
+                                        key: "additional.reasonType",
+                                        title: "REASON_FOR_DELAY",
+                                        type: "select",
+                                        required: true,
+                                        titleMap: [{
+                                            "name": "Business",
+                                            "value": "Business"
+                                            },
+                                            {
+                                                "name": "Personal",
+                                                "value": "Personal"
+                                            }],
+
+                                    },
+
+                                    {
                                         key: "additional.overdueReasons",
                                         title: "OVERDUE_REASON",
                                         type: "textarea",
@@ -373,6 +346,35 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                                         "condition": "model.additional.reason=='Others'"
 
                                     },
+
+                                    {
+                                        key: "additional.reason",
+                                        title: "REASON",
+                                        type: "select",
+                                        required: true,
+                                        condition: "model.additional.reasonType=='Business'",
+                                        enumCode: "business_overdue_reasons",
+
+                                    },
+                                    {
+                                        key: "additional.reason",
+                                        title: "REASON",
+                                        type: "select",
+                                        required: true,
+                                        condition: "model.additional.reasonType=='Personal'",
+                                        enumCode: "personal_overdue_reasons",
+
+                                    },
+                                    {
+                                        key: "additional.scheduledDate",
+                                        title: "FOLLOW_UP_DATE",
+                                        required: true,
+                                        readonly: false,
+                                        "condition": "model.promise.promiseToPay=='NO' && model.additional.currentCollectionStatus=='Contact Again' ",
+                                        type: "date",
+
+                                    },
+
                                     {
                                         key: "promise.remarks",
                                         title: "REMARKS",
@@ -452,11 +454,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
 
                         if (model.promise.promiseToPay == 'YES') {
                             model.promise.promiseToPayDate = model.additional.promiseToPayDate;
-                            model.promise.reasonType = model.additional.reasonType;
-                            if (model.additional.reason && model.additional.reason == "Others")
-                                model.promise.overdueReasons = model.additional.overdueReasons;
-                            else
-                                model.promise.overdueReasons = model.additional.reason;
+
                         } else {
 
                             model.promise.collectionSubStatus = model.additional.collectionSubStatus;
@@ -464,6 +462,11 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                             if (model.additional.currentCollectionStatus == 'Contact Again')
                                 model.promise.scheduledDate = model.additional.scheduledDate;
                         }
+                        model.promise.reasonType = model.additional.reasonType;
+                        if (model.additional.reason && model.additional.reason == "Others")
+                            model.promise.overdueReasons = model.additional.overdueReasons;
+                        else
+                            model.promise.overdueReasons = model.additional.reason;
 
                 model.promise.overdueAmount=model.promise.amount;
 
