@@ -114,13 +114,6 @@ export class IndividualCustomerIDLOVConfiguration extends LOVElementConfiguratio
             "screenFilter": true,
             "readonly": true
         },
-        "centreName": {
-            "key": "customer.place",
-            "title":"CENTRE_NAME",
-            "type": "string",
-            "readonly": true,
-
-        },
         "centreId":{
             "key": "customer.centreId",
             "title": "CENTRE_ID",
