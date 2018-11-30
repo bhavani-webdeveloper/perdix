@@ -337,16 +337,6 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                                             }],
 
                                     },
-
-                                    {
-                                        key: "additional.overdueReasons",
-                                        title: "OVERDUE_REASON",
-                                        type: "textarea",
-                                        required: true,
-                                        "condition": "model.additional.reason=='Others'"
-
-                                    },
-
                                     {
                                         key: "additional.reason",
                                         title: "REASON",
@@ -372,6 +362,14 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                                         readonly: false,
                                         "condition": "model.promise.promiseToPay=='NO' && model.additional.currentCollectionStatus=='Contact Again' ",
                                         type: "date",
+
+                                    },
+                                    {
+                                        key: "additional.overdueReasons",
+                                        title: "OVERDUE_REASON",
+                                        type: "textarea",
+                                        required: true,
+                                        "condition": "model.additional.reason=='Others'"
 
                                     },
 
