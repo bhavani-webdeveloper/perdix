@@ -17,6 +17,25 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
         return true;
     }
 
+    var filteredData = function (questionList, telecallingQuestionList) {
+        const questions = questionList.slice();
+        for (let i = 0; i < questions.length; i++) {
+            const elem = questions[i];
+            for (let j = 0; j < telecallingQuestionList.length; j++) {
+                const elem1 = telecallingQuestionList[j];
+                if(elem1 && elem1.question) {
+                    if (elem.question == elem1.question) {
+                        questions.splice(i, 1);
+                        i=0;
+                        break;
+                    }
+                }
+            }
+        }
+        return questions;
+    }
+
+
     return {
         "type": "schema-form",
         "title": "PERSONAL_DISCUSSION",
@@ -86,22 +105,38 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
 
                     if (model.loanAccount.telecallingDetails.length == 0)
                         model.loanAccount.telecallingDetails[applicantIndex].telecallingQuestionnaireList = [];
-                    
+
+                    if (model.loanAccount.telecallingDetails.length > 0 && model.loanAccount.telecallingDetails[applicantIndex] && _.isArray(model.loanAccount.telecallingDetails[applicantIndex].telecallingQuestionnaireList) && model.loanAccount.telecallingDetails[applicantIndex].telecallingQuestionnaireList.length > 0) {
+                        for (var i = 0; i < model.applicantTelecallingQuestionnaireList.length; i++) {
+                            var arr1 = model.applicantTelecallingQuestionnaireList[i];
+                            for (var j = 0; j < model.loanAccount.telecallingDetails[applicantIndex].telecallingQuestionnaireList.length; j++) {
+                                var arr2 = model.loanAccount.telecallingDetails[applicantIndex].telecallingQuestionnaireList[j];
+                                if(arr1.question == arr2.question) {
+                                    arr2["input_type"] = arr1.input_type;
+                                    arr2["select"] = arr1.select;
+                                }
+                            }
+                        }
+                    }
+
                     personalDiscussionForm.push(
                         {
                             "key": "loanAccount.telecallingDetails[" + applicantIndex + "].telecallingQuestionnaireList",
                             "type": "array",
+                            "condition": "model.applicantTelecallingQuestionnaireList.length > 0",
                             "title": "Applicant Question",
+                            "view": "fixed",
+                            "startEmpty": true,
                             "items": [
-                                {
+                            {
                                     "key": "loanAccount.telecallingDetails[" + applicantIndex + "].telecallingQuestionnaireList[].question",
                                     "title": "SELECT_QUESTION",
                                     "type": "lov",
+                                    "required": true,
                                     "lovonly": true,
-                                    "startEmpty": true,
                                     search: function (inputModel, form, model, context) {
 
-                                        return $q.when(model.applicantTelecallingQuestionnaireList).then((res) => {
+                                        return $q.when(filteredData(model.applicantTelecallingQuestionnaireList, model.loanAccount.telecallingDetails[applicantIndex].telecallingQuestionnaireList)).then((res) => {
                                             var out = [];
                                             if (res && res.length && res.length > 0) {
                                                 for (i in res) {
@@ -130,19 +165,52 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                         ]
                                     },
                                     onSelect: function (result, model, context) {
-                                        var out = {
-                                            question: result.question,
-                                            input_type: result.input_type
-                                        };
+                                        if (result && result.select) {
+                                            var out = {
+                                                question: result.question,
+                                                input_type: result.input_type,
+                                                select: result.select
+                                            };
+                                        } else {
+                                            var out = {
+                                                question: result.question,
+                                                input_type: result.input_type
+                                            };
+                                        }
                                         model.loanAccount.telecallingDetails[applicantIndex].telecallingQuestionnaireList[context.arrayIndex] = out;
                                     }
                                 },
                                 {
                                     "key": "loanAccount.telecallingDetails[" +applicantIndex+ "].telecallingQuestionnaireList[].answer",
                                     "title": "Answer",
-                                    "type": "select",
                                     "required": true,
-                                    "condition": "model.loanAccount.telecallingDetails[" + applicantIndex + "].telecallingQuestionnaireList[arrayIndex].question && model.loanAccount.telecallingDetails[" +applicantIndex+ "].telecallingQuestionnaireList[arrayIndex].input_type == 'select'"
+                                    "condition": "model.loanAccount.telecallingDetails[" + applicantIndex + "].telecallingQuestionnaireList[arrayIndex].question && model.loanAccount.telecallingDetails[" + applicantIndex + "].telecallingQuestionnaireList[arrayIndex].input_type == 'select'",
+                                    "type": "lov",
+                                    "lovonly": true,
+                                    "search": function (inputModel, form, model, context) {
+                                        var list = {};
+                                        var out = [];
+                                        list = model.loanAccount.telecallingDetails[applicantIndex].telecallingQuestionnaireList[context.arrayIndex].select;
+                                        _.forEach(list, function (val) {
+                                            out.push({
+                                                "name": val
+                                            });
+                                        });
+                                        return $q.resolve({
+                                            headers: {
+                                                "x-total-count": out.length
+                                            },
+                                            body: out
+                                        });
+                                    },
+                                    onSelect: function (valueObj, model, context) {
+                                        model.loanAccount.telecallingDetails[applicantIndex].telecallingQuestionnaireList[context.arrayIndex].answer = valueObj.name;
+                                    },
+                                    getListDisplayItem: function (item, index) {
+                                        return [
+                                            item.name
+                                        ];
+                                    }
                                 },
                                 {
                                     "key": "loanAccount.telecallingDetails[" + applicantIndex + "].telecallingQuestionnaireList[].answer",
@@ -187,19 +255,35 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     if (model.loanAccount.telecallingDetails.length == 0)
                         model.loanAccount.telecallingDetails[loanCustomerIndex].telecallingQuestionnaireList = [];
 
+                    if (model.loanAccount.telecallingDetails.length > 0 && model.loanAccount.telecallingDetails[loanCustomerIndex] && _.isArray(model.loanAccount.telecallingDetails[loanCustomerIndex].telecallingQuestionnaireList) && model.loanAccount.telecallingDetails[loanCustomerIndex].telecallingQuestionnaireList.length > 0) {
+                        for (var i = 0; i < model.loanCustomerTelecallingQuestionnaireList.length; i++) {
+                            var arr1 = model.loanCustomerTelecallingQuestionnaireList[i];
+                            for (var j = 0; j < model.loanAccount.telecallingDetails[loanCustomerIndex].telecallingQuestionnaireList.length; j++) {
+                                var arr2 = model.loanAccount.telecallingDetails[loanCustomerIndex].telecallingQuestionnaireList[j];
+                                if (arr1.question == arr2.question) {
+                                    arr2["input_type"] = arr1.input_type;
+                                    arr2["select"] = arr1.select;
+                                }
+                            }
+                        }
+                    }
+
                     personalDiscussionForm.push(
                         {
                             "key": "loanAccount.telecallingDetails[" +loanCustomerIndex+ "].telecallingQuestionnaireList",
+                            "condition": "model.loanCustomerTelecallingQuestionnaireList.length > 0",
                             "type": "array",
                             "title": "LoanCustomer Question",
+                            "view": "fixed",
+                            "startEmpty": true,
                             "items": [{
                                     "key": "loanAccount.telecallingDetails[" +loanCustomerIndex+ "].telecallingQuestionnaireList[].question",
                                     "title": "SELECT_QUESTION",
                                     "type": "lov",
                                     lovonly: true,
-                                    "startEmpty": true,
+                                    "required": true,
                                     search: function (inputModel, form, model, context) {
-                                        return $q.when(model.loanCustomerTelecallingQuestionnaireList).then((res) => {
+                                        return $q.when(filteredData(model.loanCustomerTelecallingQuestionnaireList, model.loanAccount.telecallingDetails[loanCustomerIndex].telecallingQuestionnaireList)).then((res) => {
                                             var out = [];
                                             if (res && res.length && res.length > 0) {
                                                 for (i in res) {
@@ -285,26 +369,40 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     model.coApplicantTelecallingQuestionnaireList = _.filter(model.telecallingDetails, {
                         "party_type": "coApplicant"
                     });
-
-                    
                     
                     _.forEach(coApplicantIndexes, function (coApplicantIndex) {
 
                        if (model.loanAccount.telecallingDetails.length == 0)
                             model.loanAccount.telecallingDetails[coApplicantIndex].telecallingQuestionnaireList = [];
                        
+                        if (model.loanAccount.telecallingDetails.length > 0 && model.loanAccount.telecallingDetails[coApplicantIndex] && _.isArray(model.loanAccount.telecallingDetails[coApplicantIndex].telecallingQuestionnaireList) && model.loanAccount.telecallingDetails[coApplicantIndex].telecallingQuestionnaireList.length > 0) {
+                            for (var i = 0; i < model.coApplicantTelecallingQuestionnaireList.length; i++) {
+                                var arr1 = model.coApplicantTelecallingQuestionnaireList[i];
+                                for (var j = 0; j < model.loanAccount.telecallingDetails[coApplicantIndex].telecallingQuestionnaireList.length; j++) {
+                                    var arr2 = model.loanAccount.telecallingDetails[coApplicantIndex].telecallingQuestionnaireList[j];
+                                    if (arr1.question == arr2.question) {
+                                        arr2["input_type"] = arr1.input_type;
+                                        arr2["select"] = arr1.select;
+                                    }
+                                }
+                            }
+                        }
+
                         personalDiscussionForm.push({
                            "key": "loanAccount.telecallingDetails[" +coApplicantIndex+ "].telecallingQuestionnaireList",
                            "type": "array",
+                           "condition": "model.coApplicantTelecallingQuestionnaireList.length > 0",
                            "title": "Co-Applicant Question",
+                           "view": "fixed",
+                           "startEmpty": true,
                            "items": [{
                                    "key": "loanAccount.telecallingDetails[" +coApplicantIndex+ "].telecallingQuestionnaireList[].question",
                                    "title": "SELECT_QUESTION",
                                    "type": "lov",
                                    lovonly: true,
-                                   "startEmpty": true,
+                                   "required": true,
                                    search: function (inputModel, form, model, context) {
-                                       return $q.when(model.coApplicantTelecallingQuestionnaireList).then((res) => {
+                                       return $q.when(filteredData(model.coApplicantTelecallingQuestionnaireList, model.loanAccount.telecallingDetails[coApplicantIndex].telecallingQuestionnaireList)).then((res) => {
                                            var out = [];
                                            if (res && res.length && res.length > 0) {
                                                for (i in res) {
@@ -390,24 +488,41 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     model.guarantorTelecallingQuestionnaireList = _.filter(model.telecallingDetails, {
                         "party_type": "guarantor"
                     });
+
                     
                     _.forEach(guarantorIndexes, function (guarantorIndex) {
 
                         if (model.loanAccount.telecallingDetails.length == 0)
                             model.loanAccount.telecallingDetails[guarantorIndex].telecallingQuestionnaireList = [];
+
+                        if (model.loanAccount.telecallingDetails.length > 0 && model.loanAccount.telecallingDetails[guarantorIndex] && _.isArray(model.loanAccount.telecallingDetails[guarantorIndex].telecallingQuestionnaireList) && model.loanAccount.telecallingDetails[guarantorIndex].telecallingQuestionnaireList.length > 0) {
+                            for (var i = 0; i < model.guarantorTelecallingQuestionnaireList.length; i++) {
+                                var arr1 = model.guarantorTelecallingQuestionnaireList[i];
+                                for (var j = 0; j < model.loanAccount.telecallingDetails[guarantorIndex].telecallingQuestionnaireList.length; j++) {
+                                    var arr2 = model.loanAccount.telecallingDetails[guarantorIndex].telecallingQuestionnaireList[j];
+                                    if (arr1.question == arr2.question) {
+                                        arr2["input_type"] = arr1.input_type;
+                                        arr2["select"] = arr1.select;
+                                    }
+                                }
+                            }
+                        }
                         
                         personalDiscussionForm.push({
                             "key": "loanAccount.telecallingDetails[" +guarantorIndex+ "].telecallingQuestionnaireList",
                             "type": "array",
+                            "condition": "model.guarantorTelecallingQuestionnaireList.length > 0",
                             "title": "Guarantor Question",
+                            "view": "fixed",
+                            "startEmpty": true,
                             "items": [{
                                     "key": "loanAccount.telecallingDetails[" +guarantorIndex+ "].telecallingQuestionnaireList[].question",
                                     "title": "SELECT_QUESTION",
                                     "type": "lov",
                                     lovonly: true,
-                                    "startEmpty": true,
+                                    "required": true,
                                     search: function (inputModel, form, model, context) {
-                                        return $q.when(model.guarantorTelecallingQuestionnaireList).then((res) => {
+                                        return $q.when(model.guarantorTelecallingQuestionnaireList, model.loanAccount.telecallingDetails[guarantorIndex].telecallingQuestionnaireList).then((res) => {
                                             var out = [];
                                             if (res && res.length && res.length > 0) {
                                                 for (i in res) {
@@ -520,11 +635,12 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 /* TODO Call proceed servcie for the loan account */
 
                 Utils.confirm("Are You Sure?").then(function(){
-
+                    if (!validateForm(form)) {
+                        return;
+                    }
                     var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
-                    PageHelper.showProgress("update-loan", "Working...");
                     reqData.loanProcessAction = "SAVE";
-
+                    PageHelper.showProgress("update-loan", "Working...", 3000);
                     IndividualLoan.update(reqData)
                         .$promise
                         .then(function(res){
