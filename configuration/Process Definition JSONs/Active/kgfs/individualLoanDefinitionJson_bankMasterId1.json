@@ -3,7 +3,7 @@
     "customerMaxGenericAge":60,
     "customerMaxAgeBcProduct":58,
     "customerAgeLimitForSingleFemale":35,
-    "productValidationFromStage":"LoanBooking",
+    "productValidationFromStage":"LoanInitiation",
     "stages":[
        {
           "order":1,
