@@ -108,12 +108,6 @@ export class IndividualCustomerIDLOVConfiguration extends LOVElementConfiguratio
             "title": "URN_NO",
             "type": "string"
         },
-        "customerBranchId": {
-            "key": "customer.customerBranchId",
-            "type": "select",
-            "screenFilter": true,
-            "readonly": true
-        },
         "centreId":{
             "key": "customer.centreId",
             "title": "CENTRE_ID",
