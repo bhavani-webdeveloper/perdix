@@ -7,11 +7,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
             pageType: "Engine",
             dependencies: ["$log", "$state", "$stateParams", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper",
                 "$q", "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries",
-                "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository","irfProgressMessage"],
+                "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository","irfProgressMessage","Files"],
 
             $pageFn: function ($log, $state, $stateParams, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q,
                 PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch,
-                BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository,irfProgressMessage) {
+                BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository,irfProgressMessage,Files) {
 
                 AngularResourceService.getInstance().setInjector($injector);
                 var branch = SessionStore.getBranch();
@@ -626,6 +626,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                         "HouseVerification": {
                             orderNo: 131
                         },
+                        "HouseVerification.nameRo":{
+                            type:"string",
+                            readonly:false
+                        },
                         "EDF":{
                             orderNo: 140
                         },
@@ -1221,6 +1225,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                             $log.warn(model);
                             model.customer.title = String(model.customer.addressProofSameAsIdProof);
                             model.customer.miscellaneous = null;
+                            model.customer.nameofRo 
                             if (!EnrollmentHelper.validateData(model)) {
                                 $log.warn("Invalid Data, returning false");
                                 return false;
@@ -1253,7 +1258,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                             }
                             $q.all(fpPromisesArr).then(function(){
                                 /** Valid check whether the user have enrolled or fingerprints or not **/
-                                 if (!(_.has(reqData['customer'], 'leftHandThumpImageId') && !_.isNull(reqData['customer']['leftHandThumpImageId']) &&
+                                 if (!(
+                                     _.has(reqData['customer'], 'leftHandThumpImageId') && !_.isNull(reqData['customer']['leftHandThumpImageId']) &&
                                     _.has(reqData['customer'], 'leftHandIndexImageId') && !_.isNull(reqData['customer']['leftHandIndexImageId']) &&
                                    _.has(reqData['customer'], 'leftHandMiddleImageId') && !_.isNull(reqData['customer']['leftHandMiddleImageId']) &&
                                     _.has(reqData['customer'], 'leftHandRingImageId') && !_.isNull(reqData['customer']['leftHandRingImageId']) &&
@@ -1262,7 +1268,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                                     _.has(reqData['customer'], 'rightHandIndexImageId') && !_.isNull(reqData['customer']['rightHandIndexImageId']) &&
                                      _.has(reqData['customer'], 'rightHandMiddleImageId') && !_.isNull(reqData['customer']['rightHandMiddleImageId']) &&
                                     _.has(reqData['customer'], 'rightHandRingImageId') && !_.isNull(reqData['customer']['rightHandRingImageId']) &&
-                                     _.has(reqData['customer'], 'rightHandSmallImageId') && !_.isNull(reqData['customer']['rightHandSmallImageId'])
+                                     _.has(reqData['customer'], 'rightHandSmallImageId') && !_.isNull(reqData['customer']['rightHandSmallImageId']) &&
                                  )) {
                                      PageHelper.showErrors({
                                         "data": {
