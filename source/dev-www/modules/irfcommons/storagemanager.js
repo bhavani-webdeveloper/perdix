@@ -150,16 +150,16 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter, Utils){
 		try {
 			fileSystem.root.getFile('irfMasters', {create: false}, function(fileEntry) {
 				fileEntry.remove(function() {
-						deferred.resolve();
+					deferred.resolve();
 				}, function(err){
 					deferred.reject(err);
 				});
-			  }, function(err){
+			}, function(err){
 				deferred.reject(err);
-			  });
-			}catch(e){
-				deferred.reject(e);
-			}
+			});
+		} catch(e) {
+			deferred.reject(e);
+		}
 		return deferred.promise;
 	}
 	var factoryObj = {
