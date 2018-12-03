@@ -155,11 +155,6 @@ define({
                                    }
                                 ]
                              },
-                             "data":{  
-                                "name":"1",
-                                "id":1,
-                                "value":"1"
-                             },
                              "fieldId":"30"
                           }
                        ]
@@ -180,7 +175,7 @@ define({
     {
 		"type": "button",
 		"title": "Generate/Validate Expression",
-		"onClick": "actions.validateRule(model.item.ruleExpression.group,model)"
+		"onClick": "actions.validateRule(model.item.ruleExpression,model)"
     },
     {
 		"type": "button",
@@ -396,14 +391,16 @@ define({
                                     };
                                     if(res.body[i].userExpression){
                                         a.userExpression=res.body[i].userExpression;
+                                        a.ruleExpression = JSON.parse(res.body[i].userExpression);
                                     }else{
                                         a.userExpression=res.body[i].expression;
+                                        a.ruleExpression = {
+                                            group: {
+                                              operator: model.options.operators[0], rules: []
+                                            }
+                                        };
                                     }
-                                    a.ruleExpression = {
-                                        group: {
-                                          operator: model.options.operators[0], rules: []
-                                        }
-                                    };
+                                    
                                     model.rule.rules.push(a);
                                     model.rule.stages.push({'fromStage':a.fromStage});
                                     
@@ -458,14 +455,15 @@ define({
                                     };
                                     if(res.body[i].userExpression){
                                         a.userExpression=res.body[i].userExpression;
+                                        a.ruleExpression = JSON.parse(res.body[i].userExpression);
                                     }else{
                                         a.userExpression=res.body[i].expression;
+                                        a.ruleExpression = {
+                                            group: {
+                                              operator: model.options.operators[0], rules: []
+                                            }
+                                        };
                                     }
-                                    a.ruleExpression = {
-                                        group: {
-                                          operator: model.options.operators[0], rules: []
-                                        }
-                                    };
                                     model.rule.rules.push(a);
                                 };
                             }
@@ -652,6 +650,9 @@ define({
                     PageHelper.showLoader();
                     RuleMaintenance.save(reqData).$promise.then(function(res){
                         PageHelper.hideLoader();
+                        for (var i = 0; i < res.length; i++) {
+                            res[i].ruleExpression = JSON.parse(res[i].userExpression); 
+                        }
                         model.rule.rules=res;
                         PageHelper.showProgress("new rule Save", "rule updation success" , 3000);
                         $log.info(res);
