@@ -307,7 +307,8 @@ function process_outgoing() {
     $customer_data = DB::table("customer")->select('*')->whereIn('id', $customer_ids)->get();
 
     $piped_customer_text = prepare_ckyc_data($customer_data);
-    write_file(CKYC_OUTGOING_TEMP_DIR.DIRECTORY_SEPARATOR."customerData.txt", $piped_customer_text);
+    $timestamp = (new DateTime())->format('Y-m-dH:i:s');
+    write_file(CKYC_OUTGOING_TEMP_DIR.DIRECTORY_SEPARATOR."CustomerData_$timestamp.txt", $piped_customer_text);
 
     foreach ($customer_data as $customer) {
         echo "Processing customer: $customer->id\n";

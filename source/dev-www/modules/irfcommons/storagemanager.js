@@ -148,34 +148,18 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter, Utils){
 	var removeMasterFile = function(){
 		var deferred = $q.defer();
 		try {
-			//
-			fs.root.getFile('irfMasters', {create: false}, function(fileEntry) {
-
+			fileSystem.root.getFile('irfMasters', {create: false}, function(fileEntry) {
 				fileEntry.remove(function() {
-				  deferred.resolve();
+					deferred.resolve();
 				}, function(err){
 					deferred.reject(err);
 				});
-			  }, function(err){
+			}, function(err){
 				deferred.reject(err);
-			  });
-			}catch(e){
-				console.log("e");
-				deferred.reject(e);
-			}
-			//
-		// 	fileSystem.root.getFile('irfMasters', function(fileEntry){
-		// 		fileEntry.remove(function(){
-		// 			deferred.resolve();
-		// 		},function(){
-		// 			deferred.reject();
-		// 		});
-		// 	}, function(){
-		// 		deferred.reject();
-		// 	})
-		// } catch (e) {
-		// 	deferred.reject();
-		//}
+			});
+		} catch(e) {
+			deferred.reject(e);
+		}
 		return deferred.promise;
 	}
 	var factoryObj = {

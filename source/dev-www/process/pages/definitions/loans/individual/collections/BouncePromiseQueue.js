@@ -6,12 +6,26 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q,U
         "title": "BOUNCED_PAYMENTS",
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
-            model.branch = SessionStore.getCurrentBranch().branchId;
+            model.branch = SessionStore.getBranch();
         },
         definition: {
             title: "SEARCH_BOUNCED_PAYMENTS",
             searchForm: [
-                "*"
+                "loan_no",
+                "first_name",
+                {
+                    "title": "BRANCH",
+                    "type": "select",
+                    enumCode: "userbranches",
+                    key:"branchId"
+                   
+                },
+                {
+                        key:"centre",
+                        "title": "CENTRE",
+                        "type": "select",
+                        "enumCode": "centre"
+                }
             ],
             autoSearch:false,
             searchSchema: {
@@ -27,16 +41,24 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q,U
                         "title": "CUSTOMER_NAME",
                         "type": "string"
                     },
+                    "branchId":{
+                        "title": "BRANCH",
+                        "x-schema-form": {
+                            "type": "select",
+                            enumCode: "userbranches"
+                        }
+                    },
                     "centre": {
                         "title": "CENTRE",
                         "type": "integer",
-                        "enumCode": "centre",
-                        "parentEnumCode": "branch_id",
                         "x-schema-form": {
                             "type": "select",
-                            parentValueExpr: "model.branch"
+                            "enumCode": "centre",
+                            "parentEnumCode": "userbranches",
+                            "parentValueExpr": "model.branch",
+                            "screenFilter": true
                         }
-                    }
+                    },
                 }
             },
             getSearchFormHelper: function() {
@@ -47,7 +69,7 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q,U
                 
                 var promise = LoanProcess.bounceCollectionDemand({
                     'accountNumbers': searchOptions.loan_no,  /*Service missing_27082016*/
-                    'branchId': branchId,
+                    'branchId':searchOptions.branchId,
                     'centreId': searchOptions.centre,
                     'customerName': searchOptions.first_name,
                     'page': pageOpts.pageNo,

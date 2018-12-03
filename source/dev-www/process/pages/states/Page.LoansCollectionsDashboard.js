@@ -29,6 +29,18 @@ function($log, $scope, PagesDefinition,formHelper, SessionStore, LoanProcess,Rep
             "Page/Engine/loans.individual.collections.RejectedQueue"
         ]
     };
+    var assignedTo ;
+    PagesDefinition.getPageConfig("Page/Engine/loans.individual.collections.BounceQueue")
+    .then(function(data){
+        console.log(data);
+        // var defaultConfig = {
+        //     IncludeUserFilter: false
+        // };
+        // _.defaults(data, defaultConfig);
+        // model.pageConfig = _.extend(model.pageConfig, data);
+        if (data.IncludeUserFilter)
+             assignedTo = SessionStore.getLoginname();
+    });
 
     PagesDefinition.getUserAllowedDefinition(fullDefinition).then(function(resp) {
         $scope.dashboardDefinition = resp;
@@ -73,7 +85,7 @@ function($log, $scope, PagesDefinition,formHelper, SessionStore, LoanProcess,Rep
             var centres = SessionStore.getCentres();
             bqMenu.data = 0;
             for (var i = 0; i < centres.length; i++) {
-                LoanProcess.bounceCollectionDemand({ 'branchId': branchId, 'centreId': centres[i].id , 'assignedTo': SessionStore.getLoginname() }).$promise.then(function(response,headerGetter){
+                LoanProcess.bounceCollectionDemand({  'centreId': centres[i].id , 'assignedTo': assignedTo }).$promise.then(function(response,headerGetter){
                     bqMenu.data += response.body.length; // Number(headerGetter()['x-total-count']);
                 }, function() {
                     bqMenu.data = '-';

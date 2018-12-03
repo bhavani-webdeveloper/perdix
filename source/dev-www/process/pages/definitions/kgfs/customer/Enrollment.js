@@ -7,11 +7,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
             pageType: "Engine",
             dependencies: ["$log", "$state", "$stateParams", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper",
                 "$q", "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries",
-                "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository","irfProgressMessage"],
+                "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository","irfProgressMessage","Files"],
 
             $pageFn: function ($log, $state, $stateParams, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q,
                 PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch,
-                BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository,irfProgressMessage) {
+                BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository,irfProgressMessage,Files) {
 
                 AngularResourceService.getInstance().setInjector($injector);
                 var branch = SessionStore.getBranch();
@@ -47,6 +47,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
 
                 var overridesFields = function (bundlePageObj) {
                     return {
+                        "KYC":{
+                            orderNo:1
+                        },
                         "CustomerInformation.firstName": {
                             schema: {
                                 pattern: "^[a-zA-Z\. ]+$",
@@ -874,7 +877,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                             model.customer.customerBranchId = branchId;
                         };
                         model.siteCode = SessionStore.getGlobalSetting('siteCode');
-
+                        if(typeof model.customer.nameOfRo == "undefined" || model.customer.nameOfRo == null )
+                            model.customer.nameOfRo = SessionStore.getUsername();
                         var self = this;
                         var formRequest = {
                             "overrides": overridesFields(model),

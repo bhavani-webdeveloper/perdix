@@ -215,17 +215,17 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
                         {
                             "key": "scoreMaster.subScore",
                             "type": "array",
-                            startEmpty: true,
+                            startEmpty: false,
                             "title": "SUBSCORE",
                             "items": [
                                 {
-                                    "key": "scoreMaster.scoreParameters[].subscoreName",
+                                    "key": "scoreMaster.subscore[].subScoreName",
                                     "title": "SUBSCORE_NAME",
                                     "type": "string",
                                     "required": true,
                                 },
                                 {
-                                    "key": "scoreMaster.scoreParameters[].subscoreWeightage",
+                                    "key": "scoreMaster.subScore[].subscoreWeightage",
                                     "title": "SUBSCORE_WEIGHTAGE",
                                     "type": "integer",
                                     required: true
@@ -233,7 +233,7 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
                                 {
                                     "key": "scoreMaster.subScore[].isIndividualScore",
                                     "title": "IS_INDIVIDULA_SCORE",
-                                    "type": "radio",
+                                    "type": "radios",
                                     "titleMap": [{
                                         value: true,
                                         name: "Yes"
@@ -242,11 +242,64 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
                                         value: false,
                                         name: "No"
                                     }
-                                    ],
+                                    ]
                                 },
                                 {
-                                    "key":"scoreMaster.subScore[]."
-                                }
+                                    "key": "scoreMaster.subScore[].subScoreWeightage",
+                                    "title": "SUBSCOR_WEIGHTAGE"
+                                },
+                                {
+                                    "key":"scoreMaster.subScore[].scoreParameters",
+                                    "type": "array",
+                                    "title": "SCORE_PARAMETERS",
+                                    "items":[
+                                        {   
+                                            "key": "scoreMaster.subScore[].scoreParameters[].parameterName",
+                                            "title":"parameterName",
+                                            "type":"lov",
+                                            bindMap: {},
+                                            outputMap: {
+                                                 "parameterDisplayName": "scoreMaster.subScore[].scoreParameters[].parameterName"
+                                            },
+                                            searchHelper: formHelper,
+                                            search: function (inputModel, form, model) {
+                                                var defered = $q.defer();
+                                                ScoresMaintenance.allParameterMaster().$promise.then(function(item){
+                                                    var out = {};
+                                                    out.body = [];
+                                                    for(var i=0;i<item.length;i++){
+                                                        if(item[i].status == "ACTIVE")
+                                                            out.body.push(item[i]);
+
+                                                    }
+                                                    defered.resolve(out);
+                                                
+                                                });
+                                                return defered.promise;
+                                                
+                                            },
+                                            getListDisplayItem: function (item, index) {
+                                                return item.parameterDisplayName;
+                                                
+                                            },
+                                            onSelect: function (result, model, context) {
+                                                
+                                            }
+
+                                        },
+                                        {
+                                            "title":"parameterPassScore",
+                                            "type": "string",
+                                            "key": "scoreMaster.subScore[].scoreParameters[].parameterPassScore"
+                                        },
+                                        {
+                                            "title":"parameterWeightage",
+                                            "type": "string",
+                                            "key": "scoreMaster.subScore[].scoreParameters[].parameterWeightage"
+                                        }
+                                    ]
+                                },
+                                
                                 
 
                             ]
