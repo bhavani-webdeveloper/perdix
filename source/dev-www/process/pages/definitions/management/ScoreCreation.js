@@ -266,10 +266,10 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
                                                 var defered = $q.defer();
                                                 ScoresMaintenance.allParameterMaster().$promise.then(function(item){
                                                     var out = {};
-                                                    out.body = {};
+                                                    out.body = [];
                                                     for(var i=0;i<item.length;i++){
                                                         if(item[i].status == "ACTIVE")
-                                                            out.body.(item[i]);
+                                                            out.body.push(item[i]);
 
                                                     }
                                                     defered.resolve(out);
@@ -279,7 +279,7 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
                                                 
                                             },
                                             getListDisplayItem: function (item, index) {
-                                                return item.;
+                                                return item.parameterDisplayName;
                                                 
                                             },
                                             onSelect: function (result, model, context) {
