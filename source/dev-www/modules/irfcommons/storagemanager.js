@@ -150,11 +150,8 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter, Utils){
 		try {
 			fileSystem.root.getFile('irfMasters', {create: false}, function(fileEntry) {
 				fileEntry.remove(function() {
-				factoryObj.retrieveMaster().finally(function(){
 						deferred.resolve();
-					})
 				}, function(err){
-					console.log("FIle remove success");
 					deferred.reject(err);
 				});
 			  }, function(err){
