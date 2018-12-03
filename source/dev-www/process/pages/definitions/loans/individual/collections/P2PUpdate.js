@@ -320,7 +320,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                                         type: "select",
                                         required: true,
                                         "condition": "model.promise.promiseToPay=='NO'",
-                                        enumCode: "recovery_attempt",
+                                        enumCode: "collection_sub_status",
                                     },
                                     {
                                         key: "additional.reasonType",
