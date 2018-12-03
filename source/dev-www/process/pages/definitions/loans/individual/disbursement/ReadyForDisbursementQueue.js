@@ -29,15 +29,6 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
                         "title": "VIEW_LOANS",
                         "required":[],
                         "properties": {
-
-                            // "customerSignatureDate": {
-                            //     "title": "CUSTOMER_SIGNATURE_DATE",
-                            //     "type": "string",
-                            //     "x-schema-form": {
-                            //         "type": "date"
-
-                            //     }
-                            // },
                             'branch': {
                                 'title': "BRANCH",
                                 "type": ["string", "null"],
