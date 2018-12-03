@@ -47,6 +47,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
 
                 var overridesFields = function (bundlePageObj) {
                     return {
+                        "KYC":{
+                            orderNo:1
+                        },
                         "CustomerInformation.firstName": {
                             schema: {
                                 pattern: "^[a-zA-Z\. ]+$",
@@ -626,10 +629,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                         "HouseVerification": {
                             orderNo: 131
                         },
-                        "HouseVerification.nameRo":{
-                            type:"string",
-                            readonly:false
-                        },
                         "EDF":{
                             orderNo: 140
                         },
@@ -878,7 +877,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                             model.customer.customerBranchId = branchId;
                         };
                         model.siteCode = SessionStore.getGlobalSetting('siteCode');
-
+                        if(typeof model.customer.nameOfRo == "undefined" || model.customer.nameOfRo == null )
+                            model.customer.nameOfRo = SessionStore.getUsername();
                         var self = this;
                         var formRequest = {
                             "overrides": overridesFields(model),
@@ -1225,7 +1225,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                             $log.warn(model);
                             model.customer.title = String(model.customer.addressProofSameAsIdProof);
                             model.customer.miscellaneous = null;
-                            model.customer.nameofRo 
                             if (!EnrollmentHelper.validateData(model)) {
                                 $log.warn("Invalid Data, returning false");
                                 return false;
