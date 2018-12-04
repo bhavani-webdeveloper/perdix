@@ -33,22 +33,39 @@ define(
                         "condition": "model.loanAccount.vehicleLoanDetails.vehicleAssetConditions[arrayIndex].componentType == 'LH Front' || model.loanAccount.vehicleLoanDetails.vehicleAssetConditions[arrayIndex].componentType == 'LH Rear' || model.loanAccount.vehicleLoanDetails.vehicleAssetConditions[arrayIndex].componentType == 'RH Front' || model.loanAccount.vehicleLoanDetails.vehicleAssetConditions[arrayIndex].componentType == 'RH Rear'",
                         "enumCode": "vehicle_tyre_make",
                         "type":"select",
-                        "orderNo": 20
+                        "orderNo": 20,
+                        "readonly":  true
                     },
                     "VehicleAsset.vehicleAssetConditions": {
-                        "view": "fixed"
+                        "view": "fixed",
+                        "readonly":  true
                     },
                     "VehicleAsset.vehicleAssetConditions.componentType": {
-                        "orderNo": 10
+                        "orderNo": 10,
+                        "readonly":  true
                     },
                     "VehicleAsset.vehicleAssetConditions.componentCondition1": {
-                        "orderNo": 40
+                        "orderNo": 40,
+                        "readonly":  true
                     },
                     "VehicleAsset.vehicleAssetConditions.componentRemarks": {
-                        "orderNo": 50
+                        "orderNo": 50,
+                        "readonly":  true
                     },
                     "VehiclePrimaryInfo.registrationNumber": {
                         "readonly":  true
+                    },
+                    "VehicleRegistrationDetails.vehicleClass":{
+                        "readonly":  true
+                    },
+                    "VehicleRegistrationDetails.fuelUsed":{
+                        "readonly":true
+                    },
+                    "VehicleRegistrationDetails.cubicCapacity":{
+                        "readonly":true
+                    },
+                    "VehicleIdentityDetails.chasisNo":{
+                        "readonly":true
                     },
                         "VehiclePrimaryInfo.firstName": {
                             "readonly":  true
@@ -78,34 +95,44 @@ define(
                             "readonly":  true
                         },
                     "VehicleRegistrationDetails.reRegistered" :{
-                        "orderNo":10
+                        "orderNo":10,
+                         "readonly":  true
                     },
                     "VehicleRegistrationDetails.previousRegistrationNumber": {
-                        "orderNo":20
+                        "orderNo":20,
+                        "readonly":  true
                     },
                     "VehicleRegistrationDetails.registrationAsPerRcbook":{
-                        "orderNo":30
+                        "orderNo":30,
+                        "readonly":  true
                     },
                     "VehicleRegistrationDetails.registrationAsPerActual": {
-                        "orderNo":40
+                        "orderNo":40,
+                        "readonly":  true
                     },
                     "VehicleRegistrationDetails.numberPlateColour": {
-                        "orderNo":50
+                        "orderNo":50,
+                        "readonly":  true
                     },
                     "VehicleRegistrationDetails.registeredownersname": {
-                        "orderNo":60
+                        "orderNo":60,
+                        "readonly":  true
                     },
                     "VehicleRegistrationDetails.engineNo": {
-                        "orderNo":70
+                        "orderNo":70,
+                        "readonly":  true
                     },
                     "VehicleRegistrationDetails.registeredAddress": {
-                        "orderNo":80
+                        "orderNo":80,
+                        "readonly":  true
                     },
                     "VehicleRegistrationDetails.ownerSerialNo": {
-                        "orderNo":90
+                        "orderNo":90,
+                        "readonly":  true
                     },
                     "VehicleRegistrationDetails.registrationDate": {
-                        "orderNo":100
+                        "orderNo":100,
+                        "readonly":  true
                     },
                     "VehicleValuationPriliminaryInformation": {
                         "readonly": true
@@ -134,6 +161,33 @@ define(
                     "VehicleAsset.vehicleAssetConditions": {
                         "readonly": true
                     },
+                    "VehicleRegistrationDetails.makersClassification":{
+                        "readonly":true
+                    },
+                    "VehicleRegistrationDetails.seatingCapacity":{
+                        "readonly":true
+                    },
+                    "VehicleRegistrationDetails.unladenWeight":{
+                        "readonly":true
+                    },
+                    "VehicleRegistrationDetails.fitnesscertifiedUpto":{
+                        "readonly":true
+                    },
+                    "VehicleIdentityDetails.transmission":{
+                        "readonly":true
+                    },
+                    "VehicleIdentityDetails.engineNo":{
+                        "readonly":true
+                    },
+                    "VehicleIdentityDetails.trailer":{
+                        "readonly":true
+                    },
+                    "VehicleIdentityDetails.colour":{
+                        "readonly":true
+                    },
+                    "VehicleIdentityDetails.variant":{
+                        "readonly":true
+                    },
                         "VehicleAsset.vehicleAssetConditions.make": {
                             "readonly": true
                         },
@@ -157,6 +211,18 @@ define(
                     },
                     "VehiclePhotoCaptures": {
                         "readonly": true
+                    },
+                    "VehicleIdentityDetails.usedFor":{
+                        "readonly":true
+                    },
+                    "VehicleIdentityDetails.odometer":{
+                        "readonly":true
+                    },
+                    "VehicleIdentityDetails.odometerReading":{
+                        "readonly":true
+                    },
+                    "VehicleAccessories.vehicleAccessories.accessoryType":{
+                        "required":false
                     },
                     "VehicleIdentityDetails": {
                         "items": {
@@ -184,7 +250,8 @@ define(
                                 "title": "TRAILER_ATTACHED",
                                 "type": "select",
                                 "required": "true",
-                                "enumCode": "vehicle_trailer_attached"
+                                "enumCode": "vehicle_trailer_attached",
+                                "readonly":  true
                             }
                         }
                     },
@@ -195,26 +262,31 @@ define(
                                 "title": "NO_OF_CYLINDERS",
                                 "inputmode": "number",
                                 "numberType": "number",
-                                "type": "number"
+                                "type": "number",
+                                "readonly":  true
                             },
                             "grossVehicleWeight":{
                                 "key": "loanAccount.vehicleLoanDetails.grossVehicleWeight",
                                 "title": "GROSS_VEHICLE_WEIGHT",
                                 "inputmode": "number",
-                                "numberType": "number"
+                                "numberType": "number",
+                                "readonly":  true
                             },
                             "noOfAxles":{
                                 "key": "loanAccount.vehicleLoanDetails.noOfAxles",
                                 "title": "NO_OF_AXLES",
                                 "inputmode": "number",
                                 "numberType": "number",
-                                "type": "number"
+                                "type": "number",
+                                "readonly":  true
                             },
                             "bodyType":{
-                                "enumCode": "business_asset_description"
+                                "enumCode": "business_asset_description",
+                                "readonly":  true
                             },
                             "hypothecatedTo":{
-                                "type": "text"
+                                "type": "text",
+                                "readonly":  true
                             }
                         }
                     } 
