@@ -1242,6 +1242,24 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
                                 })
                         }
+                    },
+                    "KYC.addressProofImageId": {
+                        "offline": true
+                    },
+                    "IndividualInformation.photoImageId": {
+                        "offline": true
+                    },
+                    "CustomerDocumentUpload.customerDocuments.fileId": {
+                        "offline": true
+                    },
+                    "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto": {
+                        "offline": true
+                    },
+                    "KYC.additionalKYCs.kyc1ImagePath": {
+                        "offline": true
+                    },
+                    "KYC.identityProofImageId": {
+                        "offline": true
                     }
                 }
             }
@@ -2012,7 +2030,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     ]
                 },
                 form: [],
-
                 schema: function () {
                     return Enrollment.getSchema().$promise;
                 },

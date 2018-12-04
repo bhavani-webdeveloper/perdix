@@ -844,7 +844,9 @@ define([], function() {
                         },
                         "LoanRecommendation.processingFee": {
                             "key": "loanAccount.vProcessingFee"
->>>>>>> d2d8657fd... Fixed
+                        },
+                        "LoanDocuments.loanDocuments.documentId": {
+                            "offline": true
                         }
                         
                     },

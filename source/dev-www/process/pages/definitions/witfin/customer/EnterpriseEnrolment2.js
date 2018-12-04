@@ -1111,6 +1111,30 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             },
                             "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerName" :{
                                 "readonly": true
+                            },
+                            "EnterpriseInformation.photoImageId": {
+                                "offline": true
+                            },
+                            "EnterpriseInformation.enterpriseRegistrations.documentId": {
+                                "offline": true
+                            },
+                            "enterpriseDocuments.enterpriseDocuments.fileId": {
+                                "offline": true
+                            },
+                            "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto": {
+                                "offline": true
+                            },
+                            "EnterpriseAssets.enterpriseAssets.vehicleDocuments.rc": {
+                                "offline": true
+                            },
+                            "EnterpriseAssets.enterpriseAssets.vehicleDocuments.insurance": {
+                                "offline": true
+                            },
+                            "EnterpriseAssets.enterpriseAssets.vehicleDocuments.soa": {
+                                "offline": true
+                            },
+                            "CommercialCBCheck.enterpriseBureauDetails.fileId": {
+                                "offline": true
                             }
                             /*,
                             "BusinessVerification":{

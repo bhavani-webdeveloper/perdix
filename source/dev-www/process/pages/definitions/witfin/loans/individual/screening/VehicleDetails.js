@@ -1086,6 +1086,12 @@ define(
                         },
                         "actionbox": {
                             "orderNo": 999
+                        },
+                        "vehicleLoanDocuments.vehicleLoanDocuments.fileId": {
+                            "offline": true
+                        },
+                        "VehiclePhotoCaptures.vehiclePhotoCaptures.photoFileId": {
+                            "offline": true
                         }
                     },
                     "includes": getIncludes (model),
