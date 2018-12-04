@@ -332,7 +332,8 @@ define([], function () {
                         "orderNo":4
                     },
                     "LoanDetails.interestRate":{
-                        "orderNo":6
+                        "orderNo":6,
+                        required:false,
                     },
                     "LoanDetails.loanPurpose1": {
                         "orderNo": 6,
@@ -516,7 +517,6 @@ define([], function () {
                     "NomineeDetails.nominees.nomineeFirstName": {
                         "orderNo": 1,
                         "type": "lov",
-                        required: true,
                         "title": "NAME",
                         searchHelper: formHelper,
                         search: function (inputModel, form, model, context) {
@@ -559,7 +559,7 @@ define([], function () {
                     },
                     "NomineeDetails.nominees.nomineeDOB": {
                         "orderNo": 2,
-                        required:true
+                        
                     },
                     "NomineeDetails.nominees.nomineeRelationship": {
                         "readonly": true,
@@ -572,8 +572,7 @@ define([], function () {
                     },
                     "NomineeDetails.nominees.nomineePincode": {
                         "orderNo": 6,
-                        fieldType: "number",
-                        required:true,
+                        fieldType: "number",    
                         autolov: true,
                         inputMap: {
                             "district": {
@@ -710,15 +709,6 @@ define([], function () {
                             else
                                 addressMapCustomertoGuardian({},model.loanAccount.nominees[0]);
                         }
-                    },
-                    "NomineeDetails.nominees.nomineeDistrict":{
-                        required:true
-                    },
-                    "NomineeDetails.nominees.nomineeState":{
-                        required:true
-                    },
-                    "NomineeDetails.nominees.nomineeLocality":{
-                        required:true
                     },
                     "LoanSanction":{
                         "condition": "model.loanAccount.id"

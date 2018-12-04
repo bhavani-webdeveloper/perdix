@@ -189,7 +189,7 @@
                 "type": "array",
                 "items": {
                     "type": "object",
-                    "required": ["expenditureSource", "annualExpenses", "frequency"],
+                    "required": ["annualExpenses", "frequency"],
                     "properties": {
                         "expenditureSource": {
                             "title": "Expenditure Source",
@@ -1314,7 +1314,7 @@
             "physicalVerification": {
                 "title": "Physical Verification",
                 "type": "object",
-                "required": ["nameOfRo", "date", "place", "houseVerificationPhoto"],
+                "required": [],
                 "properties": {
                     "nameOfRo": {
                         "title": "Name Of Ro",
