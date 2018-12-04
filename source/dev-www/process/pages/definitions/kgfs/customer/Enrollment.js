@@ -297,10 +297,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                         },
                         "familyDetails.familyMembers": {
                             "startEmpty":true,
+                            titleExpr: "(model.customer.familyMembers[arrayIndex].relationShip == 'Self'?'Self':'Family Memeber')",
                             onArrayAdd: function(value, form, model, formCtrl, event) {
                                 if ((model.customer.familyMembers.length - 1) === 0) {
                                     model.customer.familyMembers[0].relationShip = 'Self';
                                     model.customer.familyMembers[0].gender = model.customer.gender;
+                                    model.customer.familyMembers[0].familyMemberFirstName = model.customer.firstName;
                                     model.customer.familyMembers[0].dateOfBirth = model.customer.dateOfBirth;
                                     model.customer.familyMembers[0].age = model.customer.age;
                                     model.customer.familyMembers[0].maritalStatus = model.customer.maritalStatus;
@@ -319,12 +321,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                                     }
                                 }
                             }
-                        },
+                        },  
                         "familyDetails.familyMembers.relationShip": {
-                            "condition":"model.customer.familyMembers[arrayIndex].relationShip == 'Self'",
-                            readonly:true
-                        },
-                        "familyDetails.familyMembers.relationShip": {
+                            "condition":"model.customer.familyMembers[arrayIndex].relationShip != 'Self'",
                             "onChange": function(modelValue, form, model, formCtrl, event) {
                                 if (model.customer.familyMembers[form.arrayIndex].relationShip == 'Self') {
                                     for (var index = 0; index < model.customer.familyMembers.length; index++) {
@@ -374,6 +373,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                             }
                         },
                         "familyDetails.familyMembers.familyMemberFirstName": {
+                            "condition":"model.customer.familyMembers[arrayIndex].relationShip != 'Self'",
                             schema: {
                                 pattern: "^[a-zA-Z\. ]+$",
                                 type: ["string", "null"],
@@ -395,6 +395,30 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                             "validationMessage": {
                                 "validVaue": "range is between 1 to 12"
                             }
+                        },
+                        "familyDetails.familyMembers.gender":{
+                            "condition":"model.customer.familyMembers[arrayIndex].relationShip != 'Self'"
+                        },
+                        "familyDetails.familyMembers.age":{
+                            "condition":"model.customer.familyMembers[arrayIndex].relationShip != 'Self'"
+                        },
+                        "familyDetails.familyMembers.dateOfBirth":{
+                            "condition":"model.customer.familyMembers[arrayIndex].relationShip != 'Self'"
+                        },
+                        "familyDetails.familyMembers.maritalStatus":{
+                            "condition":"model.customer.familyMembers[arrayIndex].relationShip != 'Self'"
+                        },
+                        "familyDetails.familyMembers.mobilePhone":{
+                            "condition":"model.customer.familyMembers[arrayIndex].relationShip != 'Self'"
+                        },
+                        "familyDetails.familyMembers.customerId":{
+                            "condition":"model.customer.familyMembers[arrayIndex].relationShip != 'Self'"
+                        },
+                        "familyDetails.familyMembers.familyMemberFirstName":{
+                            "condition":"model.customer.familyMembers[arrayIndex].relationShip != 'Self'"
+                        },
+                        "familyDetails.familyMembers.incomes":{
+                            "condition":"model.customer.familyMembers[arrayIndex].relationShip != 'Self'"
                         },
                         "BusinessOccupationDetails.businessDetails.ageOfEnterprise": {
                             type: "radios"

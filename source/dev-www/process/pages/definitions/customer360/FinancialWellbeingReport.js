@@ -16,7 +16,7 @@ function($log, $scope, $stateParams, irfNavigator, $sce, PageHelper, SessionStor
         irfNavigator.goBack();
     };
     PageHelper.showLoader();
-    Queries.getResult('userBasic.one', { userId: SessionStore.getLoginname() }).then(function(records) {
+    Queries.getResult('loginDetails.one', { userId: SessionStore.getLoginname() }).then(function(records) {
         if (records && records.results && records.results[0] && records.results[0].id) {
             irfProgressMessage.clear();
             $scope.fwrDashboardURL = $sce.trustAsResourceUrl(irf.FWR_BASE_URL + '/fwr_input.php?customer_id='+customerId+'&s_id='+records.results[0].id);
