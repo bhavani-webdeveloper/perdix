@@ -363,6 +363,7 @@ define({
                     },
                     onSelect: function(result, model, context) {
                         PageHelper.showLoader();
+                        model.rule.rules = [];
                         RuleMaintenance.getRules({processName:result.name}).$promise.then(function(res){
                             $log.info(res);
                             if (res && res.body && res.body.length) {
