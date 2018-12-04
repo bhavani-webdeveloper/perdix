@@ -265,17 +265,8 @@ define({
                         res[i].name=res[i].displayName;
                         res[i].value='${'+res[i].displayName+'}';
                     }
+                    res.push({ id: res.length +1, name: 1, value:'1', type: 'number' });
                     model.options.fields= res;
-                    model.options.fields.push({
-                        id:(model.options.fields.length +1),
-                        value:'1',
-                        name:1,
-                        type:'number',
-                        options: [
-                            { name: '1', id: 1,value:'1'},
-                          ]
-                    });
-
                 },function(err){
                     console.log(err);
                     model.options.fields = [
