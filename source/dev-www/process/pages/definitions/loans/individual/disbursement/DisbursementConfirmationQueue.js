@@ -20,7 +20,6 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
                     autoSearch: true,
                     sorting: true,
                     sortByColumns: {
-                        "customerSignatureDate": "Customer Signature Date",
                         "scheduledDisbursementDate": "Scheduled Disbursement Date"
 
                     },
@@ -33,14 +32,6 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
                         "required": [],
                         "properties": {
 
-                            // "customerSignatureDate": {
-                            //     "title": "CUSTOMER_SIGNATURE_DATE",
-                            //     "type": "string",
-                            //     "x-schema-form": {
-                            //         "type": "date"
-
-                            //     }
-                            // },
                             'branch': {
                                 'title': "BRANCH",
                                 "type": ["string", "null"],
@@ -110,8 +101,8 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
                         getListItem: function (item) {
                             return [
                                 item.customerName + " ( Account #: " + item.accountNumber + ")",
-                                "<em>Disbursed Amount:  &#8377;" + (_.isEmpty(item.disbursedAmount) ? 0 : item.disbursedAmount) + ", Disbursement Amount :  &#8377;" + item.disbursementAmount + "</em>",
-                                "Customer Signature Date  : " + (_.isEmpty(item.customerSignatureDate) ? " NA " : item.customerSignatureDate) + ", Scheduled Disbursement Date :" + (_.isEmpty(item.scheduledDisbursementDate) ? " NA " : item.scheduledDisbursementDate)
+                                "<em>Disbursed Amount:  &#8377;" + (_.isEmpty(item.disbursedAmount) ? 0 : item.disbursedAmount) + ", Disbursement Amount :  &#8377;" + item.disbursementAmount
+                                +", Scheduled Disbursement Date :" + (_.isEmpty(item.scheduledDisbursementDate) ? " NA " : item.scheduledDisbursementDate) + "</em>"
                             ]
                         },
                         getActions: function () {

@@ -1456,8 +1456,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         "onChange": "fillGeolocation(modelValue, form)"
                     },
                     "nameOfRo": {
-                        key: "customer.nameOfRo",
-                        readonly: true,
+                        key: "customer.nameOfRo"
                     },
                     "houseVerificationPhoto": {
                         key: "customer.houseVerificationPhoto",

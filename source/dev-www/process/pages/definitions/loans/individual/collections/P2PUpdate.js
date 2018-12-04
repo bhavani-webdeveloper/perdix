@@ -16,7 +16,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
 
                 if ((moment(model.additional.promiseToPayDate).isBefore(new Date()))) {
                     PageHelper.setError({
-                        message: "p2p date should be nore than or equal to current system date" + " " + moment(new Date()).format(SessionStore.getDateFormat())
+                        message: "p2p date should be more than or equal to current system date" + " " + moment(new Date()).format(SessionStore.getDateFormat())
                     });
                     return;
                 }

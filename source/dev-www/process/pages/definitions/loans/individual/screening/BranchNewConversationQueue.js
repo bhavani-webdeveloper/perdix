@@ -182,12 +182,12 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.BranchNewConvers
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('loans.individual.screening.LoanView', {
+								entityManager.setModel('witfin.loans.individual.screening.LoanView', {
 									_request: item
 								});
 								irfNavigator.go({
 									state: "Page.Bundle",
-									pageName: "loans.individual.screening.LoanView",
+									pageName: "witfin.loans.individual.screening.LoanView",
 									pageId: item.loanId
 								}, {
 									state: 'Page.Engine',

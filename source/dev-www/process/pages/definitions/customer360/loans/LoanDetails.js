@@ -1250,10 +1250,10 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                 condition: "model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Reminder'"
                             },
                             {
-                                key: "loanRepaymentReminderHistory[].repaymentAmountInPaisa",
+                                key: "loanRepaymentReminderHistory[].installmentAmount",
                                 type: "string",
                                 title: "AMOUNT",
-                                condition: "model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Promise to Pay'"
+                                condition: "model.loanRepaymentReminderHistory[arrayIndex].installmentAmount == 'Promise to Pay'"
                             },
                             {
                                 key: "loanRepaymentReminderHistory[].repaymentDate",

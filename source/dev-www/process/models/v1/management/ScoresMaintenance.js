@@ -42,6 +42,10 @@ irf.models.factory('ScoresMaintenance', ["$resource", "$httpParamSerializer", "B
                 method: 'GET',
                 url:endpoint+'/getScoreCriteriaMaster/:id'
             }),
+            getConfigurationJson:{
+                method:'GET',
+                url:'process/schemas/:name'
+            }
 
         });
         return res;

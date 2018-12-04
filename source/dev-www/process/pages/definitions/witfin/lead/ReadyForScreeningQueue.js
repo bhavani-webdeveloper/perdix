@@ -62,10 +62,6 @@ define({
 							"title": "LEAD_NAME",
 							"type": "string"
 						},
-						"businessName": {
-							"title": "BUSINESS_NAME",
-							"type": "string"
-						},
 						"area": {
 							"title": "AREA",
 							"type": "string"
@@ -136,7 +132,6 @@ define({
 						'branchName': searchOptions.branchName,
 						'currentStage': "ReadyForScreening",
 						'leadName': searchOptions.leadName,
-						'businessName': searchOptions.businessName,
 						'page': pageOpts.pageNo,
 						'per_page': pageOpts.itemsPerPage,
 						'area': searchOptions.area,

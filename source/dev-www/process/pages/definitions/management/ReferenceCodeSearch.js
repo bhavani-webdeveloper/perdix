@@ -51,6 +51,8 @@ define({
 
 				var promise = ReferenceCodeResource.search({
 					'classifier': searchOptions.classifier,
+					"name": searchOptions.name,
+					"code": searchOptions.code,
 					'per_page': pageOpts.itemsPerPage,
 					'page': pageOpts.pageNo
 				}).$promise;
