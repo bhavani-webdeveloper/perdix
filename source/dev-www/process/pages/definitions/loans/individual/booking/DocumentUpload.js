@@ -69,8 +69,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                                                     if (!uploadedExistingDocs[j]) continue;
                                                     if (masterDocumentsArray[i].document_code == uploadedExistingDocs[j].document) {
                                                         
-                                                        if (uploadedExistingDocs[i].documentStatus == 'APPROVED'){
-                                                            hiddenFlag = true;
+                                                        if (uploadedExistingDocs[j].documentStatus == 'APPROVED'){
+                                                            hiddenFlag = true; 
                                                         }
                                                         allExistingDocs.push({
                                                             "$formsKey": masterDocumentsArray[i].forms_key,
