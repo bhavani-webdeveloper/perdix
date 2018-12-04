@@ -16,20 +16,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                 AngularResourceService.getInstance().setInjector($injector);
                 var branch = SessionStore.getBranch();
                 // TODO Hd -> Has to make it as nameParamneter supporatable function
-                var showErrorMsg = function(errorMsg){
-                    PageHelper.showErrors({
-                        "data":{
-                            "error":errorMsg
-                        }
-                    })
-                    PageHelper.hideLoader();
-                }
                 var policyOnSubmit = function(policyName,model){
                     if(policyName){
                         if(policyName == "minimumFamilyMembers"){
-                            if(model.customer.familyMembers.lenght<1)
-                                showErrorMsg("Minimum one Family Member is require apart self.");
+                            if(model.customer.familyMembers.length<1){
+                                PageHelper.showErrors({
+                                    "data":{
+                                        "error":"Minimum One Familymember is required other than Self."
+                                    }
+                                });
+                                PageHelper.hideLoader();
                                 return false;
+                            }
                         }
                     }
                     else{
