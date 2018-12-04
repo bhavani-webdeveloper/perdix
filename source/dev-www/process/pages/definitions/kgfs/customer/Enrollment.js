@@ -323,8 +323,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                             }
                         },
                         "familyDetails.familyMembers.relationShip": {
-                            "condition":"model.customer.familyMembers[arrayIndex].relationShip=='Self'",
-                            "readonly":true
+                            "condition":"model.customer.familyMembers[arrayIndex].relationShip == 'Self'",
+                            readonly:true
                         },
                         "familyDetails.familyMembers.relationShip": {
                             "onChange": function(modelValue, form, model, formCtrl, event) {
@@ -906,8 +906,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                             model.customer.customerBranchId = branchId;
                         };
                         model.siteCode = SessionStore.getGlobalSetting('siteCode');
-                        if(typeof model.customer.nameOfRo == "undefined" || model.customer.nameOfRo == null )
-                            model.customer.nameOfRo = SessionStore.getUsername();
                         var self = this;
                         var formRequest = {
                             "overrides": overridesFields(model),
@@ -974,7 +972,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                                         self.form = IrfFormRequestProcessor.getFormDefinition('IndividualEnrollment', formRequest, configFile(), model);
                                 });
                             }
-
+                            if(typeof model.customer.nameOfRo == "undefined" || model.customer.nameOfRo == null )
+                            model.customer.nameOfRo = SessionStore.getUsername();
                             if(model.$$STORAGE_KEY$$){
                                 $log.info(model);
                             }
@@ -1293,7 +1292,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                                         var promise = Files.uploadBase64({file: obj.data, type: 'CustomerEnrollment', subType: 'FINGERPRINT', extn:'iso'}, {}).$promise;
                                         promise.then(function(data){
                                             model.customer[obj.table_field] = data.fileId;
+                                            reqData.customer[obj.table_field] = data.fileId;
                                             delete model.customer.$fingerprint[obj.fingerId];
+                                            delete reqData.customer.$fingerprint[obj.fingerId];
                                         });
                                         fpPromisesArr.push(promise);
                                     })(out[key]);
