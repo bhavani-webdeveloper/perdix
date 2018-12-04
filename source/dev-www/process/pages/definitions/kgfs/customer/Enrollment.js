@@ -15,7 +15,28 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
 
                 AngularResourceService.getInstance().setInjector($injector);
                 var branch = SessionStore.getBranch();
-
+                // TODO Hd -> Has to make it as nameParamneter supporatable function
+                var showErrorMsg = function(errorMsg){
+                    PageHelper.showErrors({
+                        "data":{
+                            "error":errorMsg
+                        }
+                    })
+                    PageHelper.hideLoader();
+                }
+                var policyOnSubmit = function(policyName,model){
+                    if(policyName){
+                        if(policyName == "minimumFamilyMembers"){
+                            if(model.customer.familyMembers.lenght<1)
+                                showErrorMsg("Minimum one Family Member is require apart self.");
+                                return false;
+                        }
+                    }
+                    else{
+                        // allPolicies
+                    }
+                    return true;
+                }
                 var preSaveOrProceed = function (reqData) {
                     if (_.hasIn(reqData, 'customer.familyMembers') && _.isArray(reqData.customer.familyMembers)) {
                         var selfExist = false
@@ -559,10 +580,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                             "title": "OWNED_ASSET_VALUE"
                         },
                         "HouseVerification.caste": {
-                            "required": true
+                            // "required": true
                         },
                         "HouseVerification.language": {
-                            "required": true
+                            // "required": true
                         },
                         "HouseVerification.HouseDetails.landLordName": {
                             condition: "model.customer.udf.userDefinedFieldValues.udf3=='RENTED'"
@@ -605,7 +626,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                             }
                         },
                         "HouseVerification.houseVerificationPhoto": {
-                            "required": true,
+                            // "required": true,
                             type: "file",
                             fileType: "image/*",
                             "viewParams": function(modelValue, form, model) {
@@ -615,16 +636,24 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                             },
                         },
                         "HouseVerification.verifications.houseNo": {
-                            "required": true,
+                            // "required": true,
                         },
                         "HouseVerification.verifications.referenceFirstName": {
-                            "required": true,
+                            // "required": true,
                         },
                         "HouseVerification.verifications.relationship": {
-                            "required": true,
+                            // "required": true,
                         },
                         "HouseVerification.place": {
-                            required: true
+                            // required: true
+                        },
+                        "HouseVerification.religion":{
+                            required :false
+                        },
+                        "HouseVerification.nameRo":{
+                            readonly:false,
+                            required :false,
+                            type: "string"
                         },
                         "HouseVerification": {
                             orderNo: 131
@@ -648,7 +677,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                     return [
                     "CustomerInformation",
                     "CustomerInformation.customerBranchId",
-                    "CustomerInformation.centreId",
                     "CustomerInformation.enrolledAs",
                     "CustomerInformation.firstName",
                     "CustomerInformation.photoImageId",
@@ -708,6 +736,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                     "ContactInformation.CustomerResidentialAddress.street",
                     "ContactInformation.CustomerResidentialAddress.locality",
                     "ContactInformation.CustomerResidentialAddress.villageName",
+                    "ContactInformation.CustomerResidentialAddress.centreId",
                     "ContactInformation.CustomerResidentialAddress.postOffice",
                     "ContactInformation.CustomerResidentialAddress.district",
                     "ContactInformation.CustomerResidentialAddress.pincode",
@@ -887,6 +916,24 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                             ],
                             "options": {
                                 "repositoryAdditions": {
+                                    "ContactInformation":{
+                                        "items":{
+                                            "CustomerResidentialAddress":{
+                                                "items":{
+                                                    "centreId": {
+                                                        orderNo: 60,
+                                                        key: "customer.centreId",
+                                                        "required": true,
+                                                        type: "select",
+                                                        enumCode: "centre",
+                                                        parentEnumCode: "userbranches",
+                                                        parentValueExpr: "model.customer.customerBranchId",
+                                                    },
+                                                }
+                                              }
+                                        }
+                                    },
+                                    
                                 },
                                 "additions": [
                                 ]
@@ -1234,6 +1281,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                                 PageHelper.hideLoader();
                                 return false;
                             }
+                            if(!policyOnSubmit("minimumFamilyMembers",model))
+                                return false;
                             model.siteCode = SessionStore.getGlobalSetting('siteCode');
                             var reqData = _.cloneDeep(model);
                             var out = model.customer.$fingerprint;
@@ -1268,13 +1317,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                                     _.has(reqData['customer'], 'rightHandRingImageId') && !_.isNull(reqData['customer']['rightHandRingImageId']) &&
                                      _.has(reqData['customer'], 'rightHandSmallImageId') && !_.isNull(reqData['customer']['rightHandSmallImageId'])
                                  )) {
+                                     console.log(reqData);
                                      PageHelper.showErrors({
                                         "data": {
                                             "error": "Fingerprints are not enrolled. Please check"
                                         }
                                     });
                                      PageHelper.hideLoader();
-            
                                      return;
                                  }
                             
