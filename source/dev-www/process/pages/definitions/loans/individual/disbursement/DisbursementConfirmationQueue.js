@@ -18,16 +18,9 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
                 definition: {
                     title: "ReadyForDisbursement",
                     autoSearch: true,
-<<<<<<< HEAD
-                    sorting:true,
-                    sortByColumns:{
-                        "customerSignatureDate":"Customer Signature Date",
-                        "scheduledDisbursementDate":"Scheduled Disbursement Date"
-=======
                     sorting: true,
                     sortByColumns: {
                         "scheduledDisbursementDate": "Scheduled Disbursement Date"
->>>>>>> 928cac4d0... witfin issues
 
                     },
                     searchForm: [
