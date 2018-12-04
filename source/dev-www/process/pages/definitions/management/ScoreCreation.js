@@ -76,34 +76,28 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
                             "key": "scoreMaster.scoreCriterias",
                             "type": "array",
                             "title": "CRITERIA",
-                            "items": [{
+                            "items": [
+                                {
                                 "key": "scoreMaster.scoreCriterias[].criteriaName",
                                 "startEmpty": true,
                                 "title": "CRITERIA_NAME",
-                                "type": "select",
-                                "required": true,
-                                "onChange": function (modelValue, form, model, formCtrl, event) {
-                                    for (var i = 0; i < model.scoreMaster.scoreCriterias.length; i++) {
-                                        if (i != form.arrayIndex) {
-                                            if (model.scoreMaster.scoreCriterias[i].criteriaName == modelValue) {
-                                                Utils.alert("already selected");
-                                                delete model.scoreMaster.scoreCriterias[form.arrayIndex].criteriaName;
-                                            }
-                                        }
-                                    }
-                                    delete model.scoreMaster.scoreCriterias.criteriaValue;
-                                }
-                            },
-                            {
-                                "key": "scoreMaster.scoreCriterias[].criteriaValue",
-                                "startEmpty": true,
-                                "title": "CRITERIA_VALUE",
                                 "type": "lov",
-                                "required": true,
-                                "condition": "model.scoreMaster.scoreCriterias[arrayIndex].criteriaName",
-                                lovonly: true,
+                                lovonly:true,
                                 searchHelper: formHelper,
-                                search: function (inputModel, form, model, context) {
+                                search: function(inputModel,form,model,context){
+                                    
+                                }
+                                
+                                },
+                                {
+                                    "key": "scoreMaster.scoreCriterias[].criteriaValue",
+                                    "title": "CRITERIA_VALUE",
+                                    "type": "lov",
+                                    "required": true,
+                                    "condition": "model.scoreMaster.scoreCriterias[arrayIndex].criteriaName",
+                                    lovonly: true,
+                                    searchHelper: formHelper,
+                                    search: function (inputModel, form, model, context) {
                                     var defered = $q.defer();
                                     ScoresMaintenance.allCriteria().$promise.then(
                                         function (data) {
@@ -128,20 +122,18 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
                                             defered.reject(err);
                                         });
                                     return defered.promise;
-                                },
-                                getListDisplayItem: function (item, index) {
-                                    return [
-                                        item.name
-                                    ];
-                                },
-                                onSelect: function (result, model, context) {
-                                    model.scoreMaster.scoreCriterias[context.arrayIndex].criteriaValue = result.value;
-                                    model.scoreMaster.scoreCriterias[context.arrayIndex].status = 'ACTIVE';
-                                    model.scoreMaster.scoreCriterias[context.arrayIndex].scoreName = model.scoreMaster.scoreName;
+                                    },
+                                    getListDisplayItem: function (item, index) {
+                                        return [
+                                            item.name
+                                        ];
+                                    },
+                                    onSelect: function (result, model, context) {
+                                        model.scoreMaster.scoreCriterias[context.arrayIndex].criteriaValue = result.value;
+                                        model.scoreMaster.scoreCriterias[context.arrayIndex].status = 'ACTIVE';
+                                        model.scoreMaster.scoreCriterias[context.arrayIndex].scoreName = model.scoreMaster.scoreName;
+                                    }
                                 }
-                            }
-
-
                             ]
                         },
                         //  SUnscore array
