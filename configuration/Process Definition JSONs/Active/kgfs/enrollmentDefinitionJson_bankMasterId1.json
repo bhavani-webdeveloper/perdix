@@ -189,7 +189,7 @@
                 "type": "array",
                 "items": {
                     "type": "object",
-                    "required": ["annualExpenses", "frequency"],
+                    "required": [],
                     "properties": {
                         "expenditureSource": {
                             "title": "Expenditure Source",
@@ -417,7 +417,7 @@
             "personalProfile": {
                 "title": "Personal Profile",
                 "type": "object",
-                "required": ["firstName", "fatherFirstName", "dateOfBirth", "gender", "villageName", "district", "state", "pincode", "maritalStatus", "language", "caste", "religion", "verified"],
+                "required": ["firstName", "fatherFirstName", "dateOfBirth", "gender", "villageName", "district", "state", "pincode", "maritalStatus","verified"],
                 "properties": {
                     "urnNo": {
                         "title": "URN",
