@@ -182,7 +182,12 @@ define({
         "title": "Create Rule",
         "condition":"model.type=='Create'",
 		"onClick": "actions.createNewRule(model)"
-    }, 
+    },
+    {
+		"type": "button",
+        "title": "Update Rule",
+		"onClick": "actions.saveRule(model)"
+    } 
 ];
 
     var Ruleschema= {
@@ -573,15 +578,13 @@ define({
         
             {
                 "type": "actionbox",
-                "items": [{
-                    "type": "button",
-                    "title": "Update Rule",
-                    "onClick": "actions.saveRule(model, form, formName)"
-                },{
-                    "type": "button",
-                    "title": "Add New Rule",
-                    "onClick": "actions.createRule(model, form, formName)"
-                }]
+                "items": [
+                    {
+                        "type": "button",
+                        "title": "Add New Rule",
+                        "onClick": "actions.createRule(model, form, formName)"
+                    }
+                ]
             }],
             schema: function() {
                  return Lead.getLeadSchema().$promise;
@@ -652,15 +655,10 @@ define({
                     PageHelper.showProgress("new rule Save", "Updating rule.." , 3000);
                     $log.info("Inside submit()");
                     var reqData={};
-                    reqData.rules=model.rule.rules;
+                    reqData.rules=[model.item];
                     PageHelper.showLoader();
                     RuleMaintenance.save(reqData).$promise.then(function(res){
                         PageHelper.hideLoader();
-                        for (var i = 0; i < res.length; i++) {
-                            res[i].ruleExpression = JSON.parse(res[i].userExpression);
-                            res[i].userExpressionInRuleForm = res[i].expression; 
-                        }
-                        model.rule.rules=res;
                         PageHelper.showProgress("new rule Save", "rule updation success" , 3000);
                         $log.info(res);
                     },function(err){
