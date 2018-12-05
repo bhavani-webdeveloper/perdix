@@ -28,8 +28,7 @@
       "customerMinAge":18,
       "customerMaxAge":70,
       "isMinimumFingerPrintRequired":1,
-      "required":[  
-         "personalProfile"
+      "required":[
       ],
       "properties":{  
          "personalProfile":{  

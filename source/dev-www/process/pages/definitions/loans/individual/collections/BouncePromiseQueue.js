@@ -1,31 +1,20 @@
 irf.pageCollection.factory(irf.page("loans.individual.collections.BouncePromiseQueue"),
 ["$log", "entityManager", "formHelper", "LoanProcess", "$state", "SessionStore", "$q","Utils",
 function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q,Utils){
+    
     return {
         "type": "search-list",
         "title": "BOUNCED_PAYMENTS",
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
-            model.branch = SessionStore.getBranch();
+           // model.branch = SessionStore.getBranch();
+            var branch = SessionStore.getBranch();
+	        //var centres = SessionStore.getCentres();
         },
         definition: {
             title: "SEARCH_BOUNCED_PAYMENTS",
             searchForm: [
-                "loan_no",
-                "first_name",
-                {
-                    "title": "BRANCH",
-                    "type": "select",
-                    enumCode: "userbranches",
-                    key:"branchId"
-                   
-                },
-                {
-                        key:"centre",
-                        "title": "CENTRE",
-                        "type": "select",
-                        "enumCode": "centre"
-                }
+                "*"
             ],
             autoSearch:false,
             searchSchema: {
@@ -41,21 +30,22 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q,U
                         "title": "CUSTOMER_NAME",
                         "type": "string"
                     },
-                    "branchId":{
-                        "title": "BRANCH",
+                    "branchId": {
+                        'title': "BRANCH",
+                        "type": ["string", "null"],
                         "x-schema-form": {
-                            "type": "select",
-                            enumCode: "userbranches"
+                            "type": "userbranch",
+                            "screenFilter": true
                         }
                     },
                     "centre": {
                         "title": "CENTRE",
-                        "type": "integer",
+                        "type": ["integer", "null"],
                         "x-schema-form": {
                             "type": "select",
                             "enumCode": "centre",
-                            "parentEnumCode": "userbranches",
-                            "parentValueExpr": "model.branch",
+                            "parentEnumCode": "branch_id",
+                            "parentValueExpr": "model.branchId",
                             "screenFilter": true
                         }
                     },
@@ -65,7 +55,7 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q,U
                 return formHelper;
             },
             getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
-                var branchId = SessionStore.getCurrentBranch().branchId;
+                //var branchId = SessionStore.getCurrentBranch().branchId;
                 
                 var promise = LoanProcess.bounceCollectionDemand({
                     'accountNumbers': searchOptions.loan_no,  /*Service missing_27082016*/
