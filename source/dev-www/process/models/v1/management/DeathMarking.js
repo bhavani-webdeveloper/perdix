@@ -22,6 +22,10 @@
             postCustomerDeathMarking:{
                 method: 'POST',
                 url: endpoint + '/capturedeathdetails/:customerId',
-            }         
+            },            
+            modifyCustomerDeathMarking:{
+                method: 'PUT',
+                url: endpoint + '/modifydeathdetails/:customerId',
+            }                
         });
     });
