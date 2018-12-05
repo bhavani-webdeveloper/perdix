@@ -180,12 +180,13 @@ define({
     {
 		"type": "button",
         "title": "Create Rule",
-        "condition":"model.type=='Create'",
+        "condition":"model.item.id==null",
 		"onClick": "actions.createNewRule(model)"
     },
     {
 		"type": "button",
         "title": "Update Rule",
+        "condition":"model.item.id!=null",
 		"onClick": "actions.saveRule(model)"
     } 
 ];
