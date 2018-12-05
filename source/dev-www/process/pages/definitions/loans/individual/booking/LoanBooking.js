@@ -499,7 +499,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     },
                     {
                         "key": "loanAccount.commercialCibilCharge",
-                        "condition": "model.siteCode != 'sambandh' && model.siteCode != 'saija'",
+                        "condition": "model.siteCode != 'sambandh' && model.siteCode != 'saija' && model.siteCode != 'witfin'",
                         "title": "CIBIL_CHARGES",
                         "readonly": true
                     },

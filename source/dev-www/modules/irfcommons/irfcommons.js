@@ -99,16 +99,21 @@ irf.commons.factory("Utils", ["$log", "$q", "$http", function($log, $q, $http){
 			return f + (m&l?' '+m:'') + (l?' '+l:'');
 		},
 		alert: function(message, title) {
+			var deferred = $q.defer();
 			if (typeof cordova === 'undefined') {
 				alert(message);
+				deferred.resolve();
 			} else {
 				navigator.notification.alert(
 					message,
-					null, // callback
+					function() {
+						deferred.resolve();
+					}, // callback
 					(typeof title === 'undefined' || !title) ? 'Alert' : title, // title
 					'OK'
 				);
 			}
+			return deferred.promise;
 		},
 		confirm: function(message, title) {
 			var deferred = $q.defer();

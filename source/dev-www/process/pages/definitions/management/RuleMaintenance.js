@@ -69,7 +69,7 @@ define({
                     "x-total-count": out.length
                 },
                 body: out
-            });
+            });       
         },
         getListDisplayItem: function(item, index) {
             return [
@@ -114,7 +114,7 @@ define({
         }
     },
     {
-		"key": "item.userExpression",
+		"key": "item.userExpressionInRuleForm",
         "title": "Rule Definition",
         "readonly":true,
 		"type": "textarea"
@@ -210,13 +210,9 @@ define({
         }
     };
 
-    
-   
-
     var initialize= function(model) {
         $log.info(model);
     };
-
 
         var simpleSchemaFormHtml =
         
@@ -265,17 +261,8 @@ define({
                         res[i].name=res[i].displayName;
                         res[i].value='${'+res[i].displayName+'}';
                     }
+                    res.push({ id: res.length +1, name: 1, value:'1', type: 'number' });
                     model.options.fields= res;
-                    model.options.fields.push({
-                        id:(model.options.fields.length +1),
-                        value:'1',
-                        name:1,
-                        type:'number',
-                        options: [
-                            { name: '1', id: 1,value:'1'},
-                          ]
-                    });
-
                 },function(err){
                     console.log(err);
                     model.options.fields = [
@@ -372,6 +359,7 @@ define({
                     },
                     onSelect: function(result, model, context) {
                         PageHelper.showLoader();
+                        model.rule.rules = [];
                         RuleMaintenance.getRules({processName:result.name}).$promise.then(function(res){
                             $log.info(res);
                             if (res && res.body && res.body.length) {
@@ -391,9 +379,15 @@ define({
                                     };
                                     if(res.body[i].userExpression){
                                         a.userExpression=res.body[i].userExpression;
-                                        a.ruleExpression = JSON.parse(res.body[i].userExpression);
+                                        a.userExpressionInRuleForm = res.body[i].expression;
+                                        try{
+                                            a.ruleExpression = JSON.parse(res.body[i].userExpression);
+                                        } catch(e){
+                                            a.ruleExpression = JSON.parse("{}");
+                                        }
                                     }else{
                                         a.userExpression=res.body[i].expression;
+                                        a.userExpressionInRuleForm = res.body[i].expression;
                                         a.ruleExpression = {
                                             group: {
                                               operator: model.options.operators[0], rules: []
@@ -455,9 +449,15 @@ define({
                                     };
                                     if(res.body[i].userExpression){
                                         a.userExpression=res.body[i].userExpression;
-                                        a.ruleExpression = JSON.parse(res.body[i].userExpression);
+                                        a.userExpressionInRuleForm = res.body[i].expression;
+                                        try{
+                                                a.ruleExpression = JSON.parse(res.body[i].userExpression);
+                                            } catch(e){
+                                                a.ruleExpression = JSON.parse("{}");
+                                            }
                                     }else{
                                         a.userExpression=res.body[i].expression;
+                                        a.userExpressionInRuleForm = res.body[i].expression;
                                         a.ruleExpression = {
                                             group: {
                                               operator: model.options.operators[0], rules: []
@@ -651,7 +651,8 @@ define({
                     RuleMaintenance.save(reqData).$promise.then(function(res){
                         PageHelper.hideLoader();
                         for (var i = 0; i < res.length; i++) {
-                            res[i].ruleExpression = JSON.parse(res[i].userExpression); 
+                            res[i].ruleExpression = JSON.parse(res[i].userExpression);
+                            res[i].userExpressionInRuleForm = res[i].expression; 
                         }
                         model.rule.rules=res;
                         PageHelper.showProgress("new rule Save", "rule updation success" , 3000);
