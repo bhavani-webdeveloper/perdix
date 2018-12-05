@@ -312,7 +312,7 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
                 }
                 ],
                 schema: function () {
-                    return ScoresMaintenance.getConfigurationJson({ name:"ScoreManagementInformation.json" }).$promise;
+                    return ScoresMaintenance.getConfigurationJson({ name:"scoreManagementInformation.json" }).$promise;
                 },
                 actions: {
                     submit: function (model, form, formName) {
