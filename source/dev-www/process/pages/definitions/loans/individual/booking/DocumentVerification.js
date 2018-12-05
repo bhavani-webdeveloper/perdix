@@ -82,7 +82,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                                 }
                             }
                             if(pushFlag){
-                                // push to allExistingDocs
                                 allExistingDocs.push({
                                     "$formsKey": masterDocumentsArray[i].forms_key,
                                     "$key": masterDocumentsArray[i].forms_key,
@@ -110,7 +109,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                                         "documentId": uploadedExistingDocs[i].documentId,
                                         "id": uploadedExistingDocs[i].id,
                                         "loanId": uploadedExistingDocs[i].loanId,
-                                        "$title": null,
+                                        "$title": uploadedExistingDocs[i].document,
                                         "$downloadRequired": masterDocumentsArray[i].download_required,
                                         "$mandatory": null,
                                         "isHidden": false,
@@ -121,30 +120,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                                 }
                             }
                         }
-                        var remainArray=[];
-                        for(var i=0;i<remainingDocsArray.length;i++){
-                            
-                            for(var j=0;j<masterDocumentsArray.length;j++){
-                                if(remainingDocsArray[i].document==masterDocumentsArray[j].document_code){
-                                    remainArray.push({
-                                        "$formsKey": masterDocumentsArray[j].forms_key,
-                                        "$key": masterDocumentsArray[j].forms_key,
-                                        "documentId": null,
-                                        "id": null,
-                                        "loanId": $stateParams.pageId,
-                                        "$title": masterDocumentsArray[j].document_description || masterDocumentsArray[j].document_name || masterDocumentsArray[j].document_code,
-                                        "$downloadRequired": masterDocumentsArray[j].download_required,
-                                        "$mandatory": masterDocumentsArray[j].mandatory,
-                                        "isHidden": false,
-                                        "documentStatus":null,
-                                        "remarks":null,
-                                        "rejectReason":null
-                                    })
-                                }
-                            }
-
-                        }
-                        model.remainingDocsArray = remainArray;
+                
+                        model.remainingDocsArray = remainingDocsArray;
                         model.allExistingDocs = allExistingDocs;
                         
                         for (var i = 0; i < loanDocuments.length; i++) {
@@ -360,7 +337,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                                     "key": "allExistingDocs[].downloadRequired",
                                     "items": [{
                                         "title": "No File",
-                                        "notitle": true,
                                         "fieldHtmlClass": "btn-block",
                                         "style": "btn-default",
                                         "icon": "fa fa-download", 
@@ -467,7 +443,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                                     "key": "allExistingDocs[].downloadRequired",
                                     "items": [{
                                         "title": "DOWNLOAD_FORM",
-                                        "notitle": true,
                                         "fieldHtmlClass": "btn-block",
                                         "style": "btn-default",
                                         "icon": "fa fa-download", 
@@ -489,7 +464,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                                     "key": "remainingDocsArray[].downloadRequired",
                                     "items": [{
                                         "title": "No File",
-                                        "notitle": true,
                                         "fieldHtmlClass": "btn-block",
                                         "style": "btn-default",
                                         "icon": "fa fa-download", 
