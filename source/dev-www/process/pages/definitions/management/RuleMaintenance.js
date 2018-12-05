@@ -537,10 +537,6 @@ define({
                                         $log.info(res);
                                         PageHelper.showProgress("Rule-Delete", "Rule deleted successfully ,Please reload the page", 5000);
                                         PageHelper.hideLoader();
-                                        irfNavigator.go({
-                                            state: "Page.Landing",
-                                            pageName: ""
-                                        });
                                     },function(err){
                                         $log.info(err);
                                         PageHelper.hideLoader();
@@ -661,6 +657,7 @@ define({
                         PageHelper.hideLoader();
                         PageHelper.showProgress("new rule Save", "rule updation success" , 3000);
                         $log.info(res);
+                        model.item.version = model.item.version +1;
                     },function(err){
                         PageHelper.hideLoader();
                         PageHelper.showErrors(err);
