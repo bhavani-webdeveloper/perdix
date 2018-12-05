@@ -74,7 +74,6 @@ function($log, formHelper, CentreCreationResource,$state, ScoresMaintenance,Sess
 				},
 				getColumns: function(){
 					return [
-
 						{
 							title:'SCORE_NAME',	
 							data: 'scoreName'
@@ -85,7 +84,7 @@ function($log, formHelper, CentreCreationResource,$state, ScoresMaintenance,Sess
 						},
 						{
 							title:'PARTERN_OR_SELF',
-							data: 'partnerOrSelf'
+							data: 'partnerSelf'
 						},
 						{
 							title:'order',
@@ -106,7 +105,7 @@ function($log, formHelper, CentreCreationResource,$state, ScoresMaintenance,Sess
 					return [
 
 							{
-							name: "Edit_Centre",
+							name: "Edit_Score",
 							desc: "",
 							icon: "fa fa-user",
 							fn: function(item, index) {
