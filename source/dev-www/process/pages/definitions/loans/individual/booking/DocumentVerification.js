@@ -473,51 +473,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                                         "onClick": function(model, form, schemaForm, event) {
                                         }
                                     }] 
-                                },{
-                                    "type": "section",
-                                    "htmlClass": "col-sm-2",
-                                    "items": [{
-                                        "key": "remainingDocsArray[].documentStatus",
-                                        "title": "Status",
-                                        "notitle": true,
-                                        "type": "select",
-                                        "titleMap": [{
-                                            value: "REJECTED",
-                                            name: "Rejected"
-                                        }, {
-                                            value: "APPROVED",
-                                            name: "Approved"
-                                        }]
-                                    }]
-                                }, {
-                                    "type": "section",
-                                    "htmlClass": "col-sm-3",
-                                    "condition": "model.remainingDocsArray[arrayIndex].documentStatus === 'REJECTED'",
-                                    "items": [{
-                                        title: "Reason",
-                                        notitle: true,
-                                        placeholder: "Reason",
-                                        key: "remainingDocsArray[].rejectReason",
-                                        type: "lov",
-                                        lovonly: true,
-                                        searchHelper: formHelper,
-                                        search: function(inputModel, form, model, context) {
-                                            var f = $filter('filter')(docRejectReasons, {"document_code": model.remainingDocsArray[context.arrayIndex].document},true);
-                                            return $q.resolve({
-                                                "header": {
-                                                    "x-total-count": f && f.length
-                                                },
-                                                "body": f
-                                            });
-                                        },
-                                        getListDisplayItem: function(item, index) {
-                                            return [item.reject_reason];
-                                        },
-                                        onSelect: function(result, model, context) {
-                                            model.remainingDocsArray[context.arrayIndex].rejectReason = result.reject_reason;
-                                        }
-                                    }]
-                                }, {
+                                },
+                                {
                                     "type": "section",
                                     "htmlClass": "col-sm-2",
                                     "condition": "model.remainingDocsArray[arrayIndex].documentStatus === 'REJECTED'",
@@ -527,17 +484,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                                         placeholder: "Remarks",
                                         key: "remainingDocsArray[].remarks"
                                     }]
-                                }, {
-                                    "type": "section",
-                                    "htmlClass": "col-sm-5",
-                                    "condition": "model.remainingDocsArray[arrayIndex].documentStatus !== 'REJECTED'",
-                                    "items": [{
-                                        title: "Remarks",
-                                        notitle: true,
-                                        placeholder: "Remarks",
-                                        key: "remainingDocsArray[].remarks"
-                                    }]
-                                }]
+                                },
+                                
+                            ]
                             }] 
                         }]
                     }
