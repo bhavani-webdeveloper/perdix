@@ -2,11 +2,41 @@ define({
     pageUID: "management.RuleMaintenance",
     pageType: "Engine",
     dependencies: ["$log","Utils","PagesDefinition","Queries","Lead", "$q",'PageHelper', 'formHelper','irfProgressMessage',
-        'SessionStore', "$state", "$stateParams", "RuleMaintenance",'irfSimpleModal','irfNavigator'],
+        'SessionStore', "$state", "$stateParams", "RuleMaintenance",'irfSimpleModal','irfNavigator', 'IndividualLoan'],
     $pageFn: function($log,Utils,PagesDefinition,Queries,Lead, $q, PageHelper, formHelper, irfProgressMessage,
-        SessionStore, $state, $stateParams, RuleMaintenance,irfSimpleModal,irfNavigator) {
+        SessionStore, $state, $stateParams, RuleMaintenance,irfSimpleModal,irfNavigator, IndividualLoan) {
 
-
+    var defaultRuleExpression = {
+        "group":{  
+           "operator":{  
+              "name":"AND",
+              "value":"&&"
+           },
+           "rules":[  
+              {  
+                 "comparator":{  
+                    "id":1,
+                    "name":"equal to",
+                    "value":"=="
+                 },
+                 "field":{  
+                    "id":30,
+                    "value":"1",
+                    "name":1,
+                    "type":"number",
+                    "options":[  
+                       {  
+                          "name":"1",
+                          "id":1,
+                          "value":"1"
+                       }
+                    ]
+                 },
+                 "fieldId":"30"
+              }
+           ]
+        }
+    };       
 
     var NewRuleForm = [
     {
@@ -53,14 +83,14 @@ define({
 		type: "lov",
         searchHelper: formHelper,
         search: function(inputModel, form, model) {
-            var targetstage = formHelper.enum('targetstage').data;
+            var targetstage = model.stages;
             var out=[];
             for (var i = 0; i < targetstage.length; i++) {
                 var t = targetstage[i];
                     out.push({
                         name: t.name,
                         value:t.code,
-                        field1:t.field1
+                        field1:t.code
                     })
             }
             out= _.uniqBy(out, 'field1');
@@ -86,14 +116,14 @@ define({
         type: "lov",
         searchHelper: formHelper,
         search: function(inputModel, form, model) {
-            var targetstage = formHelper.enum('targetstage').data;
+            var targetstage = model.stages;
             var out=[];
             for (var i = 0; i < targetstage.length; i++) {
                 var t = targetstage[i];
                     out.push({
                         name: t.name,
                         value:t.code,
-                        field1:t.field1
+                        field1:t.code
                     })
             }
             out= _.uniqBy(out, 'field1');
@@ -129,37 +159,7 @@ define({
         },
         "onChange": function (modelValue, form, model) {
             if(model.item.ruleApplicable=='No'){
-                model.item.ruleExpression={
-                    "group":{  
-                       "operator":{  
-                          "name":"AND",
-                          "value":"&&"
-                       },
-                       "rules":[  
-                          {  
-                             "comparator":{  
-                                "id":1,
-                                "name":"equal to",
-                                "value":"=="
-                             },
-                             "field":{  
-                                "id":30,
-                                "value":"1",
-                                "name":1,
-                                "type":"number",
-                                "options":[  
-                                   {  
-                                      "name":"1",
-                                      "id":1,
-                                      "value":"1"
-                                   }
-                                ]
-                             },
-                             "fieldId":"30"
-                          }
-                       ]
-                    }
-                };
+                model.item.ruleExpression=defaultRuleExpression;
                 //actions.validateRule(model.item.ruleExpression.group,model)
             }else{
 
@@ -253,6 +253,12 @@ define({
                 $log.info(model.createConversationModel);
 
                 model.options = {};
+
+                IndividualLoan.getDefiniftion().$promise.then(function(res){
+                    model.stages = res.stages || [];
+                }, function(err){
+                    console.log(err);
+                });
 
                 RuleMaintenance.getRuleParams().$promise.then(function(res){
                     console.log(res);
@@ -383,7 +389,7 @@ define({
                                         try{
                                             a.ruleExpression = JSON.parse(res.body[i].userExpression);
                                         } catch(e){
-                                            a.ruleExpression = JSON.parse("{}");
+                                            a.ruleExpression = defaultRuleExpression;
                                         }
                                     }else{
                                         a.userExpression=res.body[i].expression;
@@ -453,7 +459,7 @@ define({
                                         try{
                                                 a.ruleExpression = JSON.parse(res.body[i].userExpression);
                                             } catch(e){
-                                                a.ruleExpression = JSON.parse("{}");
+                                                a.ruleExpression = defaultRuleExpression;
                                             }
                                     }else{
                                         a.userExpression=res.body[i].expression;
