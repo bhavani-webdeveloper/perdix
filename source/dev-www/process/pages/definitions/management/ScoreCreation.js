@@ -11,6 +11,26 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
                     self.form = self.formSource;
                 },
                 modelPromise: function (pageId, _model) {
+                    self = this;
+                    self.form = self.formSource;
+                    var defered = $q.defer();
+                    if (!pageId) {
+                        return deferred.promise;
+                    }
+                    PageHelper.showLoader();
+                    ScoresMaintenance.getScoresById({ id: pageId }).$promise.then(function(resp){
+                        model = _model;
+                        DataResponse = resp.body;
+                        model = DataResponse;
+                        PageHelper.hideLoader();
+                        defered.resolve(model);
+                    }),function (resp) {
+                        defered.resolve(resp);
+                    },function (err) {
+                        PageHelper.hideLoader();
+                        defered.reject(err);
+                    };
+                return defered.promise;
                 },
                 form: [],
                 formSource: [{
@@ -34,15 +54,10 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
                         {
                             "key": "scoreMaster.order",
                             "title": "ORDER",
-                            "type": "text",
                             "required": true,
                         },
                         {
-                            "key": "scoreMaster.scoreId",
-                            "type": "hidden",
-                        },
-                        {
-                            "key": "scoreMaster.partnerOrSelf",
+                            "key": "scoreMaster.partnerSelf",
                             "title": "PARTNER_SELF",
                             "type": "select",
                             "enumCode": "partner",
@@ -56,7 +71,6 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
                         {
                             "key": "scoreMaster.maxScoreValue",
                             "title": "MAX_SCORE",
-                            "type": "text",
                             "required": true,
                         },
                         {
@@ -78,17 +92,44 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
                             "title": "CRITERIA",
                             "items": [
                                 {
-                                "key": "scoreMaster.scoreCriterias[].criteriaName",
-                                "startEmpty": true,
-                                "title": "CRITERIA_NAME",
-                                "type": "lov",
-                                lovonly:true,
-                                searchHelper: formHelper,
-                                search: function(inputModel,form,model,context){
-                                    
-                                }
-                                
-                                },
+                                    "key": "scoreMaster.scoreCriterias[].criteriaName",
+                                    "startEmpty": true,
+                                    "title": "CRITERIA_NAME",
+                                    "type": "lov",
+                                    lovonly:true,            
+                                    searchHelper: formHelper,
+                                    search: function (inputModel, form, model) {
+                                        var defered = $q.defer();
+                                        ScoresMaintenance.allCriteria().$promise.then(function(item){
+                                            var out = [];
+                                            for(var i=0;i<item.body.length;i++){
+                                                if(item.body[i].status == "ACTIVE")
+                                                    out.push(item.body[i]);
+                                            }
+                                            defered.resolve({
+                                                headers: {
+                                                    "x-total-count": out.length
+                                                },
+                                                body: out
+                                            });
+                                            
+                                        },function(err){
+                                            deferred.reject(err);
+                                        });
+                                        return defered.promise;    
+                                    },
+                                    getListDisplayItem: function (item, index) {
+                                        return [
+                                            item.id,
+                                            item.criteriaName
+                                        ]
+                                        
+                                    },
+                                    onSelect: function (result, model, context) {
+                                        model.scoreMaster.scoreCriterias[context.arrayIndex].criteriaName = result.criteriaName;
+                                        model.scoreMaster.scoreCriterias[context.arrayIndex].criteriaValue = null;
+                                    }
+                                },            
                                 {
                                     "key": "scoreMaster.scoreCriterias[].criteriaValue",
                                     "title": "CRITERIA_VALUE",
@@ -98,30 +139,30 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
                                     lovonly: true,
                                     searchHelper: formHelper,
                                     search: function (inputModel, form, model, context) {
-                                    var defered = $q.defer();
-                                    ScoresMaintenance.allCriteria().$promise.then(
-                                        function (data) {
-                                            var resp_array = [];
-                                            resp_array = data.body;
-                                            var output = [], l = resp_array.length, i;
-                                            for (i = 0; i < l; i++) {
-                                                if (resp_array[i].criteriaName == model.scoreMaster.scoreCriterias[context.arrayIndex].criteriaName) {
-                                                    output.push({
-                                                        name: resp_array[i].criteriaValue,
-                                                        value: resp_array[i].criteriaValue
-                                                    });
+                                        var defered = $q.defer();
+                                        ScoresMaintenance.allCriteria().$promise.then(
+                                            function (data) {
+                                                var resp_array = [];
+                                                resp_array = data.body;
+                                                var output = [], l = resp_array.length, i;
+                                                for (i = 0; i < l; i++) {
+                                                    if (resp_array[i].criteriaName == model.scoreMaster.scoreCriterias[context.arrayIndex].criteriaName) {
+                                                        output.push({
+                                                            name: resp_array[i].criteriaValue,
+                                                            value: resp_array[i].criteriaValue
+                                                        });
+                                                    }
                                                 }
-                                            }
-                                            defered.resolve({
-                                                headers: {
-                                                    "x-total-count": output.length
-                                                },
-                                                body: output
+                                                defered.resolve({
+                                                    headers: {
+                                                        "x-total-count": output.length
+                                                    },
+                                                    body: output
+                                                });
+                                            }, function (err) {
+                                                defered.reject(err);
                                             });
-                                        }, function (err) {
-                                            defered.reject(err);
-                                        });
-                                    return defered.promise;
+                                        return defered.promise;
                                     },
                                     getListDisplayItem: function (item, index) {
                                         return [
@@ -130,10 +171,21 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
                                     },
                                     onSelect: function (result, model, context) {
                                         model.scoreMaster.scoreCriterias[context.arrayIndex].criteriaValue = result.value;
-                                        model.scoreMaster.scoreCriterias[context.arrayIndex].status = 'ACTIVE';
                                         model.scoreMaster.scoreCriterias[context.arrayIndex].scoreName = model.scoreMaster.scoreName;
                                     }
-                                }
+                                },
+                                {
+                                    "key": "scoreMaster.scoreCriterias[].status",
+                                    "title": "STATUS",
+                                    "type": "select",
+                                    "titleMap": [{
+                                        "value": 'ACTIVE',
+                                        "name": "Active"
+                                    }, {
+                                        "value": 'INACTIVE',
+                                        "name": "InActive"
+                                    }]
+                                },
                             ]
                         },
                         //  SUnscore array
@@ -144,16 +196,15 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
                             "title": "SUBSCORE",
                             "items": [
                                 {
-                                    "key": "scoreMaster.subScores[].subScoreName",
+                                    "key": "scoreMaster.subScores[].subscoreName",
                                     "title": "SUBSCORE_NAME",
-                                    "type": "string",
+                                    "type":"text",
                                     "required": true,
                                 },
                                 {
-                                    "key": "scoreMaster.subScores[].subscoreWeightage",
+                                    "key": "scoreMaster.subScores[].subScoreWeightage",
                                     "title": "SUBSCORE_WEIGHTAGE",
-                                    "type": "integer",
-                                    required: true
+                                    "required": true,
                                 },
                                 {
                                     "key": "scoreMaster.subScores[].isIndividualScore",
@@ -170,8 +221,16 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
                                     ]
                                 },
                                 {
-                                    "key": "scoreMaster.subScores[].subScoreWeightage",
-                                    "title": "SUBSCOR_WEIGHTAGE"
+                                    "key": "scoreMaster.subScores[].status",
+                                    "title": "STATUS",
+                                    "type": "select",
+                                    "titleMap": [{
+                                        "value": 'ACTIVE',
+                                        "name": "Active"
+                                    }, {
+                                        "value": 'INACTIVE',
+                                        "name": "InActive"
+                                    }]
                                 },
                                 {
                                     "key":"scoreMaster.subScores[].scoreParameters",
@@ -219,12 +278,25 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
                                             "title":"parameterWeightage",
                                             "type": "string",
                                             "key": "scoreMaster.subScores[].scoreParameters[].parameterWeightage"
+                                        },
+                                        {
+                                            "title": "MAX_PARAMETERS_SCORE",
+                                            "key": "scoreMaster.subScores[].scoreParameters[].maxParameterScore"
+                                        },
+                                        {
+                                            "title": "STATUS",
+                                            "key": "scoreMaster.subScores[].scoreParameters[].status",
+                                            "type": "select",
+                                            "titleMap": [{
+                                                "value": 'ACTIVE',
+                                                "name": "Active"
+                                            }, {
+                                                "value": 'INACTIVE',
+                                                "name": "InActive"
+                                            }]
                                         }
                                     ]
                                 },
-                                
-                                
-
                             ]
                         },
                     ]
@@ -251,7 +323,7 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
                                 irfNavigator.goBack();
                                 deferred.resolve(resp);
                             }, function (errResp) {
-                                PageHelper.showErrors(errResp);
+                                PageHelper.showErrors(errResp.data);
                             }).finally(function () {
                                 PageHelper.hideLoader();
                             });
@@ -259,9 +331,8 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
                             ScoresMaintenance.scoreUpdate(model).$promise.then(function (resp) {
                                 Utils.alert("Score Updated Successfully");
                                 irfNavigator.goBack();
-                                deferred.resolve(resp);
                             }, function (errResp) {
-                                PageHelper.showErrors(errResp);
+                                PageHelper.showErrors(errResp.data);
                             }).finally(function () {
                                 PageHelper.hideLoader();
                             });

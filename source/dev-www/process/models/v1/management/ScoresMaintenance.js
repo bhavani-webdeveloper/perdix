@@ -24,7 +24,6 @@ irf.models.factory('ScoresMaintenance', ["$resource", "$httpParamSerializer", "B
             scoreSearch: searchResource({
                 method: 'GET',
                 url: endpoint + '/findScoreMaster',
-                isArray:true
             }),
             getScoresById: searchResource({
                 method: 'GET',
