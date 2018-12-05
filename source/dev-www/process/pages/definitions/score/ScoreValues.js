@@ -31,9 +31,9 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
                 model.scoreMasterID = $stateParams.pageId;
 
 
-                 ScoresMaintenance.allParameterMaster({}, function (resp, header) {
+                model.allParameterMaster =ScoresMaintenance.allParameterMaster({}, function (resp, header) {
                     console.log(resp);
-                     model.allParameterMaster=resp;
+                     //model.allParameterMaster=resp;
 
                 }, function (err) {
 
@@ -92,24 +92,20 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
                                 return $q.resolve({
                                     "dtlKeyvalue": "ADD_PARAMETER",
                                     "columns": [
-                                        {
-                                            prop: "scoreName",
-                                            type : "text" ,
-                                            required: true,
-                                            name: "scoreName"
-                                        },
+
                                         {
                                             prop: "subScoreName",
                                             type: "text",
-                                            name: "subScoreName"
+                                            name: "SUB_SCORE_NAME"
                                         },
                                         {
                                             prop: "parameterName",
                                             type: "select",
-                                            name: "parameterName",
+                                            name: "PARAMETER_NAME",
                                             getListOptions: function (model) {
                                                 return $q.when(model.allParameterMaster).then(function (value) {
                                                     var options = [];
+                                                    //console.log("okkkkkkkkk");
                                                     if(value){
                                                         for (i = 0; i < value.length; i++) {
                                                             options.push(value[i].parameterName);
@@ -119,51 +115,49 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
                                                 });
                                             },
                                         },
-                                        // {
-                                        //     prop: "categoryValueFrom",
-                                        //     type: "select-typeahead",
-                                        //     isTypeaheadSelect: false,
-                                        //     isTypeaheadStrategy : true,
-                                        //     name: "categoryValueFrom",
-                                        //     getItems: function (model) {
-                                        //
-                                        //
-                                        //         return $q.when(model.allParameterMaster).then(function (value) {
-                                        //             return ["A","B","C"];
-                                        //             })
-                                        //
-                                        //         // console.log("okkkkkkkkkkkk");
-                                        //         // return $q.when(model.allParameterMaster).then(function (value) {
-                                        //         //     var options = ["A","B","C"];
-                                        //         //     // if(value){
-                                        //         //     //     for (i = 0; i < value.length; i++) {
-                                        //         //     //         options.push(value[i].parameterName);
-                                        //         //     //     }
-                                        //         //     // }
-                                        //         //     return options;
-                                        //         // });
-                                        //     },
-                                        // },
+                                    //-------------------------------------------------------------
                                         {
                                             prop: "categoryValueFrom",
-                                            type: "text",
-                                            name: "categoryValueFrom"
+                                            type: "select-typeahead",
+                                            name: "VALUE_FROM",
+                                            isTypeaheadSelect : false,
+                                            isTypeaheadStrategy : false,
+                                            typeaheadExpr : "name",
+                                            getItems: function (viewValue, model) {
+
+                                                return $q.when(formHelper.enum("language")).then(function (value) {
+                                                    var options = [];
+                                                    for (i = 0; i < value.data.length; i++) {
+                                                        options.push({ "name" :  value.data[i].value}  );
+                                                    }
+                                                    return options;
+                                                });
+
+                                            },
                                         },
+                                        //-------------------------------------------------------------
+                                        
                                         {
                                             prop: "categoryValueTo",
                                             type: "text",
-                                            name: "categoryValueTo"
+                                            name: "VALUE_TO"
                                         },
                                         {
                                             prop: "colorEnglish",
                                             type: "text",
-                                            name: "colorEnglish"
+                                            name: "COLOR"
                                         },
                                         {
                                             prop: "status",
-                                            type: "text",
-                                            name: "status"
-                                        }
+                                            type: "select",
+                                            name: "status",
+                                            getListOptions: function (model) {
+                                                return $q.when(model.allParameterMaster).then(function (value) {
+                                                    var options = ["ACTIVE","DEACTIVE"];
+                                                    return options;
+                                                });
+                                            },
+                                        },
                                     ],
 
                                 })
@@ -204,7 +198,7 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
 
                 var requestBody ={ scoreMaster : model.scoreMaster}
                 ScoresMaintenance.scoreUpdate( requestBody, function (resp, header) {
-
+                    irfProgressMessage.pop('cust-update', 'Done. Customer Updated, ID : ' + res.customer.id, 2000);
                 }, function (err) {
 
                 });
