@@ -302,8 +302,14 @@ define([], function () {
                         required: true,
                         searchHelper: formHelper,
                         search: function (inputModel, form, model, context) {
-
-                            return Queries.getLoanProductDetails(model.loanAccount.loanType, model.loanAccount.partnerCode, model.loanAccount.frequency);
+                            var deferred = $q.defer();
+                            Queries.getLoanProductDetails(model.loanAccount.loanType, model.loanAccount.partnerCode, model.loanAccount.frequency).then(function(resp){
+                                for(var i = 0; i< resp.body.length;i++){
+                                    if(resp.body[i].expiryDate < Utils.getCurrentDate())
+                                        resp.body.splice(i,1);
+                                }
+                            });
+                            return deferred.promise;
                         },
                         onSelect: function (valueObj, model, context) {
                             model.loanAccount.productCode = valueObj.productCode;
