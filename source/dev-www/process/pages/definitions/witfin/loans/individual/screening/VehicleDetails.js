@@ -734,7 +734,11 @@ define(
                     "NewVehicleDetails.permitType",
                     "NewVehicleDetails.price",
                     "NewVehicleDetails.udf1",
-                    "NewVehicleDetails.insuredDeclaredValue",  
+                    "NewVehicleDetails.insuredDeclaredValue",
+                    "NewVehicleDetails.engineNo",
+                    "NewVehicleDetails.chasisNo",
+                    "NewVehicleDetails.registrationDate",
+                    "NewVehicleDetails.ownerSerialNo",  
                     "VehicleViability",
                     "VehicleViability.viabilityCategory",
                     "VehicleViability.fuelConsumptionPerHour",
@@ -756,8 +760,8 @@ define(
                     "VehicleViability1.freeCashFlow1",
                     "VehicleViability1.totalMonthlyExpense1",
                     "VehicleAssetUse",
-                    "VehicleAssetUse.segment",
-                    "VehicleAssetUse.subSegnment",
+                    "VehicleAssetUse.vehicleUseSegment",
+                    "VehicleAssetUse.vehicleUseSubSegment",
                     "VehicleAssetUse.entityType",
                     "VehicleAssetUse.attachedWith",
                     "VehicleAssetUse.attachedAddress",
@@ -1243,6 +1247,25 @@ define(
                                             "orderNo":140,
                                             "key":"loanAccount.vehicleLoanDetails.price",
                                             "title": "PURCHASE_PRICE"
+                                        },
+                                        "engineNo": {
+                                            "key": "loanAccount.vehicleLoanDetails.engineNo",
+                                            "title": "ENGINE_NO"
+                                        },
+                                        "chasisNo": {
+                                            "key": "loanAccount.vehicleLoanDetails.chasisNo",
+                                            "title": "CHASIS_NO"
+                                        },
+                                        "registrationDate": {
+                                            "key": "loanAccount.vehicleLoanDetails.registrationDate",
+                                            "title": "REGISTRATION_DATE",
+                                            "type": "date"
+                                        },
+                                        "ownerSerialNo": {
+                                            "key": "loanAccount.vehicleLoanDetails.ownerSerialNo",
+                                            "title": "OWNER_SERIAL_NO",
+                                            "type": "string",
+                                             fieldType: "number"
                                         }
                                     }
                                 },
@@ -1444,6 +1467,23 @@ define(
                                 },
                                 "VehicleAssetUse": {
                                     "items": {
+                                        "vehicleUseSegment": {
+                                            "key": "loanAccount.vehicleLoanDetails.vehicleUseSegment",
+                                            "title": "INDUSTRY/SEGMENT",
+                                            "type": "select",
+                                            "enumCode": "vehicle_use_segment",
+                                            "orderNo": 5
+
+                                        },
+                                        "vehicleUseSubSegment": {
+                                            "key": "loanAccount.vehicleLoanDetails.vehicleUseSubSegment",
+                                            "title": "SUB_SEGMENT",
+                                            "type": "select",
+                                            "parentEnumCode": "vehicle_use_segment",
+                                            "enumCode": "vehicle_use_subsegment",
+                                            "orderNo": 10
+
+                                        },
                                         "dailyWorkingHours": {
                                             "key":  "loanAccount.vehicleLoanDetails.dailyWorkingHours",
                                             "title": "NO_OF_HOURS_RUNNING_PER_DAY",

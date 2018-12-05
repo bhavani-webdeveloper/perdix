@@ -62,10 +62,6 @@ define({
                         "cityTownVillage": {
                             "title": "CITY_TOWN_VILLAGE",
                             "type": "string"
-                        },
-                        "pincode": {
-                            "title": "PIN_CODE",
-                            "type": "string"
                         }
                     },
                     "required": []
@@ -80,8 +76,6 @@ define({
                     return IndividualLoan.search({
                         'stage': 'TeleVerification',
                         'branchId': searchOptions.branch,
-                        'enterprisePincode': searchOptions.pincode,
-                        'enterprisePincode': searchOptions.pincode,
                         'applicantName': searchOptions.applicantName,
                         'area': searchOptions.area,
                         'status': searchOptions.status,
@@ -118,7 +112,6 @@ define({
                             item.customerName,
 							item.branchName,
 							item.centreName
-
                         ]
                     },
                     getTableConfig: function() {
