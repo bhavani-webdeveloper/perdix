@@ -234,7 +234,7 @@ irf.pageCollection.factory(irf.page("customer360.CustomerDeathMarking"), ["$log"
                 },
                 {
                     type: "actionbox",
-                    condition:"!model.deathMarking.deathMarkingStatus || model.deathMarking.deathMarkingStatus == 'REJECT'",
+                   condition:"!model.deathMarking.deathMarkingStatus || model.deathMarking.deathMarkingStatus == 'REJECT'",
                     items: [
                         {
                             type: "submit",
