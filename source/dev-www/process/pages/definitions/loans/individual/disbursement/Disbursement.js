@@ -6,7 +6,10 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
             var siteCode = SessionStore.getGlobalSetting("siteCode");
             var requires = {
                 "modeOfDisbursement": siteCode == 'kinara' || siteCode == 'sambandh' || siteCode == 'saija' || siteCode == 'pahal'
-            }
+            };
+            var readonly = {
+                "scheduledDisbursementDate": siteCode == 'KGFS'
+            };
             return {
                 "type": "schema-form",
                 "title": "DISBURSE_LOAN",
@@ -103,6 +106,9 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                             if (model.siteCode == 'sambandh') {
                                 model.additional.netDisbursementAmount = Number(resp[0].amount);
                                 model.loanAccountDisbursementSchedule.modeOfDisbursement = "CASH";
+                            }
+                            if (model.siteCode == 'KGFS') {
+                                loanAccountDisbursementSchedule.scheduledDisbursementDate = SessionStore.getSystemDate();
                             }
 
                             Enrollment.getCustomerById({
@@ -237,6 +243,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                             "key": "loanAccountDisbursementSchedule.scheduledDisbursementDate",
                             "title": "SCHEDULED_DISBURSEMENT_DATE",
                             "type": "date",
+                            "readonly": readonly['scheduledDisbursementDate'],
                             "required": true,
                             "onChange": function (value, form, model, event) {
                                 model.validateDisbursementDate(model);
