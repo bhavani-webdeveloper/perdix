@@ -350,19 +350,56 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                     },
                 };
             } else if (model.siteCode == "sambandh") {
-                var customReadonly = false;
-                /*if (_.hasIn($stateParams.pageData, 'currentStage') && $stateParams.pageData.currentStage == 'Stage02') {
-                    customReadonly = true;
-                }*/
+               
+                var customReadonly = true;
                 return {
-                    "CustomerInformation": {
+                   "CustomerInformation.download":{},
+                   
+                    "CustomerInformation.photoImageId":{
                         "readonly": customReadonly
                     },
+                    "CustomerInformation.gender":{
+                        "readonly": customReadonly
+                    },
+                    "CustomerInformation.age":{
+                        "readonly": customReadonly
+                    },
+                    "CustomerInformation.dateOfBirth":{
+                        "readonly": customReadonly
+                    },
+                    "CustomerInformation.maritalStatus":{
+                        "readonly": customReadonly
+                    },
+                    "CustomerInformation.fatherFirstName":{
+                        "readonly": customReadonly
+                    },
+                    "CustomerInformation.spouseFirstName":{
+                        "readonly": customReadonly
+                    },
+                    "CustomerInformation.spouseDateOfBirth":{
+                        "readonly": customReadonly
+                    },
+                    "CustomerInformation.religion":{
+                        "readonly": customReadonly
+                    },
+                    "CustomerInformation.caste":{
+                        "readonly": customReadonly
+                    },
+                    "CustomerInformation.dateOfBirth":{
+                        "readonly": customReadonly
+                    },
+                    "CustomerInformation.area":{
+                        "readonly": customReadonly
+                    },
+                    "CustomerInformation.download":{},
+                  
+                    //
                     "ContactInformation": {
                         "readonly": customReadonly
                     },
                     "KYC": {
-                        "readonly": customReadonly
+                        "readonly": customReadonly,
+                        "orderNo":15
                     },
                     "AdditionalKYC": {
                         "readonly": customReadonly
@@ -381,6 +418,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                     },
                     "CustomerInformation.firstName": {
                         "type": "string",
+                        "readonly":true,
                         "schema": {
                             "pattern": "^[a-zA-Z\. ]+$",
                         },
@@ -390,6 +428,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                     },
                     "CustomerInformation.fatherFirstName": {
                         "type": "string",
+                        "readonly":true,
                         "schema": {
                             "pattern": "^[a-zA-Z\. ]+$",
                         },
@@ -399,6 +438,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                     },
                     "CustomerInformation.spouseFirstName": {
                         "required": true,
+                        "readonly":true,
                         "type": "string",
                         "schema": {
                             "pattern": "^[a-zA-Z\. ]+$",
@@ -409,6 +449,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                     },
                     "CustomerInformation.spouseDateOfBirth": {
                         "required": true,
+                        "readonly":true
                     },
                     "ContactInformation.mobilePhone": {
                         "required": false,
@@ -521,13 +562,17 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                     },
                     "BusinessOccupationDetails.businessDetails.businessPhone": {
                         title: "INCHARGE_WHEN_YOU_ARE_NOT_AVAILABLE",
-                        type: "string",
+                        type: "select",
+                        enumCode: "businessabsense_responsibility",
                         schema: {
                             "type": ["string", "null"],
                         }
                     },
                     "BusinessOccupationDetails.businessDetails.workPlaceType": {
-                        title: "WORK_PLACE_OWNERSHIP",
+                        title: "Business premise (if non-farm business)",
+                        type:"radios",
+                        enumCode:"work_place_type",
+                       // key:"BusinessOccupationDetails.businessDetails.workPlace"
                     },
                     "BusinessOccupationDetails.businessDetails.workPlaceBuildType": {
                         "titleMap": {
@@ -536,6 +581,33 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                             "Kuccha": "Kuccha",
                             "Handcart": "Handcart",
                         }
+                    },
+                    "assets.financialAssets.ownedBy":{
+                        "type": "select",
+                                key: "customer.financialAssets[].udf2",
+                                "title": "OWNED_BY",
+                                titleMap: [{
+                                    "name": "Own",
+                                    "value": "Own"
+                                }, {
+                                    "name": "Other Family Members",
+                                    "value": "Others"
+                                }, {
+                                    "name": "None",
+                                    "value": "None"
+                                }]
+                    },
+                    "BusinessOccupationDetails.businessDetails.noOfWorkersEmployed": {
+                        title: "NO_OF_WORKERS_EMPLOYED_NON_FAMILY",
+                        type: "number"
+                    },
+                    "BusinessOccupationDetails.businessDetails.businessManages": {
+                        title: "WHO_MANAGES_BUSINESS",
+                        type: "radios"
+                     },
+                    "BusinessOccupationDetails.businessDetails.involvedInMarketTransaction":{
+                        title:"INVOLVED_IN_MARKET_BUSINESS_TRANSACTIONS",
+                        
                     },
                     "BusinessOccupationDetails.agricultureDetails.nonIrrigated": {
                         title: "NON_IRRIGATED_LAND",
@@ -797,9 +869,9 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                         }
                     },
                     "HouseVerification.HouseDetails.durationOfStay": {
-                        title: "TOILET_FACILITY",
+                        title: "What Toilet facility does your family use?",
                         required: true,
-                        "type": "select",
+                        "type": "radios",
                         order: 100,
                         "titleMap": {
                             "Own toilet": "Own toilet",
@@ -813,6 +885,19 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                     "HouseVerification.houseVerificationPhoto": {
 
                     },
+                     //new added "HouseVerification.HouseDetails.DrinkingWater, HouseVerification.HouseDetails.WaterFiler, HouseVerification.HouseDetails.toiletFacility"
+                     "HouseVerification.HouseDetails.drinkingWater":{
+                        title:"Drinking Water",
+                        required: true,
+                        type:"radios"
+                        },
+                        "HouseVerification.HouseDetails.waterFiler":{
+                            title:"Water Filter",
+                            required: true,
+                            type:"radios"
+                        },
+                       
+                    //
                     "Expenditures1.expenditures": {
                         startEmpty: true
                     },
@@ -862,10 +947,17 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                     },
                     "BusinessOccupationDetails": {
                         "title": "LOAN_PURPOSE_ENTERPRISE_DETAILS"
+                    },
+                    "BusinessOccupationDetails.businessDetails": {
+                        condition: "'Business,Employed,Trading,Services,Manufacturing,Toilet Construction,House Construction and repair'.indexOf(model.customer.udf.userDefinedFieldValues.udf13) > -1"
+                    },
+                    "BusinessOccupationDetails.agricultureDetails": {
+                        condition: "'Agriculture,Livestock'.indexOf(model.customer.udf.userDefinedFieldValues.udf13) > -1"
                     }
                 };
             }
         }
+        
         var getIncludes = function(model) {
             if (model.siteCode == "saija") {
                 return [
@@ -1065,6 +1157,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
             } else if (model.siteCode == "sambandh") {
                 return [
                     "CustomerInformation",
+                    "CustomerInformation.download",
                     "CustomerInformation.customerBranchId",
                     "CustomerInformation.centreId",
                     "CustomerInformation.area",
@@ -1183,6 +1276,11 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                     "HouseVerification.HouseDetails.HouseVerification", //waterfilter
                     //"HouseVerification.HouseDetails.Toilet",//is toilet available
                     "HouseVerification.HouseDetails.durationOfStay", //toilet facility
+                    // new Added
+                    "HouseVerification.HouseDetails.drinkingWater", 
+                    "HouseVerification.HouseDetails.waterFiler",
+                    // "HouseVerification.HouseDetails.toiletFacility",
+                     //
                     "HouseVerification.HouseDetails.buildType",
                     "HouseVerification.latitude",
                     "HouseVerification.houseVerificationPhoto",
@@ -1236,6 +1334,11 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                     "BusinessOccupationDetails.businessDetails.workPeriod",
                     "BusinessOccupationDetails.businessDetails.workPlaceType",
                     "BusinessOccupationDetails.businessDetails.workPlaceBuildType",
+                    // new added
+                    "BusinessOccupationDetails.businessDetails.noOfWorkersEmployed",
+                    "BusinessOccupationDetails.businessDetails.businessManages",
+                    "BusinessOccupationDetails.businessDetails.involvedInMarketTransaction",
+                    //
                     // "BusinessOccupationDetails.businessDetails.WorkPlaceOthers",
                     "BusinessOccupationDetails.agricultureDetails",
                     "BusinessOccupationDetails.agricultureDetails.relationwithFarmer",
@@ -1304,6 +1407,9 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                 model = Utils.removeNulls(model, true);
                 model.customer.kgfsName = model.customer.kgfsName || SessionStore.getCurrentBranch().branchName;
                 model.customer.customerType = model.customer.customerType || 'Individual';
+                if(model.customer.udf){
+                  model.BusinessOccupationDetails.businessDetails.businessManages=model.customer.udf.userDefinedFieldValues.udf19;
+                }
                 var centres = SessionStore.getCentres();
                 if (centres && centres.length > 0) {
                     model.customer.centreId = model.customer.centreId || centres[0].id;
@@ -1314,9 +1420,92 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                     "includes": getIncludes(model),
                     "excludes": [
                         "KYC.addressProofSameAsIdProof",
-                    ]
-                };
 
+                    ],
+                    "options":{
+                        "repositoryAdditions":{
+                            "CustomerInformation":{
+                                "items":{
+                                    "download": {
+                                        title: "Download PGF",
+                                        required: true,
+                                        orderNo: 0,
+                                        "readonly": false,
+                                        "type": "button",
+                                        "condition": "model.customer.currentStage == 'Completed' ",
+                                        "onClick": function (model, form, schemaForm, event) {
+                                            Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=pgf_form&record_id=" + model.customer.id);
+                                        }
+                                    }
+                                }
+                            },
+                            "HouseVerification":{
+                                "items":{
+                                    "HouseDetails":{
+                                        "items": {
+                                            "drinkingWater":{
+                                                title:"Drinking Water",
+                                                required: true,
+                                               type:"radios",
+                                               "titleMap": {
+                                                "Public": "Public",
+                                                "Shared": "Shared",
+                                                "Own":"Own"
+                                            },  
+                                            "key": "HouseVerification.HouseDetails.drinkingWater"
+                                                },
+                                                "waterFiler":{
+                                                    title:"Water Filer",
+                                                    required: true,
+                                                    type:"radios",
+                                                    "titleMap": {
+                                                        "Yes": "Yes",
+                                                        "No": "No",
+                                                    },
+                                                    "key":"HouseVerification.HouseDetails.waterFiler"
+                                                },
+                                        }
+                                    }
+                                }
+                              
+                            },
+                            "BusinessOccupationDetails":{
+                                "items":{
+                                    "businessDetails":{
+                                        "items":{
+                                          "noOfWorkersEmployed":{
+                                              title:"No. of workers Employed (Non-family members)"
+                                          },
+                                          "businessManages":{
+                                            type:"radios",
+                                            "titleMap":{
+                                                "Female": "Female",
+                                                "Male": "Male",
+                                                "Both":"Both"
+                                            },
+                                          // key: "customer.udf.userDefinedFieldValues.udf"
+                                           //key: "customer.udf.BusinessOccupationDetails.userDefinedFieldValues.udf20"
+                                         key:"BusinessOccupationDetails.businessDetails.businessManages"
+                        
+
+                                        },
+                                        "involvedInMarketTransaction":{
+                                            type:"radios",
+                                            titleMap:{
+                                                "Yes": "Yes",
+                                                "No": "No",
+                                            },
+                                            key:"BusinessOccupationDetails.businessDetails.involved_in_market_transactions"
+                                        }
+                                        },
+                                      
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                };
                 if (_.hasIn($stateParams.pageData, 'lead_id') && _.isNumber($stateParams.pageData['lead_id'])) {
                     PageHelper.showLoader();
                     PageHelper.showProgress("Enrollment-input", 'Loading lead details');
@@ -1359,10 +1548,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                             PageHelper.hideLoader();
                         })
                 }
-
                 this.form = IrfFormRequestProcessor.getFormDefinition('IndividualEnrollment', formRequest);
-                //this.form.push(actionbox);
-                console.log(this.form);
+
             },
             modelPromise: function(pageId, _model) {
                 var deferred = $q.defer();
@@ -1441,7 +1628,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                         
                     }
                     deferred.resolve(model);
-                    debugger;
+                   
                     PageHelper.hideLoader();
                 }, function(resp) {
                     PageHelper.hideLoader();
@@ -1456,6 +1643,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                 return deferred.promise;
             },
             offline: true,
+         
             getOfflineDisplayItem: function(item, index) {
                 return [
                     item.customer.urnNo,
@@ -1501,7 +1689,9 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                 submit: function(model, form, formName) {
                     var actions = this.actions;
                     $log.info("Inside submit()");
-                    $log.warn(model);
+                    if(model.BusinessOccupationDetails.businessDetails.businessManages){
+                        model.customer.udf.userDefinedFieldValues.udf19=model.BusinessOccupationDetails.businessDetails.businessManages;
+                    }
                     if (!EnrollmentHelper.validateData(model)) {
                         $log.warn("Invalid Data, returning false");
                         return false;
