@@ -110,7 +110,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                                         "id": uploadedExistingDocs[i].id,
                                         "loanId": uploadedExistingDocs[i].loanId,
                                         "$title": uploadedExistingDocs[i].document,
-                                        "$downloadRequired": masterDocumentsArray[i].download_required,
+                                        "$downloadRequired": false,
                                         "$mandatory": null,
                                         "isHidden": false,
                                         "documentStatus": uploadedExistingDocs[i].documentStatus,
