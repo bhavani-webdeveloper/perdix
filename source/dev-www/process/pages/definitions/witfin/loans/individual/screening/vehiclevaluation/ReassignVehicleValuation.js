@@ -221,7 +221,11 @@ define(
                     "VehicleIdentityDetails.odometerReading":{
                         "readonly":true
                     },
+                     "VehicleAccessories.vehicleAccessories":{
+                        "startEmpty": true,
+                    },
                     "VehicleAccessories.vehicleAccessories.accessoryType":{
+                        "readonly":true,
                         "required":false
                     },
                     "VehicleIdentityDetails": {
