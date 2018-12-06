@@ -618,7 +618,45 @@ define({
                     RuleMaintenance.save(reqData).$promise.then(function(res){
                         PageHelper.hideLoader();
                         PageHelper.showProgress("new rule Save", "rule Creation success" , 3000);
-                        model.rule.rules=res;
+                        RuleMaintenance.getRules({processName:model.rule.processName, fromStage: model.rule.fromStage}).$promise.then(function(res){
+                            $log.info(res);
+                            if (res && res.body && res.body.length) {
+                                model.rule.rules = [];
+                                for (var i = 0; i < res.body.length; i++) {
+                                    var a = {
+                                        id: res.body[i].id,
+                                        version: res.body[i].version,
+                                        expression: res.body[i].expression,
+                                        fromStage: res.body[i].fromStage,
+                                        order: res.body[i].order,
+                                        processName: res.body[i].processName,
+                                        ruleDescription: res.body[i].ruleDescription,
+                                        ruleName: res.body[i].ruleName,
+                                        toStage: res.body[i].toStage  
+                                    };
+                                    if(res.body[i].userExpression){
+                                        a.userExpression=res.body[i].userExpression;
+                                        a.userExpressionInRuleForm = res.body[i].expression;
+                                        try{
+                                                a.ruleExpression = JSON.parse(res.body[i].userExpression);
+                                            } catch(e){
+                                                a.ruleExpression = defaultRuleExpression;
+                                            }
+                                    }else{
+                                        a.userExpression=res.body[i].expression;
+                                        a.userExpressionInRuleForm = res.body[i].expression;
+                                        a.ruleExpression = {
+                                            group: {
+                                              operator: model.options.operators[0], rules: []
+                                            }
+                                        };
+                                    }
+                                    model.rule.rules.push(a);
+                                };
+                            }
+                        }).finally(function(){
+                            PageHelper.hideLoader();
+                        });
                         $log.info(res);
                     },function(err){
                         PageHelper.hideLoader();
