@@ -61,9 +61,6 @@ define(
                     "VehicleRegistrationDetails.fuelUsed":{
                         "readonly":true
                     },
-                    "VehicleRegistrationDetails.cubicCapacity":{
-                        "readonly":true
-                    },
                     "VehicleIdentityDetails.chasisNo":{
                         "readonly":true
                     },
@@ -188,9 +185,6 @@ define(
                     "VehicleIdentityDetails.variant":{
                         "readonly":true
                     },
-                        "VehicleAsset.vehicleAssetConditions.make": {
-                            "readonly": true
-                        },
                         "VehicleAsset.vehicleAssetConditions.componentType": {
                             "readonly": true
                         },
