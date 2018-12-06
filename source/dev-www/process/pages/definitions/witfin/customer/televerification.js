@@ -1163,6 +1163,121 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 ]
                             },
                             {
+                                "type": "section",
+                                "htmlClass": "col-sm-12",
+                                "items": [
+                                   {
+                                        "type": "section",
+                                        "htmlClass": "row",
+                                        "items": [
+                                            {
+                                                "type": "box",
+                                                "colClass": "col-xs-6 col-md-6",
+                                                "title": "VEHICLE",
+                                                "items": [
+                                                    {
+                                                        "type": "fieldset",
+                                                        "title": "Vehicle Details",
+                                                        "items": [
+                                                            {
+                                                                "key": "loanAccount.vehicleLoanDetails.vehicleType",
+                                                                "type": "text",
+                                                                "title": "Vehicle type",
+                                                                "readonly": true
+                                                            },
+                                                            {
+                                                                "key": "loanAccount.vehicleLoanDetails.usedFor",
+                                                                "type": "text",
+                                                                "title": "Nature of Use",
+                                                                "readonly": true
+                                                            },
+                                                            {
+                                                                "key": "loanAccount.vehicleLoanDetails.endUse",
+                                                                "type": "text",
+                                                                "title": "End use of the vehicle",
+                                                                "readonly": true
+                                                            },
+                                                            {
+                                                                "key": "loanAccount.vehicleLoanDetails.segment",
+                                                                "type": "text",
+                                                                "title": "Segment",
+                                                                "readonly": true
+                                                            },
+                                                            {
+                                                                "key": "loanAccount.vehicleLoanDetails.vehicleModel",
+                                                                "type": "text",
+                                                                "title": "Model",
+                                                                "readonly": true
+                                                            },
+                                                            {
+                                                                "key": "loanAccount.vehicleLoanDetails.yearOfManufacture",
+                                                                "type": "date",
+                                                                "title": "Manufacture Year",
+                                                                "readonly": true
+                                                            },
+                                                            {
+                                                                "key": "loanAccount.vehicleLoanDetails.registrationNumber",
+                                                                "type": "text",
+                                                                "title": "Registration no",
+                                                                "readonly": true
+                                                            },
+                                                            {
+                                                                "key": "loanAccount.vehicleLoanDetails.price",
+                                                                "type": "number",
+                                                                "title": "Purchase price",
+                                                                "readonly": true
+                                                            },
+                                                            {
+                                                                "key": "loanAccount.vehicleLoanDetails.insuredDeclaredValue",
+                                                                "type": "number",
+                                                                "title": "IDV",
+                                                                "readonly": true
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "type": "fieldset",
+                                                        "title": "Vehicle Viability",
+                                                        "items": [
+                                                            {
+                                                                "key": "loanAccount.vehicleLoanDetails.fcfToEmi",
+                                                                "type": "number",
+                                                                "title": "FCF:EMI",
+                                                                "readonly": true
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "type": "fieldset",
+                                                        "title": "Vehicle Valuation",
+                                                        "items": [
+                                                            {
+                                                                "key": "loanAccount.vehicleLoanDetails.currentMarketValue",
+                                                                "type": "number",
+                                                                "title": "Market value as on date of inspection",
+                                                                "readonly": true
+                                                            },
+                                                            {
+                                                                "key": "loanAccount.vehicleLoanDetails.distressValue",
+                                                                "type": "number",
+                                                                "title": "Distress value",
+                                                                "readonly": true
+                                                            },
+                                                            {
+                                                                "key": "loanAccount.vehicleLoanDetails.futureLife",
+                                                                "type": "number",
+                                                                "title": "Expected future life of vehicle",
+                                                                "readonly": true
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
                                 "type": "actionbox",
                                 "items": [
                                     {

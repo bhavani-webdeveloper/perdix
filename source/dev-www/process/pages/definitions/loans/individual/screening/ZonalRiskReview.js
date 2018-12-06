@@ -45,12 +45,19 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ZonalRiskReview'
                 maximum: 1,
                 order: 50
             }, {
+                pageName: 'loans.individual.screening.PersonalDiscussion',
+                title: 'PERSONAL_DISCUSSION',
+                pageClass: 'personal-discussion',
+                minimum: 1,
+                maximum: 1,
+                order: 52
+            }, {
                 pageName: 'loans.individual.screening.detail.PortfolioAnalysis',
                 title: 'CUSTOMER HISTORY',
                 pageClass: 'portfolio-analysis',
                 minimum: 1,
                 maximum: 1,
-                order: 52
+                order: 55
             },{
                 pageName: 'loans.individual.screening.detail.LoanApplicationView',
                 title: 'Loan Recommendation',
@@ -240,6 +247,14 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ZonalRiskReview'
                                     customerId: res.customerId
                                 }
                             });
+                            
+                            $this.bundlePages.push({
+                                pageClass: 'personal-discussion',
+                                model: {
+                                    loanAccount: res
+                                }
+                            });
+
                             $this.bundlePages.push({
                                 pageClass: 'portfolio-analytics',
                                 model: {

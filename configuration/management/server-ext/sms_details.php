@@ -21,7 +21,7 @@ $dotEnv->load();
 $repaymentReminderHistory = DB::table('global_settings')->where('name', 'repaymentReminderHistory')->first();
 //echo $repaymentReminderHistory->value;
 $frequencies= explode(",", $repaymentReminderHistory->value);
-echo "<br/>frequencies : $frequencies";
+
 foreach ($frequencies as $frequency) {
     echo "<br/>frequency : $frequency";
     try{

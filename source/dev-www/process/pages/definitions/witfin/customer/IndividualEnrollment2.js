@@ -1112,7 +1112,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     "KYC.customerId": {
                         type: "lov",
-                        key: "customer.id",
+                        key: "customer.id", 
+                         initialize: function(model, form, parentModel, context) {
+                            model.customerBranchId = parentModel.customer.customerBranchId;                        
+                        },
                         "inputMap": {
                             "firstName": {
                                 "key": "customer.firstName",
