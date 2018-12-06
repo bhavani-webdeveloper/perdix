@@ -170,7 +170,7 @@ define({
                         "type": "button",
                         "title": "DOWNLOAD_ALL_FORMS",
                         "onClick": function (model, form, schemaForm, event) {
-                            Utils.downloadFile(irf.MANAGEMENT_BASE_URL + "/server-ext/AllFormsDownload.php?record_id=" + model.loanAccount.id);
+                            Utils.downloadFile(irf.MANAGEMENT_BASE_URL + "/server-ext/testAllFormsDownload.php?record_id=" + model.loanAccount.id);
                         }
                     }, {
                         "type": "fieldset",
