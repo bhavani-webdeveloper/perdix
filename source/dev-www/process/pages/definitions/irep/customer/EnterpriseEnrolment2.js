@@ -27,6 +27,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseInformation.enterpriseRegistrations.registrationType": {
                          "enumCode": "business_registration_type_upd"
                     },
+                    "EnterpriseInformation.enterpriseRegistrations.registeredDate": {
+                        "required": true
+                    },
                     "BankAccounts.customerBankAccounts.isDisbersementAccount":{
                         "title": "Is Disbursement"
                     },

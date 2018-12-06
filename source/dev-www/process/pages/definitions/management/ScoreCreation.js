@@ -239,7 +239,7 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
                                     "items":[
                                         {   
                                             "key": "scoreMaster.subScores[].scoreParameters[].parameterName",
-                                            "title":"parameterName",
+                                            "title":"PARAMETER_NAME",
                                             "type":"lov",
                                             searchHelper: formHelper,
                                             search: function (inputModel, form, model) {
@@ -270,12 +270,12 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
 
                                         },
                                         {
-                                            "title":"parameterPassScore",
+                                            "title":"PARAMETER_PASS_SCORE",
                                             "type": "string",
                                             "key": "scoreMaster.subScores[].scoreParameters[].parameterPassScore"
                                         },
                                         {
-                                            "title":"parameterWeightage",
+                                            "title":"PARAMETER_WEIGHTAGE",
                                             "type": "string",
                                             "key": "scoreMaster.subScores[].scoreParameters[].parameterWeightage"
                                         },
