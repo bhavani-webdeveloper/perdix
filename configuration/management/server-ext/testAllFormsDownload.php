@@ -3,27 +3,27 @@
 include_once("bootload.php");
 $download = $_GET["download"];
 if(isset($download)){
-
     $url_file = $_GET["file"];
     $url_file_type = $_GET["file_type"];
     $url_folder_name = $_GET["folder_name"];
 
     $url_file_name = $url_file.".".$url_file_type;
 
-    $folder_path = getenv('ALL_FORMS_BASE_DIR');
+    $folder_path = $_GET["folder_path"];
+    // $folder_path = getenv('ALL_FORMS_BASE_DIR');
     $folder_name = date('YMd').'/';
 
-    $file_name = $folder_path.$url_file_name;
-
+    $file_name = $folder_path.'/'.$url_file_name;
+    echo($file_name);
     if(isset($url_folder_name)) {
-        $file_name = $folder_path.$url_folder_name.'/'.$url_file_name;
+        $file_name = $folder_path.'/'.$url_folder_name.'/'.$url_file_name;
     }
     if (file_exists($file_name)) {
         header('Content-Description: File Transfer');
         header('Content-Type: application/octet-stream');
         header("Content-Type: application/force-download");
         header('Content-Disposition: attachment; filename=' . urlencode(basename($file_name)));
-        // header('Content-Transfer-Encoding: binary');
+        header('Content-Transfer-Encoding: binary');
         header('Expires: 0');
         header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
         header('Pragma: public');
@@ -57,9 +57,9 @@ else{
     define('DB_PASSWORD', getenv('DB_PASSWORD'));
 
     $perdix_db = getenv('DB_NAME');
-
     $form_base_url = "http://sit.perdix.co.in:8080/sit_kgfs_forms";
-    $folder_path = getenv('ALL_FORMS_BASE_DIR');
+    // $folder_path = getenv('ALL_FORMS_BASE_DIR');
+    $folder_path = sys_get_temp_dir();
 
     try{
         try{
@@ -124,7 +124,6 @@ else{
     $folder_name = date('YMd');
 
     $files_folder_path = $folder_path.'/'.$type.'_'.$record_id.'_'.date('YMDHis').'/';
-
     if (!file_exists($files_folder_path)) {
         $old_umask = umask(0);
         mkdir($files_folder_path, 0777);
@@ -222,7 +221,6 @@ else{
         or die(mysqli_error($connection));
 
     $individual_forms = [];
-
     for ($j = 0; $stored_forms = mysqli_fetch_assoc($get_all_form_names); $j++) {
         $f = [];
         $f['forms_key'] = $stored_forms['forms_key'];
@@ -266,9 +264,9 @@ else{
     rmdir($files_folder_path);
 
     if ($show_log) {
-        echo "\n\n".'<a href="allFormsDownload.php?file='.$attachment_zip_file.'&file_type=zip$download=auto" onclick="this.style.display=\'none\'">Download ZIP</a></pre>';
+         echo "\n\n".'<a href="testAllFormsDownload.php?file='.$attachment_zip_file.'&file_type=zip$download=auto" onclick="this.style.display=\'none\'">Download ZIP</a></pre>';
     } else {
-        header('Location: allFormsDownload.php?file='.$attachment_zip_file.'&file_type=zip&download=auto');
+        header('Location: testAllFormsDownload.php?folder_path='.$folder_path.'&file='.$attachment_zip_file.'&file_type=zip&download=auto');
     }
 }
 ?>
