@@ -1,0 +1,7 @@
+ApplicationReview = Your loan application has been logged at Pahal Finance. The credit risk team will contact you shortly. Thanks for reaching us for Loan requirement.
+Disbursed = Your loan application has been approved. You have been sanctioned LOAN_NAME loan for TENURE months for LOAN_PURPOSE purpose.
+ODCollection = You have paid REPAYMENT_AMT amount by REPAYMENT_TYPE against your overdue loan account. Your receipt number for this payment is: RECEIPT_NUMBER. Please note that this will be posted to your account subject to bank clearance. For any discrepancies in AMOUNT you paid and mention here. pl. reach us on -079-4-373857 
+ReversedRepayment = Your EMI payment has bounced. Your revised payment amount is REPAYMENT_AMT. Please deposit this immediately to our Branch
+Sanction = Your loan application has been approved. You have been sanctioned LOAN_NAME loan for TENURE months for LOAN_PURPOSE purpose.
+
+

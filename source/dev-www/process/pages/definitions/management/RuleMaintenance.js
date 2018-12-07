@@ -2,11 +2,41 @@ define({
     pageUID: "management.RuleMaintenance",
     pageType: "Engine",
     dependencies: ["$log","Utils","PagesDefinition","Queries","Lead", "$q",'PageHelper', 'formHelper','irfProgressMessage',
-        'SessionStore', "$state", "$stateParams", "RuleMaintenance",'irfSimpleModal','irfNavigator'],
+        'SessionStore', "$state", "$stateParams", "RuleMaintenance",'irfSimpleModal','irfNavigator', 'IndividualLoan'],
     $pageFn: function($log,Utils,PagesDefinition,Queries,Lead, $q, PageHelper, formHelper, irfProgressMessage,
-        SessionStore, $state, $stateParams, RuleMaintenance,irfSimpleModal,irfNavigator) {
+        SessionStore, $state, $stateParams, RuleMaintenance,irfSimpleModal,irfNavigator, IndividualLoan) {
 
-
+    var defaultRuleExpression = {
+        "group":{  
+           "operator":{  
+              "name":"AND",
+              "value":"&&"
+           },
+           "rules":[  
+              {  
+                 "comparator":{  
+                    "id":1,
+                    "name":"equal to",
+                    "value":"=="
+                 },
+                 "field":{  
+                    "id":30,
+                    "value":"1",
+                    "name":1,
+                    "type":"number",
+                    "options":[  
+                       {  
+                          "name":"1",
+                          "id":1,
+                          "value":"1"
+                       }
+                    ]
+                 },
+                 "fieldId":"30"
+              }
+           ]
+        }
+    };       
 
     var NewRuleForm = [
     {
@@ -53,14 +83,14 @@ define({
 		type: "lov",
         searchHelper: formHelper,
         search: function(inputModel, form, model) {
-            var targetstage = formHelper.enum('targetstage').data;
+            var targetstage = model.stages;
             var out=[];
             for (var i = 0; i < targetstage.length; i++) {
                 var t = targetstage[i];
                     out.push({
                         name: t.name,
                         value:t.code,
-                        field1:t.field1
+                        field1:t.code
                     })
             }
             out= _.uniqBy(out, 'field1');
@@ -86,14 +116,14 @@ define({
         type: "lov",
         searchHelper: formHelper,
         search: function(inputModel, form, model) {
-            var targetstage = formHelper.enum('targetstage').data;
+            var targetstage = model.stages;
             var out=[];
             for (var i = 0; i < targetstage.length; i++) {
                 var t = targetstage[i];
                     out.push({
                         name: t.name,
                         value:t.code,
-                        field1:t.field1
+                        field1:t.code
                     })
             }
             out= _.uniqBy(out, 'field1');
@@ -129,37 +159,7 @@ define({
         },
         "onChange": function (modelValue, form, model) {
             if(model.item.ruleApplicable=='No'){
-                model.item.ruleExpression={
-                    "group":{  
-                       "operator":{  
-                          "name":"AND",
-                          "value":"&&"
-                       },
-                       "rules":[  
-                          {  
-                             "comparator":{  
-                                "id":1,
-                                "name":"equal to",
-                                "value":"=="
-                             },
-                             "field":{  
-                                "id":30,
-                                "value":"1",
-                                "name":1,
-                                "type":"number",
-                                "options":[  
-                                   {  
-                                      "name":"1",
-                                      "id":1,
-                                      "value":"1"
-                                   }
-                                ]
-                             },
-                             "fieldId":"30"
-                          }
-                       ]
-                    }
-                };
+                model.item.ruleExpression=defaultRuleExpression;
                 //actions.validateRule(model.item.ruleExpression.group,model)
             }else{
 
@@ -180,9 +180,15 @@ define({
     {
 		"type": "button",
         "title": "Create Rule",
-        "condition":"model.type=='Create'",
+        "condition":"model.item.id==null",
 		"onClick": "actions.createNewRule(model)"
-    }, 
+    },
+    {
+		"type": "button",
+        "title": "Update Rule",
+        "condition":"model.item.id!=null",
+		"onClick": "actions.saveRule(model)"
+    } 
 ];
 
     var Ruleschema= {
@@ -253,6 +259,12 @@ define({
                 $log.info(model.createConversationModel);
 
                 model.options = {};
+
+                IndividualLoan.getDefiniftion().$promise.then(function(res){
+                    model.stages = res.stages || [];
+                }, function(err){
+                    console.log(err);
+                });
 
                 RuleMaintenance.getRuleParams().$promise.then(function(res){
                     console.log(res);
@@ -383,7 +395,7 @@ define({
                                         try{
                                             a.ruleExpression = JSON.parse(res.body[i].userExpression);
                                         } catch(e){
-                                            a.ruleExpression = JSON.parse("{}");
+                                            a.ruleExpression = defaultRuleExpression;
                                         }
                                     }else{
                                         a.userExpression=res.body[i].expression;
@@ -453,7 +465,7 @@ define({
                                         try{
                                                 a.ruleExpression = JSON.parse(res.body[i].userExpression);
                                             } catch(e){
-                                                a.ruleExpression = JSON.parse("{}");
+                                                a.ruleExpression = defaultRuleExpression;
                                             }
                                     }else{
                                         a.userExpression=res.body[i].expression;
@@ -526,10 +538,6 @@ define({
                                         $log.info(res);
                                         PageHelper.showProgress("Rule-Delete", "Rule deleted successfully ,Please reload the page", 5000);
                                         PageHelper.hideLoader();
-                                        irfNavigator.go({
-                                            state: "Page.Landing",
-                                            pageName: ""
-                                        });
                                     },function(err){
                                         $log.info(err);
                                         PageHelper.hideLoader();
@@ -567,15 +575,13 @@ define({
         
             {
                 "type": "actionbox",
-                "items": [{
-                    "type": "button",
-                    "title": "Update Rule",
-                    "onClick": "actions.saveRule(model, form, formName)"
-                },{
-                    "type": "button",
-                    "title": "Add New Rule",
-                    "onClick": "actions.createRule(model, form, formName)"
-                }]
+                "items": [
+                    {
+                        "type": "button",
+                        "title": "Add New Rule",
+                        "onClick": "actions.createRule(model, form, formName)"
+                    }
+                ]
             }],
             schema: function() {
                  return Lead.getLeadSchema().$promise;
@@ -612,7 +618,45 @@ define({
                     RuleMaintenance.save(reqData).$promise.then(function(res){
                         PageHelper.hideLoader();
                         PageHelper.showProgress("new rule Save", "rule Creation success" , 3000);
-                        model.rule.rules=res;
+                        RuleMaintenance.getRules({processName:model.rule.processName, fromStage: model.rule.fromStage}).$promise.then(function(res){
+                            $log.info(res);
+                            if (res && res.body && res.body.length) {
+                                model.rule.rules = [];
+                                for (var i = 0; i < res.body.length; i++) {
+                                    var a = {
+                                        id: res.body[i].id,
+                                        version: res.body[i].version,
+                                        expression: res.body[i].expression,
+                                        fromStage: res.body[i].fromStage,
+                                        order: res.body[i].order,
+                                        processName: res.body[i].processName,
+                                        ruleDescription: res.body[i].ruleDescription,
+                                        ruleName: res.body[i].ruleName,
+                                        toStage: res.body[i].toStage  
+                                    };
+                                    if(res.body[i].userExpression){
+                                        a.userExpression=res.body[i].userExpression;
+                                        a.userExpressionInRuleForm = res.body[i].expression;
+                                        try{
+                                                a.ruleExpression = JSON.parse(res.body[i].userExpression);
+                                            } catch(e){
+                                                a.ruleExpression = defaultRuleExpression;
+                                            }
+                                    }else{
+                                        a.userExpression=res.body[i].expression;
+                                        a.userExpressionInRuleForm = res.body[i].expression;
+                                        a.ruleExpression = {
+                                            group: {
+                                              operator: model.options.operators[0], rules: []
+                                            }
+                                        };
+                                    }
+                                    model.rule.rules.push(a);
+                                };
+                            }
+                        }).finally(function(){
+                            PageHelper.hideLoader();
+                        });
                         $log.info(res);
                     },function(err){
                         PageHelper.hideLoader();
@@ -646,17 +690,14 @@ define({
                     PageHelper.showProgress("new rule Save", "Updating rule.." , 3000);
                     $log.info("Inside submit()");
                     var reqData={};
-                    reqData.rules=model.rule.rules;
+                    reqData.rules=[model.item];
                     PageHelper.showLoader();
                     RuleMaintenance.save(reqData).$promise.then(function(res){
                         PageHelper.hideLoader();
-                        for (var i = 0; i < res.length; i++) {
-                            res[i].ruleExpression = JSON.parse(res[i].userExpression);
-                            res[i].userExpressionInRuleForm = res[i].expression; 
-                        }
-                        model.rule.rules=res;
                         PageHelper.showProgress("new rule Save", "rule updation success" , 3000);
                         $log.info(res);
+                        model.item.version = res[0].version;
+                        model.item.userExpressionInRuleForm = res[0].expression;
                     },function(err){
                         PageHelper.hideLoader();
                         PageHelper.showErrors(err);
@@ -673,6 +714,7 @@ define({
                     reqData.rules=rules;
                     RuleMaintenance.validateRule(reqData).$promise.then(function(res){
                         $log.info(res);
+                        model.item.userExpressionInRuleForm = res[0].expression;
                         PageHelper.showProgress("rule validate", "Rule is valid" , 3000);
                     },function(err){
                         try {

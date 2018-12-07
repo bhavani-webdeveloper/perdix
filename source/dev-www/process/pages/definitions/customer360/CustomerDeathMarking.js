@@ -228,7 +228,7 @@ irf.pageCollection.factory(irf.page("customer360.CustomerDeathMarking"), ["$log"
                             subCategory: "DEATHCERTIFICATE",
                             type: "file",
                             fileType: "jpeg,jpg,png",  
-                            condition:"!model.deathMarking.deathMarkingStatus",            
+                            condition:"!model.deathMarking.deathMarkingStatus || model.deathMarking.deathMarkingStatus == 'REJECT'",            
                         },
                     ]
                 },

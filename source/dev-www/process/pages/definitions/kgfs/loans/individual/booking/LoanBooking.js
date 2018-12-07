@@ -302,8 +302,19 @@ define([], function () {
                         required: true,
                         searchHelper: formHelper,
                         search: function (inputModel, form, model, context) {
-
-                            return Queries.getLoanProductDetails(model.loanAccount.loanType, model.loanAccount.partnerCode, model.loanAccount.frequency);
+                            var deferred = $q.defer();
+                            Queries.getLoanProductDetails(model.loanAccount.loanType, model.loanAccount.partnerCode, model.loanAccount.frequency).then(function(resp){
+                                for(var i = 0; i< resp.body.length;i++){
+                                    var date = moment(resp.body[i].expiry_date,"YYYY-MM-DD");
+                                    var currentDate = moment(Utils.getCurrentDate(),"YYYY-MM-DD");
+                                    if( date < currentDate)
+                                        resp.body.splice(i,1);
+                                }
+                                deferred.resolve(resp);
+                            }),function(err){
+                                deferred.reject(err);
+                            };
+                            return deferred.promise;
                         },
                         onSelect: function (valueObj, model, context) {
                             model.loanAccount.productCode = valueObj.productCode;

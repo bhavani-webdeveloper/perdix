@@ -202,19 +202,17 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisal')
                                             loanRelation: {customerId: loanCustomerId}
                                         }
                                     })
-
+                                    var temp_model = {
+                                        loanAccount:res
+                                    }
                                     $this.bundlePages.push({
                                         pageClass: 'personal-discussion',
-                                        model: {
-                                            loanAccount: res
-                                        }
+                                        model: temp_model 
                                     });
 
                                     $this.bundlePages.push({
                                         pageClass: 'loan-request',
-                                        model: {
-                                            loanAccount: res
-                                        }
+                                        model: temp_model
                                     });
 
                                     $this.bundlePages.push({

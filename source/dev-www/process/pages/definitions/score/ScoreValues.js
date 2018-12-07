@@ -8,6 +8,17 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
         "subTitle": "",
         initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
 
+            model.getByEnumCode = function (parameterName) {
+                if(parameterName == "PM1")
+                    return "language";
+                else if(parameterName == "PM2")
+                    return "recovery_attempt"
+                else if(parameterName == "DSCR!")
+                    return "personal_overdue_reasons"
+                else if(parameterName == "SBscore!")
+                    return "excel_type"
+            }
+
 
             model.getScoreParameter = function(subScoreId, ScoreParameterId){
                 var subScore = model.scoreMaster.subScores.find(function(subScore) {
@@ -31,9 +42,9 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
                 model.scoreMasterID = $stateParams.pageId;
 
 
-                 ScoresMaintenance.allParameterMaster({}, function (resp, header) {
+                model.allParameterMaster =ScoresMaintenance.allParameterMaster({}, function (resp, header) {
                     console.log(resp);
-                     model.allParameterMaster=resp;
+                     //model.allParameterMaster=resp;
 
                 }, function (err) {
 
@@ -92,21 +103,22 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
                                 return $q.resolve({
                                     "dtlKeyvalue": "ADD_PARAMETER",
                                     "columns": [
-                                        {
-                                            prop: "scoreName",
-                                            type : "text" ,
-                                            required: true,
-                                            name: "scoreName"
-                                        },
+
                                         {
                                             prop: "subScoreName",
                                             type: "text",
-                                            name: "subScoreName"
+                                            name: "SUB_SCORE_NAME"
                                         },
                                         {
                                             prop: "parameterName",
                                             type: "select",
-                                            name: "parameterName",
+                                            name: "PARAMETER_NAME",
+                                            onClick : function(value , model , row){
+                                                console.log("its working ");
+                                                row.enumCode = model.getByEnumCode(row.parameterName);
+                                                row.categoryValueFrom="";
+                                                row.categoryValueTo="";
+                                            },
                                             getListOptions: function (model) {
                                                 return $q.when(model.allParameterMaster).then(function (value) {
                                                     var options = [];
@@ -119,51 +131,61 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
                                                 });
                                             },
                                         },
-                                        // {
-                                        //     prop: "categoryValueFrom",
-                                        //     type: "select-typeahead",
-                                        //     isTypeaheadSelect: false,
-                                        //     isTypeaheadStrategy : true,
-                                        //     name: "categoryValueFrom",
-                                        //     getItems: function (model) {
-                                        //
-                                        //
-                                        //         return $q.when(model.allParameterMaster).then(function (value) {
-                                        //             return ["A","B","C"];
-                                        //             })
-                                        //
-                                        //         // console.log("okkkkkkkkkkkk");
-                                        //         // return $q.when(model.allParameterMaster).then(function (value) {
-                                        //         //     var options = ["A","B","C"];
-                                        //         //     // if(value){
-                                        //         //     //     for (i = 0; i < value.length; i++) {
-                                        //         //     //         options.push(value[i].parameterName);
-                                        //         //     //     }
-                                        //         //     // }
-                                        //         //     return options;
-                                        //         // });
-                                        //     },
-                                        // },
+                                    //-------------------------------------------------------------
                                         {
                                             prop: "categoryValueFrom",
-                                            type: "text",
-                                            name: "categoryValueFrom"
+                                            type: "select-typeahead",
+                                            name: "VALUE_FROM",
+                                            isTypeaheadSelect : false,
+                                            isTypeaheadStrategy : false,
+                                            typeaheadExpr : "name",
+                                            getItems: function (viewValue, model,row) {
+                                                return $q.when(formHelper.enum(row.enumCode)).then(function (value) {
+                                                    var options = [];
+                                                    for (i = 0; i < value.data.length; i++) {
+                                                        options.push({ "name" :  value.data[i].value}  );
+                                                    }
+                                                    return options;
+                                                });
+
+                                            },
                                         },
                                         {
                                             prop: "categoryValueTo",
-                                            type: "text",
-                                            name: "categoryValueTo"
+                                            type: "select-typeahead",
+                                            name: "VALUE_TO",
+                                            isTypeaheadSelect : false,
+                                            isTypeaheadStrategy : false,
+                                            typeaheadExpr : "name",
+                                            getItems: function (viewValue, model,row) {
+                                                return $q.when(formHelper.enum(row.enumCode)).then(function (value) {
+                                                    var options = [];
+                                                    for (i = 0; i < value.data.length; i++) {
+                                                        options.push({ "name" :  value.data[i].value}  );
+                                                    }
+                                                    return options;
+                                                });
+
+                                            },
                                         },
+                                        //-------------------------------------------------------------
+                                        
                                         {
                                             prop: "colorEnglish",
                                             type: "text",
-                                            name: "colorEnglish"
+                                            name: "COLOR"
                                         },
                                         {
                                             prop: "status",
-                                            type: "text",
-                                            name: "status"
-                                        }
+                                            type: "select",
+                                            name: "status",
+                                            getListOptions: function (model) {
+                                                return $q.when(model.allParameterMaster).then(function (value) {
+                                                    var options = ["ACTIVE","DEACTIVE"];
+                                                    return options;
+                                                });
+                                            },
+                                        },
                                     ],
 
                                 })
@@ -204,7 +226,7 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
 
                 var requestBody ={ scoreMaster : model.scoreMaster}
                 ScoresMaintenance.scoreUpdate( requestBody, function (resp, header) {
-
+                    irfProgressMessage.pop('cust-update', 'Done. Customer Updated, ID : ' + res.customer.id, 2000);
                 }, function (err) {
 
                 });

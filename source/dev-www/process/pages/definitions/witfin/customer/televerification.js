@@ -1228,7 +1228,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                                 "readonly": true
                                                             },
                                                             {
-                                                                "key": "loanAccount.vehicleLoanDetails.insuranceIdv",
+                                                                "key": "loanAccount.vehicleLoanDetails.insuredDeclaredValue",
                                                                 "type": "number",
                                                                 "title": "IDV",
                                                                 "readonly": true

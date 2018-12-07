@@ -19,7 +19,7 @@
         },
         "scoreCriterias": {
           "type": "array",
-          "items": [
+          "items": 
             {
               "type": "object",
               "properties": {
@@ -47,7 +47,6 @@
                 "status"
               ]
             }
-          ]
         },
         "scoreId": {
           "type": "integer"
@@ -63,12 +62,18 @@
         },
         "subScores": {
           "type": "array",
-          "items": [
+          "items": 
             {
               "type": "object",
               "properties": {
                 "id": {
                   "type": "integer"
+                },
+                "subscoreName": {
+                    "type": "string"
+                },
+                "subScoreWeightage": {
+                    "type": "integer"
                 },
                 "isIndividualScore": {
                   "type": "boolean"
@@ -78,8 +83,7 @@
                 },
                 "scoreParameters": {
                   "type": "array",
-                  "items": [
-                    {
+                  "items": {
                       "type": "object",
                       "properties": {
                         "id": {
@@ -99,7 +103,7 @@
                         },
                         "scoreValues": {
                           "type": "array",
-                          "items": [
+                          "items": 
                             {
                               "type": "object",
                               "properties": {
@@ -151,7 +155,7 @@
                                 "value"
                               ]
                             }
-                          ]
+                          
                         },
                         "status": {
                           "type": "string"
@@ -170,16 +174,9 @@
                         "status",
                         "subScoreId"
                       ]
-                    }
-                  ]
+                    }        
                 },
                 "status": {
-                  "type": "string"
-                },
-                "subScoreWeightage": {
-                  "type": "integer"
-                },
-                "subscoreName": {
                   "type": "string"
                 }
               },
@@ -193,7 +190,6 @@
                 "subscoreName"
               ]
             }
-          ]
         }
       },
       "required": [
