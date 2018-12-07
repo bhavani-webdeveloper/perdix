@@ -23,11 +23,13 @@ define(
                     "VehicleRegistrationDetails.cubicCapacity":{
                         "inputmode": "number",
                         "numberType": "number",
-                        "type": "number"
+                        "type": "number",
+                        "readonly":true
                     },
                     "VehicleAsset.vehicleAssetConditions.componentCondition": {
                         "condition": "!(model.loanAccount.vehicleLoanDetails.vehicleAssetConditions[arrayIndex].componentType == 'LH Front' || model.loanAccount.vehicleLoanDetails.vehicleAssetConditions[arrayIndex].componentType == 'RH Front' || model.loanAccount.vehicleLoanDetails.vehicleAssetConditions[arrayIndex].componentType == 'LH Rear' || model.loanAccount.vehicleLoanDetails.vehicleAssetConditions[arrayIndex].componentType == 'RH Rear')",
-                        "orderNo": 30
+                        "orderNo": 30,
+                        "readonly":true
                     },
                     "VehicleAsset.vehicleAssetConditions.make": {
                         "condition": "model.loanAccount.vehicleLoanDetails.vehicleAssetConditions[arrayIndex].componentType == 'LH Front' || model.loanAccount.vehicleLoanDetails.vehicleAssetConditions[arrayIndex].componentType == 'LH Rear' || model.loanAccount.vehicleLoanDetails.vehicleAssetConditions[arrayIndex].componentType == 'RH Front' || model.loanAccount.vehicleLoanDetails.vehicleAssetConditions[arrayIndex].componentType == 'RH Rear'",
@@ -61,39 +63,36 @@ define(
                     "VehicleRegistrationDetails.fuelUsed":{
                         "readonly":true
                     },
-                    "VehicleRegistrationDetails.cubicCapacity":{
-                        "readonly":true
-                    },
                     "VehicleIdentityDetails.chasisNo":{
                         "readonly":true
                     },
-                        "VehiclePrimaryInfo.firstName": {
-                            "readonly":  true
-                        },
-                        "VehiclePrimaryInfo.mobileNo": {
-                            "readonly":  true
-                        },
-                        "VehiclePrimaryInfo.AlternatemobileNo": {
-                            "readonly":  true
-                        },
-                        "VehiclePrimaryInfo.doorNo": {
-                            "readonly":  true
-                        },
-                        "VehiclePrimaryInfo.street": {
-                            "readonly":  true
-                        },
-                        "VehiclePrimaryInfo.postOffice": {
-                            "readonly":  true
-                        },
-                        "VehiclePrimaryInfo.pincode": {
-                            "readonly":  true
-                        },
-                        "VehiclePrimaryInfo.district": {
-                            "readonly":  true
-                        },
-                        "VehiclePrimaryInfo.state": {
-                            "readonly":  true
-                        },
+                    "VehiclePrimaryInfo.firstName": {
+                        "readonly":  true
+                    },
+                    "VehiclePrimaryInfo.mobileNo": {
+                        "readonly":  true
+                    },
+                    "VehiclePrimaryInfo.AlternatemobileNo": {
+                        "readonly":  true
+                    },
+                    "VehiclePrimaryInfo.doorNo": {
+                        "readonly":  true
+                    },
+                    "VehiclePrimaryInfo.street": {
+                        "readonly":  true
+                    },
+                    "VehiclePrimaryInfo.postOffice": {
+                        "readonly":  true
+                    },
+                    "VehiclePrimaryInfo.pincode": {
+                        "readonly":  true
+                    },
+                    "VehiclePrimaryInfo.district": {
+                        "readonly":  true
+                    },
+                    "VehiclePrimaryInfo.state": {
+                        "readonly":  true
+                    },
                     "VehicleRegistrationDetails.reRegistered" :{
                         "orderNo":10,
                          "readonly":  true
@@ -188,21 +187,12 @@ define(
                     "VehicleIdentityDetails.variant":{
                         "readonly":true
                     },
-                        "VehicleAsset.vehicleAssetConditions.make": {
-                            "readonly": true
-                        },
-                        "VehicleAsset.vehicleAssetConditions.componentType": {
-                            "readonly": true
-                        },
-                        "VehicleAsset.vehicleAssetConditions.componentCondition": {
-                            "readonly": true
-                        },
-                        "VehicleAsset.vehicleAssetConditions.componentCondition1": {
-                            "readonly": true
-                        },
-                        "VehicleAsset.vehicleAssetConditions.componentRemarks": {
-                            "readonly": true
-                        },
+                    "VehicleAsset.vehicleAssetConditions.componentType": {
+                        "readonly": true
+                    },
+                    "VehicleAsset.vehicleAssetConditions.componentRemarks": {
+                        "readonly": true
+                    },
                     "VehicleAccessories": {
                         "readonly": true
                     },
@@ -221,7 +211,11 @@ define(
                     "VehicleIdentityDetails.odometerReading":{
                         "readonly":true
                     },
+                     "VehicleAccessories.vehicleAccessories":{
+                        "startEmpty": true,
+                    },
                     "VehicleAccessories.vehicleAccessories.accessoryType":{
+                        "readonly":true,
                         "required":false
                     },
                     "VehicleIdentityDetails": {

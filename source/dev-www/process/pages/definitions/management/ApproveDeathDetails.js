@@ -22,6 +22,7 @@ define({
                 model.approveDeathDetails.dateOfIncident = $stateParams.pageData.dateOfIncident;
                 model.approveDeathDetails.details = $stateParams.pageData.furtherDetails;
                 model.approveDeathDetails.comments = $stateParams.pageData.comments;
+                model.approveDeathDetails.fileId = $stateParams.pageData.fileId;                
             },
             form: [
                 {
@@ -70,6 +71,15 @@ define({
                             "type": "string",
                             "title": "APPROVE_DEATH_COMMENTS",
                             readonly: true
+                        },
+                        {
+                            key: "approveDeathDetails.fileId",                                            
+                            title: "DEATHCERTIFICATE_UPLOAD_FILE",
+                            category: "DeathMarking",
+                            subCategory: "DEATHCERTIFICATE",
+                            type: "file",
+                            fileType: "jpeg,jpg,png",  
+                            readonly : true
                         },
                     ]
                 },

@@ -122,7 +122,26 @@ function($log, formHelper, CentreCreationResource,$state, ScoresMaintenance,Sess
 							isApplicable: function(item, index){
 									return true;
 							}
-							}
+							},
+                        {
+                            name: "EDIT_SCORE_VALUE",
+                            desc: "",
+                            icon: "fa fa-user",
+                            fn: function(item, index) {
+                                irfNavigator.go({
+                                        state: "Page.Engine",
+                                        pageName: "score.ScoreValues",
+                                        pageId: item.scoreId,
+                                    },
+                                    {
+                                        state: "Page.Engine",
+                                        pageName: "management.ScoreCreationSearch",
+                                    });
+                            },
+                            isApplicable: function(item, index){
+                                return true;
+                            }
+                        }
 						];
 				}
 			}
@@ -132,4 +151,3 @@ function($log, formHelper, CentreCreationResource,$state, ScoresMaintenance,Sess
 ]);
 
 
-						

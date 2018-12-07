@@ -2,6 +2,19 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
     ["$log", "$state", "ScoresMaintenance", "formHelper", "$q", "irfProgressMessage", "ScoresMaintenance", "PageHelper", "Utils", "irfNavigator",
         function ($log, $state, ScoresMaintenance, formHelper, $q, irfProgressMessage, ScoresMaintenance, PageHelper, Utils, irfNavigator) {
 
+            var tempErrorFix = function(resp){
+                var newError = {};
+                newError.errors = {};
+                if(resp.data.body.errors){
+                    var keys = Object.keys(resp.data.body.errors);
+                    for(var i=0;i<keys.length;i++){
+                        if(!keys[i]== "")
+                            newError.errors[keys[i]] = resp.data.body.errors[keys[i]];
+                    }
+                    return newError;
+                }
+                return null;
+            };  
             return {
                 "type": "schema-form",
                 "title": "SCORE_CREATION",
@@ -239,7 +252,7 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
                                     "items":[
                                         {   
                                             "key": "scoreMaster.subScores[].scoreParameters[].parameterName",
-                                            "title":"parameterName",
+                                            "title":"PARAMETER_NAME",
                                             "type":"lov",
                                             searchHelper: formHelper,
                                             search: function (inputModel, form, model) {
@@ -270,12 +283,12 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
 
                                         },
                                         {
-                                            "title":"parameterPassScore",
+                                            "title":"PARAMETER_PASS_SCORE",
                                             "type": "string",
                                             "key": "scoreMaster.subScores[].scoreParameters[].parameterPassScore"
                                         },
                                         {
-                                            "title":"parameterWeightage",
+                                            "title":"PARAMETER_WEIGHTAGE",
                                             "type": "string",
                                             "key": "scoreMaster.subScores[].scoreParameters[].parameterWeightage"
                                         },
@@ -323,7 +336,9 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
                                 irfNavigator.goBack();
                                 deferred.resolve(resp);
                             }, function (errResp) {
-                                PageHelper.showErrors(errResp.data);
+                                PageHelper.showErrors({data:{
+                                    error:"Please work"
+                                }});
                             }).finally(function () {
                                 PageHelper.hideLoader();
                             });
@@ -332,7 +347,9 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
                                 Utils.alert("Score Updated Successfully");
                                 irfNavigator.goBack();
                             }, function (errResp) {
-                                PageHelper.showErrors(errResp.data);
+                                errors = tempErrorFix(errResp);
+                                errors.errors = ["sajfjf","sakffaf","affffa"];
+                                PageHelper.showErrors(errors|errResp.data.body);
                             }).finally(function () {
                                 PageHelper.hideLoader();
                             });

@@ -1,35 +1,30 @@
 <?php
-
 include_once("bootload.php");
 $download = $_GET["download"];
+ob_start();
 if(isset($download)){
-
     $url_file = $_GET["file"];
     $url_file_type = $_GET["file_type"];
     $url_folder_name = $_GET["folder_name"];
-
     $url_file_name = $url_file.".".$url_file_type;
-
-    $folder_path = getenv('ALL_FORMS_BASE_DIR');
+    $folder_path = $_GET["folder_path"];
+    // $folder_path = getenv('ALL_FORMS_BASE_DIR');
     $folder_name = date('YMd').'/';
-
-    $file_name = $folder_path.$url_file_name;
-
+    $file_name = $folder_path.'/'.$url_file_name;
     if(isset($url_folder_name)) {
-        $file_name = $folder_path.$url_folder_name.'/'.$url_file_name;
+        $file_name = $folder_path.'/'.$url_folder_name.'/'.$url_file_name;
     }
     if (file_exists($file_name)) {
-        header('Content-Description: File Transfer');
-        header('Content-Type: application/octet-stream');
+        // header('Content-Description: File Transfer');
+        header('Content-Type: application/zip');
         header("Content-Type: application/force-download");
         header('Content-Disposition: attachment; filename=' . urlencode(basename($file_name)));
-        // header('Content-Transfer-Encoding: binary');
+        header('Content-Transfer-Encoding: binary');
         header('Expires: 0');
         header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
         header('Pragma: public');
         header('Content-Length: ' . filesize($file_name));
-        ob_clean();
-        flush();
+        ob_end_clean();
         readfile($file_name);
         unlink($file_name);
         exit;
@@ -57,9 +52,9 @@ else{
     define('DB_PASSWORD', getenv('DB_PASSWORD'));
 
     $perdix_db = getenv('DB_NAME');
-
-    $form_base_url = "http://sit.perdix.co.in:8080/sit_kgfs_forms";
-    $folder_path = getenv('ALL_FORMS_BASE_DIR');
+    $form_base_url = $_GET["forms_base_url"];
+    // $folder_path = getenv('ALL_FORMS_BASE_DIR');
+    $folder_path = sys_get_temp_dir();
 
     try{
         try{
@@ -113,26 +108,18 @@ else{
             return false;
         }
     }
-
-
     $files_to_zip = "";
     $file_time = date('YmdHis');
-
     $record_id = $_GET['record_id'];
     $type = empty($_GET['type'])? 'INDV': $_GET['type'];
-
     $folder_name = date('YMd');
-
     $files_folder_path = $folder_path.'/'.$type.'_'.$record_id.'_'.date('YMDHis').'/';
-
     if (!file_exists($files_folder_path)) {
         $old_umask = umask(0);
         mkdir($files_folder_path, 0777);
         umask($old_umask);
     }
-
     $query = [];
-
     $query['INDV'] = "
     SELECT
         DOC.`forms_key` AS `forms_key`,
@@ -153,7 +140,6 @@ else{
         AND DOC.`download_required` = 1
     ORDER BY DOC.id ASC
     ";
-
     $query['JLG'] = "
     SELECT 'personal_information' AS `forms_key`, 'personal_information' AS `document_name`, GM.customer_id AS `record_id`, 'html' AS `file_extn`
     FROM $perdix_db.jlg_groups G
@@ -215,14 +201,10 @@ else{
     WHERE
         G.id = $record_id
     ";
-
     if ($show_log) echo "<pre>Query:\n".$query[$type]."\n\n";
-
     $get_all_form_names = mysqli_query($connection, $query[$type])
         or die(mysqli_error($connection));
-
     $individual_forms = [];
-
     for ($j = 0; $stored_forms = mysqli_fetch_assoc($get_all_form_names); $j++) {
         $f = [];
         $f['forms_key'] = $stored_forms['forms_key'];
@@ -239,36 +221,26 @@ else{
     }
     mysqli_free_result($get_all_form_names);
     mysqli_close($connection);
-
     foreach ($individual_forms as $f) {
         $DownloadFileName = $f['document_name']."_".$f['record_id'].'.'.$f['file_extn'];
         $form_url = $form_base_url."/formPrint.jsp?form_name=".$f['forms_key']."&record_id=".$f['record_id'];
-
         if ($show_log) echo "\nDownloading <a href='$form_url' target='_blank'>$DownloadFileName</a>";
-
         $DownloadContent = file_get_contents($form_url);
-
         file_put_contents($files_folder_path.$DownloadFileName, $DownloadContent);
-
         $files_to_zip[] = $DownloadFileName;
     }
-
     $attachment_zip_file = $type.'_'.$record_id;
-
     $zipping_folder_path = $folder_path;
     $output_filename = $zipping_folder_path.'/'.$attachment_zip_file.".zip";
-
     create_zip($files_to_zip, $files_folder_path, $output_filename);
-
     foreach($files_to_zip AS $file_name) {
         unlink($files_folder_path.$file_name);
     }
     rmdir($files_folder_path);
-
     if ($show_log) {
-        echo "\n\n".'<a href="allFormsDownload.php?file='.$attachment_zip_file.'&file_type=zip$download=auto" onclick="this.style.display=\'none\'">Download ZIP</a></pre>';
+         echo "\n\n".'<a href="allFormsDownload.php?file='.$attachment_zip_file.'&file_type=zip$download=auto" onclick="this.style.display=\'none\'">Download ZIP</a></pre>';
     } else {
-        header('Location: allFormsDownload.php?file='.$attachment_zip_file.'&file_type=zip&download=auto');
+        header('Location:allFormsDownload.php?file='.$attachment_zip_file.'&file_type=zip&download=auto&folder_path='.$folder_path);
     }
 }
 ?>

@@ -1,12 +1,23 @@
 irf.pageCollection.factory(irf.page("score.ScoreValues"),
-["$q","$log","$stateParams", "ScoresMaintenance", "$state", "SessionStore","formHelper", "PageHelper", "$httpParamSerializer", "AuthTokenHelper", "SchemaResource",
-    function($q,$log,$stateParams, ScoresMaintenance, $state, SessionStore,formHelper, PageHelper, $httpParamSerializer, AuthTokenHelper, SchemaResource) {
+["$q","$log","$stateParams", "ScoresMaintenance", "$state", "SessionStore","formHelper", "PageHelper", "$httpParamSerializer", "AuthTokenHelper", "SchemaResource","irfProgressMessage",
+    function($q,$log,$stateParams, ScoresMaintenance, $state, SessionStore,formHelper, PageHelper, $httpParamSerializer, AuthTokenHelper, SchemaResource,irfProgressMessage) {
 	
 	return {
         "type": "schema-form",
         "title": "Manage Parameter Score",
         "subTitle": "",
         initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
+
+            model.getByEnumCode = function (parameterName) {
+                if(parameterName == "PM1")
+                    return "language";
+                else if(parameterName == "PM2")
+                    return "recovery_attempt"
+                else if(parameterName == "DSCR!")
+                    return "personal_overdue_reasons"
+                else if(parameterName == "SBscore!")
+                    return "excel_type"
+            }
 
 
             model.getScoreParameter = function(subScoreId, ScoreParameterId){
@@ -102,10 +113,15 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
                                             prop: "parameterName",
                                             type: "select",
                                             name: "PARAMETER_NAME",
+                                            onClick : function(value , model , row){
+                                                console.log("its working ");
+                                                row.enumCode = model.getByEnumCode(row.parameterName);
+                                                row.categoryValueFrom="";
+                                                row.categoryValueTo="";
+                                            },
                                             getListOptions: function (model) {
                                                 return $q.when(model.allParameterMaster).then(function (value) {
                                                     var options = [];
-                                                    //console.log("okkkkkkkkk");
                                                     if(value){
                                                         for (i = 0; i < value.length; i++) {
                                                             options.push(value[i].parameterName);
@@ -123,9 +139,26 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
                                             isTypeaheadSelect : false,
                                             isTypeaheadStrategy : false,
                                             typeaheadExpr : "name",
-                                            getItems: function (viewValue, model) {
+                                            getItems: function (viewValue, model,row) {
+                                                return $q.when(formHelper.enum(row.enumCode)).then(function (value) {
+                                                    var options = [];
+                                                    for (i = 0; i < value.data.length; i++) {
+                                                        options.push({ "name" :  value.data[i].value}  );
+                                                    }
+                                                    return options;
+                                                });
 
-                                                return $q.when(formHelper.enum("language")).then(function (value) {
+                                            },
+                                        },
+                                        {
+                                            prop: "categoryValueTo",
+                                            type: "select-typeahead",
+                                            name: "VALUE_TO",
+                                            isTypeaheadSelect : false,
+                                            isTypeaheadStrategy : false,
+                                            typeaheadExpr : "name",
+                                            getItems: function (viewValue, model,row) {
+                                                return $q.when(formHelper.enum(row.enumCode)).then(function (value) {
                                                     var options = [];
                                                     for (i = 0; i < value.data.length; i++) {
                                                         options.push({ "name" :  value.data[i].value}  );
@@ -136,12 +169,7 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
                                             },
                                         },
                                         //-------------------------------------------------------------
-                                        
-                                        {
-                                            prop: "categoryValueTo",
-                                            type: "text",
-                                            name: "VALUE_TO"
-                                        },
+
                                         {
                                             prop: "colorEnglish",
                                             type: "text",
@@ -182,8 +210,8 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
         },
         actions: {
             submit: function(model, form, formName) {
-                console.log("Goog");
 
+                PageHelper.showLoader();
                 model.scoreMaster.subScores.forEach(function(subScore) {
                     subScore.scoreParameters.forEach(function(scoreParameters) {
                         var ScoreParameter = model.getScoreParameter(subScore.id,scoreParameters.id);
@@ -198,9 +226,12 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
 
                 var requestBody ={ scoreMaster : model.scoreMaster}
                 ScoresMaintenance.scoreUpdate( requestBody, function (resp, header) {
-                    irfProgressMessage.pop('cust-update', 'Done. Customer Updated, ID : ' + res.customer.id, 2000);
-                }, function (err) {
 
+                    PageHelper.hideLoader();
+                    irfProgressMessage.pop('cust-update', 'Done. Score Values are Updated ', 2000);
+                }, function (err) {
+                    PageHelper.hideLoader();
+                    irfProgressMessage.pop('cust-update', 'Oops. Some error.', 2000);
                 });
 			}
 			

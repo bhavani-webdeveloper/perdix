@@ -696,7 +696,8 @@ define({
                         PageHelper.hideLoader();
                         PageHelper.showProgress("new rule Save", "rule updation success" , 3000);
                         $log.info(res);
-                        model.item.version = model.item.version +1;
+                        model.item.version = res[0].version;
+                        model.item.userExpressionInRuleForm = res[0].expression;
                     },function(err){
                         PageHelper.hideLoader();
                         PageHelper.showErrors(err);
@@ -713,6 +714,7 @@ define({
                     reqData.rules=rules;
                     RuleMaintenance.validateRule(reqData).$promise.then(function(res){
                         $log.info(res);
+                        model.item.userExpressionInRuleForm = res[0].expression;
                         PageHelper.showProgress("rule validate", "Rule is valid" , 3000);
                     },function(err){
                         try {
