@@ -101,8 +101,8 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
                         getListItem: function(item){
                             return [
                                 item.customerName + " ( Account #: " + item.accountNumber + ")",
-                                "<em>Disbursed Amount:  &#8377;" + (_.isEmpty(item.disbursedAmount) ? 0 : item.disbursedAmount) + ", Disbursement Amount :  &#8377;" + item.disbursementAmount
-                                +", Scheduled Disbursement Date :" + (_.isEmpty(item.scheduledDisbursementDate) ? " NA " : item.scheduledDisbursementDate) + "</em>"
+                                "<em>Disbursed Amount:  &#8377;" + ((!item.disbursedAmount) ? 0 : item.disbursedAmount) + ", Disbursement Amount :  &#8377;" + item.disbursementAmount
+                                +", Scheduled Disbursement Date :" + ((!item.scheduledDisbursementDate) ? " NA " : item.scheduledDisbursementDate) + "</em>"
                             ]
                         },
                         getActions: function(){
