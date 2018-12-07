@@ -59,8 +59,8 @@ define({
 								"screenFilter": true
 							}
 						},
-                        "customerId": {
-                            "title": "CUSTOMER_ID",
+                        "urn": {
+                            "title": "URN",
                             "type": "string"
                         },
                         "area": {
@@ -86,12 +86,13 @@ define({
                         'stage': 'BusinessApproval1',
                         'applicantName':searchOptions.applicantName,
                         'area':searchOptions.area,
-                        'villageName':searchOptions.villageName,
+                        'villageName':searchOptions.cityTownVillage,
                         'status':searchOptions.status,
                         'customerName': searchOptions.businessName,
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage,
-                        'centreCode': searchOptions.centre
+                        'centreCode': searchOptions.centre,
+                        'urn': searchOptions.urn
                     }).$promise;
                 },
                 paginationOptions: {
