@@ -97,7 +97,7 @@ define({
                     getListItem: function(item){
                         return [
                             item.customerName + " ( Account #: "+item.accountNumber+")",
-                            "<em>Disbursed Amount:  &#8377;"+(_.isEmpty(item.disbursedAmount)?0:item.disbursedAmount)+", Disbursement Amount :  &#8377;"+item.disbursementAmount+"</em>",
+                            "<em>Disbursed Amount:  &#8377;"+((!item.disbursedAmount)?0:item.disbursedAmount)+", Disbursement Amount :  &#8377;"+item.disbursementAmount+"</em>",
                             "{{'TRANCHE'|translate}} : &#8377;" + item.trancheNumber
                         ]
                     },
