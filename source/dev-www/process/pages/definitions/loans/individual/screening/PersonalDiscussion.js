@@ -224,7 +224,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                     "key": "loanAccount.telecallingDetails[" + applicantIndex + "].telecallingQuestionnaireList[].answer",
                                     "title": "Answer",
                                     "required": true,
-                                    "type": "number",
+                                    "type": ["number","string"],
                                     "condition": "model.loanAccount.telecallingDetails[" + applicantIndex + "].telecallingQuestionnaireList[arrayIndex].question && model.loanAccount.telecallingDetails[" + applicantIndex + "].telecallingQuestionnaireList[arrayIndex].input_type == 'number'"
                                 },
                                 {
@@ -344,7 +344,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                     "key": "loanAccount.telecallingDetails[" + applicantIndex + "].telecallingQuestionnaireList[].answer",
                                     "title": "Answer",
                                     "required": true,
-                                    "type": "number",
+                                    "type": ["number","string"],
                                     "condition": "model.loanAccount.telecallingDetails[" + applicantIndex + "].telecallingQuestionnaireList[arrayIndex].question && model.loanAccount.telecallingDetails[" + applicantIndex + "].telecallingQuestionnaireList[arrayIndex].input_type == 'number'"
                                 },
                                 {
@@ -490,7 +490,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                     "key": "loanAccount.telecallingDetails[" + loanCustomerIndex + "].telecallingQuestionnaireList[].answer",
                                     "title": "Answer",
                                     "required": true,
-                                    "type": "number",
+                                    "type": ["number","string"],
                                     "condition": "model.loanAccount.telecallingDetails[" + loanCustomerIndex + "].telecallingQuestionnaireList[arrayIndex].question && model.loanAccount.telecallingDetails[" + loanCustomerIndex + "].telecallingQuestionnaireList[arrayIndex].input_type == 'number'"
                                 },
                                 {
@@ -610,7 +610,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                     "key": "loanAccount.telecallingDetails[" + loanCustomerIndex + "].telecallingQuestionnaireList[].answer",
                                     "title": "Answer",
                                     "required": true,
-                                    "type": "number",
+                                    "type": ["number","string"],
                                     "condition": "model.loanAccount.telecallingDetails[" + loanCustomerIndex + "].telecallingQuestionnaireList[arrayIndex].question && model.loanAccount.telecallingDetails[" + loanCustomerIndex + "].telecallingQuestionnaireList[arrayIndex].input_type == 'number'"
                                 },
                                 {
@@ -760,7 +760,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                         "key": "loanAccount.telecallingDetails[" + coApplicantIndex + "].telecallingQuestionnaireList[].answer",
                                         "title": "Answer",
                                         "required": true,
-                                        "type": "number",
+                                        "type": ["number","string"],
                                         "condition": "model.loanAccount.telecallingDetails[" + coApplicantIndex + "].telecallingQuestionnaireList[arrayIndex].question && model.loanAccount.telecallingDetails[" + coApplicantIndex + "].telecallingQuestionnaireList[arrayIndex].input_type == 'number'"
                                     },
                                     {
@@ -879,7 +879,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                         "key": "loanAccount.telecallingDetails[" + coApplicantIndex + "].telecallingQuestionnaireList[].answer",
                                         "title": "Answer",
                                         "required": true,
-                                        "type": "number",
+                                        "type": ["number","string"],
                                         "condition": "model.loanAccount.telecallingDetails[" + coApplicantIndex + "].telecallingQuestionnaireList[arrayIndex].question && model.loanAccount.telecallingDetails[" + coApplicantIndex + "].telecallingQuestionnaireList[arrayIndex].input_type == 'number'"
                                     },
                                     {
@@ -999,7 +999,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                         "key": "loanAccount.telecallingDetails[" + guarantorIndex + "].telecallingQuestionnaireList[].answer",
                                         "title": "Answer",
                                         "required": true,
-                                        "type": "number",
+                                        "type": ["number","string"],
                                         "condition": "model.loanAccount.telecallingDetails[" + guarantorIndex + "].telecallingQuestionnaireList[arrayIndex].question && model.loanAccount.telecallingDetails[" + guarantorIndex + "].telecallingQuestionnaireList[arrayIndex].input_type == 'number'"
                                     },
                                     {
@@ -1085,7 +1085,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                         "key": "loanAccount.telecallingDetails[" + guarantorIndex + "].telecallingQuestionnaireList[].answer",
                                         "title": "Answer",
                                         "required": true,
-                                        "type": "number",
+                                        "type": ["number","string"],
                                         "condition": "model.loanAccount.telecallingDetails[" + guarantorIndex + "].telecallingQuestionnaireList[arrayIndex].question && model.loanAccount.telecallingDetails[" + guarantorIndex + "].telecallingQuestionnaireList[arrayIndex].input_type == 'number'"
                                     },
                                     {
