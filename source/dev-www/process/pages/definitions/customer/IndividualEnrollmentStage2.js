@@ -870,6 +870,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                     },
                     "HouseVerification.HouseDetails.durationOfStay": {
                         title: "What Toilet facility does your family use?",
+                        key:"HouseVerification.HouseDetails.toilet_facility_type",
                         required: true,
                         "type": "radios",
                         order: 100,
@@ -957,7 +958,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                 };
             }
         }
-        
+
         var getIncludes = function(model) {
             if (model.siteCode == "saija") {
                 return [
@@ -1452,7 +1453,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                                                 "Shared": "Shared",
                                                 "Own":"Own"
                                             },  
-                                            "key": "HouseVerification.HouseDetails.drinkingWater"
+                                            "key": "HouseVerification.HouseDetails.drinking_water"
                                                 },
                                                 "waterFiler":{
                                                     title:"Water Filer",
@@ -1462,7 +1463,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                                                         "Yes": "Yes",
                                                         "No": "No",
                                                     },
-                                                    "key":"HouseVerification.HouseDetails.waterFiler"
+                                                    "key":"HouseVerification.HouseDetails.water_filter"
                                                 },
                                         }
                                     }
