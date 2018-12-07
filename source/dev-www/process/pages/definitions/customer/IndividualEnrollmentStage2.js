@@ -1690,8 +1690,10 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                 submit: function(model, form, formName) {
                     var actions = this.actions;
                     $log.info("Inside submit()");
-                    if(model.BusinessOccupationDetails.businessDetails.businessManages){
-                        model.customer.udf.userDefinedFieldValues.udf19=model.BusinessOccupationDetails.businessDetails.businessManages;
+                    if(model.BusinessOccupationDetails && model.BusinessOccupationDetails.businessDetails){
+                        if(model.BusinessOccupationDetails.businessDetails.businessManages){
+                            model.customer.udf.userDefinedFieldValues.udf19=model.BusinessOccupationDetails.businessDetails.businessManages;
+                        }
                     }
                     if (!EnrollmentHelper.validateData(model)) {
                         $log.warn("Invalid Data, returning false");
