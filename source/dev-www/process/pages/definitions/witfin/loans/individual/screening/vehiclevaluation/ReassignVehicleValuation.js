@@ -190,12 +190,6 @@ define(
                     "VehicleAsset.vehicleAssetConditions.componentType": {
                         "readonly": true
                     },
-                    "VehicleAsset.vehicleAssetConditions.componentCondition": {
-                        "readonly": true
-                    },
-                    "VehicleAsset.vehicleAssetConditions.componentCondition1": {
-                        "readonly": true
-                    },
                     "VehicleAsset.vehicleAssetConditions.componentRemarks": {
                         "readonly": true
                     },
