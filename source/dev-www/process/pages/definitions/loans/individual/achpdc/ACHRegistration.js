@@ -165,7 +165,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"), 
 											});
 										} else if ((model.achACHSearch.body[i].accountId == model.ach.accountId) && (!model.achACHSearch.body[i].mandateActive)) {
 											model.isRejected = true;
-											angular.extend(model.ach, model.achACHSearch.body[i]);
+										//	angular.extend(model.ach, model.achACHSearch.body[i]);
 											model.ach.mandateStatus = "PENDING";
 											model.ach.registrationStatus = "PENDING";
 										}
@@ -448,6 +448,9 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"), 
 						PageHelper.showProgress("page-init", "ACH Registration Successful", 5000);
 						if (model.isRejected) {
 							model.achUpdateStatus = [];
+							model.ach.mandateId = response.mandateId;
+							model.ach.verificationStatus = 'Verified';
+							model.ach.mandateStatus = 'ACCEPTED'
 							model.achUpdateStatus.push(model.ach);
 							ACH.updateMandateStatus(model.achUpdateStatus).$promise.then(
 								function(response) {

@@ -1,17 +1,14 @@
 irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"),
-    ["$log", "$q", "Enrollment", "BiometricService", "elementsUtils", "SessionStore", "$state", "$stateParams", "PageHelper", "IndividualLoan", "SchemaResource", "Utils", "LoanAccount", "formHelper", "Queries", "LoanAccount", "Locking", "irfProgressMessage", "irfNavigator",
-        function ($log, $q, Enrollment, BiometricService, elementsUtils, SessionStore, $state, $stateParams, PageHelper, IndividualLoan, SchemaResource, Utils, LoanAccount, formHelper, Queries, LoanAccount, Locking, irfProgressMessage, irfNavigator) {
+    ["$log", "Enrollment", "BiometricService", "elementsUtils", "SessionStore", "$stateParams", "PageHelper", "IndividualLoan", "SchemaResource", "LoanAccount", "formHelper", "Queries", "LoanAccount", "irfNavigator",
+        function ($log, Enrollment, BiometricService, elementsUtils, SessionStore, $stateParams, PageHelper, IndividualLoan, SchemaResource, LoanAccount, formHelper, Queries, LoanAccount, irfNavigator) {
 
             var branch = SessionStore.getBranch();
             var siteCode = SessionStore.getGlobalSetting("siteCode");
             var requires = {
                 "modeOfDisbursement": siteCode == 'kinara' || siteCode == 'sambandh' || siteCode == 'saija' || siteCode == 'pahal'
-            }
-            var backToQueue = function () {
-                $state.go("Page.Engine", {
-                    pageName: "loans.individual.disbursement.ReadyForDisbursementQueue",
-                    pageId: null
-                });
+            };
+            var readonly = {
+                "scheduledDisbursementDate": siteCode == 'KGFS'
             };
             return {
                 "type": "schema-form",
@@ -22,19 +19,6 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                 "lockingRequired": true,
                 initialize: function (model, form, formCtrl) {
                     $log.info("Disbursement Page got initialized");
-                   // var recordId = ($stateParams['pageId'].split('.'))[0];
-
-                    // Locking.lock({
-                    //     "processType": "Loan",
-                    //     "processName": "Disbursement",
-                    //     "recordId": recordId
-                    // },{},function(resp,header){
-                    //     $state.page.locked = true;
-                    // },function(resp){
-                    //     irfProgressMessage.pop("Locking", "Locking failed for " + recordId, 6000);
-                    //     irfNavigator.goBack();
-                    // });
-
                     model.customer = model.customer || {};
                     model.loanAccountDisbursementSchedule = model.loanAccountDisbursementSchedule || {};
                     model.fee = model.fee || {};
@@ -52,10 +36,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
 
                     if (!model._disbursement) {
                         $log.info("Page visited directly");
-                        $state.go('Page.Engine', {
-                            pageName: 'loans.individual.disbursement.ReadyForDisbursementQueue',
-                            pageId: null
-                        });
+                        irfNavigator.goBack();
                     } else {
                         model.loanAccountDisbursementSchedule = model._disbursement;
                         $log.info("Printing the loanAccountDisbursementSchedule");
@@ -100,18 +81,6 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                 }
                             });
 
-                            /*if(model.siteCode == 'KGFS' && resp[0].fees) {
-                                model.additional.feeamount = [];
-                                for (var i = 0; i < resp[0].fees.length; i++){
-                                    if(resp[0].fees[i].param1 != "Cibil Charges") {
-                                        model.additional.feeamount.push(resp[0].fees[i]);
-                                    }
-                                }
-                            } else {
-                                model.additional.feeamount=resp[0].fees;
-                            }
-    */
-
                             model.additional.netDisbursementAmount = Number(resp[0].netDisbursementAmount);
                             var j = 1;
                             if (model.additional.tempfees) {
@@ -138,7 +107,9 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                 model.additional.netDisbursementAmount = Number(resp[0].amount);
                                 model.loanAccountDisbursementSchedule.modeOfDisbursement = "CASH";
                             }
-
+                            if (model.siteCode == 'KGFS') {
+                                loanAccountDisbursementSchedule.scheduledDisbursementDate = SessionStore.getSystemDate();
+                            }
 
                             Enrollment.getCustomerById({
                                 id: model.additional.customerId
@@ -153,21 +124,17 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                 });
                             $log.info(model.customer);
                         },
-                            function (resp) {
-                                PageHelper.showProgress('loan-fetch', 'Oops. An Error Occurred', 5000);
-                                PageHelper.showErrors(resp);
-
-
-                            }).$promise.finally(function () {
-                                PageHelper.hideLoader();
-                            });
+                        function (resp) {
+                            PageHelper.showProgress('loan-fetch', 'Oops. An Error Occurred', 5000);
+                            PageHelper.showErrors(resp);
+                        }).$promise.finally(function () {
+                            PageHelper.hideLoader();
+                        });
                     }
                     catch (err) {
                         console.error(err);
                         PageHelper.showProgress('loan-fetch', 'Oops. An Error Occurred', 5000);
                     }
-
-
                 },
                 offline: false,
                 getOfflineDisplayItem: function (item, index) {
@@ -275,15 +242,8 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         {
                             "key": "loanAccountDisbursementSchedule.scheduledDisbursementDate",
                             "title": "SCHEDULED_DISBURSEMENT_DATE",
-                            "condition": "model.siteCode != 'IREPDhan'",
                             "type": "date",
-                            "required": true
-                        },
-                        {
-                            "key": "loanAccountDisbursementSchedule.scheduledDisbursementDate",
-                            "title": "SCHEDULED_DISBURSEMENT_DATE",
-                            "condition": "model.siteCode == 'IREPDhan'",
-                            "type": "date",
+                            "readonly": readonly['scheduledDisbursementDate'],
                             "required": true,
                             "onChange": function (value, form, model, event) {
                                 model.validateDisbursementDate(model);
@@ -510,7 +470,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                 },
                 actions: {
                     goBack: function (model, formCtrl, form, $event) {
-                        backToQueue();
+                        irfNavigator.goBack();
                     },
                     disburseLoan: function (model, formCtrl, form) {
                         formCtrl.scope.$broadcast("schemaFormValidate");
@@ -566,8 +526,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                                 PageHelper.showProgress('disbursement', 'Disbursement done', 2000);
                                                 model.additional.disbursementDone = true;
                                                 PageHelper.hideLoader();
-                                                $state.go('Page.Engine', { pageName: 'loans.individual.disbursement.ReadyForDisbursementQueue', pageId: null });
-
+                                                irfNavigator.goBack();
                                             },
                                             function (res) {
                                                 PageHelper.showErrors(res);
@@ -608,7 +567,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                 reqData.stage = "DisbursementConfirmation";
                                 IndividualLoan.updateDisbursement(reqData, function (resp, header) {
                                     PageHelper.showProgress("upd-disb", "Done.", "5000");
-                                    backToQueue();
+                                    irfNavigator.goBack();
                                 }, function (resp) {
                                     PageHelper.showProgress("upd-disb", "Oops. An error occurred", "5000");
                                     PageHelper.showErrors(resp);

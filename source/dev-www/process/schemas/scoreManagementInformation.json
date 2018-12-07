@@ -1,0 +1,212 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "scoreMaster": {
+      "type": "object",
+      "properties": {
+        "maxScoreValue": {
+          "type": "integer"
+        },
+        "order": {
+          "type": "integer"
+        },
+        "overallPassvalue": {
+          "type": "string"
+        },
+        "partnerOrSelf": {
+          "type": "string"
+        },
+        "scoreCriterias": {
+          "type": "array",
+          "items": 
+            {
+              "type": "object",
+              "properties": {
+                "criteriaName": {
+                  "type": "string"
+                },
+                "criteriaValue": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "scoreName": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "criteriaName",
+                "criteriaValue",
+                "id",
+                "scoreName",
+                "status"
+              ]
+            }
+        },
+        "scoreId": {
+          "type": "integer"
+        },
+        "scoreName": {
+          "type": "string"
+        },
+        "stage": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "subScores": {
+          "type": "array",
+          "items": 
+            {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "subscoreName": {
+                    "type": "string"
+                },
+                "subScoreWeightage": {
+                    "type": "integer"
+                },
+                "isIndividualScore": {
+                  "type": "boolean"
+                },
+                "scoreName": {
+                  "type": "string"
+                },
+                "scoreParameters": {
+                  "type": "array",
+                  "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "maxParameterScore": {
+                          "type": "string"
+                        },
+                        "parameterName": {
+                          "type": ["string","null"]
+                        },
+                        "parameterPassScore": {
+                          "type": "string"
+                        },
+                        "parameterWeightage": {
+                          "type": "string"
+                        },
+                        "scoreValues": {
+                          "type": "array",
+                          "items": 
+                            {
+                              "type": "object",
+                              "properties": {
+                                "categoryValueFrom": {
+                                  "type": "string"
+                                },
+                                "categoryValueTo": {
+                                  "type": "string"
+                                },
+                                "colorEnglish": {
+                                  "type": "string"
+                                },
+                                "colorHexadecimal": {
+                                  "type": "string"
+                                },
+                                "id": {
+                                  "type": "integer"
+                                },
+                                "nonNegotiable": {
+                                  "type": "string"
+                                },
+                                "parameterName": {
+                                  "type": "string"
+                                },
+                                "scoreName": {
+                                  "type": "string"
+                                },
+                                "status": {
+                                  "type": "string"
+                                },
+                                "subscoreName": {
+                                  "type": "string"
+                                },
+                                "value": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "categoryValueFrom",
+                                "categoryValueTo",
+                                "colorEnglish",
+                                "colorHexadecimal",
+                                "id",
+                                "nonNegotiable",
+                                "parameterName",
+                                "scoreName",
+                                "status",
+                                "subscoreName",
+                                "value"
+                              ]
+                            }
+                          
+                        },
+                        "status": {
+                          "type": "string"
+                        },
+                        "subScoreId": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "maxParameterScore",
+                        "parameterName",
+                        "parameterPassScore",
+                        "parameterWeightage",
+                        "scoreValues",
+                        "status",
+                        "subScoreId"
+                      ]
+                    }        
+                },
+                "status": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "isIndividualScore",
+                "scoreName",
+                "scoreParameters",
+                "status",
+                "subScoreWeightage",
+                "subscoreName"
+              ]
+            }
+        }
+      },
+      "required": [
+        "maxScoreValue",
+        "order",
+        "overallPassvalue",
+        "partnerOrSelf",
+        "scoreCriterias",
+        "scoreId",
+        "scoreName",
+        "stage",
+        "status",
+        "subScores"
+      ]
+    }
+  },
+  "required": [
+    "scoreMaster"
+  ]
+}

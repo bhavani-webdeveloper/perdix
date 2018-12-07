@@ -136,7 +136,6 @@ gulp.task('updateLegacyURLInIndex', function(){
     return gulp.src(['./dev-www/integration.html'])
         .pipe($.cheerio({
             run: function($, file){
-                console.log(file);
                 $("#i7iframe").attr("src",legacySystemUrl)
             }
         }))

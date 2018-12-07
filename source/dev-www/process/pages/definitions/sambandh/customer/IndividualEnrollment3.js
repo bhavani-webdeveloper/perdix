@@ -25,6 +25,18 @@ irf.pageCollection.factory(irf.page("sambandh.customer.IndividualEnrollment3"), 
                             202: "Only alphabets and space are allowed."
                         },
                     },
+                    //new
+                        "CustomerInformation.caste":{
+                            "required":true,
+                        },
+                        "CustomerInformation.area":{
+                            "required":true, 
+                        },
+                        "CustomerInformation.photoImageId":{
+                            required:true,
+                        },
+                    
+                    //
                     "CustomerInformation.spouseFirstName": {
                         "required": true,
                         "type": "string",
@@ -34,7 +46,12 @@ irf.pageCollection.factory(irf.page("sambandh.customer.IndividualEnrollment3"), 
                         "validationMessage": {
                             202: "Only alphabets and space are allowed."
                         },
-                    },"KYC.IdentityProof1.identityProofImageId": {
+                    },
+                    //moved start
+                    "KYC": {
+                        orderNo: 15
+                    },
+                    "KYC.IdentityProof1.identityProofImageId": {
                         "viewParams": function(modelValue, form, model) {
                             return {
                                 customerId: model.customer.id
@@ -89,6 +106,8 @@ irf.pageCollection.factory(irf.page("sambandh.customer.IndividualEnrollment3"), 
                             };
                         },
                     },
+
+                    // till here
                     "CustomerInformation.customerBranchId": {
                         enumCode: "userbranches"
                     }, 
@@ -120,7 +139,7 @@ irf.pageCollection.factory(irf.page("sambandh.customer.IndividualEnrollment3"), 
                         },
                     },
                     "ContactInformation.mobilePhone": {
-                        "required": false
+                        "required": true
                     },
                     "CustomerInformation.age": {
                         "schema": {
@@ -396,7 +415,8 @@ irf.pageCollection.factory(irf.page("sambandh.customer.IndividualEnrollment3"), 
                         "required": true,
                     },
                     "CustomerInformation.fatherFirstName": {
-                        "title": "FATHER_FULL_NAME",
+                       "title":"father",
+                        //"title": "FATHER_FULL_NAME",
                         schema: {
                             pattern: "^[a-zA-Z\. ]+$",
                             type: ["string", "null"],

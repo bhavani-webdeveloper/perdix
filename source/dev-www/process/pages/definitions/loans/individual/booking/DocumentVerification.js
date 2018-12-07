@@ -14,6 +14,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
             "processName": "Booking",
             "lockingRequired": true,
             initialize: function(model, form, formCtrl) {
+                var loanDocumentsArray=[];
+                var masterDocumentsArray=[];
+                var allExistingDocs=[];
+                var uploadedExistingDocs=[];
+                var remainingDocsArray=[];
                 $log.info("Demo Customer Page got initialized");
                 model.loanView = SessionStore.getGlobalSetting("LoanViewPageName");
                 model.siteCode = SessionStore.getGlobalSetting("siteCode");
@@ -23,6 +28,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                 IndividualLoan.get({ id: $stateParams.pageId }).$promise.then(function(res) {
                     PageHelper.showProgress('loan-load', 'Loading done.', 2000);
                     model.loanAccount = res;
+                    uploadedExistingDocs=_.cloneDeep(res.loanDocuments);
+                   
                     /* DO BASIC VALIDATION */
                     if (res.currentStage!= 'DocumentVerification'){
                         PageHelper.showProgress('load-loan', 'Loan is in different Stage', 2000);
@@ -47,6 +54,76 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                     var availableDocCodes = [];
                     LoanBookingCommons.getDocsForProduct(model.loanAccount.productCode, "LoanBooking", "DocumentUpload").then(function(docsForProduct) {
                         $log.info(docsForProduct);
+                        
+                        masterDocumentsArray=docsForProduct;
+                        for(var i=0;i<masterDocumentsArray.length;i++){
+                            var pushFlag = true;
+                            if (uploadedExistingDocs && uploadedExistingDocs.length) {
+                                for(var j=0;j<uploadedExistingDocs.length;j++){
+                                    if (!uploadedExistingDocs[j]) continue;
+                                    if(masterDocumentsArray[i].document_code == uploadedExistingDocs[j].document){
+                                        allExistingDocs.push({
+                                            "documentId": uploadedExistingDocs[j].documentId,
+                                            "id": uploadedExistingDocs[j].id,
+                                            "loanId": uploadedExistingDocs[j].loanId,
+                                            "$title": masterDocumentsArray[i].document_description ||
+                                                masterDocumentsArray[i].document_name ||
+                                                masterDocumentsArray[i].document_code,
+                                            "$downloadRequired": masterDocumentsArray[i].download_required,
+                                            "$mandatory": masterDocumentsArray[i].mandatory,
+                                            "isHidden": false,
+                                            "documentStatus": uploadedExistingDocs[j].documentStatus,
+                                            "remarks":uploadedExistingDocs[j].remarks,
+                                            "rejectReason":uploadedExistingDocs[j].rejectReason
+                                        });
+                                        pushFlag=false;
+                                        uploadedExistingDocs[j]=null;
+                                    }
+                                }
+                            }
+                            if(pushFlag){
+                                allExistingDocs.push({
+                                    "$formsKey": masterDocumentsArray[i].forms_key,
+                                    "$key": masterDocumentsArray[i].forms_key,
+                                    "documentId": null,
+                                    "id": null,
+                                    "loanId": $stateParams.pageId,
+                                    "$title":masterDocumentsArray[i].document_description || masterDocumentsArray[i].document_name || masterDocumentsArray[i].document_code || 'No Title Defined',
+                                    "$downloadRequired": masterDocumentsArray[i].download_required,
+                                    "$mandatory": masterDocumentsArray[i].mandatory,
+                                    "isHidden": false,
+                                    "documentStatus":null,
+                                    "remarks":null,
+                                    "rejectReason":null
+                                });
+                            }
+                        }
+                       
+                        if (uploadedExistingDocs && uploadedExistingDocs.length) {
+                           
+                            for (var i = 0; i < uploadedExistingDocs.length; i++) {
+                                if (uploadedExistingDocs[i]) {
+                                    remainingDocsArray.push({
+                                        "$formsKey": null,
+                                        "$key": null,
+                                        "documentId": uploadedExistingDocs[i].documentId,
+                                        "id": uploadedExistingDocs[i].id,
+                                        "loanId": uploadedExistingDocs[i].loanId,
+                                        "$title": uploadedExistingDocs[i].document || 'No Title Defined',
+                                        "$downloadRequired": false,
+                                        "$mandatory": null,
+                                        "isHidden": false,
+                                        "documentStatus": uploadedExistingDocs[i].documentStatus,
+                                        "remarks":uploadedExistingDocs[i].remarks,
+                                        "rejectReason":uploadedExistingDocs[i].rejectReason
+                                    });
+                                }
+                            }
+                        }
+                
+                        model.remainingDocsArray = remainingDocsArray;
+                        model.allExistingDocs = allExistingDocs;
+                        
                         for (var i = 0; i < loanDocuments.length; i++) {
                             availableDocCodes.push(loanDocuments[i].document);
                             var documentObj = LoanBookingCommons.getDocumentDetails(docsForProduct, loanDocuments[i].document);
@@ -211,14 +288,15 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                                 var fileUrl = IndividualLoan.getAllDocumentsUrl(model.loanAccount.id);
                                 Utils.downloadFile(fileUrl);
                         }
-                    }, {
+                    },  //allExistingDocs form
+                    {
                         "type": "fieldset",
                         "title": "DOCUMENT_VERIFICATION",
                         "items": [{
                             "type": "array",
                             "notitle": true,
                             "view": "fixed",
-                            "key": "loanAccount.loanDocuments",
+                            "key": "allExistingDocs",
                             "add": null,
                             "remove": null,
                             "items": [{
@@ -228,7 +306,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                                     "type": "section",
                                     "htmlClass": "col-sm-3",
                                     "items": [{
-                                        "key": "loanAccount.loanDocuments[].$title",
+                                        "key": "allExistingDocs[].$title",
                                         "notitle": true,
                                         "title": " ",
                                         "readonly": true
@@ -236,26 +314,43 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                                 }, {
                                     "type": "section",
                                     "htmlClass": "col-sm-2",
-                                    "key": "loanDocs[].downloadRequired",
+                                    "condition":"model.allExistingDocs[arrayIndex].documentId",
+                                    "key": "allExistingDocs[].downloadRequired",
                                     "items": [{
                                         "title": "DOWNLOAD_FORM",
-                                        "notitle": true,
                                         "fieldHtmlClass": "btn-block",
                                         "style": "btn-default",
                                         "icon": "fa fa-download", 
                                         "type": "button",
                                         "readonly": false,
-                                        "key": "loanAccount.loanDocs[].documentId",
+                                        "key": "allExistingDocs[].documentId",
                                         "onClick": function(model, form, schemaForm, event) {
-                                            var fileId = model.loanAccount.loanDocuments[schemaForm.arrayIndex].documentId;
+                                            var fileId = model.allExistingDocs[schemaForm.arrayIndex].documentId;
                                             Utils.downloadFile(Files.getFileDownloadURL(fileId));
                                         }
                                     }]
-                                }, {
+                                }, 
+                                {
+                                    "type": "section",
+                                    "htmlClass": "col-sm-2",
+                                    "condition":"!model.allExistingDocs[arrayIndex].documentId",
+                                    "key": "allExistingDocs[].downloadRequired",
+                                    "items": [{
+                                        "title": "No File",
+                                        "fieldHtmlClass": "btn-block",
+                                        "style": "btn-default",
+                                        "icon": "fa fa-download", 
+                                        "type": "button",
+                                        "readonly": false,
+                                        "key": "allExistingDocs[].documentId",
+                                        "onClick": function(model, form, schemaForm, event) {
+                                        }
+                                    }] 
+                                },{
                                     "type": "section",
                                     "htmlClass": "col-sm-2",
                                     "items": [{
-                                        "key": "loanAccount.loanDocuments[].documentStatus",
+                                        "key": "allExistingDocs[].documentStatus",
                                         "title": "Status",
                                         "notitle": true,
                                         "type": "select",
@@ -270,17 +365,17 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                                 }, {
                                     "type": "section",
                                     "htmlClass": "col-sm-3",
-                                    "condition": "model.loanAccount.loanDocuments[arrayIndex].documentStatus === 'REJECTED'",
+                                    "condition": "model.allExistingDocs[arrayIndex].documentStatus === 'REJECTED'",
                                     "items": [{
                                         title: "Reason",
                                         notitle: true,
                                         placeholder: "Reason",
-                                        key: "loanAccount.loanDocuments[].rejectReason",
+                                        key: "allExistingDocs[].rejectReason",
                                         type: "lov",
                                         lovonly: true,
                                         searchHelper: formHelper,
                                         search: function(inputModel, form, model, context) {
-                                            var f = $filter('filter')(docRejectReasons, {"document_code": model.loanAccount.loanDocuments[context.arrayIndex].document},true);
+                                            var f = $filter('filter')(docRejectReasons, {"document_code": model.allExistingDocs[context.arrayIndex].document},true);
                                             return $q.resolve({
                                                 "header": {
                                                     "x-total-count": f && f.length
@@ -292,33 +387,110 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                                             return [item.reject_reason];
                                         },
                                         onSelect: function(result, model, context) {
-                                            model.loanAccount.loanDocuments[context.arrayIndex].rejectReason = result.reject_reason;
+                                            model.allExistingDocs[context.arrayIndex].rejectReason = result.reject_reason;
                                         }
                                     }]
                                 }, {
                                     "type": "section",
                                     "htmlClass": "col-sm-2",
-                                    "condition": "model.loanAccount.loanDocuments[arrayIndex].documentStatus === 'REJECTED'",
+                                    "condition": "model.allExistingDocs[arrayIndex].documentStatus === 'REJECTED'",
                                     "items": [{
                                         title: "Remarks",
                                         notitle: true,
                                         placeholder: "Remarks",
-                                        key: "loanAccount.loanDocuments[].remarks"
+                                        key: "allExistingDocs[].remarks"
                                     }]
                                 }, {
                                     "type": "section",
                                     "htmlClass": "col-sm-5",
-                                    "condition": "model.loanAccount.loanDocuments[arrayIndex].documentStatus !== 'REJECTED'",
+                                    "condition": "model.allExistingDocs[arrayIndex].documentStatus !== 'REJECTED'",
                                     "items": [{
                                         title: "Remarks",
                                         notitle: true,
                                         placeholder: "Remarks",
-                                        key: "loanAccount.loanDocuments[].remarks"
+                                        key: "allExistingDocs[].remarks"
                                     }]
                                 }]
-                            }] // END of array items
+                            }] 
                         }]
-                    }] // END of box items
+                    },
+                    { // remaining docs array
+                        "type": "fieldset",
+                        "title": "Additional Documents",
+                        "items": [{
+                            "type": "array",
+                            "notitle": true,
+                            "view": "fixed",
+                            "key": "remainingDocsArray",
+                            "add": null,
+                            "remove": null,
+                            "items": [{
+                                "type": "section",
+                                "htmlClass": "row",
+                                "items": [{
+                                    "type": "section",
+                                    "htmlClass": "col-sm-3",
+                                    "items": [{
+                                        "key": "remainingDocsArray[].$title",
+                                        "notitle": true,
+                                        "title": " ",
+                                        "readonly": true
+                                    }]
+                                }, {
+                                    "type": "section",
+                                    "htmlClass": "col-sm-2",
+                                    "condition":"model.remainingDocsArray[arrayIndex].documentId",
+                                    "key": "allExistingDocs[].downloadRequired",
+                                    "items": [{
+                                        "title": "DOWNLOAD_FORM",
+                                        "fieldHtmlClass": "btn-block",
+                                        "style": "btn-default",
+                                        "icon": "fa fa-download", 
+                                        "type": "button",
+                                        "readonly": false,
+                                        "key": "remainingDocsArray[].documentId",
+                                        "onClick": function(model, form, schemaForm, event) {
+                                            var fileId = model.remainingDocsArray[schemaForm.arrayIndex].documentId;
+                                            if(fileId){
+                                                Utils.downloadFile(Files.getFileDownloadURL(fileId));
+                                            }
+                                        }
+                                    }]
+                                }, 
+                                {
+                                    "type": "section",
+                                    "htmlClass": "col-sm-2",
+                                    "condition":"!model.remainingDocsArray[arrayIndex].documentId",
+                                    "key": "remainingDocsArray[].downloadRequired",
+                                    "items": [{
+                                        "title": "No File",
+                                        "fieldHtmlClass": "btn-block",
+                                        "style": "btn-default",
+                                        "icon": "fa fa-download", 
+                                        "type": "button",
+                                        "readonly": false,
+                                        "key": "remainingDocsArray[].documentId",
+                                        "onClick": function(model, form, schemaForm, event) {
+                                        }
+                                    }] 
+                                },
+                                {
+                                    "type": "section",
+                                    "htmlClass": "col-sm-2",
+                                    "condition": "model.remainingDocsArray[arrayIndex].documentStatus === 'REJECTED'",
+                                    "items": [{
+                                        title: "Remarks",
+                                        notitle: true,
+                                        placeholder: "Remarks",
+                                        key: "remainingDocsArray[].remarks"
+                                    }]
+                                },
+                                
+                            ]
+                            }] 
+                        }]
+                    }
+                ]   // END of box items
             },
             {
                 "type": "box",
@@ -564,8 +736,28 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
             actions: {
                 reject: function(model, formCtrl, form, $event){
                     $log.info("Inside reject()");
-                    Utils.confirm("Are You Sure?").then(function(){
-                        var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
+                    Utils.confirm("Are You Sure?").then(function () {
+                        model.loanAccount.loanDocuments = [];
+
+                        if (model.allExistingDocs) {
+                          
+                            for (var i = 0; i < model.allExistingDocs.length; i++) {
+
+                                if (model.allExistingDocs[i].documentId) {
+
+                                    model.loanAccount.loanDocuments.push(model.allExistingDocs[i]);
+                                }
+                            }
+                        }
+                        if (model.remainingDocsArray && model.remainingDocsArray.length) {
+                            for (var j = 0; j < model.remainingDocsArray.length; j++) {
+                                if (model.remainingDocsArray[j].documentId) {
+                                    model.loanAccount.loanDocuments.push(model.remainingDocsArray[j]);
+                                }
+                            }
+                        }
+
+                        var reqData = { loanAccount: _.cloneDeep(model.loanAccount) };
                         reqData.loanAccount.status = '';
                         reqData.loanProcessAction = "PROCEED";
                         reqData.stage = "Rejected";
@@ -574,16 +766,16 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                         PageHelper.showProgress("update-loan", "Working...");
                         IndividualLoan.update(reqData)
                             .$promise
-                            .then(function(res){
+                            .then(function (res) {
                                 PageHelper.showProgress("update-loan", "Done.", 3000);
                                 $state.go('Page.Engine', {
                                     pageName: 'loans.individual.booking.PendingVerificationQueue'
                                 });
-                            }, function(httpRes){
+                            }, function (httpRes) {
                                 PageHelper.showProgress("update-loan", "Oops. Some error occured.", 3000);
                                 PageHelper.showErrors(httpRes);
                             })
-                            .finally(function(){
+                            .finally(function () {
                                 PageHelper.hideLoader();
                             })
                     })
@@ -592,25 +784,45 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                     $log.info("Inside save()");
                     Utils.confirm("Are You Sure?")
                         .then(
-                            function(){
-                                var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
-                                reqData.loanAccount.status = 'HOLD';
-                                reqData.loanProcessAction = "SAVE";
-                                reqData.remarks = model.review.remarks;
-                                PageHelper.showLoader();
-                                IndividualLoan.create(reqData)
-                                    .$promise
-                                    .then(function(res){
-                                        $state.go('Page.Engine', {
-                                            pageName: 'loans.individual.booking.PendingVerificationQueue'
-                                        });
-                                    }, function(httpRes){
-                                        PageHelper.showErrors(httpRes);
-                                    })
-                                    .finally(function(httpRes){
-                                        PageHelper.hideLoader();
-                                    })
+                        function () {
+
+                            model.loanAccount.loanDocuments = [];
+
+                            if (model.allExistingDocs) {
+                                replaceFlag = false;
+                                for (var i = 0; i < model.allExistingDocs.length; i++) {
+
+                                    if (model.allExistingDocs[i].documentId) {
+
+                                        model.loanAccount.loanDocuments.push(model.allExistingDocs[i]);
+                                    }
+                                }
                             }
+                            if (model.remainingDocsArray && model.remainingDocsArray.length) {
+                                for (var j = 0; j < model.remainingDocsArray.length; j++) {
+                                    if (model.remainingDocsArray[j].documentId) {
+                                        model.loanAccount.loanDocuments.push(model.remainingDocsArray[j]);
+                                    }
+                                }
+                            }
+                            var reqData = { loanAccount: _.cloneDeep(model.loanAccount) };
+                            reqData.loanAccount.status = 'HOLD';
+                            reqData.loanProcessAction = "SAVE";
+                            reqData.remarks = model.review.remarks;
+                            PageHelper.showLoader();
+                            IndividualLoan.create(reqData)
+                                .$promise
+                                .then(function (res) {
+                                    $state.go('Page.Engine', {
+                                        pageName: 'loans.individual.booking.PendingVerificationQueue'
+                                    });
+                                }, function (httpRes) {
+                                    PageHelper.showErrors(httpRes);
+                                })
+                                .finally(function (httpRes) {
+                                    PageHelper.hideLoader();
+                                })
+                        }
                         );
                 },
                 viewLoan: function(model, formCtrl, form, $event) {
@@ -649,6 +861,21 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                         return false;
                     }
                     Utils.confirm("Are You Sure?").then(function(){
+                        model.loanAccount.loanDocuments=[];
+                        if (model.allExistingDocs) {
+                            for(var i=0;i< model.allExistingDocs.length;i++){
+                                if( model.allExistingDocs[i].documentId){
+                                    model.loanAccount.loanDocuments.push(model.allExistingDocs[i]);
+                                }
+                            }
+                         }
+                         if (model.remainingDocsArray && model.remainingDocsArray.length) {
+                                for (var j = 0; j < model.remainingDocsArray.length; j++) {
+                                    if(model.remainingDocsArray[j].documentId){
+                                        model.loanAccount.loanDocuments.push(model.remainingDocsArray[j]);
+                                    }  
+                                }
+                            }
                         var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                         reqData.loanAccount.status = '';
                         reqData.loanProcessAction = "PROCEED";
@@ -674,24 +901,37 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                     })
 
                 },
-                proceed: function(model, form, formName) {
-
-                    if (PageHelper.isFormInvalid(form)){
+                proceed: function (model, form, formName) {
+                    if (PageHelper.isFormInvalid(form)) {
                         return false;
                     }
-                    
-                    var reqData = {
+             
+                    model.loanAccount.loanDocuments=[];
+                    if (model.allExistingDocs) {
+                        for(var i=0;i< model.allExistingDocs.length;i++){
+                            if( model.allExistingDocs[i].documentId){
+                                model.loanAccount.loanDocuments.push(model.allExistingDocs[i]);
+                            }
+                        }
+                     }
+                     if (model.remainingDocsArray && model.remainingDocsArray.length) {
+                            for (var j = 0; j < model.remainingDocsArray.length; j++) {
+                                if(model.remainingDocsArray[j].documentId){
+                                    model.loanAccount.loanDocuments.push(model.remainingDocsArray[j]);
+                                }  
+                            }
+                        }
+                
+                    var reqParamData = {
                         'loanAccount': _.cloneDeep(model.loanAccount),
                         'loanProcessAction': 'PROCEED',
                     };
-                    reqData.loanAccount.status = null;
-                    var docStatuses = [];
-                    var allowedStatues = ['APPROVED', 'REJECTED'];
-                    var redirectToUploadFlag = false;
-                    for (var i = 0; i < reqData.loanAccount.loanDocuments.length; i++) {
-                        var doc = reqData.loanAccount.loanDocuments[i];
+                    reqParamData.loanAccount.status = null;
+                     var redirectToUploadFlag = false;
+                    for (var i = 0; i < reqParamData.loanAccount.loanDocuments.length; i++) {
+                        var doc = reqParamData.loanAccount.loanDocuments[i];
                         if (_.indexOf(allowedStatues, doc.documentStatus) == -1) {
-                            PageHelper.showProgress('update-loan', 'Invalid document status selected. Only Approved or Rejected are allowed.',3000);
+                            PageHelper.showProgress('update-loan', 'Invalid document status selected. Only Approved or Rejected are allowed.', 3000);
                             return;
                         }
 
@@ -699,30 +939,29 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                             redirectToUploadFlag = true;
                         }
                     }
-
                     if (redirectToUploadFlag == true) {
-                        reqData['stage'] = 'DocumentUpload';
+                        reqParamData['stage'] = 'DocumentUpload';
                     }
 
                     PageHelper.showProgress('update-loan', 'Working...');
                     PageHelper.showLoader();
-                    console.log(JSON.stringify(reqData));
-                    return IndividualLoan.update(reqData)
+                    console.log(JSON.stringify(reqParamData));
+                    return IndividualLoan.update(reqParamData)
                         .$promise
                         .then(
-                            function(res) {
+                            function (res) {
                                 PageHelper.showProgress('update-loan', 'Done.', 2000);
                                 $state.go('Page.Engine', {
                                     pageName: 'loans.individual.booking.PendingVerificationQueue'
                                 });
                                 return;
                             },
-                            function(httpRes) {
+                            function (httpRes) {
                                 PageHelper.showProgress('update-loan', 'Unable to proceed.', 2000);
                                 PageHelper.showErrors(httpRes);
                             }
                         )
-                        .finally(function() {
+                        .finally(function () {
                             PageHelper.hideLoader();
                         })
                 },

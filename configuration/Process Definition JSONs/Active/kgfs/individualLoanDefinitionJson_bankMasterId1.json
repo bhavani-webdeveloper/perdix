@@ -3,7 +3,6 @@
     "customerMaxGenericAge":60,
     "customerMaxAgeBcProduct":58,
     "customerAgeLimitForSingleFemale":35,
-    "productValidationFromStage":"LoanBooking",
     "stages":[
        {
           "order":1,
@@ -217,56 +216,7 @@
        ]
     },
        {
-          "order":18,
-          "code":"PendingForPartner",
-          "name":"Pending for Partner",
-          "stageType":"CAPTURE",
-          "sendSms":"No",
-          "smsCategory":"LoanBooking",
-          "isAccountOpening":false,
-          "allowedRoles":[
-             "WM"
-          ]
-       },
-       {
-          "order":19,
-          "code":"LoanBooking",
-          "name":"Loan Booking",
-          "stageType":"CAPTURE",
-          "sendSms":"No",
-          "smsCategory":"LoanBooking",
-          "isAccountOpening":true,
-          "allowedRoles":[
-             "WM"
-          ]
-       },
-       {
-         "order":20,
-         "code":"LinkedAccountVerification",
-         "name":"Linked Account Verification",
-         "stageType":"CAPTURE",
-         "sendSms":"No",
-         "smsCategory":"LoanBooking",
-         "isAccountOpening":true,
-         "allowedRoles":[
-            "WM"
-         ]
-      },
-       
-       {
-          "order":21,
-          "code":"DocumentVerification",
-          "name":"Document Verification",
-          "stageType":"CAPTURE",
-          "sendSms":"No",
-          "smsCategory":"LoanBooking",
-          "isAccountOpening":false,
-          "allowedRoles":[
-             "WM"
-          ]
-       },
-       {
-         "order":22,
+         "order":18,
          "code":"Completed",
          "name":"Completed",
          "stageType":"CAPTURE",

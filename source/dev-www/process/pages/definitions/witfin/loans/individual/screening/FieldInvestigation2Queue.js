@@ -63,8 +63,8 @@ define({
 								"screenFilter": true
 							}
 						},
-                        "customerId": {
-                            "title": "CUSTOMER_ID",
+                        "urn": {
+                            "title": "URN",
                             "type": "string"
                         },
                         "area": {
@@ -91,11 +91,12 @@ define({
                         'applicantName': searchOptions.applicantName,
                         'area': searchOptions.area,
                         'status': searchOptions.status,
-                        'villageName': searchOptions.villageName,
+                        'villageName': searchOptions.cityTownVillage,
                         'customerName': searchOptions.businessName,
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage,
-                        'centreCode': searchOptions.centre
+                        'centreCode': searchOptions.centre,
+                        'urn': searchOptions.urn
 
                     }).$promise;
                 },

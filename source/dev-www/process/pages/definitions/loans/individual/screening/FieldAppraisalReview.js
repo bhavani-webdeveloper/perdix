@@ -39,13 +39,20 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisalRe
                 maximum: 1,
                 order: 50
             }, {
+                pageName: 'loans.individual.screening.PersonalDiscussion',
+                title: 'PERSONAL_DISCUSSION',
+                pageClass: 'personal-discussion',
+                minimum: 1,
+                maximum: 1,
+                order: 52
+            }, {
                 pageName: 'loans.individual.screening.detail.PortfolioAnalysis',
                 title: 'CUSTOMER HISTORY',
                 pageClass: 'portfolio-analysis',
                 minimum: 1,
                 maximum: 1,
-                order: 52
-            },{
+                order: 55
+            }, {
                 pageName: 'loans.individual.screening.detail.LoanApplicationView',
                 title: 'Loan Recommendation',
                 pageClass: 'loan-recommendation',
@@ -252,6 +259,13 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisalRe
                                 pageClass: 'business-finance',
                                 model: {
                                     customerId: res.customerId
+                                }
+                            });
+
+                            $this.bundlePages.push({
+                                pageClass: 'personal-discussion',
+                                model: {
+                                    loanAccount: res
                                 }
                             });
 

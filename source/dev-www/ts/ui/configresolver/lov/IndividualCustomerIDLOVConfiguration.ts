@@ -49,6 +49,18 @@ export class IndividualCustomerIDLOVConfiguration extends LOVElementConfiguratio
                 model.customer.firstName = null;
                 return false;
             }
+            if(typeof valueObj.id != "undefined"){
+                var temp = model.loanProcess.loanAccount.loanCustomerRelations;
+                for(let i =0;i<temp.length;i++){
+                    if(temp[i].customerId == valueObj.id){
+                        PageHelper.showProgress('customer-load','Applicant,Co-applicant and Guarantor should be different customers');
+                        model.customer.firstName = null;
+                        model.customer.urnNo = null;
+                        return false;
+                    }
+                        
+                }
+            }
         }
         var enrolmentDetails = {
             'customerId': model.customer.id,
@@ -107,19 +119,6 @@ export class IndividualCustomerIDLOVConfiguration extends LOVElementConfiguratio
             "key": "customer.urnNo",
             "title": "URN_NO",
             "type": "string"
-        },
-        "customerBranchId": {
-            "key": "customer.customerBranchId",
-            "type": "select",
-            "screenFilter": true,
-            "readonly": true
-        },
-        "centreName": {
-            "key": "customer.place",
-            "title":"CENTRE_NAME",
-            "type": "string",
-            "readonly": true,
-
         },
         "centreId":{
             "key": "customer.centreId",

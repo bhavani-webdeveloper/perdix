@@ -39,6 +39,7 @@ irf.pageCollection.factory(irf.page("customer360.CustomerDeathMarking"), ["$log"
                                     model.deathMarking.reasonForDeath =  model.deceaseDetails[i].reason_for_death || {};
                                     model.deathMarking.dateOfDeath =  model.deceaseDetails[i].date_of_incident || {};
                                     model.deathMarking.deathMarkingStatus =  model.deceaseDetails[i].admin_confirmation_status || {};
+                                    model.deathMarking.fileId =  model.deceaseDetails[i].fileId || {};
                                    }
                                     }
                                     PageHelper.hideLoader();
@@ -219,6 +220,16 @@ irf.pageCollection.factory(irf.page("customer360.CustomerDeathMarking"), ["$log"
                             title:"COMMENTS",
                             required: true
                         },
+
+                        {
+                            key: "deathMarking.fileId",                                            
+                            title: "DEATHCERTIFICATE_UPLOAD_FILE",
+                            category: "DeathMarking",
+                            subCategory: "DEATHCERTIFICATE",
+                            type: "file",
+                            fileType: "jpeg,jpg,png",  
+                            condition:"!model.deathMarking.deathMarkingStatus || model.deathMarking.deathMarkingStatus == 'REJECT'",            
+                        },
                     ]
                 },
                 {
@@ -237,8 +248,10 @@ irf.pageCollection.factory(irf.page("customer360.CustomerDeathMarking"), ["$log"
             },
             actions: {
                 submit: function(model, form, formName) { 
+                
                     var selecteddate = model.deathMarking.dateOfDeath;
                     var currentdate = moment(new Date()).format("YYYY-MM-DD");
+                    var currentstatus = model.deathMarking.deathMarkingStatus;
 
                     if(selecteddate > currentdate){
                         PageHelper.showProgress("Date Error", "Future Death Date is not allowed" , 5000);
@@ -257,18 +270,32 @@ irf.pageCollection.factory(irf.page("customer360.CustomerDeathMarking"), ["$log"
                         "familyMemberName": model.deathMarking.familyMemberName,
                         "furtherDetails": model.deathMarking.furtherDetails,
                         "reasonForDeath": model.deathMarking.reasonForDeath,
+                        "fileId": model.deathMarking.fileId,
                     };
                    // req.parameter.push(parameter_list);
                     Utils.confirm("Are you sure?").then(function() {
                         PageHelper.showLoader();
-                        DeathMarking.postCustomerDeathMarking(req).$promise.then(function(resp) {
-                            PageHelper.showProgress("customerdeathmarking-pages", "Page customer death marking saved", 3000);
-                            irfNavigator.goBack();
-                        }, function(err) {
-                            PageHelper.showErrors(err);
-                        }).finally(function() {
-                            PageHelper.hideLoader();
-                        });
+                        if(currentstatus == "REJECT"){
+                            DeathMarking.modifyCustomerDeathMarking(req).$promise.then(function(resp) {
+                                PageHelper.showProgress("customerdeathmarking-pages", "Page customer death marking saved", 3000);
+                                irfNavigator.goBack();
+                            }, function(err) {
+                                PageHelper.showErrors(err);
+                            }).finally(function() {
+                                PageHelper.hideLoader();
+                            });
+                        }
+                        else{
+                            DeathMarking.postCustomerDeathMarking(req).$promise.then(function(resp) {
+                                PageHelper.showProgress("customerdeathmarking-pages", "Page customer death marking saved", 3000);
+                                irfNavigator.goBack();
+                            }, function(err) {
+                                PageHelper.showErrors(err);
+                            }).finally(function() {
+                                PageHelper.hideLoader();
+                            });
+
+                        }
                     });
                 },
             }

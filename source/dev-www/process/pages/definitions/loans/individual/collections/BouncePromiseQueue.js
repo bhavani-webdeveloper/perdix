@@ -1,12 +1,15 @@
 irf.pageCollection.factory(irf.page("loans.individual.collections.BouncePromiseQueue"),
 ["$log", "entityManager", "formHelper", "LoanProcess", "$state", "SessionStore", "$q","Utils",
 function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q,Utils){
+    
     return {
         "type": "search-list",
         "title": "BOUNCED_PAYMENTS",
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
-            model.branch = SessionStore.getCurrentBranch().branchId;
+           // model.branch = SessionStore.getBranch();
+            var branch = SessionStore.getBranch();
+	        //var centres = SessionStore.getCentres();
         },
         definition: {
             title: "SEARCH_BOUNCED_PAYMENTS",
@@ -27,27 +30,36 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q,U
                         "title": "CUSTOMER_NAME",
                         "type": "string"
                     },
+                    "branchId": {
+                        'title': "BRANCH",
+                        "type": ["string", "null"],
+                        "x-schema-form": {
+                            "type": "userbranch",
+                            "screenFilter": true
+                        }
+                    },
                     "centre": {
                         "title": "CENTRE",
-                        "type": "integer",
-                        "enumCode": "centre",
-                        "parentEnumCode": "branch_id",
+                        "type": ["integer", "null"],
                         "x-schema-form": {
                             "type": "select",
-                            parentValueExpr: "model.branch"
+                            "enumCode": "centre",
+                            "parentEnumCode": "branch_id",
+                            "parentValueExpr": "model.branchId",
+                            "screenFilter": true
                         }
-                    }
+                    },
                 }
             },
             getSearchFormHelper: function() {
                 return formHelper;
             },
             getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
-                var branchId = SessionStore.getCurrentBranch().branchId;
+                //var branchId = SessionStore.getCurrentBranch().branchId;
                 
                 var promise = LoanProcess.bounceCollectionDemand({
                     'accountNumbers': searchOptions.loan_no,  /*Service missing_27082016*/
-                    'branchId': branchId,
+                    'branchId':searchOptions.branchId,
                     'centreId': searchOptions.centre,
                     'customerName': searchOptions.first_name,
                     'page': pageOpts.pageNo,

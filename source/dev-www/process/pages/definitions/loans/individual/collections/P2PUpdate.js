@@ -16,7 +16,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
 
                 if ((moment(model.additional.promiseToPayDate).isBefore(new Date()))) {
                     PageHelper.setError({
-                        message: "p2p date should be nore than or equal to current system date" + " " + moment(new Date()).format(SessionStore.getDateFormat())
+                        message: "p2p date should be more than or equal to current system date" + " " + moment(new Date()).format(SessionStore.getDateFormat())
                     });
                     return;
                 }
@@ -296,7 +296,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                                     },
                                     {
                                         key: "additional.promiseToPayDate",
-                                        title: "NEXT_ACTION_DATE",
+                                        title: "P2P_DATE",
                                         readonly: false,
                                         required: true,
                                         "condition": "model.promise.promiseToPay=='YES'",
@@ -307,15 +307,30 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
 
                                     },
                                     {
+                                        key: "additional.currentCollectionStatus",
+                                        title: "RECOVERY_ATTEMPT",
+                                        type: "select",
+                                        required: true,
+                                        "condition": "model.promise.promiseToPay=='NO'",
+                                        enumCode: "recovery_attempt",
+                                    },
+                                    {
+                                        key: "additional.collectionSubStatus",
+                                        title: "SUB_STATUS",
+                                        type: "select",
+                                        required: true,
+                                        "condition": "model.promise.promiseToPay=='NO'",
+                                        enumCode: "collection_sub_status",
+                                    },
+                                    {
                                         key: "additional.reasonType",
                                         title: "REASON_FOR_DELAY",
                                         type: "select",
                                         required: true,
-                                        "condition": "model.promise.promiseToPay=='YES'",
                                         titleMap: [{
                                             "name": "Business",
                                             "value": "Business"
-                                        },
+                                            },
                                             {
                                                 "name": "Personal",
                                                 "value": "Personal"
@@ -327,7 +342,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                                         title: "REASON",
                                         type: "select",
                                         required: true,
-                                        condition: "model.additional.reasonType=='Business' && model.promise.promiseToPay=='YES'",
+                                        condition: "model.additional.reasonType=='Business'",
                                         enumCode: "business_overdue_reasons",
 
                                     },
@@ -336,17 +351,9 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                                         title: "REASON",
                                         type: "select",
                                         required: true,
-                                        condition: "model.additional.reasonType=='Personal' && model.promise.promiseToPay=='YES'",
+                                        condition: "model.additional.reasonType=='Personal'",
                                         enumCode: "personal_overdue_reasons",
 
-                                    },
-                                    {
-                                        key: "additional.currentCollectionStatus",
-                                        title: "RECOVERY_ATTEMPT",
-                                        type: "select",
-                                        required: true,
-                                        "condition": "model.promise.promiseToPay=='NO'",
-                                        enumCode: "recovery_attempt",
                                     },
                                     {
                                         key: "additional.scheduledDate",
@@ -365,6 +372,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                                         "condition": "model.additional.reason=='Others'"
 
                                     },
+
                                     {
                                         key: "promise.remarks",
                                         title: "REMARKS",
@@ -444,16 +452,19 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
 
                         if (model.promise.promiseToPay == 'YES') {
                             model.promise.promiseToPayDate = model.additional.promiseToPayDate;
-                            model.promise.reasonType = model.additional.reasonType;
-                            if (model.additional.reason && model.additional.reason == "Others")
-                                model.promise.overdueReasons = model.additional.overdueReasons;
-                            else
-                                model.promise.overdueReasons = model.additional.reason;
+
                         } else {
+
+                            model.promise.collectionSubStatus = model.additional.collectionSubStatus;
                             model.promise.currentCollectionStatus = model.additional.currentCollectionStatus;
                             if (model.additional.currentCollectionStatus == 'Contact Again')
                                 model.promise.scheduledDate = model.additional.scheduledDate;
                         }
+                        model.promise.reasonType = model.additional.reasonType;
+                        if (model.additional.reason && model.additional.reason == "Others")
+                            model.promise.overdueReasons = model.additional.overdueReasons;
+                        else
+                            model.promise.overdueReasons = model.additional.reason;
 
                 model.promise.overdueAmount=model.promise.amount;
 

@@ -132,7 +132,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         orderNo: 160,
                         key: "customer.spouseFirstName",
                         title: "SPOUSE_FULL_NAME",
-                        condition: "model.customer.maritalStatus==='MARRIED' || model.customer.maritalStatus === 'WIDOWER'",
+                        condition: "model.customer.maritalStatus==='MARRIED' || model.customer.maritalStatus === 'WIDOWER' || model.customer.maritalStatus === 'WIDOW'",
                         type: "qrcode",
                         onCapture: function (result, model, form) {
                             $log.info(result); // spouse id proof
@@ -1456,8 +1456,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         "onChange": "fillGeolocation(modelValue, form)"
                     },
                     "nameOfRo": {
-                        key: "customer.nameOfRo",
-                        readonly: true,
+                        key: "customer.nameOfRo"
                     },
                     "houseVerificationPhoto": {
                         key: "customer.houseVerificationPhoto",

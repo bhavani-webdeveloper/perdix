@@ -176,6 +176,7 @@ irf.pageCollection.factory(irf.page("CBCheckCapture"),
 						}
 						$state.go("Page.Engine", {pageName:"CBCheck", pageId:null});
 					}, function(errorResponse){
+						PageHelper.showErrors(errorResponse);
 						PageHelper.hideLoader();
 						PM.pop('cbcheck-submit', 'CB Check Failed for ' + model.customerName, 5000);
 					});

@@ -34,6 +34,10 @@ define({
                             "title": "BUSINESS_NAME",
                             "type": "string"
                         },
+                        "urn": {
+                            "title": "URN",
+                            "type": "string"
+                        },
                         "area": {
                             "title": "AREA",
                             "type": "string"
@@ -71,6 +75,7 @@ define({
                         'status':searchOptions.status,
                         'villageName':searchOptions.cityTownVillage,
                         'customerName': searchOptions.businessName,
+                        'urn': searchOptions.urn,
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage,
                     }).$promise;

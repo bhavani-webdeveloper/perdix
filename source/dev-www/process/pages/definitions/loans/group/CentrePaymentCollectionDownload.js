@@ -84,7 +84,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 									return;
 								}
 								for(var i = 0; i < userCentres.length; i++) {
-									userCentreCollectionDemands = userCentreCollectionDemands.concat($filter('filter')(response.body, {centreId: userCentres[i].id, userId: SessionStore.getLoginname()}, true));
+									userCentreCollectionDemands = userCentreCollectionDemands.concat($filter('filter')(response.body, {centreId: userCentres[i].id}, true));
 								}
 
 								var temp = {};

@@ -8,13 +8,14 @@ irf.models.factory('ScoresMaintenance', ["$resource", "$httpParamSerializer", "B
                 method: 'GET',
                 url: endpoint + '/findScoreCriteriaMaster'
             }),
-            allParameterMaster : searchResource({
+            allParameterMaster : {
                 method : 'GET',
-                url : endpoint + '/findScoreParameterMaster'
-            }),
+                url : endpoint + '/findScoreParameterMaster',
+                isArray:true
+            },
             scoreCreate: searchResource({
                 method: 'POST',
-                url: endpoint + '/createScoreMaster'
+                url: endpoint + '/createScoreMaster',
             }),
             scoreUpdate: searchResource({
                 method: 'PUT',
@@ -22,12 +23,29 @@ irf.models.factory('ScoresMaintenance', ["$resource", "$httpParamSerializer", "B
             }),
             scoreSearch: searchResource({
                 method: 'GET',
-                url: endpoint + '/findScoreMaster'
+                url: endpoint + '/findScoreMaster',
             }),
             getScoresById: searchResource({
                 method: 'GET',
                 url: endpoint + '/getScoreMaster/' + '/:id'
-            })
+            }),
+            getScore: searchResource({
+                method: 'GET',
+                url:endpoint+ '/getScoreMaster/:id'
+            }),
+            getScoreParameter: searchResource({
+                method: 'GET',
+                url:endpoint+ '/getScoreParameterMaster/:id'
+            }),
+            getScoreCriteria: searchResource({
+                method: 'GET',
+                url:endpoint+'/getScoreCriteriaMaster/:id'
+            }),
+            getConfigurationJson:{
+                method:'GET',
+                url:'process/schemas/:name'
+            }
+
         });
         return res;
     }

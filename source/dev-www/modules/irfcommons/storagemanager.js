@@ -145,33 +145,54 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter, Utils){
 		}
 		return classifiers;
 	};
+	var removeMasterFile = function(){
+		var deferred = $q.defer();
+		try {
+			fileSystem.root.getFile('irfMasters', {create: false}, function(fileEntry) {
+				fileEntry.remove(function() {
+					deferred.resolve();
+				}, function(err){
+					deferred.reject(err);
+				});
+			}, function(err){
+				deferred.reject(err);
+			});
+		} catch(e) {
+			deferred.reject(e);
+		}
+		return deferred.promise;
+	}
 	var factoryObj = {
 		storeMaster: function(value) {
 			if (fileSystem.root) {
 				var deferred = $q.defer();
-				try {
-					fileSystem.root.getFile('irfMasters', {create: true}, function(fileEntry) {
-						fileEntry.createWriter(function(fileWriter) {
-							fileWriter.onwriteend = function() {
-								deferred.resolve();
-							};
-							fileWriter.onerror = function() {
+					removeMasterFile().finally(function (){
+						try {
+							fileSystem.root.getFile('irfMasters', {create: true}, function(fileEntry) {
+								fileEntry.createWriter(function(fileWriter) {
+									fileWriter.onwriteend = function() {
+										deferred.resolve();
+									};
+									fileWriter.onerror = function() {
+										fileSystem.errorHandler(e);
+										deferred.reject(e);
+									};
+									var blob = new Blob([JSON.stringify(value)], {type: 'application/json'});
+									fileWriter.write(blob);
+								}, function(e) {
+									fileSystem.errorHandler(e);
+									deferred.reject(e);
+								});
+							}, function(e) {
 								fileSystem.errorHandler(e);
 								deferred.reject(e);
-							};
-							var blob = new Blob([JSON.stringify(value)], {type: 'application/json'});
-							fileWriter.write(blob);
-						}, function(e) {
-							fileSystem.errorHandler(e);
+							});
+						} catch (e) {
 							deferred.reject(e);
-						});
-					}, function(e) {
-						fileSystem.errorHandler(e);
+						}
+					},function(e){
 						deferred.reject(e);
 					});
-				} catch (e) {
-					deferred.reject(e);
-				}
 				return deferred.promise;
 			} else {
 				return $q.resolve(factoryObj.storeJSON('irfMasters', value));
@@ -640,7 +661,7 @@ irf.commons.run(["irfStorageService", "SessionStore", "$q", "$log", "filterFilte
 			createEnum("origination_stage", "origination_stage", codeToValue);
 			createEnum("investor_id", "investor_id", codeAsNumberToValue);
 			createEnum("lender_product_type", "lender_product_type", codeToValue);
-			createEnum("loan_partner","partner_master",codeToValue);
+			createEnum("loan_partner","partner_master_new",codeToValue);
 
 			return irfStorageService.storeMaster(masters);
 		});

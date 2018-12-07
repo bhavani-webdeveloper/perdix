@@ -7,34 +7,6 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager, 
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
             model.branch = SessionStore.getCurrentBranch().branchId;
-            model.pageConfig = {
-                isAllBranchAllowed: false,
-                centresRestricted: false
-            };
-
-            console.log($stateParams);
-            PagesDefinition.getRolePageConfig("Page/Engine/loans.individual.collections.BounceQueue")
-                .then(
-                function(config){
-                    console.log("shahal1");
-                    if (config && _.hasIn(config, 'all_branch_allowed') && config['all_branch_allowed']) {
-                        model.pageConfig.isAllBranchAllowed = true;
-                    }
-
-                    if (model.pageConfig.isAllBranchAllowed === false){
-                        model.centres = SessionStore.getCurrentBranch().centresMappedToUser;
-
-                        /* Default centre */
-                        if (model.centres && model.centres.length>0){
-                            model.centre = model.centres[0].centreCode;
-                            model.centreName = model.centres[0].centreName;
-                        }
-                    }
-                }, function(err){
-                    model.pageConfig.isAllBranchAllowed = false;
-                }
-            );
-
             PagesDefinition.getPageConfig("Page/Engine/loans.individual.collections.BounceQueue")
             .then(function(data){
                 console.log(data);
@@ -61,40 +33,14 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager, 
                 "first_name",
                 {
                     "key": "branch",
-                    "condition": "model.pageConfig.isAllBranchAllowed"
+                    "readonly":true
                 },
                 {
                     "key": "centre",
-                    "condition": "model.pageConfig.isAllBranchAllowed"
-                },
-                {
-                    key: "centreName",
-                    type: "lov",
-                    autolov: false,
-                    required:true,
+                    "type":"select",
+                    "enumCode":"usercentre",
                     title:"CENTRE",
-                    condition: "model.pageConfig.isAllBranchAllowed===false",
-                    bindMap: {
-                    },
-                    searchHelper: formHelper,
-                    search: function(inputModel, form, model, context) {
-                        var centres = SessionStore.getCentres();
-                        return $q.resolve({
-                            headers: {
-                                "x-total-count": centres.length
-                            },
-                            body: centres
-                        });
-                    },
-                    onSelect: function(valueObj, model, context){
-                        model.centre = valueObj.centreCode;
-                        model.centreName = valueObj.centreName;
-                    },
-                    getListDisplayItem: function(item, index) {
-                        return [
-                            item.centreName
-                        ];
-                    }
+                    required:true,
                 },
                 {
                     "key": "promisreToPayDate"
