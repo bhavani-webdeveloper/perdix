@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("score.ScoreValues"),
-["$q","$log","$stateParams", "ScoresMaintenance", "$state", "SessionStore","formHelper", "PageHelper", "$httpParamSerializer", "AuthTokenHelper", "SchemaResource",
-    function($q,$log,$stateParams, ScoresMaintenance, $state, SessionStore,formHelper, PageHelper, $httpParamSerializer, AuthTokenHelper, SchemaResource) {
+["$q","$log","$stateParams", "ScoresMaintenance", "$state", "SessionStore","formHelper", "PageHelper", "$httpParamSerializer", "AuthTokenHelper", "SchemaResource","irfProgressMessage",
+    function($q,$log,$stateParams, ScoresMaintenance, $state, SessionStore,formHelper, PageHelper, $httpParamSerializer, AuthTokenHelper, SchemaResource,irfProgressMessage) {
 	
 	return {
         "type": "schema-form",
@@ -169,7 +169,7 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
                                             },
                                         },
                                         //-------------------------------------------------------------
-                                        
+
                                         {
                                             prop: "colorEnglish",
                                             type: "text",
@@ -210,8 +210,8 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
         },
         actions: {
             submit: function(model, form, formName) {
-                console.log("Goog");
 
+                PageHelper.showLoader();
                 model.scoreMaster.subScores.forEach(function(subScore) {
                     subScore.scoreParameters.forEach(function(scoreParameters) {
                         var ScoreParameter = model.getScoreParameter(subScore.id,scoreParameters.id);
@@ -226,9 +226,12 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
 
                 var requestBody ={ scoreMaster : model.scoreMaster}
                 ScoresMaintenance.scoreUpdate( requestBody, function (resp, header) {
-                    irfProgressMessage.pop('cust-update', 'Done. Customer Updated, ID : ' + res.customer.id, 2000);
-                }, function (err) {
 
+                    PageHelper.hideLoader();
+                    irfProgressMessage.pop('cust-update', 'Done. Score Values are Updated ', 2000);
+                }, function (err) {
+                    PageHelper.hideLoader();
+                    irfProgressMessage.pop('cust-update', 'Oops. Some error.', 2000);
                 });
 			}
 			
