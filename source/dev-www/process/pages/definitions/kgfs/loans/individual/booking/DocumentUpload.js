@@ -1,10 +1,8 @@
 define({
     pageUID: "kgfs.loans.individual.booking.DocumentUpload",
     pageType: "Engine",
-    dependencies: ["$q","$log", "Enrollment", "IndividualLoan", "SessionStore", "$state", '$stateParams', 'PageHelper', 'IndividualLoan', 'Queries', 'Utils', 'formHelper', "LoanProcess", "CustomerBankBranch", "SchemaResource", "LoanAccount", "irfNavigator", "PagesDefinition",
-        "PageHelper", "Utils", "PagesDefinition", "Queries", "$stateParams", "Queries", "DeathMarking"
-    ],
-    $pageFn: function ($q,$log, Enrollment, IndividualLoan, SessionStore, $state, $stateParams, PageHelper, IndividualLoan, Queries, Utils, formHelper, LoanProcess, CustomerBankBranch, SchemaResource, LoanAccount, irfNavigator, PagesDefinition) {
+    dependencies: ["$q","$log", "Enrollment", "IndividualLoan", "SessionStore", "$state", '$stateParams', 'PageHelper', 'IndividualLoan', 'Queries', 'Utils', 'formHelper', "LoanProcess", "CustomerBankBranch", "SchemaResource", "LoanAccount", "irfNavigator", "PagesDefinition","DeathMarking","Misc"],
+    $pageFn: function ($q,$log, Enrollment, IndividualLoan, SessionStore, $state, $stateParams, PageHelper, IndividualLoan, Queries, Utils, formHelper, LoanProcess, CustomerBankBranch, SchemaResource, LoanAccount, irfNavigator, PagesDefinition,DeathMarking,Misc) {
         var getDocument = function (docsArr, docCode) {
             var i = 0;
             for (i = 0; i < docsArr.length; i++) {
@@ -170,7 +168,7 @@ define({
                         "type": "button",
                         "title": "DOWNLOAD_ALL_FORMS",
                         "onClick": function (model, form, schemaForm, event) {
-                            Utils.downloadFile(irf.MANAGEMENT_BASE_URL + "/server-ext/testAllFormsDownload.php?record_id=" + model.loanAccount.id);
+                            Utils.downloadFile(Misc.allFormsDownload({recordId:model.loanAccount.id}));
                         }
                     }, {
                         "type": "fieldset",
@@ -201,6 +199,7 @@ define({
                                                 var doc = model.loanAccount.loanDocuments[event.arrayIndex];
                                                 console.log(doc);
                                                 Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=" + doc.$formsKey + "&record_id=" + model.loanAccount.id)
+                                                // Utils.downloadFile(Misc.allFormsDownload());
                                             }
                                         }, {
                                             "key": "loanAccount.loanDocuments[].$title",
