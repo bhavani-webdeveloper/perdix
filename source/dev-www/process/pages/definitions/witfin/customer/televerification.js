@@ -157,7 +157,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     var data = [];
                     data.push({
                                 "type": "box",
-                                "title": "COAPPLICANT-"+(key+1)+"_INFORMATION",
+                                "title": "COAPPLICANT_INFORMATION",
                                 "colClass": "col-xs-6 col-md-6",
                                 "items": [                                                                
                                     {
@@ -363,7 +363,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     }
                                 ]
                             });
-                    data.push(generateQuestionairreFormForParty("coApplicants["+key + "]", "CoApplicant-"+(key+1)));
+                    data.push(generateQuestionairreFormForParty("coApplicants["+key + "]", "COAPPLICANT"));
                     coAppData.push({"type": "section","htmlClass": "row","items": data});
                 })
                 return coAppData;
@@ -375,7 +375,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     var data = [];
                     data.push({
                                 "type": "box",
-                                "title": "GUARANTOR-"+(key+1)+"_INFORMATION",
+                                "title": "GUARANTOR_INFORMATION",
                                 "colClass": "col-xs-6 col-md-6",
                                 "items": [                                                                
                                     {
@@ -581,7 +581,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     }
                                 ]
                             });
-                    data.push(generateQuestionairreFormForParty("guarantors["+ key + "]", "Guarantor-"+(key+1)));
+                    data.push(generateQuestionairreFormForParty("guarantors["+ key + "]", "GUARANTOR"));
                     guarantorData.push({"type": "section","htmlClass": "row","items": data});
                 });
                 return guarantorData;
