@@ -905,6 +905,10 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                     "Expenditures1.expenditures.expendituresSection.expenditureSource": {
                         required: true,
                     },
+                    "Expenditures1.expenditures.expendituresSection.frequencySection.frequency": {
+                        type:"select",
+                        enumCode: "expenditure_frequency"
+                    },
                     "assets.financialAssets.instrumentType": {
                         required: false,
                     },
@@ -919,6 +923,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                     },
                     "assets.financialAssets.frequencyOfDeposite": {
                         required: false,
+                        type:"select",
+                        enumCode: "deposit_frequency"
                     },
                     "Liabilities1.liabilities.loanType": {
                         required: false,
@@ -1453,7 +1459,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                                                 "Shared": "Shared",
                                                 "Own":"Own"
                                             },  
-                                            "key": "HouseVerification.HouseDetails.drinking_water"
+                                            "key": "customer.drinking_water"
+                                           // "key": "HouseVerification.HouseDetails.drinking_water"
                                                 },
                                                 "waterFiler":{
                                                     title:"Water Filer",
@@ -1463,7 +1470,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                                                         "Yes": "Yes",
                                                         "No": "No",
                                                     },
-                                                    "key":"HouseVerification.HouseDetails.water_filter"
+                                                    "key":"customer.water_filter"
+                                                   // "key":"HouseVerification.HouseDetails.water_filter"
                                                 },
                                         }
                                     }
@@ -1496,7 +1504,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                                                 "Yes": "Yes",
                                                 "No": "No",
                                             },
-                                            key:"BusinessOccupationDetails.businessDetails.involved_in_market_transactions"
+                                            key:"customer.involved_in_market_transactions"
                                         }
                                         },
                                       
