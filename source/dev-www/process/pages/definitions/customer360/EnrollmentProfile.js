@@ -5,6 +5,34 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
     PageHelper, Utils, BiometricService,CustomerBankBranch){
 
     var branch = SessionStore.getBranch();
+    var mapCustomerToSelfFamilyMemebr = function(model){
+        var temp = model.customer.familyMembers;
+        if(temp.length > 0){
+            var isThere = false;
+            for (var i=0;i<1;i++){
+                if(temp[i].relationShip == "Self"){
+                    isThere =false;
+                    temp[i].customerId = model.customer.id;
+                    temp[i].dateOfBirth = model.customer.dateOfBirth;
+                    temp[i].gender = model.customer.gender;
+                    temp[i].maritalStatus = model.customer.maritalStatus;
+                    temp[i].familyMemberFirstName = model.customer.firstName;
+                    temp[i].age = model.customer.age;
+                }
+            }
+            // if(!isThere){
+            //     temp.push({
+            //         relationShip: "Self",
+            //         customerId:model.customer.id,
+            //         dateOfBirth:model.customer.dateOfBirth,
+            //         gender:model.customer.gender,
+            //         maritalStatus:model.customer.maritalStatus,
+            //         familyMemberFirstName:model.customer.firstName
+            //     })
+            // }
+            model.customer.familyMembers = temp;
+        }
+    }
 
     var initData = function(model) {
         var branch1 = formHelper.enum('branch_id').data;
@@ -1495,6 +1523,7 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                     } else {
                         reqData['enrollmentAction'] = 'SAVE';    
                     };
+                    mapCustomerToSelfFamilyMemebr(model);
                     Enrollment.updateCustomer(reqData, function (res, headers) {
                         if (res.customer) {
                             model.customer = res.customer;
