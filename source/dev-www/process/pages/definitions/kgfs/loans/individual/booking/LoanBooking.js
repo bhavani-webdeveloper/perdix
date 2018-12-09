@@ -47,6 +47,16 @@ define([], function () {
                 guardian.guardianStreet = customer.street || null;
                 guardian.guardianDoorNo = customer.doorNo || null;
             }
+            var clearAll = function(baseKey,listOfKeys,model){
+                if(listOfKeys != null ||listOfKeys.length > 0){
+                    for(var i =0 ;i<listOfKeys.lenght;i++){
+                        model[baseKey[listOfKeys[i]]] = null;
+                    }
+                }
+                else{
+                    model[baseKey] = null;
+                }
+            }
             var policyBasedOnLoanType = function(loanType,model){
                 if (loanType == "JEWEL"){
                     if(model.loanAccount.loanAmountRequested >= (model.loanAccount.ornamentsAppraisals[0].marketValueInPaisa/100)*75){
@@ -62,6 +72,9 @@ define([], function () {
                 else if (loanType == "UNSECURED"){
                     model.loanAccount.jewelLoanDetails = null;
                     model.loanAccount.ornamentsAppraisals = [];
+                }
+                else if (loanType == "ChangeProduct"){
+                    
                 }
                 return true;
             }
@@ -336,7 +349,8 @@ define([], function () {
                             ];
                         },
                         onChange: function (value, form, model) {
-                            // getProductDetails(value, model);
+                            console.log("Test");
+                           clearAll("loanAccount",["loanAmountRequested","requestedTenure","interestRate","loanPurpose1","loanPurpose2","loanPurpose3"],model);
                         },
                     },
                     "LoanDetails.loanProductName":{
