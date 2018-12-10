@@ -330,6 +330,7 @@ define([], function () {
                             return deferred.promise;
                         },
                         onSelect: function (valueObj, model, context) {
+                            clearAll("loanAccount",["loanAmountRequested","requestedTenure","interestRate","loanPurpose1","loanPurpose2","loanPurpose3"],model);
                             model.loanAccount.productCode = valueObj.productCode;
                             model.additions.tenurePlaceHolder = valueObj.tenure_from + '-' + valueObj.tenure_to;
                             model.additions.amountPlaceHolder = valueObj.amount_from + '-' + valueObj.amount_to;
