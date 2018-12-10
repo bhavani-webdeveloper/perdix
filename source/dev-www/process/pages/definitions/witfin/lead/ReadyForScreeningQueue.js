@@ -166,7 +166,6 @@ define({
 							item.branchName,
 							item.addressLine1,
 							item.cityTownVillage,
-							item.pincode,
 							item.mobileNo
 						]
 					},
@@ -193,9 +192,6 @@ define({
 						}, {
 							title: 'CityTownVillage',
 							data: 'cityTownVillage'
-						}, {
-							title: 'Pincode',
-							data: 'pincode'
 						}]
 					},
 					getActions: function() {
