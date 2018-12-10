@@ -19,6 +19,9 @@ import {AgentProcess} from '../model/agent/AgentProcess';
 import AgentRepository = require('../model/agent/AgentRepository');
 
 import {PaymentRepository} from '../model/payment/PaymentRepository';
+import {InsuranceProcess} from '../model/insurance/InsuranceProcess';
+
+import {InsuranceRepository} from '../model/insurance/InsuranceRepository';
 
 //import {TagMasterRepository} from "../model/TMaster/TagMasterRepository"
 
@@ -47,7 +50,9 @@ class RepositoryFactory {
             case RepositoryIdentifiers.AgentProcess:
                 return new AgentRepository();     
             case RepositoryIdentifiers.Payment:
-                return new PaymentRepository();   
+                return new PaymentRepository();  
+            case RepositoryIdentifiers.Insurance:
+                return new InsuranceRepository();     
 
             // case RepositoryIdentifiers.TagMasterProcess:
             //     return new TagMasterRepository();

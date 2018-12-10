@@ -438,6 +438,14 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
 
                 PageHelper.showLoader();
 
+                if ((moment(model.additional.promiseToPayDate).isBefore(new Date()))) {
+                    PageHelper.setError({
+                        message: "p2p date should be more than or equal to current system date" + " " + moment(new Date()).format(SessionStore.getDateFormat())
+                    });
+                    PageHelper.hideLoader();
+                    return;
+                }
+
                         delete model.promise.udf1;
                         delete model.promise.udf2;
                         delete model.promise.promiseToPayDate;

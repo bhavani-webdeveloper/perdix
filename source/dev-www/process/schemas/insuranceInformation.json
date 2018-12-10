@@ -1,0 +1,97 @@
+{  
+   "$schema":"http://json-schema.org/draft-04/schema#",
+   "type":"object",
+   "customerMinAge":18,
+   "customerMaxAge":60,
+   "isMinimumFingerPrintRequired":1,
+   "properties":{  
+      "insurancePolicyDetailsDTO":{  
+         "type":"object",
+         "properties":{  
+            "nomineeDetailsDTO":{  
+               "type":"array",
+               "items": 
+                  {  
+                     "type":"object",
+                     "properties":{  
+                        "nomineeName":{  
+                           "type":"string",
+                           "title":"NOMINEE_NAME"
+                        }
+                     }
+                  }
+            
+            },
+            "insurancePolicyDetailsDTO" : {
+                "type" : "array",
+                "items" : {
+                    "type" : "object",
+                    "properties" : {
+                        "productCode" : {
+                            "type" : "string",
+                            "title" : "PRODUCT_CODE"
+                        }
+                    }
+                }
+            },
+            "pincode":{  
+               "type":[  
+                  "string",
+                  "null"
+               ],
+               "title":"PINCODE",
+               "maxLength":12
+            },
+            "state":{  
+               "type":[  
+                  "string",
+                  "null"
+               ],
+               "title":"STATE"
+            },
+            "district":{  
+               "type":[  
+                  "string",
+                  "null"
+               ],
+               "title":"DISTRICT"
+            },
+            "urnNo":{  
+               "type":[  
+                  "string",
+                  "null"
+               ],
+               "title":"URN_NO"
+            },
+            "custmerId":{  
+               "type":[  
+                  "number",
+                  "null"
+               ],
+               "title":"CUSTOMER_ID"
+            },
+            "contactNumber":{  
+               "type":[  
+                  "string",
+                  "null"
+               ],
+               "title":"CONTACT_NUMBER"
+            },
+            "dateOfBirth":{  
+               "type":[  
+                  "date",
+                  "null"
+               ],
+               "title":"DATE_OF_BIRTH"
+            },
+            "benificieryRelationship":{  
+               "type":[  
+                  "string",
+                  "null"
+               ],
+               "title":"BENIFICIERY_RELATIONSHIP"
+            }
+         }
+      }
+   }
+}
