@@ -9,14 +9,10 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
         initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
 
             model.getByEnumCode = function (parameterName) {
-                if(parameterName == "PM1")
-                    return "language";
-                else if(parameterName == "PM2")
-                    return "recovery_attempt"
-                else if(parameterName == "DSCR!")
-                    return "personal_overdue_reasons"
-                else if(parameterName == "SBscore!")
-                    return "excel_type"
+                if(model.allParameterMaster){
+                    var object = model.allParameterMaster.find(o => o.parameterName ==parameterName) ;
+                    return object.enumCode;
+                }
             }
 
 
