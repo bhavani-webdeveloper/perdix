@@ -57,20 +57,16 @@ define({
                                 "screenFilter": true
                             }
                         },
-                        "customerId": {
-                            "title": "CUSTOMER_ID",
-                            "type": "string"
-                        },
+	                    "urn": {
+	                        "title": "URN",
+	                        "type": "string"
+	                    },
                         "area": {
                             "title": "AREA",
                             "type": "string"
                         },
                         "cityTownVillage": {
                             "title": "CITY_TOWN_VILLAGE",
-                            "type": "string"
-                        },
-                         "pincode": {
-                            "title": "PIN_CODE",
                             "type": "string"
                         }
                     },
@@ -89,7 +85,6 @@ define({
                     return IndividualLoan.search({
                         'branchName':searchOptions.branch,
                         'stage': ['FieldInvestigation1','FieldInvestigation2','FieldInvestigation3','TeleVerification'],
-                        'enterprisePincode':searchOptions.pincode,
                         'applicantName':searchOptions.applicantName,
                         'area':searchOptions.area,
                         'villageName':searchOptions.villageName,
@@ -98,6 +93,7 @@ define({
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage,
                         'centreCode': searchOptions.centre,
+                        'urn': searchOptions.urn,
                         'valuator': SessionStore.session.login
                     }).$promise;
                 },
