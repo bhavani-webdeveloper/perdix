@@ -927,6 +927,48 @@ irf.models.factory('Queries', [
             return deferred.promise;
         };
 
+         resource.getCustomerFamilyRelations = function(customerId) {
+            var deferred = $q.defer();
+            resource.getResult("customerFamilyMembers.list", {
+                "customerId": customerId
+            }).then(function(records) {
+                if (records && records.results) {
+                    var result = {
+                        headers: {
+                            "x-total-count": records.results.length
+                        },
+                        body: records.results
+                    };
+                    deferred.resolve(result);
+                }
+            }, deferred.reject);
+            return deferred.promise;
+        };
+
+        resource.getProductCode = function (bankId, branchId){
+            var deferred = $q.defer();
+            var request = {
+                "bankId" : bankId,
+                "branchId" : branchId
+            };
+            resource.getResult("insuranceProducts.list",request).then(function(records) {
+                if(records && records.results){
+                    var result = {
+                        headers : {
+                             "x-total-count": records.results.length
+                         },
+                         body: records.results
+                    };
+                    deferred.resolve(result);
+                }
+                else{
+                    deferred.reject();
+                }
+            }, deferred.reject);
+            return deferred.promise;
+        };
+
+
         resource.getCibilHighmarkMandatorySettings = function() {
             var deferred = $q.defer();
             resource.getResult("globalSettingsIn.list", {
@@ -1348,6 +1390,25 @@ irf.models.factory('Queries', [
             }
         }, deferred.reject);
         return deferred.promise;
+    }
+
+    resource.searchCustomerData = function(urnNo) {
+         var deferred = $q.defer();
+            var request = {
+                "urnNo" : urnNo
+            }
+            resource.getResult("customer.list",request).then(function(records) {
+                if (records && records.results) {
+                    var result = {
+                        headers: {
+                            "x-total-count": records.results.length
+                        },
+                        body: records.results
+                    };
+                    deferred.resolve(result);
+                }
+            }, deferred.reject);
+            return deferred.promise;
     }
     return resource;
     
