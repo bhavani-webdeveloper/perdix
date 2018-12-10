@@ -692,7 +692,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                         "type": "button",
                         "title": "DOWNLOAD_ALL_FORMS",
                         "onClick": function(model, form, schemaForm, event) {
-                            Misc.downloadFile(Misc.allFormsDownload({recordId:model.loanAccount.id}));
+                            Utils.downloadFile(Misc.allFormsDownload({recordId:model.loanAccount.id}));
                         }
                     }, 
                      //all existing docs

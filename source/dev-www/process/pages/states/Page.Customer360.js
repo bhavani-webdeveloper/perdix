@@ -86,7 +86,8 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 			"Page/Engine/customer360.Recapture",
 			"Page/Engine/customer360.CustomerHistorySummary",
 			"Page/Engine/customer360.CustomerDeathMarking",
-			"Page/Engine/customer360.loans.CustomerGroupsView"
+			"Page/Engine/customer360.loans.CustomerGroupsView",
+			"Page/Engine/customer360.Insurance"
 		]
 	};
 	//"Page/CustomerHistory",

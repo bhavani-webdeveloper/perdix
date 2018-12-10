@@ -78,6 +78,14 @@
                 "Page/JournalPostingDashboard",
                 "Page/FinconAccountingDashboard"
             ]
+        },{
+            "title": "INSURANCE_REGISTRATION",
+            "iconClass": "fa fa-user",
+            "items": [
+                "Page/Engine/insurance.InsuranceRegistrationQueue",
+                "Page/Engine/insurance.Registration"
+                
+            ]
         }, {
             "title": "MANAGEMENT",
             "iconClass": "fa fa-cubes",

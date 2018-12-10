@@ -43,7 +43,12 @@ irf.models.factory('UIRepository', function($resource, $httpParamSerializer, BAS
         getPaymentDetails: {
             method: "GET",
             url: 'modules/ui/payment/payment.json'
+        },
+        getInsuranceProcessDetails: {
+            method: "GET",
+            url: "modules/ui/insurance/InsuranceProcess.json"
         }
+
     });
 
     return ret;

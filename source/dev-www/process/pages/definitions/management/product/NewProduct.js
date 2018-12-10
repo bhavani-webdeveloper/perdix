@@ -52,7 +52,8 @@ define({
             form: [{
                 "type": "box",
                 "title": "PRODUCT_INFORMATION",
-                "items": [{
+                "items": [
+                {
                     "key": "product.productCategory",
                     "type": "select",
                     "enumCode": "loan_product_category_master",
@@ -233,6 +234,23 @@ define({
                         "name": "Health Insurance",
                         "value": "HI",
                     }]
+                },
+                {
+                    "title": "APPLICANT_MIN_AGE",
+                    "key": "product.applicantMinAge",
+                    "type": "number",
+                    required:true
+                },
+                {
+                    "title": "APLLICANT_MAX_AGE",
+                    "key":"product.applicantMaxAge",
+                    "type":"number",
+                    required:true
+                },
+                {
+                    "title": "MATURITY_AGE",
+                    "key":"product.maturityAge",
+                    "type":"number"
                 },
                 {
                     "key": "product.repaymentReminderEnabled",

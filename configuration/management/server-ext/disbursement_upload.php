@@ -54,7 +54,6 @@ function activateLoanAccounts($id){
 	    ]);
 }
 
-
 function searchDisbursementByAccountNumber($param){
     global $url;
     global $authHeader;
@@ -108,10 +107,14 @@ function putDisbursement($api, $requestBody){
 }
 
 
-$tempWipDir = $filePath . DIRECTORY_SEPARATOR . "Internal". DIRECTORY_SEPARATOR . "wip" . DIRECTORY_SEPARATOR;
-$tempRejectedDir = $filePath . DIRECTORY_SEPARATOR . "Internal". DIRECTORY_SEPARATOR . "rejected" . DIRECTORY_SEPARATOR;
-$tempCompletedDir = $filePath . DIRECTORY_SEPARATOR . "Internal". DIRECTORY_SEPARATOR . "completed" . DIRECTORY_SEPARATOR;
+$tempWipDir = $filePath . DIRECTORY_SEPARATOR . "wip" . DIRECTORY_SEPARATOR;
+$tempRejectedDir = $filePath . DIRECTORY_SEPARATOR . "rejected" . DIRECTORY_SEPARATOR;
+$tempCompletedDir = $filePath . DIRECTORY_SEPARATOR . "completed" . DIRECTORY_SEPARATOR;
+$tempToBeProcessed = $filePath . DIRECTORY_SEPARATOR . "to_be_processed" . DIRECTORY_SEPARATOR;
 
+if (!is_dir($tempToBeProcessed )) {
+    mkdir($tempToBeProcessed, 0777, true);
+}
 
 if (!is_dir($tempWipDir )) {
     mkdir($tempWipDir, 0777, true);
@@ -123,7 +126,7 @@ if (!is_dir($tempCompletedDir )) {
     mkdir($tempCompletedDir, 0777, true);
 }
 
-$files = new DirectoryIterator($filePath);
+$files = new DirectoryIterator($tempToBeProcessed);
 
 foreach ($files as $file) {
 
@@ -134,7 +137,7 @@ foreach ($files as $file) {
             echo "<br/>".$file;
 
             echo "<br/> temp : ". $tempCompletedDir;
-            $source = $filePath . DIRECTORY_SEPARATOR . $file->getFilename();
+            $source = $tempToBeProcessed . DIRECTORY_SEPARATOR . $file->getFilename();
             $dest = $tempWipDir . $file->getFilename();
 
             copy($source, $dest);
@@ -214,8 +217,19 @@ foreach ($files as $file) {
 
                         //echo "<br/>".$rowData;
                         //print_r($rowData);
-                        $loanId = $rowData[1];
+
+
+                        //$loanId = $rowData[1];
                         $accountNumber = $rowData[2];
+                        $loan_accounts = DB::table('loan_accounts')
+                            ->select('id', 'account_number', 'old_account_no')
+                            ->where('account_number', $accountNumber)
+                            ->get();
+
+                        foreach ($loan_accounts as $loan_account) {
+                            $loanId=$loan_account->id;
+                            $partner_loan_id= $loan_account->old_account_no;
+                        }                        
                         $disbursementId = $rowData[6];
                         $modeOfDisbursement = $rowData[5];
                         $disbursementFromBankAccountNumber = $rowData[6];
@@ -268,7 +282,6 @@ foreach ($files as $file) {
                         
                         putDisbursement("batchDisbursement", $reqBodyForBatch);
 
-
                         //echo json_encode($reqBody);
                         //updateDisbursement($reqBody);
                         //api calling     
@@ -277,7 +290,7 @@ foreach ($files as $file) {
                          $disbursementReportDetail = new DisbursementReportDetail();
                          $disbursementReportDetail->master_id = $IdGenerated;
                          $disbursementReportDetail->account_number = $rowData[2] ;
-                         $disbursementReportDetail->partner_loan_id = $rowData[1] ;
+                         $disbursementReportDetail->partner_loan_id = $partner_loan_id ;
                          $disbursementReportDetail->is_processed = true;
                          $disbursementReportDetail->status = 'SUCCESS';
                          $disbursementReportDetail->error_response = 'NA';
