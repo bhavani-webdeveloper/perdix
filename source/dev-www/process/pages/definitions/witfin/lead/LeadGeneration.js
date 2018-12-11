@@ -239,6 +239,17 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                     //this.form.push(actionbox);
 
                 },
+                offlineInitialize: function(model, form, formCtrl) {
+                    if (model.$$STORAGE_KEY$$) {
+                        // model.leadProcess = LeadProcess.createFromOfflineData(model.leadProcess);
+                        LeadProcess.createFromPlainLeadObject(model.lead)
+                            .subscribe(function(leadProcess){
+                                model.leadProcess = leadProcess;
+                                model.lead = leadProcess.lead;
+                                // self.form = IrfFormRequestProcessor.getFormDefinition('LeadGeneration', formRequest);
+                            })
+                    }
+                },
                 offline: true,
                 getOfflineDisplayItem: function(item, index) {
                     return [

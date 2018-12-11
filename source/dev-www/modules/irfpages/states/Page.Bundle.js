@@ -82,7 +82,7 @@ irf.pages.factory('BundleManager', ['BundleLog', '$injector', '$q', 'formHelper'
          * @param bundleModel
          * @return pageObj
          */
-        createPageObject: function(definition, model, bundleModel, shouldInitialize, bundlePageName) {
+        createPageObject: function(definition, model, bundleModel, isOnlineLoad, bundlePageName) {
             var deferred = $q.defer();
 
             var pageObj = {};
@@ -98,8 +98,10 @@ irf.pages.factory('BundleManager', ['BundleLog', '$injector', '$q', 'formHelper'
             var pageDefPath = "pages/" + pageObj.pageName.replace(/\./g, "/");
             try {
                 pageObj.page = _.cloneDeep($injector.get(irf.page(pageObj.pageName)));
-                if (angular.isFunction(pageObj.page.initialize) && shouldInitialize) {
+                if (angular.isFunction(pageObj.page.initialize) && isOnlineLoad) {
                     pageObj.$initPromise = $q.when(pageObj.page.initialize(pageObj.model, pageObj.page.form, pageObj.formCtrl, pageObj.singlePageDefinition, bundleModel));
+                } else if (angular.isFunction(pageObj.page.offlineInitialize) && !isOnlineLoad) {
+                    pageObj.$initPromise = $q.when(pageObj.page.offlineInitialize(pageObj.model, pageObj.page.form, pageObj.formCtrl, pageObj.singlePageDefinition, bundleModel));
                 }
                 deferred.resolve(pageObj);
             } catch (err) {
@@ -114,8 +116,10 @@ irf.pages.factory('BundleManager', ['BundleLog', '$injector', '$q', 'formHelper'
                     irf.pageCollection.loadPage(pageDefObj.pageUID, pageDefObj.dependencies, pageDefObj.$pageFn);
                     try {
                         pageObj.page = _.cloneDeep($injector.get(irf.page(pageObj.pageName)));
-                        if (angular.isFunction(pageObj.page.initialize) && shouldInitialize) {
+                        if (angular.isFunction(pageObj.page.initialize) && isOnlineLoad) {
                             pageObj.$initPromise = $q.when(pageObj.page.initialize(pageObj.model, pageObj.page.form, pageObj.formCtrl, pageObj.singlePageDefinition, bundleModel));
+                        } else if (angular.isFunction(pageObj.page.offlineInitialize) && !isOnlineLoad) {
+                            pageObj.$initPromise = $q.when(pageObj.page.offlineInitialize(pageObj.model, pageObj.page.form, pageObj.formCtrl, pageObj.singlePageDefinition, bundleModel)); 
                         }
                         deferred.resolve(pageObj);
                     } catch (e) {
@@ -557,7 +561,8 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
                         $scope.bundleModel = offlineData.bundleModel;
                         $scope.bundlePage.bundlePages = offlineData.bundlePages;
                         $scope.bundleModel.$$STORAGE_KEY$$ = offlineData.$$STORAGE_KEY$$;
-                        initPromise = $q.resolve();
+                        // initPromise = $q.resolve();
+                        initPromise = $q.when($scope.bundlePage.offlineInitialize($scope.bundleModel));
                     } else { // Loading online data
                         initPromise = $q.when($scope.bundlePage.pre_pages_initialize($scope.bundleModel));
                     }
