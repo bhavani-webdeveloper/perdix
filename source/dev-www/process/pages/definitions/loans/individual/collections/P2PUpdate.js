@@ -321,6 +321,8 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                                         required: true,
                                         "condition": "model.promise.promiseToPay=='NO'",
                                         enumCode: "collection_sub_status",
+                                        parentEnumCode: "recovery_attempt",
+                                        parentValueExpr:"model.additional.currentCollectionStatus",
                                     },
                                     {
                                         key: "additional.reasonType",
