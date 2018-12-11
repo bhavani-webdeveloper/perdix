@@ -1260,6 +1260,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     "KYC.identityProofImageId": {
                         "offline": true
+                    },
+                    "BankAccounts.customerBankAccounts.bankStatements": {
+                       "startEmpty": true 
                     }
                 }
             }

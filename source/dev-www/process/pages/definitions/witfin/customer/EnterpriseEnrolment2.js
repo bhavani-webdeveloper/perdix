@@ -1136,6 +1136,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             },
                             "CommercialCBCheck.enterpriseBureauDetails.fileId": {
                                 "offline": true
+                            },
+                            "BankAccounts.customerBankAccounts.bankStatements": {
+                               "startEmpty": true 
                             }
                             /*,
                             "BusinessVerification":{
