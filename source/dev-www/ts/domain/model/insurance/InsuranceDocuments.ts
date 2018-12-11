@@ -1,9 +1,8 @@
 import { Type } from "class-transformer";
 
-export class InsuranceDocuments {
-insuranceId: number;
-documentCode : string;
-fileId : string;
-
-
+class InsuranceDocuments {
+    insuranceId: number;
+    documentCode : string;
+    fileId : string;
 }
+export = InsuranceDocuments;

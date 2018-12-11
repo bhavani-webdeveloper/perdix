@@ -1,13 +1,9 @@
 import { Type } from "class-transformer";
-
 import InsuranceTransactionDetails = require("./InsuranceTransactionDetails");
 import InsuranceDocuments = require("./InsuranceDocuments");
 import NomineeDetails = require("./NomineeDetails");
 
-
 export class InsurancePolicyDetails {
-
-   
     productCode: string;
     partnerCode: string;
     InsuranceType: string;
@@ -19,19 +15,19 @@ export class InsurancePolicyDetails {
     customerId: number;
     urnNo: string;
     fullName: string;
-    dateOfBirth: date;
+    dateOfBirth: Date;
     beneficieryUrn: number;
     benificieryFamilyMemberId: string;
     benificieryName: string;
     benificieryRelationship: string;
     policyNumber: string;
     certificateNo: string;
-    purchaseDate: date;
-    startDate: date;
-    maturityDate: date;
+    purchaseDate: Date;
+    startDate: Date;
+    maturityDate: Date;
     tenureInYears: number;
-    sumInsured: amount;
-    recommendationAmount: amount;
+    sumInsured: number;
+    recommendationAmount: number;
     recommendationOverride: string;
     recommendationRemarks: string;
     dscId: number;
@@ -56,6 +52,4 @@ export class InsurancePolicyDetails {
 
     @Type(() => NomineeDetails)
     nomineeDetailsDTO: NomineeDetails[];
-
-
 }
