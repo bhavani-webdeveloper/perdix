@@ -40,6 +40,7 @@ irf.pageCollection.factory(irf.page("customer360.CustomerDeathMarking"), ["$log"
                                     model.deathMarking.dateOfDeath =  model.deceaseDetails[i].date_of_incident || {};
                                     model.deathMarking.deathMarkingStatus =  model.deceaseDetails[i].admin_confirmation_status || {};
                                     model.deathMarking.fileId =  model.deceaseDetails[i].fileId;
+                                    model.deathMarking.id =  model.deceaseDetails[i].id || {};
                                    }
                                     }
                                     PageHelper.hideLoader();
@@ -271,6 +272,7 @@ irf.pageCollection.factory(irf.page("customer360.CustomerDeathMarking"), ["$log"
                         "furtherDetails": model.deathMarking.furtherDetails,
                         "reasonForDeath": model.deathMarking.reasonForDeath,
                         "fileId": model.deathMarking.fileId,
+                        "id": model.deathMarking.id,
                     };
                    // req.parameter.push(parameter_list);
                     Utils.confirm("Are you sure?").then(function() {
