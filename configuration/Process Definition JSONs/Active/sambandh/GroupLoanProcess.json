@@ -954,10 +954,10 @@
 			  "GroupCreation",
                 "Checker1",
 				"AgreementUploadPending"
-				
+
               ]
             },
-			  
+
 			 "agreementStatus": {
               "title": "agreementStatus",
               "type": "string",
@@ -991,7 +991,7 @@
               ]
             }
           }
-       
+
       },
          "cgt": {
             "title": "CGT Details",
