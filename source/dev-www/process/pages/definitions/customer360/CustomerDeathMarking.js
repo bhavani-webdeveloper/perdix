@@ -39,7 +39,7 @@ irf.pageCollection.factory(irf.page("customer360.CustomerDeathMarking"), ["$log"
                                     model.deathMarking.reasonForDeath =  model.deceaseDetails[i].reason_for_death || {};
                                     model.deathMarking.dateOfDeath =  model.deceaseDetails[i].date_of_incident || {};
                                     model.deathMarking.deathMarkingStatus =  model.deceaseDetails[i].admin_confirmation_status || {};
-                                    model.deathMarking.fileId =  model.deceaseDetails[i].fileId || {};
+                                    model.deathMarking.fileId =  model.deceaseDetails[i].fileId;
                                    }
                                     }
                                     PageHelper.hideLoader();

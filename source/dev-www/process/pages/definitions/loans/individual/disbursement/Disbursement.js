@@ -65,8 +65,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                             model.loanAccountDisbursementSchedule.normalInterestDuePayment = resp[0].normalInterestDuePayment;
                             model.loanAccountDisbursementSchedule.principalDuePayment = resp[0].principalDuePayment;
                             model.loanAccountDisbursementSchedule.linkedAccountNumber = resp[0].linkedAccountNumber;
-
-                            model.loanAccountDisbursementSchedule.linkedAccountTotalFeeDue = resp[0].linkedAccountTotalFeeDue - resp[0].linkedAccountPreclosureFee;
+                            model.loanAccountDisbursementSchedule.otherFeesDue = resp[0].linkedAccountTotalFeeDue - resp[0].linkedAccountPreclosureFee;
                             model.loanAccountDisbursementSchedule.linkedAccountPreclosureFee = resp[0].linkedAccountPreclosureFee;
                             model.loanAccountDisbursementSchedule.linkedAccountPenalInterestDue = resp[0].linkedAccountPenalInterestDue;
                             model.loanAccountDisbursementSchedule.linkedAccountNormalInterestDue = resp[0].linkedAccountNormalInterestDue;
@@ -429,8 +428,8 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                             "title": "TOTAL_PENAL_INTEREST_DUE",
                             "readonly": true
                         }, {
-                            "key": "loanAccountDisbursementSchedule.linkedAccountTotalFeeDue",
-                            "title": "TOTAL_FEE_DUE",
+                            "key": "loanAccountDisbursementSchedule.otherFeesDue",
+                            "title": "OTHER_FEE_DUE",
                             "readonly": true
                         }, {
                             "key": "loanAccountDisbursementSchedule.linkedAccountPreclosureFee",

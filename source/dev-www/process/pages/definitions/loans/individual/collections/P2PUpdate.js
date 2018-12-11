@@ -438,13 +438,6 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
 
                 PageHelper.showLoader();
 
-                if ((moment(model.additional.promiseToPayDate).isBefore(new Date()))) {
-                    PageHelper.setError({
-                        message: "p2p date should be more than or equal to current system date" + " " + moment(new Date()).format(SessionStore.getDateFormat())
-                    });
-                    PageHelper.hideLoader();
-                    return;
-                }
 
                         delete model.promise.udf1;
                         delete model.promise.udf2;
@@ -460,13 +453,29 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
 
                         if (model.promise.promiseToPay == 'YES') {
                             model.promise.promiseToPayDate = model.additional.promiseToPayDate;
+                            if ((moment(model.additional.promiseToPayDate).isBefore(new Date()))) {
+                                PageHelper.setError({
+                                    message: "p2p date should be more than or equal to current system date" + " " + moment(new Date()).format(SessionStore.getDateFormat())
+                                });
+                                PageHelper.hideLoader();
+                                return;
+                            }
 
                         } else {
 
                             model.promise.collectionSubStatus = model.additional.collectionSubStatus;
                             model.promise.currentCollectionStatus = model.additional.currentCollectionStatus;
-                            if (model.additional.currentCollectionStatus == 'Contact Again')
+                            if (model.additional.currentCollectionStatus == 'Contact Again'){
                                 model.promise.scheduledDate = model.additional.scheduledDate;
+                                if ((moment(model.additional.scheduledDate).isBefore(new Date()))) {
+                                    PageHelper.setError({
+                                        message: "Follow Up date should be more than or equal to current system date" + " " + moment(new Date()).format(SessionStore.getDateFormat())
+                                    });
+                                    PageHelper.hideLoader();
+                                    return;
+                                }
+                            }
+                                
                         }
                         model.promise.reasonType = model.additional.reasonType;
                         if (model.additional.reason && model.additional.reason == "Others")
