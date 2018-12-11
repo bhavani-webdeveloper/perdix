@@ -41,16 +41,17 @@ foreach ($frequencies as $frequency) {
             $out_going_message=str_replace('INSTALLMENT_AMOUNT', $reminder->installment_amount, $out_going_message);
             $out_going_message=str_replace('INSTALLMENT_DATE',	$reminder->installment_date, $out_going_message);
 
-            DB::table('sms_details')->insert(
-            ['customer_id' => $reminder->customer_id, 
+            DB::table('sms_scheduler_details')->insert(
+            ['customer_id' => $reminder->customer_id,
+            'version' => 1, 
             'product_transaction_id' => $reminder->loan_id.$reminder->installment_number,
             'mobile_no' => $reminder->mobile_phone,
-            'transaction_date' => $fromDate,
             'created_by' => 'System',
             'created_at' => $fromDate,
             'sms_type' => 'Transactional',
             'transaction_ref_no' => $reminder->mobile_phone,
-            'out_going_message' => $out_going_message]
+            'out_going_message' => $out_going_message,
+            'text_message'=>$out_going_message]
             );  
         }
     }catch(Exception $e){
