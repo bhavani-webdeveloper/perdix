@@ -131,6 +131,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "BusinessVerification.businessVerification.incomeEarnedPerMonth",
                     "BusinessVerification.businessVerification.localityType",
                     "BusinessVerification.businessVerification.areaInSqFt",
+                    "BusinessVerification.businessVerification.latitude",
                     "TrackDetails",
                     "TrackDetails.vehiclesOwned",
                     "TrackDetails.vehiclesFinanced",
@@ -1166,7 +1167,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "type": "box",
                                     "title": "BUSINESS_VERIFICATION",
                                     "orderNo": 130,
-                                    "condition": "model.customer.enterprise.enterpriseType=='Enterprise'",
+                                    "condition": "model.customer.enterprise.enterpriseType=='Enterprise' || model.customer.enterprise.enterpriseType.toLowerCase() == 'sole proprietorship'",
                                     "items": {
                                         "businessVerification": {
                                             "key": "customer.fieldInvestigationDetails",
@@ -1225,21 +1226,23 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                                     "title": "AREA_IN_SQ_FT",
                                                     "enumCode": "area_in_sq_ft",
                                                     "required": "true"
-                                                }
+                                                },
+                                                "latitude": {
+                                                    "key": "customer.udf.userDefinedFieldValues.udf37",
+                                                    "title": "BUSINESS_LOCATION",
+                                                    "type": "geotag",
+                                                    "latitude": "customer.udf.userDefinedFieldValues.udf37",
+                                                    "longitude": "customer.udf.userDefinedFieldValues.udf38",
+                                                    "orderNo": 120
+                                                },
                                             }
                                         }
                                     }  
                                 },
                                 "EnterpriseAssets": {
                                         "type": "box",
-<<<<<<< HEAD
-                                        "title": "BUSINESS_VERIFICATION",
-                                        "orderNo": 130,
-                                        "condition": "model.customer.enterprise.enterpriseType=='Enterprise' || model.customer.enterprise.enterpriseType.toLowerCase() == 'sole proprietorship'",
-=======
                                         "title": "EXISTING_VEHICLE_DETAILS",
                                         "orderNo": 400,
->>>>>>> d2d8657fd... Fixed
                                         "items": {
                                             "enterpriseAssets": {
                                                 "key": "customer.enterpriseAssets",
