@@ -744,7 +744,7 @@ define([], function() {
 
             }
 
-            var formRequest = function(model) { 
+            var formRequest = function(model) {
                 return {
                     "overrides": {
                         "LoanRecommendation.loanChannels": {
@@ -778,24 +778,6 @@ define([], function() {
                                 model.loanAccount.expectedInterestRate = null;
                                 model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = null;
                             }
-<<<<<<< HEAD
-                        },function (errResp){
-        
-                        });
-                    }
-
-                    model.loanAccount.processingFee = (model.loanAccount.expectedProcessingFeePercentage / 100) * model.loanAccount.loanAmountRequested;
-                    model.loanAccount.dsaPayoutFee = Math.round(((model.loanAccount.dsaPayout / 100) * model.loanAccount.loanAmountRequested)*100)/100;
-
-                    // model.loanAccount.accountUserDefinedFields = model.loanAccount.accountUserDefinedFields || {};
-                    if (_.hasIn(model, 'loanAccount.loanCustomerRelations') &&
-                        model.loanAccount.loanCustomerRelations!=null &&
-                        model.loanAccount.loanCustomerRelations.length > 0) {
-                        var lcr = model.loanAccount.loanCustomerRelations;
-                        var idArr = [];
-                        for (var i=0;i<lcr.length;i++){
-                            idArr.push(lcr[i].customerId);
-=======
                         },
                         "PreliminaryInformation.udf5": {
                             "required": true,
@@ -848,7 +830,6 @@ define([], function() {
                         "LoanDocuments.loanDocuments.documentId": {
                             "offline": true
                         }
-                        
                     },
                     "includes": getIncludes(model),
                     "excludes": [
@@ -917,178 +898,8 @@ define([], function() {
                                         "title": "DSA_PAYOUT_IN_PERCENTAGE",
                                         "orderNo": 30,
                                         onChange: function(modelValue, form, model) {
-                                            model.loanAccount.dsaPayoutFee = (model.loanAccount.dsaPayout / 100) * model.loanAccount.loanAmountRequested;
+                                            model.loanAccount.dsaPayoutFee = Math.round(((model.loanAccount.dsaPayout / 100) * model.loanAccount.loanAmountRequested)*100)/100;
                                         }
-<<<<<<< HEAD
-                                        
-                                        
-                                    }
-                                },
-                                
-                                "DeductionsFromLoan": {
-                                    "orderNo": 40,
-                                    "items": {
-                                        "dsaPayout": {
-                                            "key": "loanAccount.dsaPayout",
-                                            "type": "number",
-                                            "title": "DSA_PAYOUT_IN_PERCENTAGE",
-                                            "orderNo": 30,
-                                            onChange: function(modelValue, form, model) {
-                                                model.loanAccount.dsaPayoutFee = Math.round(((model.loanAccount.dsaPayout / 100) * model.loanAccount.loanAmountRequested)*100)/100;
-                                            }
-                                        },
-                                        "fee3": {
-                                            "key": "loanAccount.fee3",
-                                            "title": "ACTUAL_FRANKING",
-                                            "orderNo": 40
-                                        },
-                                        "expectedPortfolioInsurancePremium": {
-                                            "key": "loanAccount.expectedPortfolioInsurancePremium",
-                                            "title": "PERSONAL_INSURANCE",
-                                            "orderNo": 50,
-                                            "readonly": true
-                                        },
-                                        "fee4": {
-                                            "key": "loanAccount.fee4",
-                                            "title": "VEHICLE_INSURANCE",
-                                            "orderNo": 60
-                                        },
-                                        "fee5":{
-                                            "key": "loanAccount.fee5",
-                                            "title": "DOCUMENT_CHARGES",
-                                            "type": "number",
-                                            "orderNo": 70
-                                        },
-                                        "dealIrr": {
-                                            "key": "loanAccount.dealIrr",
-                                            "title": "XIRR",
-                                            "type": "number",
-                                            "orderNo": 110,
-                                            "readonly": true
-                                        },
-                                        "vExpectedProcessingFee":{
-                                            "key": "loanAccount.vExpectedProcessingFee",
-                                            "title": "PROCESSING_FEE",
-                                            "type": "number",
-                                            "orderNo": 120,
-                                            "readonly": true
-                                        },
-                                        "dsaPayoutFee":{
-                                            "key": "loanAccount.dsaPayoutFee",
-                                            "title": "DSA_PAYOUT",
-                                            "type": "number",
-                                            "orderNo": 130,
-                                            "readonly": true
-                                        },
-                                        "calculateDisbursedAmount": {
-                                            "type": "button",
-                                            "title": "CALCULATE_XIRR",
-                                            "orderNo": 90,
-                                            onClick: function(model, formCtrl) {
-                                                if (model.loanAccount.estimatedEmi == null) {
-                                                    PageHelper.showProgress('calculateXirr', 'Please Click Calculate EMI Button', 5000);
-                                                } else {
-                                                    var processFee;
-                                                    var dsaPayout;
-                                                    var frequency;
-                                                    var frequencyRequested;
-                                                    var advanceEmi = model.loanAccount.estimatedEmi;
-                                                    processFee = Math.round(((model.loanAccount.expectedProcessingFeePercentage / 100) * model.loanAccount.loanAmountRequested)* 100) / 100;
-                                                    dsaPayout = Math.round(((model.loanAccount.dsaPayout / 100) * model.loanAccount.loanAmountRequested)*100)/100;
-                                                    frankingCharge = model.loanAccount.fee3;
-                                                    model.loanAccount.vExpectedProcessingFee = processFee;
-                                                    model.loanAccount.dsaPayoutFee = dsaPayout;
-                                                    model.netDisbursementAmount = model.loanAccount.loanAmountRequested - processFee - advanceEmi + dsaPayout;
-                                                    switch (model.loanAccount.frequencyRequested) {
-                                                        case 'Monthly':
-                                                            frequency = "MONTH";
-                                                            break;
-                                                        case 'Weekly':
-                                                            frequency = "WEEK";
-                                                            break;
-                                                        case 'Yearly':
-                                                            frequency = "YEAR";
-                                                            break;
-                                                        case 'Fortnightly':
-                                                            frequency = "FORTNIGHT";
-                                                            break;
-                                                        case 'Quarterly':
-                                                            frequency = "QUARTER";
-                                                            break;
-                                                        case 'Daily':
-                                                            frequency = "DAY";
-                                                            break;
-                                                    }
-                                                    switch (model.loanAccount.frequencyRequested) {
-                                                        case 'Daily':
-                                                            frequencyRequested = 1;
-                                                            break;
-                                                        case 'Fortnightly':
-                                                            frequencyRequested = 15;
-                                                            break;
-                                                        case 'Monthly':
-                                                            frequencyRequested = 30;
-                                                            break;
-                                                        case 'Quarterly':
-                                                            frequencyRequested = 120;
-                                                            break;
-                                                        case 'Weekly':
-                                                            frequencyRequested = 7;
-                                                            break;
-                                                        case 'Yearly':
-                                                            frequencyRequested = 365;
-                                                    }
-
-                                                    LoanProcess.findPreOpenSummary({
-                                                            "amountMagnitude": model.loanAccount.loanAmountRequested,
-                                                            "tenureMagnitude": model.loanAccount.tenureRequested,
-                                                            "tenureUnit": frequency,
-                                                            "normalInterestRate": model.loanAccount.expectedInterestRate,
-                                                            "productCode": "IRRTP",
-                                                        //    "moratoriumPeriod": "0",
-                                                            "openedOnDate": Utils.getCurrentDate(),
-                                                            "branchId": model.loanAccount.branchId || model.loanProcess.applicantEnrolmentProcess.customer.customerBranchId,
-                                                            "firstRepaymentDate": moment().add(frequencyRequested, 'days').format("YYYY-MM-DD"),
-                                                            "scheduledDisbursementDate": Utils.getCurrentDate(),
-                                                            "scheduledDisbursementAmount": model.loanAccount.loanAmountRequested,
-                                                            "userSecurityDeposit": "100",
-                                                            "inputFees": [
-                                                                {
-                                                                "FeeAmount": "900",
-                                                                "Surcharge": "100",
-                                                                "GrossAmount": "1000",
-                                                                "TransactionName": "Processing Fee"
-                                                                }
-                                                            ],
-                                                              "inputMoratoriums": [
-                                                                  {
-                                                                  "accountId": "",
-                                                                  "amendmentType": "",
-                                                                  "amount": "",
-                                                                  "computeStartDate": true,
-                                                                  "feeAmount": "",
-                                                                  "grossAmount": "",
-                                                                  "moratoriumInstallment": "0",
-                                                                  "moratoriumInterestRate": "23.61",
-                                                                  "moratoriumPeriod": "0 NONE",
-                                                                  "repaymentDate": "2017-10-24",
-                                                                  "surcharge": "",
-                                                                  "tenure": "",
-                                                                  "transactionDate": "",
-                                                                  "transactionId": "",
-                                                                  "transactionName": "",
-                                                                  "urnNo": ""
-                                                                }
-                                                              ],
-                                                          "scheduledDisbursements": [],
-                                                          "equatedInstallment": "31000"
-                                                        })
-                                                        .$promise
-                                                        .then(function(resp) {
-                                                            $log.info(resp);
-                                                            model.loanAccount.dealIrr = Number(resp.xirr.substr(0, resp.xirr.length - 1));
-                                                        });
-=======
                                     },
                                     "fee3": {
                                         "key": "loanAccount.fee3",
@@ -1147,7 +958,7 @@ define([], function() {
                                                 var frequencyRequested;
                                                 var advanceEmi = model.loanAccount.estimatedEmi;
                                                 processFee = Math.round(((model.loanAccount.expectedProcessingFeePercentage / 100) * model.loanAccount.loanAmountRequested)* 100) / 100;
-                                                dsaPayout = (model.loanAccount.dsaPayout / 100) * model.loanAccount.loanAmountRequested;
+                                                dsaPayout = Math.round(((model.loanAccount.dsaPayout / 100) * model.loanAccount.loanAmountRequested)*100)/100;
                                                 frankingCharge = model.loanAccount.fee3;
                                                 model.loanAccount.vExpectedProcessingFee = processFee;
                                                 model.loanAccount.dsaPayoutFee = dsaPayout;
@@ -1190,7 +1001,6 @@ define([], function() {
                                                         break;
                                                     case 'Yearly':
                                                         frequencyRequested = 365;
->>>>>>> d2d8657fd... Fixed
                                                 }
 
                                                 LoanProcess.findPreOpenSummary({
@@ -1543,8 +1353,8 @@ define([], function() {
                             }
                         ]
                     }
-                };
-            }
+                }
+            };
 
             return {
                 "type": "schema-form",
@@ -1593,7 +1403,8 @@ define([], function() {
                     }
 
                     model.loanAccount.processingFee = (model.loanAccount.expectedProcessingFeePercentage / 100) * model.loanAccount.loanAmountRequested;
-                    model.loanAccount.dsaPayoutFee = (model.loanAccount.dsaPayout / 100) * model.loanAccount.loanAmountRequested;
+                    model.loanAccount.dsaPayoutFee = Math.round(((model.loanAccount.dsaPayout / 100) * model.loanAccount.loanAmountRequested)*100)/100;
+
                     // model.loanAccount.accountUserDefinedFields = model.loanAccount.accountUserDefinedFields || {};
                     if (_.hasIn(model, 'loanAccount.loanCustomerRelations') &&
                         model.loanAccount.loanCustomerRelations!=null &&
@@ -1617,7 +1428,6 @@ define([], function() {
                     }
                     
                     var self = this;
-                   
                     var p1 = UIRepository.getLoanProcessUIRepository().$promise;
 
                     p1.then(function(repo) {
@@ -1630,6 +1440,7 @@ define([], function() {
                 },
                 offlineInitialize: function(model, form, formCtrl, bundlePageObj, bundleModel) {
                     model.loanProcess = bundleModel.loanProcess;
+
                     if(_.hasIn(model.loanProcess, 'loanAccount')) {
                         model.loanAccount = model.loanProcess.loanAccount;
                     }
