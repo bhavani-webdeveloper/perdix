@@ -66,6 +66,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                             model.loanAccountDisbursementSchedule.principalDuePayment = resp[0].principalDuePayment;
                             model.loanAccountDisbursementSchedule.linkedAccountNumber = resp[0].linkedAccountNumber;
                             model.loanAccountDisbursementSchedule.otherFeesDue = resp[0].linkedAccountTotalFeeDue - resp[0].linkedAccountPreclosureFee;
+                            model.loanAccountDisbursementSchedule.linkedAccountTotalFeeDue = resp[0].linkedAccountTotalFeeDue;
                             model.loanAccountDisbursementSchedule.linkedAccountPreclosureFee = resp[0].linkedAccountPreclosureFee;
                             model.loanAccountDisbursementSchedule.linkedAccountPenalInterestDue = resp[0].linkedAccountPenalInterestDue;
                             model.loanAccountDisbursementSchedule.linkedAccountNormalInterestDue = resp[0].linkedAccountNormalInterestDue;
