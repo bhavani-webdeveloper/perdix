@@ -303,7 +303,7 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
                                                 
                                             },
                                             onSelect: function (result, model, context) {
-                                                model.scoreMaster.subScores[context.arrayIndexes[0]].scoreParameters[context.arrayIndexes[1]].parameterName = result[0].parameterDisplayName;
+                                                model.scoreMaster.subScores[context.arrayIndexes[0]].scoreParameters[context.arrayIndexes[1]].parameterName = result[0].parameterName;
                                                 model.scoreMaster.subScores[context.arrayIndexes[0]].scoreParameters[context.arrayIndexes[1]].status = result[0].status;                                                
                                             }
 
@@ -311,6 +311,7 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
                                         {
                                             "title":"PARAMETER_PASS_SCORE",
                                             "type": "string",
+                                            "required": false,
                                             "key": "scoreMaster.subScores[].scoreParameters[].parameterPassScore"
                                         },
                                         {
