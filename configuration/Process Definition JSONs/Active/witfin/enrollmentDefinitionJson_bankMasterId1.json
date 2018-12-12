@@ -2502,26 +2502,6 @@
               "BasicEnrolment",
               "Completed"
             ]
-          },
-          "udf37": {
-            "title": "Latitude",
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 100,
-            "captureStages": [
-              "BasicEnrolment",
-              "Completed"
-            ]
-          },
-          "udf38": {
-            "title": "Longitude",
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 100,
-            "captureStages": [
-              "BasicEnrolment",
-              "Completed"
-            ]
           }
         }
       },
@@ -2592,6 +2572,26 @@
           "udf5": {
             "title": "Enterprise Name 2",
             "type": "string",
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "udf6": {
+            "title": "Latitude",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "udf7": {
+            "title": "Longitude",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
               "Completed"
