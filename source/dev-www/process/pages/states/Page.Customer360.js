@@ -87,7 +87,7 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 			"Page/Engine/customer360.CustomerHistorySummary",
 			"Page/Engine/customer360.CustomerDeathMarking",
 			"Page/Engine/customer360.loans.CustomerGroupsView",
-			"Page/Engine/customer360.Insurance"
+			"Page/Engine/customer360.ViewInsurance"
 		]
 	};
 	//"Page/CustomerHistory",
@@ -113,7 +113,8 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 			"Page/Engine/customer360.Recapture",
 			"Page/Engine/customer360.CustomerSummaryView",
 			"Page/Engine/customer360.CustomerDeathMarking",
-			"Page/Engine/customer360.loans.CustomerGroupsView"
+			"Page/Engine/customer360.loans.CustomerGroupsView",
+			"Page/Engine/customer360.ViewInsurance"
 
 		]
 	};
@@ -537,6 +538,12 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 				};
 			} catch (e) {}
 			entityManager.setModel(menu.stateParams.pageName, loanInput);
+			return $q.resolve(menu);
+		};
+
+		if ($scope.dashboardDefinition.$menuMap['Page/Engine/customer360.ViewInsurance'])
+		$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.ViewInsurance'].onClick = function(event, menu) {
+			menu.stateParams.pageId = $scope.customerId;
 			return $q.resolve(menu);
 		};
 
