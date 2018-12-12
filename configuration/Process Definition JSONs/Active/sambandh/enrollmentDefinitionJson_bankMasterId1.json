@@ -4749,6 +4749,45 @@
             }
           }
         }
+      },
+      "Verifications": {
+        "title": "Verifications",
+        "type": "object",
+        "required": [
+          "corporateName",
+          "businessName",
+          "businessConstitution",
+          "businessType"
+        ],
+        "properties": {
+          "drinkingWater": {
+            "title": "drinkingWater",
+            "type": "number",
+             "captureStages": [
+              "BasicEnrolment",
+              "Stage02",
+              "Completed"
+            ]
+          },
+          "waterFilter": {
+            "title": "waterFilter",
+            "type": "number",
+             "captureStages": [
+              "BasicEnrolment",
+              "Stage02",
+              "Completed"
+            ]
+          },
+          "toiletFacility": {
+            "title": "toiletFacility",
+            "type": "number",
+             "captureStages": [
+              "BasicEnrolment",
+              "Stage02",
+              "Completed"
+            ]
+          }
+        }
       }
     }
   }
