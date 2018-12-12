@@ -136,6 +136,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                     "type": "lov",
                                     "required": true,
                                     "lovonly": true,
+                                    "uiType": "textarea",
                                     search: function (inputModel, form, model, context) {
 
                                         return $q.when(filteredData(model.applicantTelecallingQuestionnaireList, model.loanAccount.telecallingDetails[applicantIndex].telecallingQuestionnaireList)).then((res) => {
@@ -217,6 +218,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                 {
                                     "key": "loanAccount.telecallingDetails[" + applicantIndex + "].telecallingQuestionnaireList[].answer",
                                     "title": "Answer",
+                                    "type":"textarea",
                                     "required": true,
                                     "condition": "model.loanAccount.telecallingDetails[" + applicantIndex + "].telecallingQuestionnaireList[arrayIndex].question && model.loanAccount.telecallingDetails[" + applicantIndex + "].telecallingQuestionnaireList[arrayIndex].input_type == 'string'"
                                 },
@@ -237,6 +239,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                 {
                                     "key": "loanAccount.telecallingDetails[" + applicantIndex + "].telecallingQuestionnaireList[].remarks",
                                     "title": "Remarks",
+                                    "type":"textarea",
                                     "condition": "model.loanAccount.telecallingDetails[" + applicantIndex + "].telecallingQuestionnaireList[arrayIndex].question"
                                 }
                             ]
@@ -256,6 +259,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                     "type": "lov",
                                     "required": true,
                                     "lovonly": true,
+                                    "uiType": "textarea",
                                     search: function (inputModel, form, model, context) {
 
                                         return $q.when(filteredData(model.applicantTelecallingQuestionnaireList, model.loanAccount.telecallingDetails[applicantIndex].telecallingQuestionnaireList)).then((res) => {
@@ -338,6 +342,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                     "key": "loanAccount.telecallingDetails[" + applicantIndex + "].telecallingQuestionnaireList[].answer",
                                     "title": "Answer",
                                     "required": true,
+                                    "type":"textarea",
                                     "condition": "model.loanAccount.telecallingDetails[" + applicantIndex + "].telecallingQuestionnaireList[arrayIndex].question && model.loanAccount.telecallingDetails[" + applicantIndex + "].telecallingQuestionnaireList[arrayIndex].input_type == 'string'"
                                 },
                                 {
@@ -357,6 +362,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                 {
                                     "key": "loanAccount.telecallingDetails[" + applicantIndex + "].telecallingQuestionnaireList[].remarks",
                                     "title": "Remarks",
+                                    "type":"textarea",
                                     "condition": "model.loanAccount.telecallingDetails[" + applicantIndex + "].telecallingQuestionnaireList[arrayIndex].question"
                                 }
                             ]
@@ -402,6 +408,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                     "type": "lov",
                                     lovonly: true,
                                     "required": true,
+                                    "uiType": "textarea",
                                     search: function (inputModel, form, model, context) {
                                         return $q.when(filteredData(model.loanCustomerTelecallingQuestionnaireList, model.loanAccount.telecallingDetails[loanCustomerIndex].telecallingQuestionnaireList)).then((res) => {
                                             var out = [];
@@ -484,6 +491,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                     "key": "loanAccount.telecallingDetails[" + loanCustomerIndex + "].telecallingQuestionnaireList[].answer",
                                     "title": "Answer",
                                     "required": true,
+                                    "type":"textarea",
                                     "condition": "model.loanAccount.telecallingDetails[" + loanCustomerIndex + "].telecallingQuestionnaireList[arrayIndex].question && model.loanAccount.telecallingDetails[" + loanCustomerIndex + "].telecallingQuestionnaireList[arrayIndex].input_type == 'string'"
                                 },
                                 {
@@ -503,6 +511,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                 {
                                     "key": "loanAccount.telecallingDetails[" + loanCustomerIndex + "].telecallingQuestionnaireList[].remarks",
                                     "title": "Remarks",
+                                    "type":"textarea",
                                     "condition": "model.loanAccount.telecallingDetails[" + loanCustomerIndex + "].telecallingQuestionnaireList[arrayIndex].question"
                                 }
                             ]
@@ -522,6 +531,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                     "type": "lov",
                                     lovonly: true,
                                     "required": true,
+                                    "uiType": "textarea",
                                     search: function (inputModel, form, model, context) {
                                         return $q.when(filteredData(model.loanCustomerTelecallingQuestionnaireList, model.loanAccount.telecallingDetails[loanCustomerIndex].telecallingQuestionnaireList)).then((res) => {
                                             var out = [];
@@ -604,6 +614,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                     "key": "loanAccount.telecallingDetails[" + loanCustomerIndex + "].telecallingQuestionnaireList[].answer",
                                     "title": "Answer",
                                     "required": true,
+                                    "type":"textarea",
                                     "condition": "model.loanAccount.telecallingDetails[" + loanCustomerIndex + "].telecallingQuestionnaireList[arrayIndex].question && model.loanAccount.telecallingDetails[" + loanCustomerIndex + "].telecallingQuestionnaireList[arrayIndex].input_type == 'string'"
                                 },
                                 {
@@ -623,6 +634,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                 {
                                     "key": "loanAccount.telecallingDetails[" + loanCustomerIndex + "].telecallingQuestionnaireList[].remarks",
                                     "title": "Remarks",
+                                    "type":"textarea",
                                     "condition": "model.loanAccount.telecallingDetails[" + loanCustomerIndex + "].telecallingQuestionnaireList[arrayIndex].question"
                                 }
                             ]
@@ -673,6 +685,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                         "type": "lov",
                                         lovonly: true,
                                         "required": true,
+                                        "uiType": "textarea",
                                         search: function (inputModel, form, model, context) {
                                             return $q.when(filteredData(model.coApplicantTelecallingQuestionnaireList, model.loanAccount.telecallingDetails[coApplicantIndex].telecallingQuestionnaireList)).then((res) => {
                                                 var out = [];
@@ -754,6 +767,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                         "key": "loanAccount.telecallingDetails[" + coApplicantIndex + "].telecallingQuestionnaireList[].answer",
                                         "title": "Answer",
                                         "required": true,
+                                        "type":"textarea",
                                         "condition": "model.loanAccount.telecallingDetails[" + coApplicantIndex + "].telecallingQuestionnaireList[arrayIndex].question && model.loanAccount.telecallingDetails[" + coApplicantIndex + "].telecallingQuestionnaireList[arrayIndex].input_type == 'string'"
                                     },
                                     {
@@ -773,6 +787,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                     {
                                         "key": "loanAccount.telecallingDetails[" + coApplicantIndex + "].telecallingQuestionnaireList[].remarks",
                                         "title": "Remarks",
+                                        "type":"textarea",
                                         "condition": "model.loanAccount.telecallingDetails[" + coApplicantIndex + "].telecallingQuestionnaireList[arrayIndex].question"
                                     }
                                 ]
@@ -792,6 +807,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                         "type": "lov",
                                         lovonly: true,
                                         "required": true,
+                                        "uiType": "textarea",
                                         search: function (inputModel, form, model, context) {
                                             return $q.when(filteredData(model.coApplicantTelecallingQuestionnaireList, model.loanAccount.telecallingDetails[coApplicantIndex].telecallingQuestionnaireList)).then((res) => {
                                                 var out = [];
@@ -873,6 +889,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                         "key": "loanAccount.telecallingDetails[" + coApplicantIndex + "].telecallingQuestionnaireList[].answer",
                                         "title": "Answer",
                                         "required": true,
+                                        "type":"textarea",
                                         "condition": "model.loanAccount.telecallingDetails[" + coApplicantIndex + "].telecallingQuestionnaireList[arrayIndex].question && model.loanAccount.telecallingDetails[" + coApplicantIndex + "].telecallingQuestionnaireList[arrayIndex].input_type == 'string'"
                                     },
                                     {
@@ -892,6 +909,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                     {
                                         "key": "loanAccount.telecallingDetails[" + coApplicantIndex + "].telecallingQuestionnaireList[].remarks",
                                         "title": "Remarks",
+                                        "type":"textarea",
                                         "condition": "model.loanAccount.telecallingDetails[" + coApplicantIndex + "].telecallingQuestionnaireList[arrayIndex].question"
                                     }
                                 ]
@@ -944,6 +962,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                         "type": "lov",
                                         lovonly: true,
                                         "required": true,
+                                        "uiType": "textarea",
                                         search: function (inputModel, form, model, context) {
                                             return $q.when(model.guarantorTelecallingQuestionnaireList, model.loanAccount.telecallingDetails[guarantorIndex].telecallingQuestionnaireList).then((res) => {
                                                 var out = [];
@@ -992,6 +1011,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                     {
                                         "key": "loanAccount.telecallingDetails[" + guarantorIndex + "].telecallingQuestionnaireList[].answer",
                                         "title": "Answer",
+                                        "type":"textarea",
                                         "required": true,
                                         "condition": "model.loanAccount.telecallingDetails[" + guarantorIndex + "].telecallingQuestionnaireList[arrayIndex].question && model.loanAccount.telecallingDetails[" + guarantorIndex + "].telecallingQuestionnaireList[arrayIndex].input_type == 'string'"
                                     },
@@ -1012,6 +1032,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                     {
                                         "key": "loanAccount.telecallingDetails[" + guarantorIndex + "].telecallingQuestionnaireList[].remarks",
                                         "title": "Remarks",
+                                        "type":"textarea",
                                         "condition": "model.loanAccount.telecallingDetails[" + guarantorIndex + "].telecallingQuestionnaireList[arrayIndex].question"
                                     }
                                 ]
@@ -1030,6 +1051,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                         "type": "lov",
                                         lovonly: true,
                                         "required": true,
+                                        "uiType": "textarea",
                                         search: function (inputModel, form, model, context) {
                                             return $q.when(model.guarantorTelecallingQuestionnaireList, model.loanAccount.telecallingDetails[guarantorIndex].telecallingQuestionnaireList).then((res) => {
                                                 var out = [];
@@ -1079,6 +1101,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                         "key": "loanAccount.telecallingDetails[" + guarantorIndex + "].telecallingQuestionnaireList[].answer",
                                         "title": "Answer",
                                         "required": true,
+                                        "type":"textarea",
                                         "condition": "model.loanAccount.telecallingDetails[" + guarantorIndex + "].telecallingQuestionnaireList[arrayIndex].question && model.loanAccount.telecallingDetails[" + guarantorIndex + "].telecallingQuestionnaireList[arrayIndex].input_type == 'string'"
                                     },
                                     {
@@ -1098,6 +1121,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                     {
                                         "key": "loanAccount.telecallingDetails[" + guarantorIndex + "].telecallingQuestionnaireList[].remarks",
                                         "title": "Remarks",
+                                        "type":"textarea",
                                         "condition": "model.loanAccount.telecallingDetails[" + guarantorIndex + "].telecallingQuestionnaireList[arrayIndex].question"
                                     }
                                 ]
