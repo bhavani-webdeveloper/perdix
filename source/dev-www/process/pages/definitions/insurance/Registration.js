@@ -79,10 +79,11 @@ var getIncludes = function (model) {
                     "InsuranceTransactionDetails.insuranceTransactionDetailsDTO.totalPremium",
                     "InsuranceTransactionDetails.insuranceTransactionDetailsDTO.transactionDate",
 
-                    "actionbox",
-                    "actionbox.save",
-                    "actionbox.OnlinePrint",
-                    "actionbox.Back"
+                    "actionboxBeforeSave",
+                    "actionboxBeforeSave.save",
+                    "actionboxAfterSave",
+                    "actionboxAfterSave.OnlinePrint",
+                    "actionboxAfterSave.Back"
                 ];
 
             }
@@ -440,8 +441,8 @@ var getIncludes = function (model) {
                         if(PageHelper.isFormInvalid(formCtrl)) {
                             return false;
                         }
+                        
                         formCtrl.scope.$broadcast('schemaFormValidate');
-
                         if (formCtrl && formCtrl.$invalid) {
                             PageHelper.showProgress('Insurance', 'Insurance Registration Failed', 5000);
                             return false;

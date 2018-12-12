@@ -367,11 +367,11 @@
 
     }
    },
-   "actionbox":{  
+   "actionboxBeforeSave":{  
       "type":"actionbox",
+      "condition": "!model.insurancePolicyDetailsDTO.id" , 
       "items":{  
          "save":{
-            "condition": "!model.insurancePolicyDetailsDTO.id" , 
             "type":"button",
             "title":"SAVE",
             "onClick":"actions.save(model, formCtrl, form, $event)"
@@ -384,6 +384,22 @@
          },
          "Back":{
             "condition": "model.insurancePolicyDetailsDTO.id" , 
+            "type":"button",
+            "title":"BACK",
+            "onClick":"actions.Back(model, formCtrl, form, $event)"
+         }
+      }
+   },
+   "actionboxAfterSave":{  
+      "type":"actionbox",
+      "condition": "model.insurancePolicyDetailsDTO.id" , 
+      "items":{
+         "OnlinePrint":{
+            "type":"button",
+            "title":"Print",
+            "onClick":"actions.OnlinePrint(model, formCtrl, form, $event)"
+         },
+         "Back":{
             "type":"button",
             "title":"BACK",
             "onClick":"actions.Back(model, formCtrl, form, $event)"
