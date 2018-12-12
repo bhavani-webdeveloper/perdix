@@ -871,7 +871,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                     "HouseVerification.HouseDetails.durationOfStay": {
                         title: "What Toilet facility does your family use?",
                         //key:"HouseVerification.HouseDetails.toilet_facility_type",
-                        key:"customer.verifications[].toiletFacilityType",
+                        key:"customer.verifications[0].toiletFacilityType",
                         required: true,
                         "type": "radios",
                         order: 100,
@@ -1455,7 +1455,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                                                 "Own":"Own"
                                             },  
                                             //"key": "customer.drinking_water",
-                                            "key": "customer.verifications[].drinkingWater",
+                                            "key": "customer.verifications[0].drinkingWater",
                                             // "key": "HouseVerification.HouseDetails.drinking_water"
                                                 },
                                                 "waterFiler":{
@@ -1467,7 +1467,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                                                         "No": "No",
                                                     },
                                                     //"key":"customer.water_filter"
-                                                    "key":"customer.verifications[].waterFilter"
+                                                    "key":"customer.verifications[0].waterFilter"
                                                    // "key":"HouseVerification.HouseDetails.water_filter"
                                                 },
                                         }
