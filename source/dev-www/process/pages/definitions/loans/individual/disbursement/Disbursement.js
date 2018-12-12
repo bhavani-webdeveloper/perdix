@@ -108,7 +108,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                 model.loanAccountDisbursementSchedule.modeOfDisbursement = "CASH";
                             }
                             if (model.siteCode == 'KGFS') {
-                                loanAccountDisbursementSchedule.scheduledDisbursementDate = SessionStore.getSystemDate();
+                                model.loanAccountDisbursementSchedule.scheduledDisbursementDate = SessionStore.getSystemDate();
                             }
 
                             Enrollment.getCustomerById({
