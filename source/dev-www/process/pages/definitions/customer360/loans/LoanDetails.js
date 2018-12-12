@@ -21,6 +21,13 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
             "title": "Loan Details",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
+                //
+                var remainingDocsArray=[];
+                var uploadedExistingDocs=[];
+                var masterDocumentsArray=[];
+                var allExistingDocs = []; 
+                var newLoanDocuments=[];
+                //
                 model.siteCode = SessionStore.getGlobalSetting("siteCode");
                 model.transactions=model.transactions||{};
                 var loanAccountId = $stateParams.pageId;
@@ -29,6 +36,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                 model.loanDocuments.existingDocuments = model.loanDocuments.existingDocuments || [];
                 model.loanDocuments = model.loanDocuments || {};
                 model.loanDocuments.newLoanDocuments = model.loanDocuments.newLoanDocuments || [];
+                model.newLoanDocuments=model.loanDocuments.newLoanDocuments || [];
                 model.reqData = model.reqData || {};
                 model.reqData.loanAccount = model.reqData.loanAccount || {};
                 model.reqData.loanAccount.loanDocuments = model.reqData.loanAccount.loanDocuments || [];
@@ -57,6 +65,9 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                     .$promise
                     .then(function(res) {
                         model.loanAccount = res;
+                       
+                        uploadedExistingDocs=res.loanDocuments;
+                      
                         model.loanAccount.processingFee = model.loanAccount.processingFeeInPaisa ? model.loanAccount.processingFeeInPaisa/100 : 0;
                         var promiseArray = [];
                         if(model.loanAccount.loanDocuments && model.loanAccount.loanDocuments.length>0){
@@ -409,6 +420,26 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                         var availableDocCodes = [];
                                         LoanBookingCommons.getDocsForProduct(model.cbsLoan.productCode, "LoanBooking", "DocumentUpload").then(function(docsForProduct) {
                                                 $log.info(docsForProduct);
+                                                masterDocumentsArray=docsForProduct;
+                                                for(var i=0;i<uploadedExistingDocs.length;i++){
+                                                    var pushFlag = true;
+                                                    for(var j=0;j<masterDocumentsArray.length;j++){
+                                                        if(masterDocumentsArray[j].document_name == uploadedExistingDocs[i].document){
+                                                           
+                                                            uploadedExistingDocs[i].$formsKey= masterDocumentsArray[j].forms_key;
+                                                            allExistingDocs.push(uploadedExistingDocs[i]);
+
+                                                            pushFlag=false;
+
+                                                        }
+                                                    }
+                                                    if(pushFlag){
+                                                        remainingDocsArray.push(uploadedExistingDocs[i]);
+                                                    }
+                                                }
+                                                model.remainingDocsArray = remainingDocsArray;
+                                                model.allExistingDocs = allExistingDocs;
+                                               
                                                 for (var i = 0; i < loanDocuments.length; i++) {
                                                     availableDocCodes.push(loanDocuments[i].document);
                                                     var documentObj = LoanBookingCommons.getDocumentDetails(docsForProduct, loanDocuments[i].document);
@@ -1289,13 +1320,13 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                 key: "loanRepaymentReminderHistory[].repaymentDate",
                                 type: "string",
                                 title: "P2P_DATE",
-                                condition: "model.loanRepaymentReminderHistory[arrayIndex].repaymentDate  && model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Promise to Pay'"
+                                condition: "model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Promise to Pay'"
                             },
                             {
                                 key: "loanRepaymentReminderHistory[].reminderStatus",
                                 type: "string",
                                 title: "RECOVERY_ATTEMPT",
-                                condition: "model.loanRepaymentReminderHistory[arrayIndex].reminderStatus  &&  model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Promise to Pay'"
+                                condition: "model.loanRepaymentReminderHistory[].reminderStatus  &&  model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Promise to Pay'"
                             },
                             {
                                 key: "loanRepaymentReminderHistory[].reason",
@@ -1953,7 +1984,8 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                 "title": "EXISTING_LOAN_DOCUMENTS",
                                 "items": [{
                                     "type": "array",
-                                    "key": "loanDocuments.existingDocuments",
+                                    //"key": "loanDocuments.existingDocuments",
+                                    "key":"allExistingDocs",
                                     "add": null,
                                     "startEmpty": true,
                                     "remove": null,
@@ -1966,15 +1998,15 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                                 "type": "section",
                                                 "htmlClass": "col-sm-7",
                                                 "items": [{
-                                                    "key": "loanDocuments.existingDocuments[].document",
+                                                    "key": "allExistingDocs[].document",
                                                     "notitle": true,
-                                                    "titleExpr": "model.loanDocuments.existingDocuments[arrayIndex].document",
+                                                    "titleExpr": "model.allExistingDocs[arrayIndex].document",
                                                     "type": "anchor",
                                                     "fieldHtmlClass": "text-bold",
                                                     "onClick": function (model, form, schemaForm, event) {
-                                                        var doc = model.loanDocuments.existingDocuments[event.arrayIndex];
-                                                        console.log(doc);
-                                                        Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=" + doc.$formsKey + "&record_id=" + model.loanAccount.id)
+                                                        var doc = model.allExistingDocs[event.arrayIndex];
+                                                       
+                                                       Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=" + doc.$formsKey + "&record_id=" + model.loanAccount.id)
                                                     }
                                                 }]
                                             },
@@ -1983,7 +2015,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                                 "htmlClass": "col-sm-5",
                                                 "items": [{
                                                     title: "Upload",
-                                                    key: "loanDocuments.existingDocuments[].documentId",
+                                                    key: "allExistingDocs[].documentId",
                                                     "condition": "model.pageConfig.documentUploadAllowed",
                                                     type: "file",
                                                     fileType: "application/pdf",
@@ -1994,7 +2026,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
 
                                                 }, {
                                                     title: "Upload",
-                                                    key: "loanDocuments.existingDocuments[].documentId",
+                                                    key: "allExistingDocs[].documentId",
                                                     "condition": "!model.pageConfig.documentUploadAllowed",
                                                     readonly: true,
                                                     type: "file",
@@ -2010,7 +2042,75 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                     }]
 
                                 }]
-                            }, {
+                            },
+                             // second form
+                             {
+                                "type": "fieldset",
+                                "title": "Addtional  Documents :",
+                                "items": [{
+                                    "type": "array",
+                                    "key": "remainingDocsArray",
+                                    "condition": "(!_.isUndefined(model.pageConfig.readonly) && model.pageConfig.readonly==false)",
+                                    "add": null,
+                                    "startEmpty": true,
+                                    "remove": null,
+                                    "notitle": true,
+                                    "view": "fixed",
+                                    "items": [{
+                                        "type": "section",
+                                        "htmlClass": "row",
+                                        "items": [{
+                                                "type": "section",
+                                                "htmlClass": "col-sm-7",
+                                                "items": [{
+                                                    "key": "remainingDocsArray[].document",
+                                                    "notitle": true,
+                                                    "titleExpr": "model.remainingDocsArray[arrayIndex].document",
+                                                    "type": "anchor",
+                                                    "fieldHtmlClass": "text-bold",
+                                                    "onClick": function (model, form, schemaForm, event) {
+                                                        var doc = model.remainingDocsArray[event.arrayIndex];
+                                                        
+                                                       // Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=" + doc.$formsKey + "&record_id=" + model.loanAccount.id)
+                                                    }
+                                                }]
+                                            },
+                                            {
+                                                "type": "section",
+                                                "htmlClass": "col-sm-5",
+                                                "items": [{
+                                                    title: "Upload",
+                                                    key: "remainingDocsArray[].documentId",
+                                                    
+                                                    "condition": "model.pageConfig.documentUploadAllowed",
+                                                    type: "file",
+                                                    fileType: "application/pdf",
+                                                    category: "Loan",
+                                                    subCategory: "DOC1",
+                                                    "notitle": true,
+                                                    using: "scanner"
+
+                                                }, {
+                                                    title: "Upload",
+                                                    key: "remainingDocsArray[].documentId",
+                                                    "condition": "!model.pageConfig.documentUploadAllowed",
+                                                    readonly: true,
+                                                    type: "file",
+                                                    fileType: "application/pdf",
+                                                    category: "Loan",
+                                                    subCategory: "DOC1",
+                                                    "notitle": true,
+                                                    using: "scanner"
+
+                                                }]
+                                            }
+                                        ]
+                                    }]
+
+                                }]
+                            },
+                            // sec form
+                            {
                                 "type": "fieldset",
                                 "title": "ADD_LOAN_DOCUMENTS",
                                 "items": [{
@@ -2057,7 +2157,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
 
                                 }, {
                                     "type": "array",
-                                    "key": "loanDocuments.newLoanDocuments",
+                                    "key": "newLoanDocuments",
                                     "startEmpty": true,
                                     "title": "ADD_DOCUMENTS",
                                     "remove": null,
@@ -2067,15 +2167,15 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                     "items": [{
                                         "type": "section",
                                         "htmlClass": "row",
-                                        "condition": "model.loanDocuments.newLoanDocuments[arrayIndex].readonly",
+                                        "condition": "model.newLoanDocuments[arrayIndex].readonly",
                                         "readonly": true,
                                         "items": [{
                                                 "type": "section",
                                                 "htmlClass": "col-sm-7",
                                                 "items": [{
-                                                    "key": "loanDocuments.newLoanDocuments[].document",
+                                                    "key": "newLoanDocuments[].document",
                                                     "notitle": true,
-                                                    "titleExpr": "model.loanDocuments.newLoanDocuments[arrayIndex].document",
+                                                    "titleExpr": "model.newLoanDocuments[arrayIndex].document",
                                                     "placeholder": "Name",
                                                     "fieldHtmlClass": "text-bold",
                                                 }]
@@ -2085,7 +2185,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                                 "htmlClass": "col-sm-5",
                                                 "items": [{
                                                     title: "Upload",
-                                                    "key": "loanDocuments.newLoanDocuments[].documentId",
+                                                    "key": "newLoanDocuments[].documentId",
                                                     type: "file",
                                                     fileType: "application/pdf",
                                                     category: "Loan",
@@ -2099,14 +2199,14 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                     }, {
                                         "type": "section",
                                         "htmlClass": "row",
-                                        "condition": "!model.loanDocuments.newLoanDocuments[arrayIndex].readonly",
+                                        "condition": "!model.newLoanDocuments[arrayIndex].readonly",
                                         "items": [{
                                                 "type": "section",
                                                 "htmlClass": "col-sm-7",
                                                 "items": [{
-                                                    "key": "loanDocuments.newLoanDocuments[].document",
+                                                    "key": "newLoanDocuments[].document",
                                                     "notitle": true,
-                                                    "titleExpr": "model.loanDocuments.newLoanDocuments[arrayIndex].document",
+                                                    "titleExpr": "model.newLoanDocuments[arrayIndex].document",
                                                     "placeholder": "Name",
                                                     "fieldHtmlClass": "text-bold",
                                                 }]
@@ -2116,7 +2216,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                                 "htmlClass": "col-sm-5",
                                                 "items": [{
                                                     title: "Upload",
-                                                    "key": "loanDocuments.newLoanDocuments[].documentId",
+                                                    "key": "newLoanDocuments[].documentId",
                                                     type: "file",
                                                     fileType: "application/pdf",
                                                     category: "Loan",
@@ -2195,6 +2295,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                         }]
                     }]
                 },
+                
                 {
                     "type":"box",
                     "title": "PAYER_DETAILS",
@@ -2328,22 +2429,29 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                         loanAccount : null,
                         loanProcessAction : "SAVE"
                     };
-
+                    
                     //updating existing doc
                     reqData.loanAccount = _.cloneDeep(model.loanAccount);
-                    _.forEach(model.loanDocuments.existingDocuments, function(obj,i){
-                        if(obj.documentId != reqData.loanAccount.loanDocuments[i].documentId){
-                             reqData.loanAccount.loanDocuments[i].documentId = obj.documentId;
+                    reqData.loanAccount.loanDocuments=[];
+                    _.forEach(model.remainingDocsArray, function(obj,i){
+                        if(obj.documentId){
+                            reqData.loanAccount.loanDocuments.push(obj);
+                        }
+                    });
+                    _.forEach(model.allExistingDocs, function(obj,i){
+                        if(obj.documentId){
+                            reqData.loanAccount.loanDocuments.push(obj);
                         }
                     })
+                    
                     // updating new loan Account
-                    if (model.loanDocuments.newLoanDocuments) {
-                        for (var i = 0; i < model.loanDocuments.newLoanDocuments.length; i++) {
-                            model.loanDocuments.newLoanDocuments[i].loanId = reqData.loanAccount.id;
-                            model.loanDocuments.newLoanDocuments[i].accountNumber = reqData.loanAccount.accountNumber;
-                            model.loanDocuments.newLoanDocuments[i].documentStatus = "APPROVED";
+                    if (model.newLoanDocuments) {
+                        for (var i = 0; i < model.newLoanDocuments.length; i++) {
+                            model.newLoanDocuments[i].loanId = reqData.loanAccount.id;
+                            model.newLoanDocuments[i].accountNumber = reqData.loanAccount.accountNumber;
+                            model.newLoanDocuments[i].documentStatus = "APPROVED";
 
-                            reqData.loanAccount.loanDocuments.push(model.loanDocuments.newLoanDocuments[i]);
+                            reqData.loanAccount.loanDocuments.push(model.newLoanDocuments[i]);
                         }
                     }
                     PageHelper.showLoader();
@@ -2368,17 +2476,29 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                     //    delete model.loanAccount.guarantors;
                     // }
                     model.reqData.loanAccount = _.cloneDeep(model.loanAccount);
-                    //alert(model.reqData.loanAccount.loanDocuments.length);
-                    model.reqData.loanAccount.loanDocuments = model.reqData.loanAccount.loanDocuments || [];
                     model.reqData.loanProcessAction = "PROCEED";
                     model.reqData.stage = null;
-                    if (model.loanDocuments.newLoanDocuments) {
-                        for (var i = 0; i < model.loanDocuments.newLoanDocuments.length; i++) {
-                            model.loanDocuments.newLoanDocuments[i].loanId = model.loanAccount.id;
-                            model.loanDocuments.newLoanDocuments[i].accountNumber = model.loanAccount.accountNumber;
-                            model.loanDocuments.newLoanDocuments[i].documentStatus = "APPROVED";
+                    //alert(model.reqData.loanAccount.loanDocuments.length);
+                    
+                    model.reqData.loanAccount.loanDocuments=[];
+                    _.forEach(model.remainingDocsArray, function(obj,i){
+                        if(obj.documentId){
+                            model.reqData.loanAccount.loanDocuments.push(obj);
+                        }
+                    });
+                    _.forEach(model.allExistingDocs, function(obj,i){
+                        if(obj.documentId){
+                            model.reqData.loanAccount.loanDocuments.push(obj);
+                        }
+                    })
+                   
+                    if (model.newLoanDocuments) {
+                        for (var i = 0; i < model.newLoanDocuments.length; i++) {
+                            model.newLoanDocuments[i].loanId = model.loanAccount.id;
+                            model.newLoanDocuments[i].accountNumber = model.loanAccount.accountNumber;
+                            model.newLoanDocuments[i].documentStatus = "APPROVED";
 
-                            model.reqData.loanAccount.loanDocuments.push(model.loanDocuments.newLoanDocuments[i]);
+                            model.reqData.loanAccount.loanDocuments.push(model.newLoanDocuments[i]);
                         }
                     }
                     PageHelper.showLoader();
