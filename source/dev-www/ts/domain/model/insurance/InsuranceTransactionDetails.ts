@@ -12,6 +12,7 @@ serviceCharge : number;
 gstOnServiceChange : number;
 totalPremium : number;
 isFpOverriden : boolean;
+id: number;
 
 
 }

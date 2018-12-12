@@ -370,10 +370,23 @@
    "actionbox":{  
       "type":"actionbox",
       "items":{  
-         "save":{  
+         "save":{
+            "condition": "!model.insurancePolicyDetailsDTO.id" , 
             "type":"button",
             "title":"SAVE",
             "onClick":"actions.save(model, formCtrl, form, $event)"
+         },
+         "OnlinePrint":{
+            "condition": "model.insurancePolicyDetailsDTO.id" , 
+            "type":"button",
+            "title":"Print",
+            "onClick":"actions.OnlinePrint(model, formCtrl, form, $event)"
+         },
+         "Back":{
+            "condition": "model.insurancePolicyDetailsDTO.id" , 
+            "type":"button",
+            "title":"BACK",
+            "onClick":"actions.Back(model, formCtrl, form, $event)"
          }
       }
    }

@@ -13,5 +13,6 @@ class NomineeDetails {
     gauridianMinorRelationship : string;
     gauridianGender : string;
     nomineeDoor : string;
+    id: number;
 }
 export = NomineeDetails;

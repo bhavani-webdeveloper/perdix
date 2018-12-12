@@ -4,5 +4,6 @@ class InsuranceDocuments {
     insuranceId: number;
     documentCode : string;
     fileId : string;
+    id:  number;
 }
 export = InsuranceDocuments;

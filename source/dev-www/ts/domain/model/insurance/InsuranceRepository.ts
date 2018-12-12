@@ -40,7 +40,7 @@ export class InsuranceRepository implements IInsuranceRepository {
 		let promise = this.insuranceService.create(insuranceProcess).$promise;
         return Observable.fromPromise(promise)
             .map((obj: any) => {InsurancePolicyDetails
-                let insurancePolicyDetailsDTO: InsurancePolicyDetails = <InsurancePolicyDetails>plainToClass<InsurancePolicyDetails, Object>(, obj.insurancePolicyDetailsDTO);
+                let insurancePolicyDetailsDTO: InsurancePolicyDetails = <InsurancePolicyDetails>plainToClass<InsurancePolicyDetails, Object>(InsurancePolicyDetails, obj.insurancePolicyDetailsDTO);
                 _.merge(insuranceProcess.insurancePolicyDetailsDTO, insurancePolicyDetailsDTO);
                 return insuranceProcess;
             });
