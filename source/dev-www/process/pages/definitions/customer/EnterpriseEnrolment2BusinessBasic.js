@@ -1612,7 +1612,15 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                     //model.customer.fixedAssetsMachinaries[context.arrayIndex].manufacturerName=result.machineName;
                                     priceCalculation(null, null, model);
                                     if (model.customer.fixedAssetsMachinaries[model.arrayIndex].marketPrice && model.customer.fixedAssetsMachinaries[model.arrayIndex].presentValue) {
-                                        model.customer.fixedAssetsMachinaries[model.arrayIndex].finalPrice = Math.round(((model.customer.fixedAssetsMachinaries[model.arrayIndex].presentValue+model.customer.fixedAssetsMachinaries[model.arrayIndex].marketPrice) /2)*100)/100;
+                                        if(model.customer.fixedAssetsMachinaries[model.arrayIndex].marketPrice <=0 && model.customer.fixedAssetsMachinaries[model.arrayIndex].presentValue > 0) {
+                                            model.customer.fixedAssetsMachinaries[model.arrayIndex].finalPrice = Math.round(model.customer.fixedAssetsMachinaries[model.arrayIndex].presentValue);
+                                        }                                        }
+                                        else if(model.customer.fixedAssetsMachinaries[model.arrayIndex].marketPrice > 0 && model.customer.fixedAssetsMachinaries[model.arrayIndex].presentValue <=0){
+                                            model.customer.fixedAssetsMachinaries[model.arrayIndex].finalPrice = Math.round(model.customer.fixedAssetsMachinaries[model.arrayIndex].marketPrice);
+                                        }                                        }
+                                        else{
+                                         model.customer.fixedAssetsMachinaries[model.arrayIndex].finalPrice = Math.round(((model.customer.fixedAssetsMachinaries[model.arrayIndex].presentValue+model.customer.fixedAssetsMachinaries[model.arrayIndex].marketPrice) /2)*100)/100;
+                                        }
                                     } else {
                                         model.customer.fixedAssetsMachinaries[model.arrayIndex].finalPrice = null;
                                     }
