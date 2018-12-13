@@ -578,11 +578,11 @@ define({
                         "type": "grid",
                         "orientation": "vertical",
                         "items": [{
-                            "key": "customer.enterprise.noOfFemaleEmployees",
+                            "key": "customer.enterprise.noOfMaleEmployees",
                             "title": "No. of Male Employees",
                             "type": "number"
                         }, {
-                            "key": "customer.enterprise.noOfMaleEmployees",
+                            "key": "customer.enterprise.noOfFemaleEmployees",
                             "title": "No. of Female Employees",
                             "type": "number"
                         }]
