@@ -245,7 +245,7 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
                                 },
                                 {
                                     "key": "scoreMaster.subScores[].isIndividualScore",
-                                    "title": "IS_INDIVIDULA_SCORE",
+                                    "title": "IS_INDIVIDUAL_SCORE",
                                     "type": "radios",
                                     "titleMap": [{
                                         value: true,
@@ -282,7 +282,7 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
                                             searchHelper: formHelper,
                                             search: function (inputModel, form, model) {
                                                 var defered = $q.defer();
-                                                ScoresMaintenance.allParameterMaster().$promise.then(function(item){
+                                                ScoresMaintenance.allParameterMaster({page:1,per_page:100}).$promise.then(function(item){
                                                     var out = {};
                                                     out.body = [];
                                                     for(var i=0;i<item.length;i++){
