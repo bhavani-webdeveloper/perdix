@@ -4,10 +4,10 @@ define(['perdix/domain/model/insurance/InsuranceProcess'], function (InsurancePr
         pageUID: "insurance.Registration",
         pageType: "Engine",
         dependencies: ["$log", "$state", "$stateParams","Insurance", "SessionStore", "formHelper", "$q",
-            "PageHelper", "Utils", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository", "irfNavigator"],
+            "PageHelper", "Utils", "PagesDefinition", "Queries", "irfProgressMessage", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository", "irfNavigator"],
 
         $pageFn: function ($log, $state, $stateParams, Insurance,SessionStore, formHelper, $q,
-                           PageHelper, Utils, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository, irfNavigator) {
+                           PageHelper, Utils, PagesDefinition, Queries, PM, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository, irfNavigator) {
 
               var configFile = function () {
                 return {
@@ -59,6 +59,7 @@ var getIncludes = function (model) {
                     "InsurancePolicyInformation.tenureInYears",
                     "InsurancePolicyInformation.urnNo",
                     "InsurancePolicyInformation.insuranceRecommendations",
+                    "InsurancePolicyInformation.recommendationStatus",
                     
 
 
@@ -261,7 +262,7 @@ var getIncludes = function (model) {
                                     model.insurancePolicyDetailsDTO.partnerCode = result.partnerCode,
                                     model.insurancePolicyDetailsDTO.insuranceType = result.insuranceType,
                                     model.insurancePolicyDetailsDTO.premiumRateCode = result.premiumRateCode,
-                                    model.moduleConfigId = result.moduleConfigId
+                                    model.insurancePolicyDetailsDTO.moduleConfigId = result.moduleConfigId
                                 },
                                 getListDisplayItem : function(item,index){
                                     return[
@@ -315,15 +316,23 @@ var getIncludes = function (model) {
                 actions: {
                     insuranceRecommendations : function(model, formRequest, formCtrl){
                        
-                        insuranceProcess.getInsuranceRecommendation(
+                        PageHelper.showLoader();
 
-                            ).$promise.then(function(res){
-
-                        })
+                                    model.insuranceProcess.getInsuranceRecommendation()
+                                    .finally(function() {
+                                        PageHelper.hideLoader();
+                                    })
+                                    .subscribe(function(value) {
+                                        PageHelper.clearErrors();
+                                    }, function(err) {
+                                        PageHelper.showProgress('Insurance', 'Insurance Registration Failed', 5000);
+                                        PageHelper.showErrors(err);
+                                        PageHelper.hideLoader();
+                                    });
 
                     },
                 OnlinePrint:function(model, formCtrl, form, $event){
-                if(model.idPresent){
+                if(model.insurancePolicyDetailsDTO.id){
                     var requestObj=model.insurancePolicyDetailsDTO;
                     var opts = {
                         'centreId': requestObj.centreId,
@@ -334,7 +343,7 @@ var getIncludes = function (model) {
                         'insuranceId': requestObj.id,
                         'urnNo': requestObj.urnNo,
                         'sumInsured': requestObj.sumInsured,
-                        'premiumCollected': requestObj.insuranceTransactionDetailsDTO[0].premiumCollected,
+                        'premiumCollected': requestObj.insuranceTransactionDetailsDTO[0].totalPremium,
                         'company_name': "IFMR Rural Channels and Services Pvt. Ltd.",
                         'cin': 'U74990TN2011PTC081729',
                         'address1': 'IITM Research Park, Phase 1, 10th Floor',
@@ -366,7 +375,7 @@ var getIncludes = function (model) {
 
 
                 }else{
-                    PM.pop('collection-demand', 'No data available to Print', 5000);
+                    PM.pop('insurance-registration', 'No data available to Print', 5000);
                 }
             },
             Back: function(model, formCtrl, form, $event){
@@ -404,26 +413,10 @@ var getIncludes = function (model) {
                     },
                    
                     {
-                        "bFont": 3,
-                        "text": ""
-                    },
-                    {
                         "bFont": 4,
                         "text": "Received " + model.premiumCollected + " as Insurance Premium"
                     },
-                    {
-                        "bFont": 1,
-                        "text": ""
-                    },
-                    
-                    {
-                        "bFont": 2,
-                        "text": ""
-                    },
-                    {
-                        "bFont": 2,
-                        "text": ""
-                    },
+                   
                     {
                         "bFont": 3,
                         "text": "Group Head Sign  Local Representative Sign"

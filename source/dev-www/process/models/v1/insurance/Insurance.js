@@ -1,4 +1,6 @@
-irf.models.factory('Insurance',function($resource,$httpParamSerializer,BASE_URL, searchResource){
+irf.models.factory('Insurance',[
+"$resource","$httpParamSerializer","BASE_URL","searchResource", "Upload", "$q", "PageHelper","PrinterData","Utils",
+function($resource,$httpParamSerializer,BASE_URL,searchResource, Upload, $q, PageHelper,PrinterData,Utils){
     var endpoint = BASE_URL + '/api/';    
    
    
@@ -9,9 +11,7 @@ irf.models.factory('Insurance',function($resource,$httpParamSerializer,BASE_URL,
      *      /enrollments/1           -> $get({id:1})
      * $post will send data as form data, save will send it as request payload
      */
-    return $resource(endpoint, null, {
-
-      
+    var res = $resource(endpoint, null, {
         getSchema:{
             method:'GET',
             url:'process/schemas/insuranceInformation.json'
@@ -30,13 +30,18 @@ irf.models.factory('Insurance',function($resource,$httpParamSerializer,BASE_URL,
         url:endpoint+'fetchInsurancePremiumDetails',
         isArray : true
        },
-        search: searchResource({
+       getInsuranceRecommendation:{
+        method : 'GET',
+        url:endpoint+'getInsuranceRecommendation'
+       },
+       search: searchResource({
             method: 'GET',
             url: endpoint + 'findInsurancePolicyDetails'
-        }),
-    });
+       })
+ });
 
-     res.getWebHeader = function(opts) {
+    
+        res.getWebHeader = function(opts) {
         var curTime = moment();
         var curTimeStr = curTime.local().format("DD-MM-YYYY HH:MM:SS");
         var printHtml=
@@ -79,7 +84,7 @@ irf.models.factory('Insurance',function($resource,$httpParamSerializer,BASE_URL,
         '<div style="font-size:12px;text-align : center">' + '<p>'  + "electronically generated receipt." + '</p>' + '</div>' + 
         '</div>';
         return printHtml;
-    }
+    };
 
      res.getThermalHeader = function(opts) {
         PrinterData.lines=[];
@@ -141,7 +146,7 @@ irf.models.factory('Insurance',function($resource,$httpParamSerializer,BASE_URL,
            
             .addLine("", {});
             return PrinterData;
-    }
+    };
 
     res.getThermalFooter = function(opts,PData) {
         PData
@@ -187,9 +192,11 @@ irf.models.factory('Insurance',function($resource,$httpParamSerializer,BASE_URL,
                 font: PrinterData.FONT_SMALL_NORMAL
             });
             return PData;
-    }
+    };
+    return res;
 
 
-});    
+
+}]);
 
 
