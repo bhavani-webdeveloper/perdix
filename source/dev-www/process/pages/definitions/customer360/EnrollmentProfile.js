@@ -1507,6 +1507,7 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                         return false;
                     }
                     if (!( EnrollmentHelper.validateDate(model))) {
+                        PageHelper.hideLoader();
                         return false;
                     }
                     if(model.customer.latitude == "0") {
@@ -1523,7 +1524,7 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                     } else {
                         reqData['enrollmentAction'] = 'SAVE';    
                     };
-                    mapCustomerToSelfFamilyMemebr(model);
+                    mapCustomerToSelfFamilyMemebr(reqData);
                     Enrollment.updateCustomer(reqData, function (res, headers) {
                         if (res.customer) {
                             model.customer = res.customer;
