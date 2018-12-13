@@ -23,9 +23,7 @@ export class InsuranceRepository implements IInsuranceRepository {
 
 	getPremiumAmount(insuranceProcess:InsuranceProcess): Observable<InsuranceProcess> {
 		let promise = this.insuranceService.getPremiumAmount({premiumRateCode:insuranceProcess.insurancePolicyDetailsDTO.premiumRateCode,
-			gender:insuranceProcess.insurancePolicyDetailsDTO.gender,
-			sumInsured:insuranceProcess.insurancePolicyDetailsDTO.sumInsured,
-			age:insuranceProcess.insurancePolicyDetailsDTO.age}).$promise;
+			sumInsured:insuranceProcess.insurancePolicyDetailsDTO.sumInsured}).$promise;
         return Observable.fromPromise(promise)
             .map((obj: any) => {
             	if(obj && obj.length > 0)
