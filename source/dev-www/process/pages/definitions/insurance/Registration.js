@@ -4,16 +4,17 @@ define(['perdix/domain/model/insurance/InsuranceProcess'], function (InsurancePr
         pageUID: "insurance.Registration",
         pageType: "Engine",
         dependencies: ["$log", "$state", "$stateParams","Insurance", "SessionStore", "formHelper", "$q",
-            "PageHelper", "Utils", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository", "irfNavigator"],
+            "PageHelper", "Utils", "PagesDefinition", "Queries", "irfProgressMessage", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository", "irfNavigator"],
 
         $pageFn: function ($log, $state, $stateParams, Insurance,SessionStore, formHelper, $q,
-                           PageHelper, Utils, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository, irfNavigator) {
+                           PageHelper, Utils, PagesDefinition, Queries, PM, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository, irfNavigator) {
 
               var configFile = function () {
                 return {
                 }
             }
 var idPresent = false;
+
 var getIncludes = function (model) {
 
                 return [
@@ -58,6 +59,7 @@ var getIncludes = function (model) {
                     "InsurancePolicyInformation.tenureInYears",
                     "InsurancePolicyInformation.urnNo",
                     "InsurancePolicyInformation.insuranceRecommendations",
+                    "InsurancePolicyInformation.recommendationStatus",
                     
 
 
@@ -78,8 +80,11 @@ var getIncludes = function (model) {
                     "InsuranceTransactionDetails.insuranceTransactionDetailsDTO.totalPremium",
                     "InsuranceTransactionDetails.insuranceTransactionDetailsDTO.transactionDate",
 
-                    "actionbox",
-                    "actionbox.save"
+                    "actionboxBeforeSave",
+                    "actionboxBeforeSave.save",
+                    "actionboxAfterSave",
+                    "actionboxAfterSave.OnlinePrint",
+                    "actionboxAfterSave.Back"
                 ];
 
             }
@@ -233,64 +238,58 @@ var getIncludes = function (model) {
                             "InsurancePolicyInformation" : {
                                 "readonly" : idPresent
                             },
-                            "actionbox":{
-                                "condition" : "!model.insurancePolicyDetailsDTO.id"
-                            },
+                           
                             "InsuranceNomineeDetails" : {
                                  "readonly" : idPresent
                             },
                             "InsuranceTransactionDetails":{
                                 "readonly" : idPresent
                             },
-                                "InsurancePolicyInformation.productCode" : {
-                                    "key" : "insurancePolicyDetailsDTO.productCode",
-                                    "type" : "lov",
-                                    /*"autolov" : true,*/
-                                    "required" :  true,
-                                    "title" : "PRODUCT_CODE",
-                                    search : function(inputModel,form,model,context){
-                                        return Queries.getProductCode(
-                                           SessionStore.getBankId(),
-                                           SessionStore.getCurrentBranch().branchId
-                                        );
-                                    },
-                                    onSelect : function(result,model,context){
-                                        model.insurancePolicyDetailsDTO.productCode = result.productCode,
-                                        model.insurancePolicyDetailsDTO.partnerCode = result.partnerCode,
-                                        model.insurancePolicyDetailsDTO.insuranceType = result.insuranceType,
-                                        model.insurancePolicyDetailsDTO.premiumRateCode = result.premiumRateCode,
-                                        model.moduleConfigId = result.moduleConfigId
-                                    },
-                                    getListDisplayItem : function(item,index){
-                                        return[
-                                            item.productCode +" "+ item.partnerCode
-                                        ];
-                                    }
-                                    
+                            "InsurancePolicyInformation.productCode" : {
+                                "key" : "insurancePolicyDetailsDTO.productCode",
+                                "type" : "lov",
+                                /*"autolov" : true,*/
+                                "required" :  true,
+                                "title" : "PRODUCT_CODE",
+                                search : function(inputModel,form,model,context){
+                                    return Queries.getProductCode(
+                                       SessionStore.getBankId(),
+                                       SessionStore.getCurrentBranch().branchId
+                                    );
                                 },
-                               
-                                "InsurancePolicyInformation.sumInsured" : {
-                                    "onChange" : function(modelValue, form, model){
-                                PageHelper.showLoader();
-
-                                   model.insuranceProcess.getPremiumAmount()
-                                .finally(function() {
-                                    PageHelper.hideLoader();
-                                })
-                                .subscribe(function(value) {
-                                   
-                                    PageHelper.clearErrors();
-
-                                }, function(err) {
-                                    PageHelper.showProgress('Insurance', 'Insurance Registration Failed', 5000);
-                                    PageHelper.showErrors(err);
-                                    PageHelper.hideLoader();
-                                });
-                                    }
+                                onSelect : function(result,model,context){
+                                    model.insurancePolicyDetailsDTO.productCode = result.productCode,
+                                    model.insurancePolicyDetailsDTO.partnerCode = result.partnerCode,
+                                    model.insurancePolicyDetailsDTO.insuranceType = result.insuranceType,
+                                    model.insurancePolicyDetailsDTO.premiumRateCode = result.premiumRateCode,
+                                    model.insurancePolicyDetailsDTO.moduleConfigId = result.moduleConfigId
+                                },
+                                getListDisplayItem : function(item,index){
+                                    return[
+                                        item.productCode +" "+ item.partnerCode
+                                    ];
                                 }
+                                
+                            },
+                            "InsurancePolicyInformation.sumInsured" : {
+                                "onChange" : function(modelValue, form, model){
+                                 PageHelper.showLoader();
+
+                                    model.insuranceProcess.getPremiumAmount()
+                                    .finally(function() {
+                                        PageHelper.hideLoader();
+                                    })
+                                    .subscribe(function(value) {
+                                        PageHelper.clearErrors();
+                                    }, function(err) {
+                                        PageHelper.showProgress('Insurance', 'Insurance Registration Failed', 5000);
+                                        PageHelper.showErrors(err);
+                                        PageHelper.hideLoader();
+                                    });
+                                }
+                            }
                          }
                     }
-
                      UIRepository.getInsuranceProcessDetails().$promise
                         .then(function(repo){
                             return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model)
@@ -317,20 +316,126 @@ var getIncludes = function (model) {
                 actions: {
                     insuranceRecommendations : function(model, formRequest, formCtrl){
                        
-                        insuranceProcess.getInsuranceRecommendation(
+                        PageHelper.showLoader();
 
-                            ).$promise.then(function(res){
-
-                        })
+                                    model.insuranceProcess.getInsuranceRecommendation()
+                                    .finally(function() {
+                                        PageHelper.hideLoader();
+                                    })
+                                    .subscribe(function(value) {
+                                        PageHelper.clearErrors();
+                                    }, function(err) {
+                                        PageHelper.showProgress('Insurance', 'Insurance Registration Failed', 5000);
+                                        PageHelper.showErrors(err);
+                                        PageHelper.hideLoader();
+                                    });
 
                     },
+                OnlinePrint:function(model, formCtrl, form, $event){
+                if(model.insurancePolicyDetailsDTO.id){
+                    var requestObj=model.insurancePolicyDetailsDTO;
+                    var opts = {
+                        'centreId': requestObj.centreId,
+                        'bankId': requestObj.bankId,
+                        'branchId':requestObj.branchId,
+                        'entityName': SessionStore.getBankName(),
+                        'benificieryName': requestObj.benificieryName,
+                        'insuranceId': requestObj.id,
+                        'urnNo': requestObj.urnNo,
+                        'sumInsured': requestObj.sumInsured,
+                        'premiumCollected': requestObj.insuranceTransactionDetailsDTO[0].totalPremium,
+                        'company_name': "IFMR Rural Channels and Services Pvt. Ltd.",
+                        'cin': 'U74990TN2011PTC081729',
+                        'address1': 'IITM Research Park, Phase 1, 10th Floor',
+                        'address2': 'Kanagam Village, Taramani',
+                        'address3': 'Chennai - 600113, Phone: 91 44 66687000',
+                        'website': "http://ruralchannels.ifmr.co.in/",
+                        'helpline': '18001029370',
+                    };
+    
+                    var print={};
+                    print.paperReceipt= Insurance.getWebHeader(opts);
+                    print.thermalReceipt= Insurance.getThermalHeader(opts);
+                    print.paperReceipt= print.paperReceipt + Insurance.getWebFooter(opts);
+                    print.thermalReceipt= Insurance.getThermalFooter(opts,print.thermalReceipt);
+    
+                    $log.info(print.paperReceipt);
+                    $log.info(print.thermalReceipt);
+    
+                    //LoanProcess.PrintReceipt(print.thermalReceipt,print.paperReceipt);
+    
+                    Utils.confirm("Please Save the data offline,Page will redirected to Print Preview")
+                            .then(function(){
+                                irfNavigator.go({
+                                    state: "Page.Engine",
+                                    pageName: "management.ReceiptPrint",
+                                    pageData: print
+                                });
+                            });
+
+
+                }else{
+                    PM.pop('insurance-registration', 'No data available to Print', 5000);
+                }
+            },
+            Back: function(model, formCtrl, form, $event){
+                 irfNavigator.goBack();
+            },
+            print: function(model){
+                console.log(model);
+            
+                var printData = [
+                    {
+                        "bFont": 2,
+                        "text": "SAIJA FINANCE PVT. LTD",
+                        "style": {
+                            center: true
+                        }
+                    },
+                    {
+                        "bFont": 1,
+                        "text": "RECIEPT",
+                        "style": {
+                            "center": true
+                        }
+                    },
+                    {
+                        "bFont": 3,
+                        "text": "No: <Receipt No here>"
+                    },
+                    {
+                        "bFont": 3,
+                        "text": "Mr/Mrs. " + model.insurancePolicyDetailsDTO.benificieryName
+                    },
+                    {
+                        "bFont": 3,
+                        "text": "Customer UrnNo: "+ model.insurancePolicyDetailsDTO.urnNo
+                    },
+                   
+                    {
+                        "bFont": 4,
+                        "text": "Received " + model.premiumCollected + " as Insurance Premium"
+                    },
+                   
+                    {
+                        "bFont": 3,
+                        "text": "Group Head Sign  Local Representative Sign"
+                    }
+
+                ]
+                var printObj = {
+                    "data": printData
+                };
+
+                return;
+            },
                      save: function (model, formCtrl, form, $event) {
                         PageHelper.clearErrors();
                         if(PageHelper.isFormInvalid(formCtrl)) {
                             return false;
                         }
+                        
                         formCtrl.scope.$broadcast('schemaFormValidate');
-
                         if (formCtrl && formCtrl.$invalid) {
                             PageHelper.showProgress('Insurance', 'Insurance Registration Failed', 5000);
                             return false;
@@ -345,10 +450,9 @@ var getIncludes = function (model) {
                                     PageHelper.hideLoader();
                                 })
                                 .subscribe(function(value) {
-                                     PageHelper.showProgress('Insurance', 'Insurance Registration Saved', 5000);
-                                   irfNavigator.goBack();
-                                    PageHelper.clearErrors();
-
+                                    model.insurancePolicyDetailsDTO = value.insurancePolicyDetailsDTO;
+                                    model.submissionDone = true;
+                                    PageHelper.showProgress('Insurance', 'Insurance Registration Saved', 5000);
                                 }, function(err) {
                                     PageHelper.showProgress('Insurance', 'Insurance Registration Failed', 5000);
                                     PageHelper.showErrors(err);

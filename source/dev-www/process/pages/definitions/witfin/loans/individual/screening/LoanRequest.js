@@ -829,6 +829,9 @@ define([], function() {
                         },
                         "LoanDocuments.loanDocuments.documentId": {
                             "offline": true
+                        },
+                        "actionbox.save": {
+                            "buttonType": "submit"
                         }
                         
                     },
@@ -1178,6 +1181,7 @@ define([], function() {
                                     key: "review.proceedButton",
                                     type: "button",
                                     title: "PROCEED",
+                                    buttonType: "submit",
                                     onClick: "actions.proceed(model, formCtrl, form, $event)"
                                 }]
 

@@ -1092,6 +1092,9 @@ define(
                         },
                         "VehiclePhotoCaptures.vehiclePhotoCaptures.photoFileId": {
                             "offline": true
+                        },
+                        "actionbox.save": {
+                            "buttonType": "submit"
                         }
                     },
                     "includes": getIncludes (model),

@@ -67,35 +67,35 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "ContactInformation.distanceFromBranch",
                     "ContactInformation.businessInPresentAreaSince",
                     "ContactInformation.businessInCurrentAddressSince",
-                    "Liabilities",
-                    "Liabilities.liabilities",
-                    "Liabilities.liabilities.loanType",
-                    "Liabilities.liabilities.loanSource",
-                    "Liabilities.liabilities.loanAmountInPaisa",
-                    "Liabilities.liabilities.installmentAmountInPaisa",
-                    "Liabilities.liabilities.outstandingAmountInPaisa",
-                    "Liabilities.liabilities.startDate",
-                    "Liabilities.liabilities.maturityDate",
-                    "Liabilities.liabilities.noOfInstalmentPaid",
-                    "Liabilities.liabilities.frequencyOfInstallment",
-                    "Liabilities.liabilities.liabilityLoanPurpose",
-                    "Liabilities.liabilities.interestOnly",
-                    "Liabilities.liabilities.interestRate",
-                    "Liabilities.liabilities.proofDocuments",
+                    "BusinessVerification",
+                    "BusinessVerification.businessVerification",
+                    "BusinessVerification.businessVerification.personMet",
+                    "BusinessVerification.businessVerification.personName",
+                    "BusinessVerification.businessVerification.noOfEmployeesWorking",
+                    "BusinessVerification.businessVerification.noofYearsWorking",
+                    "BusinessVerification.businessVerification.incomeEarnedPerMonth",
+                    "BusinessVerification.businessVerification.localityType",
+                    "BusinessVerification.businessVerification.areaInSqFt",
                     "EnterpriseAssets",
                     "EnterpriseAssets.enterpriseAssets",
                     "EnterpriseAssets.enterpriseAssets.assetType",
                     "EnterpriseAssets.enterpriseAssets.endUse",
                     "EnterpriseAssets.enterpriseAssets.natureOfUse",
                     "EnterpriseAssets.enterpriseAssets.manufacturer",
-                    "EnterpriseAssets.enterpriseAssets.make",
-                    "EnterpriseAssets.enterpriseAssets.assetCategory",
                     "EnterpriseAssets.enterpriseAssets.vehicleMakeModel",
                     "EnterpriseAssets.enterpriseAssets.manufactureDate",
-                    "EnterpriseAssets.enterpriseAssets.details",
-                    "EnterpriseAssets.enterpriseAssets.subDetails",
                     "EnterpriseAssets.enterpriseAssets.assetregistrationNumber",
                     "EnterpriseAssets.enterpriseAssets.valueOfAsset",
+                    "TrackDetails",
+                    "TrackDetails.vehiclesOwned",
+                    "TrackDetails.vehiclesFinanced",
+                    "TrackDetails.vehiclesFree",
+                    "IndividualReferences",
+                    "IndividualReferences.verifications",
+                    "IndividualReferences.verifications.referenceFirstName",
+                    "IndividualReferences.verifications.mobileNo",
+                    "IndividualReferences.verifications.knownSince",
+                    "IndividualReferences.verifications.relationship",
                     "BankAccounts",
                     "BankAccounts.customerBankAccounts",
                     "BankAccounts.customerBankAccounts.ifscCode",
@@ -115,7 +115,24 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "BankAccounts.customerBankAccounts.bankStatements.noOfChequeBounced",
                     "BankAccounts.customerBankAccounts.bankStatements.noOfEmiChequeBounced",
                     "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto",
-                    "BankAccounts.customerBankAccounts.isDisbersementAccount"
+                    "BankAccounts.customerBankAccounts.isDisbersementAccount",
+                    "TangibleNetWorth",
+                    "TangibleNetWorth.enterpriseNetworth",
+                    "TangibleNetWorth.enterpriseNetworth.tangibleNetworth",
+                    "TangibleNetWorth.enterpriseNetworth.financialYear",
+                    "CommercialCBCheck",
+                    "CommercialCBCheck.enterpriseBureauDetails",
+                    "CommercialCBCheck.enterpriseBureauDetails.bureau",
+                    "CommercialCBCheck.enterpriseBureauDetails.fileId",
+                    "CommercialCBCheck.enterpriseBureauDetails.doubtful",
+                    "CommercialCBCheck.enterpriseBureauDetails.loss",
+                    "CommercialCBCheck.enterpriseBureauDetails.specialMentionAccount",
+                    "CommercialCBCheck.enterpriseRegistrations.standard",
+                    "CommercialCBCheck.enterpriseRegistrations.subStandard",
+                    "enterpriseDocuments",
+                    "enterpriseDocuments.enterpriseDocuments",
+                    "enterpriseDocuments.enterpriseDocuments.docType",
+                    "enterpriseDocuments.enterpriseDocuments.fileId"
                 ];
             }
 
@@ -151,12 +168,207 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             "includes": getIncludes(model),
                             "excludes": [
                             ],
-                            "overrides": "",
+                            "overrides": {
+                                "BankAccounts.customerBankAccounts.bankStatements":{
+                                    "startEmpty": true
+                                },
+                                "ContactInformation": {
+                                    "condition": "model.customer.enterprise.enterpriseType=='Enterprise'"
+                                },
+                                "BankAccounts": {
+                                    "condition": "model.customer.enterprise.enterpriseType=='Enterprise'"
+                                },
+                                "EnterpriseInformation": {
+                                    "condition": "model.customer.enterprise.enterpriseType=='Enterprise'"
+                                },
+                                "CommercialCBCheck": {
+                                    "condition": "model.customer.enterprise.enterpriseType=='Enterprise'",
+                                    "orderNo": 130,
+                                },
+                                "Liabilities": {
+                                    "condition": "model.customer.enterprise.enterpriseType=='Enterprise'"
+                                },
+                                "IndividualReferences": {
+                                    "condition": "model.customer.enterprise.enterpriseType=='Enterprise' || model.customer.enterprise.enterpriseType.toLowerCase() == 'sole proprietorship'"
+                                },
+                                "TrackDetails": {
+                                    "condition": "model.customer.enterprise.enterpriseType=='Enterprise' || model.customer.enterprise.enterpriseType.toLowerCase() == 'sole proprietorship'"
+                                },
+                                "TangibleNetWorth": {
+                                    "condition": "model.customer.enterprise.enterpriseType=='Enterprise'"
+                                }, 
+                                "EnterpriseAssets.enterpriseAssets.assetType": {
+                                    "required": true,
+                                    "enumCode": "type_of_vehicle"
+                                },
+                                "EnterpriseAssets.enterpriseAssets.manufactureDate":{
+                                    "key":"customer.enterpriseAssets[].yearOfManufacture",
+                                    "title":"YEAR_AND_MONTH_OF_MANUFACTURE"
+                                },
+                                "EnterpriseAssets.enterpriseAssets.valueOfAsset": {
+                                    "required": true,
+                                     "title": "PURCHASE_PRICE"
+                                },
+                                "EnterpriseAssets.enterpriseAssets.endUse": {
+                                    "type": "select",
+                                    "enumCode": "vehicle_end_use"
+                                },
+                                "EnterpriseInformation.enterpriseType": {
+                                    "title": "ENTERPRISE_TYPE",
+                                    "resolver": "SoleProprietorshipBusinessConfiguration",
+                                    "titleMap": [
+                                        {
+                                            "name": "Individual",
+                                            "value": "Sole Proprietorship"
+                                        },
+                                        {
+                                            "name": "Company",
+                                            "value": "Enterprise"
+                                        }
+                                    ]
+                                }
+                            },
                             "options": {
-                                "additions": [
+                                "repositoryAdditions": {"BusinessVerification": {
+                                    "type": "box",
+                                    "title": "BUSINESS_VERIFICATION",
+                                    "orderNo": 1300,
+                                    "condition": "model.customer.enterprise.enterpriseType=='Enterprise' || model.customer.enterprise.enterpriseType.toLowerCase() == 'sole proprietorship'",
+                                    "items": {
+                                        "businessVerification": {
+                                            "key": "customer.fieldInvestigationDetails",
+                                            "type": "array",
+                                            "add": null,
+                                            "remove": null,
+                                            "view": "fixed",
+                                            //"startEmpty": true,
+                                            "items": {
+                                                "personMet": {
+                                                    "key": "customer.fieldInvestigationDetails[].category",
+                                                    "type": "select",
+                                                    "title": "PERSON_MET",
+                                                    "enumCode": "person_met",
+                                                    "required": "true"
+                                                },
+                                                "personName": {
+                                                    "key": "customer.fieldInvestigationDetails[].name",
+                                                    "title": "PERSON_NAME",
+                                                    "type": "text",
+                                                    "required": "true",
+                                                    "condition": "model.customer.fieldInvestigationDetails[0].category=='Business Partner' || model.customer.fieldInvestigationDetails[0].category == 'Others'"
+                                                },
+                                                "noOfEmployeesWorking": {
+                                                    "key": "customer.enterprise.noOfRegularEmployees",
+                                                    "title": "NO_OF_EMPLOYEES_WORKING",
+                                                    "type": "number",
+                                                    "inputmode": "number",
+                                                    "required": "true"
+                                                },
+                                                "noofYearsWorking": {
+                                                    "key": "customer.fieldInvestigationDetails[].yearsOfExperience",
+                                                    "type": "select",
+                                                    "title": "NO_OF_YEARS_WORKING",
+                                                    "enumCode": "no_of_years_working",
+                                                    "required": "true"
+                                                },
+                                                "incomeEarnedPerMonth": {
+                                                    "key": "customer.fieldInvestigationDetails[].incomeEarned",
+                                                    "title": "INCOME_EARNED_PER_MONTH",
+                                                    "type": "number",
+                                                    "inputmode": "number",
+                                                    "numberType": "number",
+                                                    "required": "true"
+                                                },
+                                                "localityType": {
+                                                    "key": "customer.localityType",
+                                                    "type": "select",
+                                                    "title": "LOCALITY_TYPE",
+                                                    "enumCode": "locality_type",
+                                                    "required": "true"
+                                                },
+                                                "areaInSqFt": {
+                                                    "key": "customer.enterprise.floorArea",
+                                                    "type": "select",
+                                                    "title": "AREA_IN_SQ_FT",
+                                                    "enumCode": "area_in_sq_ft",
+                                                    "required": "true"
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                    "EnterpriseAssets": {
+                                        "type": "box",
+                                        "title": "EXISTING_VEHICLE_DETAILS",
+                                        "orderNo": 400,
+                                        "items": {
+                                            "enterpriseAssets": {
+                                                "key": "customer.enterpriseAssets",
+                                                "type": "array",
+                                                "startEmpty": true,
+                                                "title": "EXISTING_VEHICLE_DETAILS",
+                                                "items": {
+                                                    "natureOfUse": {
+                                                        "orderNo": 20
+                                                    },
+                                                    "endUse": {
+                                                        "orderNo": 30,
+                                                        "condition":"model.customer.enterpriseAssets[arrayIndex].natureOfUse == 'Commmercial'"
+                                                    },
+                                                    "status":{
+                                                        "orderNo": 140,
+                                                        "title":"STATUS",
+                                                        "type": "select",
+                                                        "enumCode": "existing_vehicle_status",
+                                                        "key":"customer.enterpriseAssets[].isHypothecated"   
+                                                    },
+                                                    "vehicleDocuments": {
+                                                        "type": "fieldset",
+                                                        "title": "VEHICLE_DOCUMENTS",
+                                                        "view": "fixed",
+                                                        "items": {
+                                                            "rc":{
+                                                                "orderNo": 150,
+                                                                "title":"RC",
+                                                                "type": "file",
+                                                                "category": "CustomerEnrollment",
+                                                                "subCategory": "PHOTO",
+                                                                "key":"customer.enterpriseAssets[].udf1"
+                                                            },
+                                                            "insurance":{
+                                                                "orderNo": 160,
+                                                                "title":"INSURANCE",
+                                                                "type": "file",
+                                                                "category": "CustomerEnrollment",
+                                                                "subCategory": "PHOTO",
+                                                                "key":"customer.enterpriseAssets[].udf2"
+                                                            },
+                                                            "soa":{
+                                                                "orderNo": 170,
+                                                                "title":"SOA",
+                                                                "type": "file",
+                                                                "category": "CustomerEnrollment",
+                                                                "subCategory": "PHOTO",
+                                                                "key":"customer.enterpriseAssets[].udf3"
+                                                            }
+                                                        }
+                                                    }     
+                                            }
+                                        }
+                                    }
+                                }
+                                },
+                                "additions": [{
+                                    "orderNo": 1,   
+                                    "type": "box",
+                                    "title": "BUSINESS_SELECTION",
+                                    "items":[
+                                        "EnterpriseInformation.enterpriseType"
+                                    ]
+                                },
                                     {
                                         "type": "actionbox",
-                                        "orderNo": 1200,
+                                        "orderNo": 2000,
                                         "items": [
                                             {
                                                 "type": "button",

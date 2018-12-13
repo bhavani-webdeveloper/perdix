@@ -36,11 +36,26 @@ export class InsuranceRepository implements IInsuranceRepository {
             });
 	}
 
+	getInsuranceRecommendation(insuranceProcess:InsuranceProcess): Observable<InsuranceProcess> {
+		let promise = this.insuranceService.getInsuranceRecommendation({id:insuranceProcess.insurancePolicyDetailsDTO.customerId,
+			familyEnrollmentId:insuranceProcess.insurancePolicyDetailsDTO.benificieryFamilyMemberId,
+			InsuranceType:insuranceProcess.insurancePolicyDetailsDTO.insuranceType,
+			moduleConfigMasterId:insuranceProcess.insurancePolicyDetailsDTO.moduleConfigId}).$promise;
+        return Observable.fromPromise(promise)
+            .map((obj: any) => {
+            	if(obj)
+            		var a = obj.insuranceRecmdtnInPaisa/100;
+                    insuranceProcess.insurancePolicyDetailsDTO.recommendationAmount = a;
+                    insuranceProcess.insurancePolicyDetailsDTO.recommendationStatus = obj.trxnStatus;
+                return insuranceProcess;
+            });
+	}
+
 	create(insuranceProcess:InsuranceProcess): Observable<InsuranceProcess> {
 		let promise = this.insuranceService.create(insuranceProcess).$promise;
         return Observable.fromPromise(promise)
             .map((obj: any) => {InsurancePolicyDetails
-                let insurancePolicyDetailsDTO: InsurancePolicyDetails = <InsurancePolicyDetails>plainToClass<InsurancePolicyDetails, Object>(, obj.insurancePolicyDetailsDTO);
+                let insurancePolicyDetailsDTO: InsurancePolicyDetails = <InsurancePolicyDetails>plainToClass<InsurancePolicyDetails, Object>(InsurancePolicyDetails, obj.insurancePolicyDetailsDTO);
                 _.merge(insuranceProcess.insurancePolicyDetailsDTO, insurancePolicyDetailsDTO);
                 return insuranceProcess;
             });

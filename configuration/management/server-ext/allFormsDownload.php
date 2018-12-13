@@ -223,7 +223,7 @@ else{
     mysqli_close($connection);
     foreach ($individual_forms as $f) {
         $DownloadFileName = $f['document_name']."_".$f['record_id'].'.'.$f['file_extn'];
-        $form_url = $form_base_url."/formPrint.jsp?form_name=".$f['forms_key']."&record_id=".$f['record_id'];
+        $form_url = $form_base_url."?form_name=".$f['forms_key']."&record_id=".$f['record_id'];
         if ($show_log) echo "\nDownloading <a href='$form_url' target='_blank'>$DownloadFileName</a>";
         $DownloadContent = file_get_contents($form_url);
         file_put_contents($files_folder_path.$DownloadFileName, $DownloadContent);
@@ -234,9 +234,9 @@ else{
     $output_filename = $zipping_folder_path.'/'.$attachment_zip_file.".zip";
     create_zip($files_to_zip, $files_folder_path, $output_filename);
     foreach($files_to_zip AS $file_name) {
-        unlink($files_folder_path.$file_name);
+        // unlink($files_folder_path.$file_name);
     }
-    rmdir($files_folder_path);
+    // rmdir($files_folder_path);
     if ($show_log) {
          echo "\n\n".'<a href="allFormsDownload.php?file='.$attachment_zip_file.'&file_type=zip$download=auto" onclick="this.style.display=\'none\'">Download ZIP</a></pre>';
     } else {
