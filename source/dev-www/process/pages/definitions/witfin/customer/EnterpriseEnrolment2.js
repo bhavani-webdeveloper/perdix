@@ -1446,7 +1446,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "items": [
                                         {
                                             "type": "submit",
-                                            "title": "SUBMIT"
+                                            "title": "SUBMIT",
+                                            "buttonType": "submit"
                                         }
                                     ]
                                 },
@@ -1458,7 +1459,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         {
                                             "type": "button",
                                             "title": "UPDATE",
-                                            "onClick": "actions.proceed(model, formCtrl, form, $event)"
+                                            "onClick": "actions.proceed(model, formCtrl, form, $event)",
+                                            "buttonType": "submit"
                                         }
                                     ]
                                 },
