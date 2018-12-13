@@ -41,7 +41,9 @@ irf.pageCollection.factory(irf.page("customer360.Insurance"), ["$log", "Insuranc
             var getExcludes = function(){
                 return [
                     "actionbox",
-                    "actionbox.save"
+                    "actionbox.save",
+                    "actionboxBeforeSave",
+                    "actionboxAfterSave",
                 ];
             };
             var getOptions =function(){
