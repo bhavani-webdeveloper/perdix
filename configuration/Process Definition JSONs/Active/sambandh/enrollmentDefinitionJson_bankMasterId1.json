@@ -1649,6 +1649,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1659,6 +1660,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1669,6 +1671,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3087,6 +3090,7 @@
             "maxLength":100,
             "captureStages":[  
                "BasicEnrolment",
+               "Stage02",
                "Completed"
             ]
          },
