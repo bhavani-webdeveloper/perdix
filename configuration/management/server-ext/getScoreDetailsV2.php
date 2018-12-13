@@ -32,7 +32,7 @@ if (isset($_GET)) {
 
     $error_log = "";
     $CustomerLoanId = $_GET['LoanId'];
-    $authInfo = 'Bearer '.$_GET['auth_token'];
+    $authInfo = $_GET['authInfo'];
     $SessionUserName = "admin";
     $userInfo = $perdixService->accountInfo($authInfo);
     $partnerCode = $userInfo['partnerCode'];
@@ -442,12 +442,12 @@ if (isset($_GET)) {
                                 AND s.isIndividualScore = $s
                                 AND p.ParameterName='$Column'
                                 AND (
-                                        (IF($InputValue/$InputValue IS NULL AND $InputValue NOT IN ('0', '0.0', '0.00'), FALSE, $InputValue+0 between v.CategoryValueFrom+0 and v.CategoryValueTo+0 AND v.CategoryValueFrom NOT LIKE '%#%' AND v.CategoryValueTO NOT LIKE '%#%'))
-                                        or (v.CategoryValueFrom = $InputValue AND v.CategoryValueFrom NOT LIKE '%#%' AND v.CategoryValueTO='')
-                                        or (IF($InputValue/$InputValue IS NULL AND $InputValue NOT IN ('0', '0.0', '0.00'), FALSE, v.CategoryValueFrom LIKE '#<#%'  AND REPLACE(v.CategoryValueFrom ,'#<#','')+0 > $InputValue+0))
-                                        or (IF($InputValue/$InputValue IS NULL AND $InputValue NOT IN ('0', '0.0', '0.00'), FALSE, v.CategoryValueFrom LIKE '#<=#%' AND REPLACE(v.CategoryValueFrom , '#<=#','')+0 >= $InputValue+0))
-                                        or IF($InputValue/$InputValue IS NULL AND $InputValue NOT IN ('0', '0.0', '0.00'), FALSE, (v.CategoryValueFrom LIKE '#>#%' AND REPLACE(v.CategoryValueFrom , '#>#', '')+0 < $InputValue+0))
-                                        or IF($InputValue/$InputValue IS NULL AND $InputValue NOT IN ('0', '0.0', '0.00'), FALSE, (v.CategoryValueFrom LIKE '#>=#%' AND REPLACE(v.CategoryValueFrom, '#>=#', '')+0 <= $InputValue+0))
+                                        (IF('$InputValue'/'$InputValue' IS NULL AND '$InputValue' NOT IN ('0', '0.0', '0.00'), FALSE, '$InputValue'+0 between v.CategoryValueFrom+0 and v.CategoryValueTo+0 AND v.CategoryValueFrom NOT LIKE '%#%' AND v.CategoryValueTO NOT LIKE '%#%'))
+                                        or (v.CategoryValueFrom = '$InputValue' AND v.CategoryValueFrom NOT LIKE '%#%' AND v.CategoryValueTO='')
+                                        or (IF('$InputValue'/'$InputValue' IS NULL AND '$InputValue' NOT IN ('0', '0.0', '0.00'), FALSE, v.CategoryValueFrom LIKE '#<#%'  AND REPLACE(v.CategoryValueFrom ,'#<#','')+0 > '$InputValue'+0))
+                                        or (IF('$InputValue'/'$InputValue' IS NULL AND '$InputValue' NOT IN ('0', '0.0', '0.00'), FALSE, v.CategoryValueFrom LIKE '#<=#%' AND REPLACE(v.CategoryValueFrom , '#<=#','')+0 >= '$InputValue'+0))
+                                        or IF('$InputValue'/'$InputValue' IS NULL AND '$InputValue' NOT IN ('0', '0.0', '0.00'), FALSE, (v.CategoryValueFrom LIKE '#>#%' AND REPLACE(v.CategoryValueFrom , '#>#', '')+0 < '$InputValue'+0))
+                                        or IF('$InputValue'/'$InputValue' IS NULL AND '$InputValue' NOT IN ('0', '0.0', '0.00'), FALSE, (v.CategoryValueFrom LIKE '#>=#%' AND REPLACE(v.CategoryValueFrom, '#>=#', '')+0 <= '$InputValue'+0))
                                         )
                                 ) ";
 
