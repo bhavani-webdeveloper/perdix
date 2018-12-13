@@ -7,7 +7,11 @@ irf.models.factory("Misc",["$resource", "$httpParamSerializer", "BASE_URL","sear
         })
 
         res.allFormsDownload = function(opts){
-            return irf.MANAGEMENT_BASE_URL+ '/server-ext/allFormsDownload.php?forms_base_url='+irf.FORM_DOWNLOAD_URL+'&record_id='+opts.recordId;
+            if(!opts.type)
+                return irf.MANAGEMENT_BASE_URL+ '/server-ext/allFormsDownload.php?forms_base_url='+irf.FORM_DOWNLOAD_URL+'&record_id='+opts.recordId;
+            else
+                return irf.MANAGEMENT_BASE_URL+ '/server-ext/allFormsDownload.php?forms_base_url='+irf.FORM_DOWNLOAD_URL+'&record_id='+opts.recordId+'&type='+opts.type;
+
         },
         res.formDownload = function(opts){
             return irf.FORM_DOWNLOAD_URL+'?form_name='+opts.formName+'&recored_id='+opts.recordId;

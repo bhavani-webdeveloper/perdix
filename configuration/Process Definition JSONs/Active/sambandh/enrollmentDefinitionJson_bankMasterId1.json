@@ -4750,8 +4750,8 @@
           }
         }
       },
-      "Verifications": {
-        "title": "Verifications",
+      "verifications": {
+        "title": "verifications",
         "type": "object",
         "required": [
           "corporateName",
@@ -4762,8 +4762,21 @@
         "properties": {
           "drinkingWater": {
             "title": "drinkingWater",
-            "type": "number",
-             "captureStages": [
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "BasicEnrolment",
+              "Stage02",
+              "Completed"
+            ]
+          },
+          "toiletFacilityType": {
+            "title": "toiletFacilityType",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
               "BasicEnrolment",
               "Stage02",
               "Completed"
@@ -4771,17 +4784,10 @@
           },
           "waterFilter": {
             "title": "waterFilter",
-            "type": "number",
-             "captureStages": [
-              "BasicEnrolment",
-              "Stage02",
-              "Completed"
-            ]
-          },
-          "toiletFacility": {
-            "title": "toiletFacility",
-            "type": "number",
-             "captureStages": [
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
               "BasicEnrolment",
               "Stage02",
               "Completed"

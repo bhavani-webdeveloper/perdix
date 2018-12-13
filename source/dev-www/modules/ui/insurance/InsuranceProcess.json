@@ -196,6 +196,12 @@
             "type":"amount",
             "orderNo":135
          },
+          "recommendationStatus":{  
+            "key":"insurancePolicyDetailsDTO.recommendationStatus",
+            "title":"RECOMMENDATION_STATUS",
+            "type":"string",
+            "orderNo":134
+         },
          "recommendationOverride":{  
             "key":"insurancePolicyDetailsDTO.recommendationOverride",
             "title":"RECOMMENDTAION_OVERRIDE",
@@ -210,19 +216,20 @@
             "key":"insurancePolicyDetailsDTO.recommendationRemarks",
             "title":"RECOMMENDATION_REMARKS",
             "type":"select",
+            "enumCode":"recommendation_response",
             "orderNo":137
          },
          "remarks":{  
             "key":"insurancePolicyDetailsDTO.remarks",
             "title":"REMARKS",
             "type":"string",
-            "orderNo":130
+            "orderNo":145
          },
          "startDate":{  
             "key":"insurancePolicyDetailsDTO.startDate",
             "title":"START_DATE",
             "type":"date",
-            "orderNo":130
+            "orderNo":143
          },
          "state":{  
             "key":"insurancePolicyDetailsDTO.state",
@@ -241,7 +248,7 @@
             "key":"insurancePolicyDetailsDTO.sumInsured",
             "title":"SUM_INSURED",
             "type":"amount",
-            "orderNo":130
+            "orderNo":140
          },
          "tenureInYears":{  
             "key":"insurancePolicyDetailsDTO.tenureInYears",
