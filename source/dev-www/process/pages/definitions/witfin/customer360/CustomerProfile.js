@@ -100,10 +100,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "CustomerLicenceDetails.customerLicenceDetails.licence1Type",
                     "CustomerLicenceDetails.customerLicenceDetails.licence1ValidFrom",
                     "CustomerLicenceDetails.customerLicenceDetails.licence1ValidTo",
-                    // "TrackDetails",
-                    // "TrackDetails.vehiclesOwned",
-                    // "TrackDetails.vehiclesFinanced",
-                    // "TrackDetails.vehiclesFree",
                     "CustomerDocumentUpload",
                     "CustomerDocumentUpload.customerDocuments",
                     "CustomerDocumentUpload.customerDocuments.fileType",
@@ -158,18 +154,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseReferences.verifications.knownSince",
                     "EnterpriseReferences.verifications.customerResponse",
                     "EnterpriseReferences.verifications.opinion"
-                    // "IndividualReferences",
-                    // "IndividualReferences.verifications",
-                    // "IndividualReferences.verifications.referenceFirstName",
-                    // "IndividualReferences.verifications.mobileNo",
-                    // "IndividualReferences.verifications.occupation",
-                    // "IndividualReferences.verifications.address",
-                    // "IndividualReferences.verifications.ReferenceCheck",
-                    // "IndividualReferences.verifications.ReferenceCheck.knownSince",
-                    // "IndividualReferences.verifications.ReferenceCheck.relationship",
-                    // "IndividualReferences.verifications.ReferenceCheck.customerResponse",
-                    // "IndividualReferences.verifications.ReferenceCheck.opinion",
-                    // "IndividualReferences.verifications.ReferenceCheck.financialStatus"
 
                 ];
             }
