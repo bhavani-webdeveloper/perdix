@@ -38,7 +38,7 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
                 model.scoreMasterID = $stateParams.pageId;
 
 
-                model.allParameterMaster =ScoresMaintenance.allParameterMaster({}, function (resp, header) {
+                model.allParameterMaster =ScoresMaintenance.allParameterMaster({page:1, per_page: 100}, function (resp, header) {
                     console.log(resp);
                      //model.allParameterMaster=resp;
 
