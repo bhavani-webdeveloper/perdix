@@ -295,7 +295,11 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisal')
                         if (enrolmentDetails.customerId){
                             BundleManager.broadcastEvent('remove-customer-relation', enrolmentDetails);
                         }
-                    }
+                    },
+                    "load-personal-discussion-object": function(form, formCtrl, model, bundlePageObj,bundleModel){
+                        BundleManager.broadcastEvent('load-personal-discussion', form, formCtrl, model,bundlePageObj, bundleModel);
+                        //object.initialize(model, form, formCtrl, bundlePageObj, bundleModel);
+                    },
         		}
         	}
         }

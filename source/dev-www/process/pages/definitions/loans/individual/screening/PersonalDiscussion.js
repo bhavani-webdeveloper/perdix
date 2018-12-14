@@ -1164,6 +1164,9 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
             ]
         },
         eventListeners: {
+            "load-personal-discussion": function(form, model, formCtrl, bundlePageObj, bundleModel){
+                object.initialize(model, form, formCtrl, bundlePageObj, bundleModel);
+            },
         },
         schema: function() {
             return SchemaResource.getLoanAccountSchema().$promise;

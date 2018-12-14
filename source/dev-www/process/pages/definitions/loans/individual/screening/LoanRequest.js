@@ -2789,7 +2789,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         "type": "button",
                         "icon": "fa fa-circle-o",
                         "title": "SAVE",
-                        "onClick": "actions.save(model, formCtrl, form, $event)"
+                        "onClick": "actions.save(model, formCtrl, form, $event,bundlePageObj,bundleModel)"
                     }
                 ]
             }
@@ -2842,7 +2842,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         })
                 })
             },
-            save: function(model, formCtrl, form, $event){
+            save: function(model, formCtrl, form, $event,bundlePageObj,bundleModel){
                 $log.info("Inside save()");
                 PageHelper.clearErrors();
 
@@ -2896,6 +2896,16 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                     }
 
                                     BundleManager.pushEvent('new-loan', model._bundlePageObj, {loanAccount: model.loanAccount});
+                                    BundleManager.pushEvent('load-personal-discussion-object', form,model,formCtrl, bundlePageObj,bundleModel);
+                                    if (completeLead===true && _.hasIn(model, "lead.id")){
+                                        var reqData = {
+                                            lead: _.cloneDeep(model.lead),
+                                            stage: "Completed"
+                                        }
+
+                                        reqData.lead.leadStatus = "Complete";
+                                        LeadHelper.proceedData(reqData)
+                                    }
                                     if (completeLead===true && _.hasIn(model, "lead.id")){
                                         var reqData = {
                                             lead: _.cloneDeep(model.lead),
