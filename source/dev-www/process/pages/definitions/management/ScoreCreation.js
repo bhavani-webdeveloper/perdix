@@ -155,6 +155,7 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
                                     },
                                     onSelect: function (result, model, context) {
                                         model.scoreMaster.scoreCriterias[context.arrayIndex].criteriaName = result.criteriaName;
+                                        model.scoreMaster.scoreCriterias[context.arrayIndex].enumCode = result.enumCode;
                                         model.scoreMaster.scoreCriterias[context.arrayIndex].criteriaValue = null;
                                         model.scoreMaster.scoreCriterias[context.arrayIndex].status =result.status;
                                     }

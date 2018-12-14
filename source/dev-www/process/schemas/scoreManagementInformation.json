@@ -37,6 +37,9 @@
                 },
                 "status": {
                   "type": "string"
+                },
+                "enumCode": {
+                  "type": "string"
                 }
               },
               "required": [
