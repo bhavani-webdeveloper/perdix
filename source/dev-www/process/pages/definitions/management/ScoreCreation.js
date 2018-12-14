@@ -257,7 +257,7 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
                                 },
                                 {
                                     "key": "scoreMaster.subScores[].isIndividualScore",
-                                    "title": "IS_INDIVIDULA_SCORE",
+                                    "title": "IS_INDIVIDUAL_SCORE",
                                     "type": "radios",
                                     "titleMap": [{
                                         value: true,
