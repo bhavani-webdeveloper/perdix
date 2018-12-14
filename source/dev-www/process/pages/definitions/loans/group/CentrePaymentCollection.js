@@ -5,8 +5,48 @@ irf.pageCollection.factory(irf.page("CentrePaymentCollection"),
 function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 	$stateParams, LoanProcess, PM, PageHelper, StorageService,
 	$filter, elementsUtils, Utils,PagesDefinition, irfNavigator,GroupProcess ){
+	
+	
+	var generateThermelPrint = function(opts){
+		// Code 
+			// 2 - string,
+			// 3 - line,
+			// 4 - keyvalue
 
-
+			// this.FONT_LARGE_BOLD =2,
+		// this.FONT_LARGE_NORMAL =1,
+		// this.FONT_SMALL_NORMAL =3,
+		// this.FONT_SMALL_BOLD =4,
+		var defaultFont = 3,defaultValue="",defaultCenter=false,data = [];
+		for(var i=0; i<opts.length; i++){
+			font = defaultFont;
+			value = defaultValue;
+			center = defaultCenter;
+			if(opts[i].length==2){
+				center = false;
+				font  = opts[i][0]+1 < 5 ? opts[i][0] : defaultFont;
+				value = _.padEnd(" ",font+3 < 5 ?  24: 42,opts[i][1]);
+			}
+			else if (opts[i].length == 3){
+				center = opts[i][0] == 0 ? false : true;
+				font = opts[i][1]+1 < 5 ? opts[i][1] : defaultFont;
+				value = opts[i][2];
+			}
+			else if (opts[i].length == 4){
+				center = opts[i][0] == 0 ? false : true;
+				font = opts[i][1]+1 < 5? opts[i][1] : defaultFont;
+				value = _.padEnd(opts[i][2], font+3 < 5 ?  11: 23) + ': ' + opts[i][3];
+			}
+			data.push({
+				"bFont": font,
+				"text": value,
+				"style": {
+					"center": center
+				}
+			})
+		}
+		console.log(data);
+	}
 	return {
 		"id": "CentrePaymentCollection",
 		"type": "schema-form",
@@ -14,6 +54,16 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 		"title": "CENTRE_PAYMENT_COLLECTION",
 		"subTitle": "",
 		initialize: function (model, form, formCtrl) {
+			var testdata = [1,2,3,4,5];
+			var string = "Testing";
+			var test = [
+				[1,5,"Harish"],
+				[0,5,"Harish",testdata[1]],
+				[1,"-"],
+				[2,"-"],
+				[1,4,"Harish"+string]
+			];
+			// generateThermelPrint(test);
 			model.onlineResponse = false;
 			if (!model.$$STORAGE_KEY$$) {
 				model.showDenomination = false;

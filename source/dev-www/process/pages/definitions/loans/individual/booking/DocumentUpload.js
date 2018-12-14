@@ -84,7 +84,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                                                             "$downloadRequired": masterDocumentsArray[i].download_required,
                                                             "$mandatory": masterDocumentsArray[i].mandatory,
                                                             "isHidden": hiddenFlag,
-                                                            "documentStatus":uploadedExistingDocs[j].documentStatus
+                                                            "documentStatus":uploadedExistingDocs[j].documentStatus,
+                                                            "document":uploadedExistingDocs[j].document
                                                         });
                                                         uploadedExistingDocs[j] = null;
                                                         pushFlag = false;
@@ -102,7 +103,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                                                     "$downloadRequired": masterDocumentsArray[i].download_required,
                                                     "$mandatory": masterDocumentsArray[i].mandatory,
                                                     "isHidden": false,
-                                                    "documentStatus":null
+                                                    "documentStatus":null,
+                                                    "document":masterDocumentsArray[i].document_code
                                                 });
                                             }
                                         }
@@ -119,7 +121,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                                                         "$downloadRequired": null,
                                                         "$mandatory": null,
                                                         "isHidden": false,
-                                                        "documentStatus":null
+                                                        "documentStatus":null,
+                                                        "document":uploadedExistingDocs[i].document
                                                     });
                                                 }
                                             }
