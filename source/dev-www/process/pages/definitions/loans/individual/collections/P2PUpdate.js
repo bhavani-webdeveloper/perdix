@@ -16,7 +16,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
 
                 if ((moment(model.additional.promiseToPayDate).isBefore(new Date()))) {
                     PageHelper.setError({
-                        message: "p2p date should be more than or equal to current system date" + " " + moment(new Date()).format(SessionStore.getDateFormat())
+                        message: "P2P date should be more than to current system date" + " " + moment(new Date()).format(SessionStore.getDateFormat())
                     });
                     return;
                 }
@@ -457,7 +457,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                             model.promise.promiseToPayDate = model.additional.promiseToPayDate;
                             if ((moment(model.additional.promiseToPayDate).isBefore(new Date()))) {
                                 PageHelper.setError({
-                                    message: "p2p date should be more than or equal to current system date" + " " + moment(new Date()).format(SessionStore.getDateFormat())
+                                    message: "P2P date should be more than to current system date" + " " + moment(new Date()).format(SessionStore.getDateFormat())
                                 });
                                 PageHelper.hideLoader();
                                 return;
@@ -471,7 +471,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                                 model.promise.scheduledDate = model.additional.scheduledDate;
                                 if ((moment(model.additional.scheduledDate).isBefore(new Date()))) {
                                     PageHelper.setError({
-                                        message: "Follow Up date should be more than or equal to current system date" + " " + moment(new Date()).format(SessionStore.getDateFormat())
+                                        message: "Follow Up date should be more than to current system date" + " " + moment(new Date()).format(SessionStore.getDateFormat())
                                     });
                                     PageHelper.hideLoader();
                                     return;
