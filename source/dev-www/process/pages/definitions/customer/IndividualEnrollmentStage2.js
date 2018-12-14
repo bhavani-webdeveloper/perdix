@@ -1409,6 +1409,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                 model = Utils.removeNulls(model, true);
                 model.customer.kgfsName = model.customer.kgfsName || SessionStore.getCurrentBranch().branchName;
                 model.customer.customerType = model.customer.customerType || 'Individual';
+                model.BusinessOccupationDetails={};
+                model.BusinessOccupationDetails.businessDetails={};
                 if(model.customer.udf){
                   model.BusinessOccupationDetails.businessDetails.businessManages=model.customer.udf.userDefinedFieldValues.udf19;
                 }
@@ -1480,7 +1482,9 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                                     "businessDetails":{
                                         "items":{
                                           "noOfWorkersEmployed":{
-                                              title:"No. of workers Employed (Non-family members)"
+                                              title:"No. of workers Employed (Non-family members)",
+                                              type: "number",
+                                              "key":"BusinessOccupationDetails.businessDetails.noOfWorkersEmployed"
                                           },
                                           "businessManages":{
                                             type:"radios",
@@ -1621,10 +1625,20 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                         customer.udf.userDefinedFieldValues.udf39 = "No";
                         customer.udf.userDefinedFieldValues.udf40 = "No";
                         customer.udf.userDefinedFieldValues.udf5 = "Good";
-                        if(model.customer.udf != null){
+                        model.BusinessOccupationDetails={}
+                        model.BusinessOccupationDetails.businessDetails={}
+                        model.BusinessOccupationDetails.businessDetails.businessManages={}
+                        if(model.customer.udf != null){console.log("udf test");console.log(model.customer.udf)
                             model.customer.udf.userDefinedFieldValues.udf38 = customer.udf.userDefinedFieldValues.udf38;
                             model.customer.udf.userDefinedFieldValues.udf39 = customer.udf.userDefinedFieldValues.udf39;
                             model.customer.udf.userDefinedFieldValues.udf40 = customer.udf.userDefinedFieldValues.udf40;
+                            //÷÷model.BusinessOccupationDetails.businessDetails={};
+                            model.BusinessOccupationDetails.businessDetails.businessManages=model.customer.udf.userDefinedFieldValues.udf19;
+                            if(model.customer.udf.userDefinedFieldValues.udf21){
+                                
+                                model.BusinessOccupationDetails.businessDetails.noOfWorkersEmployed= parseInt(model.customer.udf.userDefinedFieldValues.udf21) ;
+                            }
+                           // model.BusinessOccupationDetails.businessDetails.noOfWorkersEmployed=model.customer.udf.userDefinedFieldValues.udf21;
                         }
                         else{
                             model.customer.udf = customer.udf
@@ -1696,6 +1710,9 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                     if(model.BusinessOccupationDetails && model.BusinessOccupationDetails.businessDetails){
                         if(model.BusinessOccupationDetails.businessDetails.businessManages){
                             model.customer.udf.userDefinedFieldValues.udf19=model.BusinessOccupationDetails.businessDetails.businessManages;
+                        }
+                        if(model.BusinessOccupationDetails.businessDetails.noOfWorkersEmployed){
+                            model.customer.udf.userDefinedFieldValues.udf21=model.BusinessOccupationDetails.businessDetails.noOfWorkersEmployed;
                         }
                     }
                     if (!EnrollmentHelper.validateData(model)) {
