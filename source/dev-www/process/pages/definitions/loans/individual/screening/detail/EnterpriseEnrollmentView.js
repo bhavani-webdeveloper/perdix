@@ -638,6 +638,7 @@ define({
                         "key": "customer.fixedAssetsMachinaries",
                         "selectable": false,
                         "editable": false,
+                        "transpose": true,
                         "tableConfig": {
                             "searching": false,
                             "paginate": false,
