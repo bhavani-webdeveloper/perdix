@@ -5,7 +5,7 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
     PageHelper, Utils, BiometricService,CustomerBankBranch){
 
     var branch = SessionStore.getBranch();
-    var mapCustomerToSelfFamilyMemebr = function(model){
+    var mapCustomerToSelfFamilyMemeber = function(model){
         var temp = model.customer.familyMembers;
         if(temp.length > 0){
             var isThere = false;
@@ -31,6 +31,7 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
             //     })
             // }
             model.customer.familyMembers = temp;
+            return model.customer.familyMembers;
         }
     }
 
@@ -1518,13 +1519,12 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                     }
                     var reqData = _.cloneDeep(model);
                     EnrollmentHelper.fixData(reqData);
-
+                    reqData.customer.familyMembers = mapCustomerToSelfFamilyMemeber(reqData);
                     if (reqData.customer.currentStage == 'Completed'){ 
                         reqData['enrollmentAction'] = 'PROCEED';
                     } else {
                         reqData['enrollmentAction'] = 'SAVE';    
                     };
-                    mapCustomerToSelfFamilyMemebr(reqData);
                     Enrollment.updateCustomer(reqData, function (res, headers) {
                         if (res.customer) {
                             model.customer = res.customer;
