@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("management.ScoreCreation"),
-    ["$log", "$state", "ScoresMaintenance", "formHelper", "$q", "irfProgressMessage", "ScoresMaintenance", "PageHelper", "Utils", "irfNavigator",
-        function ($log, $state, ScoresMaintenance, formHelper, $q, irfProgressMessage, ScoresMaintenance, PageHelper, Utils, irfNavigator) {
+    ["$log", "$state", "ScoresMaintenance", "formHelper", "$q", "irfProgressMessage", "ScoresMaintenance", "PageHelper", "Utils", "irfNavigator","$stateParams",
+        function ($log, $state, ScoresMaintenance, formHelper, $q, irfProgressMessage, ScoresMaintenance, PageHelper, Utils, irfNavigator,$stateParams) {
 
             var tempErrorFix = function(resp){
                 var newError = {};
@@ -15,6 +15,13 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
                 }
                 return null;
             };
+            var getEnumCode = function(value,model){
+                for(var i=0; i< model.additions.criteriaLov.body.length; i++){
+                    if(value == model.additions.criteriaLov.body[i].criteriaName){
+                        return model.additions.criteriaLov.body[i].enumCode;
+                    }
+                }
+            }
             var makeUnique = function(resp){
                 var result = [];
                 loop1: for (var i = 0; i < resp.length; i++) {
@@ -35,11 +42,13 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
                 initialize: function (model, form, formCtrl) {
                     var self = this;
                     self.form = self.formSource;
-                    model.additions = {};
-                    ScoresMaintenance.allCriteria().$promise.then(function(resp){
-                        model.additions.criteriaLov = resp;
-                    })
-                },
+                    if(!$stateParams.pageId){
+                    model.additions = {}; 
+                        ScoresMaintenance.allCriteria().$promise.then(function(resp){
+                            model.additions.criteriaLov = resp;
+                        })
+                    }
+                    },
                 modelPromise: function (pageId, _model) {
                     self = this;
                     self.form = self.formSource;
@@ -52,11 +61,14 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
                         model = _model;
                         DataResponse = resp.body;
                         model = DataResponse;
+                        model.additions = {};
+                        ScoresMaintenance.allCriteria().$promise.then(function(resp){
+                            model.additions.criteriaLov = resp;
+                            PageHelper.hideLoader();
+                            defered.resolve(model);
+                        })
                         PageHelper.hideLoader();
-                        defered.resolve(model);
-                    }),function (resp) {
-                        defered.resolve(resp);
-                    },function (err) {
+                    }),function (err) {
                         PageHelper.hideLoader();
                         defered.reject(err);
                     };
@@ -169,7 +181,7 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
                                     searchHelper: formHelper,
                                     search: function (inputModel, form, model, context) {
                                         var defered = $q.defer();
-                                        $q.when(formHelper.enum(model.scoreMaster.scoreCriterias[context.arrayIndex].criteriaName)).then(function(value){
+                                        $q.when(formHelper.enum(getEnumCode(model.scoreMaster.scoreCriterias[context.arrayIndex].criteriaName,model))).then(function(value){
                                             defered.resolve({
                                                 body:value.data
                                             })

@@ -6,7 +6,24 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 	$stateParams, LoanProcess, PM, PageHelper, StorageService,
 	$filter, elementsUtils, Utils,PagesDefinition, irfNavigator,GroupProcess ){
 
+	var generateThermelPrint = function(opts,dynamicObjectList){
+		// Code 
+			// 2 - string,
+			// 3 - line,
+			// 4 - keyvalue
+		var data = [];
+		for(var i=0; i<opts.length; i++){
+			if(opts[i].length==2){
 
+			}
+			else if (opts[i].length == 3){
+
+			}
+			else if (opts[i].length == 4){
+
+			}
+		}
+	}
 	return {
 		"id": "CentrePaymentCollection",
 		"type": "schema-form",
