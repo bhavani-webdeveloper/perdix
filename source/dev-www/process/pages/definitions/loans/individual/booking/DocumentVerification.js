@@ -74,7 +74,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                                             "isHidden": false,
                                             "documentStatus": uploadedExistingDocs[j].documentStatus,
                                             "remarks":uploadedExistingDocs[j].remarks,
-                                            "rejectReason":uploadedExistingDocs[j].rejectReason
+                                            "rejectReason":uploadedExistingDocs[j].rejectReason,
+                                            "document":uploadedExistingDocs[j].document
                                         });
                                         pushFlag=false;
                                         uploadedExistingDocs[j]=null;
@@ -94,7 +95,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                                     "isHidden": false,
                                     "documentStatus":null,
                                     "remarks":null,
-                                    "rejectReason":null
+                                    "rejectReason":null,
+                                    "document":masterDocumentsArray[i].document_code
                                 });
                             }
                         }
@@ -115,7 +117,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                                         "isHidden": false,
                                         "documentStatus": uploadedExistingDocs[i].documentStatus,
                                         "remarks":uploadedExistingDocs[i].remarks,
-                                        "rejectReason":uploadedExistingDocs[i].rejectReason
+                                        "rejectReason":uploadedExistingDocs[i].rejectReason,
+                                        "document":uploadedExistingDocs[i].document
                                     });
                                 }
                             }
@@ -872,6 +875,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                          if (model.remainingDocsArray && model.remainingDocsArray.length) {
                                 for (var j = 0; j < model.remainingDocsArray.length; j++) {
                                     if(model.remainingDocsArray[j].documentId){
+                                        model.remainingDocsArray[j].document=model.remainingDocsArray[j].$title;
                                         model.loanAccount.loanDocuments.push(model.remainingDocsArray[j]);
                                     }  
                                 }
@@ -917,6 +921,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                      if (model.remainingDocsArray && model.remainingDocsArray.length) {
                             for (var j = 0; j < model.remainingDocsArray.length; j++) {
                                 if(model.remainingDocsArray[j].documentId){
+                                    model.remainingDocsArray[j].document=model.remainingDocsArray[j].$title;
                                     model.loanAccount.loanDocuments.push(model.remainingDocsArray[j]);
                                 }  
                             }
