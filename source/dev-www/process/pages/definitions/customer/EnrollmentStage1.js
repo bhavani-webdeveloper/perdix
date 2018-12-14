@@ -164,6 +164,9 @@ irf.pageCollection.factory("Pages__ProfileInformation", ["$log", "Lead", "LeadHe
                 return deferred.promise;
             },
             offline: true,
+            offlineStrategy : function(){
+                return window.cordova.platformId =="android" ?  "SQLITE" : undefined
+            },
             getOfflineDisplayItem: function(item, index) {
                 return [
                     item["customer"]["urnNo"],
