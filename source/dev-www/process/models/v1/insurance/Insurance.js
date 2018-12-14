@@ -46,22 +46,23 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource, Upload, $q, Pag
         var curTimeStr = curTime.local().format("DD-MM-YYYY HH:MM:SS");
         var printHtml=
         '<div style="border-style: dashed ; padding:27px">' + 
-        '<div style="text-align : center">' + '<h4><b>' + "RECEIPT" + '</b></h4>' + '</div>' + 
+        '<div style="text-align : center">' + '<h4><b>' + "PREMIUM RECEIPT" + '</b></h4>' + '</div>' + 
         '<div style="text-align : center">' + '<h5><b>' + opts.entityName + '</b></h4>' + '</div>' + 
         '<div style="text-align : center">' + '<h6><b>' + opts.branchId + '</b></h6>' + '</div>' + 
         '<div style="text-align : center">' + '<p>' + "Date:" + curTimeStr + '</p>' + '</div>' + 
-        '<div style="text-align : center">' + '<p><b>' + "Insurance Registration" + '</b></p>' + '</div>' + 
+        '<div style="text-align : center">' + '<p><b>' + "PERSONAL ACCIDENT INSURANCE PREMIUM" + '</b></p>' + '</div>' + 
         '<div style="text-align : center">' + '<p>' + "" + '</p>' + '</div>' +
         '<div style="font-size:13px; width:95%; margin:auto">' + '<p>' + "Branch Id :" +'<span style="border-bottom: 1px solid black; width: 100%;">'+  opts.branchId+ '</span>' + '</p>' + '</div>' + 
-        '<div style="font-size:13px;width:95%; margin:auto">' + '<p>' + "Centre Id:"  + '<span style="border-bottom: 1px solid black;">'+opts.centreId + '</span>'+'</p>' + '</div>' + 
-        '<div style="font-size:13px;width:95%; margin:auto">' + '<p>' + "Customer Urn:"  + '<span style="border-bottom: 1px solid black;">'+opts.urnNo + '</span>'+'</p>' + '</div>' + 
-        '<div style="font-size:13px;width:95%; margin:auto">' + '<p>' + "Beneficiary Name:"  + '<span style="border-bottom: 1px solid black;">'+opts.benificieryName + '</span>'+'</p>' + '</div>' + 
+        '<div style="font-size:13px;width:95%; margin:auto">' + '<p>' + "Customer Name:"  + '<span style="border-bottom: 1px solid black;">'+opts.benificieryName + '</span>'+'</p>' + '</div>' + 
+        '<div style="font-size:13px;width:95%; margin:auto">' + '<p>' + "URN Number:"  + '<span style="border-bottom: 1px solid black;">'+opts.urnNo + '</span>'+'</p>' + '</div>' + 
+        '<div style="font-size:13px;width:95%; margin:auto">' + '<p>' + "Policy Number:"  + '<span style="border-bottom: 1px solid black;">'+opts.policyNumber + '</span>'+'</p>' + '</div>' + 
+        '<div style="font-size:13px;width:95%; margin:auto">' + '<p>' + "Transaction Type:"  + '<span style="border-bottom: 1px solid black;">'+"Personal Accident Insurance Premium" + '</span>'+'</p>' + '</div>' + 
+        '<div style="font-size:13px;width:95%; margin:auto">' + '<p>' + "Amount Paid(Include GST):"  + '<span style="border-bottom: 1px solid black;">'+opts.premiumCollected + '</span>'+'</p>' + '</div>' + 
+        '<div style="font-size:13px;width:95%; margin:auto">' + '<p>' + "Customer Premium:"  + '<span style="border-bottom: 1px solid black;">'+opts.premiumCollected + '</span>'+'</p>' + '</div>' + 
        
         '<div style="text-align : center">' + '<p>' + "" + '</p>' + '</div>' +
         '<div style="text-align : center">' + '<p>' + "" + '</p>' + '</div>' +
         '<br>'+
-        '<div style="font-size:13px;width:95%; margin:auto">' + '<p>' + "Sum Insured:"  + '<span style="border-bottom: 1px solid black;">'+opts.sumInsured + '</span>'+'</p>' + '</div>' + 
-        '<div style="font-size:13px;width:95%; margin:auto">' + '<p>' + "Total Premium Collected:"  + '<span style="border-bottom: 1px solid black;">'+opts.premiumCollected + '</span>'+'</p>' + '</div>' + 
        
         '<div style="text-align : center">' + '<p>' + "" + '</p>' + '</div>' +
         '<br>';

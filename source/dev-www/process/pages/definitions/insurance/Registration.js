@@ -344,6 +344,7 @@ var getIncludes = function (model) {
                         'urnNo': requestObj.urnNo,
                         'sumInsured': requestObj.sumInsured,
                         'premiumCollected': requestObj.insuranceTransactionDetailsDTO[0].totalPremium,
+                        'policyNumber' :  requestObj.policyNumber,
                         'company_name': "IFMR Rural Channels and Services Pvt. Ltd.",
                         'cin': 'U74990TN2011PTC081729',
                         'address1': 'IITM Research Park, Phase 1, 10th Floor',
