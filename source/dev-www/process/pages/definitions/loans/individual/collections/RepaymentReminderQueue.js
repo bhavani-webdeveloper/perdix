@@ -105,7 +105,7 @@ define({
                     var centreName = null;
                     for (var i = 0; i < centres.length; i++) {
                         var centre = centres[i];
-                        if (centre.code == searchOptions.centreName) {
+                        if (centre.code == searchOptions.centre) {
                             centreName = centre.name;
                         }
                     }
