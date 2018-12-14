@@ -83,7 +83,7 @@ function($log, formHelper, CentreCreationResource,$state, ScoresMaintenance,Sess
 							data: 'stage'
 						},
 						{
-							title:'PARTERN_OR_SELF',
+							title:'PARTNER_OR_SELF',
 							data: 'partnerSelf'
 						},
 						{

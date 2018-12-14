@@ -32,7 +32,7 @@ if (isset($_GET)) {
 
     $error_log = "";
     $CustomerLoanId = $_GET['LoanId'];
-    $authInfo = 'Bearer '.$_GET['auth_token'];
+    $authInfo = $_GET['authInfo'];
     $SessionUserName = "admin";
     $userInfo = $perdixService->accountInfo($authInfo);
     $partnerCode = $userInfo['partnerCode'];

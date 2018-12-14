@@ -167,6 +167,7 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
                                     },
                                     onSelect: function (result, model, context) {
                                         model.scoreMaster.scoreCriterias[context.arrayIndex].criteriaName = result.criteriaName;
+                                        model.scoreMaster.scoreCriterias[context.arrayIndex].enumCode = result.enumCode;
                                         model.scoreMaster.scoreCriterias[context.arrayIndex].criteriaValue = null;
                                         model.scoreMaster.scoreCriterias[context.arrayIndex].status =result.status;
                                     }
@@ -294,7 +295,7 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
                                             searchHelper: formHelper,
                                             search: function (inputModel, form, model) {
                                                 var defered = $q.defer();
-                                                ScoresMaintenance.allParameterMaster().$promise.then(function(item){
+                                                ScoresMaintenance.allParameterMaster({page:1,per_page:100}).$promise.then(function(item){
                                                     var out = {};
                                                     out.body = [];
                                                     for(var i=0;i<item.length;i++){

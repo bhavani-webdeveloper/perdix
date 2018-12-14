@@ -2502,6 +2502,22 @@
               "BasicEnrolment",
               "Completed"
             ]
+          },
+          "udf37": {
+            "title": "latitude",
+            "type": "string",
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "udf38": {
+            "title": "longitude",
+            "type": "string",
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
           }
         }
       },
@@ -2577,21 +2593,17 @@
               "Completed"
             ]
           },
-          "udf6": {
-            "title": "Latitude",
+          "udf37": {
+            "title": "latitude",
             "type": "string",
-            "minLength": 1,
-            "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
               "Completed"
             ]
           },
-          "udf7": {
-            "title": "Longitude",
+          "udf38": {
+            "title": "longitude",
             "type": "string",
-            "minLength": 1,
-            "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
               "Completed"

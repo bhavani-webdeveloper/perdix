@@ -1228,12 +1228,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                                     "required": "true"
                                                 },
                                                 "latitude": {
-                                                    "key": "customer.udf.enterprise_user_defined_fields.udf6",
+                                                    "key": "customer.udf.userDefinedFieldValues.udf1",
                                                     "title": "BUSINESS_LOCATION",
                                                     "type": "geotag",
                                                     fieldType: "string",
-                                                    "latitude": "customer.udf.enterprise_user_defined_fields.udf6",
-                                                    "longitude": "customer.udf.enterprise_user_defined_fields.udf7",
+                                                    "latitude": "customer.udf.userDefinedFieldValues.udf1",
+                                                    "longitude": "customer.udf.userDefinedFieldValues.udf2",
                                                     "orderNo": 120
                                                 },
                                             }
@@ -1616,6 +1616,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
 
                     },
                     proceed: function(model, form){
+
+                        model.customer.udf.userDefinedFieldValues.udf1 = model.customer.udf.userDefinedFieldValues.udf1.toString();
+                        model.customer.udf.userDefinedFieldValues.udf2 = model.customer.udf.userDefinedFieldValues.udf2.toString();
+
                         if( model.customer.vehiclesOwned >= model.customer.vehiclesFinanced){
                             model.customer.vehiclesFree = model.customer.vehiclesOwned - model.customer.vehiclesFinanced;
                         }
