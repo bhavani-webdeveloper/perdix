@@ -377,10 +377,11 @@ if (isset($_GET)) {
                 sc_perdixparameters.TableName,
                 sc_perdixparameters.condition_if_any
                 FROM sc_perdixparameters
-                LEFT JOIN score_subscore ON score_subscore.ScoreName = '$ScoreName'
-                LEFT JOIN score_parameters ON sc_perdixparameters.ParameterName=score_parameters.ParameterName
-                LEFT JOIN score_master ON score_subscore.ScoreName = score_master.ScoreName
+                INNER JOIN score_subscore
+                LEFT JOIN score_parameters ON sc_perdixparameters.ParameterName = score_parameters.ParameterName                
+                LEFT JOIN score_master ON score_master.ScoreName = score_subscore.ScoreName                
                 WHERE score_parameters.status = 'ACTIVE'
+                AND score_subscore.ScoreName = '$ScoreName'
                 AND score_subscore.id = score_parameters.subscoreid
                 $subscore_condition
                GROUP BY sc_perdixparameters.ParameterName ORDER BY score_subscore.id, score_parameters.id ASC
@@ -415,42 +416,53 @@ if (isset($_GET)) {
 
                         // $ParameterDataAvail[] = $Column;
                         //get the allocated value from sc_values
-                        $ScoreValue = 
-                            "(SELECT    
-                                p.ParameterPassScore,
-                                s.subscoreName,
-                                IF(v.Value >=p.ParameterPassScore AND v.Value IS NOT NULL, 'PASS','FAIL') AS 'ParameterPassStatus',
-                                IF(v.Value <p.ParameterPassScore OR v.Value IS NULL, GROUP_CONCAT(DISTINCT m.mitigant SEPARATOR '|'),'') AS 'mitigant',
-                                p.ParameterWeightage*$weightage_manipulation AS `ParameterWeightage`,
-                                p.MaxParameterScore,
-                                p.ParameterName,
-                                v.id,
-                                v.CategoryValueFrom,
-                                v.CategoryValueTo,
-                                v.Value,
-                                v.nonNegotiable,
-                                v.colorEnglish,
-                                v.colorHexadecimal,
-                                CONCAT_WS('-', v.CategoryValueFrom, if(v.CategoryValueTo='', NULL, v.CategoryValueTo)) AS Category
-                                FROM score_values v
-                                LEFT JOIN score_subscore s on s.scoreName = '$ScoreName'
-                                LEFT JOIN score_parameters p ON v.ParameterName = p.ParameterName
-                                LEFT JOIN sc_mitigants m ON (p.ParameterName=m.ParameterName AND m.status='ACTIVE')
-                                WHERE
-                                v.status='ACTIVE'
-                                AND s.id = p.subscoreid
-                                AND s.isIndividualScore = $s
-                                AND p.ParameterName='$Column'
-                                AND (
-                                    (IF('$InputValue'/'$InputValue' IS NULL AND '$InputValue' NOT IN ('0', '0.0', '0.00'), FALSE, '$InputValue'+0 between v.CategoryValueFrom+0 and v.CategoryValueTo+0 AND v.CategoryValueFrom NOT LIKE '%#%' AND v.CategoryValueTO NOT LIKE '%#%'))
-                                    or (v.CategoryValueFrom = '$InputValue' AND v.CategoryValueFrom NOT LIKE '%#%' AND v.CategoryValueTO='')
-                                    or (IF('$InputValue'/'$InputValue' IS NULL AND '$InputValue' NOT IN ('0', '0.0', '0.00'), FALSE, v.CategoryValueFrom LIKE '#<#%'  AND REPLACE(v.CategoryValueFrom ,'#<#','')+0 > '$InputValue'+0))
-                                    or (IF('$InputValue'/'$InputValue' IS NULL AND '$InputValue' NOT IN ('0', '0.0', '0.00'), FALSE, v.CategoryValueFrom LIKE '#<=#%' AND REPLACE(v.CategoryValueFrom , '#<=#','')+0 >= '$InputValue'+0))
-                                    or IF('$InputValue'/'$InputValue' IS NULL AND '$InputValue' NOT IN ('0', '0.0', '0.00'), FALSE, (v.CategoryValueFrom LIKE '#>#%' AND REPLACE(v.CategoryValueFrom , '#>#', '')+0 < '$InputValue'+0))
-                                    or IF('$InputValue'/'$InputValue' IS NULL AND '$InputValue' NOT IN ('0', '0.0', '0.00'), FALSE, (v.CategoryValueFrom LIKE '#>=#%' AND REPLACE(v.CategoryValueFrom, '#>=#', '')+0 <= '$InputValue'+0))
-                                    )
-                                ) ";
+                        $ScoreValue = "(SELECT    
+                    p.ParameterPassScore,
+                    s.subscoreName,
+                    IF(v.Value >=p.ParameterPassScore AND v.Value IS NOT NULL, 'PASS','FAIL') AS 'ParameterPassStatus',
+                    IF(v.Value <p.ParameterPassScore OR v.Value IS NULL, GROUP_CONCAT(DISTINCT m.mitigant SEPARATOR '|'),'') AS 'mitigant',
+                    p.ParameterWeightage*$weightage_manipulation AS `ParameterWeightage`,
+                    p.MaxParameterScore,
+                    p.ParameterName,
+                    v.id,
+                    v.CategoryValueFrom,
+                    v.CategoryValueTo,
+                    v.Value,
+                    v.nonNegotiable,
+                    v.colorEnglish,
+                    v.colorHexadecimal,
+                    CONCAT_WS('-', v.CategoryValueFrom, if(v.CategoryValueTo='', NULL, v.CategoryValueTo)) AS Category
+                    FROM score_values v
+                    LEFT JOIN score_subscore s on s.scoreName = '$ScoreName'
+                    LEFT JOIN score_parameters p ON v.ParameterName = p.ParameterName
+                    LEFT JOIN sc_mitigants m ON (p.ParameterName=m.ParameterName AND m.status='ACTIVE')
+                    WHERE
+                    v.status='ACTIVE'
+                    AND s.id = p.subscoreid
+                    AND s.isIndividualScore = $s
+                    AND v.scoreName = s.ScoreName
+                    AND v.subscoreName = s.subscoreName
+                    AND p.ParameterName='$Column'
+                    AND (
+                        (IF('$InputValue'/'$InputValue' IS NULL AND '$InputValue' NOT IN ('0', '0.0', '0.00'), FALSE, '$InputValue'+0 between v.CategoryValueFrom+0 and v.CategoryValueTo+0 AND v.CategoryValueFrom NOT LIKE '%#%' AND v.CategoryValueTO NOT LIKE '%#%'))
+                        or (v.CategoryValueFrom = '$InputValue' AND v.CategoryValueFrom NOT LIKE '%#%' AND v.CategoryValueTO='')
+                        or (IF('$InputValue'/'$InputValue' IS NULL AND '$InputValue' NOT IN ('0', '0.0', '0.00'), FALSE, v.CategoryValueFrom LIKE '#<#%'  AND REPLACE(v.CategoryValueFrom ,'#<#','')+0 > '$InputValue'+0))
+                        or (IF('$InputValue'/'$InputValue' IS NULL AND '$InputValue' NOT IN ('0', '0.0', '0.00'), FALSE, v.CategoryValueFrom LIKE '#<=#%' AND REPLACE(v.CategoryValueFrom , '#<=#','')+0 >= '$InputValue'+0))
+                        or IF('$InputValue'/'$InputValue' IS NULL AND '$InputValue' NOT IN ('0', '0.0', '0.00'), FALSE, (v.CategoryValueFrom LIKE '#>#%' AND REPLACE(v.CategoryValueFrom , '#>#', '')+0 < '$InputValue'+0))
+                        or IF('$InputValue'/'$InputValue' IS NULL AND '$InputValue' NOT IN ('0', '0.0', '0.00'), FALSE, (v.CategoryValueFrom LIKE '#>=#%' AND REPLACE(v.CategoryValueFrom, '#>=#', '')+0 <= '$InputValue'+0))
+                        )
 
+                        GROUP BY p.ParameterPassScore, s.subscoreName, ParameterPassStatus, mitigant, ParameterWeightage,
+                    p.MaxParameterScore, p.ParameterName, v.id, v.CategoryValueFrom,
+                    v.CategoryValueTo,
+                    v.Value,
+                    v.nonNegotiable,
+                    v.colorEnglish,
+                    v.colorHexadecimal,Category 
+
+                    ) ";
+
+                        echo("$ScoreValue");
                         $calculateWeightage = 0;
 
                         $DefinedScoreValues = collect($defaultDb->select($ScoreValue))->first();
