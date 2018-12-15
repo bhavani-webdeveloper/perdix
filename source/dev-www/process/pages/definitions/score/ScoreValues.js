@@ -15,20 +15,41 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
                 }
             }
 
+            model.getModelSubScore = function(subscoreName,parameterName){
 
-            model.getScoreParameter = function(subScoreId, ScoreParameterId){
+
+                // for (i = 0; i < model.scoreMaster.subScores.length; i++) {
+                //     for (j = 0; j < model.scoreMaster.subScores[i].scoreParameters.length; i++) {
+                //         if( model.scoreMaster.subScores[i].subscoreName==subscoreName && model.scoreMaster.subScores[i].scoreParameters[j].parameterName==parameterName)
+                //             return subscoreName && model.scoreMaster.subScores[i].scoreParameters[j].scoreValues;
+                //     }
+                // }
+
+                var values=[];
+
+                model.scoreMaster.subScores.forEach(function(subScore) {
+                    subScore.scoreParameters.forEach(function(scoreParameter) {
+                        if( subScore.subscoreName==subscoreName && scoreParameter.parameterName==parameterName){
+                            values=scoreParameter.scoreValues;
+                        }
+                    });
+                });
+                return values;
+
+            }
+            model.getScoreParameter = function(subscoreName,parameterName){
                 var subScore = model.scoreMaster.subScores.find(function(subScore) {
-                    return subScore.id == subScoreId;
+                    return subScore.subscoreName == subscoreName;
                 });
 
                 var scoreParameter = subScore.scoreParameters.find(function(scoreParameter) {
-                    return scoreParameter.id == ScoreParameterId;
+                    return scoreParameter.parameterName == parameterName;
                 });
                 return scoreParameter;
             }
 
-            model.getScoreValuesByParamId = function(subScoreId, ScoreParameterId){
-                return model.scoreMaster.scoreValues.filter(subScore => subScore.subScoreId == subScoreId && subScore.scoreParameterId == ScoreParameterId);
+            model.getScoreValuesByParamId = function(subscoreName,parameterName){
+                return model.scoreValues.filter(subScore => subScore.subScoreName == subscoreName && subScore.parameterName == parameterName);
             }
 
            
@@ -52,10 +73,14 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
                 ScoresMaintenance.getScoresById({ id: model.scoreMasterID  }, function (resp, header) {
 
                     model.scoreMaster = resp.body.scoreMaster;
-                    model.scoreMaster.scoreValues=[];
+                    model.scoreValues=[];
                     model.scoreMaster.subScores.forEach(function(subScore) {
+                        console.log(subScore);
                         subScore.scoreParameters.forEach(function(scoreParameters) {
+                            console.log(scoreParameters);
                             scoreParameters.scoreValues.forEach(function(scoreValue) {
+                                console.log(scoreValue);
+
                                 //console.log(scoreValue);
 
                                 scoreValue.subScoreId = subScore.id;
@@ -64,12 +89,14 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
                                 scoreValue.scoreParameterId = scoreParameters.id;
                                 scoreValue.scoreParameterName = scoreParameters.parameterName;
 
-                                model.scoreMaster.scoreValues.push(scoreValue);
+                                scoreValue.enumCode = model.getByEnumCode(scoreParameters.parameterName);
+
+                                model.scoreValues.push(scoreValue);
 
                             });
                         });
                     });
-                    console.log( model.scoreMaster.scoreValues);
+                    console.log( model.scoreValues);
 
                 }, function (err) {
 
@@ -90,7 +117,7 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
                         readonly : true
                     },
                     {
-                        key: "scoreMaster.scoreValues",
+                        key: "scoreValues",
                         type: "datatable",
                         title: "SCORE_VALUES",
                         startEmpty: true,
@@ -99,11 +126,21 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
                                 return $q.resolve({
                                     "dtlKeyvalue": "ADD_PARAMETER",
                                     "columns": [
-
                                         {
                                             prop: "subScoreName",
-                                            type: "text",
-                                            name: "SUB_SCORE_NAME"
+                                            type: "select",
+                                            name: "SUB_SCORE_NAME",
+                                            getListOptions: function (model) {
+                                                return $q.when(model.scoreMaster.subScores).then(function (subScores) {
+                                                    var options = [];
+                                                    if(subScores){
+                                                        for (i = 0; i < subScores.length; i++) {
+                                                            options.push(subScores[i].subscoreName);
+                                                        }
+                                                    }
+                                                    return options;
+                                                });
+                                            },
                                         },
                                         {
                                             prop: "parameterName",
@@ -169,7 +206,22 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
                                         {
                                             prop: "colorEnglish",
                                             type: "text",
-                                            name: "COLOR"
+                                            name: "colorEnglish"
+                                        },
+                                        {
+                                            prop: "colorHexadecimal",
+                                            type: "text",
+                                            name: "colorHexadecimal"
+                                        },
+                                        {
+                                            prop: "nonNegotiable",
+                                            type: "text",
+                                            name: "nonNegotiable"
+                                        },
+                                        {
+                                            prop: "value",
+                                            type: "text",
+                                            name: "value"
                                         },
                                         {
                                             prop: "status",
@@ -207,12 +259,44 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
         actions: {
             submit: function(model, form, formName) {
 
-                PageHelper.showLoader();
+                //PageHelper.showLoader();
+
+                // model.scoreValues.forEach(function(subScore) {
+                //     var subScores = model.getModelSubScore(subScore.subscoreName,subScore.parameterName);
+                //     //var object = subScores.find(o => o.parameterName ==parameterName) ;
+                //     subScores.push(subScore);
+                //     subScoreName
+                //     parameterName
+                // });
+
+
                 model.scoreMaster.subScores.forEach(function(subScore) {
+                    console.log(subScore);
+                    // model.allParameterMaster.forEach(function(scoreParameters) {
+                    //     console.log(scoreParameters);
+                    //     var ScoreParameter = model.getScoreParameter(subScore.subscoreName,scoreParameters.parameterName);
+                    //     //console.log(ScoreParameter.scoreValues);
+                    //     var values =model.getScoreValuesByParamId(subScore.subscoreName,scoreParameters.parameterName);
+                    //     //console.log(values);
+                    //     if(values.length>0 ){
+                    //         if(ScoreParameter==undefined){
+                    //             ScoreParameter = {
+                    //                 parameterName: "DSCR",
+                    //                 status: "ACTIVE",
+                    //                 scoreValues: []
+                    //             };
+                    //         }
+                    //         ScoreParameter.scoreValues= values;
+                    //     }
+                        
+
+                    // });
+
                     subScore.scoreParameters.forEach(function(scoreParameters) {
-                        var ScoreParameter = model.getScoreParameter(subScore.id,scoreParameters.id);
+                        console.log(scoreParameters);
+                        var ScoreParameter = model.getScoreParameter(subScore.subscoreName,scoreParameters.parameterName);
                         //console.log(ScoreParameter.scoreValues);
-                        var values =model.getScoreValuesByParamId(subScore.id,scoreParameters.id);
+                        var values =model.getScoreValuesByParamId(subScore.subscoreName,scoreParameters.parameterName);
                         //console.log(values);
                         ScoreParameter.scoreValues= values;
                         //console.log("-------");
@@ -227,7 +311,8 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
                     irfProgressMessage.pop('cust-update', 'Done. Score Values are Updated ', 2000);
                 }, function (err) {
                     PageHelper.hideLoader();
-                    irfProgressMessage.pop('cust-update', 'Oops. Some error.', 2000);
+                    var errObj = JSON.stringify(err);
+                    irfProgressMessage.pop('cust-update', 'err : '+err.data.body.error, 2000);
                 });
 			}
 			
