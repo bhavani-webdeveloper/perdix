@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
- ["PagesDefinition","$log","GroupProcess", "SessionStore", "LoanAccount", "$state", "$stateParams", "SchemaResource", "PageHelper", "Enrollment", "formHelper", "IndividualLoan", "Utils", "$filter", "$q", "irfProgressMessage", "Queries", "Files", "LoanBookingCommons", "irfSimpleModal", "irfNavigator", "RepaymentReminder", "$httpParamSerializer",
-    function(PagesDefinition,$log,GroupProcess, SessionStore, LoanAccount, $state, $stateParams, SchemaResource, PageHelper, Enrollment, formHelper, IndividualLoan, Utils, $filter, $q, irfProgressMessage, Queries, Files, LoanBookingCommons, irfSimpleModal, irfNavigator, RepaymentReminder, $httpParamSerializer) {
+ ["PagesDefinition","$log","GroupProcess", "SessionStore", "LoanAccount", "$state", "$stateParams", "SchemaResource", "PageHelper", "Enrollment", "formHelper", "IndividualLoan", "Utils", "$filter", "$q", "irfProgressMessage", "Queries", "Files", "LoanBookingCommons", "irfSimpleModal", "irfNavigator", "RepaymentReminder","Misc","$httpParamSerializer",
+    function(PagesDefinition,$log,GroupProcess, SessionStore, LoanAccount, $state, $stateParams, SchemaResource, PageHelper, Enrollment, formHelper, IndividualLoan, Utils, $filter, $q, irfProgressMessage, Queries, Files, LoanBookingCommons, irfSimpleModal, irfNavigator, RepaymentReminder,Misc, $httpParamSerializer) {
 
         var transactionDetailHtml = "\
         <irf-simple-summary-table irf-table-def='model.orgTransactionDetails' />\
@@ -2246,7 +2246,8 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                         "condition":"model.loanDocuments != null && model.loanDocuments.existingDocuments != null && model.loanDocuments.existingDocuments.length !=0",
                                         "fieldHtmlClass": "pull-right",
                                         "onClick": function (model, form, schemaForm, event) {
-                                            Utils.downloadFile(irf.MANAGEMENT_BASE_URL + "/forms/AllFormsDownload.php?record_id=" + model.loanAccount.id);
+                                            Utils.downloadFile(Misc.allFormsDownload({recordId:model.loanAccount.id}));
+                                           // Utils.downloadFile(irf.MANAGEMENT_BASE_URL + "/forms/AllFormsDownload.php?record_id=" + model.loanAccount.id);
 
                                            // var fileUrl = IndividualLoan.getAllDocumentsUrl(model.loanAccount.id);
                                             //Utils.downloadFile(fileUrl);
