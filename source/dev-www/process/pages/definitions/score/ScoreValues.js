@@ -4,7 +4,7 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
 	
 	return {
         "type": "schema-form",
-        "title": "Manage Parameter Score",
+        "title": "MANAGE_PARAMETER_SCORE",
         "subTitle": "",
         initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
 
@@ -119,7 +119,7 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
                     {
                         key: "scoreValues",
                         type: "datatable",
-                        title: "SCORE_VALUES",
+                        title: "SCORE_VALUE",
                         startEmpty: true,
                         dtlConfig: {
                             columnsFn: function () {
@@ -168,7 +168,7 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
                                         {
                                             prop: "categoryValueFrom",
                                             type: "select-typeahead",
-                                            name: "VALUE_FROM",
+                                            name: "FROM",
                                             isTypeaheadSelect : false,
                                             isTypeaheadStrategy : false,
                                             typeaheadExpr : "name",
@@ -186,7 +186,7 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
                                         {
                                             prop: "categoryValueTo",
                                             type: "select-typeahead",
-                                            name: "VALUE_TO",
+                                            name: "TO",
                                             isTypeaheadSelect : false,
                                             isTypeaheadStrategy : false,
                                             typeaheadExpr : "name",
@@ -206,27 +206,27 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
                                         {
                                             prop: "colorEnglish",
                                             type: "text",
-                                            name: "colorEnglish"
+                                            name: "COLOR_ENGLISH"
                                         },
                                         {
                                             prop: "colorHexadecimal",
                                             type: "text",
-                                            name: "colorHexadecimal"
+                                            name: "COLOR_HAXADECIMAL"
                                         },
                                         {
                                             prop: "nonNegotiable",
                                             type: "text",
-                                            name: "nonNegotiable"
+                                            name: "NON_NEGOTIABLE"
                                         },
                                         {
                                             prop: "value",
                                             type: "text",
-                                            name: "value"
+                                            name: "VALUE"
                                         },
                                         {
                                             prop: "status",
                                             type: "select",
-                                            name: "status",
+                                            name: "STATUS",
                                             getListOptions: function (model) {
                                                 return $q.when(model.allParameterMaster).then(function (value) {
                                                     var options = ["ACTIVE","DEACTIVE"];
@@ -259,7 +259,7 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
         actions: {
             submit: function(model, form, formName) {
 
-                //PageHelper.showLoader();
+                PageHelper.showLoader();
 
                 // model.scoreValues.forEach(function(subScore) {
                 //     var subScores = model.getModelSubScore(subScore.subscoreName,subScore.parameterName);
