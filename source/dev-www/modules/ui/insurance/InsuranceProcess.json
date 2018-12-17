@@ -247,7 +247,8 @@
          "sumInsured":{  
             "key":"insurancePolicyDetailsDTO.sumInsured",
             "title":"SUM_INSURED",
-            "type":"amount",
+            "type":"select",
+            "enumCode":"insurance_premium_amounts",
             "orderNo":140
          },
          "tenureInYears":{  
