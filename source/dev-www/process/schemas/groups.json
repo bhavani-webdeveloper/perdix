@@ -333,12 +333,6 @@
                 "groupStatus": {
                     "type": "boolean",
                     "title": "GroupStatus"
-
-                },
-                "grtDate": {
-                    "type": "string",
-                    "title": "GRT_DATE"
-                    
                 },
                 "grtDoneBy": {
                     "type": "string",
@@ -1106,7 +1100,6 @@
                 "groupName",
                 "groupFormationDate",
                 "groupStatus",
-                "grtDate",
                 "grtDoneBy",
                 "grtRemarks",
                 "id",

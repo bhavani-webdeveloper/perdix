@@ -32,7 +32,7 @@ if (isset($_GET)) {
 
     $error_log = "";
     $CustomerLoanId = $_GET['LoanId'];
-    $authInfo = $_GET['authInfo'];
+    $authInfo = 'Bearer '.$_GET['auth_token'];
     $SessionUserName = "admin";
     $userInfo = $perdixService->accountInfo($authInfo);
     $partnerCode = $userInfo['partnerCode'];
@@ -132,11 +132,9 @@ if (isset($_GET)) {
     "$loan_purpose_1|loan_purpose_2=$loan_purpose_2|business_type=$business_type|existing_customer=$existing_customer|customer_category=$customer_category|";
     
     if( ! $ScoreName ) {
-        $response->setStatusCode(400)->json( ['error' => 'no '.$msg]);
+        $response->setStatusCode(400)->json( ['ScoreDetails' => 'no '.$msg]);
         return;
     } 
-
-    echo("$ScoreName: ".$msg);
 
     $non_negotiable = 0;
 
@@ -462,7 +460,6 @@ if (isset($_GET)) {
 
                     ) ";
 
-                        echo("$ScoreValue");
                         $calculateWeightage = 0;
 
                         $DefinedScoreValues = collect($defaultDb->select($ScoreValue))->first();
@@ -531,7 +528,6 @@ if (isset($_GET)) {
     $AvailCustomerParams['Parameters'] = $ConsolidatedArray;
 
     $FinalScoreResponse = '{"ScoreDetails": [' . json_encode($AvailCustomerParams) . ']}';
-    echo("$FinalScoreResponse \n");
 
     $defaultDb->insert(substr($InsertValues, 0, -1));
     // sub score calculation
@@ -569,7 +565,7 @@ if (isset($_GET)) {
                 AND ApplicationId = '$CustomerLoanId'";
     
     $defaultDb->update($FinalScoreCalculation);
-    $response->setStatusCode(200)->json([ 'scoreDetails' => $json_ConsolidatedArray ]);
+    $response->setStatusCode(200)->json([ 'ScoreDetails' => $AvailCustomerParams ]);
     return;
 
     EndExecution:
