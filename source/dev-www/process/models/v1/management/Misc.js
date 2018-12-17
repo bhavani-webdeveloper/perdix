@@ -14,7 +14,7 @@ irf.models.factory("Misc",["$resource", "$httpParamSerializer", "BASE_URL","sear
 
         },
         res.formDownload = function(opts){
-            return irf.FORM_DOWNLOAD_URL+'?form_name='+opts.formName+'&recored_id='+opts.recordId;
+            return irf.FORM_DOWNLOAD_URL+'?form_name='+opts.formName+'&record_id='+opts.recordId;
         }
         return res;
     }
