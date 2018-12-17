@@ -101,7 +101,7 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
                         console.log(subScore);
                         subScore.scoreParameters.forEach(function(scoreParameters) {
                             scoreParameters.enumCode = model.getByEnumCode(scoreParameters.parameterName);
-                            scoreParameters.subscoreName=subScore.subscoreName;
+                            scoreParameters.subScoreName=subScore.subscoreName;
                             model.parameterMaster.push(scoreParameters);
 
                             console.log(scoreParameters);
@@ -179,13 +179,13 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
                                                 row.categoryValueTo="";
                                             },
                                             getListOptions: function (model, row) {
-                                                return $q.when(model.parameterMaster).then(function (value) {
+                                                return $q.when(model.parameterMaster).then(function (values) {
                                                     var options = [];
-                                                    if(value){
-                                                        for (i = 0; i < value.length; i++) {  
-                                                            if( row.subscoreName &&  value[i].subscoreName==row.subscoreName)
-                                                                options.push(value[i].parameterName  );
-                                                        }
+                                                    if(values){
+                                                        values.forEach(function(value) {
+                                                            if( row.subScoreName &&  value.subScoreName==row.subScoreName)
+                                                                options.push(value.parameterName  );
+                                                        });
                                                     }
                                                     return options;
                                                 });
