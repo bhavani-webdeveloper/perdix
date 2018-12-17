@@ -9,7 +9,7 @@ define({
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 $log.info("Reminder Follow Up Queue got initialized");
-                model.branchName = SessionStore.getCurrentBranch().branchId;
+                model.branch = SessionStore.getCurrentBranch().branchId;
                 Queries.getNextInstallmentDate()
                 .then(function(response){
                     $log.info(response);
@@ -36,13 +36,11 @@ define({
                             "title": "BUSINESS_NAME",
                             "type": "string"
                         },
-                        "branchName": {
-                            "title": "HUB_NAME",
-                            "type": ["integer", "null"],
-                            "enumCode": "branch_id",
-                            "readonly": true,
+                        "branch": {
+                            'title': "BRANCH",
+                            "type": ["string", "null"],
                             "x-schema-form": {
-                                "type": "select",
+                                "type":"userbranch",
                                 "screenFilter": true
                             }
                         },
@@ -95,11 +93,11 @@ define({
                     return formHelper;
                 },
                 getResultsPromise: function(searchOptions, pageOpts) {
-                    var branches = formHelper.enum('branch').data;
+                    var branches = formHelper.enum('branch_id').data;
                     var branchName = null;
                     for (var i = 0; i < branches.length; i++) {
                         var branch = branches[i];
-                        if (branch.code == searchOptions.branchName) {
+                        if (branch.code == searchOptions.branch) {
                             branchName = branch.name;
                         }
                     }
@@ -114,7 +112,7 @@ define({
 
                     var promise = RepaymentReminder.query({
                         'customerUrn': searchOptions.customerUrn,
-                        'branchName': branchName,
+                        'branchId': searchOptions.branch,
                         'centreName': centreName,
                         'businessName': searchOptions.businessName,
                         'applicantName': searchOptions.applicantName,
