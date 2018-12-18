@@ -3092,17 +3092,7 @@
               "Completed"
             ]
           },
-          "involvedInMarketTransactions":{  
-            "title":"involvedInMarketTransactions",
-            "type":"string",
-            "minLength":1,
-            "maxLength":100,
-            "captureStages":[  
-               "BasicEnrolment",
-               "Stage02",
-               "Completed"
-            ]
-         },
+       
           "businessDescription": {
             "title": "businessDescription",
             "type": "string",
