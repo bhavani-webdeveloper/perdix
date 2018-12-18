@@ -69,6 +69,10 @@ irf.models.factory('Enrollment',function($resource,$httpParamSerializer,BASE_URL
                 return data;
             }
         },
+        modifyStatus:{
+            method:'GET',
+            url: endpoint + '/modifyBlockedStatus/'
+        },
         update:{
             method:'PUT',
             url:endpoint+'/:service'
