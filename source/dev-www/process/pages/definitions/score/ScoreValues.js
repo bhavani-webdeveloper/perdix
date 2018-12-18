@@ -8,6 +8,11 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
         "subTitle": "",
         initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
 
+            model.colors =[
+                {colorEnglish : "RED", colorHexadecimal : "#FF0000"},
+                {colorEnglish : "YELLOW", colorHexadecimal : "#FFFF00"},
+                {colorEnglish : "GREEN", colorHexadecimal : "#008000"}];
+
             model.getByEnumCode = function (parameterName) {
                 if(model.allParameterMaster){
                     var object = model.allParameterMaster.find(o => o.parameterName ==parameterName) ;
@@ -62,6 +67,23 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
                 model.allParameterMaster =ScoresMaintenance.allParameterMaster({page:1, per_page: 100}, function (resp, header) {
                     console.log(resp);
                      //model.allParameterMaster=resp;
+                    //  {
+                    //      "ParamName": {
+
+                    //      }
+                    //  }
+                    //  {
+                    //      "SubscoreName": {
+                    //          "ParamName": {OJB},
+                    //          "ParamName": {OJB},
+                    //          "ParamName": {OJB}
+                    //      },
+                    //      "SubscoreName": {
+                    //         "ParamName": {OJB},
+                    //         "ParamName": {OJB},
+                    //         "ParamName": {OJB}
+                    //     }
+                    //  }
 
                 }, function (err) {
 
@@ -74,9 +96,14 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
 
                     model.scoreMaster = resp.body.scoreMaster;
                     model.scoreValues=[];
+                    model.parameterMaster=[];
                     model.scoreMaster.subScores.forEach(function(subScore) {
                         console.log(subScore);
                         subScore.scoreParameters.forEach(function(scoreParameters) {
+                            scoreParameters.enumCode = model.getByEnumCode(scoreParameters.parameterName);
+                            scoreParameters.subScoreName=subScore.subscoreName;
+                            model.parameterMaster.push(scoreParameters);
+
                             console.log(scoreParameters);
                             scoreParameters.scoreValues.forEach(function(scoreValue) {
                                 console.log(scoreValue);
@@ -147,18 +174,18 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
                                             type: "select",
                                             name: "PARAMETER_NAME",
                                             onClick : function(value , model , row){
-                                                console.log("its working ");
                                                 row.enumCode = model.getByEnumCode(row.parameterName);
                                                 row.categoryValueFrom="";
                                                 row.categoryValueTo="";
                                             },
-                                            getListOptions: function (model) {
-                                                return $q.when(model.allParameterMaster).then(function (value) {
+                                            getListOptions: function (model, row) {
+                                                return $q.when(model.parameterMaster).then(function (values) {
                                                     var options = [];
-                                                    if(value){
-                                                        for (i = 0; i < value.length; i++) {
-                                                            options.push(value[i].parameterName);
-                                                        }
+                                                    if(values){
+                                                        values.forEach(function(value) {
+                                                            if( row.subScoreName &&  value.subScoreName==row.subScoreName)
+                                                                options.push(value.parameterName  );
+                                                        });
                                                     }
                                                     return options;
                                                 });
@@ -205,8 +232,21 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
 
                                         {
                                             prop: "colorEnglish",
-                                            type: "text",
-                                            name: "COLOR_ENGLISH"
+                                            type: "select",
+                                            name: "COLOR_ENGLISH",
+                                            onClick : function(value , model , row){
+                                                var colorHexadecimalObj = model.colors.find(o => o.colorEnglish == row.colorEnglish) ;
+                                                row.colorHexadecimal = colorHexadecimalObj.colorHexadecimal;
+                                            },
+                                            getListOptions: function (model) {
+                                                return $q.when(model.colors).then(function (value) {
+                                                    var options = [];
+                                                    for (i = 0; i < value.length; i++) {
+                                                        options.push(value[i].colorEnglish );
+                                                    }
+                                                    return options;
+                                                });
+                                            },
                                         },
                                         {
                                             prop: "colorHexadecimal",
@@ -215,8 +255,14 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
                                         },
                                         {
                                             prop: "nonNegotiable",
-                                            type: "text",
-                                            name: "NON_NEGOTIABLE"
+                                            type: "select",
+                                            name: "NON_NEGOTIABLE",
+                                            getListOptions: function (model,row ) {
+                                                return $q.when(model.allParameterMaster).then(function (value) {
+                                                    var options = ["YES","NO"];
+                                                    return options;
+                                                });
+                                            },
                                         },
                                         {
                                             prop: "value",

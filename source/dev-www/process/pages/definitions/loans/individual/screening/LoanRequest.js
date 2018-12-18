@@ -1873,12 +1873,11 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                             {
                                 key: "loanAccount.collateral[].collateral1FilePath",
                                 title: "MACHINE_QUOTATION",
+                                "type": "file",
+                                "fileType": "application/pdf",
                                 "category": "Loan",
-                                "required":true,
                                 "subCategory": "DOC1",
-                                type: "file",
-                                fileType: "application/pdf",
-                                using: "scanner"
+                                "using": "scanner"
                             }
 
                          ]

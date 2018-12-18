@@ -1503,7 +1503,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                                                 "Yes": "Yes",
                                                 "No": "No",
                                             },
-                                            key:"customer.enterprise.involvedInMarketTransactions"
+                                            key:"customer.involvedInMarketTransactions"
                                         }
                                         },
                                       
