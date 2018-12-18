@@ -1392,10 +1392,11 @@ irf.models.factory('Queries', [
         return deferred.promise;
     }
 
-    resource.searchCustomerData = function(urnNo) {
+    resource.searchCustomerData = function(urnNo,customerName) {
          var deferred = $q.defer();
             var request = {
-                "urnNo" : urnNo
+                "urnNo" : urnNo || '',
+                "customerName":customerName || '',
             }
             resource.getResult("customer.list",request).then(function(records) {
                 if (records && records.results) {
