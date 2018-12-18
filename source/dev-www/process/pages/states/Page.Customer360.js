@@ -193,6 +193,10 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 				},{
 					"key": "customer.urnNo",
 					"title": "URN_NO"
+				}, {
+					"key": "customerBlockedStatusHtml",
+					"type": "html",
+					"title": "STATUS"
 				}]
 			},{
 				"type": "section",
@@ -244,6 +248,10 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 				},{
 					"key": "customer.urnNo",
 					"title": "URN_NO"
+				}, {
+					"key": "customerBlockedStatusHtml",
+					"type": "html",
+					"title": "STATUS"
 				}]
 			},{
 				"type": "section",
@@ -344,7 +352,11 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 
 	$scope.initialize = function(data) {
 		$log.info(data);
-		$scope.model = {customer: data};
+		$scope.model = {
+			customer: data,
+			actions: $scope.actions,
+			customerBlockedStatusHtml: '{{(model.customer.blocked?"BLOCKED":"ACTIVE")|translate}} (<a href="" ng-click="model.actions.modifyBlockedStatus(model)">{{(model.customer.blocked?"UNBLOCK":"BLOCK")|translate}}</a>)'
+		};
 		$scope.introFormName = "introForm";
 		$scope.pageTitle = 'CUSTOMER_360';
 
@@ -567,6 +579,22 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 	$scope.initializeSF = function(model, form, formCtrl) {
 	};
 
-	$scope.actions = {};
+	$scope.actions = {
+		modifyBlockedStatus: function(model) {
+			var message = model.customer.blocked? "Do you want to activate the customer?": "Do you want to block the customer?";
+			Utils.confirm(message).then(function() {
+				PageHelper.showBlockingLoader("Changing...");
+				Enrollment.modifyBlockedStatus({
+					customerId: model.customer.id,
+					isBlocked : !model.customer.blocked
+				}).$promise.then(function(response){
+					model.customer.blocked = response.blocked;
+					model.customer.version = response.version;
+					model.customer.blockStatusChangedBy = response.blockStatusChangedBy;
+					model.customer.blockStatusChangedAt = response.blockStatusChangedAt;
+				}, PageHelper.showErrors).finally(PageHelper.hideBlockingLoader);
+			});
+		}
+	};
 
 }]);
