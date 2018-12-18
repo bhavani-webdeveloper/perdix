@@ -422,7 +422,7 @@ define({
                     "items": [
                         {
                             "type": "submit",
-                            "title": "SAVE"
+                            "title": "SUBMIT"
                         }
                     ]
                 }

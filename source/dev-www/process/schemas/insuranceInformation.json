@@ -63,6 +63,13 @@
                ],
                "title":"URN_NO"
             },
+            "fullName":{  
+               "type":[  
+                  "string",
+                  "null"
+               ],
+               "title":"CUSTOMER_NAME"
+            },
             "custmerId":{  
                "type":[  
                   "number",

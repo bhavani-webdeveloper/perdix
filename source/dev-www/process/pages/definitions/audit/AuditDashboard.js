@@ -94,23 +94,19 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 if (uciq) uciq.data = '-';
 
                 if (saqMenu) {
-                    $q.all([
-                        Audit.online.findAuditInfo({
-                            'auditor_id': auditor_id,
-                            'current_stage': 'scheduled',
-                        }).$promise
-                    ]).then(function(data) {
-                        saqMenu.data = data[0].body.length;
+                    Audit.online.findAuditInfo({
+                        'auditor_id': auditor_id,
+                        'current_stage': 'scheduled',
+                    }).$promise.then(function(data) {
+                        saqMenu.data = Number(data.headers['x-total-count']) || data.body.length;
                     });
                 }
 
                 if (savqMenu) {
-                    $q.all([
-                        Audit.online.findAuditInfo({
-                            'current_stage': 'scheduled'
-                        }).$promise
-                    ]).then(function(data) {
-                        savqMenu.data = data[0].body.length;
+                    Audit.online.findAuditInfo({
+                        'current_stage': 'scheduled'
+                    }).$promise.then(function(data) {
+                        savqMenu.data = Number(data.headers['x-total-count']) || data.body.length;
                     });
                 }
 
@@ -123,7 +119,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                             'current_stage': 'cancel'
                         }).$promise
                     ]).then(function(data) {
-                        daq.data = data[0].body.length + data[1].body.length;
+                        daq.data = (Number(data[0].headers['x-total-count']) || data[0].body.length) + (Number(data[1].headers['x-total-count']) || data[1].body.length);
                     });
                 }
                 if (oraq) {
@@ -132,7 +128,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                         'status': 'O',
                         'audit_type': 1
                     }).$promise.then(function(data) {
-                        oraq.data = data.body.length;
+                        oraq.data = Number(data.headers['x-total-count']) || data.body.length;
                     });
                 }
                 if (osaq) {
@@ -141,7 +137,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                         'audit_type': 0,
                         'status': 'O'
                     }).$promise.then(function(data) {
-                        osaq.data = data.body.length;
+                        osaq.data = Number(data.headers['x-total-count']) || data.body.length;
                     });
                 }
 
@@ -150,7 +146,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                         'current_stage': 'draft',
                         'status': 'D'
                     }).$promise.then(function(data) {
-                        doaq.data = data.body.length;
+                        doaq.data = Number(data.headers['x-total-count']) || data.body.length;
                     });
                 }
 
@@ -160,7 +156,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                         'current_stage': 'draft-review',
                         'status': 'D'
                     }).$promise.then(function(data) {
-                        daaq.data = data.body.length;
+                        daaq.data = Number(data.headers['x-total-count']) || data.body.length;
                     });
                 }
 
@@ -169,10 +165,10 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                         'current_stage': 'publish'
                     }).$promise.then(function(data) {
                         if (pavq) {
-                            pavq.data = data.body.length;
+                            pavq.data = Number(data.headers['x-total-count']) || data.body.length;
                         }
                         if (paq) {
-                            paq.data = data.body.length;
+                            paq.data = Number(data.headers['x-total-count']) || data.body.length;
                         }
                     });
                 }
@@ -182,10 +178,10 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                         'current_stage': 'L1-approve'
                     }).$promise.then(function(data) {
                         if (raq) {
-                            raq.data = data.body.length;
+                            raq.data = Number(data.headers['x-total-count']) || data.body.length;
                         }
                         if (ravq) {
-                            ravq.data = data.body.length;
+                            ravq.data = Number(data.headers['x-total-count']) || data.body.length;
                         }
                     });
                 }
@@ -195,10 +191,10 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                         'current_stage': 'approve'
                     }).$promise.then(function(data) {
                         if (aaq) {
-                            aaq.data = data.body.length;
+                            aaq.data = Number(data.headers['x-total-count']) || data.body.length;
                         }
                         if (aavq) {
-                            aavq.data = data.body.length;
+                            aavq.data = Number(data.headers['x-total-count']) || data.body.length;
                         }
                     });
                 }
@@ -207,13 +203,13 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                     Audit.online.findAuditInfo({
                         'current_stage': 'reject'
                     }).$promise.then(function(data) {
-                        reaq.data = data.body.length;
+                        reaq.data = Number(data.headers['x-total-count']) || data.body.length;
                     });
                 }
 
                 if (adq) {
                     Audit.online.findAuditInfo({}).$promise.then(function(data) {
-                        adq.data = data.body.length;
+                        adq.data = Number(data.headers['x-total-count']) || data.body.length;
                     });
                 }
 
@@ -228,7 +224,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
 
                 if (avq) {
                     Audit.online.findAuditInfo({}).$promise.then(function(data) {
-                        avq.data = data.body.length;
+                        avq.data = Number(data.headers['x-total-count']) || data.body.length;
                     });
                 }
 
