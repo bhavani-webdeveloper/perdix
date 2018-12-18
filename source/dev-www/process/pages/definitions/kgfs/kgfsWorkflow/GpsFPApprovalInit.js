@@ -450,7 +450,6 @@ define({
                         },
                     }, {
                         "key": "customer.biometricEnrollment",
-                        readonly: true,
                         title: "BIOMETRIC_AUTHENTICATION",
                         type: "select",
                         titleMap: {
