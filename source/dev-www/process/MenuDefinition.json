@@ -34,6 +34,7 @@
         },
         "Page/Adhoc/sambandh.customer.EnrollmentDashboard",
         "Page/Adhoc/MutualFund.MutualFundDashboard",
+        "Page/Adhoc/insurance.InsuranceRegistrationDashboard",
         "Page/ServiceRequestDashboard",
         "Page/LeadDashboard",
         "Page/Adhoc/coa.ChartOfAccountDashboard",
@@ -77,14 +78,6 @@
                 "Page/JournalMaintenanceDashboard",
                 "Page/JournalPostingDashboard",
                 "Page/FinconAccountingDashboard"
-            ]
-        },{
-            "title": "INSURANCE_REGISTRATION",
-            "iconClass": "fa fa-user",
-            "items": [
-                "Page/Engine/insurance.InsuranceRegistrationQueue",
-                "Page/Engine/insurance.Registration"
-                
             ]
         }, {
             "title": "MANAGEMENT",

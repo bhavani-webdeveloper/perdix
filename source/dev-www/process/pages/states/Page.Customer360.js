@@ -329,7 +329,13 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 			PagesDefinition.getUserAllowedDefinition(fullDefinition).then(function(resp) {
 				$scope.dashboardDefinition = resp;
 				$scope.customerSchema = customerSchemaResponse;
-				$scope.initialize(response);
+				PagesDefinition.getPageConfig("Page/Customer360").then(function(config) {
+					if (config) {
+						$scope.pageConfig = config;
+					}
+				}).finally(function() {
+					$scope.initialize(response);
+				});
 			});
 		}, function(errorResponse) {
 			PageHelper.showErrors(errorResponse);
@@ -391,6 +397,8 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 		if ($scope.dashboardDefinition.$menuMap['Page/Engine/customer360.EnrollmentProfile'])
 		$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.EnrollmentProfile'].onClick = function(event, menu) {
 			menu.stateParams.pageId = $scope.customerId;
+			menu.stateParams.pageData = menu.stateParams.pageData || {};
+			menu.stateParams.pageData.enabletrue = !!$scope.pageConfig.readonly;
 			entityManager.setModel(menu.stateParams.pageName, $scope.model);
 			return $q.resolve(menu);
 		};

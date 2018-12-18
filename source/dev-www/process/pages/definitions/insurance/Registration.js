@@ -164,6 +164,11 @@ var getIncludes = function (model) {
                                                     "key":"insurancePolicyDetailsDTO.urnNo",
                                                     "title":"URN_NO",
                                                     "type":"string"
+                                                },
+                                                "fullName":{
+                                                    "key":"insurancePolicyDetailsDTO.fullName",
+                                                    "title":"CUSTOMER_NAME",
+                                                    "type":"string"
                                                 }
                                             },
                                              "outputMap": {
@@ -180,13 +185,14 @@ var getIncludes = function (model) {
                                             search: function(inputModel, form, model, context) {
                                                
                                                return Queries.searchCustomerData(
-                                                 inputModel.urnNo
+                                                 inputModel.urnNo,
+                                                 inputModel.fullName
                                                 );
                                             },
                                            
                                             getListDisplayItem: function(item, index) {
                                                 return [
-                                                    item.urnNo + item.firstName + item.lastName
+                                                    item.urnNo +" "+item.firstName 
                                                 ];
                                             }
                                         },
