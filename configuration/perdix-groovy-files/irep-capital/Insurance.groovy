@@ -21,7 +21,7 @@ import java.time.*;
         noOfInstallments = Integer.parseInt(loanAccount.getTenure());
         
         factor=0;
-        if(frequency.equals("daily")){
+        if(frequency.equals("Daily")){
             factor=applicationProperties.getFactor().getDailyFactor();
         }else if(frequency.equals("Weekly") || frequency.equals("EWI") ||
                 frequency.equals("Weeks") || frequency.equals("Week") || frequency.equals("W")){
