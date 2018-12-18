@@ -646,6 +646,8 @@ define({
                                     promise.then(function (data) {
                                         model.customer[obj.table_field] = data.fileId;
                                         delete model.customer.$fingerprint[obj.fingerId];
+                                        reqData.customer[obj.table_field] = data.fileId;
+                                        delete reqData.customer.$fingerprint[obj.fingerId];
                                     });
                                     fpPromisesArr.push(promise);
                                 })(out[key]);
