@@ -467,7 +467,7 @@ define({
 
                         {
                             "type": "submit",
-                            "title": "SAVE"
+                            "title": "SUBMIT"
                         }
                     ]
                 }
