@@ -10,7 +10,7 @@ irf.pageCollection.factory(irf.page("bi.BIReports"), ["$log", "RolesPages", "BIR
                         report_name: reportName
                     }, true);
                 } else {
-                    result = allReportParametersCach
+                    result = allReportParametersCache
                 }
                 defered.resolve(result);
             } else {

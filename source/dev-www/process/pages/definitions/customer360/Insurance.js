@@ -132,8 +132,6 @@ irf.pageCollection.factory(irf.page("customer360.Insurance"), ["$log", "Insuranc
                             PageHelper.showLoader();
                             Insurance.getById({ id: $stateParams.pageId }).$promise.then(function(resp){
                                     model.insurancePolicyDetailsDTO = resp;
-                                    model.insurancePolicyDetailsDTO.insuranceDocumentsDTO[0]={};
-                                    model.insurancePolicyDetailsDTO.insuranceDocumentsDTO[0].documentCode="Harish";
                                     PageHelper.hideLoader();
                                 });
                         };

@@ -2201,9 +2201,7 @@
           },
           "udf11": {
             "title": "BUSINESS_PHONE",
-            "type": "number",
-            "minimum": 1000000000,
-            "maximum": 9999999999,
+            "type": "string",
             "captureStages": [
               "BasicEnrolment",
               "Stage02",
