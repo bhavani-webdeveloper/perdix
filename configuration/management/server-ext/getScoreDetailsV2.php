@@ -14,7 +14,6 @@ $perdix_db = $settings['db']['database'];
 $guarantor_is_required = true;
 $defaultDb = DB::connection("default");
 
-//function SpecificData($AuthToken, $LoanId, $ScoreName) {
 if (isset($_GET)) {
     header("Access-Control-Allow-Headers: Content-Type, accept, Authorization, X-Requested-With");
     header("Access-Control-Allow-Methods: OPTIONS,GET,POST,PUT");
@@ -36,11 +35,14 @@ if (isset($_GET)) {
     $SessionUserName = "admin";
     $userInfo = $perdixService->accountInfo($authInfo);
     $partnerCode = $userInfo['partnerCode'];
+    $loanVersion = $_GET['loanVersion'];
+    $isScoringOptimizationEnabled = $_GET['isScoringOptimizationEnabled'];
 
     //get all customer details from loan_accounts table
     $CustomerDetails = "SELECT
                 l.account_number AS 'loan_accountNumber',
                 l.current_stage,
+                l.version,
                 MAX(app.urn_no) AS `urn_no`,
                 MAX(coapp.id) AS `coapp_customer_id`,
                 MAX(guarantor.id) AS `guarantor_customer_id`,
@@ -52,7 +54,7 @@ if (isset($_GET)) {
                 l.loan_purpose_2,
                 l.loan_type,
                 e.business_type,
-                IF(old_loan.id IS NULL, 'No', 'Yes') AS `existing_customer`,
+                IF(old_loan.id IS NULL, 'NO', 'YES') AS `existing_customer`,
                 '' AS 'OverallPassValue',
                 '' AS 'OverallWeightedScore',
                 '' AS 'OverallPassStatus',
@@ -81,6 +83,7 @@ if (isset($_GET)) {
     $existing_customer = $AvailCustomerParams['existing_customer'];
     $customer_category = $AvailCustomerParams['customer_category'];
     $currentStage = $AvailCustomerParams['current_stage'];
+    $loanVersion = $AvailCustomerParams['version'];
 
     $scoreCriteriaDetails = "
         SELECT m.ScoreName, m.order, m.partner_or_self, c.CriteriaName, c.CriteriaValue
@@ -88,7 +91,7 @@ if (isset($_GET)) {
             WHERE m.ScoreName = c.ScoreName
             AND m.status = 'ACTIVE'
             AND m.Stage = '$currentStage'
-            AND m.partner_or_self = '$partnerCode'
+            AND LOWER(m.partner_or_self) = LOWER('$partnerCode')
             ORDER by m.Order ASC";
 
     $scoreToCriteriaDetails = $defaultDb->select($scoreCriteriaDetails);
@@ -132,9 +135,24 @@ if (isset($_GET)) {
     "$loan_purpose_1|loan_purpose_2=$loan_purpose_2|business_type=$business_type|existing_customer=$existing_customer|customer_category=$customer_category|";
     
     if( ! $ScoreName ) {
-        $response->setStatusCode(400)->json( ['ScoreDetails' => 'no '.$msg]);
-        return;
+        http_response_code(404);
+        $response->json([ 'error' => 'no '.$msg]);
+        exit();
     } 
+
+    if($isScoringOptimizationEnabled == 1 ){
+        $ScoreCalcCheckQuery = "SELECT ScoreName, ApplicationId, loanVersion, PartnerSelf 
+            FROM sc_calculation
+            WHERE
+            ApplicationId='$CustomerLoanId'
+            AND loanVersion = $loanVersion
+            AND  PartnerSelf = '$partnerCode'
+        ";
+
+        $row = (array) collect($defaultDb->select($ScoreCalcCheckQuery))->first();
+        $response->setStatusCode(200)->json( ['ScoreDetails' => $row]);
+        exit();
+    }
 
     $non_negotiable = 0;
 
@@ -560,17 +578,20 @@ if (isset($_GET)) {
                 OverallPassValue = '$OverallPassValue',
                 OverallWeightedScore = '$consolidateScore',
                 OverallPassStatus = '$OverallPassStatus',
-                updated_by = '$SessionUserName'
+                updated_by = '$SessionUserName',
+                loanVersion = $loanVersion,
+                PartnerSelf = '$partnerCode'
                 WHERE id = $AutoID
                 AND ApplicationId = '$CustomerLoanId'";
     
     $defaultDb->update($FinalScoreCalculation);
     $response->setStatusCode(200)->json([ 'ScoreDetails' => $AvailCustomerParams ]);
-    return;
+    exit();
 
     EndExecution:
-        print_r($error_log);
-        $response->setStatusCode(400)->json([ 'error' => $error_log ]);
+        http_response_code(404);
+        $response->json([ 'error' => $error_log ]);
+        exit();
 }
 ?>
 
