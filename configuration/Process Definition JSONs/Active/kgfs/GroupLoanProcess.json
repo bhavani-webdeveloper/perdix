@@ -111,7 +111,7 @@
       "code": "AgreementUploadPending",
       "name": "Agreement Upload Pending",
       "isAccountOpening": false,
-      "stageType": "CAPTURE",
+      "stageType": "AGREEMENT",
       "allowedRoles": []
    }, {
       "order": 12,
