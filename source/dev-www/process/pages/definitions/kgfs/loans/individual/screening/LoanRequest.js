@@ -3100,7 +3100,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 // }
                 /* 1)validating loan amount requested should be greater then current loan account */
                 if(!_.isNull(model.loanAccount.transactionType) && model.loanAccount.transactionType.toLowerCase() =='renewal'){
-                    if(model.linkedLoanAmount && (model.loanAccount.loanAmountRequested < model.linkedLoanAmount || ( !_.isNull(model.loanAccount.loanAmount) && model.loanAccount.loanAmount < model.linkedLoanAmount))){
+                    if(model.linkedLoanAmount && (model.loanAccount.loanAmountRequested <= model.linkedLoanAmount || ( !_.isNull(model.loanAccount.loanAmount) && model.loanAccount.loanAmount <= model.linkedLoanAmount))){
                         var res = {
                             data: {
                                 error: 'RequestedLoanAmount or recommended loan amount should be greater than or equal current loan amount' +"  "+ model.linkedLoanAmount 
