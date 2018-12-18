@@ -13,8 +13,6 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 	$log.info($stateParams);
 	//$scope.siteCode=$stateParams.pageData;
 	$scope.formHelper = formHelper;
-	//var htmlSection=`<a onClick='blockStatusChange()'>{{model.customer.statusHtml}}</a>`
-	var htSection=`<a>{{model.customer.statusHtml}}</a>`
 
 	var getCustomerProfilePageUrl = function() {
 		if (siteCode == 'sambandh') {
@@ -40,7 +38,7 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 			return "Page/Engine/customer360.BusinessProfile";
 		}
 	}
-	
+
 	var customerDefinition = {
 		"title": "CUSTOMER_360",
 		"items": [
@@ -89,7 +87,7 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 			"Page/Engine/customer360.CustomerHistorySummary",
 			"Page/Engine/customer360.CustomerDeathMarking",
 			"Page/Engine/customer360.loans.CustomerGroupsView",
-			"Page/Engine/customer360.Insurance"
+			"Page/Engine/customer360.ViewInsurance"
 		]
 	};
 	//"Page/CustomerHistory",
@@ -115,7 +113,8 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 			"Page/Engine/customer360.Recapture",
 			"Page/Engine/customer360.CustomerSummaryView",
 			"Page/Engine/customer360.CustomerDeathMarking",
-			"Page/Engine/customer360.loans.CustomerGroupsView"
+			"Page/Engine/customer360.loans.CustomerGroupsView",
+			"Page/Engine/customer360.ViewInsurance"
 
 		]
 	};
@@ -152,11 +151,10 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 		"type": "box",
 		"title": "PORTFOLIO",
 		"colClass": "col-sm-12",
-		"items": [
-			{
+		"readonly": true,
+		"items": [{
 			"type": "section",
 			"htmlClass": "row",
-			"readonly": true,
 			"items": [{
 				"type": "section",
 				"htmlClass": "col-sm-4",
@@ -171,8 +169,7 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 					},
 					"readonly": true,
 					"notitle": true
-				},
-			]
+				}]
 			},{
 				"type": "section",
 				"htmlClass": "col-sm-6",
@@ -195,58 +192,13 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 					"titleExpr": "('ID'|translate) + ' & ' + ('BC_CUST_ID'|translate)"
 				},{
 					"key": "customer.urnNo",
-					"title": "URN_NO",
-					},
-					{
-						"type": "html",
-						"title": "Status",
-						"key":"customer.htSection"
-					}
-					
-				]
-			},
-			{
+					"title": "URN_NO"
+				}]
+			},{
 				"type": "section",
 				"htmlClass": "col-sm-2 hidden-xs",
 				"items": []
-			},
-		]
-		},
-		{
-			"type": "button",
-			"readonly":false,
-			"title": "TOGGLE_STATUS",
-			"onClick": function(model, form, schemaForm, event) {
-				var blockedStatus=model.customer.blocked;
-				var customerId=model.customer.id;
-				var message=blockedStatus ?"Active":"Blocked";
-				//Utils.confirm("Are you sure you want to change the blocked status to " + !blockedStatus + "?")
-				Utils.confirm("Are you sure you want to change the blocked status to " + message + "?")
-				.then(function(){
-					PageHelper.showBlockingLoader("Changing...");
-					Enrollment.modifyStatus(
-						{customerId: customerId, 
-							isBlocked : !blockedStatus}) 
-						.$promise
-						.then(function(response){
-							model.customer.blocked=response.blocked;
-							model.customer.version=response.version;
-							model.customer.statusHtml = response.blocked ? "Blocked":"Active";
-							model.customer.blockStatusChangedBy=response.blockStatusChangedBy;
-							model.customer.blockStatusChangedAt=response.blockStatusChangedAt;
-						}, function(httpResponse){
-							Utils.alert("Unknown error while trying to change blocked status");
-						}
-						)
-						.finally(function(){
-							PageHelper.hideBlockingLoader();
-						})
-					
-				},function(){
-					console.log("error")
-				})
-			   // Utils.downloadFile(Misc.allFormsDownload({recordId:model.loanAccount.id}));
-			}
+			}]
 		}]
 	}];
 
@@ -254,11 +206,10 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 		"type": "box",
 		"title": "PORTFOLIO",
 		"colClass": "col-sm-12",
-		//"readonly": true,
+		"readonly": true,
 		"items": [{
 			"type": "section",
 			"htmlClass": "row",
-			"readonly": true,
 			"items": [/*{
 				"type": "section",
 				"htmlClass": "col-sm-4",
@@ -293,57 +244,13 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 				},{
 					"key": "customer.urnNo",
 					"title": "URN_NO"
-				},
-				{
-					"type": "html",
-					"title": "Status",
-					"key":"customer.htSection"
-				}
-			]
+				}]
 			},{
 				"type": "section",
 				"htmlClass": "col-sm-2 hidden-xs",
 				"items": []
 			}]
-		},
-		{
-			"type": "button",
-			"readonly":false,
-			"title": "TOGGLE_STATUS",
-			"onClick": function(model, form, schemaForm, event) {
-				var blockedStatus=model.customer.blocked;
-				var customerId=model.customer.id;
-				var message=blockedStatus ?"Active":"Blocked";
-				Utils.confirm("Are you sure you want to change the blocked status to " + message + "?")
-				.then(function(){
-					PageHelper.showBlockingLoader("Changing...");
-					Enrollment.modifyStatus(
-						{
-						customerId: customerId, 
-						isBlocked : !blockedStatus}) // need to be changed to isBlocked
-						.$promise
-						.then(function(response){
-							model.customer.blocked=response.blocked;
-							model.customer.version=response.version;
-							model.customer.statusHtml = response.blocked ? "Blocked":"Active";
-							model.customer.blockStatusChangedBy=response.blockStatusChangedBy;
-							model.customer.blockStatusChangedAt=response.blockStatusChangedAt;
-						}, function(httpResponse){
-							Utils.alert("Unknown error while trying to change blocked status");
-						}
-						)
-						.finally(function(){
-							PageHelper.hideBlockingLoader();
-						})
-					
-				},function(){
-					console.log("error")
-				})
-			   // Utils.downloadFile(Misc.allFormsDownload({recordId:model.loanAccount.id}));
-			}
-		}
-		//
-	]
+		}]
 	}];
 
 	var reportBox = {
@@ -434,19 +341,13 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 			PageHelper.showErrors(errorResponse);
 		});
 	});
-	
-	$scope.initialize = function(data) {
 
+	$scope.initialize = function(data) {
 		$log.info(data);
 		$scope.model = {customer: data};
-		
-	$scope.model.customer.statusHtml = $scope.model.customer.blocked ? "Blocked":"Active";
-
 		$scope.introFormName = "introForm";
 		$scope.pageTitle = 'CUSTOMER_360';
 
-		
-		$scope.model.customer.htSection=`<a>{{model.customer.statusHtml}}</a>`
 		if (data.customerType === 'Enterprise') {
 			$scope.introForm = enterprisePortfolioForm;
 			//$scope.pageTitle = 'BUSINESS_360';
@@ -660,10 +561,10 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 			menu.stateParams.pageId = $scope.customerId;
 			return $q.resolve(menu);
 		};
-	};
-	
-	$scope.initializeSF = function(model, form, formCtrl) {
 
+	};
+
+	$scope.initializeSF = function(model, form, formCtrl) {
 	};
 
 	$scope.actions = {};
