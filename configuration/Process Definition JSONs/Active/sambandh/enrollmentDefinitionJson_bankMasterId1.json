@@ -739,6 +739,16 @@
               "Stage02",
               "Completed"
             ]
+          }, 
+           "marketTransactionInvolved": {
+            "title": "market Transaction Involved",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
           },
           "doorNo": {
             "title": "Door Number",
