@@ -93,6 +93,20 @@ irf.pageCollection.factory(irf.page("customer360.Insurance"), ["$log", "Insuranc
                                     onClick:function(model,form){
                                         Utils.downloadFile(Misc.formDownload({formName:"Coi_liberty",recordId:model.insurancePolicyDetailsDTO.id}));
                                     }
+                                },
+                                "tempDownloadAll":{
+                                    "type": "button",
+                                    "title": "DOWNLOAD_FORM",
+                                    onClick: function(model,form){
+                                        Utils.downloadFile(Misc.formDownloadStatic({siteCode:"KGFS"}))
+                                    }
+                                },
+                                "tempDownloadAll2":{
+                                    "type": "button",
+                                    "title": "DOWNLOAD_FORM",
+                                    onClick: function(model,form){
+                                        Utils.downloadFile(Misc.formDownloadStatic())
+                                    }
                                 }
                             }
                         }
@@ -109,6 +123,8 @@ irf.pageCollection.factory(irf.page("customer360.Insurance"), ["$log", "Insuranc
                 return [
                     "insuranceDocuments",
                     "insuranceDocuments.downloadAll",
+                    "insuranceDocuments.tempDownloadAll",
+                    "insuranceDocuments.tempDownloadAll2",
                     "insuranceDocuments.listOfDocuments",
                     "insuranceDocuments.listOfDocuments.section",
                     "insuranceDocuments.listOfDocuments.section.selectionList",

@@ -186,7 +186,11 @@ irf.models.factory('Enrollment',function($resource,$httpParamSerializer,BASE_URL
         lenderSearch: searchResource({
             method: 'GET',
             url: endpoint + '/findInternal/'
-        })
+        }),
+        modifyBlockedStatus: {
+            method:'GET',
+            url: endpoint + '/modifyBlockedStatus'
+        }
     });
 });
 

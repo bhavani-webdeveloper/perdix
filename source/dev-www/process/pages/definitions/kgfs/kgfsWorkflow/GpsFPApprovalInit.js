@@ -450,7 +450,6 @@ define({
                         },
                     }, {
                         "key": "customer.biometricEnrollment",
-                        readonly: true,
                         title: "BIOMETRIC_AUTHENTICATION",
                         type: "select",
                         titleMap: {
@@ -467,7 +466,7 @@ define({
 
                         {
                             "type": "submit",
-                            "title": "SAVE"
+                            "title": "SUBMIT"
                         }
                     ]
                 }
@@ -646,6 +645,8 @@ define({
                                     promise.then(function (data) {
                                         model.customer[obj.table_field] = data.fileId;
                                         delete model.customer.$fingerprint[obj.fingerId];
+                                        reqData.customer[obj.table_field] = data.fileId;
+                                        delete reqData.customer.$fingerprint[obj.fingerId];
                                     });
                                     fpPromisesArr.push(promise);
                                 })(out[key]);

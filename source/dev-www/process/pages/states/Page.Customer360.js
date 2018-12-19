@@ -16,7 +16,7 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 
 	var getCustomerProfilePageUrl = function() {
 		if (siteCode == 'sambandh') {
-			return "Page/Engine/customer.IndividualEnrollmentStage2";
+			return "Page/Engine/sambandh.customer.IndividualEnrollment3";
 		}  else if (siteCode == 'saija') {
 			return "Page/Engine/customer.IndividualEnrollmentStage2";
 		} else if(siteCode == 'witfin') {
@@ -193,6 +193,10 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 				},{
 					"key": "customer.urnNo",
 					"title": "URN_NO"
+				}, {
+					"key": "customerBlockedStatusHtml",
+					"type": "html",
+					"title": "STATUS"
 				}]
 			},{
 				"type": "section",
@@ -244,6 +248,10 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 				},{
 					"key": "customer.urnNo",
 					"title": "URN_NO"
+				}, {
+					"key": "customerBlockedStatusHtml",
+					"type": "html",
+					"title": "STATUS"
 				}]
 			},{
 				"type": "section",
@@ -329,7 +337,13 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 			PagesDefinition.getUserAllowedDefinition(fullDefinition).then(function(resp) {
 				$scope.dashboardDefinition = resp;
 				$scope.customerSchema = customerSchemaResponse;
-				$scope.initialize(response);
+				PagesDefinition.getPageConfig("Page/Customer360").then(function(config) {
+					if (config) {
+						$scope.pageConfig = config;
+					}
+				}).finally(function() {
+					$scope.initialize(response);
+				});
 			});
 		}, function(errorResponse) {
 			PageHelper.showErrors(errorResponse);
@@ -338,7 +352,11 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 
 	$scope.initialize = function(data) {
 		$log.info(data);
-		$scope.model = {customer: data};
+		$scope.model = {
+			customer: data,
+			actions: $scope.actions,
+			customerBlockedStatusHtml: '{{(model.customer.blocked?"BLOCKED":"ACTIVE")|translate}} (<a href="" ng-click="model.actions.modifyBlockedStatus(model)">{{(model.customer.blocked?"UNBLOCK":"BLOCK")|translate}}</a>)'
+		};
 		$scope.introFormName = "introForm";
 		$scope.pageTitle = 'CUSTOMER_360';
 
@@ -388,9 +406,18 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 			};
 		}
 
+		if ($scope.dashboardDefinition.$menuMap['Page/Engine/sambandh.customer.IndividualEnrollment3']) {
+			$scope.dashboardDefinition.$menuMap['Page/Engine/sambandh.customer.IndividualEnrollment3'].onClick = function(event, menu) {
+				menu.stateParams.pageId = $scope.customerId;
+				return $q.resolve(menu);
+			};
+		}
+
 		if ($scope.dashboardDefinition.$menuMap['Page/Engine/customer360.EnrollmentProfile'])
 		$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.EnrollmentProfile'].onClick = function(event, menu) {
 			menu.stateParams.pageId = $scope.customerId;
+			menu.stateParams.pageData = menu.stateParams.pageData || {};
+			menu.stateParams.pageData.enabletrue = !!$scope.pageConfig.readonly;
 			entityManager.setModel(menu.stateParams.pageName, $scope.model);
 			return $q.resolve(menu);
 		};
@@ -552,6 +579,22 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 	$scope.initializeSF = function(model, form, formCtrl) {
 	};
 
-	$scope.actions = {};
+	$scope.actions = {
+		modifyBlockedStatus: function(model) {
+			var message = model.customer.blocked? "Do you want to activate the customer?": "Do you want to block the customer?";
+			Utils.confirm(message).then(function() {
+				PageHelper.showBlockingLoader("Changing...");
+				Enrollment.modifyBlockedStatus({
+					customerId: model.customer.id,
+					isBlocked : !model.customer.blocked
+				}).$promise.then(function(response){
+					model.customer.blocked = response.blocked;
+					model.customer.version = response.version;
+					model.customer.blockStatusChangedBy = response.blockStatusChangedBy;
+					model.customer.blockStatusChangedAt = response.blockStatusChangedAt;
+				}, PageHelper.showErrors).finally(PageHelper.hideBlockingLoader);
+			});
+		}
+	};
 
 }]);

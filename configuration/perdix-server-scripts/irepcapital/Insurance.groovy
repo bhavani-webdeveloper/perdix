@@ -52,7 +52,7 @@ import java.time.*;
             customerTenureInYear = calculateFactor + 1;
     
         int cutOffInstallment = 0;
-        if(frequency.equals("daily")){
+        if(frequency.equals("Daily")){
             cutOffInstallment=applicationProperties.getCutOffInstallment().getDailyCutOffInstallmentNumber();
         }else if(frequency.equals("Weekly") || frequency.equals("EWI") ||
                 frequency.equals("Weeks") || frequency.equals("Week") || frequency.equals("W")){
@@ -79,7 +79,7 @@ import java.time.*;
             gender = customerData.getGender();
             birthdate = customer.getDateOfBirth();
             ageOfCustomer = Period.between(birthdate, LocalDate.now()).getYears();
-            portfolioInsuranceMaster = portfolioInsuranceMasterRepository.findByAgeAndGenderAndTenureInYearAndSumAssuredAndInsuranceTypeAndInsuranceRateCode(ageOfCustomer, gender, customerTenureInYear, loanAmount, insuranceType, insuranceRateCode);
+            portfolioInsuranceMaster = portfolioInsuranceMasterRepository.findByAgeAndGenderAndTenureInYearAndSumAssuredAndInsuranceTypeAndInsuranceRateCode(ageOfCustomer, gender,new BigDecimal(customerTenureInYear), loanAmount, insuranceType, insuranceRateCode);
             if(portfolioInsuranceMaster != null){
                 customerPortFolioInsurancePremium = portfolioInsuranceMaster.getTotalPremium();
                 if(portfolioInsuranceMaster.getServiceTax() != null)
@@ -99,7 +99,7 @@ import java.time.*;
                 spouseGender = (customer.getGender().equals("Male")) ? "FEMALE" : "MALE";
                 dateOfBirth = customer.getSpouseDateOfBirth();
                 ageOfSpouseCustomer = Period.between(dateOfBirth, LocalDate.now()).getYears();
-                sportfolioInsuranceMaster = portfolioInsuranceMasterRepository.findByAgeAndGenderAndTenureInYearAndSumAssuredAndInsuranceTypeAndInsuranceRateCode(ageOfSpouseCustomer, spouseGender, customerTenureInYear, loanAmount, insuranceType, insuranceRateCode);
+                sportfolioInsuranceMaster = portfolioInsuranceMasterRepository.findByAgeAndGenderAndTenureInYearAndSumAssuredAndInsuranceTypeAndInsuranceRateCode(ageOfSpouseCustomer, spouseGender,new BigDecimal(customerTenureInYear), loanAmount, insuranceType, insuranceRateCode);
                 if(sportfolioInsuranceMaster != null){
                     spousePortFolioInsurancePremium = sportfolioInsuranceMaster.getTotalPremium();
                     if(portfolioInsuranceMaster.getServiceTax() != null)

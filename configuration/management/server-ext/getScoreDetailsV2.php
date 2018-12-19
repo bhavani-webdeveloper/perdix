@@ -35,7 +35,6 @@ if (isset($_GET)) {
     $SessionUserName = "admin";
     $userInfo = $perdixService->accountInfo($authInfo);
     $partnerCode = $userInfo['partnerCode'];
-    $loanVersion = $_GET['loanVersion'];
     $isScoringOptimizationEnabled = $_GET['isScoringOptimizationEnabled'];
 
     //get all customer details from loan_accounts table
@@ -140,7 +139,7 @@ if (isset($_GET)) {
         exit();
     } 
 
-    if($isScoringOptimizationEnabled == 1 ){
+    if($isScoringOptimizationEnabled == 'true' ){
         $ScoreCalcCheckQuery = "SELECT ScoreName, ApplicationId, loanVersion, PartnerSelf 
             FROM sc_calculation
             WHERE
@@ -487,7 +486,7 @@ if (isset($_GET)) {
                             $calculateWeightage = ((($DefinedScoreValues['Value'] / $DefinedScoreValues['MaxParameterScore']) * $DefinedScoreValues['ParameterWeightage']) / 100);
                         }
                         $calculateMaxWeightage = $DefinedScoreValues['ParameterWeightage'] / 100;
-                        if ($DefinedScoreValues['non_negotiable'] == '1') {
+                        if ($DefinedScoreValues['non_negotiable'] == 'YES') {
                             $non_negotiable++;
                         }
                         

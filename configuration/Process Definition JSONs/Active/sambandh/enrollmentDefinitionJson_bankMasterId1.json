@@ -739,6 +739,17 @@
               "Stage02",
               "Completed"
             ]
+          }, 
+           "marketTransactionInvolved": {
+            "title": "market Transaction Involved",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "BasicEnrolment",
+              "Stage02",
+              "Completed"
+            ]
           },
           "doorNo": {
             "title": "Door Number",
@@ -3081,17 +3092,7 @@
               "Completed"
             ]
           },
-          "involvedInMarketTransactions":{  
-            "title":"involvedInMarketTransactions",
-            "type":"string",
-            "minLength":1,
-            "maxLength":100,
-            "captureStages":[  
-               "BasicEnrolment",
-               "Stage02",
-               "Completed"
-            ]
-         },
+       
           "businessDescription": {
             "title": "businessDescription",
             "type": "string",

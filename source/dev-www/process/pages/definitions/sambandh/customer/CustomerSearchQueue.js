@@ -708,7 +708,7 @@ function($log,PageHelper,CreditBureau,formHelper,filterFilter, Enrollment,Querie
                             	if (response.status == 'PROCESSED') {
                                     irfNavigator.go({
                                         state: "Page.Engine",
-                                        pageName: "customer.IndividualEnrollmentStage2",
+                                        pageName: "sambandh.customer.IndividualEnrollment3",
                                         pageId: item.id,
                                         pageData: {
                                             currentStage: item.currentStage
