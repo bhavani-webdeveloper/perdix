@@ -1228,12 +1228,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                                     "required": "true"
                                                 },
                                                 "latitude": {
-                                                    "key": "customer.udf.userDefinedFieldValues.udf1",
+                                                    "key": "customer.udf.userDefinedFieldValues.udf37",
                                                     "title": "BUSINESS_LOCATION",
                                                     "type": "geotag",
                                                     fieldType: "string",
-                                                    "latitude": "customer.udf.userDefinedFieldValues.udf1",
-                                                    "longitude": "customer.udf.userDefinedFieldValues.udf2",
+                                                    "latitude": "customer.udf.userDefinedFieldValues.udf37",
+                                                    "longitude": "customer.udf.userDefinedFieldValues.udf38",
                                                     "orderNo": 120
                                                 },
                                             }
