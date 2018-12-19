@@ -9,9 +9,9 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
         initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
 
             model.colors =[
-                {colorEnglish : "RED", colorHexadecimal : "#FF0000"},
-                {colorEnglish : "YELLOW", colorHexadecimal : "#FFFF00"},
-                {colorEnglish : "GREEN", colorHexadecimal : "#008000"}];
+                {colorEnglish : "red", colorHexadecimal : "#FF0000"},
+                {colorEnglish : "yellow", colorHexadecimal : "#FFFF00"},
+                {colorEnglish : "green", colorHexadecimal : "#008000"}];
 
             model.getByEnumCode = function (parameterName) {
                 if(model.allParameterMaster){
@@ -249,11 +249,6 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
                                             },
                                         },
                                         {
-                                            prop: "colorHexadecimal",
-                                            type: "text",
-                                            name: "COLOR_HAXADECIMAL"
-                                        },
-                                        {
                                             prop: "nonNegotiable",
                                             type: "select",
                                             name: "NON_NEGOTIABLE",
@@ -267,7 +262,7 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
                                         {
                                             prop: "value",
                                             type: "text",
-                                            name: "VALUE"
+                                            name: "SCORE_VALUE"
                                         },
                                         {
                                             prop: "status",
