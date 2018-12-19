@@ -1,12 +1,23 @@
 irf.pageCollection.factory(irf.page('customer360.loans.View'),
-    ["$log", "formHelper", "LoanAccount", "$state", "SessionStore", "LoanAccount", "$stateParams",
-        function($log, formHelper, LoanAccount, $state, SessionStore, LoanAccount, $stateParams){
+    ["PagesDefinition", "$log", "formHelper", "LoanAccount", "$state", "SessionStore", "LoanAccount", "$stateParams","PageHelper",
+        function(PagesDefinition, $log, formHelper, LoanAccount, $state, SessionStore, LoanAccount, $stateParams, PageHelper){
             return {
                 "type": "search-list",
                 "title": "VIEW_LOANS",
                 "subTitle": "VIEW_LOANS_SUB",
                 initialize: function (model, form, formCtrl) {
                     $log.info("ViewLoans initialiized");
+                    
+                    model.pageConfig = {};
+                    model.pageConfig.IsUnMarkNPA = true;
+                    PagesDefinition.getRolePageConfig("Page/Engine/customer360.loans.View")
+                        .then(function(data){
+                            if(!_.isNull(data)){
+                                model.pageConfig = data;
+                            }
+                        },function(error){
+                            PageHelper.showErrors(error)
+                        });
                 },
                 offline: false,
                 definition: {
@@ -123,7 +134,7 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                                 },
                                  {
                                     name: "Unmark NPA",
-                                    desc: "",
+                                    // desc: "",
                                     fn: function(item, index){
                                         $state.go('Page.Engine', {
                                             pageName: 'loans.UnmarkNPA',
@@ -131,7 +142,12 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                                         })
                                     },
                                     isApplicable: function(item, index){
-                                        return true;
+                                        if(model.pageConfig.IsUnMarkNPA) {
+                                            return true
+                                        }else{
+                                            return false
+                                        };
+                                    
                                     }
                                 }, {
                                     name: "FREEZE_ACCOUNT",
