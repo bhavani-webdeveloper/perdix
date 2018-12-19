@@ -105,7 +105,7 @@ irf.pageCollection.factory(irf.page("customer360.Insurance"), ["$log", "Insuranc
                                     "type": "button",
                                     "title": "DOWNLOAD_FORM",
                                     onClick: function(model,form){
-                                        Utils.downloadFile(Misc.formDownloadStatic())
+                                        Utils.downloadFile(Misc.formDownloadStatic({siteCode: "hsf"}))
                                     }
                                 }
                             }

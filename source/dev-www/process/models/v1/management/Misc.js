@@ -21,7 +21,7 @@ irf.models.factory("Misc",["$resource", "$httpParamSerializer", "BASE_URL","sear
                 return "http://kgfsuat2.perdix.co.in:8080/perdix7/ims/coiPolicyDownloadReport.htm?idStr=349873&urnNoStr=1711286984417001"
             }
             else{
-                return "http://sit.perdix.co.in:8080/sit_kgfs_perdix-client/ims/coiPolicyDownloadReport.htm?idStr=349873&urnNoStr=1711286984417001"
+                return "http://sit.perdix.co.in:8080/sit_kgfs_perdix7/ims/coiPolicyDownloadReport.htm?idStr=349873&urnNoStr=1711286984417001"
             }
         }
         return res;
