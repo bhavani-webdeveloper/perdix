@@ -1,12 +1,12 @@
 irf.pageCollection.factory(irf.page('customer360.loans.View'),
-    ["$log", "formHelper", "LoanAccount", "$state", "SessionStore", "LoanAccount", "$stateParams",
-        function($log, formHelper, LoanAccount, $state, SessionStore, LoanAccount, $stateParams){
+    ["PagesDefinition", "$log", "formHelper", "LoanAccount", "$state", "SessionStore", "LoanAccount", "$stateParams","PageHelper",
+        function(PagesDefinition, $log, formHelper, LoanAccount, $state, SessionStore, LoanAccount, $stateParams, PageHelper){
             return {
                 "type": "search-list",
                 "title": "VIEW_LOANS",
                 "subTitle": "VIEW_LOANS_SUB",
                 initialize: function (model, form, formCtrl) {
-                    $log.info("ViewLoans initialiized");
+                    $log.info("ViewLoans initialiized");             
                 },
                 offline: false,
                 definition: {
@@ -150,7 +150,7 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                                         return true;
                                     }
                                 },
-                                 {
+                                 { 
                                     name: "Unmark NPA",
                                     desc: "",
                                     fn: function(item, index){
@@ -160,9 +160,24 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                                         })
                                     },
                                     isApplicable: function(item, index){
-                                        return true;
+                                        var model={};
+                                        model.pageConfig = {};
+                                        model.pageConfig.IsUnMarkNPA = true; // default value for IsunmarkNPA
+                                        PagesDefinition.getRolePageConfig("Page/Engine/customer360.loans.View")
+                                            .then(function(data){
+                                                if(!_.isNull(data)){
+                                                    model.pageConfig = data; //set from addl_param
+                                                }
+                                            },function(error){
+                                                PageHelper.showErrors(error)
+                                            });
+                                        if (model.pageConfig.IsUnMarkNPA) {
+                                            return true
+                                        } else {
+                                            return false
+                                        };
                                     }
-                                }, {
+                                }, { 
                                     name: "FREEZE_ACCOUNT",
                                     fn: function(item, index){
                                         $state.go('Page.Engine', {
