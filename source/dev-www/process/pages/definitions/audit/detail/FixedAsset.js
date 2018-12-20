@@ -2,7 +2,11 @@ irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"),
 ["$log", "PageHelper", "irfNavigator", "$stateParams", "Audit",
     function($log, PageHelper, irfNavigator, $stateParams, Audit) {
         var validateAsset = function(a) {
-            if (!(a.quantity_on_record >= 0 && a.quantity_on_hand >= 0 && a.lost_quantity >=0 && a.transferred_quantity >= 0 && a.excess_quantity)) {
+            if (!((a.quantity_on_record > 0 || a.quantity_on_record === 0)
+                && (a.quantity_on_hand > 0 || a.quantity_on_hand === 0)
+                && (a.lost_quantity > 0 || a.lost_quantity === 0)
+                && (a.transferred_quantity > 0 || a.transferred_quantity === 0)
+                && (a.excess_quantity > 0 || a.excess_quantity === 0))) {
                 throw "Quantities cannot be empty or nagative";
             }
             if (a.quantity_on_record < a.quantity_on_hand) {
@@ -14,7 +18,7 @@ irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"),
                     throw "Excess quantity should not be greater than available quantity";
                 }
             } else if (a.quantity_on_record > a.quantity_on_hand) {
-                if (a.quantity_on_record == a.quantity_on_hand + a.lost_quantity + a.transferred_quantity) {
+                if (a.quantity_on_record != a.quantity_on_hand + a.lost_quantity + a.transferred_quantity) {
                     throw "Available, lost & transferred should add up to quantity on record";
                 } else if (a.excess_quantity != 0) {
                     throw "Excess quantity should be zero";

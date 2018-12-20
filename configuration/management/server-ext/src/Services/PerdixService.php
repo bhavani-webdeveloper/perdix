@@ -71,4 +71,19 @@ class PerdixService
 
         return $parsedArr;
     }
+
+    public function clearAllCache() {
+        $this->login();
+        $settings = Settings::getInstance()->getSettings();
+        $url = $settings['perdix']['v8_url'] . "/api/cache/clearAllCache";
+        $client = new GuzzleClient();
+        $reqResAch = $client->request('GET', $url , [
+            'headers' => [
+                'Authorization' => 'Bearer ' . $settings['perdix']['token']
+            ],
+            'connect_timeout' => 3600,
+            'timeout' => 3600
+        ]);
+        return $reqResAch;
+    }
 }
