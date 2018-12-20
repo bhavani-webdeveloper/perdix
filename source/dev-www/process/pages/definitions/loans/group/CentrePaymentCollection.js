@@ -13,7 +13,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 			// 3 - line,
 			// 4 - keyvalue
 
-			// this.FONT_LARGE_BOLD =2,
+		// this.FONT_LARGE_BOLD =2,
 		// this.FONT_LARGE_NORMAL =1,
 		// this.FONT_SMALL_NORMAL =3,
 		// this.FONT_SMALL_BOLD =4,
@@ -45,7 +45,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 				}
 			})
 		}
-		console.log(data);
+		return data;
 	}
 	return {
 		"id": "CentrePaymentCollection",
@@ -63,7 +63,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 				[2,"-"],
 				[1,4,"Harish"+string]
 			];
-			// generateThermelPrint(test);
+				// generateThermelPrint(test);
 			model.onlineResponse = false;
 			if (!model.$$STORAGE_KEY$$) {
 				model.showDenomination = false;
@@ -862,8 +862,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 
 				var print={};
 				print.paperReceipt= LoanProcess.getWebHeader(opts);
-				print.thermalReceipt= LoanProcess.getThermalHeader(opts);
-
+				var finalArray = [];
 				for (i in requestObj.collectionDemands){
 					var cd=requestObj.collectionDemands[i];
 					var repaymentInfo={};
@@ -875,16 +874,60 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 					repaymentInfo.amountPaid=cd.amountPaid;
 					repaymentInfo.notcollected=cd.notcollected;
 					print.paperReceipt= print.paperReceipt + LoanProcess.getWebReceipt(repaymentInfo);
-					print.thermalReceipt= LoanProcess.getPrintReceipt(repaymentInfo,print.thermalReceipt);
 				}
-
+				for (i in requestObj.collectionDemands){
+					var opts = [];
+					// Printer Configuration //
+					// Centre values 0 , 1 [False,True]
+					// Font values 1,2,3,4 [largeNoraml,largeBold,smallNormal,smallBold]
+					// convention//
+					// Array length 2 [font,string]
+					// Array length 3 [center,font,string]
+					// Array length 4 [center,font,key,value]
+					var opts = [
+						[1,4,"RECEIPT"],
+						[1,4,SessionStore.getBankName()],
+						[1,4,requestObj.collectionDemands[0].branchName],
+						[1,3,"Date:"+moment().local().format("DD-MM-YYYY HH:MM:SS")],
+						[1,2,"Loan Repayment"],
+						[3," "],
+						[0,3,"Branch Code",requestObj.collectionDemandSummary.customerBranchId],
+						[0,3,"Customer Id",requestObj.collectionDemands[i].customerId],
+						[0,3,"Customer Name",requestObj.collectionDemands[i].customerName],
+						// [0,3,"Spouse Name",requestObj.collectionDemands[i].spouseName],
+						[0,3,"Loan A/C Number",requestObj.collectionDemands[i].accountNumber],
+						[0,3,"Transaction Type","Loan Repayment"],
+						// [0,3,"Demand Paid",requestObj.collectionDemands[i].installmentAmount],
+						[0,3,"Demand Paid",requestObj.collectionDemands[i].installmentAmount],
+						[0,3,"Over Due Amount",requestObj.collectionDemands[i].overdueAmount],
+						[0,3,"Amount Paid",requestObj.collectionDemands[i].amountPaid],
+						[3," "],
+						[3,"-"],
+						[1,3,"IFMR Rural Channels and Services Pvt. Ltd."],
+						[1,3,"CIN:U74990TN2011PTC081729"],
+						[1,3,"Address:IITM Research Park, Phase 1, 10th Floor"],
+						[1,3,"Kanagam Village, Taramani"],
+						[1,3,"Chennai - 600113, Phone: 91 44 66687000"],
+						[1,3,"Website:http://ruralchannels.ifmr.co.in/"],
+						[1,3,"HelpLine:18001029370"],
+						[3," "],
+						[1,3,"Signature not required as this is an"],
+						[1,3,"electronically generated receipt."],
+						[3," "],
+						[3," "],
+					]
+					finalArray = finalArray.concat(opts);
+				}
+				
 				print.paperReceipt= print.paperReceipt + LoanProcess.getWebFooter(opts);
-				print.thermalReceipt= LoanProcess.getThermalFooter(opts,print.thermalReceipt);
+				print.thermalReceipt = {};
+					print.thermalReceipt.getLines = function(){
+						return generateThermelPrint(finalArray);
+					}
 
 				$log.info(print.paperReceipt);
 				$log.info(print.thermalReceipt);
 
-				//LoanProcess.PrintReceipt(print.thermalReceipt,print.paperReceipt);
 
 				Utils.confirm("Please Save the data offline,Page will redirected to Print Preview")
                         .then(function(){
@@ -921,8 +964,6 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 	
 					var print={};
 					print.paperReceipt= LoanProcess.getWebHeader(opts);
-					print.thermalReceipt= LoanProcess.getThermalHeader(opts);
-	
 					for (i in requestObj.collectionDemands){
 						var cd=requestObj.collectionDemands[i];
 						var repaymentInfo={};
@@ -934,16 +975,58 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 						repaymentInfo.amountPaid=cd.amountPaid;
 						repaymentInfo.notcollected=cd.notcollected;
 						print.paperReceipt= print.paperReceipt + LoanProcess.getWebReceipt(repaymentInfo);
-						print.thermalReceipt= LoanProcess.getPrintReceipt(repaymentInfo,print.thermalReceipt);
 					}
-	
+					var finalArray = [];
+					for (i in requestObj.collectionDemands){
+						// Printer Configuration //
+							// Centre values 0 , 1 [False,True]
+							// Font values 1,2,3,4 [largeNoraml,largeBold,smallNormal,smallBold]
+						// convention//
+							// Array length 2 [font,string]
+							// Array length 3 [center,font,string]
+							// Array length 4 [center,font,key,value]		
+						var opts = [
+						[1,4,"RECEIPT"],
+						[1,4,SessionStore.getBankName()],
+						[1,4,requestObj.collectionDemands[0].branchName],
+						[1,3,"Date:"+moment().local().format("DD-MM-YYYY HH:MM:SS")],
+						[1,2,"Loan Repayment"],
+						[3," "],
+						[0,3,"Branch Code",requestObj.collectionDemandSummary.customerBranchId],
+						[0,3,"Customer Id",requestObj.collectionDemands[i].customerId],
+						[0,3,"Customer Name",requestObj.collectionDemands[i].customerName],
+						// [0,3,"Spouse Name",requestObj.collectionDemands[i].spouseName],
+						[0,3,"Loan A/C Number",requestObj.collectionDemands[i].accountNumber],
+						[0,3,"Transaction Type","Loan Repayment"],
+						// [0,3,"Demand Paid",requestObj.collectionDemands[i].installmentAmount],
+						[0,3,"Demand Paid",requestObj.collectionDemands[i].installmentAmount],
+						[0,3,"Over Due Amount",requestObj.collectionDemands[i].overdueAmount],
+						[0,3,"Amount Paid",requestObj.collectionDemands[i].amountPaid],
+						[3," "],
+						[3,"-"],
+						[1,3,"IFMR Rural Channels and Services Pvt. Ltd."],
+						[1,3,"CIN:U74990TN2011PTC081729"],
+						[1,3,"Address:IITM Research Park, Phase 1, 10th Floor"],
+						[1,3,"Kanagam Village, Taramani"],
+						[1,3,"Chennai - 600113, Phone: 91 44 66687000"],
+						[1,3,"Website:http://ruralchannels.ifmr.co.in/"],
+						[1,3,"HelpLine:18001029370"],
+						[3," "],
+						[1,3,"Signature not required as this is an"],
+						[1,3,"electronically generated receipt."],
+						[3," "],
+						[3," "],
+						]
+						finalArray = finalArray.concat(opts);
+					}
 					print.paperReceipt= print.paperReceipt + LoanProcess.getWebFooter(opts);
-					print.thermalReceipt= LoanProcess.getThermalFooter(opts,print.thermalReceipt);
 	
 					$log.info(print.paperReceipt);
-					$log.info(print.thermalReceipt);
+					print.thermalReceipt = {};
+					print.thermalReceipt.getLines = function(){
+						return generateThermelPrint(finalArray);
+					}
 	
-					//LoanProcess.PrintReceipt(print.thermalReceipt,print.paperReceipt);
 	
 					Utils.confirm("Please Save the data offline,Page will redirected to Print Preview")
 							.then(function(){

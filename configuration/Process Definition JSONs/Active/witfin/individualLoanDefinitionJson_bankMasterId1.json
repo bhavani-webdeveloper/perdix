@@ -788,6 +788,21 @@
                     "LoanInitiation"
                  ]
               },
+              "parentLoanAccount": {
+                    "title": "parent Account Number",
+                    "type": "String",
+                    "minLength": 1,
+                    "maxLength": 100,
+                    "captureStages": [
+                        "Screening",
+                        "VehicleValuation",
+                        "FieldInvestigation1",
+                        "FieldInvestigation2",
+                        "FieldInvestigation3",
+                        "TeleVerification",
+                        "LoanInitiation"
+                    ]
+              },
               "disbursedAmountInPaisa":{
                  "title":"Disbursed Amount In Paisa",
                  "type":"number",

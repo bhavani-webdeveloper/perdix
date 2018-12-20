@@ -374,11 +374,11 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
                             ScoresMaintenance.scoreCreate(model).$promise.then(function (resp) {
                                 Utils.alert("Score Created Successfully");
                                 irfNavigator.goBack();
-                                deferred.resolve(resp);
                             }, function (errResp) {
-                                PageHelper.showErrors({data:{
-                                    error:"Please work"
-                                }});
+                                errors = tempErrorFix(errResp);
+                                var error = {}
+                                error.data = errors;
+                                PageHelper.showErrors(error);
                             }).finally(function () {
                                 PageHelper.hideLoader();
                             });
@@ -388,8 +388,9 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
                                 irfNavigator.goBack();
                             }, function (errResp) {
                                 errors = tempErrorFix(errResp);
-                                errors.errors = ["sajfjf","sakffaf","affffa"];
-                                PageHelper.showErrors(errors|errResp.data.body);
+                                var error = {};
+                                error.data = errors;
+                                PageHelper.showErrors(error);
                             }).finally(function () {
                                 PageHelper.hideLoader();
                             });

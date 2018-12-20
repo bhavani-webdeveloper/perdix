@@ -111,8 +111,8 @@ define({
 
         var fillNames = function(model) {
             var deferred = $q.defer();
-            var promiseArr = [];
-            promiseArr.push(deferred);
+            // var promiseArr = [];
+            // promiseArr.push(deferred);
             angular.forEach(model.group.jlgGroupMembers, function(member, key) {
                 if (model.siteCode == 'sambandh') {
                     promiseArr.push(activateLoans(member));
@@ -149,7 +149,7 @@ define({
                     deferred.reject(res);
                 });
             });
-            return promiseArr;
+            return deferred.promise;
         };
 
         var saveData = function(reqData) {
@@ -224,7 +224,7 @@ define({
                         model.group.groupRemarks = null;
                         fixData(model);
                         if (model.group.jlgGroupMembers.length > 0) {
-                            $q.all(fillNames(model)).then(function(m) {
+                            fillNames(model).then(function(m) {
                                 model = m;
                                 Queries.getGroupLoanRemarksHistoryById(model.group.id).then(function(resp){
                                     for (i = 0; i < resp.length; i++) {
@@ -235,6 +235,7 @@ define({
                                     model.group.remarksHistory = resp;
                                 }).finally(function(){
                                     PageHelper.hideLoader();
+                                    irfProgressMessage.pop("group-init", "Loading Done", 2000);
                                 });
                             }, function(m) {
                                 PageHelper.showErrors(m);

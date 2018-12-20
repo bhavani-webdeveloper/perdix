@@ -139,20 +139,6 @@ if (isset($_GET)) {
         exit();
     } 
 
-    if($isScoringOptimizationEnabled == 'true' ){
-        $ScoreCalcCheckQuery = "SELECT ScoreName, ApplicationId, loanVersion, PartnerSelf 
-            FROM sc_calculation
-            WHERE
-            ApplicationId='$CustomerLoanId'
-            AND loanVersion = $loanVersion
-            AND  PartnerSelf = '$partnerCode'
-        ";
-
-        $row = (array) collect($defaultDb->select($ScoreCalcCheckQuery))->first();
-        $response->setStatusCode(200)->json( ['ScoreDetails' => $row]);
-        exit();
-    }
-
     $non_negotiable = 0;
 
     // Non-negotiable proxy indicator check starts
@@ -486,7 +472,7 @@ if (isset($_GET)) {
                             $calculateWeightage = ((($DefinedScoreValues['Value'] / $DefinedScoreValues['MaxParameterScore']) * $DefinedScoreValues['ParameterWeightage']) / 100);
                         }
                         $calculateMaxWeightage = $DefinedScoreValues['ParameterWeightage'] / 100;
-                        if ($DefinedScoreValues['non_negotiable'] == 'YES') {
+                        if ($DefinedScoreValues['non_negotiable'] == '1') {
                             $non_negotiable++;
                         }
                         
@@ -544,7 +530,22 @@ if (isset($_GET)) {
     $AvailCustomerParams['OverallPassStatus'] = $OverallPassStatus;
     $AvailCustomerParams['Parameters'] = $ConsolidatedArray;
 
-    $FinalScoreResponse = '{"ScoreDetails": [' . json_encode($AvailCustomerParams) . ']}';
+    if($isScoringOptimizationEnabled == 'true' ){
+        $ScoreCalcCheckQuery = "SELECT ScoreName, ApplicationId, loanVersion, PartnerSelf 
+            FROM sc_calculation
+            WHERE
+            ApplicationId='$CustomerLoanId'
+            AND loanVersion = $loanVersion
+            AND  PartnerSelf = '$partnerCode'
+        ";
+
+        $row = (array) collect($defaultDb->select($ScoreCalcCheckQuery))->first();
+
+        if(sizeof($row) > 0 ){
+            $response->setStatusCode(200)->json([ 'ScoreDetails' => $AvailCustomerParams ]);
+            exit();
+        }
+    }
 
     $defaultDb->insert(substr($InsertValues, 0, -1));
     // sub score calculation
@@ -579,7 +580,8 @@ if (isset($_GET)) {
                 OverallPassStatus = '$OverallPassStatus',
                 updated_by = '$SessionUserName',
                 loanVersion = $loanVersion,
-                PartnerSelf = '$partnerCode'
+                PartnerSelf = '$partnerCode',
+                apiVersion = '2'
                 WHERE id = $AutoID
                 AND ApplicationId = '$CustomerLoanId'";
     

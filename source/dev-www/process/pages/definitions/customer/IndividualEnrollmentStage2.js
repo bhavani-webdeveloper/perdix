@@ -392,8 +392,6 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                         "readonly": customReadonly
                     },
                     "CustomerInformation.download":{},
-                  
-                    //
                     "ContactInformation": {
                         "readonly": customReadonly
                     },
@@ -591,7 +589,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                                     "value": "Own"
                                 }, {
                                     "name": "Other Family Members",
-                                    "value": "Others"
+                                    "value": "Other Family Members"
                                 }, {
                                     "name": "None",
                                     "value": "None"
@@ -870,7 +868,6 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                     },
                     "HouseVerification.HouseDetails.durationOfStay": {
                         title: "What Toilet facility does your family use?",
-                        //key:"HouseVerification.HouseDetails.toilet_facility_type",
                         key:"customer.verifications[0].toiletFacilityType",
                         required: true,
                         "type": "radios",
@@ -1455,11 +1452,9 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                                                 "Public": "Public",
                                                 "Shared": "Shared",
                                                 "Own":"Own"
-                                            },  
-                                            //"key": "customer.drinking_water",
+                                            },
                                             "key": "customer.verifications[0].drinkingWater",
-                                            // "key": "HouseVerification.HouseDetails.drinking_water"
-                                                },
+                                           },
                                                 "waterFiler":{
                                                     title:"Water Filer",
                                                     required: true,
@@ -1468,10 +1463,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                                                         "Yes": "Yes",
                                                         "No": "No",
                                                     },
-                                                    //"key":"customer.water_filter"
-                                                    "key":"customer.verifications[0].waterFilter"
-                                                   // "key":"HouseVerification.HouseDetails.water_filter"
-                                                },
+                                                   "key":"customer.verifications[0].waterFilter"
+                                                  },
                                         }
                                     }
                                 }
@@ -1493,9 +1486,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                                                 "Male": "Male",
                                                 "Both":"Both"
                                             },
-                                          // key: "customer.udf.userDefinedFieldValues.udf"
-                                           //key: "customer.udf.BusinessOccupationDetails.userDefinedFieldValues.udf20"
-                                         key:"BusinessOccupationDetails.businessDetails.businessManages"
+                                          key:"BusinessOccupationDetails.businessDetails.businessManages"
                                         },
                                         "involvedInMarketTransaction":{
                                             type:"radios",
@@ -1627,12 +1618,11 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                         customer.udf.userDefinedFieldValues.udf5 = "Good";
                         model.BusinessOccupationDetails={}
                         model.BusinessOccupationDetails.businessDetails={}
-                        model.BusinessOccupationDetails.businessDetails.businessManages={}
-                        if(model.customer.udf != null){console.log("udf test");console.log(model.customer.udf)
+                        model.BusinessOccupationDetails.businessDetails.businessManages="";
+                        if(model.customer.udf != null){
                             model.customer.udf.userDefinedFieldValues.udf38 = customer.udf.userDefinedFieldValues.udf38;
                             model.customer.udf.userDefinedFieldValues.udf39 = customer.udf.userDefinedFieldValues.udf39;
                             model.customer.udf.userDefinedFieldValues.udf40 = customer.udf.userDefinedFieldValues.udf40;
-                            //÷÷model.BusinessOccupationDetails.businessDetails={};
                             model.BusinessOccupationDetails.businessDetails.businessManages=model.customer.udf.userDefinedFieldValues.udf19;
                             if(model.customer.udf.userDefinedFieldValues.udf21){
                                 
