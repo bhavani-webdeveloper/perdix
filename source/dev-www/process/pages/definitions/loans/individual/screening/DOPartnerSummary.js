@@ -1036,7 +1036,7 @@ define({
                 model.loanAccount = bundleModel.loanAccount;
                 model.additional=model.additional||{};
                 model.customer_detail = bundleModel.customer_detail;
-                model.isScoringV2ApiEnabled = SessionStore.getGlobalSetting('isScoringV2ApiEnabled') == "true";
+                model.isScoringV2ApiEnabled = SessionStore.getGlobalSetting('ScoringAPIVersion') == "2";
                 model.isScoringOptimizationEnabled = SessionStore.getGlobalSetting('isScoringOptimizationEnabled') == "true";
 
                 BundleManager.pushEvent('loanAccount', model._bundlePageObj, model.loanAccount);

@@ -459,7 +459,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
             model.review = model.review|| {};
             model.temp=model.temp||{}
             model.linkedAccount={};
-            model.isScoringV2ApiEnabled = SessionStore.getGlobalSetting('isScoringV2ApiEnabled') == "true";
+            model.isScoringV2ApiEnabled = SessionStore.getGlobalSetting('ScoringAPIVersion') == "2";
             model.isScoringOptimizationEnabled = SessionStore.getGlobalSetting('isScoringOptimizationEnabled') == "true";
             model.show = true;
             if (_.hasIn(model, 'loanAccount')){

@@ -579,7 +579,7 @@ define({
                 model.bundleModel = bundleModel;
                 model.currentStage = bundleModel.currentStage;
                 model.siteCode = SessionStore.getGlobalSetting('siteCode');
-                model.isScoringV2ApiEnabled = SessionStore.getGlobalSetting('isScoringV2ApiEnabled') == "true";
+                model.isScoringV2ApiEnabled = SessionStore.getGlobalSetting('ScoringAPIVersion') == "2";
                 model.isScoringOptimizationEnabled = SessionStore.getGlobalSetting('isScoringOptimizationEnabled') == "true";
                 model.ScoreDetails = [];
                 model.customer = {};

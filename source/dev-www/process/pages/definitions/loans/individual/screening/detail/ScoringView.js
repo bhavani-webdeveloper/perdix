@@ -426,7 +426,7 @@ define({
 
                 prepareDataDeferred = $q.defer();
                 prepareDataPromise = prepareDataDeferred.promise;
-                model.isScoringV2ApiEnabled = SessionStore.getGlobalSetting('isScoringV2ApiEnabled') == "true";
+                model.isScoringV2ApiEnabled = SessionStore.getGlobalSetting('ScoringAPIVersion') == "2";
                 model.isScoringOptimizationEnabled = SessionStore.getGlobalSetting('isScoringOptimizationEnabled') == "true";
                 model.currentStage = bundleModel.currentStage;
                 model.ScoreDetails = [];

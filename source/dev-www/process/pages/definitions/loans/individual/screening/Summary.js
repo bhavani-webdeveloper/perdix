@@ -1055,7 +1055,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             prepareDataPromise = prepareDataDeferred.promise;
             model.siteCode = SessionStore.getGlobalSetting('siteCode');
             model.currentStage = bundleModel.currentStage;
-            model.isScoringV2ApiEnabled = SessionStore.getGlobalSetting('isScoringV2ApiEnabled') == "true";
+            model.isScoringV2ApiEnabled = SessionStore.getGlobalSetting('ScoringAPIVersion') == "2";
             model.isScoringOptimizationEnabled = SessionStore.getGlobalSetting('isScoringOptimizationEnabled') == "true";
             model.ScoreDetails = [];
             model.customer = {};
