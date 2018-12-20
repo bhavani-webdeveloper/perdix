@@ -565,6 +565,7 @@ define({
                     });
                 }, function(err){
                     console.log(err);
+                    prepareDataDeferred.resolve();
                 }).finally(function() {
                     
                 });

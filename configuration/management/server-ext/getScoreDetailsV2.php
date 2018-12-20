@@ -111,19 +111,19 @@ if (isset($_GET)) {
             continue;
 
         if (key_exists('loan_purpose_1', $criterias))
-            if ($loan_purpose_1 != $criterias['loan_purpose_1'])
+            if ($loan_purpose_1 != $criterias['loan_purpose_1'] && $criterias['loan_purpose_1'] != 'All')
                 continue;
         if (key_exists('loan_purpose_2', $criterias))
-            if ($loan_purpose_2 != $criterias['loan_purpose_2'])
+            if ($loan_purpose_2 != $criterias['loan_purpose_2'] && $criterias['loan_purpose_2'] != 'All')
                 continue;
         if (key_exists('business_type', $criterias))
-            if ($business_type != $criterias['business_type'])
+            if ($business_type != $criterias['business_type'] && $criterias['business_type'] != 'All' )
                 continue;
         if (key_exists('existing_customer', $criterias))
-            if ($existing_customer != $criterias['existing_customer'])
+            if ($existing_customer != $criterias['existing_customer'] && $criterias['existing_customer'] != 'All' )
                 continue;
         if (key_exists('customer_category', $criterias))
-            if ($customer_category != $criterias['customer_category'])
+            if ($customer_category != $criterias['customer_category'] && $criterias['customer_category'] != 'All' )
                 continue;
 
         $ScoreName = $score;

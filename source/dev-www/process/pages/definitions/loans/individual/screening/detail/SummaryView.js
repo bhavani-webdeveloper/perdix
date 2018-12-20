@@ -221,6 +221,7 @@ define({
                     });
                 }, function(errResp){
                     console.log(errResp);
+                    prepareDataDeferred.resolve();
                 }).finally(function() {
 
                 });
@@ -404,7 +405,7 @@ define({
                 }]
             })
 
-
+            if( model.scoreDetails && model.scoreDetails.length > 0 )
             form.push({
                 type: "box",
                 colClass: "col-sm-12",
