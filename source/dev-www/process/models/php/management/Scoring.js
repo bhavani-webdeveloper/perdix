@@ -1,6 +1,5 @@
 irf.models.factory('Scoring',function($resource,$httpParamSerializer, searchResource){
     var endpoint = irf.MANAGEMENT_BASE_URL + '/scoring/Api';
-    var baseEndpoint = irf.BASE_URL + '/server-ext';
    
     return $resource(endpoint, null, {
 
@@ -10,7 +9,7 @@ irf.models.factory('Scoring',function($resource,$httpParamSerializer, searchReso
         },
         getV2:{
             method:'GET',
-            url:baseEndpoint + '/getScoreDetailsV2.php'
+            url: irf.MANAGEMENT_BASE_URL + '/server-ext/getScoreDetailsV2.php'
         },
         financialSummary: {
             method: 'GET',
