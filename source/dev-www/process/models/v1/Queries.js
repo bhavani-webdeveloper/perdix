@@ -945,6 +945,25 @@ irf.models.factory('Queries', [
             return deferred.promise;
         };
 
+        resource.getCustomerNomineeRelations = function(customerId,relationShip) {
+            var deferred = $q.defer();
+            resource.getResult("customerNomineeMembers.list", {
+                "customerId": customerId,
+                "relationShip":relationShip
+            }).then(function(records) {
+                if (records && records.results) {
+                    var result = {
+                        headers: {
+                            "x-total-count": records.results.length
+                        },
+                        body: records.results
+                    };
+                    deferred.resolve(result);
+                }
+            }, deferred.reject);
+            return deferred.promise;
+        };
+
         resource.getProductCode = function (bankId, branchId){
             var deferred = $q.defer();
             var request = {
