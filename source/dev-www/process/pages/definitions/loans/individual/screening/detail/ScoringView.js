@@ -257,7 +257,7 @@ define({
                         deferred.resolve();
                     });
                 }, function(errRes){
-                    console.log(errResp);
+                    console.log(errRes);
                 }).finally(function() {
                 });
             }
