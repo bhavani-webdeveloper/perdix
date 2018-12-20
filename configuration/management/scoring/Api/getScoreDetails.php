@@ -24,10 +24,12 @@ if (isset($_GET)) {
     $CustomerLoanId = $_GET['LoanId'];
     $ScoreName = $_GET['ScoreName'];
     $SessionUserName = "admin";
+    $isScoringOptimizationEnabled = $_GET['isScoringOptimizationEnabled'];
 
     //get all customer details from loan_accounts table
     $CustomerDetails = "SELECT
 	'$ScoreName' AS 'ScoreName',
+    l.version,
 	l.account_number AS 'loan_accountNumber', 
 	MAX(app.urn_no) AS `urn_no`, 
 	MAX(coapp.id) AS `coapp_customer_id`, 
@@ -76,6 +78,7 @@ if (isset($_GET)) {
         $business_type = $AvailCustomerParams['business_type'];
         $existing_customer = $AvailCustomerParams['existing_customer'];
         $customer_category = $AvailCustomerParams['customer_category'];
+        $loanVersion = $AvailCustomerParams['version'];
 
     } catch (PDOException $e) {
         $error_log['CustomerDetails'] = $e->getMessage();
@@ -644,10 +647,37 @@ if (isset($_GET)) {
         $AvailCustomerParams['OverallWeightedScore'] = "$consolidateScore";
         $AvailCustomerParams['OverallPassStatus'] = $OverallPassStatus;
         $AvailCustomerParams['Parameters'] = $ConsolidatedArray;
+        $AvailCustomerParams['ScoreName'] = $ScoreName;
 
         $FinalScoreResponse = '{"ScoreDetails": [' . json_encode($AvailCustomerParams) . ']}';
 
         echo $FinalScoreResponse;
+    }
+
+
+    if($isScoringOptimizationEnabled == 'true' ){
+
+        $ScoreCalcCheckQuery = "SELECT ScoreName, ApplicationId, loanVersion, PartnerSelf 
+            FROM sc_calculation
+            WHERE
+            ApplicationId='$CustomerLoanId'
+            AND loanVersion = $loanVersion
+            AND  PartnerSelf = ''
+        ";
+
+        try{
+            $db = ConnectDb();
+            $ScoreCalcCheckParams = $db->prepare($ScoreCalcCheckQuery);
+            $ScoreCalcCheckParams->execute();
+            $ScoreCalcCheckResults = $ScoreCalcCheckParams->fetchAll(PDO::FETCH_ASSOC);
+            $db = null;
+        
+            if( sizeof($ScoreCalcCheckResults) > 0 ){
+                exit();
+            }
+        } catch(PDOException $e){
+            $error_log['ScoreCalcCheckQuery'] = $e->getMessage();            
+        }
     }
 
 

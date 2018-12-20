@@ -1361,32 +1361,7 @@ define({
                         PageHelper.showProgress("update-loan", "Working...");
 
                         if (reqData.loanAccount.currentStage == 'Screening') {
-
-
-                            var p2 = $q.when()
-                                .then(function() {
-                                    $log.info("p2_1 is resolved");
-                                    var p2_1 = Scoring.get({
-                                        auth_token: AuthTokenHelper.getAuthData().access_token,
-                                        LoanId: reqData.loanAccount.id,
-                                        ScoreName: "RiskScore1"
-                                    }).$promise;
-                                    return p2_1;
-                                })
-                                .then(function() {
-                                    var p2_2 = Queries.getQueryForScore1(reqData.loanAccount.id);
-                                    p2_2.then(function(result) {
-                                        $log.info("p2_2 is resolved");
-                                        reqData.loanAccount.literateWitnessFirstName = result.cbScore;
-                                        reqData.loanAccount.literateWitnessMiddleName = result.businessInvolvement;
-                                    }, function(response) {
-
-                                    });
-                                    return p2_2;
-                                })
-
-                            mandatoryPromises.push(p2);
-
+                            
                             // Dedupe call
                             if (DedupeEnabled == 'Y') {
                                 var p3 = Queries.getDedupeDetails({
