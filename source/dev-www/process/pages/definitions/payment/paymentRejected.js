@@ -119,6 +119,8 @@ define({
 						'paymentPurpose': searchOptions.paymentPurpose,
                         'beneficiaryName': searchOptions.beneficiaryName,
                         'currentStage':"PaymentRejected",
+						'page': pageOpts.pageNo,
+	                    'per_page': pageOpts.itemsPerPage
                     }).$promise;
                 },
                 paginationOptions: {
