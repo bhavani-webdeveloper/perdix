@@ -252,9 +252,13 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
                                             prop: "nonNegotiable",
                                             type: "select",
                                             name: "NON_NEGOTIABLE",
+                                            isKeyPair : true,
                                             getListOptions: function (model,row ) {
                                                 return $q.when(model.allParameterMaster).then(function (value) {
-                                                    var options = ["YES","NO"];
+                                                    var options = {
+                                                        Yes : "1",
+                                                        No : "0"
+                                                    };
                                                     return options;
                                                 });
                                             },
