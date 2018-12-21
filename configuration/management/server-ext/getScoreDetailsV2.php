@@ -390,8 +390,9 @@ if (isset($_GET)) {
 
             $PrepareQueries = $defaultDb->select($GetCustomerInputs);
             if (sizeof($PrepareQueries) == 0) {
-                $error_log['Parameters'] = "No parameters has been mapped for the score " . $ScoreName;
-                goto EndExecution;
+                http_response_code(404);
+                $response->json([ 'error' => "No parameters has been mapped for the score " . $ScoreName ]);
+                exit();
             }
             
             foreach ($PrepareQueries AS $KeyValues => $criterias) {
@@ -536,7 +537,8 @@ if (isset($_GET)) {
             WHERE
             ApplicationId='$CustomerLoanId'
             AND loanVersion = $loanVersion
-            AND  PartnerSelf = '$partnerCode'
+            AND PartnerSelf = '$partnerCode'
+            AND ScoreName = '$ScoreName'
         ";
 
         $row = (array) collect($defaultDb->select($ScoreCalcCheckQuery))->first();
@@ -588,11 +590,6 @@ if (isset($_GET)) {
     $defaultDb->update($FinalScoreCalculation);
     $response->setStatusCode(200)->json([ 'ScoreDetails' => $AvailCustomerParams ]);
     exit();
-
-    EndExecution:
-        http_response_code(404);
-        $response->json([ 'error' => $error_log ]);
-        exit();
 }
 ?>
 
