@@ -258,6 +258,7 @@ define({
                     });
                 }, function(errRes){
                     console.log(errRes);
+                    prepareDataDeferred.resolve();
                 }).finally(function() {
                 });
             }
@@ -306,6 +307,7 @@ define({
                 }
             });
 
+            if(model.scoreDetails && model.scoreDetails.length > 0)
             form.push({
                 type: "box",
                 colClass: "col-sm-12",

@@ -150,6 +150,24 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                                         return true;
                                     }
                                 },
+                                { 
+                                    name: "Payer Datails",
+                                    desc: "",
+                                    fn: function(item, index){
+                                        $state.go('Page.Engine', {
+                                            pageName: 'loans.PayersDetails',
+                                            pageId: [item.accountNumber,item.urnNo].join(".")
+                                        })
+                                    },
+                                    isApplicable: function(item, index){
+                                        var siteCode = SessionStore.getGlobalSetting('siteCode');
+                                        if(siteCode == 'witfin') { 
+                                            return true
+                                        }else{
+                                            return false
+                                        }
+                                    }
+                                },
                                  { 
                                     name: "Unmark NPA",
                                     desc: "",

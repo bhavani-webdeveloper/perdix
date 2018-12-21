@@ -5347,7 +5347,8 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             "annualExpenses": {
                                 "key": "customer.expenditures[].annualExpenses",
                                 "type": "amount",
-                                "title": "AMOUNT"
+                                "title": "AMOUNT",
+                                required:true,
                             },
                             "frequency": {
                                 "key": "customer.expenditures[].frequency",

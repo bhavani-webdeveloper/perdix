@@ -111,19 +111,19 @@ if (isset($_GET)) {
             continue;
 
         if (key_exists('loan_purpose_1', $criterias))
-            if ($loan_purpose_1 != $criterias['loan_purpose_1'])
+            if ($loan_purpose_1 != $criterias['loan_purpose_1'] && $criterias['loan_purpose_1'] != 'All')
                 continue;
         if (key_exists('loan_purpose_2', $criterias))
-            if ($loan_purpose_2 != $criterias['loan_purpose_2'])
+            if ($loan_purpose_2 != $criterias['loan_purpose_2'] && $criterias['loan_purpose_2'] != 'All')
                 continue;
         if (key_exists('business_type', $criterias))
-            if ($business_type != $criterias['business_type'])
+            if ($business_type != $criterias['business_type'] && $criterias['business_type'] != 'All' )
                 continue;
         if (key_exists('existing_customer', $criterias))
-            if ($existing_customer != $criterias['existing_customer'])
+            if ($existing_customer != $criterias['existing_customer'] && $criterias['existing_customer'] != 'All' )
                 continue;
         if (key_exists('customer_category', $criterias))
-            if ($customer_category != $criterias['customer_category'])
+            if ($customer_category != $criterias['customer_category'] && $criterias['customer_category'] != 'All' )
                 continue;
 
         $ScoreName = $score;
@@ -390,8 +390,9 @@ if (isset($_GET)) {
 
             $PrepareQueries = $defaultDb->select($GetCustomerInputs);
             if (sizeof($PrepareQueries) == 0) {
-                $error_log['Parameters'] = "No parameters has been mapped for the score " . $ScoreName;
-                goto EndExecution;
+                http_response_code(404);
+                $response->json([ 'error' => "No parameters has been mapped for the score " . $ScoreName ]);
+                exit();
             }
             
             foreach ($PrepareQueries AS $KeyValues => $criterias) {
@@ -536,7 +537,8 @@ if (isset($_GET)) {
             WHERE
             ApplicationId='$CustomerLoanId'
             AND loanVersion = $loanVersion
-            AND  PartnerSelf = '$partnerCode'
+            AND PartnerSelf = '$partnerCode'
+            AND ScoreName = '$ScoreName'
         ";
 
         $row = (array) collect($defaultDb->select($ScoreCalcCheckQuery))->first();
@@ -588,11 +590,6 @@ if (isset($_GET)) {
     $defaultDb->update($FinalScoreCalculation);
     $response->setStatusCode(200)->json([ 'ScoreDetails' => $AvailCustomerParams ]);
     exit();
-
-    EndExecution:
-        http_response_code(404);
-        $response->json([ 'error' => $error_log ]);
-        exit();
 }
 ?>
 

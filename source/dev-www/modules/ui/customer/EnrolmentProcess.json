@@ -1315,6 +1315,7 @@
                         "key": "customer.expenditures[].annualExpenses",
                         "title": "AMOUNT",
                         "type": "amount"
+                        
                     },
                     "frequency": {
                         "key": "customer.expenditures[].frequency",

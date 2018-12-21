@@ -322,6 +322,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                 });
             }, function(err){
                 console.log(err);
+                prepareDataDeferred.resolve();
             }).finally(function(){
 
             });
@@ -446,6 +447,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         //     ]
         // });
 
+        if(model.scoreDetails && model.scoreDetails.length > 0)
         form.push({
             type: "box",
             colClass: "col-sm-12 table-box",
