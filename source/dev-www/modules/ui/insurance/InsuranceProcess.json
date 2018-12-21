@@ -267,8 +267,10 @@
       "items":{  
          "nomineeDetailsDTO":{  
             "key":"insurancePolicyDetailsDTO.nomineeDetailsDTO",
-            "type":"array",
-            "startEmpty":true,
+            "type" : "array",
+            "view" : "fixed",
+            "remove" : null,
+            "add" : null,
             "title":"INSURANCE_NOMINEE_DETAILS",
             "items":{  
                "nomineeName":{  
