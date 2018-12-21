@@ -2304,19 +2304,22 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                         "items": [
                         {
                             "key":"loanAccount.payeeName",
-                            "title": "PAYEE_NAME"
+                            "title": "PAYEE_NAME",
+                            "readonly": true
                         },
                         {
                             "key": "loanAccount.payeeMobileNumber",
                             "title": "PAYEE_MOBILE_NUMBER",
                             "inputmode": "number",
-                            "numberType": "tel"
+                            "numberType": "tel",
+                            "readonly": true
                         },
                         {
                             "key": "loanAccount.payeeRelationToApplicant",
                             "title": "PAYEE_RELATION",
                             "type":"select",
-                            "enumCode": "payerRelation"
+                            "enumCode": "payerRelation",
+                            "readonly": true
                         }
                     ]
                 },
