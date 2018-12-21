@@ -337,7 +337,8 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 			PagesDefinition.getUserAllowedDefinition(fullDefinition).then(function(resp) {
 				$scope.dashboardDefinition = resp;
 				$scope.customerSchema = customerSchemaResponse;
-				PagesDefinition.getPageConfig("Page/Customer360").then(function(config) {
+				$scope.pageConfig = {};
+				PagesDefinition.getRolePageConfig("Page/Customer360").then(function(config) {
 					if (config) {
 						$scope.pageConfig = config;
 					}
