@@ -130,12 +130,14 @@ define({
                     var promise = Payment.search({
                         'paymentDate': searchOptions.paymentDate,
                         'paymentId': searchOptions.paymentId,
-			'debitAccountName': searchOptions.debitAccountName,
-			'paymentMode': searchOptions.transactionType,
+                        'debitAccountName': searchOptions.debitAccountName,
+                        'paymentMode': searchOptions.transactionType,
                         'paymentType': searchOptions.modeOfPayment,						
-			'paymentPurpose': searchOptions.paymentPurpose,
-			'beneficiaryName': searchOptions.beneficiaryName,
+                        'paymentPurpose': searchOptions.paymentPurpose,
+                        'beneficiaryName': searchOptions.beneficiaryName,
                         'currentStage':"PaymentInitiation",
+						'page': pageOpts.pageNo,
+	                    'per_page': pageOpts.itemsPerPage
                     }).$promise;
 
                    

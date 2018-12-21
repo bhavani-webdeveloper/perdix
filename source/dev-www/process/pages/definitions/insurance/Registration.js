@@ -78,7 +78,7 @@ var getIncludes = function (model) {
                     "InsuranceTransactionDetails",
                     "InsuranceTransactionDetails.insuranceTransactionDetailsDTO",
                     "InsuranceTransactionDetails.insuranceTransactionDetailsDTO.totalPremium",
-                    "InsuranceTransactionDetails.insuranceTransactionDetailsDTO.transactionDate",
+                    //"InsuranceTransactionDetails.insuranceTransactionDetailsDTO.transactionDate",
 
                     "actionboxBeforeSave",
                     "actionboxBeforeSave.save",
@@ -96,6 +96,7 @@ var getIncludes = function (model) {
                 "title": "INSURANCE_REGISTRATION",
               
                 initialize: function (model, form, formCtrl) {
+                   
                      if(_.hasIn($stateParams, "pageId") && !_.isNull($stateParams.pageId)) {
                         PageHelper.showLoader();
                         InsuranceProcess.fromInsurancePolicyID($stateParams.pageId)
@@ -219,16 +220,20 @@ var getIncludes = function (model) {
                                                     "bindMap": {},
                                                     "searchHelper": formHelper,
                                                     search: function(inputModel, form, model, context) {                                              
-                                                       return Queries.getCustomerFamilyRelations(
-                                                         model.insurancePolicyDetailsDTO.customerId
+                                                       return Queries.getCustomerNomineeRelations(
+                                                         model.insurancePolicyDetailsDTO.customerId,
+                                                         model.insurancePolicyDetailsDTO.benificieryRelationship
                                                         );
                                                     },
                                                     onSelect: function(result, model, context){
                                                         model.insurancePolicyDetailsDTO.nomineeDetailsDTO[context.arrayIndex].nomineeName = result.familyMemberFirstName;
+                                                        model.insurancePolicyDetailsDTO.nomineeDetailsDTO[context.arrayIndex].nomineeRelationship = result.realtionShip;
+                                                        model.insurancePolicyDetailsDTO.nomineeDetailsDTO[context.arrayIndex].nomineeGender = result.gender;
+                                                        model.insurancePolicyDetailsDTO.nomineeDetailsDTO[context.arrayIndex].nomineePercentage = 100;
                                                     },                                                   
                                                     getListDisplayItem: function(item, index) {
                                                         return [
-                                                            item.familyMemberFirstName
+                                                            item.familyMemberFirstName+" "+item.realtionShip
                                                         ];
                                                     }
                                                 }
@@ -268,6 +273,8 @@ var getIncludes = function (model) {
                                     model.insurancePolicyDetailsDTO.partnerCode = result.partnerCode,
                                     model.insurancePolicyDetailsDTO.insuranceType = result.insuranceType,
                                     model.insurancePolicyDetailsDTO.premiumRateCode = result.premiumRateCode,
+                                    model.insurancePolicyDetailsDTO.purchaseDate = moment(new Date()).format(SessionStore.getSystemDateFormat());
+                                    model.insurancePolicyDetailsDTO.startDate = moment(new Date()).format(SessionStore.getSystemDateFormat());
                                     model.insurancePolicyDetailsDTO.moduleConfigId = result.moduleConfigId
                                 },
                                 getListDisplayItem : function(item,index){

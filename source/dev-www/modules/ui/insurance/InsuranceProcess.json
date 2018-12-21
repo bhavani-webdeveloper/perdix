@@ -281,22 +281,22 @@
                "nomineeRelationship":{  
                   "key":"insurancePolicyDetailsDTO.nomineeDetailsDTO[].nomineeRelationship",
                   "title":"NOMINEE_RELATIONSHIP",
-                  "type":"select",
-                  "enumCode":"relation",
+                  "type":"string",
+                  "readonly": true,
                   "orderNo":20
                },
                "nomineeGender":{  
                   "key":"insurancePolicyDetailsDTO.nomineeDetailsDTO[].nomineeGender",
                   "title":"NOMINEE_GENDER",
-                  "type":"select",
-                  "enumCode":"gender",
+                  "readonly":true,
+                  "type": "string",
                   "orderNo":30
                },
                "nomineePercentage":{
                   "key":"insurancePolicyDetailsDTO.nomineeDetailsDTO[].nomineePercentage",
                   "title":"NOMINEE_PERCENTAGE",
                   "type":"number",
-                  "enumCode":"gender",
+                  "readonly":true,
                   "orderNo":35
                },
                "nomineeIsMinor":{  
@@ -361,6 +361,7 @@
                     "type" : "amount",
                     "key" : "insurancePolicyDetailsDTO.insuranceTransactionDetailsDTO[].totalPremium",
                     "title" : "TOTAL_PREMIUM",
+                    "readonly":true,
                     "order" : 10
                 },
                 "transactionDate" :{

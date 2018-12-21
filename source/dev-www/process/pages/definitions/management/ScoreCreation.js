@@ -183,6 +183,14 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
                                     search: function (inputModel, form, model, context) {
                                         var defered = $q.defer();
                                         $q.when(formHelper.enum(getEnumCode(model.scoreMaster.scoreCriterias[context.arrayIndex].criteriaName,model))).then(function(value){
+                                            var all = {
+                                                active: true,
+                                                name: "All",
+                                                code: "All",
+                                                value: "All"
+                                            };
+                                            if(!_.some(value.data, all))
+                                                value.data.push(all);
                                             defered.resolve({
                                                 body:value.data
                                             })
@@ -374,11 +382,11 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
                             ScoresMaintenance.scoreCreate(model).$promise.then(function (resp) {
                                 Utils.alert("Score Created Successfully");
                                 irfNavigator.goBack();
-                                deferred.resolve(resp);
                             }, function (errResp) {
-                                PageHelper.showErrors({data:{
-                                    error:"Please work"
-                                }});
+                                errors = tempErrorFix(errResp);
+                                var error = {}
+                                error.data = errors;
+                                PageHelper.showErrors(error);
                             }).finally(function () {
                                 PageHelper.hideLoader();
                             });
@@ -388,8 +396,9 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
                                 irfNavigator.goBack();
                             }, function (errResp) {
                                 errors = tempErrorFix(errResp);
-                                errors.errors = ["sajfjf","sakffaf","affffa"];
-                                PageHelper.showErrors(errors|errResp.data.body);
+                                var error = {};
+                                error.data = errors;
+                                PageHelper.showErrors(error);
                             }).finally(function () {
                                 PageHelper.hideLoader();
                             });

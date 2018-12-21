@@ -459,6 +459,8 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
             model.review = model.review|| {};
             model.temp=model.temp||{}
             model.linkedAccount={};
+            model.isScoringV2ApiEnabled = SessionStore.getGlobalSetting('ScoringAPIVersion') == "2";
+            model.isScoringOptimizationEnabled = SessionStore.getGlobalSetting('isScoringOptimizationEnabled') == "true";
             model.show = true;
             if (_.hasIn(model, 'loanAccount')){
                 $log.info('Printing Loan Account');
@@ -3259,14 +3261,15 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
 
                     if (reqData.loanAccount.currentStage == 'Screening'){
 
-
+                        if( ! model.isScoringV2ApiEnabled ){
                         var p2 = $q.when()
                         .then(function(){
                             $log.info("p2_1 is resolved");
                             var p2_1 = Scoring.get({
                                 auth_token:AuthTokenHelper.getAuthData().access_token,
                                 LoanId:reqData.loanAccount.id,
-                                ScoreName: "RiskScore1"
+                                ScoreName: "RiskScore1",
+                                isScoringOptimizationEnabled: model.isScoringOptimizationEnabled
                             }).$promise;
                             return p2_1;
                         })
@@ -3281,8 +3284,32 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                             });
                             return p2_2;
                         })
+                        mandatoryPromises.push(p2);   
+                    } else {
+                        var p2 = $q.when()
+                        .then(function(){
+                            $log.info("p2_1 is resolved");
+                            var p2_1 = Scoring.getV2({
+                                auth_token:AuthTokenHelper.getAuthData().access_token,
+                                LoanId:reqData.loanAccount.id,
+                                isScoringOptimizationEnabled: model.isScoringOptimizationEnabled
+                            }).$promise;
+                            return p2_1;
+                        })
+                        .then(function(){
+                            var p2_2 = Queries.getQueryForScore1(reqData.loanAccount.id);
+                            p2_2.then(function(result){
+                                $log.info("p2_2 is resolved");
+                                reqData.loanAccount.literateWitnessFirstName = result.cbScore;
+                                reqData.loanAccount.literateWitnessMiddleName = result.businessInvolvement;
+                            }, function(response){
 
-                        mandatoryPromises.push(p2);
+                            });
+                            return p2_2;
+                        })
+                        mandatoryPromises.push(p2);  
+                    }
+                     
 
                         // Dedupe call
                         if (DedupeEnabled == 'Y') {

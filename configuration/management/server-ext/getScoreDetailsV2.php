@@ -111,19 +111,19 @@ if (isset($_GET)) {
             continue;
 
         if (key_exists('loan_purpose_1', $criterias))
-            if ($loan_purpose_1 != $criterias['loan_purpose_1'])
+            if ($loan_purpose_1 != $criterias['loan_purpose_1'] && $criterias['loan_purpose_1'] != 'All')
                 continue;
         if (key_exists('loan_purpose_2', $criterias))
-            if ($loan_purpose_2 != $criterias['loan_purpose_2'])
+            if ($loan_purpose_2 != $criterias['loan_purpose_2'] && $criterias['loan_purpose_2'] != 'All')
                 continue;
         if (key_exists('business_type', $criterias))
-            if ($business_type != $criterias['business_type'])
+            if ($business_type != $criterias['business_type'] && $criterias['business_type'] != 'All' )
                 continue;
         if (key_exists('existing_customer', $criterias))
-            if ($existing_customer != $criterias['existing_customer'])
+            if ($existing_customer != $criterias['existing_customer'] && $criterias['existing_customer'] != 'All' )
                 continue;
         if (key_exists('customer_category', $criterias))
-            if ($customer_category != $criterias['customer_category'])
+            if ($customer_category != $criterias['customer_category'] && $criterias['customer_category'] != 'All' )
                 continue;
 
         $ScoreName = $score;
@@ -138,20 +138,6 @@ if (isset($_GET)) {
         $response->json([ 'error' => 'no '.$msg]);
         exit();
     } 
-
-    if($isScoringOptimizationEnabled == 'true' ){
-        $ScoreCalcCheckQuery = "SELECT ScoreName, ApplicationId, loanVersion, PartnerSelf 
-            FROM sc_calculation
-            WHERE
-            ApplicationId='$CustomerLoanId'
-            AND loanVersion = $loanVersion
-            AND  PartnerSelf = '$partnerCode'
-        ";
-
-        $row = (array) collect($defaultDb->select($ScoreCalcCheckQuery))->first();
-        $response->setStatusCode(200)->json( ['ScoreDetails' => $row]);
-        exit();
-    }
 
     $non_negotiable = 0;
 
@@ -486,7 +472,7 @@ if (isset($_GET)) {
                             $calculateWeightage = ((($DefinedScoreValues['Value'] / $DefinedScoreValues['MaxParameterScore']) * $DefinedScoreValues['ParameterWeightage']) / 100);
                         }
                         $calculateMaxWeightage = $DefinedScoreValues['ParameterWeightage'] / 100;
-                        if ($DefinedScoreValues['non_negotiable'] == 'YES') {
+                        if ($DefinedScoreValues['non_negotiable'] == '1') {
                             $non_negotiable++;
                         }
                         
@@ -544,7 +530,22 @@ if (isset($_GET)) {
     $AvailCustomerParams['OverallPassStatus'] = $OverallPassStatus;
     $AvailCustomerParams['Parameters'] = $ConsolidatedArray;
 
-    $FinalScoreResponse = '{"ScoreDetails": [' . json_encode($AvailCustomerParams) . ']}';
+    if($isScoringOptimizationEnabled == 'true' ){
+        $ScoreCalcCheckQuery = "SELECT ScoreName, ApplicationId, loanVersion, PartnerSelf 
+            FROM sc_calculation
+            WHERE
+            ApplicationId='$CustomerLoanId'
+            AND loanVersion = $loanVersion
+            AND  PartnerSelf = '$partnerCode'
+        ";
+
+        $row = (array) collect($defaultDb->select($ScoreCalcCheckQuery))->first();
+
+        if(sizeof($row) > 0 ){
+            $response->setStatusCode(200)->json([ 'ScoreDetails' => $AvailCustomerParams ]);
+            exit();
+        }
+    }
 
     $defaultDb->insert(substr($InsertValues, 0, -1));
     // sub score calculation
@@ -579,7 +580,8 @@ if (isset($_GET)) {
                 OverallPassStatus = '$OverallPassStatus',
                 updated_by = '$SessionUserName',
                 loanVersion = $loanVersion,
-                PartnerSelf = '$partnerCode'
+                PartnerSelf = '$partnerCode',
+                apiVersion = '2'
                 WHERE id = $AutoID
                 AND ApplicationId = '$CustomerLoanId'";
     

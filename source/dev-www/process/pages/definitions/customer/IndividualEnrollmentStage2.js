@@ -392,6 +392,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                         "readonly": customReadonly
                     },
                     "CustomerInformation.download":{},
+                  
                     "ContactInformation": {
                         "readonly": customReadonly
                     },
@@ -408,11 +409,11 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                     "CustomerInformation.centreId": {
                         "title": "CENTRE",
                         "readonly": true,
-                        "condition": "model.customer.currentStage.toLowerCase()=='completed'"
+                        "condition":"model.customer.currentStage.toLowerCase()=='completed'"
                     },
                     "CustomerInformation.centreId": {
                         "title": "CENTRE",
-                        "condition": "model.customer.currentStage.toLowerCase()!='completed'"
+                        "condition":"model.customer.currentStage.toLowerCase()!='completed'"
                     },
                     "CustomerInformation.firstName": {
                         "type": "string",
@@ -466,7 +467,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                         },
                         fileType: "image/*",
                         offline: false,
-                        using: "", //using scanner for document scanner trigger
+                        using:"",//using scanner for document scanner trigger
                     },
                     "KYC.IdentityProof1.identityProofReverseImageId": {
                         "viewParams": function(modelValue, form, model) {
@@ -476,7 +477,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                         },
                         fileType: "image/*",
                         offline: false,
-                        using: "",
+                        using:"",
                     },
                     "KYC.addressProof1.addressProofImageId": {
                         "viewParams": function(modelValue, form, model) {
@@ -486,7 +487,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                         },
                         fileType: "image/*",
                         offline: false,
-                        using: ""
+                        using:""
                     },
                     "KYC.addressProof1.addressProofReverseImageId": {
                         "viewParams": function(modelValue, form, model) {
@@ -496,7 +497,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                         },
                         fileType: "image/*",
                         offline: false,
-                        using: ""
+                        using:""
                     },
                     "AdditionalKYC.additionalKYCs": {
                         add: true,
@@ -506,7 +507,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                     "AdditionalKYC.additionalKYCs.kyc1ImagePath": {
                         required: true,
                         fileType: "image/*",
-                        "using": "",
+                        "using":"",
                         "viewParams": function(modelValue, form, model) {
                             return {
                                 customerId: model.customer.id
@@ -718,7 +719,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                                     };
                                     model.customer.familyMembers.push(spouse);
                                 }
-                            }
+                            }   
                         }
                     },
                     "familyDetails.familyMembers.relationShip": {
@@ -731,8 +732,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                                         return;
                                     }
                                 }
-                            }
-
+                            } 
+                            
                             if (model.customer.familyMembers[form.arrayIndex].relationShip == 'self') {
                                 model.customer.familyMembers[form.arrayIndex].gender = model.customer.gender;
                                 model.customer.familyMembers[form.arrayIndex].dateOfBirth = model.customer.dateOfBirth;
@@ -802,8 +803,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                             "No": "No",
                         }
                     },
-                    "familyDetails.familyMembers.incomes.incomeEarned": {
-                        "title": "CASH_INFLOW"
+                    "familyDetails.familyMembers.incomes.incomeEarned":{
+                        "title":"CASH_INFLOW"
 
                     },
                     "familyDetails.additionalDetails.privateHospitalTreatment": {
@@ -825,18 +826,18 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                             "NA": "NA",
                         }
                     },
-                    "assets.physicalAssets": {
+                    "assets.physicalAssets":{
                         titleExpr: "model.customer.physicalAssets[arrayIndex].ownedAssetDetails | translate",
-                        remove: null,
+                        remove:null,
                         add: null
                     },
-                    "assets.physicalAssets.assetType": {
-                        "type": "string",
-                        "readonly": true
+                    "assets.physicalAssets.assetType":{
+                        "type":"string",
+                        "readonly":true
                     },
-                    "assets.physicalAssets.ownedAssetDetails": {
-                        "type": "string",
-                        "readonly": true
+                    "assets.physicalAssets.ownedAssetDetails":{
+                        "type":"string",
+                        "readonly":true
                     },
                     "HouseVerification.nameOfRo": {
                         orderNo: 1,
@@ -867,22 +868,22 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                         }
                     },
                     "HouseVerification.HouseDetails.durationOfStay": {
-                        title: "What Toilet facility does your family use?",
-                        key:"customer.verifications[0].toiletFacilityType",
-                        required: true,
-                        "type": "radios",
-                        order: 100,
-                        "titleMap": {
-                            "Own toilet": "Own toilet",
-                            "Shared/public": "Shared/public",
-                            "None/open space": "None/open space",
-                        },
-                        schema: {
-                            "type": ["string", "null"],
-                        }
+                        // title: "What Toilet facility does your family use?",
+                        // key:"customer.verifications[0].toiletFacilityType",
+                        // required: true,
+                        // "type": "radios",
+                        // order: 100,
+                        // "titleMap": {
+                        //     "Own toilet": "Own toilet",
+                        //     "Shared/public": "Shared/public",
+                        //     "None/open space": "None/open space",
+                        // },
+                        // schema: {
+                        //     "type": ["string", "null"],
+                        // }
                     },
                     "HouseVerification.houseVerificationPhoto": {
-
+                       
                     },
                      "HouseVerification.HouseDetails.drinkingWater":{
                         title:"Drinking Water",
@@ -891,6 +892,12 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                         },
                         "HouseVerification.HouseDetails.waterFiler":{
                             title:"Water Filter",
+                            required: true,
+                            type:"radios"
+                        },
+                        
+                        "HouseVerification.HouseDetails.toiletFacilityType":{
+                            title: "What Toilet facility does your family use?",
                             required: true,
                             type:"radios"
                         },
@@ -904,6 +911,10 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                         type:"select",
                         enumCode: "expenditure_frequency"
                     },
+                    "Expenditures1.expenditures.expendituresSection.annualExpensesSection.annualExpenses": {
+                        required:true
+                    },
+                  
                     "assets.financialAssets.instrumentType": {
                         required: false,
                     },
@@ -944,10 +955,10 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                     "Liabilities1.liabilities.liabilityLoanPurpose": {
                         required: false,
                     },
-                    "Expenditures1": {
+                    "Expenditures1":{
                         "title": "CASH_OUTFLOW"
                     },
-                    "BusinessOccupationDetails": {
+                    "BusinessOccupationDetails":{
                         "title": "LOAN_PURPOSE_ENTERPRISE_DETAILS"
                     },
                     "BusinessOccupationDetails.businessDetails": {
@@ -959,7 +970,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                 };
             }
         }
-
+        
         var getIncludes = function(model) {
             if (model.siteCode == "saija") {
                 return [
@@ -970,6 +981,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                     //"CustomerInformation.groupName",
                     //"CustomerInformation.loanCycle",
                     "CustomerInformation.firstName",
+                    "CustomerInformation.photoImageId",
                     "CustomerInformation.gender",
                     "CustomerInformation.age",
                     "CustomerInformation.dateOfBirth",
@@ -1076,7 +1088,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                     "HouseVerification.HouseDetails.HouseOwnership",
                     "HouseVerification.HouseDetails.landLordName", //drinkingwater
                     "HouseVerification.HouseDetails.HouseVerification", //waterfilter
-                    //"HouseVerification.HouseDetails.Toilet",//is toilet available
+                    //"HouseVerification.HouseDetails.toiletFacilityType",//is toilet available
                     "HouseVerification.HouseDetails.durationOfStay", //toilet facility
                     "HouseVerification.HouseDetails.buildType",
                     "HouseVerification.latitude",
@@ -1277,7 +1289,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                     //"HouseVerification.HouseDetails.landLordName", //drinkingwater
                     "HouseVerification.HouseDetails.HouseVerification", //waterfilter
                     //"HouseVerification.HouseDetails.Toilet",//is toilet available
-                    "HouseVerification.HouseDetails.durationOfStay", //toilet facility
+                    "HouseVerification.HouseDetails.toiletFacilityType", //toilet facility
                     
                     "HouseVerification.HouseDetails.drinkingWater", 
                     "HouseVerification.HouseDetails.waterFiler",
@@ -1365,25 +1377,25 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                 ];
             }
         }
-        var populatePhysicalAssets = function(model) {
+        var populatePhysicalAssets = function (model) {
 
             if (!model.customer.physicalAssets || model.customer.physicalAssets.length == 0) {
                 PageHelper.showLoader();
-                var physicalAssets = [];
-                Queries.getPhysicalAssetsList().then(function(res) {
+                var physicalAssets=[];
+                Queries.getPhysicalAssetsList().then(function(res){
                     $log.info(res);
-                    if (res && res.length && res.length > 0) {
-                        for (i in res) {
-                            var obj = {};
-                            obj.assetType = res[i].asset;
-                            obj.ownedAssetDetails = res[i].asset_details;
-                            obj.numberOfOwnedAsset = 1;
-                            physicalAssets.push(obj);
+                    if(res && res.length && res.length>0){
+                        for(i in res){
+                            var obj={};
+                            obj.assetType= res[i].asset;
+                            obj.ownedAssetDetails=res[i].asset_details;
+                            obj.numberOfOwnedAsset=1;
+                            physicalAssets.push(obj);   
                         }
-                        model.customer.physicalAssets = physicalAssets;
+                      model.customer.physicalAssets=physicalAssets;
                     }
                     PageHelper.hideLoader();
-                }, function(err) {
+                },function(err){
                     $log.info(err);
                     PageHelper.hideLoader();
                 });
@@ -1402,7 +1414,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                 // model.familyDetails.additionalDetails.medicalCondition = 'No';
                 // model.familyDetails.additionalDetails.privateHospitalTreatment = 'No';
                 // model.familyDetails.additionalDetails.householdFinanceRelatedDecision = 'No';
-
+               
                 model = Utils.removeNulls(model, true);
                 model.customer.kgfsName = model.customer.kgfsName || SessionStore.getCurrentBranch().branchName;
                 model.customer.customerType = model.customer.customerType || 'Individual';
@@ -1447,13 +1459,13 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                                             "drinkingWater":{
                                                 title:"Drinking Water",
                                                 required: true,
-                                               type:"radios",
-                                               "titleMap": {
-                                                "Public": "Public",
-                                                "Shared": "Shared",
-                                                "Own":"Own"
-                                            },
-                                            "key": "customer.verifications[0].drinkingWater",
+                                                type:"radios",
+                                                "titleMap": {
+                                                    "Public": "Public",
+                                                    "Shared": "Shared",
+                                                    "Own":"Own"
+                                                },  
+                                             "key": "customer.verifications[0].drinkingWater",
                                            },
                                                 "waterFiler":{
                                                     title:"Water Filer",
@@ -1465,6 +1477,21 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                                                     },
                                                    "key":"customer.verifications[0].waterFilter"
                                                   },
+                                                  "toiletFacilityType":{
+                                                    title: "What Toilet facility does your family use?",
+                                                    key:"customer.verifications[0].toiletFacilityType",
+                                                    required: true,
+                                                    "type": "radios",
+                                                    order: 100,
+                                                    "titleMap": {
+                                                        "Own toilet": "Own toilet",
+                                                        "Shared/public": "Shared/public",
+                                                        "None/open space": "None/open space",
+                                                    }
+                                                    // schema: {
+                                                    //     "type": ["string", "null"],
+                                                    // }
+                                                  }
                                         }
                                     }
                                 }
@@ -1486,7 +1513,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                                                 "Male": "Male",
                                                 "Both":"Both"
                                             },
-                                          key:"BusinessOccupationDetails.businessDetails.businessManages"
+                                         key:"BusinessOccupationDetails.businessDetails.businessManages"
                                         },
                                         "involvedInMarketTransaction":{
                                             type:"radios",
@@ -1494,7 +1521,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                                                 "Yes": "Yes",
                                                 "No": "No",
                                             },
-                                            key:"customer.involvedInMarketTransactions"
+                                            key:"customer.marketTransactionInvolved"
                                         }
                                         },
                                       
@@ -1552,8 +1579,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
             },
             modelPromise: function(pageId, _model) {
                 var deferred = $q.defer();
-                var siteCode = SessionStore.getGlobalSetting('siteCode')
                 PageHelper.showLoader();
+                var siteCode = SessionStore.getGlobalSetting('siteCode');
                 irfProgressMessage.pop("enrollment", "Loading Customer Data...", 6000);
                 Enrollment.getCustomerById({
                     id: pageId
@@ -1570,15 +1597,6 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                         });
                     }
                     populatePhysicalAssets(model);
-                    var expenditures = formHelper.enum('expenditure').data;
-                    if (siteCode == 'sambandh' && expenditures && expenditures.length != 0) {
-                        for (i = 0; i < expenditures.length - 1; i++) {
-                            model.customer.expenditures.push({
-                                'expenditureSource': expenditures[i].name,
-                                'frequency': 'Monthly'
-                            });
-                        }
-                    }
                     if (model.customer.dateOfBirth) {
                         model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                     }
@@ -1595,23 +1613,22 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                             model.customer.udf.userDefinedFieldValues.udf1 === 'true';
                     }
                     if (model.customer.udf && model.customer.udf.userDefinedFieldValues &&
-                        model.customer.udf.userDefinedFieldValues.udf37 && siteCode ==  'saija') {
+                        model.customer.udf.userDefinedFieldValues.udf37 && siteCode == 'saija') {
                         model.customer.udf.userDefinedFieldValues.udf37 = model.customer.udf.userDefinedFieldValues.udf37 == 'true' ? true : false;
                     }
-                    if (siteCode == "sambandh" && model.customer.udf && model.customer.udf.userDefinedFieldValues && model.customer.currentStage == "Stage02") {
-                        model.customer.udf.userDefinedFieldValues.udf38 = "No";
-                        model.customer.udf.userDefinedFieldValues.udf39 = "No";
-                        model.customer.udf.userDefinedFieldValues.udf40 = "No";
-                        model.customer.udf.userDefinedFieldValues.udf5 = "Good";
-                    } else if (siteCode == "sambandh") {
-                        // model.customer.udf = {};
+                    if (siteCode && model.customer.udf && model.customer.udf.userDefinedFieldValues && model.customer.currentStage == "Stage02") {
+                            model.customer.udf.userDefinedFieldValues.udf38 = "No";
+                            model.customer.udf.userDefinedFieldValues.udf39 = "No";
+                            model.customer.udf.userDefinedFieldValues.udf40 = "No";
+                            model.customer.udf.userDefinedFieldValues.udf5 = "Good";
+                    }
+                    else if(siteCode == "sambandh"){
                         var customer= {
                             "udf" : {
                             "userDefinedFieldValues": {
-
+                                
                             }}
                         };
-                        // model.customer.udf.put("userDefinedFieldValues":userDefinedFieldValues);
                         customer.udf.userDefinedFieldValues.udf38 = "No";
                         customer.udf.userDefinedFieldValues.udf39 = "No";
                         customer.udf.userDefinedFieldValues.udf40 = "No";
@@ -1623,20 +1640,38 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                             model.customer.udf.userDefinedFieldValues.udf38 = customer.udf.userDefinedFieldValues.udf38;
                             model.customer.udf.userDefinedFieldValues.udf39 = customer.udf.userDefinedFieldValues.udf39;
                             model.customer.udf.userDefinedFieldValues.udf40 = customer.udf.userDefinedFieldValues.udf40;
+                            
                             model.BusinessOccupationDetails.businessDetails.businessManages=model.customer.udf.userDefinedFieldValues.udf19;
                             if(model.customer.udf.userDefinedFieldValues.udf21){
                                 
                                 model.BusinessOccupationDetails.businessDetails.noOfWorkersEmployed= parseInt(model.customer.udf.userDefinedFieldValues.udf21) ;
                             }
-                           // model.BusinessOccupationDetails.businessDetails.noOfWorkersEmployed=model.customer.udf.userDefinedFieldValues.udf21;
                         }
                         else{
                             model.customer.udf = customer.udf
                         }
-                        
                     }
+                     var expenditures = formHelper.enum('expenditure').data;
+                    if (siteCode == 'sambandh' && expenditures && expenditures.length != 0) {
+                        //for (i = 0; i < expenditures.length - 1; i++) {
+                            // model.customer.expenditures.push({
+                            //     'expenditureSource': expenditures[i].name,
+                            //     'frequency': 'Monthly'
+                            // });
+                        //}
+                    }   
+                     if(siteCode == 'sambandh' && expenditures && expenditures.length != 0){
+                        if( model.customer.expenditures.length==0){
+
+                            for (i = 0; i < expenditures.length - 1; i++) {
+                                model.customer.expenditures.push({
+                                    'expenditureSource': expenditures[i].name,
+                                    'frequency': 'Monthly'
+                                });
+                            }
+                        }
+                    }    
                     deferred.resolve(model);
-                   
                     PageHelper.hideLoader();
                 }, function(resp) {
                     PageHelper.hideLoader();
@@ -1660,6 +1695,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                 ]
             },
             form: [],
+
             schema: function() {
                 return Enrollment.getSchema().$promise;
             },
@@ -1697,6 +1733,25 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                 submit: function(model, form, formName) {
                     var actions = this.actions;
                     $log.info("Inside submit()");
+                    if(model.customer.expenditures){
+                        for(var i=0;i<model.customer.expenditures.length;i++){
+                                if(model.customer.expenditures[i]){
+                                    if(!model.customer.expenditures[i].annualExpenses){
+                                        PageHelper.setError({
+                                            message: "Expenses details required"
+                                        });
+                                        return false;
+                                    }
+                                }
+                                else{
+                                    PageHelper.setError({
+                                        message: "Expenses name required"
+                                    }); 
+                                    return false;
+                                }
+                        }
+                        
+                    }
                     if(model.BusinessOccupationDetails && model.BusinessOccupationDetails.businessDetails){
                         if(model.BusinessOccupationDetails.businessDetails.businessManages){
                             model.customer.udf.userDefinedFieldValues.udf19=model.BusinessOccupationDetails.businessDetails.businessManages;
@@ -1740,7 +1795,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                             return false;
                         }
                     }
-                    if (!model.customer.expenditures || model.customer.expenditures.length == 0) {
+                    if(!model.customer.expenditures || model.customer.expenditures.length == 0) {
                         irfProgressMessage.pop('enrollment-submit', 'Please add expenditure details in Expenditure section to proceed.', 5000);
                         return false;
                     }
