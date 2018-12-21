@@ -245,7 +245,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                         longitude: "promise.longitude"
                     },
                     {
-                        key: "customer.isBusinessRunning",
+                        key: "promise.udf1",
                         type: "radios",
                         required: true,
                         title: "BUSINESS_RUNNING",
@@ -255,7 +255,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                         }
                     },
                     {
-                        key: "customer.isCollateralAvailable",
+                        key: "promise.udf2",
                         type: "radios",
                         required: true,
                         title: "COLLATERAL_AVAILABLE",
@@ -441,17 +441,17 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                 PageHelper.showLoader();
 
 
-                        delete model.promise.udf1;
-                        delete model.promise.udf2;
+                        // delete model.promise.udf1;
+                        // delete model.promise.udf2;
                         delete model.promise.promiseToPayDate;
                         delete model.promise.reasonType;
                         delete model.promise.overdueReasons;
                         delete model.promise.scheduledDate;
 
-                        if (model.promise.isBusinessRunning)
-                            model.promise.udf1 = model.promise.isBusinessRunning;
-                        if (model.promise.isCollateralAvailable)
-                            model.promise.udf2 = model.promise.isCollateralAvailable;
+                        // if (model.promise.isBusinessRunning)
+                        //     model.promise.udf1 = model.promise.isBusinessRunning;
+                        // if (model.promise.isCollateralAvailable)
+                        //     model.promise.udf2 = model.promise.isCollateralAvailable;
 
                         if (model.promise.promiseToPay == 'YES') {
                             model.promise.promiseToPayDate = model.additional.promiseToPayDate;
