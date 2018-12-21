@@ -291,16 +291,6 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
 
                 PageHelper.showLoader();
 
-                model.clear = function (values){
-                    values.forEach(function(obj) {
-                            for (var propName in obj) { 
-                              if (obj[propName] === "" || obj[propName] === null || obj[propName] === undefined) {
-                                delete obj[propName];
-                              }
-                        }
-                    });
-                }
-
                 model.scoreMaster.subScores.forEach(function(subScore) {
                     console.log(subScore);
 
@@ -310,8 +300,6 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
                         //console.log(ScoreParameter.scoreValues);
                         var values =model.getScoreValuesByParamId(subScore.subscoreName,scoreParameters.parameterName);
                         //console.log(values);
-                        model.clear(values);
-                        console.log(JSON.stringify(values))
                         ScoreParameter.scoreValues= values;
                         //console.log("-------");
                     });
