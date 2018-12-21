@@ -704,7 +704,7 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
         {
                     type: "box",
                     title: "BANK_ACCOUNTS",
-                    // "condition":"model.currentStage=='Screening' || model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
+                    "readonly":enabletrue,
                     items: [{
                         key: "customer.customerBankAccounts",
                         type: "array",
