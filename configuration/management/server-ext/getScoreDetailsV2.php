@@ -389,11 +389,6 @@ if (isset($_GET)) {
                 ";
 
             $PrepareQueries = $defaultDb->select($GetCustomerInputs);
-            if (sizeof($PrepareQueries) == 0) {
-                http_response_code(404);
-                $response->json([ 'error' => "No parameters has been mapped for the score " . $ScoreName ]);
-                exit();
-            }
             
             foreach ($PrepareQueries AS $KeyValues => $criterias) {
                 $criterias = (array)$criterias;
@@ -441,7 +436,6 @@ if (isset($_GET)) {
                     WHERE
                     v.status='ACTIVE'
                     AND s.id = p.subscoreid
-                    AND s.isIndividualScore = $s
                     AND v.scoreName = s.ScoreName
                     AND v.subscoreName = s.subscoreName
                     AND p.ParameterName='$Column'
