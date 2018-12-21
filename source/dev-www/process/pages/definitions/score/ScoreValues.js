@@ -1,11 +1,27 @@
 irf.pageCollection.factory(irf.page("score.ScoreValues"),
 ["$q","$log","$stateParams", "ScoresMaintenance", "$state", "SessionStore","formHelper", "PageHelper", "$httpParamSerializer", "AuthTokenHelper", "SchemaResource","irfProgressMessage",
     function($q,$log,$stateParams, ScoresMaintenance, $state, SessionStore,formHelper, PageHelper, $httpParamSerializer, AuthTokenHelper, SchemaResource,irfProgressMessage) {
-	
-	return {
+        var tempErrorFix = function(resp){
+            var newError = {};
+            newError.errors = {};
+            if(resp.data.body.errors){
+                var keys = Object.keys(resp.data.body.errors);
+                for(var i=0;i<keys.length;i++){
+                    if(!keys[i]== "")
+                        newError.errors[keys[i]] = resp.data.body.errors[keys[i]];
+                }
+                return newError;
+            }
+            return null;
+        };
+    
+        return {
         "type": "schema-form",
         "title": "MANAGE_PARAMETER_SCORE",
         "subTitle": "",
+
+        
+
         initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
 
             model.colors =[
@@ -309,7 +325,10 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
                     irfProgressMessage.pop('cust-update', 'Done. Score Values are Updated ', 2000);
                 }, function (err) {
                     PageHelper.hideLoader();
-                    PageHelper.showErrors(err);
+                    errors = tempErrorFix(err);
+                               var error = {}
+                               error.data = errors;
+                               PageHelper.showErrors(error);
                     var errObj = JSON.stringify(err);
                     irfProgressMessage.pop('cust-update', 'failed : '+err.data.body.error, 2000);
                 });
