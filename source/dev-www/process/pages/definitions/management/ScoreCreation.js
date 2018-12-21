@@ -101,8 +101,37 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
                         {
                             "key": "scoreMaster.partnerSelf",
                             "title": "PARTNER_SELF",
-                            "type": "select",
-                            "enumCode": "partner",
+                            "required":true,
+                            "type": "lov",
+                            lovonly: true,
+                                    searchHelper: formHelper,
+                                    search: function (inputModel, form, model, context) {
+                                        var defered = $q.defer();
+                                        $q.when(formHelper.enum('partner')).then(function(value){
+                                            var all = {
+                                                active: true,
+                                                name: "Self",
+                                                code: "Self",
+                                                value: "Self"
+                                            };
+                                            if(!_.some(value.data, all))
+                                                value.data.push(all);
+                                            defered.resolve({
+                                                body:value.data
+                                            })
+                                        },function(err){
+                                            defered.reject(err);
+                                        }) 
+                                        return defered.promise;
+                                    },
+                                    getListDisplayItem: function (item, index) {
+                                        return [
+                                            item.name
+                                        ];
+                                    },
+                                    onSelect: function (result, model, context) {
+                                        model.scoreMaster.partnerSelf = result.value;
+                                    }    
                         },
                         {
                             "key": "scoreMaster.overallPassvalue",

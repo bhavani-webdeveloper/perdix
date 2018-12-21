@@ -34,7 +34,7 @@ if (isset($_GET)) {
     $authInfo = 'Bearer '.$_GET['auth_token'];
     $SessionUserName = "admin";
     $userInfo = $perdixService->accountInfo($authInfo);
-    $partnerCode = $userInfo['partnerCode'];
+    $partnerCode = $userInfo['partnerCode'] == '' ?  'Self':  $userInfo['partnerCode'];
     $isScoringOptimizationEnabled = $_GET['isScoringOptimizationEnabled'];
 
     //get all customer details from loan_accounts table
