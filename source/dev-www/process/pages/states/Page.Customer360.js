@@ -299,7 +299,7 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 				$scope.dashboardDefinition = resp;
 				$scope.customerSchema = customerSchemaResponse;
 				$scope.pageConfig = {};
-				PagesDefinition.getRolePageConfig("Page/Customer360").then(function(config) {
+				PagesDefinition.getRolePageConfig("Page/customer360").then(function(config) {
 					if (config) {
 						$scope.pageConfig = config;
 					}
