@@ -22,14 +22,6 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
 
             model.getModelSubScore = function(subscoreName,parameterName){
 
-
-                // for (i = 0; i < model.scoreMaster.subScores.length; i++) {
-                //     for (j = 0; j < model.scoreMaster.subScores[i].scoreParameters.length; i++) {
-                //         if( model.scoreMaster.subScores[i].subscoreName==subscoreName && model.scoreMaster.subScores[i].scoreParameters[j].parameterName==parameterName)
-                //             return subscoreName && model.scoreMaster.subScores[i].scoreParameters[j].scoreValues;
-                //     }
-                // }
-
                 var values=[];
 
                 model.scoreMaster.subScores.forEach(function(subScore) {
@@ -66,25 +58,6 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
 
                 model.allParameterMaster =ScoresMaintenance.allParameterMaster({page:1, per_page: 100}, function (resp, header) {
                     console.log(resp);
-                     //model.allParameterMaster=resp;
-                    //  {
-                    //      "ParamName": {
-
-                    //      }
-                    //  }
-                    //  {
-                    //      "SubscoreName": {
-                    //          "ParamName": {OJB},
-                    //          "ParamName": {OJB},
-                    //          "ParamName": {OJB}
-                    //      },
-                    //      "SubscoreName": {
-                    //         "ParamName": {OJB},
-                    //         "ParamName": {OJB},
-                    //         "ParamName": {OJB}
-                    //     }
-                    //  }
-
                 }, function (err) {
 
                 });
@@ -184,7 +157,7 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
                                                     if(values){
                                                         values.forEach(function(value) {
                                                             if( row.subScoreName &&  value.subScoreName==row.subScoreName)
-                                                                options.push(value.parameterName  );
+                                                                options.push(value.parameterName);
                                                         });
                                                     }
                                                     return options;
@@ -254,13 +227,9 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
                                             name: "NON_NEGOTIABLE",
                                             isKeyPair : true,
                                             getListOptions: function (model,row ) {
-                                                return $q.when(model.allParameterMaster).then(function (value) {
-                                                    var options = {
-                                                        Yes : "1",
-                                                        No : "0"
-                                                    };
-                                                    return options;
-                                                });
+                                                return $q.when({Yes : "1",No : "0"}).then(function (value) {
+                                                            return value;
+                                                        });
                                             },
                                         },
                                         {
@@ -306,36 +275,18 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
 
                 PageHelper.showLoader();
 
-                // model.scoreValues.forEach(function(subScore) {
-                //     var subScores = model.getModelSubScore(subScore.subscoreName,subScore.parameterName);
-                //     //var object = subScores.find(o => o.parameterName ==parameterName) ;
-                //     subScores.push(subScore);
-                //     subScoreName
-                //     parameterName
-                // });
-
+                model.clear = function (values){
+                    values.forEach(function(obj) {
+                            for (var propName in obj) { 
+                              if (obj[propName] === "" || obj[propName] === null || obj[propName] === undefined) {
+                                delete obj[propName];
+                              }
+                        }
+                    });
+                }
 
                 model.scoreMaster.subScores.forEach(function(subScore) {
                     console.log(subScore);
-                    // model.allParameterMaster.forEach(function(scoreParameters) {
-                    //     console.log(scoreParameters);
-                    //     var ScoreParameter = model.getScoreParameter(subScore.subscoreName,scoreParameters.parameterName);
-                    //     //console.log(ScoreParameter.scoreValues);
-                    //     var values =model.getScoreValuesByParamId(subScore.subscoreName,scoreParameters.parameterName);
-                    //     //console.log(values);
-                    //     if(values.length>0 ){
-                    //         if(ScoreParameter==undefined){
-                    //             ScoreParameter = {
-                    //                 parameterName: "DSCR",
-                    //                 status: "ACTIVE",
-                    //                 scoreValues: []
-                    //             };
-                    //         }
-                    //         ScoreParameter.scoreValues= values;
-                    //     }
-                        
-
-                    // });
 
                     subScore.scoreParameters.forEach(function(scoreParameters) {
                         console.log(scoreParameters);
@@ -343,6 +294,8 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
                         //console.log(ScoreParameter.scoreValues);
                         var values =model.getScoreValuesByParamId(subScore.subscoreName,scoreParameters.parameterName);
                         //console.log(values);
+                        model.clear(values);
+                        console.log(JSON.stringify(values))
                         ScoreParameter.scoreValues= values;
                         //console.log("-------");
                     });
@@ -356,8 +309,9 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
                     irfProgressMessage.pop('cust-update', 'Done. Score Values are Updated ', 2000);
                 }, function (err) {
                     PageHelper.hideLoader();
+                    PageHelper.showErrors(err);
                     var errObj = JSON.stringify(err);
-                    irfProgressMessage.pop('cust-update', 'err : '+err.data.body.error, 2000);
+                    irfProgressMessage.pop('cust-update', 'failed : '+err.data.body.error, 2000);
                 });
 			}
 			
