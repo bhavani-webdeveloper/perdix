@@ -341,12 +341,11 @@ if (isset($_GET)) {
                 (score_calc_id, subscore_name, applicant_customer_id, ParameterName, CategorySelected, UserInput, ParamterScore, ParameterWeightage, WeightedScore, MaxWeightedScore, ParameterPassScore, ParameterPassStatus, mitigant, color_english, color_hexadecimal, created_by)
                 VALUES ";
 
-    $scoring_array = array(1, 0);
     $CurrentParameters = [];
+    // management score and others isIndividualScore = 1/isIndividualScore = 0
+   for ($s = 0; $s < 2; $s++) {
 
-   for ($s = 0; $s < count($scoring_array); $s++) {
-
-       if( $scoring_array[$s] == 1 ){
+       if( $s == 1 ){
             $subscore_condition = " AND score_subscore.isIndividualScore = 1";
             $applicant_count = COUNT($applicant);
         } else {
@@ -356,7 +355,7 @@ if (isset($_GET)) {
         
         for ($al = 0; $al < $applicant_count; $al++) {
             $temp_CustomerId = $CustomerId;
-            if ($scoring_array[$s] == 1) {
+            if ($s == 1) {
                 $CustomerId = $applicant[$al]['relation_customer_id'];
                 if ($applicant[$al]['business_involvement'] == 'Full Time') {
                     $weightage_manipulation = $full_involvement_weight / $full_time;
