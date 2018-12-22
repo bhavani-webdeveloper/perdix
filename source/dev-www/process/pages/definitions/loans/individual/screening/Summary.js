@@ -1,7 +1,6 @@
 irf.pageCollection.directive("irfSimpleSummaryTable", function(){
 
     return {
-
         restrict: 'E',
         scope: {  tableData : '=irfTableDef'},
         templateUrl: 'process/pages/templates/simple-summary-table.html',
@@ -47,6 +46,60 @@ irf.pageCollection.directive("irfSimpleSummaryTable", function(){
             }
 
 }]);
+irf.pageCollection.directive("irfScoringDisplay", function(){
+
+    return {
+        restrict: 'E',
+        scope: {  scoringData : '=irfScoringData'},
+        templateUrl: 'process/pages/templates/irf-scoring-display.html',
+        controller: 'irfScoringDisplayController'
+    }
+}).controller("irfScoringDisplayController", ["$scope", function($scope){
+    var sd = $scope.scoringData.SubscoreDetails;
+    var ss = $scope.scoringData.SubscoreScores;
+    var _tData = {
+        "IndividualScores": [],
+        "OtherScores": []
+    };
+    _.forOwn(sd, function(v,k){
+        var _vsd = {};
+        _vsd['name'] = k;
+        _vsd['isIndividualScore'] = false;
+        _vsd['Score'] = ss[k];
+        if ( _.has(v, '__isIndividualScore') && v['__isIndividualScore'] == 'YES') {
+            _vsd['isIndividualScore'] = true;
+        }
+        // Data handling for non individual scores
+        if (_vsd['isIndividualScore'] == false){
+            _vsd['parameterData'] = v;
+            _tData.OtherScores.push(_vsd);
+        } else if (_vsd['isIndividualScore'] == true){
+            _vsd['customerParameterMapping'] = {};
+            _vsd['parameters'] = [];
+
+            var cids = v['CustomerIds'];
+
+            for (var i=0;i<cids.length; i++){
+                var _id = cids[i];
+                _vsd['customerParameterMapping'][_id] = {
+                    'Details' : v[_id].CustomerDetails,
+                    'Parameters': {}
+                };
+
+                _.forEach(v[_id].data, function(pData){
+                    _vsd['customerParameterMapping'][_id]['Parameters'][pData['Parameter']] = pData;
+                    if (_vsd['parameters'].indexOf(pData['Parameter'])<0){
+                        _vsd['parameters'].push(pData['Parameter']);
+                    }
+                })
+            }
+            _tData.IndividualScores.push(_vsd);
+        }
+        
+    })
+
+    $scope.scoringTableData = _tData;
+}]);
 
 irf.pageCollection.factory(irf.page("loans.individual.screening.Summary"),
 ["$log", "$q","Enrollment", 'SchemaResource', 'PageHelper','formHelper',"elementsUtils",
@@ -62,6 +115,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         model.enterpriseDetails = res[0];
         model.scoreDetails = [res[1], res[2], res[3], res[4]];
         model.c = res[25].summary;
+        model.fullScoringDetails = res[26].data;
         //model.scoreDetails[3].data.push({Parameter:"Hypothecation Status",color_hexadecimal:model.c.status,"Actual Value" :model.c.ActualValue})
 
 
@@ -446,6 +500,21 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         //         }
         //     ]
         // });
+
+        if (model.fullScoringDetails){
+            form.push({
+                type: "box",
+                colClass: "col-sm-12 table-box",
+                title: "SCORES",
+                items: [
+                    {
+                        "type": "section",
+                        "htmlClass": "row",
+                        "html":"<irf-scoring-display irf-scoring-data='model.fullScoringDetails' />"
+                    }
+                ]
+            })
+        }
 
         if(model.scoreDetails && model.scoreDetails.length > 0)
         form.push({
