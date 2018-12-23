@@ -305,7 +305,10 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
                                         value: false,
                                         name: "No"
                                     }
-                                    ]
+                                    ],
+                                    onChange:function(valueObj,context,model){
+                                        model.scoreMaster.subScores[context.arrayIndexes[0]].scoreParameters = null;
+                                    }
                                 },
                                 {
                                     "key": "scoreMaster.subScores[].status",
@@ -330,16 +333,18 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
                                             "title":"PARAMETER_NAME",
                                             "type":"lov",
                                             searchHelper: formHelper,
-                                            search: function (inputModel, form, model) {
+                                            search: function (inputModel, form, model,context) {
                                                 var defered = $q.defer();
                                                 ScoresMaintenance.allParameterMaster({page:1,per_page:100}).$promise.then(function(item){
                                                     var out = {};
                                                     out.body = [];
+                                                    var parameterCategory = model.scoreMaster.subScores[context.arrayIndexes[0]].isIndividualScore ? "Customer":"Loan";
                                                     for(var i=0;i<item.length;i++){
-                                                        if(item[i].status == "ACTIVE")
+                                                        if(item[i].status == "ACTIVE" && item[i].parameterCategory == parameterCategory){
                                                         var temparray = [];
                                                         temparray.push(item[i]);
                                                             out.body.push(temparray);
+                                                        }
 
                                                     }
                                                     defered.resolve(out);
