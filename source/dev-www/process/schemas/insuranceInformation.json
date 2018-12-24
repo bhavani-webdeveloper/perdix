@@ -15,7 +15,10 @@
                      "type":"object",
                      "properties":{  
                         "nomineeName":{  
-                           "type":"string",
+                           "type":[  
+                              "string",
+                              "null"
+                           ],
                            "title":"NOMINEE_NAME"
                         }
                      }
