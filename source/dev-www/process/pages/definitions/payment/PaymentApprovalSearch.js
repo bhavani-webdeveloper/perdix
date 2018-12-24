@@ -103,6 +103,7 @@ define({
 						'paymentMode': searchOptions.transactionType,
 						'paymentType': searchOptions.modeOfPayment,
 						"branchId":searchOptions.branch,
+						"branchName": SessionStore.getCurrentBranch().branchName,
 						'paymentId': searchOptions.id,
 						'debitAccountName': searchOptions.debitAccountName,
 						'paymentPurpose': searchOptions.paymentPurpose,
