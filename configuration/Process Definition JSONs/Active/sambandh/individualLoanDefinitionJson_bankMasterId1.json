@@ -1215,6 +1215,15 @@
                      "captureStages":[
                         "Application", "Screening", "LoanInitiation"
                      ]
+                  },
+                  "customerSnapshotId":{
+                     "title":"customer snapshot Id",
+                     "type":"string",
+                     "minLength":0,
+                     "maxLength":3,
+                     "captureStages":[
+                        "Application", "Screening", "LoanInitiation"
+                     ]
                   }
                }
             }
