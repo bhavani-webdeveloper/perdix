@@ -3324,7 +3324,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                 console.log(d);
 
                                 if (d.length != dedupeCustomerIdArray.length) {
-                                    PageHelper.showProgress("dedupe-status", "Not all customers have done dedupe", 5000);
+                                    PageHelper.showProgress("dedupe-status", "Please wait for 30 sec before proceeding from this stage", 5000);
                                     mandatoryToProceedLoan['Dedupe'] = false;
                                     return;
                                 }
