@@ -156,76 +156,50 @@ define({
         }; // END OF prepareData()
 
         var computeScoringData = function(model, scoreName, deferred){
-            if(!model.isScoringV2ApiEnabled){
-                Scoring.get({
-                    auth_token: AuthTokenHelper.getAuthData().access_token,
-                    LoanId: model.cbModel.loanId,
-                    ScoreName: scoreName,
-                    isScoringOptimizationEnabled : model.isScoringOptimizationEnabled
-                }).$promise.then(function(response) {
-                    model.ScoreDetails = response.ScoreDetails;
-                }).finally(function() {
-                    var onSuccessPromise = Scoring.financialSummary({
-                        loan_id: model.cbModel.loanId,
-                        score_name: scoreName
-                    }).$promise;
-                    onSuccessPromise.then(function(res) {
-                        /* var financialData = [model.ScoreDetails,res];*/
-                        BundleManager.pushEvent('financialSummary', model._bundlePageObj, res);
-                        prepareData(res, model);
-                        model.$prepared = true;
-                        prepareDataDeferred.resolve();
-                    });
+            var api = Scoring.get;
+            var params = {
+                auth_token: AuthTokenHelper.getAuthData().access_token,
+                LoanId: model.cbModel.loanId,
+                ScoreName: scoreName,
+                isScoringOptimizationEnabled : model.isScoringOptimizationEnabled
+            };
 
-                    var p3 = Enrollment.getCustomerById({
-                        id: model.cbModel.customerId
-                    }).$promise.then(function(res) {
-                        model.customer = res;
-                    }, function(httpRes) {
-                        PageHelper.showErrors(httpRes);
-                    }).finally(function() {});
+            if(model.isScoringV2ApiEnabled){
+              api = Scoring.getV2;
+              params = {
+                auth_token: AuthTokenHelper.getAuthData().access_token,
+                LoanId: model.cbModel.loanId,
+                isScoringOptimizationEnabled : model.isScoringOptimizationEnabled
+              }  
+            } 
 
-                    $q.all([onSuccessPromise, p3]).finally(function() {
-                        deferred.resolve();
-                    });
-                });
-            } else {
-                Scoring.getV2({
-                    auth_token: AuthTokenHelper.getAuthData().access_token,
-                    LoanId: model.cbModel.loanId,
-                    isScoringOptimizationEnabled : model.isScoringOptimizationEnabled
-                }).$promise.then(function(response) {
-                    model.ScoreDetails = response.ScoreDetails;
-                    var onSuccessPromise = Scoring.financialSummary({
-                        loan_id: model.cbModel.loanId,
-                        score_name: model.ScoreDetails.ScoreName
-                    }).$promise;
-                    onSuccessPromise.then(function(res) {
-                        /* var financialData = [model.ScoreDetails,res];*/
-                        BundleManager.pushEvent('financialSummary', model._bundlePageObj, res);
-                        prepareData(res, model);
-                        model.$prepared = true;
-                        prepareDataDeferred.resolve();
-                    });
-
-                    var p3 = Enrollment.getCustomerById({
-                        id: model.cbModel.customerId
-                    }).$promise.then(function(res) {
-                        model.customer = res;
-                    }, function(httpRes) {
-                        PageHelper.showErrors(httpRes);
-                    }).finally(function() {});
-
-                    $q.all([onSuccessPromise, p3]).finally(function() {
-                        deferred.resolve();
-                    });
-                }, function(errResp){
-                    console.log(errResp);
+           api(params).$promise.then(function(response) {
+                model.ScoreDetails = response.ScoreDetails;
+            }).finally(function() {
+                var onSuccessPromise = Scoring.financialSummary({
+                    loan_id: model.cbModel.loanId,
+                    score_name: model.ScoreDetails.ScoreName || scoreName
+                }).$promise;
+                onSuccessPromise.then(function(res) {
+                    /* var financialData = [model.ScoreDetails,res];*/
+                    BundleManager.pushEvent('financialSummary', model._bundlePageObj, res);
+                    prepareData(res, model);
+                    model.$prepared = true;
                     prepareDataDeferred.resolve();
-                }).finally(function() {
-
                 });
-            }
+
+                var p3 = Enrollment.getCustomerById({
+                    id: model.cbModel.customerId
+                }).$promise.then(function(res) {
+                    model.customer = res;
+                }, function(httpRes) {
+                    PageHelper.showErrors(httpRes);
+                }).finally(function() {});
+
+                $q.all([onSuccessPromise, p3]).finally(function() {
+                    deferred.resolve();
+                });
+            });
         }
 
         var HOUSEHOLD_PL_HTML =
