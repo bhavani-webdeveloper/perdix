@@ -3289,12 +3289,17 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         var p2 = $q.when()
                         .then(function(){
                             $log.info("p2_1 is resolved");
+                            var deferred = $q.defer();
                             var p2_1 = Scoring.getV2({
                                 auth_token:AuthTokenHelper.getAuthData().access_token,
                                 LoanId:reqData.loanAccount.id,
                                 isScoringOptimizationEnabled: model.isScoringOptimizationEnabled
-                            }).$promise;
-                            return p2_1;
+                            }).$promise.then(function(resp){
+                                deferred.resolve(resp);
+                            },function(err){
+                                deferred.resolve(err);
+                            })
+                            return deferred.promise;
                         })
                         .then(function(){
                             var p2_2 = Queries.getQueryForScore1(reqData.loanAccount.id);
