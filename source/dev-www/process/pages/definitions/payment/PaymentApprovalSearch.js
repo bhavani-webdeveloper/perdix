@@ -9,7 +9,8 @@ define({
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				$log.info("payment approval list got initialized");				
-                model.modeOfPayment = 'Manual';
+				model.modeOfPayment = 'Manual';
+				model.branch = SessionStore.getCurrentBranch().branchId;
 			},
 			definition: {
 				title: "Search",
@@ -81,7 +82,16 @@ define({
 						"beneficiaryName": {
 							"title": "BENEFICIARY_NAME",
 							"type": "string",
-						}
+						},
+						'branch': {
+							'title': "BRANCH_NAME",
+							"readonly":true,							
+							"type": ["string", "null"],
+							"x-schema-form": {
+								"type": "userbranch",
+								"screenFilter": true
+							}
+						},
 					}
 				},
 				getSearchFormHelper: function() {
@@ -92,6 +102,7 @@ define({
 						'paymentDate': searchOptions.paymentDate,
 						'paymentMode': searchOptions.transactionType,
 						'paymentType': searchOptions.modeOfPayment,
+						"branchId":searchOptions.branch,
 						'paymentId': searchOptions.id,
 						'debitAccountName': searchOptions.debitAccountName,
 						'paymentPurpose': searchOptions.paymentPurpose,
