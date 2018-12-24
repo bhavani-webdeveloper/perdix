@@ -35,7 +35,8 @@ irf.pageCollection.controller(irf.controller("payment.PaymentDashboard"), ['$log
             if (pasMenu) {
                 pasMenu.data = 0;
                     Payment.search({
-                        'currentStage': 'PaymentApproval'
+                        'currentStage': 'PaymentApproval',
+                        'branchName': SessionStore.getCurrentBranch().branchName,
                     }).$promise.then(function(response, headerGetter) {
                         pasMenu.data = pasMenu.data + Number(response.headers['x-total-count']);
                     }, function() {
