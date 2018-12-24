@@ -5,12 +5,12 @@ define([], function () {
         pageType: "Engine",
         dependencies: ["$log", "$q", "LoanAccount", "LoanProcess", 'Scoring', 'Enrollment', 'EnrollmentHelper', 'AuthTokenHelper', 'SchemaResource', 'PageHelper', 'formHelper', "elementsUtils",
             'irfProgressMessage', 'SessionStore', "$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch", "IndividualLoan",
-            "BundleManager", "PsychometricTestService", "LeadHelper", "Message", "$filter", "Psychometric", "IrfFormRequestProcessor", "UIRepository", "$injector", "irfNavigator"
+            "BundleManager", "PsychometricTestService", "LeadHelper", "Message", "$filter", "Psychometric", "IrfFormRequestProcessor", "UIRepository", "$injector", "irfNavigator","Groups","irfSimpleModal"
         ],
 
         $pageFn: function ($log, $q, LoanAccount, LoanProcess, Scoring, Enrollment, EnrollmentHelper, AuthTokenHelper, SchemaResource, PageHelper, formHelper, elementsUtils,
             irfProgressMessage, SessionStore, $state, $stateParams, Queries, Utils, CustomerBankBranch, IndividualLoan,
-            BundleManager, PsychometricTestService, LeadHelper, Message, $filter, Psychometric, IrfFormRequestProcessor, UIRepository, $injector, irfNavigator) {
+            BundleManager, PsychometricTestService, LeadHelper, Message, $filter, Psychometric, IrfFormRequestProcessor, UIRepository, $injector, irfNavigator,Groups,irfSimpleModal) {
             var branch = SessionStore.getBranch();
             var podiValue = SessionStore.getGlobalSetting("percentOfDisposableIncome");
             //pmt function completed
@@ -65,53 +65,71 @@ define([], function () {
                             model.customer.dscStatus = model.loanAccount.loanCustomerRelations[index].dscStatus;
                             })(i);
                         }
-                        else if (model.loanAccount.loanCustomerRelations[i].relation == 'Co-Applicant') {
-                            temp = model.loanAccount.loanCustomerRelations[i].dscStatus;
-                            (function(index){
-                            Enrollment.getCustomerById({ id: model.loanAccount.loanCustomerRelations[i].customerId })
-                                .$promise
-                                .then(function (res) {
-                                    model.customer.coapplicants.push({
-                                        "coapplicantid": res.id,
-                                        "coapplicantname": res.firstName,
-                                        "loanAmount": model.loanAccount.loanAmountRequested,
-                                        "loanPurpose1": model.loanAccount.loanPurpose1,
-                                        "dscStatus": model.loanAccount.loanCustomerRelations[index].dscStatus
-                                    });
-                                    model.customer.loanSaved = true;
+                        // else if (model.loanAccount.loanCustomerRelations[i].relation == 'Co-Applicant') {
+                        //     temp = model.loanAccount.loanCustomerRelations[i].dscStatus;
+                        //     (function(index){
+                        //     Enrollment.getCustomerById({ id: model.loanAccount.loanCustomerRelations[i].customerId })
+                        //         .$promise
+                        //         .then(function (res) {
+                        //             model.customer.coapplicants.push({
+                        //                 "coapplicantid": res.id,
+                        //                 "coapplicantname": res.firstName,
+                        //                 "loanAmount": model.loanAccount.loanAmountRequested,
+                        //                 "loanPurpose1": model.loanAccount.loanPurpose1,
+                        //                 "dscStatus": model.loanAccount.loanCustomerRelations[index].dscStatus
+                        //             });
+                        //             model.customer.loanSaved = true;
 
-                                }, function (httpRes) {
-                                    PageHelper.showErrors(httpRes);
-                                })
-                                .finally(function () {
-                                    PageHelper.hideLoader();
-                                })})(i);
-                        }
-                        else if (model.loanAccount.loanCustomerRelations[i].relation == 'Guarantor') {
-                            (function (index){
-                            Enrollment.getCustomerById({ id: model.loanAccount.loanCustomerRelations[i].customerId })
-                                .$promise
-                                .then(function (res) {
-                                    model.customer.guarantors.push({
-                                        "guarantorid": res.id,
-                                        "guarantorname": res.firstName,
-                                        "loanAmount": model.loanAccount.loanAmountRequested,
-                                        "loanPurpose1": model.loanAccount.loanPurpose1,
-                                        "dscStatus": model.loanAccount.loanCustomerRelations[index].dscStatus
-                                    });
-                                    model.customer.loanSaved = true;
+                        //         }, function (httpRes) {
+                        //             PageHelper.showErrors(httpRes);
+                        //         })
+                        //         .finally(function () {
+                        //             PageHelper.hideLoader();
+                        //         })})(i);
+                        // }
+                        // else if (model.loanAccount.loanCustomerRelations[i].relation == 'Guarantor') {
+                        //     (function (index){
+                        //     Enrollment.getCustomerById({ id: model.loanAccount.loanCustomerRelations[i].customerId })
+                        //         .$promise
+                        //         .then(function (res) {
+                        //             model.customer.guarantors.push({
+                        //                 "guarantorid": res.id,
+                        //                 "guarantorname": res.firstName,
+                        //                 "loanAmount": model.loanAccount.loanAmountRequested,
+                        //                 "loanPurpose1": model.loanAccount.loanPurpose1,
+                        //                 "dscStatus": model.loanAccount.loanCustomerRelations[index].dscStatus
+                        //             });
+                        //             model.customer.loanSaved = true;
 
-                                }, function (httpRes) {
-                                    PageHelper.showErrors(httpRes);
-                                })
-                                .finally(function () {
-                                    PageHelper.hideLoader();
-                                })})(i);
-                        }
+                        //         }, function (httpRes) {
+                        //             PageHelper.showErrors(httpRes);
+                        //         })
+                        //         .finally(function () {
+                        //             PageHelper.hideLoader();
+                        //         })})(i);
+                        // }
                     }
                 }
                 return
-            }
+            };
+            function showDscData(dscId) {
+                PageHelper.showLoader();
+                Groups.getDSCData({
+                    dscId: dscId
+                }, function(resp, headers) {
+                    PageHelper.hideLoader();
+                    var dataHtml = "<table class='table table-striped table-bordered table-responsive'>";
+                    dataHtml += "<tr><td>Response : </td><td>" + resp.response + "</td></tr>";
+                    dataHtml += "<tr><td>Response Message: </td><td>" + resp.responseMessage + "</td></tr>";
+                    dataHtml += "<tr><td>Stop Response: </td><td>" + resp.stopResponse + "</td></tr>";
+                    dataHtml += "</table>"
+                    irfSimpleModal('DSC Check Details', dataHtml);
+                }, function(res) {
+                    PageHelper.showErrors(res);
+                    PageHelper.hideLoader();
+                });
+            };
+
 
             return {
                 "type": "schema-form",
@@ -256,9 +274,9 @@ define([], function () {
                 },
                 eventListeners: {
 
-                    "new-loan-customer-relation": function(bundleModel,model,params){
-                        showDscResponse(model,params);
-                    },
+                    // "new-loan-customer-relation": function(bundleModel,model,params){
+                    //     showDscResponse(model,params);
+                    // },
 
                     "new-applicant": function (bundleModel, model, params) {
                         $log.info("Inside new-applicant of DscCheck");
@@ -271,34 +289,34 @@ define([], function () {
                     "cb-check-done": function(model){
                         $log.info("for cb-check-done");
                     },
-                    "new-co-applicant": function (bundleModel, model, params) {
-                        $log.info("Insdie new-co-applicant of DscCheck");
-                        var recordExists = false;
-                        for (var i = model.customer.coapplicants.length - 1; i >= 0; i--) {
-                            if (model.customer.coapplicants[i].coapplicantid == params.customer.id)
-                                recordExists = true;
-                        }
-                        if (!recordExists) {
-                            model.customer.coapplicants.push({
-                                "coapplicantid": params.customer.id,
-                                "coapplicantname": params.customer.firstName
-                            });
-                        }
-                    },
-                    "new-guarantor": function (bundleModel, model, params) {
-                        $log.info("Insdie new-guarantor of DscCheck");
-                        var recordExists = false;
-                        for (var i = model.customer.guarantors.length - 1; i >= 0; i--) {
-                            if (model.customer.guarantors[i].guarantorid == params.customer.id)
-                                recordExists = true;
-                        }
-                        if (!recordExists) {
-                            model.customer.guarantors.push({
-                                "guarantorid": params.customer.id,
-                                "guarantorname": params.customer.firstName
-                            });
-                        }
-                    },
+                    // "new-co-applicant": function (bundleModel, model, params) {
+                    //     $log.info("Insdie new-co-applicant of DscCheck");
+                    //     var recordExists = false;
+                    //     for (var i = model.customer.coapplicants.length - 1; i >= 0; i--) {
+                    //         if (model.customer.coapplicants[i].coapplicantid == params.customer.id)
+                    //             recordExists = true;
+                    //     }
+                    //     if (!recordExists) {
+                    //         model.customer.coapplicants.push({
+                    //             "coapplicantid": params.customer.id,
+                    //             "coapplicantname": params.customer.firstName
+                    //         });
+                    //     }
+                    // },
+                    // "new-guarantor": function (bundleModel, model, params) {
+                    //     $log.info("Insdie new-guarantor of DscCheck");
+                    //     var recordExists = false;
+                    //     for (var i = model.customer.guarantors.length - 1; i >= 0; i--) {
+                    //         if (model.customer.guarantors[i].guarantorid == params.customer.id)
+                    //             recordExists = true;
+                    //     }
+                    //     if (!recordExists) {
+                    //         model.customer.guarantors.push({
+                    //             "guarantorid": params.customer.id,
+                    //             "guarantorname": params.customer.firstName
+                    //         });
+                    //     }
+                    // },
                     "new-loan": function (bundleModel, model, params) {
                         $log.info("Inside new-loan of DSC handled");
                         model.customer.loanSaved = true;
@@ -427,6 +445,25 @@ define([], function () {
                                         "title": "DSC_REQUEST",
                                         "onClick": "actions.getDscDetails(model,model.loanAccount.id)"
                                     },
+                                    {
+                                        "type": "button",
+                                        "title": "VIEW_DSC_RESPONSE",
+                                        "icon": "fa fa-eye",
+                                        "style": "btn-primary",
+                                        "condition":"model.customer.dscStatus && model.loanAccount.currentStage == 'LoanInitiation'",
+                                        "onClick": function(model, formCtrl, form, event) {
+                                            console.log(form);
+                                            console.warn(event);
+                                            var i = event['arrayIndex'];
+                                            // console.warn("dscid :" + model.group.jlgGroupMembers[i].dscId);
+                                            for (var i=0;i<model.loanAccount.loanCustomerRelations.length;i++){
+                                                if(model.loanAccount.loanCustomerRelations[i].relation == "Applicant")
+                                                    dscId = model.loanAccount.loanCustomerRelations[i].dscId;
+                                            }
+                                            // var dscId = model.loanAccount.loanCustomerRelations[i].dscId;
+                                            showDscData(dscId);
+                                        }
+                                    }
                                 ]
                             }
                         ]
@@ -479,6 +516,7 @@ define([], function () {
                            IndividualLoan.get({id:loanid},{},function(resp){
                                if(resp.loanCustomerRelations && resp.loanCustomerRelations.length > 0){
                                    model.customer.dscStatus = "SUCCESS";
+                                   model.loanAccount = resp;
                                    showDscResponse(model,resp);
                                 BundleManager.pushEvent('dsc-status',resp.loanCustomerRelations);    
                                }
