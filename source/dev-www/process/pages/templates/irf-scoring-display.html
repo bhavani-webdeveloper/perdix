@@ -6,16 +6,14 @@
                     {{ ss.name }} - {{ ss.Score }}
                 </h3>
                 <table class="table table-condensed">
-                    <colgroup>
-                        <col width="50%">
-                        <col width="10%">
-                        <col width="40%">
-                    </colgroup>
                     <tbody>
                         <tr>
                             <th>Parameter Name</th>
-                            <th></th>
-                            <th ng-repeat="(k,j) in ss.customerParameterMapping">{{j.Details.Name}} - {{
+                            <th ng-repeat-start="(k,j) in ss.customerParameterMapping" style="width:40px"></th>
+                                
+                            </th>
+
+                            <th ng-repeat-end>{{j.Details.Name}} - {{
                                 j.Details.Relation}}</th>
                         </tr>
                         <tr ng-repeat="j in ss.parameters" ng-init="parameterIndex=$index">
@@ -48,7 +46,7 @@
                             <tbody>
                                 <tr>
                                     <th>Parameter</th>
-                                    <th></th>
+                                    <th style="width:40px"></th>
                                     <th>Actual Value</th>
                                 </tr>
                                 <tr ng-repeat="data in ss.parameterData">
