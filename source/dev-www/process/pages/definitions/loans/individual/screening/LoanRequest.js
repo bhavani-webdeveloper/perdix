@@ -520,6 +520,11 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
             if(!_.hasIn(model.loanAccount,'transactionType')|| _.isNull(model.loanAccount.transactionType)){
                 model.loanAccount.transactionType = "New Loan";
             }
+
+            if(model.loanAccount.transactionType == 'New Loan') {
+                model.loanAccount.linkedAccountNumber = null;
+            }
+
             if (_.hasIn(model.loanAccount, 'loanMitigants') && _.isArray(model.loanAccount.loanMitigants)){
                 var loanMitigantsGrouped = {};
                 for (var i=0; i<model.loanAccount.loanMitigants.length; i++){
@@ -669,6 +674,8 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     },function(err){
                         $log.info("loan request Individual/find api failure" + err);
                     });
+                } else if(model.loanAccount.transactionType == 'New Loan') {
+                    model.loanAccount.linkedAccountNumber = null;
                 }
             },
             "new-co-applicant": function(bundleModel, model, params){
@@ -863,7 +870,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         type: "lov",
                         lovonly: true,
                         autolov: true,
-                        condition: "model.loanAccount.transactionType.toLowerCase() != 'renewal'",
+                        condition: "model.loanAccount.transactionType.toLowerCase() != 'renewal' && model.loanAccount.transactionType != 'New Loan'",
                         searchHelper: formHelper,
                         search: function(inputModel, form, model, context) {
                             var out=[];
@@ -940,7 +947,12 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                             "Loan Restructure":"Loan Restructure",
                             "Internal Foreclosure":"Internal Foreclosure"
                         },
-                        condition: "model.loanAccount.transactionType.toLowerCase() != 'renewal'"
+                        condition: "model.loanAccount.transactionType.toLowerCase() != 'renewal'",
+                        onChange:function(value,form,model){
+                            if(_.hasIn(model, 'loanAccount') && model.loanAccount.transactionType == 'New Loan') {
+                                model.loanAccount.linkedAccountNumber = null;
+                            }
+                        }
 
                      },
                     {
@@ -1099,7 +1111,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 "items": [
                     {
                         key:"loanAccount.linkedAccountNumber",
-                        "condition": "model.currentStage !='FieldAppraisal' && model.currentStage !='Sanction' && model.loanAccount.transactionType.toLowerCase() != 'renewal'",
+                        condition: "model.currentStage !='FieldAppraisal' && model.currentStage !='Sanction' && model.loanAccount.transactionType.toLowerCase() != 'renewal' && && model.loanAccount.transactionType.toLowerCase() != 'New Loan'",
                         title:"LINKED_ACCOUNT_NUMBER",
                         type: "lov",
                         lovonly: true,
@@ -1130,7 +1142,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     {
                         key:"loanAccount.linkedAccountNumber",
                         title:"LINKED_ACCOUNT_NUMBER",
-                        "condition": "(model.loanAccount.transactionType.toLowerCase() != 'renewal' && (model.currentStage =='FieldAppraisal'|| model.currentStage =='Sanction' ) )",
+                        condition: "(model.loanAccount.transactionType != 'New Loan' && model.loanAccount.transactionType.toLowerCase() != 'renewal' && (model.currentStage =='FieldAppraisal'|| model.currentStage =='Sanction' ) )",
                         type: "lov",
                         lovonly: true,
                         autolov: true,
@@ -1212,7 +1224,12 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                             "Loan Restructure":"Loan Restructure",
                             "Internal Foreclosure":"Internal Foreclosure"
                         },
-                        condition: "model.loanAccount.transactionType.toLowerCase() != 'renewal'"
+                        condition: "model.loanAccount.transactionType.toLowerCase() != 'renewal'",
+                        onChange:function(value,form,model){
+                            if(_.hasIn(model, 'loanAccount') && model.loanAccount.transactionType == 'New Loan') {
+                                model.loanAccount.linkedAccountNumber = null;
+                            }
+                        }
 
                     },
                     {

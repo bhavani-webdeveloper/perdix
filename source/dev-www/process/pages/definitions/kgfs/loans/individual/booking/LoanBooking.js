@@ -50,7 +50,8 @@ define([], function () {
             var clearAll = function(baseKey,listOfKeys,model){
                 if(listOfKeys != null ||listOfKeys.length > 0){
                     for(var i =0 ;i<listOfKeys.lenght;i++){
-                        model[baseKey[listOfKeys[i]]] = null;
+                        if(typeof model[baseKey[listOfKeys[i]]] !="undefined")
+                                            model[baseKey[listOfKeys[i]]] = null;
                     }
                 }
                 else{
@@ -284,6 +285,8 @@ define([], function () {
                         "required": true,
                         "enumCode": "booking_loan_type",
                         "onChange": function(valueObj,context,model){
+                            // clearAll('loanAccount',['partner','frequency','loanProductCode',"loanAmountRequested","requestedTenure","interestRate","loanPurpose1","loanPurpose2","loanPurpose3"],model);
+                            // clearAll('loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6',[],model)
                             if(valueObj == "JEWEL"){
                                 getGoldRate(model);
                                 model.loanAccount.jewelLoanDetails = {};
@@ -330,7 +333,7 @@ define([], function () {
                             return deferred.promise;
                         },
                         onSelect: function (valueObj, model, context) {
-                            clearAll("loanAccount",["loanAmountRequested","requestedTenure","interestRate","loanPurpose1","loanPurpose2","loanPurpose3"],model);
+                            // clearAll("loanAccount",["loanAmountRequested","requestedTenure","interestRate","loanPurpose1","loanPurpose2","loanPurpose3"],model);
                             model.loanAccount.productCode = valueObj.productCode;
                             model.additions.tenurePlaceHolder = valueObj.tenure_from + '-' + valueObj.tenure_to;
                             model.additions.amountPlaceHolder = valueObj.amount_from + '-' + valueObj.amount_to;
@@ -351,7 +354,7 @@ define([], function () {
                         },
                         onChange: function (value, form, model) {
                             console.log("Test");
-                           clearAll("loanAccount",["loanAmountRequested","requestedTenure","interestRate","loanPurpose1","loanPurpose2","loanPurpose3"],model);
+                        //    clearAll("loanAccount",["loanAmountRequested","requestedTenure","interestRate","loanPurpose1","loanPurpose2","loanPurpose3"],model);
                         },
                     },
                     "LoanDetails.loanProductName":{
@@ -385,6 +388,7 @@ define([], function () {
                         },
                         onSelect: function (result, model, context) {
                             model.loanAccount.loanPurpose2 = '';
+                            model.loanAccount.loanPurpose3 = '';
                         }
                     },
                     "LoanDetails.loanPurpose2": {
@@ -464,11 +468,13 @@ define([], function () {
                             }
 
                             for (var i = 0; i < model.customer.familyMembers.length; i++) {
+                                if(!(model.customer.urnNo == model.customer.familyMembers[i].enrolledUrnNo)){
                                 out.push({
                                     name: model.customer.familyMembers[i].familyMemberFirstName,
                                     dob: model.customer.familyMembers[i].dateOfBirth,
                                     relationship: model.customer.familyMembers[i].relationShip
                                 })
+                            }
                             }
                             return $q.resolve({
                                 headers: {
@@ -736,6 +742,12 @@ define([], function () {
                                 addressMapCustomertoGuardian({},model.loanAccount.nominees[0]);
                         }
                     },
+                    "NomineeDetails.nominees.nomineeMinor":{
+                        onChange:function(valueObj,form,mode){
+                            // clearAll("loanAccount.nominees[0]",["guardianFirstName","guardianGender","guardianDOB","guardianDoorNo","guardianLocality","guardianDistrict","guardianStreet","guardianPincode","guardianState","guardianRelationWithMinor","guardianAddressSameAsCustomer"],model);
+                        }
+                    },
+
                     "LoanSanction":{
                         "condition": "model.loanAccount.id"
                     },

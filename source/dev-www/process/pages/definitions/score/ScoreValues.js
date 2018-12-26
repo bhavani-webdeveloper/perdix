@@ -259,7 +259,7 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
                                             name: "STATUS",
                                             getListOptions: function (model) {
                                                 return $q.when(model.allParameterMaster).then(function (value) {
-                                                    var options = ["ACTIVE","DEACTIVE"];
+                                                    var options = ["ACTIVE","INACTIVE"];
                                                     return options;
                                                 });
                                             },

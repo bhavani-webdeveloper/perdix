@@ -412,7 +412,7 @@ if (isset($_GET)) {
 
                         // $ParameterDataAvail[] = $Column;
                         //get the allocated value from sc_values
-                        $ScoreValue = "(SELECT    
+                        $ScoreValue = "(SELECT DISTINCT
                     p.ParameterPassScore,
                     s.subscoreName,
                     IF(v.Value >=p.ParameterPassScore AND v.Value IS NOT NULL, 'PASS','FAIL') AS 'ParameterPassStatus',
@@ -429,7 +429,7 @@ if (isset($_GET)) {
                     v.colorHexadecimal,
                     CONCAT_WS('-', v.CategoryValueFrom, if(v.CategoryValueTo='', NULL, v.CategoryValueTo)) AS Category
                     FROM score_values v
-                    LEFT JOIN score_subscore s on s.scoreName = '$ScoreName'
+                    LEFT JOIN score_subscore s on s.scoreName = '$ScoreName'                    
                     LEFT JOIN score_parameters p ON v.ParameterName = p.ParameterName
                     LEFT JOIN sc_mitigants m ON (p.ParameterName=m.ParameterName AND m.status='ACTIVE')
                     WHERE
@@ -459,46 +459,48 @@ if (isset($_GET)) {
 
                         $calculateWeightage = 0;
 
-                        $DefinedScoreValues = collect($defaultDb->select($ScoreValue))->first();
-        
-                        $DefinedScoreValues = (array) $DefinedScoreValues;
-                        if ($DefinedScoreValues['Value'] > 0){
-                            $calculateWeightage = ((($DefinedScoreValues['Value'] / $DefinedScoreValues['MaxParameterScore']) * $DefinedScoreValues['ParameterWeightage']) / 100);
+                        $DefinedScoreValue = $defaultDb->select($ScoreValue);
+
+                        foreach(  $DefinedScoreValue as $DefinedScoreValues){        
+                            $DefinedScoreValues = (array) $DefinedScoreValues;
+                            if ($DefinedScoreValues['Value'] > 0){
+                                $calculateWeightage = ((($DefinedScoreValues['Value'] / $DefinedScoreValues['MaxParameterScore']) * $DefinedScoreValues['ParameterWeightage']) / 100);
+                            }
+                            $calculateMaxWeightage = $DefinedScoreValues['ParameterWeightage'] / 100;
+                            if ($DefinedScoreValues['non_negotiable'] == '1') {
+                                $non_negotiable++;
+                            }
+                            
+                            $TempArray = array();
+
+                            $TempArray['score_calc_id'] = "$AutoID";
+                            $TempArray['subscore_name'] = $DefinedScoreValues['subscoreName'];
+                            $TempArray['applicant_customer_id'] = $CustomerId;
+                            $TempArray['ParameterName'] = $Column;
+                            $TempArray['Category'] = str_replace('#', '', $DefinedScoreValues['Category']);
+                            $TempArray['UserInput'] = $InputValue;
+                            $TempArray['ParamterScore'] = $DefinedScoreValues['Value'];
+                            $TempArray['ParameterWeightage'] = ($DefinedScoreValues['ParameterWeightage'] > 0) ? $DefinedScoreValues['ParameterWeightage'] . "%" : "";
+                            $TempArray['WeightedScore'] = "$calculateWeightage";
+                            $TempArray['MaxWeightedScore'] = "$calculateMaxWeightage";
+                            $TempArray['ParameterPassScore'] = $DefinedScoreValues['ParameterPassScore'];
+                            $TempArray['ParameterPassStatus'] = $DefinedScoreValues['ParameterPassStatus'];
+                            $TempArray['mitigant'] = $DefinedScoreValues['mitigant'];
+                            $TempArray['color_english'] = $DefinedScoreValues['colorEnglish'];
+                            $TempArray['color_hexadecimal'] = $DefinedScoreValues['colorHexadecimal'];
+                            $TempArray['created_by'] = $SessionUserName;
+
+                            $CurrentParameters[$CustomerId][$TempArray['ParameterName']] = $TempArray;
+                            $InsertValues .= "('" . implode("','", $TempArray) . "'),";
+                            $TempArray['mitigant'] = explode("|", $DefinedScoreValues['mitigant']);
+
+                            unset($TempArray['score_calc_id']);
+                            unset($TempArray['created_by']);
+
+                            array_push($ConsolidatedArray, $TempArray);
+                            $WeightageValue = $WeightageValue + $calculateWeightage;
+                            $OverallMaxWeightedScore = $OverallMaxWeightedScore + $calculateMaxWeightage;
                         }
-                        $calculateMaxWeightage = $DefinedScoreValues['ParameterWeightage'] / 100;
-                        if ($DefinedScoreValues['non_negotiable'] == '1') {
-                            $non_negotiable++;
-                        }
-                        
-                        $TempArray = array();
-
-                        $TempArray['score_calc_id'] = "$AutoID";
-                        $TempArray['subscore_name'] = $DefinedScoreValues['subscoreName'];
-                        $TempArray['applicant_customer_id'] = $CustomerId;
-                        $TempArray['ParameterName'] = $Column;
-                        $TempArray['Category'] = str_replace('#', '', $DefinedScoreValues['Category']);
-                        $TempArray['UserInput'] = $InputValue;
-                        $TempArray['ParamterScore'] = $DefinedScoreValues['Value'];
-                        $TempArray['ParameterWeightage'] = ($DefinedScoreValues['ParameterWeightage'] > 0) ? $DefinedScoreValues['ParameterWeightage'] . "%" : "";
-                        $TempArray['WeightedScore'] = "$calculateWeightage";
-                        $TempArray['MaxWeightedScore'] = "$calculateMaxWeightage";
-                        $TempArray['ParameterPassScore'] = $DefinedScoreValues['ParameterPassScore'];
-                        $TempArray['ParameterPassStatus'] = $DefinedScoreValues['ParameterPassStatus'];
-                        $TempArray['mitigant'] = $DefinedScoreValues['mitigant'];
-                        $TempArray['color_english'] = $DefinedScoreValues['colorEnglish'];
-                        $TempArray['color_hexadecimal'] = $DefinedScoreValues['colorHexadecimal'];
-                        $TempArray['created_by'] = $SessionUserName;
-
-                        $CurrentParameters[$CustomerId][$TempArray['ParameterName']] = $TempArray;
-                        $InsertValues .= "('" . implode("','", $TempArray) . "'),";
-                        $TempArray['mitigant'] = explode("|", $DefinedScoreValues['mitigant']);
-
-                        unset($TempArray['score_calc_id']);
-                        unset($TempArray['created_by']);
-
-                        array_push($ConsolidatedArray, $TempArray);
-                        $WeightageValue = $WeightageValue + $calculateWeightage;
-                        $OverallMaxWeightedScore = $OverallMaxWeightedScore + $calculateMaxWeightage;
                     }
                 }
             }
