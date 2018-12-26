@@ -9,17 +9,13 @@
                     <tbody>
                         <tr>
                             <th>Parameter Name</th>
-                            <th ng-repeat-start="(k,j) in ss.customerParameterMapping" style="width:40px"></th>
-                                
-                            </th>
-
-                            <th ng-repeat-end>{{j.Details.Name}} - {{
+                            <th colspan="2" ng-repeat="(k,j) in ss.customerParameterMapping">{{j.Details.Name}} - {{
                                 j.Details.Relation}}</th>
                         </tr>
                         <tr ng-repeat="j in ss.parameters" ng-init="parameterIndex=$index">
                             <td>{{j}}</td>
-                            <td ng-repeat-start="(x,y) in ss.customerParameterMapping"> <span class="square-color-box"
-                                    style="background:{{y.Parameters[j].color_hexadecimal}}">
+                            <td style="width:50px" ng-repeat-start="(x,y) in ss.customerParameterMapping"> <span class="square-color-box"
+                                    style="background:{{y.Parameters[j].color_hexadecimal}};">
                                 </span></td>
                             <td ng-repeat-end>{{ y.Parameters[j]["Actual Value"] }}</td>
                         </tr>
@@ -38,20 +34,14 @@
                                 {{ ss.name }} - {{ ss.Score }}
                         </h3>
                         <table class="table table-condensed">
-                            <colgroup>
-                                <col width="50%">
-                                <col width="10%">
-                                <col width="40%">
-                            </colgroup>
                             <tbody>
                                 <tr>
                                     <th>Parameter</th>
-                                    <th style="width:40px"></th>
-                                    <th>Actual Value</th>
+                                    <th colspan="2">Actual Value</th>
                                 </tr>
                                 <tr ng-repeat="data in ss.parameterData">
                                     <td>{{ data.Parameter }}</td>
-                                    <td> <span class="square-color-box" style="background: {{ data.color_hexadecimal }}">
+                                    <td style="width:50px"> <span class="square-color-box" style="background: {{ data.color_hexadecimal }}">
                                         </span></td>
                                     <td>{{ data["Actual Value"] }}</td>
                                 </tr>
