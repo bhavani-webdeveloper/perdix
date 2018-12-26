@@ -429,6 +429,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
 
                         model.linkedAccount={};
 
+                        if(_.hasIn(model, 'loanAccount') && model.loanAccount.transactionType == 'New Loan') {
+                            model.loanAccount.linkedAccountNumber = null;
+                        }
+
                         if(model.loanAccount.linkedAccountNumber && model.siteCode == 'kinara'){
                             LoanAccount.get({
                                     accountId: model.loanAccount.linkedAccountNumber
@@ -482,7 +486,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         key:"loanAccount.linkedAccountNumber",
                         title:"LINKED_ACCOUNT_NUMBER",
                         readonly:true,
-                        required: false
+                        required: false,
+                        condition: "model.loanAccount.transactionType != 'New Loan'"
                     },
                     {
                     "type":"fieldset",
@@ -824,7 +829,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 // "titleMap":{
                                 //     "New Loan":"New Loan"
                                 // },
-                                "condition": "model.siteCode == 'kinara' && !model.loanAccount.linkedAccountNumber"
+                                "condition": "model.siteCode == 'kinara' && !model.loanAccount.linkedAccountNumber",
+                                onChange:function(value,form,model){
+                                    if(_.hasIn(model, 'loanAccount') && model.loanAccount.transactionType == 'New Loan') {
+                                        model.loanAccount.linkedAccountNumber = null;
+                                    }
+                                }
                             },
                             {
                                 "key": "loanAccount.transactionType",
@@ -836,7 +846,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 //     "Internal Foreclosure":"Internal Foreclosure"
                                 // },
                                 "title":"TRANSACTION_TYPE",
-                                "condition": "model.siteCode == 'kinara' && model.loanAccount.linkedAccountNumber && model.loanAccount.transactionType.toLowerCase() != 'renewal'"
+                                "condition": "model.siteCode == 'kinara' && model.loanAccount.linkedAccountNumber && model.loanAccount.transactionType.toLowerCase() != 'renewal'",
+                                onChange:function(value,form,model){
+                                    if(_.hasIn(model, 'loanAccount') && model.loanAccount.transactionType == 'New Loan') {
+                                        model.loanAccount.linkedAccountNumber = null;
+                                    }
+                                }
                             },
                             {
                                 "key": "loanAccount.transactionType",
