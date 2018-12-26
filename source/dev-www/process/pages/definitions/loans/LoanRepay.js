@@ -714,7 +714,13 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 type: "select",
                                 required: true,
                                 condition: "model.repayment.delayReasonType =='Business'",
-                                enumCode: "business_overdue_reasons"
+                                // enumCode: "business_overdue_reasons"
+                                titleMap:[
+                                    {
+                                        "value":"others",
+                                        "name":"Others"
+                                }
+                                ]
 
                             },
                             {
