@@ -654,33 +654,6 @@ if (isset($_GET)) {
         echo $FinalScoreResponse;
     }
 
-
-    if($isScoringOptimizationEnabled == 'true' ){
-
-        $ScoreCalcCheckQuery = "SELECT ScoreName, ApplicationId, loanVersion, PartnerSelf 
-            FROM sc_calculation
-            WHERE
-            ApplicationId='$CustomerLoanId'
-            AND loanVersion = $loanVersion
-            AND  PartnerSelf = ''
-        ";
-
-        try{
-            $db = ConnectDb();
-            $ScoreCalcCheckParams = $db->prepare($ScoreCalcCheckQuery);
-            $ScoreCalcCheckParams->execute();
-            $ScoreCalcCheckResults = $ScoreCalcCheckParams->fetchAll(PDO::FETCH_ASSOC);
-            $db = null;
-        
-            if( sizeof($ScoreCalcCheckResults) > 0 ){
-                exit();
-            }
-        } catch(PDOException $e){
-            $error_log['ScoreCalcCheckQuery'] = $e->getMessage();            
-        }
-    }
-
-
     try {
         //record all inputs into the table score_calculation_inputs as individual records
         $db = ConnectDb();
@@ -715,7 +688,10 @@ if (isset($_GET)) {
 	OverallPassValue = :OverallPassValue, 
 	OverallWeightedScore = :OverallWeightedScore, 
 	OverallPassStatus = :OverallPassStatus,
-	updated_by = :updated_by
+	updated_by = :updated_by,
+    loanVersion = :loanVersion,
+    PartnerSelf = 'Self',
+    ApiVersion = '1'
 	WHERE id = :id
 	AND ApplicationId = :ApplicationId";
 
@@ -732,6 +708,7 @@ if (isset($_GET)) {
         $json_ConsolidatedArray = json_encode($ConsolidatedArray);
         $FinalDBUpdate->bindParam("ScoreResponse", $json_ConsolidatedArray);
         $FinalDBUpdate->bindParam("updated_by", $SessionUserName);
+        $FinalDBUpdate->bindParam("loanVersion", $loanVersion);
         $FinalDBUpdate->bindParam("id", $AutoID);
         $FinalDBUpdate->bindParam("ApplicationId", $CustomerLoanId);
 
