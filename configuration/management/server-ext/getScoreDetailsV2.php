@@ -139,6 +139,25 @@ if (isset($_GET)) {
         exit();
     } 
 
+    if($isScoringOptimizationEnabled == 'true' ){
+        $ScoreCalcCheckQuery = "SELECT ScoreName, ApplicationId, loanVersion, PartnerSelf 
+            FROM sc_calculation
+            WHERE
+            ApplicationId='$CustomerLoanId'
+            AND loanVersion = $loanVersion
+            AND LOWER(PartnerSelf) = LOWER('$partnerCode')
+            AND ScoreName = '$ScoreName'
+            AND ApiVersion = '2'
+        ";
+
+        $row = (array) collect($defaultDb->select($ScoreCalcCheckQuery))->first();
+
+        if(sizeof($row) > 0 ){
+            $response->setStatusCode(200)->json([ 'ScoreDetails' => [ 'ScoreName' => $ScoreName] ]);
+            exit();
+        }
+    }
+
     $non_negotiable = 0;
 
     // Non-negotiable proxy indicator check starts
@@ -525,24 +544,6 @@ if (isset($_GET)) {
     $AvailCustomerParams['OverallWeightedScore'] = "$consolidateScore";
     $AvailCustomerParams['OverallPassStatus'] = $OverallPassStatus;
     $AvailCustomerParams['Parameters'] = $ConsolidatedArray;
-
-    if($isScoringOptimizationEnabled == 'true' ){
-        $ScoreCalcCheckQuery = "SELECT ScoreName, ApplicationId, loanVersion, PartnerSelf 
-            FROM sc_calculation
-            WHERE
-            ApplicationId='$CustomerLoanId'
-            AND loanVersion = $loanVersion
-            AND PartnerSelf = '$partnerCode'
-            AND ScoreName = '$ScoreName'
-        ";
-
-        $row = (array) collect($defaultDb->select($ScoreCalcCheckQuery))->first();
-
-        if(sizeof($row) > 0 ){
-            $response->setStatusCode(200)->json([ 'ScoreDetails' => $AvailCustomerParams ]);
-            exit();
-        }
-    }
 
     $defaultDb->insert(substr($InsertValues, 0, -1));
     // sub score calculation

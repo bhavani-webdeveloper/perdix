@@ -81,6 +81,8 @@ irf.pageCollection.directive("irfScoringDisplay", function(){
 
             for (var i=0;i<cids.length; i++){
                 var _id = cids[i];
+                if (!_id)
+                    continue;
                 _vsd['customerParameterMapping'][_id] = {
                     'Details' : v[_id].CustomerDetails,
                     'Parameters': {}
