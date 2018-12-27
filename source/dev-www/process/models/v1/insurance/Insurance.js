@@ -48,11 +48,11 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource, Upload, $q, Pag
         '<div style="border-style: dashed ; padding:27px">' + 
         '<div style="text-align : center">' + '<h4><b>' + "PREMIUM RECEIPT" + '</b></h4>' + '</div>' + 
         '<div style="text-align : center">' + '<h5><b>' + opts.entityName + '</b></h4>' + '</div>' + 
-        '<div style="text-align : center">' + '<h6><b>' + opts.branchId + '</b></h6>' + '</div>' + 
+        '<div style="text-align : center">' + '<h6><b>' + opts.branchName + '</b></h6>' + '</div>' + 
         '<div style="text-align : center">' + '<p>' + "Date:" + curTimeStr + '</p>' + '</div>' + 
         '<div style="text-align : center">' + '<p><b>' + "PERSONAL ACCIDENT INSURANCE PREMIUM" + '</b></p>' + '</div>' + 
         '<div style="text-align : center">' + '<p>' + "" + '</p>' + '</div>' +
-        '<div style="font-size:13px; width:95%; margin:auto">' + '<p>' + "Branch Id :" +'<span style="border-bottom: 1px solid black; width: 100%;">'+  opts.branchId+ '</span>' + '</p>' + '</div>' + 
+        '<div style="font-size:13px; width:95%; margin:auto">' + '<p>' + "Branch Name :" +'<span style="border-bottom: 1px solid black; width: 100%;">'+  opts.branchName+ '</span>' + '</p>' + '</div>' + 
         '<div style="font-size:13px;width:95%; margin:auto">' + '<p>' + "Customer Name:"  + '<span style="border-bottom: 1px solid black;">'+opts.benificieryName + '</span>'+'</p>' + '</div>' + 
         '<div style="font-size:13px;width:95%; margin:auto">' + '<p>' + "URN Number:"  + '<span style="border-bottom: 1px solid black;">'+opts.urnNo + '</span>'+'</p>' + '</div>' + 
         '<div style="font-size:13px;width:95%; margin:auto">' + '<p>' + "Policy Number:"  + '<span style="border-bottom: 1px solid black;">'+opts.policyNumber + '</span>'+'</p>' + '</div>' + 
