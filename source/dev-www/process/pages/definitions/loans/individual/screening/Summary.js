@@ -483,12 +483,12 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         //         }
         //     ]
         // });
-
+        
         if (model.fullScoringDetails){
             form.push({
                 type: "box",
                 colClass: "col-sm-12 table-box",
-                title: "SCORES",
+                title: "SCORES - ScoreName - "+ model.fullScoringDetails.ScoreCalculationDetails.ScoreName,
                 items: [
                     {
                         "type": "section",
