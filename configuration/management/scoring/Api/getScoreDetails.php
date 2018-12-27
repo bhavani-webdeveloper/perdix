@@ -84,6 +84,33 @@ if (isset($_GET)) {
         $error_log['CustomerDetails'] = $e->getMessage();
     }
 
+    if ($isScoringOptimizationEnabled == 'true' ){
+
+        $ScoreCalcCheckQuery = "SELECT ScoreName, ApplicationId, loanVersion, PartnerSelf 
+            FROM sc_calculation
+            WHERE
+            ApplicationId='$CustomerLoanId'
+            AND loanVersion = $loanVersion
+            AND LOWER(PartnerSelf) = LOWER('Self)'
+            AND ApiVersion = '1'
+        ";
+
+        try{
+            $db = ConnectDb();
+            $ScoreCalcCheckParams = $db->prepare($ScoreCalcCheckQuery);
+            $ScoreCalcCheckParams->execute();
+            $ScoreCalcCheckResults = $ScoreCalcCheckParams->fetchAll(PDO::FETCH_ASSOC);
+            $db = null;
+        
+            if( sizeof($ScoreCalcCheckResults) > 0 ){
+                echo '{"ScoreDetails": [' . json_encode(['ScoreName' => $ScoreName ]) . ']}';
+                exit();
+            }
+        } catch(PDOException $e){
+            $error_log['ScoreCalcCheckQuery'] = $e->getMessage();            
+        }
+    }
+
     $non_negotiable = 0;
 
     // Non-negotiable proxy indicator check starts
