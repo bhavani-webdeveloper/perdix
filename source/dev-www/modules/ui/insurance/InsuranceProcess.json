@@ -248,6 +248,7 @@
             "key":"insurancePolicyDetailsDTO.sumInsured",
             "title":"SUM_INSURED",
             "type":"select",
+            "required":true,
             "enumCode":"insurance_premium_amounts",
             "orderNo":140
          },
@@ -321,6 +322,7 @@
                "gauridianName":{  
                   "key":"insurancePolicyDetailsDTO.nomineeDetailsDTO[].gauridianName",
                   "title":"GAURDIAN_NAME",
+                  "required":true,
                   "condition":"model.insurancePolicyDetailsDTO.nomineeDetailsDTO[arrayIndex].nomineeIsMinor ==  true",
                   "type":"string",
                   "orderNo":60
@@ -329,6 +331,7 @@
                   "key":"insurancePolicyDetailsDTO.nomineeDetailsDTO[].gauridianMinorRelationship",
                   "title":"GAURDIAN_RELATIONSHIP",
                   "type":"select",
+                  "required":true,
                   "enumCode":"relation",
                   "condition":"model.insurancePolicyDetailsDTO.nomineeDetailsDTO[arrayIndex].nomineeIsMinor ==  true",
                   "orderNo":70
@@ -337,6 +340,7 @@
                   "key":"insurancePolicyDetailsDTO.nomineeDetailsDTO[].gauridianGender",
                   "title":"GAURDIAN_GENDER",
                   "enumCode":"gender",
+                  "required":true,
                   "type":"select",
                    "condition":"model.insurancePolicyDetailsDTO.nomineeDetailsDTO[arrayIndex].nomineeIsMinor ==  true",
                   "orderNo":80

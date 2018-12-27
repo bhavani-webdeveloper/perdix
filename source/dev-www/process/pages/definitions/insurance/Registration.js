@@ -330,6 +330,7 @@ var getIncludes = function (model) {
                     insuranceRecommendations : function(model, formRequest, formCtrl){
                        
                         PageHelper.showLoader();
+                        
 
                                     model.insuranceProcess.getInsuranceRecommendation()
                                     .finally(function() {
@@ -351,6 +352,7 @@ var getIncludes = function (model) {
                         'centreId': requestObj.centreId,
                         'bankId': requestObj.bankId,
                         'branchId':requestObj.branchId,
+                        'branchName':SessionStore.getBranch(),
                         'entityName': SessionStore.getBankName(),
                         'benificieryName': requestObj.benificieryName,
                         'insuranceId': requestObj.id,
@@ -446,6 +448,11 @@ var getIncludes = function (model) {
                      save: function (model, formCtrl, form, $event) {
                         PageHelper.clearErrors();
                         if(PageHelper.isFormInvalid(formCtrl)) {
+                            return false;
+                        }
+                        var cbsdate = Utils.getCurrentDate();
+                        if (model.insurancePolicyDetailsDTO.startDate && moment(model.insurancePolicyDetailsDTO.startDate, SessionStore.getSystemDateFormat()).diff(cbsdate, "days") <0) {
+                            PageHelper.showProgress("insurance-create", "Start  date should be greater than or equal to system date", 5000);
                             return false;
                         }
                         
