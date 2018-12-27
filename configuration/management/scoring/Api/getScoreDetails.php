@@ -91,8 +91,9 @@ if (isset($_GET)) {
             WHERE
             ApplicationId='$CustomerLoanId'
             AND loanVersion = $loanVersion
-            AND LOWER(PartnerSelf) = LOWER('Self)'
+            AND LOWER(PartnerSelf) = LOWER('Self')
             AND ApiVersion = '1'
+            AND ScoreName = '$ScoreName'
         ";
 
         try{
