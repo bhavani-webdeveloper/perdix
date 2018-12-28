@@ -120,6 +120,24 @@ irf.pageCollection.factory(irf.page('loans.DirectLoanRepay'),
                         } else if (model.repayment.transactionName == 'Fee Payment') {
                             model.repayment.demandAmount = model.repayment.totalFeeDue;
                         }
+
+                        model.repayment.payOffAndDueAmount = Utils.ceil(data.payOffAndDueAmount);
+                        model.repayment.totalFeeDue = Utils.roundToDecimal(data.totalFeeDue);
+                        model.repayment.recoverableInterest = Utils.roundToDecimal(data.recoverableInterest);
+                        model.repayment.principalNotDue = Utils.roundToDecimal(data.principalNotDue);
+                        model.repayment.totalNormalInterestDue  = Utils.roundToDecimal(data.totalNormalInterestDue);
+                        model.repayment.preclosureFee = Utils.roundToDecimal(data.preclosureFee);
+                        model.repayment.payOffAmount = Utils.roundToDecimal(data.payOffAmount);
+                        model.repayment.totalPrincipalDue = Utils.roundToDecimal(data.totalPrincipalDue);
+                        model.repayment.totalPenalInterestDue = Utils.roundToDecimal(data.totalPenalInterestDue);
+                        model.repayment.totalDemandDue = Utils.roundToDecimal(data.totalDemandDue);
+                        model.repayment.totalDue = Utils.roundToDecimal(data.totalDemandDue + data.totalFeeDue + data.totalSecurityDepositDue);
+                        model.repayment.bookedNotDueNormalInterest = Utils.roundToDecimal(data.bookedNotDueNormalInterest);
+                        model.repayment.bookedNotDuePenalInterest = Utils.roundToDecimal(data.bookedNotDuePenalInterest);
+                        model.repayment.securityDeposit = Utils.roundToDecimal(data.securityDeposit);
+                        model.repayment.netPayoffAmount = Utils.roundToDecimal(data.payOffAmount + data.preclosureFee - data.securityDeposit);
+                        model.repayment.totalPayoffAmountToBePaid = Utils.roundToDecimal(data.payOffAndDueAmount + data.preclosureFee - data.securityDeposit);
+                        model.repayment.totalSecurityDepositDue = Utils.roundToDecimal(data.totalSecurityDepositDue);
                        
                         model.repayment.accountNumber =loanAccountNo;
                         model.repayment.instrument='CASH';
@@ -157,7 +175,116 @@ irf.pageCollection.factory(irf.page('loans.DirectLoanRepay'),
                             },
                             onChange: function(value, form, model) {
                                 model.repayment.amount = deriveAmount(value, model.repayment);
+                                if(value == "Fee Payment"){
+                                    LoanAccount.get({accountId: model.repayment.accountNumber}).$promise.then(function (data){
+                                        model.repayment.totalFeeDue  = Utils.roundToDecimal(data.totalFeeDue);
+                                    })
+                                }
+                                // else if(value == "Advance Repayment"){
+
+                                // }
                             }
+                        },
+                        {
+                            key: "repayment.bookedNotDuePenalInterest",
+                            readonly: true,
+                            condition: "model.repayment.transactionName=='PenalInterestPayment'",
+                            title: "BOOKED_NOT_DUE_PENAL_INTEREST",
+                            type: "amount"
+                        },
+                        {
+                            key: "repayment.totalPenalInterestDue",
+                            readonly: true,
+                            condition: "model.repayment.transactionName=='Scheduled Demand'",
+                            title: "TOTAL_PENAL_INTEREST_DUE",
+                            type: "amount"
+                        },
+                        {
+                            type: "fieldset",
+                            title: "PRECLOSURE_BREAKUP",
+                            condition: "model.repayment.transactionName=='Pre-closure'",
+                            items: [
+                                {
+                                    key: "repayment.principalNotDue",
+                                    readonly: true,
+                                    title: "PRINCIPAL_NOT_DUE",
+                                    type: "amount"
+                                },
+                                {
+                                    key: "repayment.bookedNotDueNormalInterest",
+                                    readonly: true,
+                                    title: "BOOKED_NOT_DUE_NORMAL_INTEREST",
+                                    type: "amount"
+                                },
+                                {
+                                    key: "repayment.bookedNotDuePenalInterest",
+                                    readonly: true,
+                                    title: "BOOKED_NOT_DUE_PENAL_INTEREST",
+                                    type: "amount"
+                                },
+                                {
+                                    key: "repayment.recoverableInterest",
+                                    readonly: true,
+                                    title: "RECOVERABLE_INTEREST",
+                                    type: "amount"
+                                },
+                                {
+                                    key: "repayment.securityDeposit",
+                                    readonly: true,
+                                    title: "SECURITY_DEPOSIT",
+                                    type: "amount"
+                                },
+                                {
+                                    key: "repayment.preclosureFee",
+                                    readonly: true,
+                                    title: "PRECLOSURE_FEE",
+                                    type: "amount"
+                                },
+                                {
+                                    key: "repayment.totalFeeDue",
+                                    readonly: true,
+                                    title: "TOTAL_FEE_DUE",
+                                    type: "amount"
+                                },
+                                {
+                                    key: "repayment.netPayoffAmount",
+                                    readonly: true,
+                                    title: "NET_PAYOFF_AMOUNT",
+                                    type: "amount"
+                                },
+                                {
+                                    type: "section",
+                                    html: "<hr />"
+                                }
+                            ]
+                        },
+                        {
+                            key: "repayment.totalDemandDue",
+                            readonly: true,
+                            condition: "model.repayment.transactionName=='Scheduled Demand'",
+                            title: "TOTAL_DEMAND_DUE",
+                            type: "amount"
+                        },
+                        {
+                            key: "repayment.totalFeeDue",
+                            readonly: true,
+                            condition: "model.repayment.transactionName=='Scheduled Demand' || model.repayment.transactionName=='Fee Payment'",
+                            title: "TOTAL_FEE_DUE",
+                            type: "amount"
+                        },
+                        {
+                            key: "repayment.totalDue",
+                            readonly: true,
+                            title: "TOTAL_DUE",
+                            condition: "model.repayment.transactionName=='Scheduled Demand'",
+                            type: "amount"
+                        },
+                        {
+                            key: "repayment.totalDueWithPenal",
+                            readonly: true,
+                            title: "Total Due with Penal Interest",
+                            condition: "(model.repayment.transactionName=='Scheduled Demand' || model.repayment.transactionName == 'Advance Repayment') && model.repayment.totalDueWithPenal",
+                            type: "amount"
                         },
                         {
                             key:"repayment.amount",
