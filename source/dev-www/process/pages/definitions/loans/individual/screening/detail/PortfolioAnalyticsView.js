@@ -17,7 +17,7 @@ define({
 	<table class="table table-bordered table-condensed table-sm table-responsive">
 		<colgroup><col width="65%"><col width="35%"></colgroup>
 		<tbody>
-			<tr><td>{{"Avarage" | translate}}</td><td style="text-align:right">{{model.portfolioAnalytics.incomeAverage.toLocaleString("en-in")}}</td></tr>
+			<tr><td>{{"Average" | translate}}</td><td style="text-align:right">{{model.portfolioAnalytics.incomeAverage.toLocaleString("en-in")}}</td></tr>
 			<tr><td>{{"Std Dev" | translate}}</td><td style="text-align:right">{{model.portfolioAnalytics.incomeStdDev.toLocaleString("en-in")}}</td></tr>
 			<tr><td>{{model.portfolioAnalytics.incomeSimulationRange}}%</td><td style="text-align:right">{{model.portfolioAnalytics.incomePercentile.toLocaleString("en-in")}}</td></tr>
 			<tr><td>{{"Ability" | translate}}</td><td style="text-align:right">{{model.portfolioAnalytics.ability.toLocaleString("en-in")}}</td></tr>
@@ -57,7 +57,7 @@ define({
 	<table class="table table-condensed table-bordered table-sm table-responsive">
 		<colgroup><col width="65%"><col width="35%"></colgroup>
 		<tbody>
-			<tr><td>{{"Avarage" | translate}}</td><td style="text-align:right">{{model.portfolioAnalytics.bankBalanceAverage.toLocaleString("en-in")}}</td></tr>
+			<tr><td>{{"Average" | translate}}</td><td style="text-align:right">{{model.portfolioAnalytics.bankBalanceAverage.toLocaleString("en-in")}}</td></tr>
 			<tr><td>{{"Std Dev" | translate}}</td><td style="text-align:right">{{model.portfolioAnalytics.bankBalanceStdDev.toLocaleString("en-in")}}</td></tr>
 			<tr><td>{{model.portfolioAnalytics.bankBalanceSimulationRange}}%</td><td style="text-align:right">{{model.portfolioAnalytics.bankBalancePercentile.toLocaleString("en-in")}}</td></tr>
 			<tr><td>{{"Kinara EMI" | translate}}</td><td style="text-align:right">{{model.portfolioAnalytics.emi.toLocaleString("en-in")}}</td></tr>
