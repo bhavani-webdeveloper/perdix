@@ -35,7 +35,47 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
             if($stateParams.pageData){
                 if($stateParams.pageData.enabletrue){
                     model.enabletrue= $stateParams.pageData.enabletrue;
-                }  
+                }
+                Enrollment.EnrollmentById({id:$stateParams.pageId},function(resp,header){
+                    // var model = {$$OFFLINE_FILES$$:_model.$$OFFLINE_FILES$$};
+                    model.customer = resp;
+                    model.customer.addressProofSameAsIdProof = (model.customer.title == "true") ? true : false;
+
+                    model = EnrollmentHelper.fixData(model);
+                    PagesDefinition.getRolePageConfig("Page/Engine/customer360.EnrollmentProfile").then(function(data){
+                        $log.info(data);
+                        $log.info(data.EditBasicCustomerInfo);
+                        if(data){
+                            model.EditBasicCustomerInfo= !data.EditBasicCustomerInfo;
+                            if(model.EditBasicCustomerInfo)
+                                {
+                                    model.enabletrue = true;
+                                }
+
+                        }
+                    },function(err){
+                        model.EditBasicCustomerInfo= true;
+                        model.enabletrue = true;
+                    });
+
+                    if (model.customer.currentStage==='Stage01') {
+                        irfProgressMessage.pop("enrollment-save","Customer "+model.customer.id+" not enrolled yet", 5000);
+                        $state.go("Page.Engine", {pageName:'ProfileInformation', pageId:pageId});
+                    } else {
+                        irfProgressMessage.pop("enrollment-save","Load Complete", 2000);
+                        initData(model);
+                        //$log.info(model);
+                        // deferred.resolve(model);
+                    }
+                    PageHelper.hideLoader();
+                },function(resp){
+                    PageHelper.hideLoader();
+                    irfProgressMessage.pop("enrollment-save","An Error Occurred. Failed to fetch Data",5000);
+                    $state.go("Page.Engine",{
+                        pageName:"CustomerSearch",
+                        pageId:null
+                    });
+                });  
             }
 
             var self = this;
@@ -2779,55 +2819,58 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                 }
             ];
         },
-        modelPromise: function(pageId, _model) {
-            if (!_model || !_model.customer || _model.customer.id != pageId) {
-                $log.info("data not there, loading...");
+        // modelPromise: function(pageId, _model) {
+        //     var deferred = $q.defer();
+        //     if (!_model || !_model.customer || _model.customer.id != pageId) {
+        //         $log.info("data not there, loading...");
 
-                var deferred = $q.defer();
-                PageHelper.showLoader();
-                Enrollment.EnrollmentById({id:pageId},function(resp,header){
-                    var model = {$$OFFLINE_FILES$$:_model.$$OFFLINE_FILES$$};
-                    model.customer = resp;
-                    model.customer.addressProofSameAsIdProof = (model.customer.title == "true") ? true : false;
+        //         PageHelper.showLoader();
+        //         Enrollment.EnrollmentById({id:pageId},function(resp,header){
+        //             var model = {$$OFFLINE_FILES$$:_model.$$OFFLINE_FILES$$};
+        //             model.customer = resp;
+        //             model.customer.addressProofSameAsIdProof = (model.customer.title == "true") ? true : false;
 
-                    model = EnrollmentHelper.fixData(model);
-                    PagesDefinition.getRolePageConfig("Page/Engine/customer360.EnrollmentProfile").then(function(data){
-                        $log.info(data);
-                        $log.info(data.EditBasicCustomerInfo);
-                        if(data){
-                            model.EditBasicCustomerInfo= !data.EditBasicCustomerInfo;
-                            if(model.EditBasicCustomerInfo)
-                                {
-                                    model.enabletrue = true;
-                                }
+        //             model = EnrollmentHelper.fixData(model);
+        //             PagesDefinition.getRolePageConfig("Page/Engine/customer360.EnrollmentProfile").then(function(data){
+        //                 $log.info(data);
+        //                 $log.info(data.EditBasicCustomerInfo);
+        //                 if(data){
+        //                     model.EditBasicCustomerInfo= !data.EditBasicCustomerInfo;
+        //                     if(model.EditBasicCustomerInfo)
+        //                         {
+        //                             model.enabletrue = true;
+        //                         }
 
-                        }
-                    },function(err){
-                        model.EditBasicCustomerInfo= true;
-                        model.enabletrue = true;
-                    });
+        //                 }
+        //             },function(err){
+        //                 model.EditBasicCustomerInfo= true;
+        //                 model.enabletrue = true;
+        //             });
 
-                    if (model.customer.currentStage==='Stage01') {
-                        irfProgressMessage.pop("enrollment-save","Customer "+model.customer.id+" not enrolled yet", 5000);
-                        $state.go("Page.Engine", {pageName:'ProfileInformation', pageId:pageId});
-                    } else {
-                        irfProgressMessage.pop("enrollment-save","Load Complete", 2000);
-                        initData(model);
-                        //$log.info(model);
-                        deferred.resolve(model);
-                    }
-                    PageHelper.hideLoader();
-                },function(resp){
-                    PageHelper.hideLoader();
-                    irfProgressMessage.pop("enrollment-save","An Error Occurred. Failed to fetch Data",5000);
-                    $state.go("Page.Engine",{
-                        pageName:"CustomerSearch",
-                        pageId:null
-                    });
-                });
-                return deferred.promise;
-            }
-        },
+        //             if (model.customer.currentStage==='Stage01') {
+        //                 irfProgressMessage.pop("enrollment-save","Customer "+model.customer.id+" not enrolled yet", 5000);
+        //                 $state.go("Page.Engine", {pageName:'ProfileInformation', pageId:pageId});
+        //             } else {
+        //                 irfProgressMessage.pop("enrollment-save","Load Complete", 2000);
+        //                 initData(model);
+        //                 //$log.info(model);
+        //                 deferred.resolve(model);
+        //             }
+        //             PageHelper.hideLoader();
+        //         },function(resp){
+        //             PageHelper.hideLoader();
+        //             irfProgressMessage.pop("enrollment-save","An Error Occurred. Failed to fetch Data",5000);
+        //             $state.go("Page.Engine",{
+        //                 pageName:"CustomerSearch",
+        //                 pageId:null
+        //             });
+        //         });
+        //     }
+        //     else{
+        //         deferred.reject();
+        //     }
+        //     return deferred.promise;
+        // },
         offline: true,
         getOfflineDisplayItem: function(item, index){
             return [
