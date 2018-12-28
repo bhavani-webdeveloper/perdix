@@ -698,39 +698,44 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 title: "REASON_FOR_DELAY",
                                 required: true,
                                 type: "select",
-                                titleMap: [{
-                                    "name": "Business",
-                                    "value": "Business"
+                                titleMap: {
+                                    "Business not running":"Business not running",
+                                    "Hardship": "Hardship",
+                                    "Wilful default":"Wilful default",
+                                    "Can pay":"Can pay",
+                                    "Others":"Others"
                                 },
-                                    {
-                                        "name": "Personal",
-                                        "value": "Personal"
-                                    }],
 
                             },
-                            {
-                                key: "repayment.overdueReasons",
-                                title: "REASON",
-                                type: "select",
-                                required: true,
-                                condition: "model.repayment.delayReasonType =='Business'",
-                                // enumCode: "business_overdue_reasons"
-                                titleMap:[
-                                    {
-                                        "value":"others",
-                                        "name":"Others"
-                                }
-                                ]
+                            // {
+                            //     key: "repayment.overdueReasons",
+                            //     title: "REASON",
+                            //     type: "select",
+                            //     required: true,
+                            //     condition: "model.repayment.delayReasonType =='Business'",
+                            //     // enumCode: "business_overdue_reasons"
+                            //     titleMap:[
+                            //         {
+                            //             "value":"others",
+                            //             "name":"Others"
+                            //     }
+                            //     ]
 
-                            },
-                            {
-                                key: "repayment.overdueReasons",
-                                title: "REASON",
-                                type: "select",
-                                required: true,
-                                condition: "model.repayment.delayReasonType=='Personal'",
-                                enumCode: "personal_overdue_reasons"
-                            },
+                            // },
+                            // {
+                            //     key: "repayment.overdueReasons",
+                            //     title: "REASON",
+                            //     type: "select",
+                            //     required: true,
+                            //     condition: "model.repayment.delayReasonType=='Personal'",
+                            //     // enumCode: "personal_overdue_reasons",
+                            //     titleMap:[
+                            //         {
+                            //             "value":"others",
+                            //             "name":"Others"
+                            //     }
+                            //     ]
+                            // },
                             {
                                 key: "repayment.reasons",
                                 title: "OVERDUE_REASON",

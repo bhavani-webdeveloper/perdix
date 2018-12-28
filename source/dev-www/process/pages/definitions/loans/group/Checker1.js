@@ -1811,7 +1811,7 @@ return {
                 $log.info("Inside ViewCustomer()");
                 irfNavigator.go({
                     state: "Page.Customer360", 
-                    pageId: model.group.jlgGroupMembers[context.arrayIndexes[0]].customer.id,
+                    pageId: model.group.jlgGroupMembers[form.arrayIndex].customer.id,
                     pageData: {
                         "siteCode":model.siteCode,
                         "enabletrue":true
