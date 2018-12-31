@@ -13,6 +13,7 @@ $settings = Settings::getInstance()->getSettings();
 $perdix_db = $settings['db']['database'];
 $guarantor_is_required = true;
 $defaultDb = DB::connection("default");
+$encore_db = $settings['encore_db']['database'];
 
 if (isset($_GET)) {
     header("Access-Control-Allow-Headers: Content-Type, accept, Authorization, X-Requested-With");
