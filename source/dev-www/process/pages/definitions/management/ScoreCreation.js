@@ -332,6 +332,7 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
                                             "key": "scoreMaster.subScores[].scoreParameters[].parameterName",
                                             "title":"PARAMETER_NAME",
                                             "type":"lov",
+                                            lovonly:true,
                                             searchHelper: formHelper,
                                             search: function (inputModel, form, model,context) {
                                                 var defered = $q.defer();
@@ -367,7 +368,6 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
                                         {
                                             "title":"PARAMETER_PASS_SCORE",
                                             "type": "string",
-                                            "required": false,
                                             "key": "scoreMaster.subScores[].scoreParameters[].parameterPassScore"
                                         },
                                         {
