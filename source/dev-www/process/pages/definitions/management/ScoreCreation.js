@@ -336,6 +336,7 @@ irf.pageCollection.factory(irf.page("management.ScoreCreation"),
                                             search: function (inputModel, form, model,context) {
                                                 var defered = $q.defer();
                                                 ScoresMaintenance.allParameterMaster({page:1,per_page:100}).$promise.then(function(item){
+                                                    item = _.sortBy(item,'parameterDisplayName');
                                                     var out = {};
                                                     out.body = [];
                                                     var parameterCategory = model.scoreMaster.subScores[context.arrayIndexes[0]].isIndividualScore ? "Customer":"Loan";
