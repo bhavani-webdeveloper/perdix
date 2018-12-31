@@ -465,6 +465,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             "new-loan": function(bundleModel, model, params){
                 $log.info("Inside new-loan of CBCheck");
                 model.loanAmountRequested = params.loanAccount.loanAmountRequested;
+                model.loanAccount = params.loanAccount;
                 model.customer.loanSaved = true;
                 model.customer.loanAmount = params.loanAccount.loanAmountRequested;
                 model.customer.loanPurpose1 = params.loanAccount.loanPurpose1;
