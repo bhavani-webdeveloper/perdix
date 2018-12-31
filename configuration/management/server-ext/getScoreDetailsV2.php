@@ -13,6 +13,8 @@ $settings = Settings::getInstance()->getSettings();
 $perdix_db = $settings['db']['database'];
 $guarantor_is_required = true;
 $defaultDb = DB::connection("default");
+$encore_db = $settings['encore_db']['database'];
+$psychometric_db = $settings['psychometric']['database'];
 
 if (isset($_GET)) {
     header("Access-Control-Allow-Headers: Content-Type, accept, Authorization, X-Requested-With");
@@ -138,6 +140,25 @@ if (isset($_GET)) {
         $response->json([ 'error' => 'no '.$msg]);
         exit();
     } 
+
+    if($isScoringOptimizationEnabled == 'true' ){
+        $ScoreCalcCheckQuery = "SELECT ScoreName, ApplicationId, loanVersion, PartnerSelf 
+            FROM sc_calculation
+            WHERE
+            ApplicationId='$CustomerLoanId'
+            AND loanVersion = $loanVersion
+            AND LOWER(PartnerSelf) = LOWER('$partnerCode')
+            AND ScoreName = '$ScoreName'
+            AND ApiVersion = '2'
+        ";
+
+        $row = (array) collect($defaultDb->select($ScoreCalcCheckQuery))->first();
+
+        if(sizeof($row) > 0 ){
+            $response->setStatusCode(200)->json([ 'ScoreDetails' => [ 'ScoreName' => $ScoreName] ]);
+            exit();
+        }
+    }
 
     $non_negotiable = 0;
 
@@ -525,24 +546,6 @@ if (isset($_GET)) {
     $AvailCustomerParams['OverallWeightedScore'] = "$consolidateScore";
     $AvailCustomerParams['OverallPassStatus'] = $OverallPassStatus;
     $AvailCustomerParams['Parameters'] = $ConsolidatedArray;
-
-    if($isScoringOptimizationEnabled == 'true' ){
-        $ScoreCalcCheckQuery = "SELECT ScoreName, ApplicationId, loanVersion, PartnerSelf 
-            FROM sc_calculation
-            WHERE
-            ApplicationId='$CustomerLoanId'
-            AND loanVersion = $loanVersion
-            AND PartnerSelf = '$partnerCode'
-            AND ScoreName = '$ScoreName'
-        ";
-
-        $row = (array) collect($defaultDb->select($ScoreCalcCheckQuery))->first();
-
-        if(sizeof($row) > 0 ){
-            $response->setStatusCode(200)->json([ 'ScoreDetails' => $AvailCustomerParams ]);
-            exit();
-        }
-    }
 
     $defaultDb->insert(substr($InsertValues, 0, -1));
     // sub score calculation

@@ -81,6 +81,8 @@ irf.pageCollection.directive("irfScoringDisplay", function(){
 
             for (var i=0;i<cids.length; i++){
                 var _id = cids[i];
+                if (!_id)
+                    continue;
                 _vsd['customerParameterMapping'][_id] = {
                     'Details' : v[_id].CustomerDetails,
                     'Parameters': {}
@@ -483,12 +485,12 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         //         }
         //     ]
         // });
-
+        
         if (model.fullScoringDetails){
             form.push({
                 type: "box",
                 colClass: "col-sm-12 table-box",
-                title: "SCORES",
+                title: "SCORES - ScoreName - "+ model.fullScoringDetails.ScoreCalculationDetails.ScoreName,
                 items: [
                     {
                         "type": "section",
