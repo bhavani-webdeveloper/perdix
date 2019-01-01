@@ -91,6 +91,7 @@ if (isset($_GET)) {
             FROM score_master m, score_criteria c
             WHERE m.ScoreName = c.ScoreName
             AND m.status = 'ACTIVE'
+            AND c.status = 'ACTIVE'
             AND m.Stage = '$currentStage'
             AND LOWER(m.partner_or_self) = LOWER('$partnerCode')
             ORDER by m.Order ASC";
