@@ -404,6 +404,7 @@ if (isset($_GET)) {
                 LEFT JOIN score_master ON score_master.ScoreName = score_subscore.ScoreName                
                 WHERE score_parameters.status = 'ACTIVE'
                 AND score_subscore.ScoreName = '$ScoreName'
+                AND score_subscore.status = 'ACTIVE'
                 AND score_subscore.id = score_parameters.subscoreid
                 $subscore_condition
                GROUP BY sc_perdixparameters.ParameterName ORDER BY score_subscore.id, score_parameters.id ASC
@@ -450,14 +451,15 @@ if (isset($_GET)) {
                     v.colorEnglish,
                     v.colorHexadecimal,
                     CONCAT_WS('-', v.CategoryValueFrom, if(v.CategoryValueTo='', NULL, v.CategoryValueTo)) AS Category
-                    FROM score_values v
+                    FROM score_parameters p
                     LEFT JOIN score_subscore s on s.scoreName = '$ScoreName'                    
-                    LEFT JOIN score_parameters p ON v.ParameterName = p.ParameterName
+                    LEFT JOIN score_values v ON v.ParameterName = p.ParameterName
                     LEFT JOIN sc_mitigants m ON (p.ParameterName=m.ParameterName AND m.status='ACTIVE')
                     WHERE
                     v.status='ACTIVE'
                     AND s.id = p.subscoreid
                     AND v.scoreName = s.ScoreName
+                    AND s.status = 'ACTIVE'
                     AND v.subscoreName = s.subscoreName
                     AND p.ParameterName='$Column'
                     AND (
