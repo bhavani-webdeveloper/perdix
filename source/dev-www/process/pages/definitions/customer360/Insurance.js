@@ -98,10 +98,12 @@ irf.pageCollection.factory(irf.page("customer360.Insurance"), ["$log", "Insuranc
                                 "downloadAll":{
                                     "type": "button",
                                     "title": "DOWNLOAD_FORM",
-                                    "condition":"model.insurancePolicyDetailsDTO.productCode == 'PAI-Liberty'",
+                                    "condition":"model.insurancePolicyDetailsDTO.productCode",
                                     onClick: function(model,form){
-                                        Queries.getInsuranceFormName({productCode : model.insurancePolicyDetailsDTO.productCode}).then(function(resp){
+                                        Queries.getInsuranceFormName(model.insurancePolicyDetailsDTO.premiumRateCode).then(function(resp){
                                             Utils.downloadFile(Misc.formDownload({formName:resp,recordId:model.insurancePolicyDetailsDTO.id}));
+                                        },function(err){
+                                            console.log(err);
                                         })
                                         
                                     }
