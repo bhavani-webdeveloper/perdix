@@ -82,7 +82,7 @@ machineDepreciation.list=SELECT distinct depreciation_percentage as `depreciatio
 machineMaster.list=SELECT machine_description as `machineDescription`, machine_name as `machineName`, machine_type as `machineType`,work_process as `workProcess`, model as `model`, depreciation_percentage as `depreciation`, year_of_manufacturing as `yearOfManufacturing` from machine_master
 
 
-goldRateDetails = SELECT gold_rate_per_gram_in_paisa as `goldRate` from gold_coin_rate_master LIMIT 1
+goldRateDetails = SELECT gold_rate_in_paisa as `goldRate` from jewel_loan_parameter_master LIMIT 1
 
 reassignment.list = SELECT l.id AS loanId,l.screening_date AS screeningDate,c.first_name AS applicantName,CUSENT.first_name AS customerName,bm.branch_name AS branchName,cm.centre_name AS centreName FROM loan_accounts l INNER JOIN loan_customer_relation lcr ON ( lcr.loan_id = l.id AND lcr.relation = 'APPLICANT' ) INNER JOIN customer c ON ( c.id = lcr.customer_id ) INNER JOIN customer CUSENT ON ( CUSENT.id = l.customer_id AND CUSENT.customer_type = 'Enterprise' ) INNER JOIN branch_master bm ON ( bm.id = l.branch_id ) INNER JOIN loan_centre lc ON ( lc.loan_id = l.id ) INNER JOIN centre_master cm ON ( cm.id = lc.centre_id ) WHERE  ( loan_purpose_1 IN( 'Purchase - Used Vehicle', 'Refinance' ) AND l.current_stage IN( 'FieldInvestigation1', 'FieldInvestigation2', 'FieldInvestigation3','TeleVerification' )) AND ( :branch_name = ''  OR bm.branch_name= :branch_name )
 
