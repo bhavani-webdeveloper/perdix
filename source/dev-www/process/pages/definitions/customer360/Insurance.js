@@ -1,5 +1,5 @@
-irf.pageCollection.factory(irf.page("customer360.Insurance"), ["$log", "Insurance", "$q", "PageHelper","$stateParams","UIRepository","IrfFormRequestProcessor","Misc","Utils",
-    function($log, Insurance, $q, PageHelper,$stateParams,UIRepository,IrfFormRequestProcessor,Misc,Utils) {
+irf.pageCollection.factory(irf.page("customer360.Insurance"), ["$log", "Insurance", "$q", "PageHelper","$stateParams","UIRepository","IrfFormRequestProcessor","Misc","Utils","Queries",
+    function($log, Insurance, $q, PageHelper,$stateParams,UIRepository,IrfFormRequestProcessor,Misc,Utils,Queries) {
             
             var globalListkeys = [];
             var getIncludesFromJson = function(params){};
