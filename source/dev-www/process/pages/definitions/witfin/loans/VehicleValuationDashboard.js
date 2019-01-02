@@ -40,7 +40,7 @@ irf.pageCollection.controller(irf.controller("witfin.loans.VehicleValuationDashb
             if (rjqMenu) {
 
                 Queries.searchReAssignment(branchName).then(function(response, headerGetter) {
-                    debugger;
+                   
                     rjqMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
                     rjqMenu.data = '-';
