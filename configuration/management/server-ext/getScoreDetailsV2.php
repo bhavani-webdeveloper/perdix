@@ -13,6 +13,8 @@ $settings = Settings::getInstance()->getSettings();
 $perdix_db = $settings['db']['database'];
 $guarantor_is_required = true;
 $defaultDb = DB::connection("default");
+$encore_db = $settings['encore_db']['database'];
+$psychometric_db = $settings['psychometric']['database'];
 
 if (isset($_GET)) {
     header("Access-Control-Allow-Headers: Content-Type, accept, Authorization, X-Requested-With");
@@ -89,6 +91,7 @@ if (isset($_GET)) {
             FROM score_master m, score_criteria c
             WHERE m.ScoreName = c.ScoreName
             AND m.status = 'ACTIVE'
+            AND c.status = 'ACTIVE'
             AND m.Stage = '$currentStage'
             AND LOWER(m.partner_or_self) = LOWER('$partnerCode')
             ORDER by m.Order ASC";
@@ -401,6 +404,7 @@ if (isset($_GET)) {
                 LEFT JOIN score_master ON score_master.ScoreName = score_subscore.ScoreName                
                 WHERE score_parameters.status = 'ACTIVE'
                 AND score_subscore.ScoreName = '$ScoreName'
+                AND score_subscore.status = 'ACTIVE'
                 AND score_subscore.id = score_parameters.subscoreid
                 $subscore_condition
                GROUP BY sc_perdixparameters.ParameterName ORDER BY score_subscore.id, score_parameters.id ASC
@@ -447,14 +451,15 @@ if (isset($_GET)) {
                     v.colorEnglish,
                     v.colorHexadecimal,
                     CONCAT_WS('-', v.CategoryValueFrom, if(v.CategoryValueTo='', NULL, v.CategoryValueTo)) AS Category
-                    FROM score_values v
+                    FROM score_parameters p
                     LEFT JOIN score_subscore s on s.scoreName = '$ScoreName'                    
-                    LEFT JOIN score_parameters p ON v.ParameterName = p.ParameterName
+                    LEFT JOIN score_values v ON v.ParameterName = p.ParameterName
                     LEFT JOIN sc_mitigants m ON (p.ParameterName=m.ParameterName AND m.status='ACTIVE')
                     WHERE
                     v.status='ACTIVE'
                     AND s.id = p.subscoreid
                     AND v.scoreName = s.ScoreName
+                    AND s.status = 'ACTIVE'
                     AND v.subscoreName = s.subscoreName
                     AND p.ParameterName='$Column'
                     AND (

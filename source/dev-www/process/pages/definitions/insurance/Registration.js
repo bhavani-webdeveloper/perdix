@@ -4,10 +4,10 @@ define(['perdix/domain/model/insurance/InsuranceProcess'], function (InsurancePr
         pageUID: "insurance.Registration",
         pageType: "Engine",
         dependencies: ["$log", "$state", "$stateParams","Insurance", "SessionStore", "formHelper", "$q",
-            "PageHelper", "Utils", "PagesDefinition", "Queries", "irfProgressMessage", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository", "irfNavigator"],
+            "PageHelper", "Utils", "PagesDefinition", "Queries", "irfProgressMessage", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository", "irfNavigator","Enrollment"],
 
         $pageFn: function ($log, $state, $stateParams, Insurance,SessionStore, formHelper, $q,
-                           PageHelper, Utils, PagesDefinition, Queries, PM, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository, irfNavigator) {
+                           PageHelper, Utils, PagesDefinition, Queries, PM, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository, irfNavigator,Enrollment) {
 
               var configFile = function () {
                 return {
@@ -78,6 +78,8 @@ var getIncludes = function (model) {
                     "InsuranceTransactionDetails",
                     "InsuranceTransactionDetails.insuranceTransactionDetailsDTO",
                     "InsuranceTransactionDetails.insuranceTransactionDetailsDTO.totalPremium",
+                    "validateBiometric",
+                    "validateBiometric.validate",
                     //"InsuranceTransactionDetails.insuranceTransactionDetailsDTO.transactionDate",
 
                     "actionboxBeforeSave",
@@ -96,13 +98,16 @@ var getIncludes = function (model) {
                 "title": "INSURANCE_REGISTRATION",
               
                 initialize: function (model, form, formCtrl) {
-                   
+                    model.customer = {};
                      if(_.hasIn($stateParams, "pageId") && !_.isNull($stateParams.pageId)) {
                         PageHelper.showLoader();
                         InsuranceProcess.fromInsurancePolicyID($stateParams.pageId)
                             .subscribe(function(insuranceProcess) {
                                 model.insuranceProcess = insuranceProcess;
                                 model.insurancePolicyDetailsDTO = model.insuranceProcess.insurancePolicyDetailsDTO;
+                                Enrollment.getCustomerById({id:model.insurancePolicyDetailsDTO.customerId}).$promise.then(function(resp){
+                                    model.customer = resp;
+                                })
                                 idPresent = true;
                                 PageHelper.hideLoader();
                             });
@@ -164,7 +169,8 @@ var getIncludes = function (model) {
                                                 "urnNo":{
                                                     "key":"insurancePolicyDetailsDTO.urnNo",
                                                     "title":"URN_NO",
-                                                    "type":"string"
+                                                    "type":"string",
+                                                    "required":"true",
                                                 },
                                                 "fullName":{
                                                     "key":"insurancePolicyDetailsDTO.fullName",
@@ -190,7 +196,13 @@ var getIncludes = function (model) {
                                                  inputModel.fullName
                                                 );
                                             },
-                                           
+                                            onSelect: function (valueObj, model, context) {
+                                                Enrollment.getCustomerById({
+                                                    id: valueObj.customerId
+                                                }).$promise.then(function(resp) {
+                                                    model.customer = resp;
+                                                })
+                                            },
                                             getListDisplayItem: function(item, index) {
                                                 return [
                                                     item.urnNo +" "+item.firstName 
@@ -240,21 +252,56 @@ var getIncludes = function (model) {
                                             }
                                         }
                                      }
-                                }
+                                },
+                                "validateBiometric":{
+                                    "type":"box",
+                                    "orderNo":4,
+                                    "title":"VALIDATE_BIOMETRIC",
+                                    "items":{
+                                        "validate": {
+                                            key: "customer.isBiometricValidated",
+                                            "title": "CHOOSE_A_FINGER_TO_VALIDATE",
+                                            type: "validatebiometric",
+                                            category: 'CustomerEnrollment',
+                                            subCategory: 'FINGERPRINT',
+                                            helper: formHelper,
+                                            biometricMap: {
+                                                leftThumb: "model.customer.leftHandThumpImageId",
+                                                leftIndex: "model.customer.leftHandIndexImageId",
+                                                leftMiddle: "model.customer.leftHandMiddleImageId",
+                                                leftRing: "model.customer.leftHandRingImageId",
+                                                leftLittle: "model.customer.leftHandSmallImageId",
+                                                rightThumb: "model.customer.rightHandThumpImageId",
+                                                rightIndex: "model.customer.rightHandIndexImageId",
+                                                rightMiddle: "model.customer.rightHandMiddleImageId",
+                                                rightRing: "model.customer.rightHandRingImageId",
+                                                rightLittle: "model.customer.rightHandSmallImageId"
+                                            },
+                                            viewParams: function(modelValue, form, model) {
+                                                return {
+                                                    customerId: model.customer.id
+                                                };
+                                            },
+                                        }
+                                    }
+                                },
                             }
+                            
                            
 
                         },
                          "overrides" : {
                             "InsurancePolicyInformation" : {
-                                "readonly" : idPresent
+                                "readonly" : idPresent,
+                                "orderNo":1,
                             },
-                           
                             "InsuranceNomineeDetails" : {
-                                 "readonly" : idPresent
+                                 "readonly" : idPresent,
+                                 "orderNo":2,
                             },
                             "InsuranceTransactionDetails":{
-                                "readonly" : idPresent
+                                "readonly" : idPresent,
+                                "orderNo":3
                             },
                             "InsurancePolicyInformation.productCode" : {
                                 "key" : "insurancePolicyDetailsDTO.productCode",
@@ -464,6 +511,15 @@ var getIncludes = function (model) {
 
                         // $q.all start
                         PageHelper.showLoader();
+                        if (!(model.isBiometricValidated)){
+                            PageHelper.hideLoader();
+                            PageHelper.showErrors({
+                                data:{
+                                    error:"Bio metric validation is required"
+                                }
+                            })
+                            return false;
+                        }
 
                        
                             model.insuranceProcess.save()

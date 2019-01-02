@@ -1430,6 +1430,24 @@ irf.models.factory('Queries', [
             }, deferred.reject);
             return deferred.promise;
     }
+    resource.getBankName = function(bankId){
+        var deferred = $q.defer();
+        resource.getResult("getBankName",{"bankId":bankId}).then(function(value){
+            if(value && value.results.length > 0){
+                Object.prototype.toString.call(value.results) == '[object Array]' ? deferred.resolve(value.results[0].bank_name) : deferred.resolve(value.results.bank_name)
+            }            
+        },deferred.reject);
+        return deferred.promise;
+    };
+    resource.getInsuranceFormName = function(productCode){
+        var deferred = $q.defer();
+        resource.getResult("getInsuranceFormName",{"productCode":productCode}).then(function(value){
+            if(value && value.results.length > 0){
+                Object.prototype.toString.call(value.results) == '[object Array]' ? deferred.resolve(value.results[0].formName) : deferred.resolve(value.results.formName)
+            }
+        },deferred.reject);
+        return deferred.promise;
+    };
     return resource;
     
     }

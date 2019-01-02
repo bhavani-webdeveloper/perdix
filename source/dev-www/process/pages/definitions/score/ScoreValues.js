@@ -25,9 +25,9 @@ irf.pageCollection.factory(irf.page("score.ScoreValues"),
         initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
 
             model.colors =[
-                {colorEnglish : "red", colorHexadecimal : "#FF0000"},
-                {colorEnglish : "yellow", colorHexadecimal : "#FFFF00"},
-                {colorEnglish : "green", colorHexadecimal : "#008000"}];
+                {colorEnglish : "red", colorHexadecimal : "#FF5050"},
+                {colorEnglish : "yellow", colorHexadecimal : "#FFBF00"},
+                {colorEnglish : "green", colorHexadecimal : "#50D050"}];
 
             model.getByEnumCode = function (parameterName) {
                 if(model.allParameterMaster){

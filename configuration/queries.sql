@@ -82,7 +82,7 @@ machineDepreciation.list=SELECT distinct depreciation_percentage as `depreciatio
 machineMaster.list=SELECT machine_description as `machineDescription`, machine_name as `machineName`, machine_type as `machineType`,work_process as `workProcess`, model as `model`, depreciation_percentage as `depreciation`, year_of_manufacturing as `yearOfManufacturing` from machine_master
 
 
-goldRateDetails = SELECT gold_rate_per_gram_in_paisa as `goldRate` from gold_coin_rate_master LIMIT 1
+goldRateDetails = SELECT gold_rate_in_paisa as `goldRate` from jewel_loan_parameter_master LIMIT 1
 
 reassignment.list = SELECT l.id AS loanId,l.screening_date AS screeningDate,c.first_name AS applicantName,CUSENT.first_name AS customerName,bm.branch_name AS branchName,cm.centre_name AS centreName FROM loan_accounts l INNER JOIN loan_customer_relation lcr ON ( lcr.loan_id = l.id AND lcr.relation = 'APPLICANT' ) INNER JOIN customer c ON ( c.id = lcr.customer_id ) INNER JOIN customer CUSENT ON ( CUSENT.id = l.customer_id AND CUSENT.customer_type = 'Enterprise' ) INNER JOIN branch_master bm ON ( bm.id = l.branch_id ) INNER JOIN loan_centre lc ON ( lc.loan_id = l.id ) INNER JOIN centre_master cm ON ( cm.id = lc.centre_id ) WHERE  ( loan_purpose_1 IN( 'Purchase - Used Vehicle', 'Refinance' ) AND l.current_stage IN( 'FieldInvestigation1', 'FieldInvestigation2', 'FieldInvestigation3','TeleVerification' )) AND ( :branch_name = ''  OR bm.branch_name= :branch_name )
 
@@ -95,3 +95,5 @@ customerFamilyMembers.list = SELECT family_member_first_name as `familyMemberFir
 customerNomineeMembers.list = SELECT family_member_first_name as `familyMemberFirstName`, family_member_last_name as familyMemberLastName, `gender` as gender, date_of_birth as `dateOfBirth`, relationship as `realtionShip`, enrollment_id as `enrollmentId` from family_details where customer_id = :customerId and relationship not in (:relationShip) and relationship in ('Father','Brother','Mother','Self','Son','Daughter','Sister','Wife','Husband')
 insuranceProducts.list = select distinct im.product_code as `productCode`, im.partner_code as `partnerCode`,m.id as `moduleConfigId`, im.insurance_type as insuranceType, im.premium_rate_code as `premiumRateCode` from  insurance_product_master im  inner join module_config_master m on m.module_name = im.product_code and m.bank_id = :bankId inner join product_type_master pm on m.module_name = pm.product_name inner join product_configuration pc on pc.product_id = pm.id where pc.bank_id = :bankId and branch_id = :branchId
 customerLoanAccount.list=SELECT account_number from loan_accounts where customer_id = :customer_id
+getBankName = SELECT bank_name from bank_master where id =:bankId
+getInsuranceFormName = SELECT product_code, document_code as `FormName`,is_mandatory from insurance_documents_master where product_code = :productCode

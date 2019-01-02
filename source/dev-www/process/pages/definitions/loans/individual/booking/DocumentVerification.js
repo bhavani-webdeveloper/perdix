@@ -931,6 +931,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                         'loanAccount': _.cloneDeep(model.loanAccount),
                         'loanProcessAction': 'PROCEED',
                     };
+                    var allowedStatues = ['APPROVED', 'REJECTED'];
                     reqParamData.loanAccount.status = null;
                      var redirectToUploadFlag = false;
                     for (var i = 0; i < reqParamData.loanAccount.loanDocuments.length; i++) {
