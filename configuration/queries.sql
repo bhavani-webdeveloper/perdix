@@ -96,3 +96,4 @@ customerNomineeMembers.list = SELECT family_member_first_name as `familyMemberFi
 insuranceProducts.list = select distinct im.product_code as `productCode`, im.partner_code as `partnerCode`,m.id as `moduleConfigId`, im.insurance_type as insuranceType, im.premium_rate_code as `premiumRateCode` from  insurance_product_master im  inner join module_config_master m on m.module_name = im.product_code and m.bank_id = :bankId inner join product_type_master pm on m.module_name = pm.product_name inner join product_configuration pc on pc.product_id = pm.id where pc.bank_id = :bankId and branch_id = :branchId
 customerLoanAccount.list=SELECT account_number from loan_accounts where customer_id = :customer_id
 getBankName = SELECT bank_name from bank_master where id =:bankId
+getInsuranceFormName = SELECT product_code, document_code as `FormName`,is_mandatory from insurance_documents_master where product_code = :productCode
