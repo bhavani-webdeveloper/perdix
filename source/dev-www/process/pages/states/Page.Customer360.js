@@ -195,6 +195,7 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 					"title": "URN_NO"
 				}, {
 					"key": "customerBlockedStatusHtml",
+					"condition":"pageConfig.isBlockedAccess",
 					"type": "html",
 					"title": "STATUS"
 				}]
@@ -250,6 +251,7 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 					"title": "URN_NO"
 				}, {
 					"key": "customerBlockedStatusHtml",
+					"condition":"pageConfig.isBlockAccess",
 					"type": "html",
 					"title": "STATUS"
 				}]
@@ -362,7 +364,7 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 		$scope.pageTitle = 'CUSTOMER_360';
 
 		if (data.customerType === 'Enterprise') {
-			$scope.introForm = enterprisePortfolioForm;
+			$scope.introForm = enterprisePortfolioForm
 			//$scope.pageTitle = 'BUSINESS_360';
 		} else {
 			$scope.introForm = customerPortfolioForm;
