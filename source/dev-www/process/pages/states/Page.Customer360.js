@@ -195,7 +195,7 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 					"title": "URN_NO"
 				}, {
 					"key": "customerBlockedStatusHtml",
-					"condition":"pageConfig.isBlockedAccess",
+					"condition":"pageConfig.isBlockAccess",
 					"type": "html",
 					"title": "STATUS"
 				}]
