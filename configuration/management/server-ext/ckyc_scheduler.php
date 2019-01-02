@@ -92,7 +92,7 @@ Class Ckyc {
         'Citizenship' => 'IN',
         'OccupationType' => function($c) {
             switch ($c->employment_status) {
-                case 'Salaried': return 'O-02';
+                case 'Salaried': case 'SALARIED': return 'O-02';
                 case 'SELF EMPLOYED': case 'SELFEMPLOYED': return 'O-01';
             }
             return '';
