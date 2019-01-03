@@ -428,7 +428,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 };
                             },
                             fileType: "image/*",
-                            offline: false,
                             using:"",//using scanner for document scanner trigger
                         },
                         "KYC.identityProofNo": {
@@ -464,7 +463,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 };
                             },
                             fileType: "image/*",
-                            offline: false,
                             condition: "!model.customer.addressProofSameAsIdProof",
                             using:""
                         },
@@ -506,8 +504,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "udf34": {
                                     key: "customer.udf.userDefinedFieldValues.udf34",
                                     type: "file",
-                                    fileType: "image/*",
-                                    offline: true,
+                                    fileType: "image/*"
                                 },
                                 "udf35": {
                                     key: "customer.udf.userDefinedFieldValues.udf35",
@@ -2037,7 +2034,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         item.customer.villageName
                     ]
                 },
-                offline: false,
                 getOfflineDisplayItem: function (item, index) {
                     return [
                         item.customer.urnNo,

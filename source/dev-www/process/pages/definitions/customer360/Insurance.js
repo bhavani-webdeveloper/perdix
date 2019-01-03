@@ -1,5 +1,5 @@
-irf.pageCollection.factory(irf.page("customer360.Insurance"), ["$log", "Insurance", "$q", "PageHelper","$stateParams","UIRepository","IrfFormRequestProcessor","Misc","Utils",
-    function($log, Insurance, $q, PageHelper,$stateParams,UIRepository,IrfFormRequestProcessor,Misc,Utils) {
+irf.pageCollection.factory(irf.page("customer360.Insurance"), ["$log", "Insurance", "$q", "PageHelper","$stateParams","UIRepository","IrfFormRequestProcessor","Misc","Utils","Queries",
+    function($log, Insurance, $q, PageHelper,$stateParams,UIRepository,IrfFormRequestProcessor,Misc,Utils,Queries) {
             
             var globalListkeys = [];
             var getIncludesFromJson = function(params){};
@@ -87,27 +87,27 @@ irf.pageCollection.factory(irf.page("customer360.Insurance"), ["$log", "Insuranc
                                         }
                                     }   
                                 },
+                                // "downloadAll":{
+                                //     "type":"button",
+                                //     "title":"DOWNLOAD_ALL_FORMS",
+                                //     "condition":"model.insurancePolicyDetailsDTO.productCode == 'PAI-Future Generali India'",
+                                //     onClick:function(model,form){
+                                //         Utils.downloadFile(Misc.formDownload({formName:"fgi_policy",recordId:model.insurancePolicyDetailsDTO.id}));
+                                //     }
+                                // },
                                 "downloadAll":{
-                                    "type":"button",
-                                    "title":"DOWNLOAD_ALL_FORMS",
-                                    onClick:function(model,form){
-                                        Utils.downloadFile(Misc.formDownload({formName:"Coi_liberty",recordId:model.insurancePolicyDetailsDTO.id}));
-                                    }
-                                },
-                                "tempDownloadAll":{
                                     "type": "button",
                                     "title": "DOWNLOAD_FORM",
+                                    "condition":"model.insurancePolicyDetailsDTO.productCode",
                                     onClick: function(model,form){
-                                        Utils.downloadFile(Misc.formDownloadStatic({siteCode:"KGFS"}))
+                                        Queries.getInsuranceFormName(model.insurancePolicyDetailsDTO.premiumRateCode).then(function(resp){
+                                            Utils.downloadFile(Misc.formDownload({formName:resp,recordId:model.insurancePolicyDetailsDTO.id}));
+                                        },function(err){
+                                            console.log(err);
+                                        })
+                                        
                                     }
                                 },
-                                "tempDownloadAll2":{
-                                    "type": "button",
-                                    "title": "DOWNLOAD_FORM",
-                                    onClick: function(model,form){
-                                        Utils.downloadFile(Misc.formDownloadStatic({siteCode: "hsf"}))
-                                    }
-                                }
                             }
                         }
                     },
@@ -123,12 +123,12 @@ irf.pageCollection.factory(irf.page("customer360.Insurance"), ["$log", "Insuranc
                 return [
                     "insuranceDocuments",
                     "insuranceDocuments.downloadAll",
-                    "insuranceDocuments.tempDownloadAll",
-                    "insuranceDocuments.tempDownloadAll2",
-                    "insuranceDocuments.listOfDocuments",
-                    "insuranceDocuments.listOfDocuments.section",
-                    "insuranceDocuments.listOfDocuments.section.selectionList",
-                    "insuranceDocuments.listOfDocuments.section.selectionList.documentTitle",
+                    // "insuranceDocuments.tempDownloadAll",
+                    
+                    // "insuranceDocuments.listOfDocuments",
+                    // "insuranceDocuments.listOfDocuments.section",
+                    // "insuranceDocuments.listOfDocuments.section.selectionList",
+                    // "insuranceDocuments.listOfDocuments.section.selectionList.documentTitle",
                 ]
             };
 

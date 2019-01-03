@@ -92,7 +92,7 @@ Class Ckyc {
         'Citizenship' => 'IN',
         'OccupationType' => function($c) {
             switch ($c->employment_status) {
-                case 'Salaried': return 'O-02';
+                case 'Salaried': case 'SALARIED': return 'O-02';
                 case 'SELF EMPLOYED': case 'SELFEMPLOYED': return 'O-01';
             }
             return '';
@@ -311,7 +311,7 @@ function process_outgoing() {
     write_file(CKYC_OUTGOING_TEMP_DIR.DIRECTORY_SEPARATOR."CustomerData_$timestamp.txt", $piped_customer_text);
 
     foreach ($customer_data as $customer) {
-        echo "Processing customer: $customer->id\n";
+        echo "Processing customer: $customer->id/$customer->urn_no\n";
         if (!recreate_directory(CKYC_OUTGOING_TEMP_DIR.DIRECTORY_SEPARATOR.$customer->urn_no)) {
             echo "Failed to create directory for customer id: $customer->id\n";
             continue;
@@ -319,9 +319,9 @@ function process_outgoing() {
         /**
          * Showing only front image but we neeed to conver front and back to pdf for addrss proof image id nad identiy proof image id
          */
-        download_customer_file($customer->id, 'customer_photo', $customer->photo_image_id);
-        download_customer_file($customer->id, Ckyc::$p2c_filename[strtolower($customer->address_proof)], $customer->address_proof_image_id);
-        download_customer_file($customer->id, Ckyc::$p2c_filename[strtolower($customer->identity_prof)], $customer->identity_proof_image_id);
+        download_customer_file($customer->urn_no, 'customer_photo', $customer->photo_image_id);
+        download_customer_file($customer->urn_no, Ckyc::$p2c_filename[strtolower($customer->address_proof)], $customer->address_proof_image_id);
+        download_customer_file($customer->urn_no, Ckyc::$p2c_filename[strtolower($customer->identity_prof)], $customer->identity_proof_image_id);
 
         $interface_data = $customer_interface_data[$customer->id];
         try {

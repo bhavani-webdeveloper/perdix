@@ -590,8 +590,7 @@ define({
                                 },                                
                                 {
                                     "title": "ABB to Kinara EMI",
-                                    "data": "ABB_to_Kinara_EMI",
-                                    "render": self.currencyRightRender
+                                    "data": "ABB_to_Kinara_EMI"
                                 },
                                 {
                                     "title": "Average Bank Deposit: Average Revenue",
@@ -692,39 +691,39 @@ define({
                         model.customerHistoryFinancials['tableData'].push(histData);
                         model.financialGraphValues['totalAssetGraphValues'].push({
                             'x' : histData.data[0]['Category'],
-	                        'y' : histData['Total Assets'],
+	                        'y' : parseFloat(histData['Total Assets']),
 	                        'series': 0,
 	                        'key' : 'Total Assets'
                         });
                         model.financialGraphValues['totalLiabilitiesGraphValues'].push({
                             'x' : histData.data[0]['Category'],
-	                        'y' : histData.data[0]['Total_Liabilities'],
+	                        'y' : parseFloat(histData.data[0]['Total_Liabilities']),
 	                        'series' :1,
 	                        'key' : 'Total Liabilities'
                         });
                         model.financialGraphValues['netIncomeGraphValues'].push({
                             'x' : histData.data[0]['Category'],
-	                        'y' : histData.data[0]['net_income'],
+	                        'y' : parseFloat(histData.data[0]['net_income']),
 	                        'series' : 0,
 	                        'key' : 'Net Income'
                         });
                         model.financialGraphValues['ownCapitalGraphValues'].push({
                             'x' : histData.data[0]['Category'],
-                            'y' : histData.data[0]['Own_capital'],
+                            'y' : parseFloat(histData.data[0]['Own_capital']),
                             'series' : 0,
 	                        'key' : 'Own Capital'
                         });
                         model.financialGraphValues['invoiceGraphValues'].push({
                             'x' : histData.data[0]['Category'],
-                            'y' : histData.data[0]['Invoice'],
+                            'y' : parseFloat(histData.data[0]['Invoice']),
                             'series' : 0,
-	                        'key' : 'Own Capital'
+	                        'key' : 'Invoice'
                         });
                         model.financialGraphValues['cashGraphValues'].push({
                             'x' : histData.data[0]['Category'],
-                            'y' : histData.data[0]['Cash'],
+                            'y' : parseFloat(histData.data[0]['Cash']),
                             'series' : 1,
-	                        'key' : 'Own Capital'
+	                        'key' : 'Cash'
                         });
 
                     });
@@ -748,8 +747,6 @@ define({
                     };                    
 
                     let prepareFinancialData={};
-                    let prepareFinancialData1={};
-                    let prepareFinancialData2={};
                         if(params){
                             let balancesheet=params[9].data[0];
                             let businessPL=params[8].data[0];
@@ -791,66 +788,45 @@ define({
                                 ]
                             };
                             data['data'].push(prepareFinancialData);
-                            prepareFinancialData1 = {
-                                'Category': 'Current Application',
-                                'ABB_to_Kinara_EMI': (params[3].data[0]) ? params[3].data[0]['Actual Value'] : null,
-                                'Average Bank Deposit : Average Revenue': (params[3].data[1]) ? params[3].data[1]['Actual Value'] : null,
-                                'no_of_cheque_bounced': (params[3].data[2]) ? params[3].data[2]['Actual Value'] : null,
-                                'Average_Bank_Balance': (params[10].BankAccounts[0])? params[10].BankAccounts[0]['Average Bank Balance'] : null ,
-                                'Average_Bank_Deposits': (params[10].BankAccounts[0]) ? params[10].BankAccounts[0]['Average Bank Deposit'] : null,
-                                'no_of_kinara_cheque_bounces': (params[3].data[7]) ? params[3].data[7]['Actual Value'] : null
-
-                            };
-                            prepareFinancialData2 = {
-                                'Category': 'Current Application',
-                                'PsychometricScore': (params[1].sections[0].data[7]) ? params[1].sections[0].data[7]['Applicant'] : null,
-                                'business_premises_status': (params[2].data[1]) ? params[2].data[1]['Actual Value']: null,
-                                'formality_of_business': (params[2].data[4])? params[2].data[4]['Actual Value'] : null,
-                                'housing_status': (params[1].sections[0].data[2]) ? params[1].sections[0].data[2]['Applicant'] : null,
-                                'years_of_business_in_current_area': (params[2].data[6]) ? params[2].data[6]['Actual Value'] : null
-
-                            };
-
-
                         }
                     model.customerHistoryFinancials['tableData'].push(data);
-                    model.customerHistoryFinancials['tableData1'].push(prepareFinancialData1);
-                    model.customerHistoryFinancials['tableData2'].push(prepareFinancialData2);
+                    model.customerHistoryFinancials['tableData1'].push(params[0].data[0]);
+                    model.customerHistoryFinancials['tableData2'].push(params[0].data[0]);
                     model.financialGraphValues['totalAssetGraphValues'].push({
                         'x' : prepareFinancialData['Category'],
-                        'y' : prepareFinancialData['Total Assets'],
+                        'y' : parseFloat(prepareFinancialData['Total Assets']),
                         'series': 0,
                         'key' : 'Total Assets'
                     });
                     model.financialGraphValues['totalLiabilitiesGraphValues'].push({
                         'x' : prepareFinancialData['Category'],
-                        'y' : prepareFinancialData['Total_Liabilities'],
+                        'y' : parseFloat(prepareFinancialData['Total_Liabilities']),
                         'series' :1,
                         'key' : 'Total Liabilities'
                     });
                     model.financialGraphValues['netIncomeGraphValues'].push({
                         'x' : prepareFinancialData['Category'],
-                        'y' : prepareFinancialData['net_income'],
+                        'y' : parseFloat(prepareFinancialData['net_income']),
                         'series' : 0,
                         'key' : 'Net Income'
                     });
                     model.financialGraphValues['ownCapitalGraphValues'].push({
                         'x' : prepareFinancialData['Category'],
-                        'y' : prepareFinancialData['Own_capital'],
+                        'y' : parseFloat(prepareFinancialData['Own_capital']),
                         'series' : 0,
                         'key' : 'Own Capital'
                     })
                     model.financialGraphValues['invoiceGraphValues'].push({
                         'x' : prepareFinancialData['Category'],
-                        'y' : prepareFinancialData['Invoice'],
+                        'y' : parseFloat(prepareFinancialData['Invoice']),
                         'series' : 0,
-                        'key' : 'Own Capital'
+                        'key' : 'Invoice'
                     });
                     model.financialGraphValues['cashGraphValues'].push({
                         'x' : prepareFinancialData['Category'],
-                        'y' : prepareFinancialData['Cash'],
+                        'y' : parseFloat(prepareFinancialData['Cash']),
                         'series' : 1,
-                        'key' : 'Own Capital'
+                        'key' : 'Cash'
                     })
                     model.renderReady('financial-summary');
                 }

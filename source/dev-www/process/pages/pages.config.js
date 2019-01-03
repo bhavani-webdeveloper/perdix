@@ -151,6 +151,12 @@ irf.pages.config([
 		url: "/ManagementReportDashboard",
 		templateUrl: "process/pages/templates/Page.Dashboard.html",
 		controller: "PageManagementReportDashboardCtrl"		
+	},{
+		name: "dashboardLoanOriginationDashboard",
+		url: "/base/dashboard/dashboardLoanOriginationDashboard",
+		//templateUrl: "process/pages/templates/Page.Dashboard.html",
+		templateUrl: "process/pages/templates/Page.Dashboard.html",
+		controller: "dashboardLoanOriginationDashboard"		
 	}];
 
 	angular.forEach(statesDefinition, function(value, key){

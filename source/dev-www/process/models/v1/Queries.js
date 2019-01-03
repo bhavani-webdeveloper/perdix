@@ -1438,7 +1438,16 @@ irf.models.factory('Queries', [
             }            
         },deferred.reject);
         return deferred.promise;
-    }
+    };
+    resource.getInsuranceFormName = function(productCode){
+        var deferred = $q.defer();
+        resource.getResult("getInsuranceFormName",{"productCode":productCode}).then(function(value){
+            if(value && value.results.length > 0){
+                Object.prototype.toString.call(value.results) == '[object Array]' ? deferred.resolve(value.results[0].FormName) : deferred.resolve(value.results.FormName)
+            }
+        },deferred.reject);
+        return deferred.promise;
+    };
     return resource;
     
     }
