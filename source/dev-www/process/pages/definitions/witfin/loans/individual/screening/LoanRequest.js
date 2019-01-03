@@ -930,7 +930,6 @@ define([], function() {
                                     },
                                     "dealIrr": {
                                         "key": "loanAccount.dealIrr",
-                                        "condition": "model.loanAccount.securityEmiRequired == 'YES'",
                                         "title": "NET_IRR",
                                         "type": "number",
                                         "orderNo": 110,
@@ -938,7 +937,6 @@ define([], function() {
                                     },
                                     "udf7": {
                                         "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf7",
-                                        "condition": "model.loanAccount.securityEmiRequired.toUpperCase() == 'NO'",
                                         "title": "GROSS_IRR",
                                         "type": "number",
                                         "orderNo": 110,
@@ -970,6 +968,8 @@ define([], function() {
                                                 PageHelper.showProgress('securityEMI', 'Please Select Advance EMI Option', 3000);
                                             } 
                                             else {
+                                                model.loanAccount.dealIrr = null;
+                                                model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf7 = null;
                                                 var processFee;
                                                 var dsaPayout;
                                                 var frequency;
@@ -1064,7 +1064,7 @@ define([], function() {
                                                         "inputMoratoriums": [],
                                                         "normalInterestRate": model.loanAccount.expectedInterestRate,
                                                         "openedOnDate": Utils.getCurrentDate(),
-                                                        "productCode": "IRRTP01",
+                                                        "productCode": "IRRTP",
                                                         "scheduledDisbursementAmount": model.loanAccount.loanAmountRequested,
                                                         "scheduledDisbursementDate": Utils.getCurrentDate(),
                                                         "scheduledDisbursements": [],
@@ -1094,7 +1094,7 @@ define([], function() {
                                                         "inputMoratoriums": [],
                                                         "normalInterestRate": model.loanAccount.expectedInterestRate,
                                                         "openedOnDate": Utils.getCurrentDate(),
-                                                        "productCode": "IRRTP",
+                                                        "productCode": "IRRTP01",
                                                         "scheduledDisbursementAmount": model.loanAccount.loanAmountRequested,
                                                         "scheduledDisbursementDate": Utils.getCurrentDate(),
                                                         "scheduledDisbursements": [],
@@ -1145,7 +1145,15 @@ define([], function() {
                                     "securityEmiRequired": {
                                         "key": "loanAccount.securityEmiRequired",
                                         "title": "ADVANCE_EMI",
-                                        "type": "radios",
+                                        "type": "select",
+                                        "titleMap": {
+                                            "YES": "YES",
+                                            "NO": "NO"
+                                        },
+                                        onChange: function (valueObj, model, context) {
+                                            context.loanAccount.dealIrr = null;
+                                            context.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf7 = null;
+                                        },
                                         "orderNo": 70
                                     }
                                 }
