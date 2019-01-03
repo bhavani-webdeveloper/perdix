@@ -427,6 +427,10 @@ define(["perdix/domain/model/loan/LoanProcess",
                         /* Update other pages */
                         BundleManager.broadcastEvent("business-updated", obj);
                     },
+                    "new-business": function(pageObj, bundlePageObj, obj){
+                        /* Update other pages */
+                        BundleManager.broadcastEvent("new-business", obj);
+                    }
                 },
                 preSave: function(offlineData) {
                     var defer = $q.defer();
