@@ -930,10 +930,6 @@ define([], function() {
                                     },
                                     "dealIrr": {
                                         "key": "loanAccount.dealIrr",
-<<<<<<< HEAD
-=======
-                                        "condition": "model.loanAccount.securityEmiRequired == 'YES'",
->>>>>>> 4ed85efaa... XIRR calculation
                                         "title": "NET_IRR",
                                         "type": "number",
                                         "orderNo": 110,
@@ -941,10 +937,6 @@ define([], function() {
                                     },
                                     "udf7": {
                                         "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf7",
-<<<<<<< HEAD
-=======
-                                        "condition": "model.loanAccount.securityEmiRequired.toUpperCase() == 'NO'",
->>>>>>> 4ed85efaa... XIRR calculation
                                         "title": "GROSS_IRR",
                                         "type": "number",
                                         "orderNo": 110,
@@ -976,11 +968,8 @@ define([], function() {
                                                 PageHelper.showProgress('securityEMI', 'Please Select Advance EMI Option', 3000);
                                             } 
                                             else {
-<<<<<<< HEAD
                                                 model.loanAccount.dealIrr = null;
                                                 model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf7 = null;
-=======
->>>>>>> 4ed85efaa... XIRR calculation
                                                 var processFee;
                                                 var dsaPayout;
                                                 var frequency;
@@ -1075,11 +1064,7 @@ define([], function() {
                                                         "inputMoratoriums": [],
                                                         "normalInterestRate": model.loanAccount.expectedInterestRate,
                                                         "openedOnDate": Utils.getCurrentDate(),
-<<<<<<< HEAD
                                                         "productCode": "IRRTP",
-=======
-                                                        "productCode": "IRRTP01",
->>>>>>> 4ed85efaa... XIRR calculation
                                                         "scheduledDisbursementAmount": model.loanAccount.loanAmountRequested,
                                                         "scheduledDisbursementDate": Utils.getCurrentDate(),
                                                         "scheduledDisbursements": [],
@@ -1109,11 +1094,7 @@ define([], function() {
                                                         "inputMoratoriums": [],
                                                         "normalInterestRate": model.loanAccount.expectedInterestRate,
                                                         "openedOnDate": Utils.getCurrentDate(),
-<<<<<<< HEAD
                                                         "productCode": "IRRTP01",
-=======
-                                                        "productCode": "IRRTP",
->>>>>>> 4ed85efaa... XIRR calculation
                                                         "scheduledDisbursementAmount": model.loanAccount.loanAmountRequested,
                                                         "scheduledDisbursementDate": Utils.getCurrentDate(),
                                                         "scheduledDisbursements": [],
@@ -1127,7 +1108,6 @@ define([], function() {
                                                         model.loanAccount.dealIrr = Number(resp.xirr.substr(0, resp.xirr.length - 1));
                                                     }, function (err) {
                                                         console.log(err);
-<<<<<<< HEAD
                                                     });
 
                                                     LoanProcess.findPreOpenSummary({
@@ -1157,37 +1137,6 @@ define([], function() {
                                                     },function (err) {
                                                         console.log(err);
                                                     });
-=======
-                                                    });
-
-                                                    LoanProcess.findPreOpenSummary({
-                                                        "amountMagnitude": model.loanAccount.loanAmountRequested,
-                                                        "branchId": model.loanAccount.branchId || model.loanProcess.applicantEnrolmentProcess.customer.customerBranchId,
-                                                        "firstRepaymentDate": moment(Utils.getCurrentDate()).add(1, 'months').format("YYYY-MM-DD"),
-                                                        "inputFees": [{
-                                                            "grossAmount": processFee + dsaPayout,
-                                                            "transactionDate": Utils.getCurrentDate(),
-                                                            "transactionName": "Processing Fee"
-                                                        }],
-                                                        "inputMoratoriums": [],
-                                                        "normalInterestRate": model.loanAccount.expectedInterestRate,
-                                                        "openedOnDate": Utils.getCurrentDate(),
-                                                        "productCode": "IRRTP01",
-                                                        "scheduledDisbursementAmount": model.loanAccount.loanAmountRequested,
-                                                        "scheduledDisbursementDate": Utils.getCurrentDate(),
-                                                        "scheduledDisbursements": [],
-                                                        "tenureMagnitude": model.loanAccount.tenureRequested,
-                                                        "tenureUnit": frequency,
-                                                        "userSecurityDeposit": "0"
-                                                    })
-                                                    .$promise
-                                                    .then(function (resp) {
-                                                        $log.info(resp);
-                                                        model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf7 = Number(resp.xirr.substr(0, resp.xirr.length - 1));
-                                                    },function (err) {
-                                                        console.log(err);
-                                                    });
->>>>>>> 4ed85efaa... XIRR calculation
                                                 }
                                                 
                                             }
