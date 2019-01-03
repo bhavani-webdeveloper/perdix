@@ -1,0 +1,74 @@
+{
+	"type": "object",
+	"properties": {
+		"applicant": {
+			"type": "object",
+			"properties": {
+                "doorNo": {
+                    "type": ["string","null"]
+                }
+			},
+			"required": [
+				"doorNo"
+			]
+		},
+		"coApplicants": {
+			"type": "array",
+			"minItems": 1,
+			"maxItems": 2,
+			"items": {
+				"type": "object",
+				"properties": {
+	                "doorNo": {
+	                    "type": "string"
+	                }
+				},
+				"required": [
+					"doorNo"
+				]
+			}
+		},
+		"gaurantors": {
+			"type": "array",
+			"minItems": 0,
+			"maxItems": 5,
+			"items": {
+				"type": "object",
+				"properties": {
+	                "doorNo": {
+	                    "type": "string"
+	                }
+				},
+				"required": [
+					"doorNo"
+				]
+			}
+		},
+		"enterprise": {
+			"type": "object",
+			"properties": {
+                "doorNo": {
+                    "type": ["string","null"]
+                },
+				"required": [
+					"doorNo"
+				]
+			}
+		},
+		"loanAccount": {
+			"type": "object",
+			"properties": {
+                "accountNumber": {
+                    "type": ["string","null"]
+                },
+				"required": [
+					"accountNumber"
+				]
+			}
+		}
+		
+	},
+	"required": [
+		"applicant"
+	]
+}
