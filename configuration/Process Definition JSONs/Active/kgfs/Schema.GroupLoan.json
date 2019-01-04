@@ -63,11 +63,14 @@
                         "string",
                         null
                      ]
-                  }
+                  },
+"verifications":{
+"type":"object"
                },
                "required":[  
                   "familyMemberFirstName",
-                  "relationShip"
+                  "relationShip",
+"verifications"
                ]
             },
             "required":[  

@@ -494,7 +494,7 @@ if (isset($_GET)) {
                                 $calculateWeightage = ((($DefinedScoreValues['Value'] / $DefinedScoreValues['MaxParameterScore']) * $DefinedScoreValues['ParameterWeightage']) / 100);
                             }
                             $calculateMaxWeightage = $DefinedScoreValues['ParameterWeightage'] / 100;
-                            if ($DefinedScoreValues['non_negotiable'] == '1') {
+                            if ($DefinedScoreValues['nonNegotiable'] == '1') {
                                 $non_negotiable++;
                             }
                             

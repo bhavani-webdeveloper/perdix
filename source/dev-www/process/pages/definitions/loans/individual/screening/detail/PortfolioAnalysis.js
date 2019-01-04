@@ -217,7 +217,7 @@ define({
                                     render: function(data, type, full, meta) {
                                         
                                         data = full['data'][0].disbursement_date;
-                                        return self.strongRender(data)
+                                        return data
                                     }
                                 },
                                 {
@@ -226,7 +226,7 @@ define({
                                     render: function(data, type, full, meta) {
                                         
                                         data = full['data'][0].monthly_turnover;
-                                        return self.strongRender(data)
+                                        return self.currencyRightRender(data)
                                     }
                                 },
                                 {
@@ -235,7 +235,7 @@ define({
                                     render: function(data, type, full, meta) {
                                         
                                         data = full['data'][0].Purchases;
-                                        return self.strongRender(data)
+                                        return self.currencyRightRender(data)
                                     }
                                 }, 
                                 {
@@ -244,7 +244,7 @@ define({
                                     render: function(data, type, full, meta) {
                                         
                                         data = full['data'][0].Opex;
-                                        return self.strongRender(data)
+                                        return self.currencyRightRender(data)
                                     }
                                 },                                
                                 {
@@ -253,7 +253,7 @@ define({
                                     render: function(data, type, full, meta) {
                                         
                                         data = full['data'][0].net_business_income;
-                                        return self.strongRender(data)
+                                        return self.currencyRightRender(data)
                                     }
                                 }, 
                                 {
@@ -271,7 +271,7 @@ define({
                                     render: function(data, type, full, meta) {
                                         
                                         data = full['data'][0].business_liabilities;
-                                        return self.strongRender(data);
+                                        return self.currencyRightRender(data);
                                     }
                                 },
                                 {
@@ -280,7 +280,7 @@ define({
                                     render: function(data, type, full, meta) {
                                         
                                         data = full['data'][0].net_income;
-                                        return self.strongRender(data);
+                                        return self.currencyRightRender(data);
                                     }
                                 },
                                 {
@@ -289,7 +289,7 @@ define({
                                     render: function(data, type, full, meta) {
                                         
                                         data = full['data'][0].kinara_emi;
-                                        return self.strongRender(data);
+                                        return self.currencyRightRender(data);
                                     }
                                 },
                                 {
@@ -306,7 +306,7 @@ define({
                                     "data": "Total_current_assets",
                                     "render": function(data, type, full, meta){
                                         data = full['data'][0].Total_current_assets;
-                                        return '<strong>'+self.currencyRightRender(data)+'</strong>';
+                                        return self.currencyRightRender(data);
                                     }
                                 },                                
                                 {
@@ -315,7 +315,7 @@ define({
                                     "render": self.strongRender,
                                     "render": function(data, type, full, meta){
                                         data = full['data'][0].Total_fixed_assets;
-                                        return '<strong>'+self.currencyRightRender(data)+'</strong>';
+                                        return self.currencyRightRender(data);
                                     }
                                 },
                                 {
@@ -323,7 +323,7 @@ define({
                                     "data": "Total Assets",
                                     "render": function(data, type, full, meta){
                                         data = full['data'][0]['Total Assets'];
-                                        return '<strong>'+self.currencyRightRender(data)+'</strong>';
+                                        return self.currencyRightRender(data);
                                     }
                                 },
                                 {
@@ -347,7 +347,7 @@ define({
                                     "data": "Total_Liabilities",
                                     "render": function(data, type, full, meta){
                                         data = full['data'][0].Total_Liabilities;
-                                        return '<strong>'+self.currencyRightRender(data)+'</strong>';
+                                        return self.currencyRightRender(data);
                                     }
                                 },
                                 {
@@ -362,7 +362,7 @@ define({
                                     "title": "HypothecationValue:LoanAmount",
                                     "data": "HypothecationValue:LoanAmount",
                                     "render": function(data, type, full, meta){
-                                        data = full['data'][0]['HypothecationValue:LoanAmount'];
+                                        data = full['data'][0]['HypothecationValue:LoanAmount']+"%";
                                         return data
                                     }
                                 }
@@ -396,52 +396,43 @@ define({
                                     "title": "DSCR",
                                     "data": "DSCR",
                                     render: function(data, type, full, meta) {
-                                        if(full.ratios[0]==undefined)
-                                            data= "NA"
-                                        else {
-                                            data= full.ratios[0]['DSCR'];
-                                            if(data==0)
-                                                data = "0";
-                                            if(data == null)
-                                                data = "NA"
-                                            
+                                        if(full.ratios[0]==undefined) {
+                                            return "NA"
+                                        } else {
+                                            if(full.ratios[0]['DSCR'] == null) {
+                                                return "NA";
+                                            }
+                                            return irfCurrencyFilter(full.ratios[0]['DSCR'], null, null, "decimal")
                                         }
-                                            return data;
                                     }
                                 },
                                 {
                                     "title": "DSO",
                                     "data": "DSONonTrading",
                                     render: function(data, type, full, meta) {
-                                        if(full.ratios[1]==undefined)
+                                        if(full.ratios[1]==undefined) {
                                             data= "NA"
-                                        else {
+                                        } else {
                                             data = full.ratios[1]['DSONonTrading'];
-                                            if(data == 0)
-                                                 data = "0"
-                                            if(data == null)
-                                                data = "NA"
-
+                                            if(full.ratios[1]['DSONonTrading'] == null) {
+                                                return "NA";
+                                            }
+                                            return irfCurrencyFilter(full.ratios[1]['DSONonTrading'], null, null, "decimal")
                                         }
-                                            
-                                            return data;
                                     }
                                 },
                                 {
                                     "title": "Current Ratio",
                                     "data": "CurrentRatio",
                                     render: function(data, type, full, meta) {
-                                        if(full.ratios[2]==undefined)
-                                        data= "NA"
-                                    else {
-                                        data= full.ratios[2]['CurrentRatio'];
-                                        if(data == 0)
-                                            data = "0"
-                                        if(data == null)
-                                            data = "NA"
-                                    }
-                                        
-                                        return data;
+                                        if(full.ratios[2]==undefined) {
+                                            return "NA"
+                                        } else {
+                                            if(full.ratios[2]['CurrentRatio'] == null) {
+                                                return "NA";
+                                            }
+                                            return irfCurrencyFilter(full.ratios[2]['CurrentRatio'], null, null, "decimal")
+                                        }
                                     }
                                 },
                                 // {
@@ -590,7 +581,10 @@ define({
                                 },                                
                                 {
                                     "title": "ABB to Kinara EMI",
-                                    "data": "ABB_to_Kinara_EMI"
+                                    "data": "ABB_to_Kinara_EMI",
+                                    render: function(data, type, full, meta) {
+                                        return irfCurrencyFilter(data, null, null, "decimal")
+                                    }
                                 },
                                 {
                                     "title": "Average Bank Deposit: Average Revenue",

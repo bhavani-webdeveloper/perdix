@@ -36,7 +36,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:20
                         },
                         {
-                            pageName: 'base.dashboard.loans.individual.customer.IndividualEnrollment2',
+                            pageName: 'base.dashboard.loans.individual.customer.IndividualEnrolment2',
                             title: 'GUARANTOR',
                             pageClass: 'guarantor',
                             minimum: 0,
