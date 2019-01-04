@@ -711,6 +711,7 @@ define([], function() {
                     "DeductionsFromLoan.fee5",
                     "DeductionsFromLoan.expectedPortfolioInsurancePremium",
                     "DeductionsFromLoan.dealIrr",
+                    "DeductionsFromLoan.udf7",
                     "DeductionsFromLoan.dsaPayoutFee",
                     "DeductionsFromLoan.vExpectedProcessingFee",
                     "LoanDocuments",
@@ -929,7 +930,14 @@ define([], function() {
                                     },
                                     "dealIrr": {
                                         "key": "loanAccount.dealIrr",
-                                        "title": "XIRR",
+                                        "title": "NET_IRR",
+                                        "type": "number",
+                                        "orderNo": 110,
+                                        "readonly": true
+                                    },
+                                    "udf7": {
+                                        "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf7",
+                                        "title": "GROSS_IRR",
                                         "type": "number",
                                         "orderNo": 110,
                                         "readonly": true
@@ -954,8 +962,14 @@ define([], function() {
                                         "orderNo": 90,
                                         onClick: function(model, formCtrl) {
                                             if (model.loanAccount.estimatedEmi == null) {
-                                                PageHelper.showProgress('calculateXirr', 'Please Click Calculate EMI Button', 5000);
-                                            } else {
+                                                PageHelper.showProgress('calculateXirr', 'Please Click Calculate EMI Button', 3000);
+                                            }
+                                            else if (!model.loanAccount.securityEmiRequired) {
+                                                PageHelper.showProgress('securityEMI', 'Please Select Advance EMI Option', 3000);
+                                            } 
+                                            else {
+                                                model.loanAccount.dealIrr = null;
+                                                model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf7 = null;
                                                 var processFee;
                                                 var dsaPayout;
                                                 var frequency;
@@ -1007,62 +1021,139 @@ define([], function() {
                                                         frequencyRequested = 365;
                                                 }
 
-                                                LoanProcess.findPreOpenSummary({
+                                                if (model.loanAccount.securityEmiRequired == 'YES') {
+                                                    LoanProcess.findPreOpenSummary({
                                                         "amountMagnitude": model.loanAccount.loanAmountRequested,
-                                                        "tenureMagnitude": model.loanAccount.tenureRequested,
-                                                        "tenureUnit": frequency,
-                                                        "normalInterestRate": model.loanAccount.expectedInterestRate,
-                                                        "productCode": "IRRTP",
-                                                    //    "moratoriumPeriod": "0",
-                                                        "openedOnDate": Utils.getCurrentDate(),
                                                         "branchId": model.loanAccount.branchId || model.loanProcess.applicantEnrolmentProcess.customer.customerBranchId,
-                                                        "firstRepaymentDate": moment().add(frequencyRequested, 'days').format("YYYY-MM-DD"),
-                                                        "scheduledDisbursementDate": Utils.getCurrentDate(),
-                                                        "scheduledDisbursementAmount": model.loanAccount.loanAmountRequested,
-                                                        "userSecurityDeposit": "100",
+                                                        "firstRepaymentDate": moment(Utils.getCurrentDate()).add(1, 'months').format("YYYY-MM-DD"),
                                                         "inputFees": [
                                                             {
-                                                            "FeeAmount": "900",
-                                                            "Surcharge": "100",
-                                                            "GrossAmount": "1000",
-                                                            "TransactionName": "Processing Fee"
+                                                                "grossAmount": processFee - dsaPayout,
+                                                                "transactionDate": Utils.getCurrentDate(),
+                                                                "transactionName": "Processing Fee"
                                                             }
                                                         ],
-                                                          "inputMoratoriums": [
-                                                              {
-                                                              "accountId": "",
-                                                              "amendmentType": "",
-                                                              "amount": "",
-                                                              "computeStartDate": true,
-                                                              "feeAmount": "",
-                                                              "grossAmount": "",
-                                                              "moratoriumInstallment": "0",
-                                                              "moratoriumInterestRate": "23.61",
-                                                              "moratoriumPeriod": "0 NONE",
-                                                              "repaymentDate": "2017-10-24",
-                                                              "surcharge": "",
-                                                              "tenure": "",
-                                                              "transactionDate": "",
-                                                              "transactionId": "",
-                                                              "transactionName": "",
-                                                              "urnNo": ""
-                                                            }
-                                                          ],
-                                                      "scheduledDisbursements": [],
-                                                      "equatedInstallment": "31000"
+                                                        "inputMoratoriums": [],
+                                                        "normalInterestRate": model.loanAccount.expectedInterestRate,
+                                                        "openedOnDate": Utils.getCurrentDate(),
+                                                        "productCode": "IRRTP",
+                                                        "scheduledDisbursementAmount": model.loanAccount.loanAmountRequested,
+                                                        "scheduledDisbursementDate": Utils.getCurrentDate(),
+                                                        "scheduledDisbursements": [],
+                                                        "tenureMagnitude": model.loanAccount.tenureRequested,
+                                                        "tenureUnit": frequency,
+                                                        "userSecurityDeposit": "0"
                                                     })
                                                     .$promise
-                                                    .then(function(resp) {
+                                                    .then(function (resp) {
                                                         $log.info(resp);
                                                         model.loanAccount.dealIrr = Number(resp.xirr.substr(0, resp.xirr.length - 1));
+                                                    },function (err) {
+                                                        console.log(err);
                                                     });
+
+                                                    LoanProcess.findPreOpenSummary({
+                                                        "amountMagnitude": model.loanAccount.loanAmountRequested,
+                                                        "branchId": model.loanAccount.branchId || model.loanProcess.applicantEnrolmentProcess.customer.customerBranchId,
+                                                        "firstRepaymentDate": moment(Utils.getCurrentDate()).add(1, 'months').format("YYYY-MM-DD"),
+                                                        "inputFees": [{
+                                                            "grossAmount": processFee + dsaPayout,
+                                                            "transactionDate": Utils.getCurrentDate(),
+                                                            "transactionName": "Processing Fee"
+                                                        }],
+                                                        "inputMoratoriums": [],
+                                                        "normalInterestRate": model.loanAccount.expectedInterestRate,
+                                                        "openedOnDate": Utils.getCurrentDate(),
+                                                        "productCode": "IRRTP",
+                                                        "scheduledDisbursementAmount": model.loanAccount.loanAmountRequested,
+                                                        "scheduledDisbursementDate": Utils.getCurrentDate(),
+                                                        "scheduledDisbursements": [],
+                                                        "tenureMagnitude": model.loanAccount.tenureRequested,
+                                                        "tenureUnit": frequency,
+                                                        "userSecurityDeposit": "0"
+                                                    })
+                                                    .$promise
+                                                    .then(function (resp) {
+                                                        $log.info(resp);
+                                                        model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf7 = Number(resp.xirr.substr(0, resp.xirr.length - 1));
+                                                    },function (err) {
+                                                        console.log(err);
+                                                    });
+                                                }
+
+                                                else if (model.loanAccount.securityEmiRequired == 'NO') {
+                                                    LoanProcess.findPreOpenSummary({
+                                                        "amountMagnitude": model.loanAccount.loanAmountRequested,
+                                                        "branchId": model.loanAccount.branchId || model.loanProcess.applicantEnrolmentProcess.customer.customerBranchId,
+                                                        "firstRepaymentDate": moment(Utils.getCurrentDate()).add(1, 'months').format("YYYY-MM-DD"),
+                                                        "inputFees": [{
+                                                            "grossAmount": processFee - dsaPayout,
+                                                            "transactionDate": Utils.getCurrentDate(),
+                                                            "transactionName": "Processing Fee"
+                                                        }],
+                                                        "inputMoratoriums": [],
+                                                        "normalInterestRate": model.loanAccount.expectedInterestRate,
+                                                        "openedOnDate": Utils.getCurrentDate(),
+                                                        "productCode": "IRRTP01",
+                                                        "scheduledDisbursementAmount": model.loanAccount.loanAmountRequested,
+                                                        "scheduledDisbursementDate": Utils.getCurrentDate(),
+                                                        "scheduledDisbursements": [],
+                                                        "tenureMagnitude": model.loanAccount.tenureRequested,
+                                                        "tenureUnit": frequency,
+                                                        "userSecurityDeposit": "0"
+                                                    })
+                                                    .$promise
+                                                    .then(function (resp) {
+                                                        $log.info(resp);
+                                                        model.loanAccount.dealIrr = Number(resp.xirr.substr(0, resp.xirr.length - 1));
+                                                    }, function (err) {
+                                                        console.log(err);
+                                                    });
+
+                                                    LoanProcess.findPreOpenSummary({
+                                                        "amountMagnitude": model.loanAccount.loanAmountRequested,
+                                                        "branchId": model.loanAccount.branchId || model.loanProcess.applicantEnrolmentProcess.customer.customerBranchId,
+                                                        "firstRepaymentDate": moment(Utils.getCurrentDate()).add(1, 'months').format("YYYY-MM-DD"),
+                                                        "inputFees": [{
+                                                            "grossAmount": processFee + dsaPayout,
+                                                            "transactionDate": Utils.getCurrentDate(),
+                                                            "transactionName": "Processing Fee"
+                                                        }],
+                                                        "inputMoratoriums": [],
+                                                        "normalInterestRate": model.loanAccount.expectedInterestRate,
+                                                        "openedOnDate": Utils.getCurrentDate(),
+                                                        "productCode": "IRRTP01",
+                                                        "scheduledDisbursementAmount": model.loanAccount.loanAmountRequested,
+                                                        "scheduledDisbursementDate": Utils.getCurrentDate(),
+                                                        "scheduledDisbursements": [],
+                                                        "tenureMagnitude": model.loanAccount.tenureRequested,
+                                                        "tenureUnit": frequency,
+                                                        "userSecurityDeposit": "0"
+                                                    })
+                                                    .$promise
+                                                    .then(function (resp) {
+                                                        $log.info(resp);
+                                                        model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf7 = Number(resp.xirr.substr(0, resp.xirr.length - 1));
+                                                    },function (err) {
+                                                        console.log(err);
+                                                    });
+                                                }
+                                                
                                             }
                                         }
                                     },
                                     "securityEmiRequired": {
                                         "key": "loanAccount.securityEmiRequired",
                                         "title": "ADVANCE_EMI",
-                                        "type": "radios",
+                                        "type": "select",
+                                        "titleMap": {
+                                            "YES": "YES",
+                                            "NO": "NO"
+                                        },
+                                        onChange: function (valueObj, model, context) {
+                                            context.loanAccount.dealIrr = null;
+                                            context.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf7 = null;
+                                        },
                                         "orderNo": 70
                                     }
                                 }

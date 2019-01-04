@@ -731,10 +731,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseInformation.businessSector": {
                                         "required": true
                                     },
-                                    "EnterpriseInformation.businessSubsector": {
-                                        "required": true,
-                                        "resolver": "BusinessSubsectorLOVConfiguration"
-                                    },
+                                    // "EnterpriseInformation.businessSubsector": {
+                                    //     "required": true,
+                                    //     "resolver": "BusinessSubsectorLOVConfiguration"
+                                    // },
                                     "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerName": {
                                         "readonly": true
                                     },
@@ -1075,6 +1075,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
 
                                         }
                                         PageHelper.showProgress('enrolment', 'Done.', 5000);
+                                        BundleManager.pushEvent("new-"+model._bundlePageObj.pageClass, model._bundlePageObj, enrolmentProcess);
+                            
                                     }, function(err) {
                                         PageHelper.showErrors(err);
                                         PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);                                        

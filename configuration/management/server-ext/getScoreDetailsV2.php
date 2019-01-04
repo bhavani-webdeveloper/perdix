@@ -113,6 +113,9 @@ if (isset($_GET)) {
         if (sizeof($criterias) == 0)
             continue;
 
+        if (key_exists('loan_type', $criterias))
+            if ($loan_type != $criterias['loan_type'] && $criterias['loan_type'] != 'All')
+            continue;
         if (key_exists('loan_purpose_1', $criterias))
             if ($loan_purpose_1 != $criterias['loan_purpose_1'] && $criterias['loan_purpose_1'] != 'All')
                 continue;

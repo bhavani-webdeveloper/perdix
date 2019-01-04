@@ -23,7 +23,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                         return $q.resolve([
                             {
                                // pageName: 'witfin.customer.IndividualEnrollment2',
-                                pageName:'base.dashboard.loans.individual.customer.IndividualEnrollment2',
+                                pageName:'base.dashboard.loans.individual.customer.IndividualEnrolment2',
                                 title: 'APPLICANT',
                                 pageClass: 'applicant',
                                 minimum: 1,
@@ -31,7 +31,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 order:10
                             },
                             {
-                                pageName: 'base.dashboard.loans.individual.customer.IndividualEnrollment2',
+                                pageName: 'base.dashboard.loans.individual.customer.IndividualEnrolment2',
                                 title: 'CO_APPLICANT',
                                 pageClass: 'co-applicant',
                                 minimum: 0,
@@ -39,7 +39,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 order:20
                             },
                             {
-                                pageName: 'base.dashboard.loans.individual.customer.IndividualEnrollment2',
+                                pageName: 'base.dashboard.loans.individual.customer.IndividualEnrolment2',
                                 title: 'GUARANTOR',
                                 pageClass: 'guarantor',
                                 minimum: 0,
@@ -71,7 +71,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             //     order:55
                             // },
                             {
-                                pageName: 'base.dashboard.loans.individual.screening.CBCheck',
+                                pageName: 'loans.individual.screening.CBCheck',
                                 title: 'CB_CHECK',
                                 pageClass: 'cb-check',
                                 minimum: 1,
@@ -79,7 +79,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 order:60
                             },
                             {
-                                pageName: 'base.dashboard.loans.individual.screening.CreditBureauView',
+                                pageName: 'loans.individual.screening.CreditBureauView',
                                 title: 'CREDIT_BUREAU',
                                 pageClass: 'cbview',
                                 minimum: 1,
