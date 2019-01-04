@@ -55,12 +55,14 @@ irf.pageCollection.directive("irfScoringDisplay", function(){
         controller: 'irfScoringDisplayController'
     }
 }).controller("irfScoringDisplayController", ["$scope", function($scope){
-    var sd = $scope.scoringData.SubscoreDetails;
-    var ss = $scope.scoringData.SubscoreScores;
     var _tData = {
         "IndividualScores": [],
-        "OtherScores": []
+        "OtherScores": [],
+        "OverAllScore":{}
     };
+    var sd = $scope.scoringData.SubscoreDetails;
+    var ss = $scope.scoringData.SubscoreScores;
+    _tData.OverAllScore = $scope.scoringData.ScoreCalculationDetails;
     _.forOwn(sd, function(v,k){
         var _vsd = {};
         _vsd['name'] = k;
