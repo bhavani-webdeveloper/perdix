@@ -49,7 +49,7 @@ define([], function () {
             }
             var clearAll = function(baseKey,listOfKeys,model){
                 if(listOfKeys != null ||listOfKeys.length > 0){
-                    for(var i =0 ;i<listOfKeys.lenght;i++){
+                    for(var i =0 ;i<listOfKeys.length;i++){
                         if(typeof model[baseKey[listOfKeys[i]]] !="undefined")
                                             model[baseKey[listOfKeys[i]]] = null;
                     }
@@ -94,6 +94,37 @@ define([], function () {
                     return false;
                 }
                 return true;
+            };
+            var validateCoGuarantor = function(c,g,type,lcr,model){
+                var valueC = c;
+                var valueG = g;
+                var tempc = 0;
+                var tempg = 0;
+                for(i=0;i<lcr.length;i++){
+                    if(lcr[i].relation == "Applicant")
+                        continue;
+                    lcr[i].relation == 'Co-Applicant' ? tempc = tempc+1 : tempg = tempg+1;
+                }
+                if(type=='validate'){
+                    if (tempg >= valueG && tempc >=valueC){
+                        return true;
+                    }
+                    else{
+                        var errorc = tempc < valueC ? valueC-tempc : 0;
+                        var errorg = tempg < valueG ? valueG-tempg : 0;
+                        var msgC = errorc != 0 ? errorc + " more Co-Applicant(s) needed ": "";
+                        var msgG = errorg != 0 ? errorg + " more Guarantor(s) needed ": "";
+                        var finalMsg = (msgC+msgG).length > 3 ? msgC+msgG : false;
+                        if(finalMsg){
+                            PageHelper.showProgress('c&g',finalMsg,2000);
+                            return false;
+                        }
+                    }
+                }
+                else{
+                    model.additions.co_borrower_required = tempc;
+                    model.additions.number_of_guarantors = tempg;
+                }
             }
 
             // View Functions
@@ -121,6 +152,7 @@ define([], function () {
                     "LoanDetails.witnessDetails.witnessFirstName",
                     "LoanDetails.witnessDetails.witnessDOB",
                     "LoanDetails.witnessDetails.witnessRelationship",
+                    "LoanDetails.numberOfGuarantorsCoApplicants",
 
 
                     "NomineeDetails",
@@ -335,8 +367,9 @@ define([], function () {
                         onSelect: function (valueObj, model, context) {
                             // clearAll("loanAccount",["loanAmountRequested","requestedTenure","interestRate","loanPurpose1","loanPurpose2","loanPurpose3"],model);
                             model.loanAccount.productCode = valueObj.productCode;
-                            model.additions.tenurePlaceHolder = valueObj.tenure_from + '-' + valueObj.tenure_to;
-                            model.additions.amountPlaceHolder = valueObj.amount_from + '-' + valueObj.amount_to;
+                            model.additions.tenurePlaceHolder = valueObj.tenure_from == valueObj.tenure_to ? valueObj.tenure_from : valueObj.tenure_from + '-' + valueObj.tenure_to;
+                            model.additions.amountPlaceHolder = valueObj.amount_from == valueObj.amount_to ? valueObj.amount_from : valueObj.amount_from + '-' + valueObj.amount_to;
+                            model.additions.interestPlaceHolder = valueObj.min_interest_rate == valueObj.max_interest_rate ? valueObj.min_interest_rate : valueObj.min_interest_rate + '-' + valueObj.max_interest_rate;
                             if(valueObj.tenure_from == valueObj.tenure_to){
                                 model.additions.tenurePlaceHolder = valueObj.tenure_from
                             }
@@ -344,7 +377,8 @@ define([], function () {
                                 model.additions.amountPlaceHolder = valueObj.amount_from;
                             }
                             model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = valueObj.product_name;
-
+                            model.additions.number_of_guarantors = valueObj.number_of_guarantors ? valueObj.number_of_guarantors : 0;
+                            model.additions.co_borrower_required = valueObj.co_borrower_required ? 1 : 0;
                         },
                         getListDisplayItem: function (item, index) {
                             return [
@@ -363,6 +397,7 @@ define([], function () {
                     "LoanDetails.interestRate":{
                         "orderNo":6,
                         required:false,
+                        "placeholderExpr": "model.additions.interestPlaceHolder",
                     },
                     "LoanDetails.loanPurpose1": {
                         "orderNo": 6,
@@ -446,7 +481,8 @@ define([], function () {
                         }
                     },
                     "LoanDetails.loanApplicationDate": {
-                        "orderNo": 9
+                        "orderNo": 9,
+                        "readonly": true,
                     },
                     "LoanDetails.requestedTenure": {
                         "orderNo": 6,
@@ -558,12 +594,14 @@ define([], function () {
                             }
 
                             for (var i = 0; i < model.customer.familyMembers.length; i++) {
-                                out.push({
-                                    name: model.customer.familyMembers[i].familyMemberFirstName,
-                                    dob : model.customer.familyMembers[i].dateOfBirth,
-                                    relationship: model.customer.familyMembers[i].relationShip,
-                                    gender: model.customer.familyMembers[i].gender
-                                })
+                                if(!(model.customer.urnNo == model.customer.familyMembers[i].enrolledUrnNo)){
+                                    out.push({
+                                        name: model.customer.familyMembers[i].familyMemberFirstName,
+                                        dob: model.customer.familyMembers[i].dateOfBirth,
+                                        relationship: model.customer.familyMembers[i].relationShip,
+                                        gender: model.customer.familyMembers[i].gender
+                                    })
+                                }
                             }
                             return $q.resolve({
                                 headers: {
@@ -803,6 +841,7 @@ define([], function () {
                 initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
                     model.customer = {};
                     model.additions = {};
+                    model.additions.noOfGuarantorCoApplicantHtml = "<p stye=\"font-size:10px !important\"><font color=#FF6347>Number of Co-Applicants : {{model.additions.co_borrower_required}} Number of Guarantors :{{model.additions.number_of_guarantors}}</font><p>";
                     model.loanAccount = model.loanProcess.loanAccount;
                     model.loanAccount.bcAccount = {};
                     model.loanAccount.processType = "1";
@@ -872,9 +911,22 @@ define([], function () {
                             trancheNumber  : 1
                         })
                     }
-                    // Hard Coded value have to fix this
+                    // TODO Hard Coded value have to fix this
                     model.loanAccount.securityEmiRequired = "No";
-            
+                    if(!(model.loanAccount.partnerCode)){
+                        var partnerList = formHelper.enum('loan_partner').data
+                        for (i=0;i<partnerList.length;i++){
+                            if(partnerList[i].value = "KGFS"){
+                                model.loanAccount.partnerCode = "KGFS";
+                                break;
+                            }
+                            continue;
+                     }
+                    };
+                    if(model.loanAccount.id){
+                        validateCoGuarantor(0,0,'map',model.loanAccount.loanCustomerRelations,model);
+                    }
+                    
                     self = this;
                     var p1 = UIRepository.getLoanProcessUIRepository().$promise;
                     p1.then(function (repo) {
@@ -941,6 +993,13 @@ define([], function () {
                                                     "type": "text",
                                                     "readonly": true,
                                                     "key": "yet to decide",
+                                                },
+                                                "numberOfGuarantorsCoApplicants":{
+                                                    "title":"REQUIRED",
+                                                    orderNo:4,
+                                                    "type":"html",
+                                                    "condition":"model.loanAccount.productCode",
+                                                    "key":"additions.noOfGuarantorCoApplicantHtml"
                                                 }
                                             }
                                         },
@@ -1321,6 +1380,8 @@ define([], function () {
                             model.loanAccount.documentTracking = "PENDING";
                             model.loanAccount.psychometricCompleted = "NO";
                         }
+                        if(!(validateCoGuarantor(model.additions.co_borrower_required,model.additions.number_of_guarantors,'validate',model.loanAccount.loanCustomerRelations,model)))
+                            return false;
                         PageHelper.showProgress('loan-process', 'Updating Loan');
                         if(!savePolicies(model))
                             return false;
