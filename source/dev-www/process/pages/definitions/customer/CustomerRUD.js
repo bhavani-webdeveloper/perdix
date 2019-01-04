@@ -1,5 +1,5 @@
-irf.pageCollection.factory("Pages__CustomerRUD", ["$log", "$q", "Enrollment", "Queries", 'PageHelper', 'irfProgressMessage', '$stateParams', '$state', 'formHelper', "BASE_URL", "$window", "SessionStore", "Utils", "EnrollmentHelper",
-    function($log, $q, Enrollment, Queries, PageHelper, irfProgressMessage, $stateParams, $state, formHelper, BASE_URL, $window, SessionStore, Utils, EnrollmentHelper) {
+irf.pageCollection.factory("Pages__CustomerRUD", ["$log", "$q", "Enrollment", "Queries", 'PageHelper', 'irfProgressMessage', '$stateParams', '$state', 'formHelper', "BASE_URL", "$window", "SessionStore","CustomerBankBranch", "Utils", "EnrollmentHelper",
+    function($log, $q, Enrollment, Queries, PageHelper, irfProgressMessage, $stateParams, $state, formHelper, BASE_URL, $window, SessionStore, CustomerBankBranch,Utils, EnrollmentHelper) {
         return {
             "id": "CustomerRUD",
             "type": "schema-form",
