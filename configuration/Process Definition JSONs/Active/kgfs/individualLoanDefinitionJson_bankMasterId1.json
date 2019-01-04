@@ -1,7 +1,7 @@
 {
     "customerMinAgeGenericProduct":18,
-    "customerMaxGenericAge":60,
-    "customerMaxAgeBcProduct":58,
+    "customerMaxGenericAge":75,
+    "customerMaxAgeBcProduct":75,
     "customerAgeLimitForSingleFemale":35,
     "stages":[
        {
