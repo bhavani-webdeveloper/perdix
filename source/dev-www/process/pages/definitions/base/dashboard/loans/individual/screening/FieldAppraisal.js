@@ -20,7 +20,7 @@ irf.pageCollection.factory(irf.page('base.dashboard.loans.individual.screening.F
                         order:5
                     },
                     {
-                        pageName: 'base.dashboard.loans.individual.customer.IndividualEnrolment2',
+                        pageName: 'customer.IndividualEnrolment2',
                         title: 'APPLICANT',
                         pageClass: 'applicant',
                         minimum: 1,
@@ -44,23 +44,23 @@ irf.pageCollection.factory(irf.page('base.dashboard.loans.individual.screening.F
                         order:30
                     },
                     {
-                        pageName: 'base.dashboard.loans.individual.customer.EnterpriseEnrolment2',
+                        pageName: 'customer.EnterpriseEnrolment2',
                         title: 'BUSINESS',
                         pageClass: 'business',
                         minimum: 1,
                         maximum: 1,
                         order:40
                     },
+                    // {
+                    //     pageName: 'loans.individual.screening.PersonalDiscussion',
+                    //     title: 'PERSONAL_DISCUSSION',
+                    //     pageClass: 'personal-discussion',
+                    //     minimum: 1,
+                    //     maximum: 1,
+                    //     order:42
+                    // },
                     {
-                        pageName: 'base.dashboard.loans.individual.screening.PersonalDiscussion',
-                        title: 'PERSONAL_DISCUSSION',
-                        pageClass: 'personal-discussion',
-                        minimum: 1,
-                        maximum: 1,
-                        order:42
-                    },
-                    {
-                        pageName: 'base.dashboard.loans.individual.screening.LoanRequest',
+                        pageName: 'loans.individual.screening.LoanRequest',
                         title: 'LOAN_REQUEST',
                         pageClass: 'loan-request',
                         minimum: 1,
@@ -68,7 +68,7 @@ irf.pageCollection.factory(irf.page('base.dashboard.loans.individual.screening.F
                         order:45
                     },
                     {
-                        pageName: 'base.dashboard.loans.individual.screening.CreditBureauView',
+                        pageName: 'loans.individual.screening.CreditBureauView',
                         title: 'CREDIT_BUREAU',
                         pageClass: 'cbview',
                         minimum: 1,
@@ -205,10 +205,10 @@ irf.pageCollection.factory(irf.page('base.dashboard.loans.individual.screening.F
                                     var temp_model = {
                                         loanAccount:res
                                     }
-                                    $this.bundlePages.push({
-                                        pageClass: 'personal-discussion',
-                                        model: temp_model 
-                                    });
+                                    // $this.bundlePages.push({
+                                    //     pageClass: 'personal-discussion',
+                                    //     model: temp_model 
+                                    // });
 
                                     $this.bundlePages.push({
                                         pageClass: 'loan-request',
