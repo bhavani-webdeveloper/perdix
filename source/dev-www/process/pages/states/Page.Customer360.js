@@ -151,7 +151,6 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 		"type": "box",
 		"title": "PORTFOLIO",
 		"colClass": "col-sm-12",
-		"readonly": true,
 		"items": [{
 			"type": "section",
 			"htmlClass": "row",
@@ -174,23 +173,29 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 				"type": "section",
 				"htmlClass": "col-sm-6",
 				"items": [{
+					"readonly": true,
 					"key": "customer.nameWithAge",
 					"title": "CUSTOMER_NAME"
 				},{
+					"readonly": true,
 					"key": "customer.dateOfBirth",
 					"title": "T_DATEOFBIRTH",
 					"type": "date"
 				},{
+					"readonly": true,
 					"key": "customer.mobilePhone",
 					"title": "MOBILE_PHONE"
 				},{
+					"readonly": true,
 					"key": "customer.identityProofNo",
 					"titleExpr": "model.customer.identityProof | translate"
 				},{
+					"readonly": true,
 					"key": "customer.idAndBcCustId",
 					"title": "Id & Legacy Cust Id",
 					"titleExpr": "('ID'|translate) + ' & ' + ('BC_CUST_ID'|translate)"
 				},{
+					"readonly": true,
 					"key": "customer.urnNo",
 					"title": "URN_NO"
 				}, {
@@ -198,7 +203,38 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 					"condition":"model.pageConfig.isBlockAccess",
 					"type": "html",
 					"title": "STATUS"
+				},{
+					"key":"customer.blockingRemarks",
+					"condition":"model.customer.blocked && model.pageConfig.isBlockAccess && model.additions.blockStatusChange",
+					"type": "string",
+					"required":true,
+					'title': "REASON_FOR_BLOCKING",
+					// "titleExpr": "REASON_FOR_+(model.customer.blocked ? 'BLOCK':'UNBLOCK'",
 				},
+				{
+					"key":"customer.blockingRemarks",
+					"condition":"!model.customer.blocked && model.pageConfig.isBlockAccess && model.additions.blockStatusChange",
+					"type": "string",
+					"required":true,
+					'title': "REASON_FOR_UNBLOCKING",
+					// "titleExpr": "REASON_FOR_+(model.customer.blocked ? 'BLOCK':'UNBLOCK'",
+				},
+				{
+					"key":"customer.blockingRemarks",
+					"condition":"model.customer.blocked && model.pageConfig.isBlockAccess && !model.additions.blockStatusChange",
+					"type": "string",
+					// "required":true,
+					"readonly":true,
+					'title': "REASON_FOR_BLOCKING",
+					// "titleExpr": "REASON_FOR_+(model.customer.blocked ? 'BLOCK':'UNBLOCK'",
+				},
+				{
+					"type":"button",
+					condition:"model.additions.blockStatusChange",
+					"title":"SUBMIT",
+					onClick:"actions.modifyBlockedStatus(model,false)"
+				}
+				
 			]
 			},{
 				"type": "section",
@@ -212,7 +248,6 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 		"type": "box",
 		"title": "PORTFOLIO",
 		"colClass": "col-sm-12",
-		"readonly": true,
 		"items": [{
 			"type": "section",
 			"htmlClass": "row",
@@ -235,19 +270,23 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 				"type": "section",
 				"htmlClass": "col-sm-8",
 				"items": [{
+					"readonly":true,
 					"key": "customer.firstName",
 					"title": "ENTITY_NAME"
 				},{
+					"readonly":true,
 					"key": "customer.enterprise.companyOperatingSince",
 					"title": "OPERATING_SINCE",
 					"type": "date"
 				},{
+					"readonly":true,
 					"key": "customer.latitude",
 					"title": "BUSINESS_LOCATION",
 					"type": "geotag",
 					"latitude": "customer.latitude",
 					"longitude": "customer.longitude"
 				},{
+					"readonly":true,
 					"key": "customer.urnNo",
 					"title": "URN_NO"
 				}, {
@@ -255,7 +294,39 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 					"condition":"model.pageConfig.isBlockAccess",
 					"type": "html",
 					"title": "STATUS"
-				}]
+				},{
+					"key":"customer.blockingRemarks",
+					"condition":"model.customer.blocked && model.pageConfig.isBlockAccess && model.additions.blockStatusChange",
+					"type": "string",
+					"required":true,
+					'title': "REASON_FOR_BLOCKING",
+					// "titleExpr": "REASON_FOR_+(model.customer.blocked ? 'BLOCK':'UNBLOCK'",
+				},
+				{
+					"key":"customer.blockingRemarks",
+					"condition":"!model.customer.blocked && model.pageConfig.isBlockAccess && model.additions.blockStatusChange",
+					"type": "string",
+					"required":true,
+					'title': "REASON_FOR_UNBLOCKING",
+					// "titleExpr": "REASON_FOR_+(model.customer.blocked ? 'BLOCK':'UNBLOCK'",
+				},
+				{
+					"key":"customer.blockingRemarks",
+					"condition":"model.customer.blocked && model.pageConfig.isBlockAccess && !model.additions.blockStatusChange",
+					"type": "string",
+					// "required":true,
+					"readonly":true,
+					'title': "REASON_FOR_BLOCKING",
+					// "titleExpr": "REASON_FOR_+(model.customer.blocked ? 'BLOCK':'UNBLOCK'",
+				},
+				{
+					"type":"button",
+					condition:"model.additions.blockStatusChange",
+					"title":"SUBMIT",
+					onClick:"actions.modifyBlockedStatus(model,false)"
+				}
+			
+			]
 			},{
 				"type": "section",
 				"htmlClass": "col-sm-2 hidden-xs",
@@ -359,7 +430,7 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 		$scope.model = {
 			customer: data,
 			actions: $scope.actions,
-			customerBlockedStatusHtml: '{{(model.customer.blocked?"BLOCKED":"ACTIVE")|translate}} (<a href="" ng-click="model.actions.modifyBlockedStatus(model)">{{(model.customer.blocked?"UNBLOCK":"BLOCK")|translate}}</a>)'
+			customerBlockedStatusHtml: '{{(model.customer.blocked?"BLOCKED":"ACTIVE")|translate}} (<a href="" ng-click="model.actions.modifyBlockedStatus(model,true)">{{(model.customer.blocked?"UNBLOCK":"BLOCK")|translate}}</a>)'
 		};
 		$scope.introFormName = "introForm";
 		$scope.pageTitle = 'CUSTOMER_360';
@@ -584,18 +655,31 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 	};
 
 	$scope.actions = {
-		modifyBlockedStatus: function(model) {
+		modifyBlockedStatus: function(model,api) {
+			if(api){
+				model.customer.blocked = !model.customer.blocked;
+				model.customer.blockingRemarks = null;
+				model.additions = {};
+				model.additions.blockStatusChange = true;
+				return;
+			}
 			var message = model.customer.blocked? "Do you want to activate the customer?": "Do you want to block the customer?";
 			Utils.confirm(message).then(function() {
 				PageHelper.showBlockingLoader("Changing...");
+				if(model.customer.blockingRemarks == null || model.customer.blockingRemarks == ""){
+					PageHelper.showProgress('Blocking','Block Remarks Required',2000);
+					return
+				}
 				Enrollment.modifyBlockedStatus({
 					customerId: model.customer.id,
-					isBlocked : !model.customer.blocked
+					isBlocked : model.customer.blocked,
+					blockingRemarks : model.customer.blockingRemarks
 				}).$promise.then(function(response){
 					model.customer.blocked = response.blocked;
 					model.customer.version = response.version;
 					model.customer.blockStatusChangedBy = response.blockStatusChangedBy;
 					model.customer.blockStatusChangedAt = response.blockStatusChangedAt;
+					model.additions.blockStatusChange = false;
 				}, PageHelper.showErrors).finally(PageHelper.hideBlockingLoader);
 			});
 		}
