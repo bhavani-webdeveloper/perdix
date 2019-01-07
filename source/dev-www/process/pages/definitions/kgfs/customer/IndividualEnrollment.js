@@ -80,6 +80,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                                         "orderNo": 1,
                                         "readonly": true
                                     },
+
                                     "NomineeDetails": {
                                         "orderNo": 2,
                                         "readonly": true
@@ -1198,6 +1199,62 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                                     "KYC": {
                                         "readonly": false
                                     },
+                                    "KYC.customerId": {
+                                        key: "customer.id",
+                                        type: "lov",
+                                        title: "CUSTOMER_SEARCH",
+                                        autolov:false,
+                                        bindMap: {},
+                                        inputMap: {},
+                                        outputMap:{},
+                                        searchHelper: formHelper,
+                                        search: function (inputModel, form, model, context) {
+                                            var temp = model.loanProcess.applicantEnrolmentProcess.customer.familyMembers;
+                                            var temp2 = model.loanProcess.applicantEnrolmentProcess.customer;
+                                            var out = [];
+                                            if(temp){
+                                           for(i=0;i<temp.length;i++)
+                                            {
+                                               if(temp[i].enrolledUrnNo != null && temp[i].enrolledUrnNo != "" && temp[i].enrolledUrnNo != temp2.urnNo){
+                                                   out.push(temp[i]);
+                                               }
+                                            } 
+                                            }  
+                                           return $q.resolve( {
+                                                headers: {
+                                                    "x-total-count": out.length
+                                                },
+                                                body: out
+                                            })
+                                        },
+                                        onSelect: function (valueObj, model, context) {
+                                            PageHelper.showLoader()
+                                            Enrollment.search({"urnNo":valueObj.enrolledUrnNo}).$promise.then(function(resp){
+                                                Enrollment.getCustomerById({id:resp.body[0].id}).$promise.then(function(resp){
+                                                    var temp = model.loanProcess.loanAccount.loanCustomerRelations;
+                                                    for(i=0;i<temp.length;i++){
+                                                        if(temp[i].customerId == resp.id ){
+                                                            PageHelper.showProgress('enrollment','This customer is already selected',2000);
+                                                            PageHelper.hideLoader();
+                                                            return;
+                                                        }
+                                                    }
+                                                    model.customer = resp;
+                                                    PageHelper.hideLoader();
+                                                    model.enrolmentProcess.customer = resp;
+                                                        model.loanProcess.loanAccount.loanCustomerRelations.push({customerId:resp.id,name:resp.firstName,relation:"Co-Applicant",urn:resp.urnNo});
+                                                        BundleManager.pushEvent("new-enrolment",model._bundlePageObj,{customer:resp});
+
+                                                })
+                                            })
+                                        },
+                                        getListDisplayItem: function (item, index) {
+                                            return [
+                                                item.familyMemberFirstName
+                                            ];
+                                        }
+                                    },
+                                    
                                     "FamilyDetails": {
                                         "readonly": true
                                     },
