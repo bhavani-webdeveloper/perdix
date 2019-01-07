@@ -9,6 +9,22 @@
 			height: 600px;
 			bottom: 0;
 		}
+		@media print {
+			body * { visibility: hidden; }
+			.fwr-iframe, .fwr-iframe * {
+				visibility: visible;
+			}
+			.fwr-iframe {
+				position: absolute;
+				top: 0;
+				left: 0;
+				height: 5000px;
+				overflow: scoll;
+			}
+			html, body {
+				height: 5000px;
+			}
+		}
 	</style>
 	<iframe ng-attr-src="{{fwrDashboardURL}}" class="fwr-iframe"></iframe>
 </div>
