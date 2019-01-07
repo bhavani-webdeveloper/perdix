@@ -115,6 +115,7 @@ function($log, $scope, PagesDefinition, SessionStore, IndividualLoan) {
         if (pfroqMenu) {
             IndividualLoan.searchDisbursement({
                 'currentStage': 'FROApproval',
+                'branchId':customerBranchId,
                 'page': 1,
                 'per_page': 1
             }).$promise.then(function(response,headerGetter){
@@ -128,6 +129,7 @@ function($log, $scope, PagesDefinition, SessionStore, IndividualLoan) {
         if (pcroqMenu) {
             IndividualLoan.searchDisbursement({
                 'currentStage': 'CROApproval',
+                'branchId':customerBranchId,
                 'page': 1,
                 'per_page': 1
             }).$promise.then(function(response,headerGetter){
