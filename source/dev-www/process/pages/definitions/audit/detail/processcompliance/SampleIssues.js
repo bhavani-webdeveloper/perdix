@@ -572,13 +572,27 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                     }];
 
                     if (!$stateParams.pageData.readonly) {
-                        self.form.push({
-                            "type": "actionbox",
-                            "items": [{
-                                "type": "submit",
-                                "title": "UPDATE"
-                            }]
-                        });
+                        if (model.siteCode == "KGFS") {
+                            self.form.push({
+                                "type": "actionbox",
+                                "items": [{
+                                    "type": "submit",
+                                    "title": "UPDATE"
+                                }, {
+                                    "type": "button",
+                                    "title": "NO_ISSUES",
+                                    "onClick": "actions.noIssues(model)"
+                                }]
+                            });
+                        } else {
+                            self.form.push({
+                                "type": "actionbox",
+                                "items": [{
+                                    "type": "submit",
+                                    "title": "UPDATE"
+                                }]
+                            });
+                        }
                     }
                 };
 
@@ -660,7 +674,10 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                 }
             },
             actions: {
-                submit: function(model, formCtrl, form, $event) {
+                noIssues: function(model) {
+                    this.actions.submit(model, null, null, null, "1");
+                },
+                submit: function(model, formCtrl, form, $event, status) {
                     PageHelper.clearErrors();
                     if (model.siteCode == "kinara") {
                         if (!validateKinara(model.sample)) {
@@ -672,7 +689,7 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                             return;
                         }
                     }
-                    model.sample.status = "0";
+                    model.sample.status = status? status: "0";
                     if (model.$isOffline) {
                         PageHelper.showLoader();
                         if (model.sampleType == "N") {
