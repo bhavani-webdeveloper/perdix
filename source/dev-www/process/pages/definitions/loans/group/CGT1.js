@@ -535,7 +535,7 @@ define({
                     }
                     PageHelper.showLoader();
                     $timeout(function() {
-                        model.group.cgtDate1 = new Date();
+                        model.group.cgtDate1 = SessionStore.getSystemDate();
                         irfProgressMessage.pop('group-save', 'Done.', 5000);
                         PageHelper.hideLoader();
                     });
@@ -547,7 +547,7 @@ define({
                     }
                     PageHelper.showLoader();
                     $timeout(function() {
-                        model.group.cgtEndDate1 = new Date();
+                        model.group.cgtEndDate1 = SessionStore.getSystemDate();
                         irfProgressMessage.pop('group-save', 'Done.', 5000);
                         PageHelper.hideLoader();
                     });
