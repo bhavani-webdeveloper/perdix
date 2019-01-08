@@ -1,10 +1,10 @@
 irf.pageCollection.factory(irf.page("CentrePaymentCollection"),
 ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper",
 "$stateParams", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService",
-"$filter", "elementsUtils", "Utils","PagesDefinition", "irfNavigator","GroupProcess",
+"$filter", "elementsUtils", "Utils","PagesDefinition", "irfNavigator","GroupProcess","irfSimpleModal",
 function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 	$stateParams, LoanProcess, PM, PageHelper, StorageService,
-	$filter, elementsUtils, Utils,PagesDefinition, irfNavigator,GroupProcess ){
+	$filter, elementsUtils, Utils,PagesDefinition, irfNavigator,GroupProcess,irfSimpleModal){
 	
 	
 	var generateThermelPrint = function(opts){
@@ -787,9 +787,16 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 			"items": [{
 				"type": "button",
 				"title": "Offline Print",
-				"condition": "model.onlineResponse",
-				"onClick": "actions.OfflinePrint(model, formCtrl, form, $event)"
-			}]
+				"condition": "!model.onlineResponse",
+				"onClick": "actions.OfflinePrint(model, formCtrl, form, $event,'print')"
+			},
+			{
+				"type":"button",
+				"title": "Preview",
+				"condition": "!model.onlineResponse",
+				"onClick": "actions.OfflinePrint(model,formCtrl,form,$event,'preview')"
+			}
+		]
 		},
 		{
 			"type": "actionbox",
@@ -798,9 +805,15 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 				"type": "button",
 				"title": "Print",
 				"condition": "model.onlineResponse",
-				"onClick": "actions.OnlinePrint(model, formCtrl, form, $event)"
-			}]
-		}
+				"onClick": "actions.OnlinePrint(model, formCtrl, form, $event,'print')"
+			},{
+				"type":"button",
+				"title": "Preview",
+				"condition": "model.onlineResponse",
+				"onClick": "actions.OnlinePrint(model,formCtrl,form,$event,'preview')"
+			}
+		]
+		},
 		],
 		actions: {
 			valueOfDenoms : function(model,form){
@@ -928,7 +941,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 				$log.info(print.paperReceipt);
 				$log.info(print.thermalReceipt);
 
-
+				if(type == 'print'){
 				Utils.confirm("Please Save the data offline,Page will redirected to Print Preview")
                         .then(function(){
 							irfNavigator.go({
@@ -937,9 +950,13 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 								pageData: print
 							});
 						});
+					}
+				else{
+					irfSimpleModal('print-preview',print.paperReceipt);
+				}
 			},
 
-			OnlinePrint:function(model, formCtrl, form, $event){
+			OnlinePrint:function(model, formCtrl, form, $event,type){
 				if(model.onlineresponseData){
 					var requestObj=model.onlineresponseData;
 					var opts = {
@@ -995,13 +1012,15 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 						[0,3,"Branch Code",requestObj.collectionDemandSummary.customerBranchId],
 						[0,3,"Customer Id",requestObj.collectionDemands[i].customerId],
 						[0,3,"Customer Name",requestObj.collectionDemands[i].customerName],
-						// [0,3,"Spouse Name",requestObj.collectionDemands[i].spouseName],
+						[0,3,"Spouse Name",""],
 						[0,3,"Loan A/C Number",requestObj.collectionDemands[i].accountNumber],
 						[0,3,"Transaction Type","Loan Repayment"],
 						// [0,3,"Demand Paid",requestObj.collectionDemands[i].installmentAmount],
 						[0,3,"Demand Paid",requestObj.collectionDemands[i].installmentAmount],
 						[0,3,"Over Due Amount",requestObj.collectionDemands[i].overdueAmount],
 						[0,3,"Amount Paid",requestObj.collectionDemands[i].amountPaid],
+						[0,3,"Total PayOff Amount",""],
+						[0,3,"Demand Paid/Pending",""],
 						[3," "],
 						[3,"-"],
 						[1,3,"IFMR Rural Channels and Services Pvt. Ltd."],
@@ -1027,7 +1046,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 						return generateThermelPrint(finalArray);
 					}
 	
-	
+					if(type == "print"){
 					Utils.confirm("Please Save the data offline,Page will redirected to Print Preview")
 							.then(function(){
 								irfNavigator.go({
@@ -1036,6 +1055,10 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 									pageData: print
 								});
 							});
+						}
+					else{
+						irfSimpleModal('print-preview',print.paperReceipt);
+					}
 
 
 				}else{

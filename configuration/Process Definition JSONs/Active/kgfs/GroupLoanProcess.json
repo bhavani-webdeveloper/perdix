@@ -8,6 +8,7 @@
       "code": "GroupCreation",
       "name": "Group Formation",
       "stageType": "CAPTURE",
+"isSchemaValidationRequired":true,
       "isAccountOpening": false,
       "allowedRoles": [
          "A",

@@ -232,12 +232,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseInformation.photoImageId",
                     "EnterpriseInformation.ownership",                    
                     "EnterpriseInformation.businessConstitution",
-                    "EnterpriseInformation.businessHistory",
-                    "EnterpriseInformation.noOfPartners",
+                    //"EnterpriseInformation.businessHistory",
+                    //"EnterpriseInformation.noOfPartners",
                     "EnterpriseInformation.anyPartnerOfPresentBusiness",
                     "EnterpriseInformation.partnershipDissolvedDate",
-                    "EnterpriseInformation.regularEmployees",
-                    "EnterpriseInformation.contractEmployee",
+                    //"EnterpriseInformation.regularEmployees",
+                    //"EnterpriseInformation.contractEmployee",
                     "EnterpriseInformation.operatedBy",
                     "EnterpriseInformation.companyRegistered",
                     "EnterpriseInformation.isGSTAvailable",
@@ -263,8 +263,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseInformation.enterpriseCustomerRelations.experienceInBusiness",
                     "EnterpriseInformation.enterpriseCustomerRelations.businessInvolvement",
                     "EnterpriseInformation.enterpriseCustomerRelations.partnerOfAnyOtherCompany",
-                    "EnterpriseInformation.enterpriseCustomerRelations.otherBusinessClosed",
-                    "EnterpriseInformation.enterpriseCustomerRelations.otherBusinessClosureDate",
+                    //"EnterpriseInformation.enterpriseCustomerRelations.otherBusinessClosed",
+                    //"EnterpriseInformation.enterpriseCustomerRelations.otherBusinessClosureDate",
 
                     "ContactInformation",
                     "ContactInformation.mobilePhone",
@@ -310,8 +310,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
 
                     "Liabilities",
                     "Liabilities.liabilities",
-                    "Liabilities.liabilities.liabilityType",
-                    "Liabilities.liabilities.loanType",
+                   // "Liabilities.liabilities.liabilityType",
+                    //"Liabilities.liabilities.loanType",
                     "Liabilities.liabilities.loanSource",
                     "Liabilities.liabilities.loanAmountInPaisa",
                     "Liabilities.liabilities.installmentAmountInPaisa",
@@ -731,10 +731,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseInformation.businessSector": {
                                         "required": true
                                     },
-                                    "EnterpriseInformation.businessSubsector": {
-                                        "required": true,
-                                        "resolver": "BusinessSubsectorLOVConfiguration"
-                                    },
+                                    // "EnterpriseInformation.businessSubsector": {
+                                    //     "required": true,
+                                    //     "resolver": "BusinessSubsectorLOVConfiguration"
+                                    // },
                                     "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerName": {
                                         "readonly": true
                                     },
@@ -1075,6 +1075,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
 
                                         }
                                         PageHelper.showProgress('enrolment', 'Done.', 5000);
+                                        BundleManager.pushEvent("new-"+model._bundlePageObj.pageClass, model._bundlePageObj, enrolmentProcess);
+                            
                                     }, function(err) {
                                         PageHelper.showErrors(err);
                                         PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);                                        

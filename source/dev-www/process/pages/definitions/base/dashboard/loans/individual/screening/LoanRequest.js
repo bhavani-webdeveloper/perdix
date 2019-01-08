@@ -152,6 +152,9 @@ define([],function(){
                                     "orderNo": 1,
                                     "readonly": true
                                 },
+                                "PreliminaryInformation.transactionType": {
+                                    "readonly": true
+                                },
                                 "LoanCustomerRelations": {
                                     "orderNo": 2,
                                     "readonly": true
@@ -612,6 +615,9 @@ define([],function(){
                         "PreliminaryInformation.linkedAccountNumber": {
                             "resolver": "LinkedAccountNumberLOVConfiguration"
                         },
+                        "PreliminaryInformation.transactionType": {
+                            "title": "TRANSACTION_TYPE",
+                        },
                         "LoanRecommendation.udf8": {
                             "title": "ELIGIBLE_DISPOSABLE_INCOME",
                             "onChange": function(modelValue, form, model, formCtrl, event) {                                
@@ -692,6 +698,7 @@ define([],function(){
 
                 return [
                     "PreliminaryInformation",
+                    "PreliminaryInformation.transactionType",
                     "PreliminaryInformation.linkedAccountNumber",
                     "PreliminaryInformation.loan",
                     "PreliminaryInformation.loanPurpose1",
@@ -706,8 +713,8 @@ define([],function(){
                     "PreliminaryInformation.emiPaymentDateRequested",
                     "PreliminaryInformation.collectionPaymentType",
                     "PreliminaryInformation.expectedPortfolioInsurancePremium",
-                    "PreliminaryInformation.actualAmountRequired",
-                    "PreliminaryInformation.fundsFromDifferentSources",
+                    //"PreliminaryInformation.actualAmountRequired",
+                    //"PreliminaryInformation.fundsFromDifferentSources",
                     
 
                     "LoanCustomerRelations",
@@ -884,6 +891,24 @@ define([],function(){
                             ],
                             "options": {
                                 "repositoryAdditions": {
+                                    "PreliminaryInformation":{
+                                        "items": {
+                                            "transactionType": {
+                                                key: "loanAccount.transactionType",
+                                                title: "TRANSACTION_TYPE",
+                                                type: "select",
+                                                required: true,
+                                                "titleMap": {
+                                                    "New Loan": "New Loan",
+                                                    "Renewal": "Renewal",
+                                                    "Loan Restructure": "Loan Restructure",
+                                                    "Internal Foreclosure": "Internal Foreclosure"
+                                                },
+                                                "orderNo": 1,
+                                            }
+                                        }
+                                       
+                                    },
                                     "NomineeDetails": {
                                         "type": "box",
                                         "title": "NOMINEE_DETAILS",

@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
- ["PagesDefinition","$log","GroupProcess", "SessionStore", "LoanAccount", "$state", "$stateParams", "SchemaResource", "PageHelper", "Enrollment", "formHelper", "IndividualLoan", "Utils", "$filter", "$q", "irfProgressMessage", "Queries", "Files", "LoanBookingCommons", "irfSimpleModal", "irfNavigator", "RepaymentReminder","Misc","$httpParamSerializer",
-    function(PagesDefinition,$log,GroupProcess, SessionStore, LoanAccount, $state, $stateParams, SchemaResource, PageHelper, Enrollment, formHelper, IndividualLoan, Utils, $filter, $q, irfProgressMessage, Queries, Files, LoanBookingCommons, irfSimpleModal, irfNavigator, RepaymentReminder,Misc, $httpParamSerializer) {
+ ["PagesDefinition","translateFilter","$log","GroupProcess", "SessionStore", "LoanAccount", "$state", "$stateParams", "SchemaResource", "PageHelper", "Enrollment", "formHelper", "IndividualLoan", "Utils", "$filter", "$q", "irfProgressMessage", "Queries", "Files", "LoanBookingCommons", "irfSimpleModal", "irfNavigator", "RepaymentReminder","Misc","$httpParamSerializer",
+    function(PagesDefinition,translateFilter,$log,GroupProcess, SessionStore, LoanAccount, $state, $stateParams, SchemaResource, PageHelper, Enrollment, formHelper, IndividualLoan, Utils, $filter, $q, irfProgressMessage, Queries, Files, LoanBookingCommons, irfSimpleModal, irfNavigator, RepaymentReminder,Misc, $httpParamSerializer) {
 
         var transactionDetailHtml = "\
         <irf-simple-summary-table irf-table-def='model.orgTransactionDetails' />\
@@ -51,7 +51,6 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                     },function(error){
                         PageHelper.showErrors(error)
                     });
-
                 var promise = Queries.feesFormMapping().then(function(response) {
                                     var test = response;
                                     if (response && response.body && response.body.length) {
@@ -79,6 +78,16 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                     model.loanAccount.waiverdocumentremarks=documents.remarks;
                                 }
                             }
+                        }
+                        model.showmessageHistory = false;
+                        if(model.loanAccount.loanType != 'JLG'){
+                            IndividualLoan.loanRemarksSummary({id:loanAccountId}).$promise.then(function (resp){
+                                model.messageHistory= resp;
+                                for(i in model.messageHistory){
+                                    model.messageHistory[i].createdDate = _.replace(model.messageHistory[i].createdDate, /T/, " ")  
+                                }
+                                model.showmessageHistory = true;
+                            });
                         }
                         if (_.hasIn(model.loanAccount, 'accountNumber') && !_.isNull(model.loanAccount.accountNumber)) {
                             var loanpromise = LoanAccount.get({
@@ -532,6 +541,8 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                     }
                                 }
                                 LoanBookingCommons.getLoanAccountRelatedCustomersLegacy(model.loanAccount);
+                                console.log("rrrrr");
+                                console.log(model)
                             }
                         }
                         $q.all(promiseArray).finally(function() {
@@ -542,6 +553,14 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                         PageHelper.showErrors(err);
                         PageHelper.hideLoader();
                     });
+                // model.showmessageHistory = false;
+                // if(model.loanAccount.loanType != 'JLG'){
+                //     IndividualLoan.loanRemarksSummary({id:loanAccountId}).$promise.then(function (resp){
+                //         model.messageHistory= resp;
+                //         model.showmessageHistory = true;
+                //     });
+                // }
+               
 
             },
             form: [
@@ -1546,6 +1565,25 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                         }
                     ] // END of box items
                 },
+                {
+                    "type": "box",
+                   "condition": "model.siteCode == 'KGFS' && model.showmessageHistory",
+                    "title": "MESSAGE_HISTORY",
+                    "readonly": true,
+                    "items": [{
+                        "key": "messageHistory",
+                        "type": "array",
+                        "view": "fixed",
+                        "titleExpr": "actions.getStageTitle(model, arrayIndex)",
+                        "items": [{
+                            "type": "section",
+                            "htmlClass": "",
+                            "html": '<i class="fa fa-commenting text-gray">&nbsp;</i> {{model.messageHistory[arrayIndex].remarks}}\
+                            <br><i class="fa fa-clock-o text-gray">&nbsp;</i> {{model.messageHistory[arrayIndex].createdDate}}\
+                            <br><i class="fa fa-user  text-gray">&nbsp;</i> {{model.messageHistory[arrayIndex].userId}}<br>'
+                        }]
+                    }]
+                }
 
                 // {
                 //     "type": "box",
@@ -1576,6 +1614,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                 //         }]
                 //     }]
                 // },
+                ,
                 {
                     "type": "box",
                     "title": "DISBURSEMENT_DETAILS",
@@ -2423,6 +2462,16 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                     }
                     return deferred.promise;
                 },
+                getStageTitle: function(model, arrayIndex) {
+                    if(messageHistory.length - 1 != arrayIndex && model.messageHistory[arrayIndex].preStage != null && model.messageHistory[arrayIndex].postStage != null){
+                        var preStage = model.messageHistory[arrayIndex].preStage;
+                        var postStage = model.messageHistory[arrayIndex].postStage;
+                        preStage =  translateFilter(preStage)  ;
+                        postStage = translateFilter(postStage) ;
+                        return preStage == postStage ? postStage : preStage + ' ⤑ ' + postStage; // &DDotrahd;
+                    }
+                    
+                },  
                 update: function(model, formCtrl, form, $event){
                     /* 1)This update is used to update the Existing Document section ,
                     2) separate pageConfig is required to enable this button as it is role specific

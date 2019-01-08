@@ -922,9 +922,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "BankAccounts.customerBankAccounts.customerBankBranchName": {
                                     "readonly": true
                                 },
-                                "BankAccounts.customerBankAccounts.bankStatements.totalDeposits": {
-                                    "required": true
-                                },
+                                // "BankAccounts.customerBankAccounts.bankStatements.totalDeposits": {
+                                //     "required": true
+                                // },
                                 "BankAccounts.customerBankAccounts.bankStatements.noOfChequeBounced": {
                                     "required": true
                                 },
@@ -1016,7 +1016,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             }
             var overridesFields = function (bundlePageObj) {
                 return {
-
+                    //over 
+                    
                     "KYC.customerId": {
                         "orderNo": 10,
                         "resolver": "IndividualCustomerIDLOVConfiguration"
@@ -1029,6 +1030,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     "BankAccounts.customerBankAccounts.isDisbersementAccount":{
                         "title": "Is Disbursement"
+                    },
+                    "BankAccounts.customerBankAccounts.bankStatements.totalDeposits":{
+                        "required": true
+                    },
+                    "BankAccounts.customerBankAccounts.bankStatements.noOfChequeBounced":{
+                        "required": true
+                    },
+                    "BankAccounts.customerBankAccounts.bankStatements.noOfEmiChequeBounced":{
+                        "required": true
+                    },
+                    "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto":{
+                        "required": true
                     },
                      "IndividualInformation.centreId": {
                         "resolver": "CentreLOVConfiguration"
@@ -1081,6 +1094,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "ContactInformation.pincode": {
                         "resolver": "PincodeLOVConfiguration",
                         "searchHelper": formHelper
+                        
                     },
                     "ContactInformation.mailingPincode": {
                         "condition": "!model.customer.mailSameAsResidence",
@@ -1381,9 +1395,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "BankAccounts.customerBankAccounts.netBankingAvailable",
                     "BankAccounts.customerBankAccounts.bankStatements",
                     "BankAccounts.customerBankAccounts.bankStatements.startMonth",
-                    "BankAccounts.customerBankAccounts.bankStatements.openingBalance",
-                    "BankAccounts.customerBankAccounts.bankStatements.closingBalance",
-                    "BankAccounts.customerBankAccounts.bankStatements.emiAmountdeducted",
+                    // "BankAccounts.customerBankAccounts.bankStatements.openingBalance",
+                    // "BankAccounts.customerBankAccounts.bankStatements.closingBalance",
+                    //"BankAccounts.customerBankAccounts.bankStatements.emiAmountdeducted",
                     "BankAccounts.customerBankAccounts.bankStatements.totalDeposits",
                     "BankAccounts.customerBankAccounts.bankStatements.totalWithdrawals",
                     "BankAccounts.customerBankAccounts.bankStatements.balanceAsOn15th",

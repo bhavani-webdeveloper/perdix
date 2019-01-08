@@ -1,12 +1,45 @@
 irf.pageCollection.factory(irf.page('customer360.loans.View'),
-    ["PagesDefinition", "$log", "formHelper", "LoanAccount", "$state", "SessionStore", "LoanAccount", "$stateParams","PageHelper",
-        function(PagesDefinition, $log, formHelper, LoanAccount, $state, SessionStore, LoanAccount, $stateParams, PageHelper){
+    ["PagesDefinition", "$log", "formHelper", "LoanAccount", "$state", "SessionStore", "LoanAccount", "$stateParams","PageHelper","$q",
+        function(PagesDefinition, $log, formHelper, LoanAccount, $state, SessionStore, LoanAccount, $stateParams, PageHelper,$q){
+            var pageConfig = {};
+            var isPageConfigResolve = false;
+            var isApplicableValue = function(param){
+                var value = pageConfig != null ? (pageConfig.length> 0 ? ((pageConfig[param] != null) ? pageConfig[param] : false) : false ): true;
+                return value;
+            }
+            var getRolePageConfig = function(param){
+                var deferred = $q.defer();
+                if(isPageConfigResolve){
+                    var value = pageConfig != null ? (pageConfig.length> 0 ? ((pageConfig[param] != null) ? pageConfig[param] : false) : false ): true;
+                      deferred.resolve(value);
+                }
+                getRolePageConfig(param).then(function(resp){
+                    if(resp)
+                        deferred.resolve(resp);
+                })
+                    // if(isPageConfigResolve) {
+                    //   
+                    // }
+                    // else{
+                    //     PagesDefinition.getRolePageConfig('Page/Engine/customer360.loans.View').then(function(resp){    
+                    //         _.isNull(resp) ? pageConfig = null : pageConfig = resp;
+                    //         var value = pageConfig != null ? (pageConfig.length> 0 ? ((pageConfig[param] != null) ? pageConfig[param] : false) : false ): true;
+                    //         defer.resolve(value);
+                    //     },defer.resolve(false))
+                    // }
+                return deferred.promise;
+            }
+            
             return {
                 "type": "search-list",
                 "title": "VIEW_LOANS",
                 "subTitle": "VIEW_LOANS_SUB",
                 initialize: function (model, form, formCtrl) {
-                    $log.info("ViewLoans initialiized");             
+                    $log.info("ViewLoans initialiized"); 
+                    // PagesDefinition.getRolePageConfig('Page/Engine/customer360.loans.View').then(function(resp){    
+                    //     _.isNull(resp) ? pageConfig = null : pageConfig = resp;
+                    //     isPageConfigResolve = true;
+                    // })          
                 },
                 offline: false,
                 definition: {
@@ -31,9 +64,17 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                         return formHelper;
                     },
                     getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
+                        var deferred = $q.defer();
                         var promise = LoanAccount.viewLoans({urn: $stateParams.pageId}).$promise;
+                        promise.then(function(resp){
+                            var data = resp;
+                            PagesDefinition.getRolePageConfig("Page/Engine/customer360.loans.View").then(function(value){
+                                pageConfig = value;
+                                deferred.resolve(data);
+                            })
+                        })
                         //var urnNo = $stateParams.pageId;
-                        return promise;
+                        return deferred.promise;
                     },
                     paginationOptions: {
                         "viewMode": "page",
@@ -204,7 +245,7 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                                         })
                                     },
                                     isApplicable: function(item, index){
-                                        return true;
+                                        return isApplicableValue('isFreezeAccountAccess');
                                     }
                                 },
                                 {

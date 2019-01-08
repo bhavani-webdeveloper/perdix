@@ -36,7 +36,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:20
                         },
                         {
-                            pageName: 'base.dashboard.loans.individual.customer.IndividualEnrollment2',
+                            pageName: 'base.dashboard.loans.individual.customer.IndividualEnrolment2',
                             title: 'GUARANTOR',
                             pageClass: 'guarantor',
                             minimum: 0,
@@ -427,6 +427,10 @@ define(["perdix/domain/model/loan/LoanProcess",
                         /* Update other pages */
                         BundleManager.broadcastEvent("business-updated", obj);
                     },
+                    "new-business": function(pageObj, bundlePageObj, obj){
+                        /* Update other pages */
+                        BundleManager.broadcastEvent("new-business", obj);
+                    }
                 },
                 preSave: function(offlineData) {
                     var defer = $q.defer();

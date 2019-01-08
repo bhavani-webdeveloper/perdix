@@ -1111,7 +1111,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 "items": [
                     {
                         key:"loanAccount.linkedAccountNumber",
-                        condition: "model.currentStage !='FieldAppraisal' && model.currentStage !='Sanction' && model.loanAccount.transactionType.toLowerCase() != 'renewal' && && model.loanAccount.transactionType.toLowerCase() != 'New Loan'",
+                        condition: "model.currentStage !='FieldAppraisal' && model.currentStage !='Sanction' && model.loanAccount.transactionType.toLowerCase() != 'renewal' && model.loanAccount.transactionType.toLowerCase() != 'New Loan'",
                         title:"LINKED_ACCOUNT_NUMBER",
                         type: "lov",
                         lovonly: true,
