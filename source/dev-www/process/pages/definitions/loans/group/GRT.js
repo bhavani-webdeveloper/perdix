@@ -1114,7 +1114,7 @@ define({
                 startGRT: function(model, form) {
                     PageHelper.showLoader();
                     $timeout(function() {
-                        model.group.grtDate = new Date();
+                        model.group.grtDate = SessionStore.getSystemDate();
                         irfProgressMessage.pop('group-save', 'Done.', 5000);
                         PageHelper.hideLoader();
                     });
@@ -1127,7 +1127,7 @@ define({
                     }
                     PageHelper.showLoader();
                     $timeout(function() {
-                        model.group.grtEndDate = new Date();
+                        model.group.grtEndDate = SessionStore.getSystemDate();
                         irfProgressMessage.pop('group-save', 'Done.', 5000);
                         PageHelper.hideLoader();
                     });
