@@ -196,13 +196,15 @@ irf.commons.config(["$httpProvider", function($httpProvider){
 			},
 			'responseError': function(rejection) {
 				console.log("rejection status: " + rejection.status);
-				if (rejection.status === 401 && !(rejection.config && rejection.config.data && rejection.config.data.skip_relogin=='yes')) {
-					var deferred = $q.defer();
-					AuthPopup.pushToRelogin(deferred, rejection);
-					return deferred.promise;
-				} else if (rejection.status === 408 || rejection.status <= 0) {
-					// CONNECTION_TIMEDOUT
-					$rootScope.$broadcast('server-connection-error', rejection.status);
+				if (!(rejection.config && rejection.config.data && rejection.config.data.skip_relogin=='yes')) {
+					if (rejection.status === 401) {
+						var deferred = $q.defer();
+						AuthPopup.pushToRelogin(deferred, rejection);
+						return deferred.promise;
+					} else if (rejection.status === 408 || rejection.status <= 0) {
+						// CONNECTION_TIMEDOUT
+						$rootScope.$broadcast('server-connection-error', rejection.status);
+					}
 				}
 				// $log.error(rejection);
 				return $q.reject(rejection);
