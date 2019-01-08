@@ -734,7 +734,7 @@ define([],function(){
                     "LoanCustomerRelations.loanCustomerRelations.urn",
                     "LoanCustomerRelations.loanCustomerRelations.name",
                     "LoanCustomerRelations.loanCustomerRelations.relation",
-                    "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant",
+                    //"LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant",
 
                     // "DeductionsFromLoan",
                     // "DeductionsFromLoan.expectedProcessingFeePercentage",
