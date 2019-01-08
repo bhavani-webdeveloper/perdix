@@ -48,14 +48,15 @@ define([], function () {
                 guardian.guardianDoorNo = customer.doorNo || null;
             }
             var clearAll = function(baseKey,listOfKeys,model){
-                if(listOfKeys != null ||listOfKeys.length > 0){
+                if(listOfKeys != null && listOfKeys.length > 0){
                     for(var i =0 ;i<listOfKeys.length;i++){
-                        if(typeof model[baseKey[listOfKeys[i]]] !="undefined")
-                                            model[baseKey[listOfKeys[i]]] = null;
+                        if(typeof model[baseKey][listOfKeys[i]] !="undefined"){
+                                model[baseKey][listOfKeys[i]] = null;
+                        }
                     }
                 }
                 else{
-                    model[baseKey] = null;
+                    model[baseKey] = {};
                 }
             }
             var policyBasedOnLoanType = function(loanType,model){
@@ -124,6 +125,99 @@ define([], function () {
                 else{
                     model.additions.co_borrower_required = tempc;
                     model.additions.number_of_guarantors = tempg;
+                }
+            };
+            var defaultConfiguration = function(model){
+                model.additions = {};
+                model.additions.noOfGuarantorCoApplicantHtml = "<p stye=\"font-size:10px !important\"><font color=#FF6347>Number of Co-Applicants : {{model.additions.co_borrower_required}} Number of Guarantors :{{model.additions.number_of_guarantors}}</font><p>";
+                model.loanAccount.bcAccount = {};
+                model.loanAccount.processType = "1";
+                if (typeof model.loanAccount.nominees == "undefined" || model.loanAccount.nominees == null){
+                    model.loanAccount.nominees = [];
+                }
+                if (typeof model.loanAccount.accountUserDefinedFields == "undefined") {
+                    model.loanAccount.accountUserDefinedFields = {};
+                    model.loanAccount.accountUserDefinedFields.userDefinedFieldValues = {};
+                }
+                if (typeof model.loanAccount.loanCentre == "undefined" || model.loanAccount.loanCentre == null){
+                    model.loanAccount.loanCentre = {};
+                }
+                model.loanAccount.remarksHistory = null;
+                if (typeof model.loanAccount.customerId != "undefined") {
+                    $q.when(Enrollment.get({
+                        'id': model.loanAccount.customerId
+                    })).then(function (resp) {
+                        model.customer = resp;
+                    })
+                }
+                if (model.loanAccount && model.loanAccount.id) {
+                    PageHelper.showLoader();
+                    IndividualLoan.loanRemarksSummary({
+                        id: model.loanAccount.id
+                    }).$promise.then(function (resp) {
+                        model.loanAccount.remarksHistory = resp;
+
+                        console.log("resposne for CheckerHistory");
+                        console.log(model);
+                    }).finally(PageHelper.hideLoader);
+
+                }
+                BundleManager.broadcastEvent('loan-account-loaded', {
+                    loanAccount: model.loanAccount
+                });
+
+                /* Deviations and Mitigations grouping */
+                if (_.hasIn(model.loanAccount, 'loanMitigants') && _.isArray(model.loanAccount.loanMitigants)) {
+                    var loanMitigantsGrouped = {};
+                    for (var i = 0; i < model.loanAccount.loanMitigants.length; i++) {
+                        var item = model.loanAccount.loanMitigants[i];
+                        if (!_.hasIn(loanMitigantsGrouped, item.parameter)) {
+                            loanMitigantsGrouped[item.parameter] = [];
+                        }
+                        loanMitigantsGrouped[item.parameter].push(item);
+                    }
+                    model.loanMitigantsByParameter = [];
+                    _.forOwn(loanMitigantsGrouped, function (mitigants, key) {
+                        var chosenMitigants = "<ul>";
+
+                        for (var i = 0; i < mitigants.length; i++) {
+                            chosenMitigants = chosenMitigants + "<li>" + mitigants[i].mitigant + "</li>";
+                        }
+                        chosenMitigants = chosenMitigants + "</ul>";
+                        model.loanMitigantsByParameter.push({
+                            'Parameter': key,
+                            'Mitigants': chosenMitigants
+                        })
+                    })
+                }
+                /* End of Deviations and Mitigations grouping */
+                if (typeof model.loanAccount.loanApplicationDate == "undefined" || model.loanAccount.loanApplicationDate == "" || model.loanAccount.loanApplicationDate == null) {
+                    model.loanAccount.loanApplicationDate = SessionStore.getCBSDate()
+                }
+                if (typeof model.loanAccount.sanctionDate == "undefined" || model.loanAccount.sanctionDate == "" || model.loanAccount.sanctionDate == null) {
+                    model.loanAccount.sanctionDate = SessionStore.getCBSDate()
+                }
+                if (typeof model.loanAccount.numberOfDisbursements == "undefined" || model.loanAccount.numberOfDisbursements == "" || model.loanAccount.numberOfDisbursements == null) {
+                    model.loanAccount.numberOfDisbursements = 1;
+                    model.loanAccount.disbursementSchedules = [];
+                    model.loanAccount.disbursementSchedules.push({
+                        trancheNumber  : 1
+                    })
+                }
+                // TODO Hard Coded value have to fix this
+                model.loanAccount.securityEmiRequired = "No";
+                if(!(model.loanAccount.partnerCode)){
+                    var partnerList = formHelper.enum('loan_partner').data
+                    for (i=0;i<partnerList.length;i++){
+                        if(partnerList[i].value = "KGFS"){
+                            model.loanAccount.partnerCode = "KGFS";
+                            break;
+                        }
+                        continue;
+                 }
+                };
+                if(model.loanAccount.id){
+                    validateCoGuarantor(0,0,'map',model.loanAccount.loanCustomerRelations,model);
                 }
             }
 
@@ -317,8 +411,8 @@ define([], function () {
                         "required": true,
                         "enumCode": "booking_loan_type",
                         "onChange": function(valueObj,context,model){
-                            // clearAll('loanAccount',['partner','frequency','loanProductCode',"loanAmountRequested","requestedTenure","interestRate","loanPurpose1","loanPurpose2","loanPurpose3"],model);
-                            // clearAll('loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6',[],model)
+                            clearAll('loanAccount',['frequency','productCode',"loanAmount","tenure","interestRate","loanPurpose1","loanPurpose2","loanPurpose3"],model);
+                            model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = null;
                             if(valueObj == "JEWEL"){
                                 getGoldRate(model);
                                 model.loanAccount.jewelLoanDetails = {};
@@ -332,11 +426,21 @@ define([], function () {
                     },
                     "LoanDetails.partner": {
                         "orderNo": 2,
-                        "enumCode": "loan_partner"
+                        "enumCode": "loan_partner",
+                        "onChange": function(valueObj,context,model){
+                            clearAll('loanAccount',['frequency','productCode',"loanAmount","tenure","interestRate","loanPurpose1","loanPurpose2","loanPurpose3"],model);
+                            model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = null;
+                            clearAll('additions',['tenurePlaceHolder','interestPlaceHolder','amountPlaceHolder'],model)
+                        },
                     },
                     "LoanDetails.frequency": {
                         "required":true,
-                        "enumCode": "loan_product_frequency"
+                        "enumCode": "loan_product_frequency",
+                        "onChange": function(valueObj,context,model){
+                            clearAll('loanAccount',['productCode',"loanAmount","tenure","interestRate","loanPurpose1","loanPurpose2","loanPurpose3"],model);
+                            model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = null;
+                            clearAll('additions',['tenurePlaceHolder','interestPlaceHolder','amountPlaceHolder'],model)
+                        }
                     },
                     "LoanDetails.loanProductCode": {
                         "orderNo": 4,
@@ -365,7 +469,7 @@ define([], function () {
                             return deferred.promise;
                         },
                         onSelect: function (valueObj, model, context) {
-                            // clearAll("loanAccount",["loanAmountRequested","requestedTenure","interestRate","loanPurpose1","loanPurpose2","loanPurpose3"],model);
+                            clearAll("loanAccount",["loanAmount","tenure","interestRate","loanPurpose1","loanPurpose2","loanPurpose3"],model);
                             model.loanAccount.productCode = valueObj.productCode;
                             model.additions.tenurePlaceHolder = valueObj.tenure_from == valueObj.tenure_to ? valueObj.tenure_from : valueObj.tenure_from + '-' + valueObj.tenure_to;
                             model.additions.amountPlaceHolder = valueObj.amount_from == valueObj.amount_to ? valueObj.amount_from : valueObj.amount_from + '-' + valueObj.amount_to;
@@ -840,92 +944,8 @@ define([], function () {
                 "subTitle": "BUSINESS",
                 initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
                     model.customer = {};
-                    model.additions = {};
-                    model.additions.noOfGuarantorCoApplicantHtml = "<p stye=\"font-size:10px !important\"><font color=#FF6347>Number of Co-Applicants : {{model.additions.co_borrower_required}} Number of Guarantors :{{model.additions.number_of_guarantors}}</font><p>";
                     model.loanAccount = model.loanProcess.loanAccount;
-                    model.loanAccount.bcAccount = {};
-                    model.loanAccount.processType = "1";
-                    if (typeof model.loanAccount.accountUserDefinedFields == "undefined") {
-                        model.loanAccount.accountUserDefinedFields = {};
-                        model.loanAccount.accountUserDefinedFields.userDefinedFieldValues = {};
-                    }
-                    model.loanAccount.remarksHistory = null;
-                    if (typeof model.loanAccount.customerId != "undefined") {
-                        $q.when(Enrollment.get({
-                            'id': model.loanAccount.customerId
-                        })).then(function (resp) {
-                            model.customer = resp;
-                        })
-                    }
-                    if (model.loanAccount && model.loanAccount.id) {
-                        PageHelper.showLoader();
-                        IndividualLoan.loanRemarksSummary({
-                            id: model.loanAccount.id
-                        }).$promise.then(function (resp) {
-                            model.loanAccount.remarksHistory = resp;
-
-                            console.log("resposne for CheckerHistory");
-                            console.log(model);
-                        }).finally(PageHelper.hideLoader);
-
-                    }
-                    BundleManager.broadcastEvent('loan-account-loaded', {
-                        loanAccount: model.loanAccount
-                    });
-
-                    /* Deviations and Mitigations grouping */
-                    if (_.hasIn(model.loanAccount, 'loanMitigants') && _.isArray(model.loanAccount.loanMitigants)) {
-                        var loanMitigantsGrouped = {};
-                        for (var i = 0; i < model.loanAccount.loanMitigants.length; i++) {
-                            var item = model.loanAccount.loanMitigants[i];
-                            if (!_.hasIn(loanMitigantsGrouped, item.parameter)) {
-                                loanMitigantsGrouped[item.parameter] = [];
-                            }
-                            loanMitigantsGrouped[item.parameter].push(item);
-                        }
-                        model.loanMitigantsByParameter = [];
-                        _.forOwn(loanMitigantsGrouped, function (mitigants, key) {
-                            var chosenMitigants = "<ul>";
-
-                            for (var i = 0; i < mitigants.length; i++) {
-                                chosenMitigants = chosenMitigants + "<li>" + mitigants[i].mitigant + "</li>";
-                            }
-                            chosenMitigants = chosenMitigants + "</ul>";
-                            model.loanMitigantsByParameter.push({
-                                'Parameter': key,
-                                'Mitigants': chosenMitigants
-                            })
-                        })
-                    }
-                    /* End of Deviations and Mitigations grouping */
-                    if (typeof model.loanAccount.loanApplicationDate == "undefined" || model.loanAccount.loanApplicationDate == "" || model.loanAccount.loanApplicationDate == null) {
-                        model.loanAccount.loanApplicationDate = SessionStore.getCBSDate()
-                    }
-                    if (typeof model.loanAccount.sanctionDate == "undefined" || model.loanAccount.sanctionDate == "" || model.loanAccount.sanctionDate == null) {
-                        model.loanAccount.sanctionDate = SessionStore.getCBSDate()
-                    }
-                    if (typeof model.loanAccount.numberOfDisbursements == "undefined" || model.loanAccount.numberOfDisbursements == "" || model.loanAccount.numberOfDisbursements == null) {
-                        model.loanAccount.numberOfDisbursements = 1;
-                        model.loanAccount.disbursementSchedules = [];
-                        model.loanAccount.disbursementSchedules.push({
-                            trancheNumber  : 1
-                        })
-                    }
-                    // TODO Hard Coded value have to fix this
-                    model.loanAccount.securityEmiRequired = "No";
-                    if(!(model.loanAccount.partnerCode)){
-                        var partnerList = formHelper.enum('loan_partner').data
-                        for (i=0;i<partnerList.length;i++){
-                            if(partnerList[i].value = "KGFS"){
-                                model.loanAccount.partnerCode = "KGFS";
-                                break;
-                            }
-                            continue;
-                     }
-                    };
-                    if(model.loanAccount.id){
-                        validateCoGuarantor(0,0,'map',model.loanAccount.loanCustomerRelations,model);
-                    }
+                    defaultConfiguration(model);
                     
                     self = this;
                     var p1 = UIRepository.getLoanProcessUIRepository().$promise;
@@ -1318,8 +1338,12 @@ define([], function () {
                 eventListeners: {
                     "new-applicant": function (bundleModel, model, obj) {
                         model.customer = obj.customer;
+                        clearAll('loanAccount',['loantype','partner','frequency','productCode',"loanAmount","tenure","interestRate","loanPurpose1","loanPurpose2","loanPurpose3"],model);
+                        clearAll('additions',['tenurePlaceHolder','interestPlaceHolder','amountPlaceHolder'],model)
                         model.loanAccount.customerId = model.customer.id;
                         model.loanAccount.urnNo = model.customer.urnNo;
+                        defaultConfiguration(model);
+                        model.loanAccount.loanCentre.centreId = obj.customer.centreId;
                     },
                     "dsc-response": function(bundleModel,model,obj){
                         model.loanAccount.loanCustomerRelations = obj;

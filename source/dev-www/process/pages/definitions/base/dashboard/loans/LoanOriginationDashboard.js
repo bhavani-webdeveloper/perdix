@@ -1,12 +1,12 @@
 irf.pageCollection.controller(irf.controller("base.dashboard.loans.LoanOriginationDashboard"), ['$log', '$scope', "formHelper", "$state", "$q", "Utils", 'PagesDefinition', 'SessionStore', "entityManager", "IndividualLoan", "LoanBookingCommons", "Lead", "Messaging",
 function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionStore, entityManager, IndividualLoan, LoanBookingCommons, Lead, Messaging) {
     $log.info("Dashboard.Page.LoanOriginationDashboard.html loaded");
-    $scope.$templateUrl = "process/pages/templates/Page.LoanOriginationDashboard.html";
+    //$scope.$templateUrl = "process/pages/templates/Page.LoanOriginationDashboard.html";
+    $scope.$templateUrl = "process/pages/templates/Page.Dashboard.html";
     var currentBranch = SessionStore.getCurrentBranch();
 
-    
-    var loanDefinition = {
-        "title": "Loan",
+        var fullDefinition={
+        "title": "Loan Origination Dashboard",
         "iconClass": "fa fa-users",
         "items": [
             "Page/Engine/base.dashboard.lead.ReadyForScreeningQueue",
@@ -15,6 +15,8 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
             "Page/Engine/base.dashboard.loans.individual.screening.ApplicationQueue",  
             "Page/Engine/base.dashboard.loans.individual.screening.ApplicationReviewQueue", 
             "Page/Engine/base.dashboard.loans.individual.screening.FieldAppraisalQueue",
+            "Page/Engine/base.dashboard.loans.individual.screening.FieldAppraisalReviewQueue",
+            // "Page/Engine/base.dashboard.loans.individual.screening.FieldAppraisalReview",
             "Page/Engine/base.dashboard.loans.individual.screening.LoanSanctionQueue",
             "Page/Engine/base.dashboard.loans.individual.screening.RejectedQueue",
             "Page/Engine/base.dashboard.loans.individual.screening.BranchNewConversationQueue",
@@ -24,14 +26,14 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
            ]
     };
 
-    PagesDefinition.getUserAllowedDefinition(loanDefinition).then(function(resp) {
+    PagesDefinition.getUserAllowedDefinition(fullDefinition).then(function(resp) {
 
-        $scope.loanDashboardDefinition = resp;
+        $scope.dashboardDefinition = resp;
         var branchId = SessionStore.getBranchId();
         var branchName = SessionStore.getBranch();
         var centres = SessionStore.getCentres();
 
-       var rfqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/base.dashboard.lead.ReadyForScreeningQueue"];
+       var rfqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.lead.ReadyForScreeningQueue"];
         
        if (rfqMenu) rfqMenu.data = 0;
         _.forEach(centres, function(centre) {
@@ -58,7 +60,7 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
 
         });
 
-        var sqMenu=$scope.loanDashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.ScreeningQueue"];
+        var sqMenu=$scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.ScreeningQueue"];
         if (sqMenu) {
             sqMenu.data = 0;
             _.forEach(centres, function(centre) {
@@ -81,7 +83,7 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
             });
         }
 
-       var srqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.ScreeningReviewQueue"];
+       var srqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.ScreeningReviewQueue"];
         
        if (srqMenu) {
             IndividualLoan.search({
@@ -101,7 +103,7 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
         }
 
 
-var aqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.ApplicationQueue"];
+var aqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.ApplicationQueue"];
 
 if (aqMenu) {
     aqMenu.data = 0;
@@ -145,7 +147,7 @@ if (aqMenu) {
     
 }
 
-var faqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.FieldAppraisalQueue"];
+var faqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.FieldAppraisalQueue"];
 if (faqMenu) {
     IndividualLoan.search({
         'stage': 'FieldAppraisal',
@@ -162,7 +164,45 @@ if (faqMenu) {
         faqMenu.data = '-';
     });
 }
-        var arqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.ApplicationReviewQueue"];
+
+//
+// var farMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.FieldAppraisalReview"];
+// if (farMenu) {
+//     IndividualLoan.search({
+//         'stage': 'FieldAppraisalReview',
+//         'enterprisePincode': '',
+//         'applicantName': '',
+//         'area': '',
+//         'villageName': '',
+//         'customerName': '',
+//         'page': 1,
+//         'per_page': 1
+//     }).$promise.then(function(response, headerGetter) {
+//         faqMenu.data = Number(response.headers['x-total-count']);
+//     }, function() {
+//         faqMenu.data = '-';
+//     });
+// }
+
+var farqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.FieldAppraisalReviewQueue"];
+            if (farqMenu) {
+                IndividualLoan.search({
+                    'stage': 'FieldAppraisalReview',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1
+                }).$promise.then(function(response, headerGetter) {
+                    farqMenu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    farqMenu.data = '-';
+                });
+            }
+//
+        var arqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.ApplicationReviewQueue"];
         if (arqMenu) {
             IndividualLoan.search({
                 'stage': 'ApplicationReview',
@@ -180,7 +220,7 @@ if (faqMenu) {
             });
         }
 
-        var gng1Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.GoNoGoApproval1Queue"];
+        var gng1Menu = $scope.dashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.GoNoGoApproval1Queue"];
         if (gng1Menu) {
             IndividualLoan.search({
                 'stage': 'GoNoGoApproval1',
@@ -198,7 +238,7 @@ if (faqMenu) {
             });
         }
 
-        var gng2Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.GoNoGoApproval2Queue"];
+        var gng2Menu = $scope.dashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.GoNoGoApproval2Queue"];
         if (gng2Menu) {
             IndividualLoan.search({
                 'stage': 'GoNoGoApproval2',
@@ -216,7 +256,7 @@ if (faqMenu) {
             });
         }
 
-        var tvq1Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.TeleVerificationQueue"];
+        var tvq1Menu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.TeleVerificationQueue"];
         if (tvq1Menu) {
             IndividualLoan.search({
                 'stage': 'TeleVerification',
@@ -235,7 +275,7 @@ if (faqMenu) {
         }
 
 
-        var caq1Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.CreditAppraisalQueue"];
+        var caq1Menu = $scope.dashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.CreditAppraisalQueue"];
         if (caq1Menu) {
             IndividualLoan.search({
                 'stage': 'CreditAppraisal',
@@ -254,7 +294,7 @@ if (faqMenu) {
         }
 
 
-        var daq1Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.DeviationApproval1Queue"];
+        var daq1Menu = $scope.dashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.DeviationApproval1Queue"];
         if (daq1Menu) {
             IndividualLoan.search({
                 'stage': 'DeviationApproval1',
@@ -272,7 +312,7 @@ if (faqMenu) {
             });
         }
 
-        var daq2Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.DeviationApproval2Queue"];
+        var daq2Menu = $scope.dashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.DeviationApproval2Queue"];
         if (daq2Menu) {
             IndividualLoan.search({
                 'stage': 'DeviationApproval2',
@@ -291,7 +331,7 @@ if (faqMenu) {
         }
 
        
-        var caq3Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.CreditApproval3Queue"];
+        var caq3Menu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.CreditApproval3Queue"];
 
         if (caq3Menu) {
             IndividualLoan.search({
@@ -310,7 +350,7 @@ if (faqMenu) {
             });
         }
 
-        var caq4Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.CreditApproval4Queue"];
+        var caq4Menu = $scope.dashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.CreditApproval4Queue"];
 
         if (caq4Menu) {
             IndividualLoan.search({
@@ -330,7 +370,7 @@ if (faqMenu) {
         }
 
 
-        var caq5Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.CreditApproval5Queue"];
+        var caq5Menu = $scope.dashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.CreditApproval5Queue"];
 
         if (caq5Menu) {
             IndividualLoan.search({
@@ -349,7 +389,7 @@ if (faqMenu) {
             });
         }
 
-        var rjqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.RejectedQueue"];
+        var rjqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.RejectedQueue"];
         if (rjqMenu) {
             IndividualLoan.search({
                 'stage': 'Rejected',
@@ -367,7 +407,7 @@ if (faqMenu) {
             });
         }
 
-       var bncqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.BranchNewConversationQueue"];
+       var bncqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.BranchNewConversationQueue"];
        
         if (bncqMenu) {
             Messaging.findConversation({
@@ -381,7 +421,7 @@ if (faqMenu) {
             });
         }
 
-       var brcqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.BranchRepliedConversationQueue"];
+       var brcqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.BranchRepliedConversationQueue"];
        
         if (brcqMenu) {
             Messaging.findConversation({
@@ -395,7 +435,7 @@ if (faqMenu) {
             });
         }
 
-       var sncqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.SpokeNewConversationQueue"];
+       var sncqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.SpokeNewConversationQueue"];
        
         if (sncqMenu) {
             var centreCode = [];
@@ -416,7 +456,7 @@ if (faqMenu) {
             });
         }
 
-        var srcqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.SpokeRepliedConversationQueue"];
+        var srcqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.SpokeRepliedConversationQueue"];
         if (srcqMenu) {
             var centreCode = [];
             _.forEach(centres, function (centre) {
