@@ -26,7 +26,7 @@ achregistrationloanaccount.list= select l.id, l.account_number, l.loan_amount, l
 customersBankAccounts.list=SELECT cb.*, c.urn_no, c.first_name, c.email, c.mobile_phone from customer_bank_accounts cb left join customer c on (c.id =cb.customer_id) where customer_id in (:customer_ids) or customer_id in (select customer.id from customer where urn_no in (:customer_urns))
 loanCustomerRelations.list=select l.urn, l.relation, c.first_name from loan_customer_relation l left join customer c on (l.urn = c.urn_no) where l.loan_id = (select id from loan_accounts where account_number = :accountNumber)
 collectionsBranchSet.list=select * from collections_branch_set
-cbsBanks.list=select b.*, now() current_system_date from cbs_banks b
+cbsBanks.list=select b.*, cast(now() as char) current_system_date from cbs_banks b
 unApprovedPaymentForAccount.list=SELECT id, account_number, current_stage, repayment_amount from loan_collections where account_number=:account_number and current_stage not in ('Completed', 'Rejected')
 Allloanpurpose1.list=SELECT DISTINCT lm.loan_purpose_first_level purpose1 FROM loan_purpose_mapping_master lm where lm.loan_purpose_first_level NOT IN ('Line of credit','Debt Consolidation')
 Allloanpurpose2.list=SELECT DISTINCT lm.loan_purpose_second_level purpose2 FROM loan_purpose_mapping_master lm WHERE lm.loan_purpose_first_level = :purpose1
