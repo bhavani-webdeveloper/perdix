@@ -16,6 +16,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                         "required": true,
                         "resolver": "PincodeLOVConfiguration"
                     },
+                    "ContactInformation.district":{
+                        "required": false
+                    },
+                    "ContactInformation.state":{
+                        "required": false
+                    },
                     "Machinery.fixedAssetsMachinaries.hypothecatedToUs": {
                          "title": "HYPOTHECATED_TO_IREP"
 
@@ -25,10 +31,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                          "enumCode": "businessinfo_business_ownershi"
                     },
                     "EnterpriseInformation.enterpriseRegistrations.registrationType": {
-                         "enumCode": "business_registration_type_upd"
+                         "enumCode": "business_registration_type_upd",
+                         "required": false
                     },
                     "EnterpriseInformation.enterpriseRegistrations.registeredDate": {
-                        "required": true
+                        "required": false
+                    },
+                    "EnterpriseInformation.enterpriseRegistrations.registrationNumber":{
+                        "required": false
                     },
                     //over ride for mandatory 
                     "EnterpriseInformation.companyOperatingSince":{
