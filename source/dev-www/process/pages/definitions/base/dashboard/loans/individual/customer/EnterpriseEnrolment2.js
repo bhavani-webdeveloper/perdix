@@ -263,8 +263,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseInformation.enterpriseCustomerRelations.experienceInBusiness",
                     "EnterpriseInformation.enterpriseCustomerRelations.businessInvolvement",
                     "EnterpriseInformation.enterpriseCustomerRelations.partnerOfAnyOtherCompany",
-                    "EnterpriseInformation.enterpriseCustomerRelations.otherBusinessClosed",
-                    "EnterpriseInformation.enterpriseCustomerRelations.otherBusinessClosureDate",
+                    //"EnterpriseInformation.enterpriseCustomerRelations.otherBusinessClosed",
+                    //"EnterpriseInformation.enterpriseCustomerRelations.otherBusinessClosureDate",
 
                     "ContactInformation",
                     "ContactInformation.mobilePhone",
@@ -310,8 +310,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
 
                     "Liabilities",
                     "Liabilities.liabilities",
-                    "Liabilities.liabilities.liabilityType",
-                    "Liabilities.liabilities.loanType",
+                   // "Liabilities.liabilities.liabilityType",
+                    //"Liabilities.liabilities.loanType",
                     "Liabilities.liabilities.loanSource",
                     "Liabilities.liabilities.loanAmountInPaisa",
                     "Liabilities.liabilities.installmentAmountInPaisa",
