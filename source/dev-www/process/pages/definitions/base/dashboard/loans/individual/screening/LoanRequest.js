@@ -95,7 +95,8 @@ define([],function(){
                                     "type": "select",
                                     "schema": {
                                              "enumCode": "tenure_requested"
-                                        }
+                                        },
+                                        "required":true
                                 },
                                 "PreliminaryInformation.expectedEmi": {
                                     "readonly": true
@@ -647,6 +648,16 @@ define([],function(){
                         },
                         "PreliminaryInformation.collectionPaymentType": {
                             "enumCode": "customerinfo_colctn_Pymt_type"
+                        },
+                        //over ride for ticket
+                        "PreliminaryInformation.tenureRequested": {
+                            "required": true
+                        },
+                        "PreliminaryInformation.emiRequested": {
+                            "required": true
+                        },
+                        "PreliminaryInformation.collectionPaymentType": {
+                            "required": true
                         },
                         "LoanCustomerRelations.loanCustomerRelations": {
                             "add": null,

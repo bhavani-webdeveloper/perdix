@@ -1026,7 +1026,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                           "type": "string"
                     },
                     "IndividualInformation.existingLoan": {
-                        "title": "EXISTING_LOAN_IREP"
+                        "title": "EXISTING_LOAN"
                     },
                     "BankAccounts.customerBankAccounts.isDisbersementAccount":{
                         "title": "Is Disbursement"

@@ -30,6 +30,55 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseInformation.enterpriseRegistrations.registeredDate": {
                         "required": true
                     },
+                    //over ride for mandatory 
+                    "EnterpriseInformation.companyOperatingSince":{
+                        "required": true
+                    },
+                    "EnterpriseInformation.companyEmailId":{
+                        "required": true
+                    },
+                    "EnterpriseInformation.photoImageId":{
+                        "required": true
+                    },
+                    "EnterpriseInformation.ownership":{
+                        "required": true
+                    },
+                    "EnterpriseInformation.companyRegistered":{
+                        "required": true
+                    },
+                    "EnterpriseInformation.businessActivity":{
+                        "required": true
+                    },
+                    "EnterpriseInformation.businessSector":{
+                        "required": true
+                    },
+                    "EnterpriseInformation.businessSubsector":{
+                        "required": true
+                    },
+                    "EnterpriseInformation.enterpriseCustomerRelations.relationshipType":{
+                        "required": true
+                    },
+                    "EnterpriseInformation.enterpriseCustomerRelations.experienceInBusiness":{
+                        "required": true
+                    },
+                    "EnterpriseInformation.enterpriseCustomerRelations.businessInvolvement":{
+                        "required": true
+                    },
+                    "ContactInformation.businessInPresentAreaSince":{
+                        "required": true
+                    },
+                    "ContactInformation.businessInCurrentAddressSince":{
+                        "required": true
+                    },
+                    "BankAccounts.customerBankAccounts.bankStatements.noOfChequeBounced":{
+                        "required": true
+                    },
+                    "BankAccounts.customerBankAccounts.bankStatements.noOfEmiChequeBounced":{
+                        "required": true
+                    },
+                    "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto":{
+                        "required": true
+                    },
                     "BankAccounts.customerBankAccounts.isDisbersementAccount":{
                         "title": "Is Disbursement"
                     },
@@ -51,7 +100,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                         "orderNo": 50
                     },
                     "EnterpriseFinancials.monthlyTurnover": {
-                         "orderNo": 10
+                         "orderNo": 10,
+                         "required":true
                      },
                     "EnterpriseFinancials.monthlyBusinessExpenses":{
                          "orderNo": 20
