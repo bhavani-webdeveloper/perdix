@@ -225,6 +225,18 @@
             "type":"string",
             "orderNo":145
          },
+         
+            "question": {
+            "key":"insurancePolicyDetailsDTO.question",   
+            "required":true,
+            "type":"checkbox",
+            "fullwidth": true,
+            "schema":{
+                "default":false
+            },
+            "title": "Terms and conditions have been explained to customer.",
+            "orderNo" : 146
+        },
          "startDate":{  
             "key":"insurancePolicyDetailsDTO.startDate",
             "title":"START_DATE",
@@ -258,6 +270,7 @@
             "type":"number",
             "orderNo":130
          }
+        
       }
    },
    

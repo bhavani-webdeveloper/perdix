@@ -60,6 +60,8 @@ var getIncludes = function (model) {
                     "InsurancePolicyInformation.urnNo",
                     "InsurancePolicyInformation.insuranceRecommendations",
                     "InsurancePolicyInformation.recommendationStatus",
+                    "InsurancePolicyInformation.question",
+                    
                     
 
 
@@ -80,6 +82,9 @@ var getIncludes = function (model) {
                     "InsuranceTransactionDetails.insuranceTransactionDetailsDTO.totalPremium",
                     "validateBiometric",
                     "validateBiometric.validate",
+                    "validateBiometric.fpOverrideRequested",
+                    "validateBiometric.fpOverrideRemarks",
+                    "validateBiometric.fpOverrideStatus",
                     //"InsuranceTransactionDetails.insuranceTransactionDetailsDTO.transactionDate",
 
                     "actionboxBeforeSave",
@@ -256,13 +261,45 @@ var getIncludes = function (model) {
                                 "validateBiometric":{
                                     "type":"box",
                                     "orderNo":4,
-                                    "title":"VALIDATE_BIOMETRIC",
+                                    "title":"VALIDATE_BIOMETRIC",                                   
                                     "items":{
+                                        
+                                        "fpOverrideRequested":{
+                                                key:"insurancePolicyDetailsDTO.fpOverrideRequested",
+                                                type: "checkbox",
+                                                "orderNo" : 10,
+                                                "title": "OVERRIDE_FINGERPRINT",
+                                                schema: {
+                                                "default": false
+                                                }
+                                            },
+                                         "fpOverrideRemarks":{
+                                             key:"insurancePolicyDetailsDTO.fpOverrideRemarks",
+                                             type:"text",
+                                             "orderNo":20,
+                                             "title":"OVERRIDE_REMARKS",
+                                             condition:"model.insurancePolicyDetailsDTO.fpOverrideRequested"
+                                         },
+                                         
+                                        "fpOverrideStatus":{
+                                            key:"insurancePolicyDetailsDTO.fpOverrideStatus",
+                                            type: "select",
+                                            "orderNo":30,
+                                            required: true,                                            
+                                            titleMap: {
+                                                "Requested": "Requested",
+                                                "Approved": "Approved"
+                                            },
+                                            "title": "OVERRIDE_STATUS",
+                                            condition: "model.insurancePolicyDetailsDTO.fpOverrideRequested"
+                                        },
                                         "validate": {
+                                            condition: "!model.insurancePolicyDetailsDTO.fpOverrideRequested",
                                             key: "customer.isBiometricValidated",
                                             "title": "CHOOSE_A_FINGER_TO_VALIDATE",
                                             type: "validatebiometric",
                                             category: 'CustomerEnrollment',
+                                            "orderNo":40,
                                             subCategory: 'FINGERPRINT',
                                             helper: formHelper,
                                             biometricMap: {
@@ -511,7 +548,7 @@ var getIncludes = function (model) {
 
                         // $q.all start
                         PageHelper.showLoader();
-                        if (!(model.isBiometricValidated)){
+                        if (!model.insurancePolicyDetailsDTO.fpOverrideRequested && !(model.isBiometricValidated)){
                             PageHelper.hideLoader();
                             PageHelper.showErrors({
                                 data:{
