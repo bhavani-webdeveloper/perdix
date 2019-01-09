@@ -911,9 +911,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                     }
              
                     model.loanAccount.loanDocuments=[];
+                    model.loanAccount.tempMasterDocuments = [];
                     if (model.allExistingDocs) {
                         for(var i=0;i< model.allExistingDocs.length;i++){
                             if( model.allExistingDocs[i].documentId){
+                                model.loanAccount.tempMasterDocuments.push(model.allExistingDocs[i]);
                                 model.loanAccount.loanDocuments.push(model.allExistingDocs[i]);
                             }
                         }
@@ -934,8 +936,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                     var allowedStatues = ['APPROVED', 'REJECTED'];
                     reqParamData.loanAccount.status = null;
                      var redirectToUploadFlag = false;
-                    for (var i = 0; i < reqParamData.loanAccount.loanDocuments.length; i++) {
-                        var doc = reqParamData.loanAccount.loanDocuments[i];
+                    for (var i = 0; i < reqParamData.loanAccount.tempMasterDocuments.length; i++) {
+                        var doc = reqParamData.loanAccount.tempMasterDocuments[i];
                         if (_.indexOf(allowedStatues, doc.documentStatus) == -1) {
                             PageHelper.showProgress('update-loan', 'Invalid document status selected. Only Approved or Rejected are allowed.', 3000);
                             return;
