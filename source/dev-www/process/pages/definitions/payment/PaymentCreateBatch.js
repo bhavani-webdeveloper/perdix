@@ -3,12 +3,13 @@ define([], function() {
     return {
         pageUID: "payment.PaymentCreateBatch",
         pageType: "Engine",
-        dependencies: ["$log", "irfElementsConfig", "Enrollment", "SessionStore", "formHelper", "$q",
-            "PageHelper", "IrfFormRequestProcessor", "$injector", "UIRepository", "irfNavigator", "Payment",
-        ],
+       
+   dependencies: ["$log", "irfElementsConfig", "Enrollment", "SessionStore", "formHelper", "$q",
+   "PageHelper", "IrfFormRequestProcessor", "$injector", "UIRepository", "irfNavigator", "Payment", "AuthTokenHelper", "$http", "$filter", "$httpParamSerializer", "irfProgressMessage",
+],
 
-        $pageFn: function($log, elementsConfig, Enrollment, SessionStore, formHelper, $q,
-            PageHelper, IrfFormRequestProcessor, $injector, UIRepository, irfNavigator, Payment) {
+$pageFn: function($log, elementsConfig, Enrollment, SessionStore, formHelper, $q,
+   PageHelper, IrfFormRequestProcessor, $injector, UIRepository, irfNavigator, Payment, AuthTokenHelper, $http, $filter, $httpParamSerializer, irfProgressMessage ) {
 
             var configFile = function() {
                 return {}
@@ -35,19 +36,21 @@ define([], function() {
                     "CreateBatch",
                     "CreateBatch.paymentDate",
                     "CreateBatch.modeOfPayment",
-                    "CreateBatch.beneficiaryBankBranch",
+                    "CreateBatch.branchName",
                     "CreateBatch.spokeName",
                     "CreateBatch.debitAccountName",
+                    "CreateBatch.dispatchName",
                     "CreateBatch.beneficiaryName",
                     "CreateBatch.paymentPurpose",
                     "CreateBatch.beneficiaryAccountName",
                     "CreateBatch.submit",
                     "BatchSummary",
                     "BatchSummary.dispatchId",
+                    "BatchSummary.dispatchName",
                     "BatchSummary.bankCode",
                     "BatchSummary.count",
                     "BatchSummary.totalAmount",
-
+                    "BatchSummary.downloadButton"
                 ]
             }
             return {
@@ -55,8 +58,10 @@ define([], function() {
                 "title": "READY_FOR_DISPATCH",
                 "subTitle": "",
                 initialize: function(model, form, formCtrl) {                   
-                    var self = this;                  
-                    var formRequest = {
+                    var self = this;                                                     
+                    model.authToken = AuthTokenHelper.getAuthData().access_token;
+                    model.userLogin = SessionStore.getLoginname();     
+                      var formRequest = {
                         "overrides": overridesFields(model),
                         "includes": getIncludes(model),
                         "excludes": [],
@@ -69,8 +74,83 @@ define([], function() {
                                         "title": "Create Batch",
                                         "onClick": "actions.submit(model, formCtrl, form, $event)"  
                                     }
-                                }                                                           }
+                                }                                                           
+                            },
+                            "BatchSummary": {
+                                "items": {
+                                    "downloadButton" : {
+                                    "title": "DOWNLOAD",
+                                    "htmlClass": "btn-block",
+                                    "icon": "fa fa-download",
+                                    "type": "button",
+                                    "notitle": true,
+                                    "readonly": false,
+                                    "onClick": function(model, formCtrl, form, $event) {
+                                        var reqdownload = {
+                                            auth_data:{auth_token:model.authToken},
+                                            report_name :"icici_integration_ircs",
+                                            filters: [{"parameter":"dispatch_name","operator":"IN","value":[model.payment.dispatchName]}]
+                                        };  
+        
+                                    $http.post(
+                                        irf.BI_BASE_URL + '/newdownload.php',
+                                        reqdownload, {
+                                            responseType: 'arraybuffer'
+                                        }
+                                    ).then(function (response) {
+                                        var headers = response.headers();
+                                        if (headers['content-type'].indexOf('json') != -1 && !headers["content-disposition"]) {
+                                            var decodedString = String.fromCharCode.apply(null, new Uint8Array(response.data));
+                                            PageHelper.showErrors({
+                                                data: {
+                                                    error: decodedString
+                                                }
+                                            });
+                                            irfProgressMessage.pop("Reports", "Report download failed.", 5000);
+                                            return;
+                                        }
+                                        var blob = new Blob([response.data], {
+                                            type: headers['content-type']
+                                        });
+                                        if (!$("#reportdownloader").length) {
+                                            var l = document.createElement('a');
+                                            l.id = "reportdownloader";
+                                            document.body.appendChild(l);
+                                        }
+                                        $("#reportdownloader").css({
+                                            "position": "absolute",
+                                            "height": "-1px",
+                                            "top": "-100px",
+                                            "left": "-100px",
+                                            "width": "-100px",
+                                        });
+                                        var link = document.getElementById("reportdownloader");
+                                        link.href = window.URL.createObjectURL(blob);
+            
+                                        if (headers["content-disposition"] && headers["content-disposition"].split('filename=').length == 2) {
+                                            var filename = headers["content-disposition"].split('filename=')[1];
+                                            link.download = filename.replace(/"/g, "");
+                                        } else {
+                                            link.download = SessionStore.getLoginname() + '_' + model.selectedReport.name + '_' + moment().format('YYYYMMDDhhmmss');
+                                        }
+                                        link.click();
+                                        irfProgressMessage.pop("Reports", "Report downloaded.", 5000);
+                                    }, function (err) {
+                                        var decodedString = String.fromCharCode.apply(null, new Uint8Array(err.data));
+                                        PageHelper.showErrors({
+                                            data: {
+                                                error: decodedString
+                                            }
+                                        });
+                                        irfProgressMessage.pop("Reports", "Report download failed.", 5000);
+                                    }).finally(function () {
+                                        PageHelper.hideLoader();
+                                    });                                  
+                                        }
+                                    }
+                                }
                             }
+                        }
                         }
                     };
                    
@@ -133,7 +213,11 @@ define([], function() {
                         Payment.search(model.payment).$promise.then(function(resp) {  
                           // response = resp                         
                            if(resp.body.length > 0){
-                            Payment.createBatch(resp.body).$promise.then(function(res) {                              //return res;    
+                               var req = {
+                                dispatchName :model.payment.dispatchName,
+                                paymentsList: resp.body
+                                };   
+                            Payment.createBatch(req).$promise.then(function(res) {                              //return res;    
                                 model.dispatch = res;
                             }, function(err){                                
                                 PageHelper.showErrors(err); 
