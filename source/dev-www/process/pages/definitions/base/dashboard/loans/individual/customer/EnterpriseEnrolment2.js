@@ -31,7 +31,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                          "enumCode": "businessinfo_business_ownershi"
                     },
                     "EnterpriseInformation.enterpriseRegistrations.registrationType": {
-                         "enumCode": "business_registration_type_upd",
+                         "enumCode": "business_registration_type",
                          "required": false
                     },
                     "EnterpriseInformation.enterpriseRegistrations.registeredDate": {
@@ -63,7 +63,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                         "required": true
                     },
                     "EnterpriseInformation.businessSubsector":{
-                        "required": true
+                        "required": true,
+                        "resolver":"BusinessSubsectorLOVConfiguration"
                     },
                     "EnterpriseInformation.enterpriseCustomerRelations.relationshipType":{
                         "required": true
@@ -105,6 +106,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseInformation.rentLeaseAgreement": {
                          "condition": "model.customer.enterprise.ownership=='Rental' || model.customer.enterprise.ownership=='Leased' ",
                          "orderNo":142
+                    },
+                    "EnterpriseInformation.businessSector":{
+                        onChange: function(modelValue, form, model) {
+                            model.customer.enterprise.businessSubsector=null;
+                        }
                     },
                     "EnterpriseFinancials": {
                         "orderNo": 50

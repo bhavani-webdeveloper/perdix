@@ -767,7 +767,8 @@ define([],function(){
              var overridesFields = function (bundlePageObj) {
                 return {
                         "PreliminaryInformation.linkedAccountNumber": {
-                            "resolver": "LinkedAccountNumberLOVConfiguration"
+                            "resolver": "LinkedAccountNumberLOVConfiguration",
+                            "condition":"model.loanAccount.transactionType!=='New Loan'"
                         },
                         "PreliminaryInformation.transactionType": {
                             "title": "TRANSACTION_TYPE",
