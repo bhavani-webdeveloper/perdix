@@ -675,7 +675,7 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
             },
             actions: {
                 noIssues: function(model) {
-                    this.actions.submit(model, null, null, null, "1");
+                    this.submit(model, null, null, null, "1");
                 },
                 submit: function(model, formCtrl, form, $event, status) {
                     PageHelper.clearErrors();
