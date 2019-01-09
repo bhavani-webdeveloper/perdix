@@ -670,7 +670,56 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
                             }
                         },
-                        "CreditCommitteeReview": {
+                        "ScreeningReview": {
+                            "excludes": [
+                                "ContactInformation.whatsAppMobileNoOption",
+                                "IndividualReferences.verifications.ReferenceCheck",
+                                "IndividualReferences"
+                            ],
+                            "overrides": {
+                                "KYC": {
+                                    "readonly": true
+                                },
+                                "FamilyDetails.familyMembers.noOfDependents":{
+                                    "readonly": true
+                                },
+                                "IndividualInformation": {
+                                    "readonly": true
+                                },
+                                "ContactInformation": {
+                                    "readonly": true
+                                },
+                                "FamilyDetails": {
+                                    "readonly": true,
+                                    "title": "HOUSEHOLD_DETAILS"
+                                },
+                                "Liabilities": {
+                                    "readonly": true
+                                },
+                                "IndividualReferences": {
+                                    "readonly": true
+                                },
+                                "TrackDetails": {
+                                    "readonly": true
+                                },
+                                "reference": {
+                                    "readonly": true
+                                },
+                                "HouseVerification": {
+                                    "readonly": true
+                                },
+                                "ResidenceVerification":{
+                                    "readonly": true
+                                },
+                                "PhysicalAssets": {
+                                    "readonly": true
+                                },
+                                "BankAccounts.customerBankAccounts":{
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "ApplicationReview":{
                             "excludes": [
                                 "ContactInformation.whatsAppMobileNoOption",
                                 "IndividualReferences.verifications.ReferenceCheck",
@@ -1017,7 +1066,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             var overridesFields = function (bundlePageObj) {
                 return {
                     //over 
-                    
                     "KYC.customerId": {
                         "orderNo": 10,
                         "resolver": "IndividualCustomerIDLOVConfiguration"
@@ -1269,7 +1317,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "ContactInformation.mailingState": {
                         "condition": "!model.customer.mailSameAsResidence",
                         "readonly": true
-                    }
+                    },
+                
                 }
             }
             var getIncludes = function (model) {
@@ -1453,7 +1502,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     model.currentStage = bundleModel.currentStage;
                     model.enrolmentProcess.currentStage =  model.currentStage;
                     /* End of setting data recieved from Bundle */
-
+        
                     /* Setting data for the form */
                     model.customer = model.enrolmentProcess.customer;
                     var branchId = SessionStore.getBranchId();

@@ -395,6 +395,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EmployeeDetails.noOfFemaleEmployees",
                     "EmployeeDetails.noOfMaleEmployees",
                     "EmployeeDetails.avgMonthlySalary",
+                   
+                    "CommercialCBCheck",
+                    "CommercialCBCheck.enterpriseBureauDetails",
+                    "CommercialCBCheck.enterpriseBureauDetails.bureau",
+                    "CommercialCBCheck.enterpriseBureauDetails.fileId",
+                    "CommercialCBCheck.enterpriseBureauDetails.doubtful",
+                    "CommercialCBCheck.enterpriseBureauDetails.loss",
+                    "CommercialCBCheck.enterpriseBureauDetails.specialMentionAccount",
+                    "CommercialCBCheck.enterpriseBureauDetails.standard",
+                    "CommercialCBCheck.enterpriseBureauDetails.subStandard",
 
                 ];
             }
@@ -958,7 +968,106 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     }
                                     
                                 }
-                            },                            
+                            },  
+                            "ScreeningReview":{
+                                "excludes": [
+                                ],
+                                "overrides": {
+                                    "EnterpriseInformation": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseInformation.rentLeaseStatus": {
+                                        "schema": {
+                                             "enumCode": "rent_lease_status"
+                                        },
+                                        "required": true,
+                                        "condition": "model.customer.enterprise.ownership.toLowerCase() =='rental' || model.customer.enterprise.ownership.toLowerCase() =='leased' "
+                                    },
+                                    "EnterpriseInformation.rentLeaseAgreement": {
+                                        "condition": "model.customer.udf.userDefinedFieldValues.udf1 == 'Available' ",
+                                        "orderNo":142,
+                                        "required": true
+
+                                    },
+                                    "CommercialCBCheck": {
+                                        "orderNo": 11,
+                                        "readonly": true
+                                    },
+                                    "EnterpriseFinancials.incomeThroughSales": {
+                                        "title": "SALES_INFO_DETAILS"
+                                    },
+                                    "Liabilities": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseAssets": {
+                                        "readonly": true
+                                    },
+                                    "BankAccounts": {
+                                        "readonly": true
+                                    },
+                                    "ContactInformation": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseReferences": {
+                                        "readonly": true
+                                    }
+                                    
+                                }
+                            },   
+                            "ApplicationReview":{
+                                "excludes": [
+                                ],
+                                "overrides": {
+                                    "EnterpriseInformation": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseInformation.rentLeaseStatus": {
+                                        "schema": {
+                                             "enumCode": "rent_lease_status"
+                                        },
+                                        "required": true,
+                                        "condition": "model.customer.enterprise.ownership.toLowerCase() =='rental' || model.customer.enterprise.ownership.toLowerCase() =='leased' "
+                                    },
+                                    "EnterpriseInformation.rentLeaseAgreement": {
+                                        "condition": "model.customer.udf.userDefinedFieldValues.udf1 == 'Available' ",
+                                        "orderNo":142,
+                                        "required": true
+
+                                    },
+                                    "CommercialCBCheck": {
+                                        "orderNo": 11,
+                                        "readonly": true
+                                    },
+                                    "EnterpriseFinancials.incomeThroughSales": {
+                                        "title": "SALES_INFO_DETAILS"
+                                    },
+                                    "Liabilities": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseAssets": {
+                                        "readonly": true
+                                    },
+                                    "BankAccounts": {
+                                        "readonly": true
+                                    },
+                                    "ContactInformation": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseReferences": {
+                                        "readonly": true
+                                    }
+                                    
+                                }
+                            }, 
+                            
+                             "Screening":{
+                                "excludes": [
+                                    "CommercialCBCheck"
+                                ],
+                                "overrides": {
+                                        
+                                }
+                        }
                             // "Televerification": {
                             
 
