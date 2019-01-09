@@ -1046,6 +1046,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                      "IndividualInformation.centreId": {
                         "resolver": "CentreLOVConfiguration"
                     },
+                    "IndividualInformation.spouseFirstName":{
+                        "condition": "model.customer.maritalStatus==='MARRIED'" 
+                    },
+                    "IndividualInformation.spouseDateOfBirth":{
+                        "condition": "model.customer.maritalStatus==='MARRIED'"
+                    },
                     "KYC.identityProofFieldSet": {
                         "orderNo": 20
                     },
@@ -1220,9 +1226,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             }
                         }
                     },
-                    "IndividualInformation.caste": {
-                        "enumCode": "caste"
-                    },
+                    // "IndividualInformation.caste": {
+                    //     "enumCode": "caste"
+                    // },
                     "HouseVerification.rentLeaseStatus": {
                         "schema": {
                             "enumCode": "rent_lease_status"
@@ -1306,7 +1312,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "IndividualInformation.spouseFirstName",
                     "IndividualInformation.spouseDateOfBirth",
                     "IndividualInformation.numberOfDependents",
-                    "IndividualInformation.caste",
+                    //"IndividualInformation.caste",
 
                     "ContactInformation",
                     "ContactInformation.mobilePhone",
@@ -1359,6 +1365,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
                     "Liabilities",
                     "Liabilities.liabilities",
+                    "Liabilities.liabilities.loanType",
                     "Liabilities.liabilities.loanSource",
                     "Liabilities.liabilities.loanAmountInPaisa",
                     "Liabilities.liabilities.installmentAmountInPaisa",

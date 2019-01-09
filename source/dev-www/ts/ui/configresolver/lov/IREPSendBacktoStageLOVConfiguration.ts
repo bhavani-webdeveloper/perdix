@@ -9,7 +9,7 @@ export class IREPSendBacktoStageLOVConfiguration extends LOVElementConfiguration
 		let $q = AngularResourceService.getInstance().getNGService("$q");
 		let formHelper = AngularResourceService.getInstance().getNGService("formHelper");
         let stage1 = model.loanProcess.loanAccount.currentStage;
-        let targetstage = formHelper.enum('irep_targetstage').data;
+        let targetstage = formHelper.enum('targetstage').data;
         let out = [];
         for (let i = 0; i < targetstage.length; i++) {
             let t = targetstage[i];

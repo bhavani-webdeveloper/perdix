@@ -371,7 +371,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "Liabilities",
                     "Liabilities.liabilities",
                    // "Liabilities.liabilities.liabilityType",
-                    //"Liabilities.liabilities.loanType",
+                    "Liabilities.liabilities.loanType",
                     "Liabilities.liabilities.loanSource",
                     "Liabilities.liabilities.loanAmountInPaisa",
                     "Liabilities.liabilities.installmentAmountInPaisa",
