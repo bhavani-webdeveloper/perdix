@@ -269,11 +269,11 @@ define({
                 RuleMaintenance.getRuleParams().$promise.then(function(res){
                     console.log(res);
                     for(i in res){
-                        res[i].id= Number(i)+1;
+                        res[i].id= res[i].displayName;
                         res[i].name=res[i].displayName;
                         res[i].value='${'+res[i].displayName+'}';
                     }
-                    res.push({ id: res.length +1, name: 1, value:'1', type: 'number' });
+                    res.push({ id: "one", name: 1, value:'1', type: 'number' });
                     model.options.fields= res;
                 },function(err){
                     console.log(err);
