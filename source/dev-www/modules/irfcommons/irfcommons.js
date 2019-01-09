@@ -644,3 +644,102 @@ irf.commons.service("PrinterData", ["$state", "$log", "$timeout", function($stat
 			return this.lines;
 		}
 }])
+irf.commons.service('irfPrinter',["$log","PageHelper","Utils","irfSimpleModal",function($log,PageHelper,Utils,irfSimpleModal){
+	var self = this;
+	self.printPreview = function(printData){
+		self.data = printData;
+		if (Utils.isCordova && self.data.thermalReceipt) {
+			self.thermalReceipt = generateThermelPrint(data.thermalReceipt);
+			self.previewHtml = self.thermalReceipt.html;
+		} else if (self.data.paperReceipt) {
+			self.previewHtml = '<div class="web-print-wrapper">' + self.webPrintStyle + printData.paperReceipt + '</div>'
+		}
+		self.thermalReceipt = generateThermelPrint(self.data.thermalReceipt);
+		self.previewHtml = self.thermalReceipt.html;
+		self.previewHtml = mapButtonToHtml(self.previewHtml);
+		irfSimpleModal('Print Preview', self.previewHtml, {
+			print: function() {
+				self.print();
+			}
+		});
+	}
+	self.print = function(){
+			try {
+				if (Utils.isCordova && self.thermalReceipt.data) {
+					cordova.plugins.irfBluetooth.print(function() {
+						console.log("succc callback");
+					}, function(err) {
+						console.error(err);
+						console.log("errr callback");
+					}, self.thermalReceipt.data);
+				} else if (self.data.paperReceipt) {
+					window.print();
+				} else {
+					PageHelper.clearErrors();
+					PageHelper.setError({message: 'No Data To Print'});
+				}
+			} catch (err) {
+				console.log(err);
+				$log.info("pringing web data");
+			}
+	}
+	var mapButtonToHtml = function(html){
+		var button = `<br><div><button ng-click=model.print()>PRINT</button></div><br>`;
+		return html + button;
+	}
+	var generateThermelPrint = function(opts) {
+		// Code 
+			// 2 - string,
+			// 3 - line,
+			// 4 - keyvalue
+
+		// self.FONT_LARGE_BOLD =2,
+		// self.FONT_LARGE_NORMAL =1,
+		// self.FONT_SMALL_NORMAL =3,
+		// self.FONT_SMALL_BOLD =4,
+		var fontHtml = [
+			[''],
+			['<h3 style="white-space: pre">', '</h3>'],
+			['<h3 style="white-space: pre"><strong>', '</strong></h3>'],
+			['<p style="white-space: pre">', '<p>'],
+			['<p style="white-space: pre"><strong>', '</strong></p>']
+		];
+		var defaultFont = 3,defaultValue="",defaultCenter=false,data = [];
+		var html = '<div style="font-family:monospace">';
+		for(var i=0; i<opts.length; i++){
+			font = defaultFont;
+			value = defaultValue;
+			center = defaultCenter;
+			if(opts[i].length==2){										
+				center = false;
+				font  = opts[i][0]+1 < 5 ? opts[i][0] : defaultFont;
+				value = _.padEnd(" ",font+3 < 5 ?  24: 42,opts[i][1]);
+			}
+			else if (opts[i].length == 3){
+				center = opts[i][0] == 0 ? false : true;
+				font = opts[i][1]+1 < 5 ? opts[i][1] : defaultFont;
+				value = opts[i][2];
+			}
+			else if (opts[i].length == 4){
+				center = opts[i][0] == 0 ? false : true;
+				font = opts[i][1]+1 < 5? opts[i][1] : defaultFont;
+				value = _.padEnd(opts[i][2], font+3 < 5 ?  11: 23) + ': ' + opts[i][3];
+			}
+			var d = {
+				"bFont": font,
+				"text": value,
+				"style": {
+					"center": center
+				}
+			};
+			data.push(d);
+			var t = d.style.center? '<center>'+d.text+'</center>': d.text;
+			html += fontHtml[d.bFont][0] + t + fontHtml[d.bFont][1] + "";
+		}
+		return {
+			data: data,
+			html: html + '</div>'
+		};
+	}
+	self.webPrintStyle = '<style>@media print { body * { visibility: hidden; } .web-print-wrapper, .web-print-wrapper * { visibility: visible } .web-print-wrapper { position: absolute; top: 0; left: 0;} html, body {height: 100%;}}</style>';
+}])

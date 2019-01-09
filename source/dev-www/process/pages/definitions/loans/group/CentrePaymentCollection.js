@@ -1,12 +1,36 @@
 irf.pageCollection.factory(irf.page("CentrePaymentCollection"),
 ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper",
 "$stateParams", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService",
-"$filter", "elementsUtils", "Utils","PagesDefinition", "irfNavigator","GroupProcess","irfSimpleModal",
+"$filter", "elementsUtils", "Utils","PagesDefinition", "irfNavigator","GroupProcess","irfSimpleModal","irfPrinter",
 function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 	$stateParams, LoanProcess, PM, PageHelper, StorageService,
-	$filter, elementsUtils, Utils,PagesDefinition, irfNavigator,GroupProcess,irfSimpleModal){
+	$filter, elementsUtils, Utils,PagesDefinition, irfNavigator,GroupProcess,irfSimpleModal,irfPrinter){
 	
-	
+	// var mapButtontoScreen = function(preHtml,printData){
+	// 	var actions ={
+	// 		print:function(printData){
+	// 			ReceiptPrint.print(printData);
+	// 		}
+	// 	}
+	// 	var form =[
+	// 		{
+	// 			"title": "PRINT",
+	// 			"type": "button",
+	// 			"onclikc":actions.print(model)
+	// 		}
+			
+	// 	]
+		
+	// 	var buttonHtml = `	
+	// 	<irf-sf 
+	// 		irf-form= actions
+	// 		irf-actions=page.actions"
+	// 		irf-model="model"
+	// 	>
+		
+	// 	`
+	// 	return preHtml 
+	// }
 	var generateThermelPrint = function(opts){
 		// Code 
 			// 2 - string,
@@ -848,7 +872,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 				model.collectionDemandSummary._denominationTotal = denominationTotal;
 				return (denominationTotal===model.collected);
 			},
-			OfflinePrint:function(model, formCtrl, form, $event){
+			OfflinePrint:function(model, formCtrl, form, $event,type){
 				if (!this.validateCollection(model, formCtrl)) {
 					return;
 				}
@@ -933,27 +957,25 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 				}
 				
 				print.paperReceipt= print.paperReceipt + LoanProcess.getWebFooter(opts);
-				print.thermalReceipt = {};
-					print.thermalReceipt.getLines = function(){
-						return generateThermelPrint(finalArray);
-					}
+				print.thermalReceipt = finalArray;
+					
 
 				$log.info(print.paperReceipt);
 				$log.info(print.thermalReceipt);
-
-				if(type == 'print'){
-				Utils.confirm("Please Save the data offline,Page will redirected to Print Preview")
-                        .then(function(){
-							irfNavigator.go({
-								state: "Page.Engine",
-								pageName: "management.ReceiptPrint",
-								pageData: print
-							});
-						});
-					}
-				else{
-					irfSimpleModal('print-preview',print.paperReceipt);
-				}
+				irfPrinter.printPreview(print);
+				// if(type == 'print'){
+				// Utils.confirm("Please Save the data offline,Page will redirected to Print Preview")
+                //         .then(function(){
+				// 			irfNavigator.go({
+				// 				state: "Page.Engine",
+				// 				pageName: "management.ReceiptPrint",
+				// 				pageData: print
+				// 			});
+				// 		});
+				// 	}
+				// else{
+				// 	irfSimpleModal('print-preview',print.paperReceipt);
+				// }
 			},
 
 			OnlinePrint:function(model, formCtrl, form, $event,type){
@@ -1041,24 +1063,24 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 					print.paperReceipt= print.paperReceipt + LoanProcess.getWebFooter(opts);
 	
 					$log.info(print.paperReceipt);
-					print.thermalReceipt = {};
-					print.thermalReceipt.getLines = function(){
-						return generateThermelPrint(finalArray);
-					}
-	
-					if(type == "print"){
-					Utils.confirm("Please Save the data offline,Page will redirected to Print Preview")
-							.then(function(){
-								irfNavigator.go({
-									state: "Page.Engine",
-									pageName: "management.ReceiptPrint",
-									pageData: print
-								});
-							});
-						}
-					else{
-						irfSimpleModal('print-preview',print.paperReceipt);
-					}
+					print.thermalReceipt = finalArray;
+					// print.thermalReceipt.getLines = function(){
+					// 	return generateThermelPrint(finalArray);
+					// }
+					irfPrinter.printPreview(print)
+					// if(type == "print"){
+					// Utils.confirm("Please Save the data offline,Page will redirected to Print Preview")
+					// 		.then(function(){
+					// 			irfNavigator.go({
+					// 				state: "Page.Engine",
+					// 				pageName: "management.ReceiptPrint",
+					// 				pageData: print
+					// 			});
+					// 		});
+					// 	}
+					// else{
+					// 	irfSimpleModal('print-preview',print.paperReceipt);
+					// }
 
 
 				}else{
