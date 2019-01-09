@@ -139,11 +139,11 @@ define({
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('witfin.loans.individual.screening.ApplicationReview', {
+								entityManager.setModel('base.dashboard.loans.individual.screening.ApplicationReview', {
 									_request: item
 								});
 								$state.go("Page.Bundle", {
-									pageName: "witfin.loans.individual.screening.ApplicationReview",
+									pageName: "base.dashboard.loans.individual.screening.ApplicationReview",
 									pageId: item.loanId
 								});
 							},

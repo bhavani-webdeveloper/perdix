@@ -26,4 +26,10 @@ function($log, $scope, $stateParams, irfNavigator, $sce, PageHelper, SessionStor
             handleError();
         }
     }, handleError).finally(PageHelper.hideLoader);
+
+    $scope.launchPrint = function() {
+        var fwrPrintWindow = window.open($scope.fwrDashboardURL);
+        fwrPrintWindow.focus();
+        fwrPrintWindow.print();
+    };
 }]);

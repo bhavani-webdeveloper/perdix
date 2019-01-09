@@ -20,7 +20,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                     "bundleDefinitionPromise": function() {
                         return $q.resolve([
                             {
-                                pageName: 'base.dashboard.loans.individual.customer.IndividualEnrollment2',
+                                pageName: 'base.dashboard.loans.individual.customer.IndividualEnrolment2',
                                 title: 'APPLICANT',
                                 pageClass: 'applicant',
                                 minimum: 1,
@@ -28,7 +28,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 order:10
                             },
                             {
-                                pageName: 'base.dashboard.loans.individual.customer.IndividualEnrollment2',
+                                pageName: 'base.dashboard.loans.individual.customer.IndividualEnrolment2',
                                 title: 'CO_APPLICANT',
                                 pageClass: 'co-applicant',
                                 minimum: 0,
@@ -36,7 +36,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 order:20
                             },
                             {
-                                pageName: 'base.dashboard.loans.individual.customer.IndividualEnrollment2',
+                                pageName: 'base.dashboard.loans.individual.customer.IndividualEnrolment2',
                                 title: 'GUARANTOR',
                                 pageClass: 'guarantor',
                                 minimum: 0,
@@ -68,7 +68,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 order:50
                             },
                             {
-                                pageName: 'base.dashboard.loans.individual.screening.CreditBureauView',
+                                pageName: 'loans.individual.screening.CreditBureauView',
                                 title: 'CREDIT_BUREAU',
                                 pageClass: 'cbview',
                                 minimum: 1,

@@ -16,6 +16,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                         "required": true,
                         "resolver": "PincodeLOVConfiguration"
                     },
+                    "ContactInformation.district":{
+                        "required": false
+                    },
+                    "ContactInformation.state":{
+                        "required": false
+                    },
                     "Machinery.fixedAssetsMachinaries.hypothecatedToUs": {
                          "title": "HYPOTHECATED_TO_IREP"
 
@@ -25,9 +31,63 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                          "enumCode": "businessinfo_business_ownershi"
                     },
                     "EnterpriseInformation.enterpriseRegistrations.registrationType": {
-                         "enumCode": "business_registration_type_upd"
+                         "enumCode": "business_registration_type",
+                         "required": false
                     },
                     "EnterpriseInformation.enterpriseRegistrations.registeredDate": {
+                        "required": false
+                    },
+                    "EnterpriseInformation.enterpriseRegistrations.registrationNumber":{
+                        "required": false
+                    },
+                    //over ride for mandatory 
+                    "EnterpriseInformation.companyOperatingSince":{
+                        "required": true
+                    },
+                    "EnterpriseInformation.companyEmailId":{
+                        "required": true
+                    },
+                    "EnterpriseInformation.photoImageId":{
+                        "required": true
+                    },
+                    "EnterpriseInformation.ownership":{
+                        "required": true
+                    },
+                    "EnterpriseInformation.companyRegistered":{
+                        "required": true
+                    },
+                    "EnterpriseInformation.businessActivity":{
+                        "required": true
+                    },
+                    "EnterpriseInformation.businessSector":{
+                        "required": true
+                    },
+                    "EnterpriseInformation.businessSubsector":{
+                        "required": true,
+                        "resolver":"BusinessSubsectorLOVConfiguration"
+                    },
+                    "EnterpriseInformation.enterpriseCustomerRelations.relationshipType":{
+                        "required": true
+                    },
+                    "EnterpriseInformation.enterpriseCustomerRelations.experienceInBusiness":{
+                        "required": true
+                    },
+                    "EnterpriseInformation.enterpriseCustomerRelations.businessInvolvement":{
+                        "required": true
+                    },
+                    "ContactInformation.businessInPresentAreaSince":{
+                        "required": true
+                    },
+                    "ContactInformation.businessInCurrentAddressSince":{
+                        "required": true
+                    },
+                    "BankAccounts.customerBankAccounts.bankStatements.noOfChequeBounced":{
+                        "required": true
+                    },
+                    "BankAccounts.customerBankAccounts.bankStatements.noOfEmiChequeBounced":{
+                        "required": true
+                    },
+                    "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto":{
                         "required": true
                     },
                     "BankAccounts.customerBankAccounts.isDisbersementAccount":{
@@ -47,11 +107,17 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                          "condition": "model.customer.enterprise.ownership=='Rental' || model.customer.enterprise.ownership=='Leased' ",
                          "orderNo":142
                     },
+                    "EnterpriseInformation.businessSector":{
+                        onChange: function(modelValue, form, model) {
+                            model.customer.enterprise.businessSubsector=null;
+                        }
+                    },
                     "EnterpriseFinancials": {
                         "orderNo": 50
                     },
                     "EnterpriseFinancials.monthlyTurnover": {
-                         "orderNo": 10
+                         "orderNo": 10,
+                         "required":true
                      },
                     "EnterpriseFinancials.monthlyBusinessExpenses":{
                          "orderNo": 20
@@ -311,7 +377,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "Liabilities",
                     "Liabilities.liabilities",
                    // "Liabilities.liabilities.liabilityType",
-                    //"Liabilities.liabilities.loanType",
+                    "Liabilities.liabilities.loanType",
                     "Liabilities.liabilities.loanSource",
                     "Liabilities.liabilities.loanAmountInPaisa",
                     "Liabilities.liabilities.installmentAmountInPaisa",
@@ -335,6 +401,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EmployeeDetails.noOfFemaleEmployees",
                     "EmployeeDetails.noOfMaleEmployees",
                     "EmployeeDetails.avgMonthlySalary",
+                   
+                    "CommercialCBCheck",
+                    "CommercialCBCheck.enterpriseBureauDetails",
+                    "CommercialCBCheck.enterpriseBureauDetails.bureau",
+                    "CommercialCBCheck.enterpriseBureauDetails.fileId",
+                    "CommercialCBCheck.enterpriseBureauDetails.doubtful",
+                    "CommercialCBCheck.enterpriseBureauDetails.loss",
+                    "CommercialCBCheck.enterpriseBureauDetails.specialMentionAccount",
+                    "CommercialCBCheck.enterpriseBureauDetails.standard",
+                    "CommercialCBCheck.enterpriseBureauDetails.subStandard",
 
                 ];
             }
@@ -898,7 +974,106 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     }
                                     
                                 }
-                            },                            
+                            },  
+                            "ScreeningReview":{
+                                "excludes": [
+                                ],
+                                "overrides": {
+                                    "EnterpriseInformation": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseInformation.rentLeaseStatus": {
+                                        "schema": {
+                                             "enumCode": "rent_lease_status"
+                                        },
+                                        "required": true,
+                                        "condition": "model.customer.enterprise.ownership.toLowerCase() =='rental' || model.customer.enterprise.ownership.toLowerCase() =='leased' "
+                                    },
+                                    "EnterpriseInformation.rentLeaseAgreement": {
+                                        "condition": "model.customer.udf.userDefinedFieldValues.udf1 == 'Available' ",
+                                        "orderNo":142,
+                                        "required": true
+
+                                    },
+                                    "CommercialCBCheck": {
+                                        "orderNo": 11,
+                                        "readonly": true
+                                    },
+                                    "EnterpriseFinancials.incomeThroughSales": {
+                                        "title": "SALES_INFO_DETAILS"
+                                    },
+                                    "Liabilities": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseAssets": {
+                                        "readonly": true
+                                    },
+                                    "BankAccounts": {
+                                        "readonly": true
+                                    },
+                                    "ContactInformation": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseReferences": {
+                                        "readonly": true
+                                    }
+                                    
+                                }
+                            },   
+                            "ApplicationReview":{
+                                "excludes": [
+                                ],
+                                "overrides": {
+                                    "EnterpriseInformation": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseInformation.rentLeaseStatus": {
+                                        "schema": {
+                                             "enumCode": "rent_lease_status"
+                                        },
+                                        "required": true,
+                                        "condition": "model.customer.enterprise.ownership.toLowerCase() =='rental' || model.customer.enterprise.ownership.toLowerCase() =='leased' "
+                                    },
+                                    "EnterpriseInformation.rentLeaseAgreement": {
+                                        "condition": "model.customer.udf.userDefinedFieldValues.udf1 == 'Available' ",
+                                        "orderNo":142,
+                                        "required": true
+
+                                    },
+                                    "CommercialCBCheck": {
+                                        "orderNo": 11,
+                                        "readonly": true
+                                    },
+                                    "EnterpriseFinancials.incomeThroughSales": {
+                                        "title": "SALES_INFO_DETAILS"
+                                    },
+                                    "Liabilities": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseAssets": {
+                                        "readonly": true
+                                    },
+                                    "BankAccounts": {
+                                        "readonly": true
+                                    },
+                                    "ContactInformation": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseReferences": {
+                                        "readonly": true
+                                    }
+                                    
+                                }
+                            }, 
+                            
+                             "Screening":{
+                                "excludes": [
+                                    "CommercialCBCheck"
+                                ],
+                                "overrides": {
+                                        
+                                }
+                        }
                             // "Televerification": {
                             
 

@@ -13,7 +13,7 @@ export class BusinessSubsectorLOVConfiguration extends LOVElementConfiguration {
         let businessSectors = formHelper.enum('businessSector').data;
 
         let selectedBusinessSector  = null;
-
+ 
         for (let i=0;i<businessSectors.length;i++){
             if (businessSectors[i].value == model.customer.enterprise.businessSector && businessSectors[i].parentCode == model.customer.enterprise.businessType){
                 selectedBusinessSector = businessSectors[i];
@@ -22,14 +22,16 @@ export class BusinessSubsectorLOVConfiguration extends LOVElementConfiguration {
         }
 
         let out = [];
-        for (let i=0;i<businessSubsectors.length; i++){
-            if (businessSubsectors[i].parentCode == selectedBusinessSector.code){
-                out.push({
-                    name: businessSubsectors[i].name,
-                    value: businessSubsectors[i].value
-                })
+        if(selectedBusinessSector != null){
+            for (let i=0;i<businessSubsectors.length; i++){
+                if (businessSubsectors[i].parentCode == selectedBusinessSector.code){
+                    out.push({
+                        name: businessSubsectors[i].name,
+                        value: businessSubsectors[i].value
+                    })
+                }
             }
-        }
+        }   
         return $q.resolve({
             headers: {
                 "x-total-count": out.length

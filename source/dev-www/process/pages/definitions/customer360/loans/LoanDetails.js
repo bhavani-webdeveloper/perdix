@@ -433,7 +433,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                                 for(var i=0;i<uploadedExistingDocs.length;i++){
                                                     var pushFlag = true;
                                                     for(var j=0;j<masterDocumentsArray.length;j++){
-                                                        if(masterDocumentsArray[j].document_name == uploadedExistingDocs[i].document){
+                                                        if(masterDocumentsArray[j].document_code == uploadedExistingDocs[i].document ){
                                                            
                                                             uploadedExistingDocs[i].$formsKey= masterDocumentsArray[j].forms_key;
                                                             allExistingDocs.push(uploadedExistingDocs[i]);
@@ -453,9 +453,9 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                                     availableDocCodes.push(loanDocuments[i].document);
                                                     var documentObj = LoanBookingCommons.getDocumentDetails(docsForProduct, loanDocuments[i].document);
                                                     if (documentObj != null) {
-                                                        loanDocuments[i].document = documentObj.document_name;
+                                                        loanDocuments[i].title = documentObj.document_name;
                                                     } else if(_.isNull(loanDocuments[i].document) || _.isUndefined(loanDocuments[i].document)) {
-                                                        loanDocuments[i].document = "DOCUMENT_TITLE_NOT_MAINTAINED";
+                                                        loanDocuments[i].title = "DOCUMENT_TITLE_NOT_MAINTAINED";
                                                     }
                                                 }
                                                 /*1)getting form key for form download , for loan documents
@@ -2039,7 +2039,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                                 "items": [{
                                                     "key": "allExistingDocs[].document",
                                                     "notitle": true,
-                                                    "titleExpr": "model.allExistingDocs[arrayIndex].document",
+                                                    "titleExpr": "model.allExistingDocs[arrayIndex].title",
                                                     "type": "anchor",
                                                     "fieldHtmlClass": "text-bold",
                                                     "onClick": function (model, form, schemaForm, event) {

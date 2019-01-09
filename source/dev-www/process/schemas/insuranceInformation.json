@@ -52,6 +52,7 @@
                ],
                "title":"STATE"
             },
+           
             "district":{  
                "type":[  
                   "string",

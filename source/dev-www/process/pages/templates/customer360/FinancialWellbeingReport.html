@@ -9,22 +9,15 @@
 			height: 600px;
 			bottom: 0;
 		}
-		@media print {
-			body * { visibility: hidden; }
-			.fwr-iframe, .fwr-iframe * {
-				visibility: visible;
-			}
-			.fwr-iframe {
-				position: absolute;
-				top: 0;
-				left: 0;
-				height: 5000px;
-				overflow: scoll;
-			}
-			html, body {
-				height: 5000px;
-			}
+		.fwr-print-button {
+			position: absolute;
+			top: 0;
+			right: 173px;
+			z-index: 1000;
+			background-color: transparent;
+			border: none;
 		}
 	</style>
+	<button class="btn btn-default fwr-print-button" ng-click="launchPrint()"><i class="fa fa-print">&nbsp;</i>Print</button>
 	<iframe ng-attr-src="{{fwrDashboardURL}}" class="fwr-iframe"></iframe>
 </div>

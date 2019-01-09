@@ -127,21 +127,40 @@ define([], function () {
                     model.additions.number_of_guarantors = tempg;
                 }
             };
-            var defaultConfiguration = function(model){
+            var defaultConfiguration = function(model,initFlag){
                 model.additions = {};
                 model.additions.noOfGuarantorCoApplicantHtml = "<p stye=\"font-size:10px !important\"><font color=#FF6347>Number of Co-Applicants : {{model.additions.co_borrower_required}} Number of Guarantors :{{model.additions.number_of_guarantors}}</font><p>";
                 model.loanAccount.bcAccount = {};
                 model.loanAccount.processType = "1";
+                
                 if (typeof model.loanAccount.nominees == "undefined" || model.loanAccount.nominees == null){
                     model.loanAccount.nominees = [];
+                    model.loanAccount.nominees.push({});
                 }
+                else {
+                    if(!initFlag)
+                        model.loanAccount.nominees = [];
+                        model.loanAccount.nominees.push({});
+                    }
                 if (typeof model.loanAccount.accountUserDefinedFields == "undefined") {
                     model.loanAccount.accountUserDefinedFields = {};
                     model.loanAccount.accountUserDefinedFields.userDefinedFieldValues = {};
                 }
+                else {
+                   if(!initFlag)
+                    {
+                    model.loanAccount.accountUserDefinedFields = {};
+                    model.loanAccount.accountUserDefinedFields.userDefinedFieldValues = {};
+                    }
+                }
                 if (typeof model.loanAccount.loanCentre == "undefined" || model.loanAccount.loanCentre == null){
                     model.loanAccount.loanCentre = {};
                 }
+                else{
+                    if(!initFlag)
+                    model.loanAccount.loanCentre = {};
+                }
+                if(initFlag){
                 model.loanAccount.remarksHistory = null;
                 if (typeof model.loanAccount.customerId != "undefined") {
                     $q.when(Enrollment.get({
@@ -150,6 +169,7 @@ define([], function () {
                         model.customer = resp;
                     })
                 }
+            
                 if (model.loanAccount && model.loanAccount.id) {
                     PageHelper.showLoader();
                     IndividualLoan.loanRemarksSummary({
@@ -165,6 +185,7 @@ define([], function () {
                 BundleManager.broadcastEvent('loan-account-loaded', {
                     loanAccount: model.loanAccount
                 });
+            }
 
                 /* Deviations and Mitigations grouping */
                 if (_.hasIn(model.loanAccount, 'loanMitigants') && _.isArray(model.loanAccount.loanMitigants)) {
@@ -204,6 +225,15 @@ define([], function () {
                         trancheNumber  : 1
                     })
                 }
+                else{
+                    if(!initFlag){
+                        model.loanAccount.numberOfDisbursements = 1;
+                        model.loanAccount.disbursementSchedules = [];
+                        model.loanAccount.disbursementSchedules.push({
+                        trancheNumber  : 1
+                    })
+                    }
+                }
                 // TODO Hard Coded value have to fix this
                 model.loanAccount.securityEmiRequired = "No";
                 if(!(model.loanAccount.partnerCode)){
@@ -216,7 +246,7 @@ define([], function () {
                         continue;
                  }
                 };
-                if(model.loanAccount.id){
+                if(model.loanAccount.id && initFlag){
                     validateCoGuarantor(0,0,'map',model.loanAccount.loanCustomerRelations,model);
                 }
             }
@@ -945,7 +975,7 @@ define([], function () {
                 initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
                     model.customer = {};
                     model.loanAccount = model.loanProcess.loanAccount;
-                    defaultConfiguration(model);
+                    defaultConfiguration(model,true);
                     
                     self = this;
                     var p1 = UIRepository.getLoanProcessUIRepository().$promise;
@@ -1338,11 +1368,11 @@ define([], function () {
                 eventListeners: {
                     "new-applicant": function (bundleModel, model, obj) {
                         model.customer = obj.customer;
-                        clearAll('loanAccount',['loantype','partner','frequency','productCode',"loanAmount","tenure","interestRate","loanPurpose1","loanPurpose2","loanPurpose3"],model);
-                        clearAll('additions',['tenurePlaceHolder','interestPlaceHolder','amountPlaceHolder'],model)
+                        clearAll('loanAccount',['loanType','partner','frequency','productCode',"loanAmount","tenure","interestRate","loanPurpose1","loanPurpose2","loanPurpose3","witnessFirstName","witnessRelationship","firstRepaymentDate"],model);
+                        clearAll('additions',['tenurePlaceHolder','interestPlaceHolder','amountPlaceHolder'],model);
                         model.loanAccount.customerId = model.customer.id;
                         model.loanAccount.urnNo = model.customer.urnNo;
-                        defaultConfiguration(model);
+                        defaultConfiguration(model,false);
                         model.loanAccount.loanCentre.centreId = obj.customer.centreId;
                     },
                     "dsc-response": function(bundleModel,model,obj){

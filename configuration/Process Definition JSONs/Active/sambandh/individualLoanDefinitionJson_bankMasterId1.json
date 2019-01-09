@@ -1198,6 +1198,14 @@
                         "Screening", "LoanInitiation","Application", "FieldAppraisal", "PendingForPartner"
                      ]
                   },
+ "customerSnapshotId":{
+                     "title":"customerSnapshotId",
+                     "type":"number",
+                     
+                     "captureStages":[
+                       "LoanInitiation","LoanBooking"
+                     ]
+                  },
                   "psychometricRequired":{
                      "title":"psychometricRequired",
                      "type":"string",
