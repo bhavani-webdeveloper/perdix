@@ -265,9 +265,9 @@ define([],function(){
                                 "PreliminaryInformation.tenureRequested": {
                                     "required": true
                                 },
-                                "PreliminaryInformation.expectedEmi": {
-                                    "readonly": true
-                                },
+                                // "PreliminaryInformation.expectedEmi": {
+                                //     "readonly": true
+                                // },
                                 "PreliminaryInformation.emiRequested": {
                                     "required": true
                                 },
@@ -610,6 +610,55 @@ define([],function(){
 
                 }
             }
+            var computeEstimatedEMI = function(model){
+                var fee = 0;console.log("computeEstimatedEMI***");
+                if(model.loanAccount.commercialCibilCharge)
+                    if(!_.isNaN(model.loanAccount.commercialCibilCharge))
+                        fee+=model.loanAccount.commercialCibilCharge;
+                $log.info(model.loanAccount.commercialCibilCharge);
+    
+                // Get the user's input from the form. Assume it is all valid.
+                // Convert interest from a percentage to a decimal, and convert from
+                // an annual rate to a monthly rate. Convert payment period in years
+                // to the number of monthly payments.
+    
+                if(model.loanAccount.loanAmountRequested == '' || model.loanAccount.expectedInterestRate == '' || model.loanAccount.frequencyRequested == '' || model.loanAccount.tenureRequested == '')
+                    return;
+    
+                var principal = model.loanAccount.loanAmountRequested;
+                var interest = model.loanAccount.expectedInterestRate / 100 / 12;
+                var payments;
+                if (model.loanAccount.frequencyRequested == 'Yearly')
+                    payments = model.loanAccount.tenureRequested * 12;
+                else if (model.loanAccount.frequencyRequested == 'Monthly')
+                    payments = model.loanAccount.tenureRequested;
+    
+                // Now compute the monthly payment figure, using esoteric math.
+                var x = Math.pow(1 + interest, payments);
+                var monthly = (principal*x*interest)/(x-1);
+    
+                // Check that the result is a finite number. If so, display the results.
+                if (!isNaN(monthly) &&
+                    (monthly != Number.POSITIVE_INFINITY) &&
+                    (monthly != Number.NEGATIVE_INFINITY)) {
+                        //model.loanAccount.expectedEmi=10;
+                    model.loanAccount.expectedEmi = round(monthly);
+                    console.log(model.loanAccount.expectedEmi);
+                    //document.loandata.total.value = round(monthly * payments);
+                    //document.loandata.totalinterest.value = round((monthly * payments) - principal);
+                }
+                // Otherwise, the user's input was probably invalid, so don't
+                // display anything.
+                else {
+                    model.loanAccount.expectedEmi  = "";
+                    //document.loandata.total.value = "";
+                    //document.loandata.totalinterest.value = "";
+                }
+    
+            };
+            function round(x) {
+                return Math.ceil(x);
+              }
 
              var overridesFields = function (bundlePageObj) {
                 return {
@@ -640,9 +689,15 @@ define([],function(){
                             "title": "HYPOTHECATED_TO_IREP"
                         },
                         "PreliminaryInformation.expectedInterestRate": {
-                            "type": "select",
-                            "enumCode": "customerinfo_expect_interestra"
+                            type: "number",
+                            title: "EXPECTED_INTEREST_RATE",
+                            onChange:function(value,form,model){
+                                computeEstimatedEMI(model);
+                            }
+                            //"type": "select",
+                            //"enumCode": "customerinfo_expect_interestra"
                         },
+                       
                         "PreliminaryInformation.emiPaymentDateRequested": {
                             "enumCode": "customerinfo_emirequest_date"
                         },
@@ -719,7 +774,7 @@ define([],function(){
                     "PreliminaryInformation.frequencyRequested",
                     "PreliminaryInformation.tenureRequested",
                     "PreliminaryInformation.expectedInterestRate",
-                    "PreliminaryInformation.expectedEmi",
+                    "PreliminaryInformatißon.expectedEmi",
                     "PreliminaryInformation.emiRequested",
                     "PreliminaryInformation.emiPaymentDateRequested",
                     "PreliminaryInformation.collectionPaymentType",
@@ -736,10 +791,10 @@ define([],function(){
                     "LoanCustomerRelations.loanCustomerRelations.relation",
                     //"LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant",
 
-                    // "DeductionsFromLoan",
-                    // "DeductionsFromLoan.expectedProcessingFeePercentage",
-                    // "DeductionsFromLoan.expectedCommercialCibilCharge",
-                    // "DeductionsFromLoan.estimatedEmi",
+                     "DeductionsFromLoan",
+                     "DeductionsFromLoan.expectedProcessingFeePercentage",
+                     "DeductionsFromLoan.expectedCommercialCibilCharge",
+                     "DeductionsFromLoan.estimatedEmi",
 
                     // "LoanMitigants",
                     // "LoanMitigants.deviationParameter",
@@ -916,6 +971,13 @@ define([],function(){
                                                     "Internal Foreclosure": "Internal Foreclosure"
                                                 },
                                                 "orderNo": 1,
+                                            },
+                                            "expectedEmi": {
+                                                "key": "loanAccount.expectedEmi",
+                                                "title": "ESTIMATED_KINARA_EMI",
+                                                "orderNo": 9,
+                                                type: "number",
+                                                "readonly": true
                                             }
                                         }
                                        
