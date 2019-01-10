@@ -288,7 +288,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseInformation.entityId",
                     "EnterpriseInformation.urnNo",
                     "EnterpriseInformation.centreId",
-                    "EnterpriseInformation.oldCustomerId",
+                    //"EnterpriseInformation.oldCustomerId",
                     "EnterpriseInformation.firstName",
                     "EnterpriseInformation.referredBy",
                     "EnterpriseInformation.referredName",

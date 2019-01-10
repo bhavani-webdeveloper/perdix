@@ -40,6 +40,137 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             var configFile = function () {
                 return {
                     "loanProcess.loanAccount.currentStage": {
+                        "Screening":{
+                            "excludes": [
+                                "IndividualFinancials",                               
+                                "HouseVerification.latitude",
+                                "HouseVerification.houseVerificationPhoto",
+                                "HouseVerification.date",
+                                "PhysicalAssets",
+                                "IndividualReferences"
+                            ],
+                            "overrides": {
+                                "KYC": {
+                                    "orderNo": 1
+                                },
+                                "HouseVerification.place":{
+                                    "condition": "model.customer.ownership == 'Rented but own house in different place'",
+                                    "required": true
+                                },                        
+                                "IndividualInformation": {
+                                    "orderNo": 2
+                                },
+                                "ContactInformation": {
+                                    "orderNo": 3
+                                },
+                                "FamilyDetails": {
+                                    "orderNo": 4
+                                },
+                                "Liabilities": {
+                                    "orderNo": 5
+                                },
+                                "HouseVerification": {
+                                    "orderNo": 6
+                                },
+                                "BankAccounts": {
+                                    "orderNo": 7
+                                },
+                                "KYC.customerId": {
+                                    "resolver": "IndividualCustomerIDLOVConfiguration"
+                                },
+                                "KYC.identityProof": {
+                                    "required": true
+                                },
+                                "KYC.identityProofImageId": {
+                                    "required": true
+                                },
+                                "KYC.identityProofNo": {
+                                    "required": true
+                                },
+                                "KYC.addressProofImageId": {
+                                    "required": true
+                                },
+                                "KYC.addressProofNo": {
+                                    "required": true
+                                },
+                                "KYC.additionalKYCs.kyc1ImagePath": {
+                                    "required": true
+                                },
+                                "IndividualInformation.customerBranchId": {
+                                    "readonly": true
+                                },
+                                "ContactInformation.locality":{
+                                    "readonly": true
+                                },
+                                "ContactInformation.villageName":{
+                                    "readonly": true
+                                },
+                                "ContactInformation.district":{
+                                    "readonly": true
+                                },
+                                "ContactInformation.state": {
+                                    "readonly": true
+                                },                      
+                                "IndividualInformation.customerId": {
+                                    "readonly": true
+                                },
+                                "IndividualInformation.urnNo": {
+                                    "readonly": true
+                                },
+                                "IndividualInformation.existingLoan": {
+                                    "required": true
+                                },
+                                "IndividualInformation.dateOfBirth": {
+                                    "required": true
+                                },
+                                "IndividualInformation.maritalStatus": {
+                                    "required": true
+                                },
+                                "IndividualInformation.spouseFirstName": {
+                                    "condition": "model.customer.maritalStatus==='MARRIED'"
+                                },
+                                "IndividualInformation.spouseDateOfBirth": {
+                                    "condition": "model.customer.maritalStatus==='MARRIED'"
+                                },
+                                "FamilyDetails.familyMembers.relationShip": {
+                                    "readonly": true
+                                },
+                                "HouseVerification.ownership": {
+                                    "required": true
+                                },
+                                "HouseVerification.udf30": {
+                                    "required": true
+                                },
+                                "BankAccounts.customerBankAccounts.ifscCode": {
+                                    "required": true,
+                                    "resolver": "IFSCCodeLOVConfiguration"
+                                },
+                                "BankAccounts.customerBankAccounts.customerBankName": {
+                                    "readonly": true
+                                },
+                                "BankAccounts.customerBankAccounts.customerBankBranchName": {
+                                    "readonly": true
+                                },
+                                "BankAccounts.customerBankAccounts.bankStatements.totalDeposits": {
+                                    "required": true
+                                },
+                                "BankAccounts.customerBankAccounts.bankStatements.noOfChequeBounced": {
+                                    "required": true
+                                },
+                                "BankAccounts.customerBankAccounts.bankStatements.noOfEmiChequeBounced": {
+                                    "required": true
+                                },
+                                "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto": {
+                                    "required": true
+                                },
+                                "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto": {
+                                    "required": true
+                                },
+                                "FamilyDetails.familyMembers": {
+                                    "view": "fixed"
+                                }
+                            }
+                        },
                         "KYC": {
                             "excludes": [
                                 "IndividualFinancials",                               
@@ -243,7 +374,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualReferences.verifications.ReferenceCheck",
                                 "PhysicalAssets.physicalAssets.vehicleModel",
                                 "IndividualReferences",
-                                "FamilyDetails.familyMembers.noOfDependents"
+                                "FamilyDetails.familyMembers.noOfDependents",
+                                "PhysicalAssets",
+                                "IndividualFinancials"
                             ],
                             "overrides": {
                                 "KYC": {
@@ -412,7 +545,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             "excludes": [
                                 "ContactInformation.whatsAppMobileNoOption",
                                 "IndividualReferences.verifications.ReferenceCheck",
-                                "IndividualReferences"
+                                "IndividualReferences",
+                                "PhysicalAssets",
+                                "IndividualFinancials"
                             ],
                             "overrides": {
                                 "KYC": {
@@ -472,7 +607,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             "excludes": [
                                 "ContactInformation.whatsAppMobileNoOption",
                                 "IndividualReferences.verifications.ReferenceCheck",
-                                "IndividualReferences"
+                                "IndividualReferences",
+                                "PhysicalAssets",
+                                "IndividualFinancials"
                             ],
                             "overrides": {
                                 "KYC": {
@@ -536,7 +673,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             "excludes": [
                                 "ContactInformation.whatsAppMobileNoOption",
                                 "IndividualReferences.verifications.ReferenceCheck",
-                                "IndividualReferences"
+                                "IndividualReferences",
+                                "PhysicalAssets",
+                                "IndividualFinancials"
                             ],
                             "overrides": {
                                 "KYC": {
@@ -601,7 +740,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "ContactInformation.whatsAppMobileNoOption",
                                 "IndividualReferences.verifications.ReferenceCheck",
                                 "IndividualReferences",
-                                "FamilyDetails.familyMembers.noOfDependents"
+                                "FamilyDetails.familyMembers.noOfDependents",
+                                "PhysicalAssets",
+                                "IndividualFinancials"
                             ],
                             "overrides": {
                                 "KYC": {
@@ -674,7 +815,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             "excludes": [
                                 "ContactInformation.whatsAppMobileNoOption",
                                 "IndividualReferences.verifications.ReferenceCheck",
-                                "IndividualReferences"
+                                "IndividualReferences",
+                                "PhysicalAssets",
+                                "IndividualFinancials"
                             ],
                             "overrides": {
                                 "KYC": {
@@ -691,7 +834,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "FamilyDetails": {
                                     "readonly": true,
-                                    "title": "HOUSEHOLD_DETAILS"
+                                    "title": "FAMILY_DETAILS"
                                 },
                                 "Liabilities": {
                                     "readonly": true
@@ -723,7 +866,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             "excludes": [
                                 "ContactInformation.whatsAppMobileNoOption",
                                 "IndividualReferences.verifications.ReferenceCheck",
-                                "IndividualReferences"
                             ],
                             "overrides": {
                                 "KYC": {
@@ -740,7 +882,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "FamilyDetails": {
                                     "readonly": true,
-                                    "title": "HOUSEHOLD_DETAILS"
+                                    "title": "FAMILY_DETAILS"
                                 },
                                 "Liabilities": {
                                     "readonly": true
@@ -772,7 +914,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             "excludes": [
                                 "ContactInformation.whatsAppMobileNoOption",
                                 "IndividualReferences.verifications.ReferenceCheck",
-                                "IndividualReferences"
+                                "IndividualReferences",
+                                "IndividualFinancials"
                             ],
                             "overrides": {
                                 "KYC": {
@@ -819,6 +962,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         },
                         "Rejected": {
                             "excludes": [
+                                "IndividualFinancials"
                             ],
                             "overrides": {
                                 "KYC": {
@@ -1392,11 +1536,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "ContactInformation.mailingDistrict",
                     "ContactInformation.mailingState",
 
-                    // "IndividualFinancials",
-                    // "IndividualFinancials.expenditures",
-                    // "IndividualFinancials.expenditures.expenditureSource",
-                    // "IndividualFinancials.expenditures.annualExpenses",
-                    // "IndividualFinancials.expenditures.frequency",
+                    "IndividualFinancials",
+                    "IndividualFinancials.expenditures",
+                    "IndividualFinancials.expenditures.expenditureSource",
+                    "IndividualFinancials.expenditures.annualExpenses",
+                    "IndividualFinancials.expenditures.frequency",
 
                     "FamilyDetails",
                     "FamilyDetails.familyMembers",
@@ -1461,8 +1605,27 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "BankAccounts.customerBankAccounts.bankStatements.noOfEmiChequeBounced",
                     "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto",
                     "BankAccounts.customerBankAccounts.isDisbersementAccount",
+//
+                    "PhysicalAssets",
+                    "PhysicalAssets.physicalAssets",
+                    "PhysicalAssets.physicalAssets.nameOfOwnedAsset",
+                    "PhysicalAssets.physicalAssets.vehicleModel",
+                    "PhysicalAssets.physicalAssets.registeredOwner",
+                    "PhysicalAssets.physicalAssets.ownedAssetValue",
+                    "PhysicalAssets.physicalAssets.unit",
 
-                   
+                    "IndividualReferences",
+                    "IndividualReferences.verifications",
+                    "IndividualReferences.verifications.referenceFirstName",
+                    "IndividualReferences.verifications.mobileNo",
+                    "IndividualReferences.verifications.occupation",
+                    "IndividualReferences.verifications.address",
+                    "IndividualReferences.verifications.ReferenceCheck",
+                    "IndividualReferences.verifications.ReferenceCheck.knownSince",
+                    "IndividualReferences.verifications.ReferenceCheck.relationship",
+                    "IndividualReferences.verifications.ReferenceCheck.opinion",
+                    "IndividualReferences.verifications.ReferenceCheck.financialStatus",
+                    "IndividualReferences.verifications.ReferenceCheck.customerResponse"
                 ];
 
             }
