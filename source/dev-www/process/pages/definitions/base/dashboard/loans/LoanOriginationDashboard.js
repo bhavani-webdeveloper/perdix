@@ -9,7 +9,8 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
         "title": "Loan Origination Dashboard",
         "iconClass": "fa fa-users",
         "items": [
-            "Page/Engine/base.dashboard.lead.ReadyForScreeningQueue",
+            "Page/Bundle/base.dashboard.loans.individual.screening.ScreeningInput",
+           // "Page/Engine/base.dashboard.lead.ReadyForScreeningQueue",
             "Page/Engine/base.dashboard.loans.individual.screening.ScreeningQueue",
             "Page/Engine/base.dashboard.loans.individual.screening.ScreeningReviewQueue",
             "Page/Engine/base.dashboard.loans.individual.screening.ApplicationQueue",  
