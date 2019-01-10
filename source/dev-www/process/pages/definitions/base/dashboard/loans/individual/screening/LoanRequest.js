@@ -763,7 +763,46 @@ define([],function(){
             function round(x) {
                 return Math.ceil(x);
               }
+            var computeEMI = function(model){
 
+                // Get the user's input from the form. Assume it is all valid.
+                // Convert interest from a percentage to a decimal, and convert from
+                // an annual rate to a monthly rate. Convert payment period in years
+                // to the number of monthly payments.
+    
+                if(model.loanAccount.loanAmount == '' || model.loanAccount.interestRate == '' || model.loanAccount.frequencyRequested == '' || model.loanAccount.tenure == '')
+                    return;
+    
+                var principal = model.loanAccount.loanAmount;
+                var interest = model.loanAccount.interestRate / 100 / 12;
+                var payments;
+                if (model.loanAccount.frequencyRequested == 'Yearly')
+                    payments = model.loanAccount.tenure * 12;
+                else if (model.loanAccount.frequencyRequested == 'Monthly')
+                    payments = model.loanAccount.tenure;
+    
+                // Now compute the monthly payment figure, using esoteric math.
+                var x = Math.pow(1 + interest, payments);
+                var monthly = (principal*x*interest)/(x-1);
+    
+                // Check that the result is a finite number. If so, display the results.
+                if (!isNaN(monthly) &&
+                    (monthly != Number.POSITIVE_INFINITY) &&
+                    (monthly != Number.NEGATIVE_INFINITY)) {
+    
+                    model.loanAccount.estimatedEmi = round(monthly);
+                    //document.loandata.total.value = round(monthly * payments);
+                    //document.loandata.totalinterest.value = round((monthly * payments) - principal);
+                }
+                // Otherwise, the user's input was probably invalid, so don't
+                // display anything.
+                else {
+                    model.loanAccount.estimatedEmi  = "";
+                    //document.loandata.total.value = "";
+                    //document.loandata.totalinterest.value = "";
+                }
+    
+            };
              var overridesFields = function (bundlePageObj) {
                 return {
                         "PreliminaryInformation.linkedAccountNumber": {
@@ -810,6 +849,39 @@ define([],function(){
                             "enumCode": "customerinfo_colctn_Pymt_type"
                         },
                         //over ride for ticket
+                        "LoanRecommendation.loanAmount":{
+                            title: "LOAN_AMOUNT",
+                            "orderNo":10,
+                            onChange:function(value,form,model){
+                                computeEMI(model);
+                            }
+                        },
+                        "LoanRecommendation.tenure":{
+                            title:"DURATION_IN_MONTHS",
+                            "orderNo":20,
+                            onChange:function(value,form,model){
+                                computeEMI(model);
+                            }
+                        },
+                        "LoanRecommendation.interestRate":{
+                            title:"INTEREST_RATE",
+                            "orderNo":30,
+                            onChange:function(value,form,model){
+                                computeEMI(model);
+                            }
+                        },
+                        "LoanRecommendation.processingFeePercentage":{
+                            title:"PROCESSING_FEES_IN_PERCENTAGE",
+                            "orderNo":50,
+                        },
+                        "LoanRecommendation.securityEmiRequired":{
+                            title:"COMMERCIAL_CIBIL_CHARGE",
+                            "orderNo":80,
+                        },
+                        "LoanRecommendation.commercialCibilCharge":{
+                            title:"SECURITY_EMI_REQUIRED",
+                            "orderNo":70,
+                        },
                         "PreliminaryInformation.tenureRequested": {
                             "required": true
                         },
@@ -915,14 +987,15 @@ define([],function(){
                     "LoanDocuments.loanDocuments.document",
                     "LoanDocuments.loanDocuments.documentId",
 
-                    // "LoanRecommendation",
-                    // "LoanRecommendation.loanAmount",
-                    // "LoanRecommendation.tenure",
-                    // "LoanRecommendation.interestRate",
-                    // "LoanRecommendation.estimatedEmi",
-                    // "LoanRecommendation.processingFeePercentage",
-                    // "LoanRecommendation.securityEmiRequired",
-                    // "LoanRecommendation.commercialCibilCharge",
+                    "LoanRecommendation",
+                    "LoanRecommendation.loanAmount",
+                    "LoanRecommendation.tenure",
+                    "LoanRecommendation.interestRate",
+                    "LoanRecommendation.estimatedEmi",
+                    "LoanRecommendation.processingFeePercentage",
+                    "LoanRecommendation.estimatedEmi1",
+                    "LoanRecommendation.securityEmiRequired",
+                    "LoanRecommendation.commercialCibilCharge",
                     // "LoanRecommendation.udf8",
                     // "LoanRecommendation.udf3",
 
@@ -1086,6 +1159,25 @@ define([],function(){
                                             }
                                         }
                                        
+                                    },
+                                    "LoanRecommendation":{
+                                        "items":{
+                                            "estimatedEmi":{
+                                                "key": "loanAccount.estimatedEmi",
+                                                "type": "amount",
+                                                "orderNo":40,
+                                                "title": "ESTIMATED_MAITREYA_EMI",
+                                                "readonly": true
+                                            },
+                                            "estimatedEmi1":{
+                                                "key": "loanAccount.estimatedEmi",
+                                                "type": "amount",
+                                                "orderNo":60,
+                                                "title": "EXPECTED_SECURITY_EMI",
+                                                "readonly": true
+                                            }
+                                        }
+
                                     },
                                     "NomineeDetails": {
                                         "type": "box",
