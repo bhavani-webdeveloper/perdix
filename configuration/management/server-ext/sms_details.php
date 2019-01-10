@@ -37,10 +37,9 @@ foreach ($frequencies as $frequency) {
             echo "<br/>reminder : ";
             print_r($reminder);
             $out_going_message = getenv('regular_repayment'.$frequency);
-
-            $out_going_message=str_replace('INSTALLMENT_AMOUNT', number_format($reminder->installment_amount,2) ,  $out_going_message);
+            $installment_amount =number_format($reminder->installment_amount,2);
+            $out_going_message=str_replace('INSTALLMENT_AMOUNT', $installment_amount ,  $out_going_message);
             $out_going_message=str_replace('INSTALLMENT_DATE',	$reminder->installment_date, $out_going_message);
-
             DB::table('sms_scheduler_details')->insert(
             ['customer_id' => $reminder->customer_id,
             'version' => 1, 
