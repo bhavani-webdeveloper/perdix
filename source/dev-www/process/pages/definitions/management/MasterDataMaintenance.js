@@ -89,6 +89,7 @@ irf.pageCollection.factory(irf.page("management.MasterDataMaintenance"), ["$log"
                             "type": "file",
                             "category": "ACH",
                             "subCategory": "cat2",
+                            "condition":"model.master.uploadNameValue",
                             "fileType": "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                             customHandle: function(file, progress, modelValue, form, model) {
                                 Maintenance.masterDataUpload(file, progress, {
