@@ -36,7 +36,7 @@ foreach ($frequencies as $frequency) {
         foreach ($reminders as $reminder) {
             echo "<br/>reminder : ";
             $out_going_message = getenv('regular_repayment'.$frequency);
-            $installment_amount =number_format($reminder->installment_amount,2);
+            $installment_amount =number_format($reminder->installment_amount,0);
             $out_going_message=str_replace('INSTALLMENT_AMOUNT', $installment_amount ,  $out_going_message);
             $out_going_message=str_replace('INSTALLMENT_DATE',	$reminder->installment_date, $out_going_message);
             $dbArray =      ['customer_id' => $reminder->customer_id,
