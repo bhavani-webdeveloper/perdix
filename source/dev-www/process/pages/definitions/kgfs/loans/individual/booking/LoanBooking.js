@@ -486,7 +486,7 @@ define([], function () {
                         search: function (inputModel, form, model, context) {
                             var deferred = $q.defer();
                             Queries.getLoanProductDetails(model.loanAccount.loanType, model.loanAccount.partnerCode, model.loanAccount.frequency).then(function(resp){
-                                for(var i = 0; i< resp.body.length;i++){
+                                for(var i = resp.body.length-1; i>= 0; i--){
                                     var date = moment(resp.body[i].expiry_date,"YYYY-MM-DD");
                                     var currentDate = moment(Utils.getCurrentDate(),"YYYY-MM-DD");
                                     if( date < currentDate)
