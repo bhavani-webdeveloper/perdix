@@ -138,9 +138,10 @@ define([], function () {
                     model.loanAccount.nominees.push({});
                 }
                 else {
-                    if(!initFlag)
+                    if(!initFlag){
                         model.loanAccount.nominees = [];
                         model.loanAccount.nominees.push({});
+                    }
                     }
                 if (typeof model.loanAccount.accountUserDefinedFields == "undefined") {
                     model.loanAccount.accountUserDefinedFields = {};
