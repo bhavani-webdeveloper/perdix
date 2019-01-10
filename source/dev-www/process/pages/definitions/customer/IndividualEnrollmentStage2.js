@@ -1389,7 +1389,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                             var obj={};
                             obj.assetType= res[i].asset;
                             obj.ownedAssetDetails=res[i].asset_details;
-                            obj.numberOfOwnedAsset=1;
+                            obj.numberOfOwnedAsset=0;
                             physicalAssets.push(obj);   
                         }
                       model.customer.physicalAssets=physicalAssets;
