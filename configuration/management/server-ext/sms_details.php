@@ -35,13 +35,11 @@ foreach ($frequencies as $frequency) {
 
         foreach ($reminders as $reminder) {
             echo "<br/>reminder : ";
-            print_r($reminder);
             $out_going_message = getenv('regular_repayment'.$frequency);
             $installment_amount =number_format($reminder->installment_amount,2);
             $out_going_message=str_replace('INSTALLMENT_AMOUNT', $installment_amount ,  $out_going_message);
             $out_going_message=str_replace('INSTALLMENT_DATE',	$reminder->installment_date, $out_going_message);
-            DB::table('sms_scheduler_details')->insert(
-            ['customer_id' => $reminder->customer_id,
+            $dbArray =      ['customer_id' => $reminder->customer_id,
             'version' => 1, 
             'product_transaction_id' => $reminder->loan_id.$reminder->installment_number,
             'mobile_no' => $reminder->mobile_phone,
@@ -50,8 +48,10 @@ foreach ($frequencies as $frequency) {
             'sms_type' => 'Transactional',
             'transaction_ref_no' => $reminder->mobile_phone,
             'out_going_message' => $out_going_message,
-            'text_message'=>$out_going_message]
-            );  
+            'text_message'=>$out_going_message];
+
+            DB::table('sms_scheduler_details')->insert($dbArray); 
+            print_r($dbArray); 
         }
     }catch(Exception $e){
         print_r($e);
