@@ -130,7 +130,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                         },
                         "ContactInformation.CustomerResidentialAddress.villageName": {
                             orderNo: 60,
-                            required: true,
+                            required: false,
                             "readonly": false,
                             type: "select",
                             "enumCode": "village",
