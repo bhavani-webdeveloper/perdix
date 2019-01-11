@@ -1663,23 +1663,34 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     model.loanCustomerRelationType =getLoanCustomerRelation(bundlePageObj.pageClass);
                     model.pageClass = bundlePageObj.pageClass;
                     model.currentStage = bundleModel.currentStage;
-                    model.enrolmentProcess.currentStage =  model.currentStage;
+                    if( model.currentStage=="FieldAppraisal"){
+
+                    }else{
+
+                        model.enrolmentProcess.currentStage =  model.currentStage;
+                        model.customer = model.enrolmentProcess.customer;
+                    }
                     /* End of setting data recieved from Bundle */
         
                     /* Setting data for the form */
-                    model.customer = model.enrolmentProcess.customer;
                     var branchId = SessionStore.getBranchId();
-                    if(branchId && !model.customer.customerBranchId)
+                    if(!model.customer){
+
+                    }
+
+                    else if(branchId && !model.customer.customerBranchId)
                         {
                             model.customer.customerBranchId = branchId;
                     };
 
                     /* End of setting data for the form */
                     model.UIUDF.family_fields.dependent_family_member = 0;
+                    if(model.customer){
                      _.each(model.customer.familyMembers, function(member) {
                         if (member.incomes && member.incomes.length == 0)
                             model.UIUDF.family_fields.dependent_family_member++;
                     });
+                }
 
                     /* Form rendering starts */
                     var self = this;
