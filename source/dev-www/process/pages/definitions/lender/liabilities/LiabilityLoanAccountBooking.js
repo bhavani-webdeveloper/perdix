@@ -250,7 +250,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     },
                     "LoanAmountDeduction.netDisbursementAmount": {
                         "required": true,
-                        "readonly":true
+                        "readonly":false
                     },
                     "LoanAmountDeduction.expectedDisbursementDate": {
                         "required": true
