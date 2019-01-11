@@ -1077,7 +1077,13 @@ define([],function(){
                     // AngularResourceService.getInstance().setInjector($injector);
 
                     /* Setting data recieved from Bundle */
-                    model.loanAccount = model.loanProcess.loanAccount;
+                    if(model.loanAccount.currentStage=="FieldAppraisal"){
+                       // model.loanAccount = model.loanAccount;
+                    }
+                    else{
+
+                        model.loanAccount = model.loanProcess.loanAccount;
+                    }
 
                     if (_.hasIn(model, 'loanAccount.loanCustomerRelations') &&
                         model.loanAccount.loanCustomerRelations!=null &&
@@ -1459,20 +1465,24 @@ define([],function(){
                     proceed: function(model, formCtrl, form, $event){
                         var trancheTotalAmount=0;
                         if(model.loanAccount.disbursementSchedules && model.loanAccount.disbursementSchedules.length){
-                            
-                            for (var i = model.loanAccount.disbursementSchedules.length - 1; i >= 0; i--) {
-                                model.loanAccount.disbursementSchedules[i].modeOfDisbursement = "CASH";
-                                trancheTotalAmount+=(model.loanAccount.disbursementSchedules[i].disbursementAmount || 0);
-                            }
-                            if (trancheTotalAmount > model.loanAccount.loanAmount){
-                                PageHelper.showProgress("loan-create","Total tranche amount is more than the Loan amount",5000);
-                                return false;
-                              }  
-                            
-                            if (trancheTotalAmount < model.loanAccount.loanAmount){
-                                PageHelper.showProgress("loan-create","Total tranche amount should match with the Loan amount",5000);
-                                return false;
-                            }
+                            var stage=model.loanProcess.applicantEnrolmentProcess.currentStage;
+                            var stageArray=["ScreeningReview","Application"];
+                            //if(stageArray.indexOf(stage)==-1){
+
+                                for (var i = model.loanAccount.disbursementSchedules.length - 1; i >= 0; i--) {
+                                    model.loanAccount.disbursementSchedules[i].modeOfDisbursement = "CASH";
+                                    trancheTotalAmount+=(model.loanAccount.disbursementSchedules[i].disbursementAmount || 0);
+                                }
+                                if (trancheTotalAmount > model.loanAccount.loanAmount){
+                                    PageHelper.showProgress("loan-create","Total tranche amount is more than the Loan amount",5000);
+                                    return false;
+                                  }  
+                                
+                                if (trancheTotalAmount < model.loanAccount.loanAmount){
+                                    PageHelper.showProgress("loan-create","Total tranche amount should match with the Loan amount",5000);
+                                    return false;
+                                }
+                            //}
                         
                         }
                         PageHelper.showProgress('enrolment', 'Updating Loan');
