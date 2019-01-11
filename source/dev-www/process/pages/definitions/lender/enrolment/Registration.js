@@ -59,7 +59,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     "LenderContactInformation.Address1.pincode": {
                         "resolver":"PincodeLOVConfiguration",
-                        "required": true,
+                        "required": false,
                         "orderNo":100
                     },
                     "LenderContactInformation.Address1.villageName": {
