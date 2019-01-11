@@ -172,10 +172,12 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource, Upload, $q, Pag
         '<div style="text-align : center">' + '<p>' + "" + '</p>' + '</div>' +
         '<div style="font-size:13px; width:95%; margin:auto">' + '<p>' + "Customer Id :" +'<span style="border-bottom: 1px solid black; width: 100%;">'+  repaymentInfo.customerId+ '</span>' + '</p>' + '</div>' + 
         '<div style="font-size:13px;width:95%; margin:auto">' + '<p>' + "Customer Name :"  + '<span style="border-bottom: 1px solid black;">'+repaymentInfo.customerName + '</span>'+'</p>' + '</div>' + 
+        '<div style="font-size:13px;width:95%; margin:auto">' + '<p>' + "Spouse Name :"  + '<span style="border-bottom: 1px solid black;"></span>'+'</p>' + '</div>' + 
         '<div style="font-size:13px;width:95%; margin:auto">' + '<p>' + "Account Number :"  + '<span style="border-bottom: 1px solid black;">'+repaymentInfo.accountNumber + '</span>'+'</p>' + '</div>' + 
         '<div style="font-size:13px;width:95%; margin:auto">' + '<p>' + "Demand Amount:"  + '<span style="border-bottom: 1px solid black;">'+repaymentInfo.installmentAmount + '</span>'+'</p>' + '</div>' + 
         '<div style="font-size:13px;width:95%; margin:auto">' + '<p>' + "Amount Paid :"  + '<span style="border-bottom: 1px solid black;">'+repaymentInfo.amountPaid + '</span>'+'</p>' + '</div>' + 
         '<div style="font-size:13px;width:95%; margin:auto">' + '<p>' + "Total PayOff Amount :"  + '<span style="border-bottom: 1px solid black;">'+repaymentInfo.notcollected + '</span>'+'</p>' + '</div>' + 
+        '<div style="font-size:13px;width:95%; margin:auto">' + '<p>' + "Demand Paid/Pending :"  + '<span style="border-bottom: 1px solid black;"></span>'+'</p>' + '</div>' + 
         '<br>';
         return printHtml;
     };
