@@ -51,14 +51,16 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ZonalRiskReview'
                 minimum: 1,
                 maximum: 1,
                 order: 52
-            }, {
-                pageName: 'loans.individual.screening.detail.PortfolioAnalysis',
-                title: 'CUSTOMER HISTORY',
-                pageClass: 'portfolio-analysis',
-                minimum: 1,
-                maximum: 1,
-                order: 55
-            },{
+            },
+            //  {
+            //     pageName: 'loans.individual.screening.detail.PortfolioAnalysis',
+            //     title: 'CUSTOMER HISTORY',
+            //     pageClass: 'portfolio-analysis',
+            //     minimum: 1,
+            //     maximum: 1,
+            //     order: 55
+            // },
+            {
                 pageName: 'loans.individual.screening.detail.LoanApplicationView',
                 title: 'Loan Recommendation',
                 pageClass: 'loan-recommendation',
@@ -263,19 +265,19 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ZonalRiskReview'
                             });
 
                             
-                                $this.bundlePages.push({
-                                    pageClass: 'portfolio-analysis',
-                                    model: {
-                                        customerUrn: res.urnNo,
-                                        cbModel: {
-                                            customerId: res.customerId,
-                                            loanId: bundleModel.loanId,
-                                            scoreName: 'RiskScore3',
-                                            customerDetail: bundleModel.customer_detail
-                                        }
+                                // $this.bundlePages.push({
+                                //     pageClass: 'portfolio-analysis',
+                                //     model: {
+                                //         customerUrn: res.urnNo,
+                                //         cbModel: {
+                                //             customerId: res.customerId,
+                                //             loanId: bundleModel.loanId,
+                                //             scoreName: 'RiskScore3',
+                                //             customerDetail: bundleModel.customer_detail
+                                //         }
                                         
-                                    }
-                                });
+                                //     }
+                                // });
 
                             $this.bundlePages.push({
                                 pageClass: 'loan-recommendation',
