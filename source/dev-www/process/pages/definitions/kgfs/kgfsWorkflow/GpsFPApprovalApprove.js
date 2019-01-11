@@ -580,6 +580,7 @@ define({
                             "customer": updatedModel.customer,
                             "action": updatedModel.action,
                             "referenceKey": updatedModel.workflow.customer.id,
+                            "remarks": updatedModel.workflow.remarks
                         };
                         if (updatedModel.action == "SENDBACK")
                             reqData.sendbackStage = "Init";
