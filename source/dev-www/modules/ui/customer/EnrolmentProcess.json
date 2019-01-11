@@ -1418,6 +1418,64 @@
             }
         }
     },
+    
+    "CurrentAssets":{
+        "type": "box",
+        "title": "STOCKS",
+        "items": {
+            "currentAssets":{
+                "key": "customer.currentAssets",
+                "type": "pivotarray",
+                "startEmpty": false,
+                "view": "fixed",
+                "addButtonExpr": " ('ADD'| translate ) + ' ' + (pivotValue | translate)",
+                "pivotFieldEnumCode": "stock_current_assets",
+                "pivotField": "assetCategory",
+                "title": "RAW_MATERIAL",
+                "items": {
+                    "description": {
+                        "key": "customer.currentAssets[].description",
+                        "title": "DESCRIPTION",
+                        "type": "string",
+                        "required": true
+                    },
+                    "assetType": {
+                        "key": "customer.currentAssets[].assetType",
+                        "title": "TYPE",
+                        "type": "select",
+                        "enumCode": "stock_asset_type",
+                        "parentEnumCode": "stock_current_assets",
+                        "parentValueExpr": "model.customer.currentAssets[arrayIndex].assetCategory",
+                        "required": true
+                    },
+                    "assetValue": {
+                        "key": "customer.currentAssets[].assetValue",
+                        "title": "PRESENT_VALUE",
+                        "required": true,
+                        "type": "amount"
+                    },
+                    "isHypothecated": {
+                        "key": "customer.currentAssets[].isHypothecated",
+                        "title": "IS_THE_MACHINE_HYPOTHECATED",
+                        "type": "radios",
+                        "titleMap": {
+                            "No": "No",
+                            "Yes": "Yes"
+                        }
+                    },
+                    "assetImageId": {
+                        "key": "customer.currentAssets[].assetImageId",
+                        "title": "IMAGE",
+                        "type": "file",
+                        "fileType": "image/*",
+                        "category": "Loan",
+                        "subCategory": "COLLATERALPHOTO"
+                    }
+                }
+            }
+        }
+    },
+  
     "FamilyDetails": {
         "type": "box",
         "title": "FAMILY_DETAILS",

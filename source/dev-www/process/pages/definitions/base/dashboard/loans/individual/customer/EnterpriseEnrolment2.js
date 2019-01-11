@@ -41,6 +41,79 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                         "required": false
                     },
                     //over ride for mandatory 
+                    
+                    "EnterpriseAssets":{
+                        "title": "Enterprise Assets",
+                    },
+                    "EnterpriseAssets.enterpriseAssets":{
+                        "title": "Enterprise Assets",
+                    },
+                    "EnterpriseAssets.enterpriseAssets.assetType":{
+                        "title": "Asset Type"
+                    },                    
+                    "EnterpriseAssets.enterpriseAssets.valueOfAsset":{
+                        "title": "Present Value"
+                    },
+                    //
+                //    "currentAssets": {
+                //        type: "box",
+                //        //condition: "model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
+                //        readonly: true,
+                //        title: "STOCKS",
+                //        items: [{
+                //            key: "customer.currentAssets",
+                //            type: "pivotarray",
+                //            startEmpty: false,
+                //            view: "fixed",
+                //            addButtonExpr: " ('ADD'| translate ) + ' ' + (pivotValue | translate)",
+                //            pivotFieldEnumCode: 'stock_current_assets',
+                //            pivotField: "assetCategory",
+                //            // title: "RAW_MATERIAL",
+                //            items: [{
+                //                key: "customer.currentAssets[].description",
+                //                title: "DESCRIPTION",
+                //                type: "string",
+                //            },
+                //            {
+                //                key: "customer.currentAssets[].assetType",
+                //                title: "TYPE",
+                //                type: "select",
+                //                enumCode: "stock_asset_type",
+                //                parentEnumCode: "stock_current_assets",
+                //                parentValueExpr: "model.customer.currentAssets[arrayIndex].assetCategory",
+                //            }, {
+                //                key: "customer.currentAssets[].assetValue",
+                //                title: "PRESENT_VALUE",
+                //                type: "amount",
+                //            }, {
+                //                key: "customer.currentAssets[].isHypothecated",
+                //                title: "IS_THE_MACHINE_HYPOTHECATED",
+                //                type: "radios",
+                //                titleMap: {
+                //                    "No": "No",
+                //                    "Yes": "Yes"
+                //                }
+                //            }, {
+                //                key: "customer.currentAssets[].hypothecatedToUs",
+                //                condition: "model.customer.currentAssets[arrayIndex].isHypothecated == 'No' ",
+                //                title: "HYPOTHECATED_TO_KINARA",
+                //                type: "radios",
+                //                titleMap: {
+                //                    "No": "No",
+                //                    "Yes": "Yes"
+                //                }
+                //            }, {
+                //                key: "customer.currentAssets[].assetImageId",
+                //                title: "IMAGE",
+                //                "type": "file",
+                //                "fileType": "image/*",
+                //                "category": "Loan",
+                //                "subCategory": "COLLATERALPHOTO"
+                //            }]
+
+                //        }]
+                //    },
+                    //
                     "EnterpriseInformation.companyOperatingSince":{
                         "required": true
                     },
@@ -411,6 +484,60 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "CommercialCBCheck.enterpriseBureauDetails.specialMentionAccount",
                     "CommercialCBCheck.enterpriseBureauDetails.standard",
                     "CommercialCBCheck.enterpriseBureauDetails.subStandard",
+
+
+                    "BuyerDetails",
+                    "BuyerDetails.buyerDetails",
+                    "BuyerDetails.buyerDetails.buyerName",
+                    "BuyerDetails.buyerDetails.customerSince",
+                    "BuyerDetails.buyerDetails.paymentDate",
+                    "BuyerDetails.buyerDetails.paymentFrequency",
+                    "BuyerDetails.buyerDetails.paymentTerms",
+                    "BuyerDetails.buyerDetails.product",
+                    "BuyerDetails.buyerDetails.sector",
+                    "BuyerDetails.buyerDetails.sector",
+                    "BuyerDetails.buyerDetails.subSector",
+                    "BuyerDetails.buyerDetails.receivablesOutstanding",
+
+
+                    "SuppliersDeatils",
+                    "SuppliersDeatils.supplierDetails",
+                    "SuppliersDeatils.supplierDetails.supplierName",
+                    "SuppliersDeatils.supplierDetails.supplierType",
+                    "SuppliersDeatils.supplierDetails.paymentTerms",
+                    "SuppliersDeatils.supplierDetails.amount",
+
+                    "EnterpriseAssets",
+                    "EnterpriseAssets.enterpriseAssets",
+                    "EnterpriseAssets.enterpriseAssets.assetType",                    
+                    "EnterpriseAssets.enterpriseAssets.valueOfAsset",  
+
+                    "Machinery",
+                    "Machinery.fixedAssetsMachinaries",
+                    "Machinery.fixedAssetsMachinaries.machineDescription",
+                    "Machinery.fixedAssetsMachinaries.manufacturerName",
+                    "Machinery.fixedAssetsMachinaries.machineType",
+                    "Machinery.fixedAssetsMachinaries.machineModel",
+                    "Machinery.fixedAssetsMachinaries.serialNumber",
+                    "Machinery.fixedAssetsMachinaries.purchasePrice",
+                    "Machinery.fixedAssetsMachinaries.machinePurchasedYear",
+                    "Machinery.fixedAssetsMachinaries.presentValue",
+                    "Machinery.fixedAssetsMachinaries.isTheMachineNew",
+                    "Machinery.fixedAssetsMachinaries.fundingSource",
+                    "Machinery.fixedAssetsMachinaries.isTheMachineHypothecated",
+                    "Machinery.fixedAssetsMachinaries.hypothecatedTo",
+                    "Machinery.fixedAssetsMachinaries.hypothecatedToUs",
+                    "Machinery.fixedAssetsMachinaries.machinePermanentlyFixedToBuilding",
+                    "Machinery.fixedAssetsMachinaries.machineBillsDocId",
+                    "Machinery.fixedAssetsMachinaries.machineImage",
+
+                    "CurrentAssets",
+                    "CurrentAssets.currentAssets",
+                    "CurrentAssets.currentAssets.description",
+                    "CurrentAssets.currentAssets.assetType",
+                    "CurrentAssets.currentAssets.assetValue",
+                    "CurrentAssets.currentAssets.isHypothecated",
+                    "CurrentAssets.currentAssets.assetImageId"
 
                 ];
             }
