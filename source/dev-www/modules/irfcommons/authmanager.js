@@ -173,6 +173,10 @@ function(Auth, Account, $q, $log, SessionStore, irfStorageService, AuthTokenHelp
 					AuthTokenHelper.clearAuthData();
 					deferred.resolve("SUCCESS");
 				}, function(httpRes){
+					removeUserData();
+					AuthTokenHelper.clearAuthData();
+					deferred.resolve("SUCCESS");
+					$log.info("Server Unreachable'")
 					deferred.reject(httpRes);
 				}
 			)

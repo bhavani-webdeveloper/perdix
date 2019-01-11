@@ -62,15 +62,18 @@ function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPop
 
         $scope.$on('server-connection-error', function(event, arg) {
             $scope.errors = $scope.errors || [];
-            if (arg === 408) {
-                $scope.errors.push({
-                    message: 'Connection timed out'
-                });
-            } else {
-                $scope.errors.push({
-                    message: 'Server Unreachable'
-                });
+            if(!SessionStore.session.offline ){
+                if (arg === 408) {
+                    $scope.errors.push({
+                        message: 'Connection timed out'
+                    });
+                } else {
+                    $scope.errors.push({
+                        message: 'Server Unreachable'
+                    });
+                }
             }
+           
         });
 
         $scope.breadcrumb = {

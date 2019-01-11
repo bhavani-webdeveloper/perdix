@@ -36,11 +36,14 @@ function($scope, authService, $log, $state, $stateParams, irfStorageService, Ses
 
 	$scope.$on('server-connection-error', function(event, arg) {
 		$scope.serverConnectionError = true;
-		if (arg === 408) {
-			$scope.errorMessage = 'Connection timed out';
-		} else {
-			$scope.errorMessage = 'Server Unreachable';
+		if(!SessionStore.session.offline){
+			if (arg === 408) {
+				$scope.errorMessage = 'Connection timed out';
+			} else {
+				$scope.errorMessage = 'Server Unreachable';
+			}
 		}
+		
 	});
 
 	var self = this;
