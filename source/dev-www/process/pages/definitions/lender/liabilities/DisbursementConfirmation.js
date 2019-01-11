@@ -11,7 +11,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
 
             var configFile = function () {
                 return {
-                }
+                }   
             }
             var overridesFields = function (bundlePageObj) {
                 return {
@@ -25,10 +25,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                         "required": true 
                     },
                     "DisbursementConfirmation.referenceNumber": {
-                        "required": true,
-                        "schema":{
-                            "pattern":"^[0-9a-zA-Z]{10}$"
-                        }
+                        "required": true
                     }
 
                 }

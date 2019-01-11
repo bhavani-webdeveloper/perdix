@@ -45,9 +45,11 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                 })
             }
             var calNetDisbAmount = function (model){
+                if(model.siteCode != "kinara"){
                 if(model.liabilityAccount.loanAmount != null && model.liabilityAccount.totalDeductions != null && model.liabilityAccount.securityAmount != null){
                     model.liabilityAccount.netDisbursementAmount = model.liabilityAccount.loanAmount - (model.liabilityAccount.totalDeductions + model.liabilityAccount.securityAmount) ;
                 }
+            }
             }
 
             var overridesFields = function(bundlePageObj) {
@@ -197,12 +199,12 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     },
                     "DisbursementDetails.markDown": {
                         "condition": "model.floatingRate",
-                        "required": true,
+                        "required": false,
                         "orderNo": 150
                     },
                     "DisbursementDetails.markUp": {
                         "condition": "model.floatingRate",
-                        "required": true,
+                        "required": false,
                         "orderNo": 160
                     },
                     "DisbursementDetails.interestCalculationMethod": {
@@ -247,8 +249,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                         }
                     },
                     "LoanAmountDeduction.netDisbursementAmount": {
-                        "required": true,
-                        "readonly":true
+                        "required": true
                     },
                     "LoanAmountDeduction.expectedDisbursementDate": {
                         "required": true
@@ -491,6 +492,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     model.auth_token= elementsConfig.fileUpload.authToken ;
                     console.log(model.auth_token)
                     var self = this;
+                    model.siteCode = SessionStore.getGlobalSetting('siteCode');
                     console.log(model);
                     var formRequest = {
                         "overrides": overridesFields(model),

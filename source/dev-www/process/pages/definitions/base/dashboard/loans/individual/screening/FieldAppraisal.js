@@ -20,7 +20,7 @@ irf.pageCollection.factory(irf.page('base.dashboard.loans.individual.screening.F
                         order:5
                     },
                     {
-                        pageName: 'customer.IndividualEnrolment2',
+                        pageName: 'base.dashboard.loans.individual.customer.IndividualEnrolment2',
                         title: 'APPLICANT',
                         pageClass: 'applicant',
                         minimum: 1,
@@ -44,7 +44,7 @@ irf.pageCollection.factory(irf.page('base.dashboard.loans.individual.screening.F
                         order:30
                     },
                     {
-                        pageName: 'customer.EnterpriseEnrolment2',
+                        pageName: 'base.dashboard.loans.individual.customer.EnterpriseEnrolment2',
                         title: 'BUSINESS',
                         pageClass: 'business',
                         minimum: 1,
@@ -60,7 +60,7 @@ irf.pageCollection.factory(irf.page('base.dashboard.loans.individual.screening.F
                     //     order:42
                     // },
                     {
-                        pageName: 'loans.individual.screening.LoanRequest',
+                        pageName: 'base.dashboard.loans.individual.screening.LoanRequest',
                         title: 'LOAN_REQUEST',
                         pageClass: 'loan-request',
                         minimum: 1,
