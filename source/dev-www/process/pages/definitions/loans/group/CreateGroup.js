@@ -541,7 +541,7 @@ define({
                             for (var idx = 0; idx < temp.length; idx++){
                                 if( 
                                 (model.group.jlgGroupMembers[context.arrayIndex].familyMembers[idx].age>=18 &&
-                                    model.group.jlgGroupMembers[context.arrayIndex].familyMembers[idx].age<=59 && (temp[idx].name !=model.group.jlgGroupMembers[context.arrayIndex].firstName) && temp[idx].relationShip.toLowerCase() != "self")
+                                    model.group.jlgGroupMembers[context.arrayIndex].familyMembers[idx].age<=59 && temp[idx].relationShip.toLowerCase() != "self")
                                 ) {
                                     familyMembers.push(model.group.jlgGroupMembers[context.arrayIndex].familyMembers[idx]);
                                 }
