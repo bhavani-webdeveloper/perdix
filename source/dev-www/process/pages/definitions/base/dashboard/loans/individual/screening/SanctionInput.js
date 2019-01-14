@@ -61,7 +61,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 order:40
                             },
                             {
-                                pageName: 'base.dashboard.loans.individual.loans.individual.screening.LoanRequest',
+                                pageName: 'base.dashboard.loans.individual.screening.LoanRequest',
                                 title: 'LOAN_REQUEST',
                                 pageClass: 'loan-request',
                                 minimum: 1,

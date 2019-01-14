@@ -556,7 +556,7 @@ define([],function(){
                         "Sanction": {
                             "excludes": [
                                 "ProposedUtilizationPlan",
-                                "DeductionsFromLoan",
+                                //"DeductionsFromLoan",
                                 "LoanMitigants",
                                 "LoanMitigants.deviationParameter",
                                 "PreliminaryInformation.actualAmountRequired",
@@ -653,9 +653,9 @@ define([],function(){
                                     "orderNo": 8,
                                     "readonly": true
                                 },
-                                "LoanSanction":{
-                                    "orderNo": 9
-                                },                          
+                                // "LoanSanction":{
+                                //     "orderNo": 9
+                                // },                          
                                 "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
                                    "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
                                 }     
@@ -824,7 +824,7 @@ define([],function(){
                 }
             }
             var computeEstimatedEMI = function(model){
-                var fee = 0;console.log("computeEstimatedEMI***");
+                var fee = 0;
                 if(model.loanAccount.commercialCibilCharge)
                     if(!_.isNaN(model.loanAccount.commercialCibilCharge))
                         fee+=model.loanAccount.commercialCibilCharge;
@@ -856,7 +856,7 @@ define([],function(){
                     (monthly != Number.NEGATIVE_INFINITY)) {
                         //model.loanAccount.expectedEmi=10;
                     model.loanAccount.expectedEmi = round(monthly);
-                    console.log(model.loanAccount.expectedEmi);
+                   // console.log(model.loanAccount.expectedEmi);
                     //document.loandata.total.value = round(monthly * payments);
                     //document.loandata.totalinterest.value = round((monthly * payments) - principal);
                 }
@@ -958,6 +958,45 @@ define([],function(){
                             "enumCode": "customerinfo_colctn_Pymt_type"
                         },
                         //over ride for ticket
+                        "LoanSanction.disbursementSchedules.tranchCondition": {
+                            type: "lov",
+                            autolov: true,
+                            title: "TRANCHE_CONDITION",
+                            bindMap: {
+                            },
+                            searchHelper: formHelper,
+                            search: function (inputModel, form, model, context) {
+
+                                var trancheConditions = formHelper.enum('tranche_conditions').data;
+                                var out = [];
+                                for (var i = 0; i < trancheConditions.length; i++) {
+                                    var t = trancheConditions[i];
+                                    var min = _.hasIn(t, "field1") ? parseInt(t.field1) - 1 : 0;
+                                    var max = _.hasIn(t, "field2") ? parseInt(t.field2) - 1 : 100;
+
+                                    if (context.arrayIndex >= min && context.arrayIndex <= max) {
+                                        out.push({
+                                            name: trancheConditions[i].name,
+                                            value: trancheConditions[i].value
+                                        })
+                                    }
+                                }
+                                return $q.resolve({
+                                    headers: {
+                                        "x-total-count": out.length
+                                    },
+                                    body: out
+                                });
+                            },
+                            onSelect: function (valueObj, model, context) {
+                                model.loanAccount.disbursementSchedules[context.arrayIndex].tranchCondition = valueObj.value;
+                            },
+                            getListDisplayItem: function (item, index) {
+                                return [
+                                    item.name
+                                ];
+                            }
+                        },
                         "LoanRecommendation":{
                             "title": "LOAN_RECOMMENDATION",
                             "condition": "model.currentStage=='ScreeningReview' || model.currentStage == 'Dedupe' || model.currentStage=='ApplicationReview'||model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='FieldAppraisal'||model.currentStage == 'ZonalRiskReview' || model.currentStage=='Sanction'"
@@ -1146,11 +1185,14 @@ define([],function(){
                     // "LoanRecommendation.udf8",
                     // "LoanRecommendation.udf3",
  
-                    // "LoanSanction",
-                    // "LoanSanction.sanctionDate",
-                    // "LoanSanction.numberOfDisbursements",
-                    // "LoanSanction.disbursementSchedules",
-                    // "LoanSanction.disbursementSchedules.disbursementAmount",
+                     "LoanSanction",
+                     "LoanSanction.sanctionDate",
+                     "LoanSanction.numberOfDisbursements",
+                     "LoanSanction.disbursementSchedules",
+                     "LoanSanction.disbursementSchedules.disbursementAmount",
+                     "LoanSanction.disbursementSchedules.trancheNumber",
+                     "LoanSanction.disbursementSchedules.tranchCondition",
+                    // loanAccount.disbursementSchedules[].disbursementAmount,
 
                     "AdditionalLoanInformation",
                     "AdditionalLoanInformation.estimatedDateOfCompletion",
