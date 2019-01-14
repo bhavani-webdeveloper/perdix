@@ -1663,13 +1663,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     model.loanCustomerRelationType =getLoanCustomerRelation(bundlePageObj.pageClass);
                     model.pageClass = bundlePageObj.pageClass;
                     model.currentStage = bundleModel.currentStage;
-                    if( model.currentStage=="FieldAppraisal"){
+                    // if( model.currentStage=="FieldAppraisal"){
 
-                    }else{
+                    // }else{
 
                         model.enrolmentProcess.currentStage =  model.currentStage;
                         model.customer = model.enrolmentProcess.customer;
-                    }
+                   // }
                     /* End of setting data recieved from Bundle */
         
                     /* Setting data for the form */
@@ -1765,7 +1765,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "items": [
                                         {
                                             "type": "button",
-                                            "title": "UPDATE_ENROLMENT",
+                                            "title": "UPDATE",
                                             "onClick": "actions.proceed(model, formCtrl, form, $event)"
                                         }
                                     ]

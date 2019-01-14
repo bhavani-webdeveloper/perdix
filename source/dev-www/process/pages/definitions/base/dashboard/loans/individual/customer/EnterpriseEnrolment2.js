@@ -1170,10 +1170,56 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     }
                                     
                                 }
-                            },   
+                            },  
+                            "Application": {
+                                "excludes": [
+                                    "ProxyIndicators"
+                                ],
+                                "overrides": {
+                                    "EnterpriseInformation": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseInformation.rentLeaseStatus": {
+                                        "schema": {
+                                             "enumCode": "rent_lease_status"
+                                        },
+                                        "required": true,
+                                        "condition": "model.customer.enterprise.ownership.toLowerCase() =='rental' || model.customer.enterprise.ownership.toLowerCase() =='leased' "
+                                    },
+                                    "EnterpriseInformation.rentLeaseAgreement": {
+                                        "condition": "model.customer.udf.userDefinedFieldValues.udf1 == 'Available' ",
+                                        "orderNo":142,
+                                        "required": true
+
+                                    },
+                                    "CommercialCBCheck": {
+                                        "orderNo": 11,
+                                        "readonly": true
+                                    },
+                                    "EnterpriseFinancials.incomeThroughSales": {
+                                        "title": "SALES_INFO_DETAILS"
+                                    },
+                                    "Liabilities": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseAssets": {
+                                        "readonly": true
+                                    },
+                                    "BankAccounts": {
+                                        "readonly": true
+                                    },
+                                    "ContactInformation": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseReferences": {
+                                        "readonly": true
+                                    }
+                                    
+                                }
+                            }, 
                             "ApplicationReview":{
                                 "excludes": [
-                                    
+                                    "ProxyIndicators"
                                 ],
                                 "overrides": {
                                     "EnterpriseInformation": {
@@ -1239,9 +1285,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 // "EnterpriseFinancials.marginDetails",                        
                                 // "EnterpriseFinancials.rawMaterialExpenses"
                              ],
-                            "overrides": {//EnterpriseAssets
+                            "overrides": {
                                 "ProxyIndicators":{
-                                    "readonly":true
+                                    "readonly":false
                                 },
                                 "Machinery":{
                                     "readonly":true
@@ -1443,16 +1489,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
 
 
                     /* Setting data for the form */
-                    if( model.currentStage=="FieldAppraisal"){
+                    // if( model.currentStage=="FieldAppraisal"){
 
-                    }else{
+                    // }else{
                     model.customer = model.enrolmentProcess.customer;
                     var branchId = SessionStore.getBranchId();
                     if(branchId && !model.customer.customerBranchId)
                         {
                             model.customer.customerBranchId = branchId;
                     };
-                }
+                //}
                     /* End of setting data for the form */
                     console.log("model information");
                     console.log(model);
