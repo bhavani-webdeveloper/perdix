@@ -1148,7 +1148,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "CommercialCBCheck": {
                                         "orderNo": 11,
-                                        "readonly": true
+                                        "readonly": false
                                     },
                                     "EnterpriseFinancials.incomeThroughSales": {
                                         "title": "SALES_INFO_DETAILS"
