@@ -78,12 +78,16 @@ define({
                                 }
                             }
                         },
-                        "applicantName": {
+                       "applicantName": {
                             "title": "APPLICANT_NAME",
                             "type": "string"
                         },
                         "businessName": {
                             "title": "BUSINESS_NAME",
+                            "type": "string"
+                        },
+                        "customerId": {
+                            "title": "CUSTOMER_ID",
                             "type": "string"
                         },
                         "urn": {
@@ -97,7 +101,11 @@ define({
                         "cityTownVillage": {
                             "title": "CITY_TOWN_VILLAGE",
                             "type": "string"
-                        }
+                        },
+                        "pincode": {
+                            "title": "PIN_CODE",
+                            "type": "string"
+                        },
                     },
                     "required": []
                 },
@@ -111,6 +119,7 @@ define({
                     return IndividualLoan.search({
                         'stage': 'Screening',
                         'branchName': branch,
+                        'enterprisePincode': searchOptions.pincode,
                         'applicantName': searchOptions.applicantName,
                         'area': searchOptions.area,
                         'status': searchOptions.status,
@@ -148,7 +157,8 @@ define({
                             item.applicantName,
                             item.customerName,
                             item.area,
-                            item.villageName
+                            item.villageName,
+                            item.enterprisePincode,
                         ]
                     },
                     getTableConfig: function() {
@@ -177,6 +187,9 @@ define({
                         }, {
                             title: 'CITY_TOWN_VILLAGE',
                             data: 'villageName'
+                        },{
+                            title: 'PIN_CODE',
+                            data: 'enterprisePincode'
                         }]
                     },
                     getActions: function() {
