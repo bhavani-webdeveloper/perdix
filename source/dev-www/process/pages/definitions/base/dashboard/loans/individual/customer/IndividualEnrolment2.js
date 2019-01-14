@@ -47,7 +47,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "HouseVerification.houseVerificationPhoto",
                                 "HouseVerification.date",
                                 "PhysicalAssets",
-                                "IndividualReferences"
+                                "IndividualReferences",
+                                "References"
                             ],
                             "overrides": {
                                 "KYC": {
@@ -178,7 +179,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "HouseVerification.houseVerificationPhoto",
                                 "HouseVerification.date",
                                 "PhysicalAssets",
-                                "IndividualReferences"
+                                "IndividualReferences",
+                                "References"
                             ],
                             "overrides": {
                                 "KYC": {
@@ -366,7 +368,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "HouseVerification.date",
                                 "HouseVerification.place",
                                 "PhysicalAssets",
-                                "IndividualReferences"
+                                "IndividualReferences",
+                                "References"
                             ]
                         },
                         "Appraisal": {
@@ -376,7 +379,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualReferences",
                                 "FamilyDetails.familyMembers.noOfDependents",
                                 "PhysicalAssets",
-                                "IndividualFinancials"
+                                "IndividualFinancials",
+                                "References"
                             ],
                             "overrides": {
                                 "KYC": {
@@ -547,7 +551,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualReferences.verifications.ReferenceCheck",
                                 "IndividualReferences",
                                 "PhysicalAssets",
-                                "IndividualFinancials"
+                                "IndividualFinancials",
+                                "References"
                             ],
                             "overrides": {
                                 "KYC": {
@@ -609,7 +614,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualReferences.verifications.ReferenceCheck",
                                 "IndividualReferences",
                                 "PhysicalAssets",
-                                "IndividualFinancials"
+                                "IndividualFinancials",
+                                "References"
                             ],
                             "overrides": {
                                 "KYC": {
@@ -675,7 +681,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualReferences.verifications.ReferenceCheck",
                                 "IndividualReferences",
                                 "PhysicalAssets",
-                                "IndividualFinancials"
+                                "IndividualFinancials",
+                                "References"
                             ],
                             "overrides": {
                                 "KYC": {
@@ -742,7 +749,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualReferences",
                                 "FamilyDetails.familyMembers.noOfDependents",
                                 "PhysicalAssets",
-                                "IndividualFinancials"
+                                "IndividualFinancials",
+                                "References"
                             ],
                             "overrides": {
                                 "KYC": {
@@ -817,7 +825,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualReferences.verifications.ReferenceCheck",
                                 "IndividualReferences",
                                 "PhysicalAssets",
-                                "IndividualFinancials"
+                                "IndividualFinancials",
+                                "References"
                             ],
                             "overrides": {
                                 "KYC": {
@@ -907,7 +916,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "BankAccounts.customerBankAccounts":{
                                     "readonly": true
-                                }
+                                },
+                                "References": {
+                                    "readonly": true
+                                },
                             }
                         },
                         "Sanction": {
@@ -957,7 +969,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "BankAccounts.customerBankAccounts":{
                                     "readonly": true
-                                }
+                                },
+                                "References": {
+                                    "readonly": true
+                                },
                             }
                         },
                         "Rejected": {
@@ -1155,7 +1170,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "IndividualReferences.verifications.customerResponse": {
                                     "required": true
-                                }
+                                },
+                                "References": {
+                                    "readonly": true
+                                },
                             }
                         }
                     },
@@ -1183,6 +1201,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "IndividualReferences": {
                                     "readonly": false
+                                },
+                                "References": {
+                                    "readonly": true
                                 },
                                 "TrackDetails": {
                                     "readonly": false
@@ -1662,14 +1683,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "References.verifications.referenceFirstName",
                     "References.verifications.mobileNo",
                     "References.verifications.address",
-                    "References.verifications.knownSince",
-                    "References.verifications.goodsSold",
-                    "References.verifications.goodsBought",
-                    "References.verifications.paymentTerms",
-                    "References.verifications.modeOfPayment",
-                    "References.verifications.outstandingPayable",
-                    "References.verifications.outstandingReceivable",
-                    "References.verifications.customerResponse",
+                    "References.verifications.ReferenceCheck",
+                    "References.verifications.ReferenceCheck.knownSince",
+                    "References.verifications.ReferenceCheck.goodsSold",
+                    "References.verifications.ReferenceCheck.goodsBought",
+                    "References.verifications.ReferenceCheck.paymentTerms",
+                    "References.verifications.ReferenceCheck.modeOfPayment",
+                    "References.verifications.ReferenceCheck.outstandingPayable",
+                    "References.verifications.ReferenceCheck.outstandingReceivable",
+                    "References.verifications.ReferenceCheck.customerResponse",
 
 
                 ];
@@ -1796,30 +1818,30 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "title": "REFERENCES",
                                     "orderNo":2500,
                                     //"condition": "model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
-                                    "items": [
-                                        {
+                                    "items": {
+                                        "verifications" : {
                                             key:"customer.verifications",
                                             title:"REFERENCES",
                                             type: "array",
-                                            items:[
-                                                {
+                                            items:{
+                                                "relationship" : {
                                                     key:"customer.verifications[].relationship",
                                                     title:"REFERENCE_TYPE",
                                                     type:"select",
                                                     required:"true",
                                                     enumCode: "business_reference_type"
                                                 },
-                                                 {
+                                                "businessName" : {
                                                     key:"customer.verifications[].businessName",
                                                     title:"BUSINESS_NAME",
                                                     type:"string"
                                                 },
-                                                {
+                                                "referenceFirstName" : {
                                                     key:"customer.verifications[].referenceFirstName",
                                                     title:"CONTACT_PERSON_NAME",
                                                     type:"string"
                                                 },
-                                                {
+                                                "mobileNo" : {
                                                     key:"customer.verifications[].mobileNo",
                                                     title:"CONTACT_NUMBER",
                                                     type:"string",
@@ -1847,52 +1869,52 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                     title:"SELF_REPORTED_INCOME",
                                                     type:"number"
                                                 }*/,
-                                                {
+                                                "address" : {
                                                     key:"customer.verifications[].address",
                                                     type:"textarea"
                                                 },
-                                                {
+                                                "ReferenceCheck" : {
                                                 type: "fieldset",
                                                 title: "REFERENCE_CHECK",
                                                 //"condition": "model.currentStage=='FieldAppraisal'",
-                                                items: [
+                                                items: {
                                                     /*,
                                                     {
                                                         key:"customer.verifications[].remarks",
                                                         title:"REMARKS",
                                                     },*/
-                                                    {
+                                                    "knownSince" : {
                                                         key:"customer.verifications[].knownSince",
                                                         required:true
                                                     },
-                                                    {
+                                                    "goodsSold" : {
                                                         key:"customer.verifications[].goodsSold",
                                                         "condition": "model.customer.verifications[arrayIndex].relationship=='Business Material Suppliers'"
                                                     },
-                                                    {
+                                                    "goodsBought" : {
                                                         key:"customer.verifications[].goodsBought",
                                                         "condition": "model.customer.verifications[arrayIndex].relationship=='Business Buyer'"
                                                     },
-                                                    {
+                                                    "paymentTerms" : {
                                                         key:"customer.verifications[].paymentTerms",
                                                         type:"select",
                                                         "title":"payment_tarms",
                                                         enumCode: "payment_terms"
                                                     },
-                                                    {
+                                                    "modeOfPayment" : {
                                                         key:"customer.verifications[].modeOfPayment",
                                                         type:"select",
                                                         enumCode: "payment_mode"
                                                     },
-                                                    {
+                                                    "outstandingPayable" : {
                                                         key:"customer.verifications[].outstandingPayable",
                                                         "condition": "model.customer.verifications[arrayIndex].relationship=='Business Material Suppliers'"
                                                     },
-                                                    {
+                                                    "outstandingReceivable" : {
                                                         key:"customer.verifications[].outstandingReceivable",
                                                         "condition": "model.customer.verifications[arrayIndex].relationship=='Business Buyer'"
                                                     },
-                                                    {
+                                                    "customerResponse" : {
                                                         key:"customer.verifications[].customerResponse",
                                                         title:"CUSTOMER_RESPONSE",
                                                         type:"select",
@@ -1905,11 +1927,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                                         name: "Negative"
                                                                     }]
                                                     }
-                                                ]
                                                 }
-                                             ]
+                                                }
+                                            }
                                         },
-                                    ]
+                                    }
                                 },
                             },
                             "additions": [
