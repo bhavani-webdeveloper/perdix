@@ -30,7 +30,7 @@ define({
                 },
                 paginationOptions: {
                     "getItemsPerPage": function(response, headers) {
-                        return 100;
+                        return 6;
                     },
                     "getTotalItemsCount": function(response, headers) {
                         return headers['x-total-count']
@@ -43,6 +43,17 @@ define({
                     itemCallback: function(item, index) {},
                     getItems: function(response, headers) {
                         if (response != null && response.length && response.length != 0) {
+                            var temp = [];
+                            for (var i=0;i<response.length;i++){
+                                if(response[i].jlgGroup == null || typeof response[i].jlgGroup == 'undefined')
+                                // temp.push({
+                                //     "urnNo":response[i].jlgGroupMember.urnNo,
+                                //     "id":response[i].jlgGroup.id
+                                // });
+                                {
+                                    console.log(i);
+                                }
+                            }
                             return response;
                         }
                         return [];
