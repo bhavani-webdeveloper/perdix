@@ -1119,6 +1119,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 "additions": [
                                     {
                                         "type": "actionbox",
+                                       // "condition": "model.customer.currentStage == 'Application'",
+                                       "condition": "model.customer.id",
+                                        "orderNo": 1200,
+                                        "items": [
+                                            {
+                                                "type": "submit",
+                                                "title": "COMPLETE_ENROLMENT"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "actionbox",
                                         "condition": "!model.customer.currentStage",
                                         "orderNo": 1200,
                                         "items": [
@@ -1209,7 +1221,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     }
                 },
                 form: [
-
+                   
                 ],
                 schema: function() {
                     return Enrollment.getSchema().$promise;
