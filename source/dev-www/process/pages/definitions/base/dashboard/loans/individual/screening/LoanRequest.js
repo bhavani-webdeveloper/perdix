@@ -62,7 +62,7 @@ define([],function(){
                                 "LoanMitigants",
                                 "DeductionsFromLoan",
                                 "LoanMitigants",
-                    "LoanMitigants.deviationParameter",
+                                "LoanMitigants.deviationParameter",
                                 "AdditionalLoanInformation",
                                 "NomineeDetails",
                                 "PreliminaryInformation.expectedPortfolioInsurancePremium",
@@ -561,7 +561,8 @@ define([],function(){
                                 "LoanMitigants.deviationParameter",
                                 "PreliminaryInformation.actualAmountRequired",
                                 "PreliminaryInformation.fundsFromDifferentSources",
-                                "NomineeDetails.nominees.nomineeButton"                  
+                                "NomineeDetails.nominees.nomineeButton", 
+                                "AdditionalLoanInformation.productCategory",                  
                             ],
                             "overrides": {
                                 "PreliminaryInformation": {
@@ -601,8 +602,10 @@ define([],function(){
                                 },                          
                                 "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
                                    "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
-                                }     
-                                    
+                                },     
+                                "LoanRecommendation":{
+                                    "readonly": true
+                                }, 
                             }
                         },
                         "ScreeningReview":{
@@ -613,7 +616,9 @@ define([],function(){
                                 "LoanMitigants.deviationParameter",
                                 "PreliminaryInformation.actualAmountRequired",
                                 "PreliminaryInformation.fundsFromDifferentSources",
-                                "NomineeDetails.nominees.nomineeButton"                  
+                                "NomineeDetails.nominees.nomineeButton"   ,
+                                "LoanRecommendation.securityEmiRequired",
+                                "LoanMitigants.loanMitigantsByParameter",               
                             ],
                             "overrides": {
                                 "PreliminaryInformation": {
@@ -662,11 +667,13 @@ define([],function(){
                             "excludes": [
                                 "ProposedUtilizationPlan",
                                 "DeductionsFromLoan",
-                                "LoanMitigants",
-                                "LoanMitigants.deviationParameter",
+                                // "LoanMitigants",
+                                // "LoanMitigants.deviationParameter",
                                 "PreliminaryInformation.actualAmountRequired",
                                 "PreliminaryInformation.fundsFromDifferentSources",
-                                "NomineeDetails.nominees.nomineeButton"                  
+                                "NomineeDetails.nominees.nomineeButton" ,
+                                "LoanRecommendation.securityEmiRequired",
+                                "LoanMitigants.loanMitigantsByParameter",                        
                             ],
                             "overrides": {
                                 "PreliminaryInformation": {
@@ -709,6 +716,108 @@ define([],function(){
                                 }     
                                     
                             }
+                        },
+                        "Application":{
+                            "excludes": [
+                                "LoanMitigants.deviationParameter",
+                            ],
+                            "overrides": {
+                                "NomineeDetails.nominees.nomineeFirstName":{
+                                    "required":true
+                                },
+                                "NomineeDetails.nominees.nomineeGender":{
+                                    "required":true
+                                },
+                                "NomineeDetails.nominees.nomineeDOB":{
+                                    "required":true
+                                },
+                                "NomineeDetails.nominees.nomineeDoorNo":{
+                                    "required":true
+                                },
+                                "NomineeDetails.nominees.nomineeRelationship":{
+                                    "required":true
+                                },
+                                "NomineeDetails.nominees.nomineePincode":{
+                                    "required":true
+                                }
+                            }
+                        },
+                        "FieldAppraisal":{
+                            "excludes":[
+                                "LoanRecommendation.securityEmiRequired",
+                                "LoanMitigants.deviationParameter",
+                            ],
+                            "overrides": {
+                                "NomineeDetails.nominees.nomineeFirstName":{
+                                    "required":true
+                                },
+                                "NomineeDetails.nominees.nomineeGender":{
+                                    "required":true
+                                },
+                                "NomineeDetails.nominees.nomineeDOB":{
+                                    "required":true
+                                },
+                                "NomineeDetails.nominees.nomineeDoorNo":{
+                                    "required":true
+                                },
+                                "NomineeDetails.nominees.nomineeRelationship":{
+                                    "required":true
+                                },
+                                "NomineeDetails.nominees.nomineePincode":{
+                                    "required":true
+                                }
+                            }
+                        },
+                        "SanctionInput":{
+
+                        },
+                        "ZonalRiskReview":{
+                            "excludes":[
+                                "LoanRecommendation.securityEmiRequired"
+                            ]
+                        },
+                        "FieldAppraisalReview":{
+                            "excludes":[
+                                "LoanMitigants.loanMitigantsByParameter",
+                            ],
+                            "overrides":{
+                                "AdditionalLoanInformation": {
+                                    "readonly": true
+                                },
+                            }
+                        },
+                        "CentralRiskReview":{
+
+                        },
+                        "Rejected":{
+                            "overrides":{
+                                "AdditionalLoanInformation": {
+                                    "readonly": true
+                                },
+                            }
+                        },
+                        "loanView":{
+                            "overrides":{
+                                "AdditionalLoanInformation": {
+                                    "readonly": true
+                                },
+                            }
+                        },
+                        "ZonalRiskReview":{
+                            "excludes":[
+                                "LoanMitigants.loanMitigantsByParameter",
+                            ],
+                            "overrides":{
+                                "AdditionalLoanInformation": {
+                                    "readonly": true
+                                },
+                            }
+                        },
+                        "Dedupe":{
+                            "excludes": [
+                                "LoanRecommendation.securityEmiRequired",
+                                "LoanMitigants.loanMitigantsByParameter",                
+                            ],
                         }
                     }
  
@@ -849,6 +958,10 @@ define([],function(){
                             "enumCode": "customerinfo_colctn_Pymt_type"
                         },
                         //over ride for ticket
+                        "LoanRecommendation":{
+                            "title": "LOAN_RECOMMENDATION",
+                            "condition": "model.currentStage=='ScreeningReview' || model.currentStage == 'Dedupe' || model.currentStage=='ApplicationReview'||model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='FieldAppraisal'||model.currentStage == 'ZonalRiskReview' || model.currentStage=='Sanction'"
+                        },
                         "LoanRecommendation.loanAmount":{
                             title: "LOAN_AMOUNT",
                             "orderNo":10,
@@ -871,16 +984,47 @@ define([],function(){
                             }
                         },
                         "LoanRecommendation.processingFeePercentage":{
-                            title:"PROCESSING_FEES_IN_PERCENTAGE",
+                            "title":"PROCESSING_FEES_IN_PERCENTAGE",
                             "orderNo":50,
                         },
                         "LoanRecommendation.securityEmiRequired":{
-                            title:"COMMERCIAL_CIBIL_CHARGE",
+                            "title":"SECURITY_EMI_REQUIRED",
                             "orderNo":80,
+                            "condition": "model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'||model.currentStage == 'Rejected'||model.currentStage == 'loanView' || model.currentStage=='Sanction'",
                         },
                         "LoanRecommendation.commercialCibilCharge":{
-                            title:"SECURITY_EMI_REQUIRED",
+                            "title":"COMMERCIAL_CIBIL_CHARGE",
                             "orderNo":70,
+                        },
+
+                       
+                        "AdditionalLoanInformation":{
+                            "title":"ADDITIONAL_LOAN_INFORMATION",
+                           // "condition": "model.currentStage=='Sanction' || model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisalReview' || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'||model.currentStage == 'ZonalRiskReview'",
+                          //  readonly:true
+                        },
+                        "AdditionalLoanInformation":{
+                            "title":"ADDITIONAL_LOAN_INFORMATION",
+                           // "condition": "model.currentStage=='Application' || model.currentStage=='FieldAppraisal' || model.currentStage == 'SanctionInput'||model.currentStage == 'ZonalRiskReview'",
+                        },
+                        // "AdditionalLoanInformation":{
+                        //     "title":"ADDITIONAL_LOAN_INFORMATION",
+                        //     //condition: "model.currentStage !=  'Application'",
+                        //     "condition": "model.currentStage =='Application' || model.currentStage=='FieldAppraisal' || model.currentStage == 'SanctionInput' ||model.currentStage == 'ZonalRiskReview' || model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisalReview' ||model.currentStage=='Sanction' || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview' ||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
+                        // },
+                        "AdditionalLoanInformation.productCategory":{
+                            key: "loanAccount.productCategory",
+                            title:"PRODUCT_TYPE",
+                            readonly:true,
+                            condition:"model.currentStage!='Application' && model.currentStage!='FieldAppraisal'"
+                        },
+                        "AdditionalLoanInformation.productCategory":{
+                            key: "loanAccount.productCategory",
+                            title:"PRODUCT_TYPE",
+                            required:true,
+                            type:"select",
+                            enumCode:"loan_product_category",
+                            condition:"model.currentStage=='Application' || model.currentStage=='FieldAppraisal'"
                         },
                         "PreliminaryInformation.tenureRequested": {
                             "required": true
@@ -972,16 +1116,19 @@ define([],function(){
                      "DeductionsFromLoan.expectedProcessingFeePercentage",
                      "DeductionsFromLoan.expectedCommercialCibilCharge",
                      "DeductionsFromLoan.estimatedEmi",
- 
-                    // "LoanMitigants",
-                    // "LoanMitigants.deviationParameter",
-                    // "LoanMitigants.deviationParameter.mitigants",
-                    // "LoanMitigants.deviationParameter.mitigants.mitigantsName",
-                    // "LoanMitigants.deviationParameter.mitigants.mitigantsName.sectionSelected",
-                    // "LoanMitigants.deviationParameter.mitigants.mitigantsName.sectionSelected.selected",
-                    // "LoanMitigants.deviationParameter.mitigants.mitigantsName.sectionMitigantName",
-                    // "LoanMitigants.deviationParameter.mitigants.mitigantsName.sectionMitigantName.mitigantName",
- 
+
+                    "LoanMitigants",
+                    "LoanMitigants.deviationParameter",
+                    "LoanMitigants.deviationParameter.mitigants",
+                    "LoanMitigants.deviationParameter.mitigants.mitigantsName",
+                    "LoanMitigants.deviationParameter.mitigants.mitigantsName.sectionSelected",
+                    "LoanMitigants.deviationParameter.mitigants.mitigantsName.sectionSelected.selected",
+                    "LoanMitigants.deviationParameter.mitigants.mitigantsName.sectionMitigantName",
+                    "LoanMitigants.deviationParameter.mitigants.mitigantsName.sectionMitigantName.mitigantName",
+                    "LoanMitigants.loanMitigantsByParameter",
+                    "LoanMitigants.loanMitigantsByParameter.Mitigants",
+
+
                     "LoanDocuments",
                     "LoanDocuments.loanDocuments",
                     "LoanDocuments.loanDocuments.document",
@@ -1004,15 +1151,15 @@ define([],function(){
                     // "LoanSanction.numberOfDisbursements",
                     // "LoanSanction.disbursementSchedules",
                     // "LoanSanction.disbursementSchedules.disbursementAmount",
- 
-                    // "AdditionalLoanInformation",
-                    // "AdditionalLoanInformation.estimatedDateOfCompletion",
-                    // "AdditionalLoanInformation.productCategory",
-                    // "AdditionalLoanInformation.customerSignDateExpected",
-                    // "AdditionalLoanInformation.proposedHires",
-                    // "AdditionalLoanInformation.percentageIncreasedIncome",
-                    // "AdditionalLoanInformation.percentageInterestSaved",
- 
+
+                    "AdditionalLoanInformation",
+                    "AdditionalLoanInformation.estimatedDateOfCompletion",
+                    "AdditionalLoanInformation.productCategory",
+                    "AdditionalLoanInformation.customerSignDateExpected",
+                    "AdditionalLoanInformation.proposedHires",
+                    "AdditionalLoanInformation.percentageIncreasedIncome",
+                    "AdditionalLoanInformation.percentageInterestSaved",
+
                     // "CollateralDetails",
                     // "CollateralDetails.collateral",
                     // "CollateralDetails.collateral.collateralDescription",
@@ -1028,21 +1175,21 @@ define([],function(){
                     // "CollateralDetails.collateral.electricityAvailable",
                     // "CollateralDetails.collateral.spaceAvailable",
                     // "CollateralDetails.collateral.collateral1FilePath",
- 
-                    // "NomineeDetails",                    
-                    // "NomineeDetails.nominees",
-                    // "NomineeDetails.nominees.nomineeFirstName",
-                    // "NomineeDetails.nominees.nomineeGender",
-                    // "NomineeDetails.nominees.nomineeDOB",
-                    // "NomineeDetails.nominees.nomineeButton",
-                    // "NomineeDetails.nominees.nomineeDoorNo",
-                    // "NomineeDetails.nominees.nomineeLocality",
-                   // "NomineeDetails.nominees.nomineeStreet",
-                    // "NomineeDetails.nominees.nomineePincode",
-                    // "NomineeDetails.nominees.nomineeDistrict",
-                    // "NomineeDetails.nominees.nomineeState",
-                    // "NomineeDetails.nominees.nomineeRelationship",
- 
+
+                    "NomineeDetails",                    
+                    "NomineeDetails.nominees",
+                    "NomineeDetails.nominees.nomineeFirstName",
+                    "NomineeDetails.nominees.nomineeGender",
+                    "NomineeDetails.nominees.nomineeDOB",
+                    "NomineeDetails.nominees.nomineeButton",
+                    "NomineeDetails.nominees.nomineeDoorNo",
+                    "NomineeDetails.nominees.nomineeLocality",
+                    "NomineeDetails.nominees.nomineeStreet",
+                    "NomineeDetails.nominees.nomineePincode",
+                    "NomineeDetails.nominees.nomineeDistrict",
+                    "NomineeDetails.nominees.nomineeState",
+                    "NomineeDetails.nominees.nomineeRelationship",
+
                     "PostReview",
                     "PostReview.action",
                     "PostReview.proceed",
@@ -1078,7 +1225,8 @@ define([],function(){
  
                     /* Setting data recieved from Bundle */
                     model.loanAccount = model.loanProcess.loanAccount;
- 
+                    model.currentStage = model.loanAccount.currentStage;
+
                     if (_.hasIn(model, 'loanAccount.loanCustomerRelations') &&
                         model.loanAccount.loanCustomerRelations!=null &&
                         model.loanAccount.loanCustomerRelations.length > 0) {
@@ -1179,25 +1327,43 @@ define([],function(){
                                         }
  
                                     },
-                                    "NomineeDetails": {
-                                        "type": "box",
-                                        "title": "NOMINEE_DETAILS",
-                                        "orderNo": 300,
+                                    // "NomineeDetails": {
+                                    //     "type": "box",
+                                    //     "title": "NOMINEE_DETAILS",
+                                    //     "orderNo": 300,
+                                    //     "items": {
+                                    //         "nominees": {
+                                    //             "key": "loanAccount.nominees",
+                                    //             "type": "array",
+                                    //             "notitle": "true",
+                                    //             "view": "fixed",
+                                    //             "add": null,
+                                    //             "remove": null,
+                                    //             "items": {
+                                    //                 "nomineeButton": {
+                                    //                     "type": "button",
+                                    //                     "title": "NOMINEE_ADDRESS_APPLICANT",
+                                    //                     "onClick": "actions.nomineeAddress(model, formCtrl, form, $event)"
+                                    //                 }
+                                    //             }
+                                    //         }
+                                    //     }
+                                    // },
+                                    "LoanMitigants":{
                                         "items": {
-                                            "nominees": {
-                                                "key": "loanAccount.nominees",
-                                                "type": "array",
-                                                "notitle": "true",
-                                                "view": "fixed",
-                                                "add": null,
-                                                "remove": null,
-                                                "items": {
-                                                    "nomineeButton": {
-                                                        "type": "button",
-                                                        "title": "NOMINEE_ADDRESS_APPLICANT",
-                                                        "onClick": "actions.nomineeAddress(model, formCtrl, form, $event)"
-                                                    }
-                                                }
+                                            "loanMitigantsByParameter":{
+                                                key: "loanMitigantsByParameter",
+                                                type: "array",
+                                                startEmpty: true,
+                                                add:null,
+                                                remove:null,
+                                                "view":"fixed",
+                                                "titleExpr": "model.loanMitigantsByParameter[arrayIndex].Parameter",
+                                                items: [{
+                                                    key: "loanMitigantsByParameter[].Mitigants",
+                                                    "type":"section",
+                                                    "html": "<div ng-bind-html='model.loanMitigantsByParameter[arrayIndex].Mitigants'></div>    "
+                                                }]
                                             }
                                         }
                                     },
@@ -1414,7 +1580,11 @@ define([],function(){
  
                     },
                     holdButton: function(model, formCtrl, form, $event){
-                        $log.info("Inside save()");
+                        $log.info("Inside HoldButton()");
+                        if (model.loanProcess.remarks==null || model.loanProcess.remarks ==""){
+                            PageHelper.showProgress("update-loan", "Remarks is mandatory", 3000);
+                            return false;
+                        }
                          if (!model.loanAccount.id){
                             model.loanAccount.isRestructure = false;
                             model.loanAccount.documentTracking = "PENDING";
@@ -1439,7 +1609,11 @@ define([],function(){
                             });
  
                     },
-                    sendBack: function(model, formCtrl, form, $event){                       
+                    sendBack: function(model, formCtrl, form, $event){   
+                        if (model.loanProcess.remarks==null || model.review.remarks =="" || model.review.targetStage1==null || model.review.targetStage1==""){
+                            PageHelper.showProgress("update-loan", "Send to Stage / Remarks is mandatory", 3000);
+                            return false;
+                        }                    
                         PageHelper.showLoader();
                         model.loanProcess.sendBack()
                             .finally(function () {
@@ -1457,24 +1631,28 @@ define([],function(){
                             });
                     },
                     proceed: function(model, formCtrl, form, $event){
-                        var trancheTotalAmount=0;
-                        if(model.loanAccount.disbursementSchedules && model.loanAccount.disbursementSchedules.length){
-                           
-                            for (var i = model.loanAccount.disbursementSchedules.length - 1; i >= 0; i--) {
-                                model.loanAccount.disbursementSchedules[i].modeOfDisbursement = "CASH";
-                                trancheTotalAmount+=(model.loanAccount.disbursementSchedules[i].disbursementAmount || 0);
-                            }
-                            if (trancheTotalAmount > model.loanAccount.loanAmount){
-                                PageHelper.showProgress("loan-create","Total tranche amount is more than the Loan amount",5000);
-                                return false;
-                              } 
-                            
-                            if (trancheTotalAmount < model.loanAccount.loanAmount){
-                                PageHelper.showProgress("loan-create","Total tranche amount should match with the Loan amount",5000);
-                                return false;
-                            }
-                       
+                        if (model.loanProcess.remarks==null || model.loanProcess.remarks ==""){
+                            PageHelper.showProgress("update-loan", "Remarks is mandatory", 3000);
+                            return false;
                         }
+                        // var trancheTotalAmount=0;
+                        // if(model.loanAccount.disbursementSchedules && model.loanAccount.disbursementSchedules.length){
+                            
+                        //     for (var i = model.loanAccount.disbursementSchedules.length - 1; i >= 0; i--) {
+                        //         model.loanAccount.disbursementSchedules[i].modeOfDisbursement = "CASH";
+                        //         trancheTotalAmount+=(model.loanAccount.disbursementSchedules[i].disbursementAmount || 0);
+                        //     }
+                        //     if (trancheTotalAmount > model.loanAccount.loanAmount){
+                        //         PageHelper.showProgress("loan-create","Total tranche amount is more than the Loan amount",5000);
+                        //         return false;
+                        //       }  
+                            
+                        //     if (trancheTotalAmount < model.loanAccount.loanAmount){
+                        //         PageHelper.showProgress("loan-create","Total tranche amount should match with the Loan amount",5000);
+                        //         return false;
+                        //     }
+                        
+                        // }
                         PageHelper.showProgress('enrolment', 'Updating Loan');
                         model.loanProcess.proceed()
                             .finally(function () {
@@ -1492,9 +1670,15 @@ define([],function(){
                             });
                     },
                     reject: function(model, formCtrl, form, $event){
-                        if(PageHelper.isFormInvalid(formCtrl)) {
+                        // if(PageHelper.isFormInvalid(formCtrl)) {
+                        //     return false;
+                        // }
+                        if (model.loanProcess.remarks==null || model.review.remarks =="" || 
+                            model.loanAccount.rejectReason==null ||model.loanAccount.rejectReason=="")
+                        {
+                            PageHelper.showProgress("update-loan", "Reject Reason / Remarks is mandatory", 3000);
                             return false;
-                        }
+                        }  
                         PageHelper.showLoader();
                          model.loanProcess.reject()
                             .finally(function () {

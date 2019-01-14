@@ -26,10 +26,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                          "title": "HYPOTHECATED_TO_IREP"
 
                     },
-                    "EnterpriseInformation.businessHistory": {
-                         "title": "BUSINESSINFO_BUSINESS_OWNERSHIP",
-                         "enumCode": "businessinfo_business_ownershi"
-                    },
+                    // "EnterpriseInformation.businessHistory": {
+                    //      "title": "BUSINESSINFO_BUSINESS_OWNERSHIP",
+                    //      "enumCode": "businessinfo_business_ownershi"
+                    // },
                     "EnterpriseInformation.enterpriseRegistrations.registrationType": {
                          "enumCode": "business_registration_type",
                          "required": false
@@ -39,6 +39,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     },
                     "EnterpriseInformation.enterpriseRegistrations.registrationNumber":{
                         "required": false
+                    },
+                    "EnterpriseInformation.enterpriseRegistrations.documentId":{
+                        "required":true
+                    },
+                    "EnterpriseInformation.isGSTAvailable": {
+                        "required": true
+                    },
+                    "EnterpriseInformation.referredBy":{
+                        "required":true
                     },
                     //over ride for mandatory 
                     
@@ -132,9 +141,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseInformation.businessActivity":{
                         "required": true
                     },
-                    "EnterpriseInformation.businessSector":{
-                        "required": true
-                    },
                     "EnterpriseInformation.businessSubsector":{
                         "required": true,
                         "resolver":"BusinessSubsectorLOVConfiguration"
@@ -181,10 +187,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                          "orderNo":142
                     },
                     "EnterpriseInformation.businessSector":{
+                        "required": true,
                         onChange: function(modelValue, form, model) {
                             model.customer.enterprise.businessSubsector=null;
                         }
                     },
+                    // "EnterpriseAssets":{
+                    //     "title":"ENTERPRICE_ASSETS"
+                    // },
                     "EnterpriseFinancials": {
                         "orderNo": 50
                     },
@@ -307,12 +317,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                          "type": "string",
                          "title": "CONFIRMED_ACCOUNT_NUMBER",
                          "required": true
-                    }                         
+                    },
+                    "BankAccounts.customerBankAccounts.bankStatements": {
+                        "titleExpr": "moment(model.customer.customerBankAccounts[arrayIndexes[0]].bankStatements[arrayIndexes[1]].startMonth).format('MMMM YYYY') + ' ' + ('STATEMENT_DETAILS' | translate)",
+                        "titleExprLocals": {moment: window.moment},
+                    },                         
                }
             }
             var repositoryAdditions = function(bundlePageObj){
                return {
-                    // "EnterpriseInformation": {
+                                    // "EnterpriseInformation": {
                     //      "items": {
                     //           "lastFiledItr": {
                     //                "key": "customer.udf.userDefinedDateFieldValues.udfDate2",
@@ -361,7 +375,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseInformation.entityId",
                     "EnterpriseInformation.urnNo",
                     "EnterpriseInformation.centreId",
-                    //"EnterpriseInformation.oldCustomerId",
+                    "EnterpriseInformation.oldCustomerId",
                     "EnterpriseInformation.firstName",
                     "EnterpriseInformation.referredBy",
                     "EnterpriseInformation.referredName",
@@ -371,7 +385,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseInformation.photoImageId",
                     "EnterpriseInformation.ownership",                    
                     "EnterpriseInformation.businessConstitution",
-                    //"EnterpriseInformation.businessHistory",
+                    "EnterpriseInformation.businessHistory",
                     //"EnterpriseInformation.noOfPartners",
                     "EnterpriseInformation.anyPartnerOfPresentBusiness",
                     "EnterpriseInformation.partnershipDissolvedDate",
@@ -463,7 +477,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "Liabilities.liabilities.interestOnly",
                     "Liabilities.liabilities.interestRate",
                     "Liabilities.liabilities.proofDocuments",
-
+                    
                     "EnterpriseFinancials",
                     "EnterpriseFinancials.monthlyTurnover",
                     "EnterpriseFinancials.monthlyBusinessExpenses",
@@ -1128,6 +1142,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             },  
                             "ScreeningReview":{
                                 "excludes": [
+                                    "currentAssets",
+                                    "EnterpriseAssets",
                                 ],
                                 "overrides": {
                                     "EnterpriseInformation": {
@@ -1148,7 +1164,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "CommercialCBCheck": {
                                         "orderNo": 11,
-                                        "readonly": true
+                                        "readonly": false
                                     },
                                     "EnterpriseFinancials.incomeThroughSales": {
                                         "title": "SALES_INFO_DETAILS"
@@ -1249,6 +1265,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "readonly": true
                                     },
                                     "EnterpriseAssets": {
+                                        "readonly": true
+                                    },
+                                    "currentAssets": {
                                         "readonly": true
                                     },
                                     "BankAccounts": {
@@ -1464,7 +1483,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             }
                         },
                             // "Televerification": {
-                            
+                           
 
                         }
 
