@@ -63,6 +63,21 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseAssets.enterpriseAssets.valueOfAsset":{
                         "title": "Present Value"
                     },
+                    "CurrentAssets":{
+                        "orderNo":100
+                    },
+                    "EnterpriseAssets":{
+                        "orderNo":110 
+                    },
+                    "BuyerDetails":{
+                        "orderNo":120 
+                    },
+                    "SuppliersDeatils":{
+                        "orderNo":130 
+                    },
+                    "Machinery":{
+                        "orderNo":140 
+                    },
                     //
                 //    "currentAssets": {
                 //        type: "box",
@@ -1741,7 +1756,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "type": "actionbox",
                                        // "condition": "model.customer.currentStage == 'Application'",
                                        "condition": "model.customer.id",
-                                        "orderNo": 1200,
+                                        "orderNo": 220,
                                         "items": [
                                             {
                                                 "type": "submit",
@@ -1752,7 +1767,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     {
                                         "type": "actionbox",
                                         "condition": "!model.customer.currentStage",
-                                        "orderNo": 1200,
+                                        "orderNo": 220,
                                         "items": [
                                             {
                                                 "type": "submit",
@@ -1763,7 +1778,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     {
                                         "type": "actionbox",
                                         "condition": "model.customer.currentStage && (model.currentStage=='KYC' || model.currentStage == 'Appraisal' || model.currentStage=='Screening')",
-                                        "orderNo": 1300,
+                                        "orderNo": 220,
                                         "items": [
                                             {
                                                 "type": "button",
