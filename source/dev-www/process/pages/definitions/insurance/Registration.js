@@ -548,7 +548,8 @@ var getIncludes = function (model) {
 
                         // $q.all start
                         PageHelper.showLoader();
-                        if (!model.insurancePolicyDetailsDTO.fpOverrideRequested && !(model.isBiometricValidated)){
+                        
+                        if (!(model.insurancePolicyDetailsDTO.fpOverrideRequested) && !(model.customer.isBiometricValidated)){
                             PageHelper.hideLoader();
                             PageHelper.showErrors({
                                 data:{

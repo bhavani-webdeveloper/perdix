@@ -536,15 +536,16 @@ define({
                         "searchHelper": formHelper,
                         "search": function(inputModel, form, model, context) {
                             var familyMembers = [];
-                            if(model.group.jlgGroupMembers[context.arrayIndex].familyMembers)
-                            for (var idx = 0; idx < model.group.jlgGroupMembers[context.arrayIndex].familyMembers.length; idx++){
+                            if(model.group.jlgGroupMembers[context.arrayIndex].familyMembers){
+                                var temp = model.group.jlgGroupMembers[context.arrayIndex].familyMembers;
+                            for (var idx = 0; idx < temp.length; idx++){
                                 if( 
                                 (model.group.jlgGroupMembers[context.arrayIndex].familyMembers[idx].age>=18 &&
-                                    model.group.jlgGroupMembers[context.arrayIndex].familyMembers[idx].age<=59)
+                                    model.group.jlgGroupMembers[context.arrayIndex].familyMembers[idx].age<=59 && temp[idx].relationShip.toLowerCase() != "self")
                                 ) {
                                     familyMembers.push(model.group.jlgGroupMembers[context.arrayIndex].familyMembers[idx]);
                                 }
-                            }
+                            }}
                             return $q.resolve({
                                 headers: {
                                     "x-total-count": familyMembers.length

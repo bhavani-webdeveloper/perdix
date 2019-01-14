@@ -34,6 +34,23 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
         var branchName = SessionStore.getBranch();
         var centres = SessionStore.getCentres();
 
+        var lsqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.LoanSanctionQueue"];
+        if (lsqMenu) {
+            IndividualLoan.search({
+                'stage':  'Sanction',
+                'enterprisePincode': '',
+                'applicantName': '',
+                'area': '',
+                'villageName': '',
+                'customerName': '',
+                'page': 1,
+                'per_page': 1,
+            }).$promise.then(function(response, headerGetter) {
+                lsqMenu.data = Number(response.headers['x-total-count']);
+            }, function() {
+                lsqMenu.data = '-';
+            });
+        }
        var rfqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.lead.ReadyForScreeningQueue"];
         
        if (rfqMenu) rfqMenu.data = 0;

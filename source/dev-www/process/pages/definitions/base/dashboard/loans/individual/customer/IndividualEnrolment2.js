@@ -913,8 +913,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "Sanction": {
                             "excludes": [
                                 "ContactInformation.whatsAppMobileNoOption",
-                                "IndividualReferences.verifications.ReferenceCheck",
-                                "IndividualReferences",
+                                //"IndividualReferences.verifications.ReferenceCheck",
+                                //"IndividualReferences",
                                 "IndividualFinancials"
                             ],
                             "overrides": {
@@ -1421,6 +1421,30 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     // "IndividualInformation.caste": {
                     //     "enumCode": "caste"
                     // },
+                    "Liabilities.liabilities.startDate":{
+                        "onChange":function(modelValue, form, model, formCtrl, $event){
+                            var index;
+                            if(moment(modelValue).isAfter(new Date())){
+                                modelValue=null;
+                                index=form.key[2];
+                                model.customer.liabilities[index].startDate=null;
+                                PageHelper.showProgress("pre-save-validation", "Start date can not be a future date.", 3000);
+                                return false;
+                            }
+                        }
+                    },
+                    "Liabilities.liabilities.maturityDate":{
+                        "onChange":function(modelValue, form, model, formCtrl, event){
+                            var index;
+                            if(moment(modelValue).isBefore(new Date())){
+                                modelValue=null;
+                                index=form.key[2];
+                                model.customer.liabilities[index].maturityDate=null;
+                                PageHelper.showProgress("pre-save-validation", "Maturity date can not be a past date.", 3000);
+                                return false;
+                            }
+                        }
+                    },
                     "HouseVerification.rentLeaseStatus": {
                         "schema": {
                             "enumCode": "rent_lease_status"
@@ -1462,7 +1486,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "condition": "!model.customer.mailSameAsResidence",
                         "readonly": true
                     },
-                
+                    "FamilyDetails.familyMembers.incomes.incomeEarned":{
+                        "title":"INCOME_EARNED",
+                        "key": "customer.familyMembers[].incomes[].incomeEarned",
+                        "type":"amount"
+                    }
                 }
             }
             var getIncludes = function (model) {
@@ -1614,18 +1642,36 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "PhysicalAssets.physicalAssets.ownedAssetValue",
                     "PhysicalAssets.physicalAssets.unit",
 
-                    "IndividualReferences",
-                    "IndividualReferences.verifications",
-                    "IndividualReferences.verifications.referenceFirstName",
-                    "IndividualReferences.verifications.mobileNo",
-                    "IndividualReferences.verifications.occupation",
-                    "IndividualReferences.verifications.address",
-                    "IndividualReferences.verifications.ReferenceCheck",
-                    "IndividualReferences.verifications.ReferenceCheck.knownSince",
-                    "IndividualReferences.verifications.ReferenceCheck.relationship",
-                    "IndividualReferences.verifications.ReferenceCheck.opinion",
-                    "IndividualReferences.verifications.ReferenceCheck.financialStatus",
-                    "IndividualReferences.verifications.ReferenceCheck.customerResponse"
+                    // "IndividualReferences",
+                    // "IndividualReferences.verifications",
+                    // "IndividualReferences.verifications.referenceFirstName",
+                    // "IndividualReferences.verifications.mobileNo",
+                    // "IndividualReferences.verifications.occupation",
+                    // "IndividualReferences.verifications.address",
+                    // "IndividualReferences.verifications.ReferenceCheck",
+                    // "IndividualReferences.verifications.ReferenceCheck.knownSince",
+                    // "IndividualReferences.verifications.ReferenceCheck.relationship",
+                    // "IndividualReferences.verifications.ReferenceCheck.opinion",
+                    // "IndividualReferences.verifications.ReferenceCheck.financialStatus",
+                    // "IndividualReferences.verifications.ReferenceCheck.customerResponse",
+
+                    "References",
+                    "References.verifications",
+                    "References.verifications.relationship",
+                    "References.verifications.businessName",
+                    "References.verifications.referenceFirstName",
+                    "References.verifications.mobileNo",
+                    "References.verifications.address",
+                    "References.verifications.knownSince",
+                    "References.verifications.goodsSold",
+                    "References.verifications.goodsBought",
+                    "References.verifications.paymentTerms",
+                    "References.verifications.modeOfPayment",
+                    "References.verifications.outstandingPayable",
+                    "References.verifications.outstandingReceivable",
+                    "References.verifications.customerResponse",
+
+
                 ];
 
             }
@@ -1663,23 +1709,34 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     model.loanCustomerRelationType =getLoanCustomerRelation(bundlePageObj.pageClass);
                     model.pageClass = bundlePageObj.pageClass;
                     model.currentStage = bundleModel.currentStage;
-                    model.enrolmentProcess.currentStage =  model.currentStage;
+                    // if( model.currentStage=="FieldAppraisal"){
+
+                    // }else{
+
+                        model.enrolmentProcess.currentStage =  model.currentStage;
+                        model.customer = model.enrolmentProcess.customer;
+                   // }
                     /* End of setting data recieved from Bundle */
         
                     /* Setting data for the form */
-                    model.customer = model.enrolmentProcess.customer;
                     var branchId = SessionStore.getBranchId();
-                    if(branchId && !model.customer.customerBranchId)
+                    if(!model.customer){
+
+                    }
+
+                    else if(branchId && !model.customer.customerBranchId)
                         {
                             model.customer.customerBranchId = branchId;
                     };
 
                     /* End of setting data for the form */
                     model.UIUDF.family_fields.dependent_family_member = 0;
+                    if(model.customer){
                      _.each(model.customer.familyMembers, function(member) {
                         if (member.incomes && member.incomes.length == 0)
                             model.UIUDF.family_fields.dependent_family_member++;
                     });
+                }
 
                     /* Form rendering starts */
                     var self = this;
@@ -1733,13 +1790,133 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "title":"RENT_LEASE_AGREEMENT_VALID_TILL"
                                         }
                                     }
-                                }
+                                },
+                                "References":{
+                                    "type": "box",
+                                    "title": "REFERENCES",
+                                    "orderNo":2500,
+                                    //"condition": "model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
+                                    "items": [
+                                        {
+                                            key:"customer.verifications",
+                                            title:"REFERENCES",
+                                            type: "array",
+                                            items:[
+                                                {
+                                                    key:"customer.verifications[].relationship",
+                                                    title:"REFERENCE_TYPE",
+                                                    type:"select",
+                                                    required:"true",
+                                                    enumCode: "business_reference_type"
+                                                },
+                                                 {
+                                                    key:"customer.verifications[].businessName",
+                                                    title:"BUSINESS_NAME",
+                                                    type:"string"
+                                                },
+                                                {
+                                                    key:"customer.verifications[].referenceFirstName",
+                                                    title:"CONTACT_PERSON_NAME",
+                                                    type:"string"
+                                                },
+                                                {
+                                                    key:"customer.verifications[].mobileNo",
+                                                    title:"CONTACT_NUMBER",
+                                                    type:"string",
+                                                    inputmode: "number",
+                                                    numberType: "tel",
+                                                    "schema": {
+                                                         "pattern": "^[0-9]{10}$"
+                                                    }
+                                                }/*,
+                                                {
+                                                    key:"customer.verifications[].businessSector",
+                                                    title:"BUSINESS_SECTOR",
+                                                    type:"select",
+                                                    enumCode: "businessSector"
+                                                },
+                                                {
+                                                    key:"customer.verifications[].businessSubSector",
+                                                    title:"BUSINESS_SUBSECTOR",
+                                                    type:"select",
+                                                    enumCode: "businessSubSector",
+                                                    parentEnumCode: "businessSector"
+                                                },
+                                                {
+                                                    key:"customer.verifications[].selfReportedIncome",
+                                                    title:"SELF_REPORTED_INCOME",
+                                                    type:"number"
+                                                }*/,
+                                                {
+                                                    key:"customer.verifications[].address",
+                                                    type:"textarea"
+                                                },
+                                                {
+                                                type: "fieldset",
+                                                title: "REFERENCE_CHECK",
+                                                //"condition": "model.currentStage=='FieldAppraisal'",
+                                                items: [
+                                                    /*,
+                                                    {
+                                                        key:"customer.verifications[].remarks",
+                                                        title:"REMARKS",
+                                                    },*/
+                                                    {
+                                                        key:"customer.verifications[].knownSince",
+                                                        required:true
+                                                    },
+                                                    {
+                                                        key:"customer.verifications[].goodsSold",
+                                                        "condition": "model.customer.verifications[arrayIndex].relationship=='Business Material Suppliers'"
+                                                    },
+                                                    {
+                                                        key:"customer.verifications[].goodsBought",
+                                                        "condition": "model.customer.verifications[arrayIndex].relationship=='Business Buyer'"
+                                                    },
+                                                    {
+                                                        key:"customer.verifications[].paymentTerms",
+                                                        type:"select",
+                                                        "title":"payment_tarms",
+                                                        enumCode: "payment_terms"
+                                                    },
+                                                    {
+                                                        key:"customer.verifications[].modeOfPayment",
+                                                        type:"select",
+                                                        enumCode: "payment_mode"
+                                                    },
+                                                    {
+                                                        key:"customer.verifications[].outstandingPayable",
+                                                        "condition": "model.customer.verifications[arrayIndex].relationship=='Business Material Suppliers'"
+                                                    },
+                                                    {
+                                                        key:"customer.verifications[].outstandingReceivable",
+                                                        "condition": "model.customer.verifications[arrayIndex].relationship=='Business Buyer'"
+                                                    },
+                                                    {
+                                                        key:"customer.verifications[].customerResponse",
+                                                        title:"CUSTOMER_RESPONSE",
+                                                        type:"select",
+                                                        required:true,
+                                                        titleMap: [{
+                                                                        value: "positive",
+                                                                        name: "positive"
+                                                                    },{
+                                                                        value: "Negative",
+                                                                        name: "Negative"
+                                                                    }]
+                                                    }
+                                                ]
+                                                }
+                                             ]
+                                        },
+                                    ]
+                                },
                             },
                             "additions": [
                                 {
                                     "type": "actionbox",
                                     "condition": "!model.customer.currentStage",
-                                    "orderNo": 1000,
+                                    "orderNo": 2700,
                                     "items": [
                                         {
                                             "type": "submit",
@@ -1750,11 +1927,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 {
                                     "type": "actionbox",
                                     "condition": "model.customer.id",
-                                    "orderNo": 1200,
+                                    "orderNo": 2800,
                                     "items": [
                                         {
                                             "type": "button",
-                                            "title": "UPDATE_ENROLMENT",
+                                            "title": "UPDATE",
                                             "onClick": "actions.proceed(model, formCtrl, form, $event)"
                                         }
                                     ]

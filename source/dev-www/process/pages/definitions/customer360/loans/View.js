@@ -4,13 +4,13 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
             var pageConfig = {};
             var isPageConfigResolve = false;
             var isApplicableValue = function(param){
-                var value = pageConfig != null ? (pageConfig.length> 0 ? ((pageConfig[param] != null) ? pageConfig[param] : false) : false ): true;
+                var value = pageConfig != null ? (Object.keys(pageConfig).length > 0 ? ((pageConfig[param] != null) ? pageConfig[param] : false) : false ): false;
                 return value;
             }
             var getRolePageConfig = function(param){
                 var deferred = $q.defer();
                 if(isPageConfigResolve){
-                    var value = pageConfig != null ? (pageConfig.length> 0 ? ((pageConfig[param] != null) ? pageConfig[param] : false) : false ): true;
+                    var value = pageConfig != null ? (Object.keys(pageConfig).length > 0 ? ((pageConfig[param] != null) ? pageConfig[param] : false) : false ): true;
                       deferred.resolve(value);
                 }
                 getRolePageConfig(param).then(function(resp){
