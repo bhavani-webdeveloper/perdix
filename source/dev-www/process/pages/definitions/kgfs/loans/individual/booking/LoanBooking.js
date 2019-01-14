@@ -26,8 +26,8 @@ define([], function () {
             var setGoldRate = function(weight,carat,model,index){
                 var dynamicRate = model.additions.goldRatePerCarat * carat;
                 var dynamicMarketValue = dynamicRate * weight;
-                model.loanAccount.ornamentsAppraisals[index].ratePerGramInPaisa = dynamicRate/100+ 0.00;
-                model.loanAccount.ornamentsAppraisals[index].marketValueInPaisa = dynamicMarketValue/100 + 0.00;
+                model.loanAccount.ornamentsAppraisals[index].ratePerGramInPaisa = dynamicRate/100;
+                model.loanAccount.ornamentsAppraisals[index].marketValueInPaisa = dynamicMarketValue/100;
             };
 
             var addressMapCustomertoNominee= function (customer,nominee){
@@ -1508,6 +1508,8 @@ define([], function () {
                         if (model.loanAccount.id){
                             if(model.loanAccount.loanCustomerRelations && model.loanAccount.loanCustomerRelations.length > 0){
                                 for(i = 0; i< model.loanAccount.loanCustomerRelations.length;i++){
+                                    if(model.loanAccount.loanCustomerRelations[i].relation != "Applicant")
+                                        continue;
                                     if(typeof model.loanAccount.loanCustomerRelations[i].dscStatus == "undefined" || model.loanAccount.loanCustomerRelations[i].dscStatus == ""){
                                         model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5  = null
                                         break;
