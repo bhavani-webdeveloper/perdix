@@ -259,9 +259,8 @@ define({
 				{
 					"type": "box",
 					"title": "GROUP_MEMBERS",
-					"items": [{
-							"type": "actionbox",
-							"items": [{
+					"items": [
+							{
 								"key": "group.jlgGroupMembers[].customerId",
 								"type": "button",
 								"title": "VIEW_CUSTOMER",
@@ -273,8 +272,7 @@ define({
 									});
 								},
 								"condition": "model.siteCode == 'sambandh'"
-							}]
-						},
+							},
 						{
 							"type":"fieldset",
 							"readonly": true,

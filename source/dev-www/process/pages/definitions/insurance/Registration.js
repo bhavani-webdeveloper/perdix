@@ -175,7 +175,6 @@ var getIncludes = function (model) {
                                                     "key":"insurancePolicyDetailsDTO.urnNo",
                                                     "title":"URN_NO",
                                                     "type":"string",
-                                                    "required":"true",
                                                 },
                                                 "fullName":{
                                                     "key":"insurancePolicyDetailsDTO.fullName",
@@ -195,22 +194,33 @@ var getIncludes = function (model) {
                                             "searchHelper": formHelper,
 
                                             search: function(inputModel, form, model, context) {
-                                               
-                                               return Queries.searchCustomerData(
-                                                 inputModel.urnNo,
-                                                 inputModel.fullName
-                                                );
+                                                return Enrollment.search({
+                                                    'branchName': SessionStore.getBranch(),
+                                                    'firstName': inputModel.fullName,
+                                                    'customerType':"individual",
+                                                    'urnNo': inputModel.urnNo
+                                                }).$promise;
+                                                
                                             },
                                             onSelect: function (valueObj, model, context) {
+                                                // model.customer = valueObj;
                                                 Enrollment.getCustomerById({
-                                                    id: valueObj.customerId
+                                                    id: valueObj.id
                                                 }).$promise.then(function(resp) {
                                                     model.customer = resp;
+                                                    model.insurancePolicyDetailsDTO.fullName = resp.firstName
+                                                    model.insurancePolicyDetailsDTO.branchId =resp.customerBranchId,
+                                                    model.insurancePolicyDetailsDTO.bankId = resp.customerBankId,
+                                                    model.insurancePolicyDetailsDTO.centreId = resp.centreId,
+                                                    model.insurancePolicyDetailsDTO.customerId = resp.id,
+                                                    model.insurancePolicyDetailsDTO.urnNo =resp.urnNo,
+                                                    model.insurancePolicyDetailsDTO.contactNumber = resp.mobilePhone
                                                 })
                                             },
                                             getListDisplayItem: function(item, index) {
                                                 return [
-                                                    item.urnNo +" "+item.firstName 
+                                                    item.firstName,
+                                                    item.urnNo
                                                 ];
                                             }
                                         },
@@ -250,7 +260,7 @@ var getIncludes = function (model) {
                                                     },                                                   
                                                     getListDisplayItem: function(item, index) {
                                                         return [
-                                                            item.familyMemberFirstName+" "+item.realtionShip
+                                                            item.familyMemberFirstName,item.realtionShip
                                                         ];
                                                     }
                                                 }
