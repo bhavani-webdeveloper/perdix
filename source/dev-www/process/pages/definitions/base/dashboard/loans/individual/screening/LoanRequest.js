@@ -608,6 +608,61 @@ define([],function(){
                                 }, 
                             }
                         },
+                        "Screening":{
+                            "excludes": [
+                                "ProposedUtilizationPlan",
+                                "DeductionsFromLoan",
+                                "LoanMitigants",
+                                "LoanMitigants.deviationParameter",
+                                "PreliminaryInformation.actualAmountRequired",
+                                "PreliminaryInformation.fundsFromDifferentSources",
+                                "NomineeDetails.nominees.nomineeButton",
+                                "NomineeDetails",
+                                "LoanRecommendation.securityEmiRequired",
+                                "LoanMitigants.loanMitigantsByParameter",               
+                            ],
+                            "overrides": {
+                                "PreliminaryInformation": {
+                                    "orderNo": 1,
+                                    "readonly": false
+                                },
+                                "LoanRecommendation.udf8":{
+                                    "readonly": false
+                                },
+                                "LoanRecommendation.udf3":{
+                                    "readonly": false
+                                },
+                                "LoanCustomerRelations": {
+                                    "orderNo": 2,
+                                    "readonly": false
+                                },
+                                "LoanMitigants": {
+                                    "orderNo": 4
+                                },
+                                "LoanDocuments": {
+                                    "orderNo": 5
+                                },
+                                "AdditionalLoanInformation": {
+                                    "orderNo": 6,
+                                    "readonly": false
+                                },
+                                "CollateralDetails": {
+                                    "orderNo": 7,
+                                    "readonly": false
+                                },
+                                // "NomineeDetails": {
+                                //     "orderNo": 8,
+                                //     "readonly": false
+                                // },
+                                // "LoanSanction":{
+                                //     "orderNo": 9
+                                // },                          
+                                "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
+                                   "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
+                                }     
+                                    
+                            }
+                        },
                         "ScreeningReview":{
                             "excludes": [
                                 "ProposedUtilizationPlan",
