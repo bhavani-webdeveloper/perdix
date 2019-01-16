@@ -935,7 +935,12 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                                         using: "scanner",
                                         offline:true
                                     }]
-                                }]
+                                }, {
+                                    key:"customer.customerBankAccounts[].isDisbersementAccount",
+                                    title:"isDisbursmentAccount",
+                                    type:"checkbox"
+                                }
+                            ]
                             }]
                 },
                 {
@@ -2299,6 +2304,10 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                                         using: "scanner",
                                         offline:true
                                     }]
+                                }, {
+                                    key:"customer.customerBankAccounts[].isDisbersementAccount",
+                                    "title":"isDisbursementAccount",
+                                    "type":"checkbox"
                                 }]
                             }]
                 },
