@@ -20,18 +20,6 @@
       },
       {
          "order":2,
-         "code":"Dedupe",
-         "name":"Dedupe",
-         "stageType":"CAPTURE",
-         "sendSms":"No",
-         "smsCategory":"LoanBooking",
-         "isAccountOpening":false,
-         "allowedRoles":[
-            "WM"
-         ]
-      },
-      {
-         "order":3,
          "code":"ScreeningReview",
          "name":"Screening Review",
          "stageType":"CAPTURE",
@@ -43,7 +31,7 @@
          ]
       },
       {
-         "order":4,
+         "order":3,
          "code":"Application",
          "name":"Application",
          "stageType":"CAPTURE",
@@ -56,7 +44,7 @@
          ]
       },
       {
-         "order":5,
+         "order":4,
          "code":"ApplicationReview",
          "name":"Application Review",
          "stageType":"CAPTURE",
@@ -69,7 +57,7 @@
          ]
       },
       {
-         "order":6,
+         "order":5,
          "code":"FieldAppraisal",
          "name":"FieldAppraisal",
          "stageType":"CAPTURE",
@@ -82,7 +70,7 @@
          ]
       },
       {
-         "order":7,
+         "order":6,
          "code":"FieldAppraisalReview",
          "name":"FieldAppraisal Review",
          "stageType":"CAPTURE",
@@ -94,31 +82,7 @@
          ]
       },
       {
-         "order":8,
-         "code":"ZonalRiskReview",
-         "name":"ZonalRisk Review",
-         "stageType":"CAPTURE",
-         "sendSms":"No",
-         "smsCategory":"LoanBooking",
-         "isAccountOpening":false,
-         "allowedRoles":[
-            "WM"
-         ]
-      },
-      {
-         "order":9,
-         "code":"CentralRiskReview",
-         "name":"Central Risk Review",
-         "stageType":"CAPTURE",
-         "sendSms":"Yes",
-         "smsCategory":"FieldAppraisal",
-         "isAccountOpening":false,
-         "allowedRoles":[
-            "WM"
-         ]
-      },
-      {
-         "order":10,
+         "order":7,
          "code":"CreditCommitteeReview",
          "name":"Credit Committee Review",
          "stageType":"CAPTURE",
@@ -131,7 +95,7 @@
          ]
       },
       {
-         "order":11,
+         "order":8,
          "code":"Sanction",
          "name":"Sanction",
          "stageType":"CAPTURE",

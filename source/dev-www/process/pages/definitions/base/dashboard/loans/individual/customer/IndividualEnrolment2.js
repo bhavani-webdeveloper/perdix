@@ -1948,8 +1948,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 {
                                     "type": "actionbox",
-                                  //  "condition": "model.customer.id",
-                                    "condition": "(model.customer.id && !model.currentStage=='ScreeningReview')",
+                                    "condition": "(model.customer.id && model.currentStage!=='ScreeningReview')",
                                     "orderNo": 2800,
                                     "items": [
                                         {

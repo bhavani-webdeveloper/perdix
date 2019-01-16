@@ -18,6 +18,7 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
             "Page/Engine/base.dashboard.loans.individual.screening.FieldAppraisalQueue",
             "Page/Engine/base.dashboard.loans.individual.screening.FieldAppraisalReviewQueue",
             // "Page/Engine/base.dashboard.loans.individual.screening.FieldAppraisalReview",
+            "Page/Engine/base.dashboard.loans.individual.screening.CreditCommitteeReviewQueue",
             "Page/Engine/base.dashboard.loans.individual.screening.LoanSanctionQueue",
             "Page/Engine/base.dashboard.loans.individual.screening.RejectedQueue",
             "Page/Engine/base.dashboard.loans.individual.screening.BranchNewConversationQueue",
@@ -33,6 +34,24 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
         var branchId = SessionStore.getBranchId();
         var branchName = SessionStore.getBranch();
         var centres = SessionStore.getCentres();
+
+        var ccrqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.CreditCommitteeReviewQueue"];
+        if (ccrqMenu) {
+            IndividualLoan.search({
+                'stage': 'CreditCommitteeReview',
+                'enterprisePincode': '',
+                'applicantName': '',
+                'area': '',
+                'villageName': '',
+                'customerName': '',
+                'page': 1,
+                'per_page': 1
+            }).$promise.then(function(response, headerGetter) {
+                ccrqMenu.data = Number(response.headers['x-total-count']);
+            }, function() {
+                ccrqMenu.data = '-';
+            });
+        }
 
         var lsqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.LoanSanctionQueue"];
         if (lsqMenu) {
