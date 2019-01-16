@@ -1755,12 +1755,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     {
                                         "type": "actionbox",
                                        // "condition": "model.customer.currentStage == 'Application'",
-                                       "condition": "model.customer.id",
+                                       "condition": "model.customer.id && !(model.currentStage=='ApplicationReview' || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview'||model.currentStage == 'Rejected'||model.currentStage == 'loanView')",
                                         "orderNo": 220,
                                         "items": [
                                             {
-                                                "type": "submit",
-                                                "title": "COMPLETE_ENROLMENT"
+                                                "type": "button",
+                                                "title": "COMPLETE_ENROLMENT",//PROCEED
+                                                "onClick": "actions.proceed(model, formCtrl, form, $event)"
                                             }
                                         ]
                                     },
@@ -1772,6 +1773,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                             {
                                                 "type": "submit",
                                                 "title": "SUBMIT"
+                                               
                                             }
                                         ]
                                     },
