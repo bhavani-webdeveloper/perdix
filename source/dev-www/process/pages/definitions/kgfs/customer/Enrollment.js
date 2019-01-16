@@ -670,6 +670,29 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                     "familyDetails.familyMembers.incomes.incomeEarned",
                     "familyDetails.familyMembers.incomes.frequency",
                     "familyDetails.familyMembers.incomes.monthsPerYear",
+                    "bankAccounts",
+                    "bankAccounts.customerBankAccounts",
+                    "bankAccounts.customerBankAccounts.ifscCode",
+                    "bankAccounts.customerBankAccounts.customerBankName",
+                    "bankAccounts.customerBankAccounts.customerBankBranchName",
+                    "bankAccounts.customerBankAccounts.customerNameAsInBank",
+                    "bankAccounts.customerBankAccounts.accountNumber",
+                    "bankAccounts.customerBankAccounts.confirmedAccountNumber",
+                    "bankAccounts.customerBankAccounts.accountType",
+                    "bankAccounts.customerBankAccounts.bankingSince",
+                    "bankAccounts.customerBankAccounts.netBankingAvailable",
+                    "bankAccounts.customerBankAccounts.sanctionedAmount",
+                    "bankAccounts.customerBankAccounts.limit",
+                    "bankAccounts.customerBankAccounts.bankStatementDocId",
+                    "bankAccounts.customerBankAccounts.bankStatements",
+                    "bankAccounts.customerBankAccounts.bankStatements.startMonth",
+                    "bankAccounts.customerBankAccounts.bankStatements.totalDeposits",
+                    "bankAccounts.customerBankAccounts.bankStatements.totalWithdrawals",
+                    "bankAccounts.customerBankAccounts.bankStatements.balanceAsOn15th",
+                    "bankAccounts.customerBankAccounts.bankStatements.noOfChequeBounced",
+                    "bankAccounts.customerBankAccounts.bankStatements.noOfEmiChequeBounced",
+                    "bankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto",
+                    "bankAccounts.customerBankAccounts.isDisbursmentAccount",
                     "Liabilities1",
                     "Liabilities1.liabilities",
                     "Liabilities1.liabilities.loanType",
@@ -780,6 +803,37 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                             ],
                             "options": {
                                 "repositoryAdditions": {
+                                    "bankAccounts":{
+                                        "items":{
+                                            "customerBankAccounts":{
+                                                "items":{
+                                                    "isDisbursmentAccount":{
+                                                        key:"customer.customerBankAccounts[].isDisbersementAccount",
+                                                        type:"checkbox",
+                                                        title:"isDisbursmentAccount",
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "ContactInformation":{
+                                        "items":{
+                                            "CustomerResidentialAddress":{
+                                                "items":{
+                                                    "centreId": {
+                                                        orderNo: 60,
+                                                        key: "customer.centreId",
+                                                        "required": true,
+                                                        type: "select",
+                                                        enumCode: "centre",
+                                                        parentEnumCode: "userbranches",
+                                                        parentValueExpr: "model.customer.customerBranchId",
+                                                    },
+                                                }
+                                              }
+                                        }
+                                    },
+                                    
                                 },
                                 "additions": [
                                 ]
