@@ -30,7 +30,7 @@ define({
                 },
                 paginationOptions: {
                     "getItemsPerPage": function(response, headers) {
-                        return 6;
+                        return 100;
                     },
                     "getTotalItemsCount": function(response, headers) {
                         return headers['x-total-count']
