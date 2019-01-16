@@ -8,7 +8,7 @@
       },
       {
          "displayFeeName":"Portfolio Insurance Premium",
-         "encoreFeeName":"Portfolio Insurance",
+         "encoreFeeName":"Portfolio Insurance Premium",
          "feeColumnName":"portfolioInsurancePremium",
          "override":"Yes"
       },
