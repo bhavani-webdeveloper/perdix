@@ -74,7 +74,7 @@ LTV.list = SELECT vvvm.value FROM vehicle_viability_master vvm LEFT JOIN vehicle
 accountOverrideStatus.list= select override_status,account_number,urn_no,product from account_override_status where account_number = :accountNo and urn_no = :urnNo 
 
 machineDescription.list=SELECT distinct machine_description as `machineDescription` from machine_master 
-machineName.list=SELECT distinct machine_name as `machineName` from machine_master where machine_description = :machineDescription
+machineName.list=SELECT distinct m.machine_name as `machineName` from machine_master m where m.machineName like "%:machine_name%"
 machineType.list=SELECT distinct machine_type as `machineType`,depreciation_percentage as `depreciationPercentage`  from machine_master where machine_description = :machineDescription and machine_name = :machineName
 machineWorkProcess.list=SELECT distinct work_process as `workProcess` from machine_master where machine_description = :machineDescription and machine_name = :machineName and machine_type = :machineType
 machineModel.list=SELECT distinct model as `machineModel` from machine_master where machine_description = :machineDescription and machine_name = :machineName and machine_type = :machineType and work_process = :workProcess
