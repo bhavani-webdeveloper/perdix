@@ -612,8 +612,8 @@ define([],function(){
                             "excludes": [
                                 "ProposedUtilizationPlan",
                                 //"DeductionsFromLoan",
-                                "LoanMitigants",
-                                "LoanMitigants.deviationParameter",
+                                //"LoanMitigants",
+                                //"LoanMitigants.deviationParameter",
                                 "PreliminaryInformation.actualAmountRequired",
                                 "PreliminaryInformation.fundsFromDifferentSources",
                                 "NomineeDetails",

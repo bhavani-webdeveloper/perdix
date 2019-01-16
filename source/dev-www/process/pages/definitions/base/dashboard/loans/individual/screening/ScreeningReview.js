@@ -31,6 +31,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 order:10
                             },
                             {
+                                pageName: 'base.dashboard.loans.individual.screening.Summary',
+                                title: 'SUMMARY',
+                                pageClass: 'summary',
+                                minimum: 1,
+                                maximum: 1,
+                                order: 1
+                            },
+                            {
                                 pageName: 'base.dashboard.loans.individual.customer.IndividualEnrolment2',
                                 title: 'CO_APPLICANT',
                                 pageClass: 'co-applicant',
@@ -179,18 +187,18 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 var loanAccount = loanProcess;
                                 loanAccount.applicantEnrolmentProcess.customer.customerId = loanAccount.customerId;
 
-                                // $this.bundlePages.push({
-                                //     pageClass: 'summary',
-                                //     model: {
-                                //         cbModel: {customerId:loanAccount.customerId,loanId:bundleModel.loanId, scoreName:'RiskScore1'}
-                                //     }
-                                // });
+                                $this.bundlePages.push({
+                                    pageClass: 'summary',
+                                    model: {
+                                        cbModel: {customerId:loanAccount.loanAccount.customerId,loanId:bundleModel.loanId, scoreName:'RiskScore1'}
+                                    }
+                                });
 
                                 // $this.bundlePages.push({
                                 //     pageClass: 'balance-sheet-history',
                                 //     model: {customerUrn:loanAccount.urnNo, loanId:bundleModel.loanId}
                                 // });
-
+                                
                                 $this.bundlePages.push({
                                     pageClass: 'applicant',
                                     model: {
