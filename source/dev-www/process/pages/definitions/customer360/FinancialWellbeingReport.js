@@ -29,7 +29,8 @@ function($log, $scope, $stateParams, irfNavigator, $sce, PageHelper, SessionStor
 
     $scope.launchPrint = function() {
         var fwrPrintWindow = window.open($scope.fwrDashboardURL);
-        fwrPrintWindow.focus();
-        fwrPrintWindow.print();
+        /* Below code crashes, so commented */
+        // fwrPrintWindow.focus();
+        // fwrPrintWindow.print();
     };
 }]);
