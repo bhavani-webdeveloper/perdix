@@ -1321,13 +1321,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                              ],
                             "overrides": {
                                 "ProxyIndicators":{
-                                    "readonly":false
+                                    "readonly":false,
+                                    "orderNo": 100
                                 },
                                 "Machinery":{
                                     "readonly":true
                                 },
                                 "CommercialCBCheck":{
-                                    "readonly":true
+                                    "readonly":true,
+                                    "orderNo": 90
                                 },
                                 "BuyerDetails":{
                                     "readonly":true
