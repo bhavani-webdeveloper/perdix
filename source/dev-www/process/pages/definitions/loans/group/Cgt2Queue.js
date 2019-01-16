@@ -116,7 +116,7 @@ define({
 			                    PageHelper.clearErrors();				                	
 			                    PageHelper.showLoader();
 								Queries.getGlobalSettings("CGTApprovalCoolingDays").then(function(result) 
-				                {
+				                {	
 				                    if(moment().format()>=moment(item.cgtEndDate1, 'YYYY-MM-DD').add('days', result).format())
 				                    {
 
