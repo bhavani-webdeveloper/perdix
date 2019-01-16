@@ -234,7 +234,7 @@ define([],function(){
                                 "LoanSanction",
                                 "DeductionsFromLoan",
                                 "LoanMitigants",
-                    "LoanMitigants.deviationParameter"              
+                                "LoanMitigants.deviationParameter"              
                             ],
                             "overrides": {
                                 "PreliminaryInformation": {
@@ -379,7 +379,7 @@ define([],function(){
                                 "LoanMitigants",
                                 "LoanRecommendation.udf8",
                                 "LoanRecommendation.udf3",
-                    "LoanMitigants.deviationParameter"             
+                                "LoanMitigants.deviationParameter"             
                             ],
                             "overrides": {
                                 "PreliminaryInformation": {
@@ -464,9 +464,9 @@ define([],function(){
                                 "LoanSanction",
                                 "DeductionsFromLoan",
                                 "LoanMitigants",
-                    "LoanMitigants.deviationParameter",
+                                "LoanMitigants.deviationParameter",
                                 "PreliminaryInformation.actualAmountRequired",
-                                 "PreliminaryInformation.fundsFromDifferentSources",
+                                "PreliminaryInformation.fundsFromDifferentSources",
                                 "NomineeDetails.nominees.nomineeButton"                  
                             ],
                             "overrides": {
@@ -625,6 +625,7 @@ define([],function(){
                                 "LoanSanction.disbursementSchedules.disbursementAmount",
                                 "LoanSanction.disbursementSchedules.trancheNumber",
                                 "LoanSanction.disbursementSchedules.tranchCondition",
+                                "AdditionalLoanInformation",
                                // "NomineeDetails.nominees.nomineeButton",
                                 "LoanRecommendation.securityEmiRequired",
                                 "LoanMitigants.loanMitigantsByParameter",               
@@ -688,6 +689,7 @@ define([],function(){
                                 "LoanSanction.disbursementSchedules.tranchCondition",
                                 "NomineeDetails",
                                 "NomineeDetails.nominees",
+                                "AdditionalLoanInformation",
                                 "NomineeDetails.nominees.nomineeButton"   ,
                                 "LoanRecommendation.securityEmiRequired",
                                 "LoanMitigants.loanMitigantsByParameter",               
