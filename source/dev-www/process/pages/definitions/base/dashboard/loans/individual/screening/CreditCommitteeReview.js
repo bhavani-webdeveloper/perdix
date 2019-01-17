@@ -248,7 +248,8 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 $this.bundlePages.push({
                                     pageClass: 'loan-recommendation',
                                     model: {
-                                        customerId: loanAccount.customerId
+                                        customerId: loanAccount.customerId,
+                                        loanAccount: loanAccount
                                     }
                                 });
 
