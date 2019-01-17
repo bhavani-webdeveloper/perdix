@@ -837,6 +837,13 @@ define([],function(){
                             "excludes":[
                                 "LoanRecommendation.securityEmiRequired",
                                 "LoanMitigants.deviationParameter",
+                                "LoanSanction",
+                                "LoanSanction.sanctionDate",
+                                "LoanSanction.numberOfDisbursements",
+                                "LoanSanction.disbursementSchedules",
+                                "LoanSanction.disbursementSchedules.disbursementAmount",
+                                "LoanSanction.disbursementSchedules.trancheNumber",
+                                "LoanSanction.disbursementSchedules.tranchCondition",
                             ],
                             "overrides": {
                                 "NomineeDetails.nominees.nomineeFirstName":{
@@ -870,6 +877,13 @@ define([],function(){
                         "FieldAppraisalReview":{
                             "excludes":[
                                 "LoanMitigants.loanMitigantsByParameter",
+                                "LoanSanction",
+                                "LoanSanction.sanctionDate",
+                                "LoanSanction.numberOfDisbursements",
+                                "LoanSanction.disbursementSchedules",
+                                "LoanSanction.disbursementSchedules.disbursementAmount",
+                                "LoanSanction.disbursementSchedules.trancheNumber",
+                                "LoanSanction.disbursementSchedules.tranchCondition",
                             ],
                             "overrides":{
                                 "AdditionalLoanInformation": {
