@@ -863,7 +863,20 @@ define([],function(){
                                 },
                                 "NomineeDetails.nominees.nomineePincode":{
                                     "required":true
+                                },
+                                "DeductionsFromLoan":{
+                                    "readonly":true,
+                                },
+                                "PreliminaryInformation":{
+                                    "readonly":true,
+                                },
+                                "LoanCustomerRelations":{
+                                    "readonly":true,
+                                },
+                                "LoanMitigants":{
+                                    "readonly":true,
                                 }
+
                             }
                         },
                         "SanctionInput":{
