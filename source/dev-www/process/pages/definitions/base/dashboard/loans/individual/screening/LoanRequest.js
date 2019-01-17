@@ -643,7 +643,7 @@ define([],function(){
                                 },
                                 "LoanCustomerRelations": {
                                     "orderNo": 2,
-                                    "readonly": false
+                                    "readonly": true
                                 },
                                 "LoanMitigants": {
                                     "orderNo": 4
@@ -830,7 +830,10 @@ define([],function(){
                                 },
                                 "NomineeDetails.nominees.nomineePincode":{
                                     "required":true
-                                }
+                                },
+                                "LoanCustomerRelations": {
+                                    "readonly": true
+                                },
                             }
                         },
                         "FieldAppraisal":{
@@ -880,7 +883,11 @@ define([],function(){
                             }
                         },
                         "SanctionInput":{
-
+                            "overrides":{
+                                "LoanCustomerRelations": {
+                                    "readonly": true
+                                },
+                            }
                         },
                         "ZonalRiskReview":{
                             "excludes":[
@@ -1225,7 +1232,8 @@ define([],function(){
                             "required": true
                         },
                         "NomineeDetails.nominees.nomineeFirstName":{
-                            "orderNo":10
+                            "orderNo":10,
+                            "resolver": "NomineeFirstNameLOVConfiguration"
                         },
                         "NomineeDetails.nominees.nomineeGender": {
                             "orderNo": 20
@@ -1234,26 +1242,26 @@ define([],function(){
                             "orderNo": 30
                         },
                         "NomineeDetails.nominees.nomineeRelationship": {
-                            "orderNo": 40
+                            "orderNo": 100
                         },
                         "NomineeDetails.nominees.nomineePincode": {
-                            "resolver": "PincodeLOVConfiguration",
-                            "orderNo":50
+                            "resolver": "NomineePincodeLOVConfiguration",
+                            "orderNo":70
                         },
                         "NomineeDetails.nominees.nomineeDoorNo": {
-                            "orderNo": 60
+                            "orderNo": 40
                         },
                         "NomineeDetails.nominees.nomineeStreet":{
-                            "orderNo": 70
+                            "orderNo": 60
                         },
                         "NomineeDetails.nominees.nomineeLocality": {
-                            "orderNo":80
+                            "orderNo":50
                         },
                         "NomineeDetails.nominees.nomineeDistrict":{
-                            "orderNo":90
+                            "orderNo":80
                         },
                         "NomineeDetails.nominees.nomineeState":{
-                            "orderNo":100
+                            "orderNo":90
                         }
  
                     }

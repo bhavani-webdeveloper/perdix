@@ -1175,6 +1175,34 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                             }
+                        },
+                        "FieldAppraisalReview":{
+                            "overrides":{
+                                "PhysicalAssets": {
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "CentralRiskReview":{
+                            "overrides":{
+                                "PhysicalAssets": {
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "CreditCommitteeReview":{
+                            "overrides":{
+                                "PhysicalAssets": {
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "loanView":{
+                            "overrides":{
+                                "PhysicalAssets": {
+                                    "readonly": true
+                                }
+                            }
                         }
                     },
                     "pageClass" : {
@@ -1511,7 +1539,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "title":"INCOME_EARNED",
                         "key": "customer.familyMembers[].incomes[].incomeEarned",
                         "type":"amount"
-                    }
+                    },
+                    "PhysicalAssets.physicalAssets.nameOfOwnedAsset":{
+                        "title": "ASSET_TYPE",
+                        "type": "select",
+                        "enumCode": "asset_type"
+                    },
+                    "PhysicalAssets.physicalAssets.vehicleModel":{
+                        "condition": "model.customer.physicalAssets[].assetType=='Two wheeler' || model.customer.physicalAssets[].assetType=='Four wheeler'"
+                    },
+
                 }
             }
             var getIncludes = function (model) {
@@ -1661,7 +1698,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "PhysicalAssets.physicalAssets.vehicleModel",
                     "PhysicalAssets.physicalAssets.registeredOwner",
                     "PhysicalAssets.physicalAssets.ownedAssetValue",
-                    "PhysicalAssets.physicalAssets.unit",
+                    //"PhysicalAssets.physicalAssets.unit",
 
                     // "IndividualReferences",
                     // "IndividualReferences.verifications",

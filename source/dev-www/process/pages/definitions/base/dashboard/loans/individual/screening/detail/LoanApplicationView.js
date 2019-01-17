@@ -388,7 +388,7 @@ define({
                             "title": "Expected Interest Rate",
                         }, {
                             "key": "loanAccount.estimatedEmi",
-                            "title": "EXPECTED_KINARA_EMI",
+                            "title": "EXPECTED_MAITREYA_EMI",
                             "type": "amount"
                         }, {
                             "key": "loanAccount.emiRequested",
