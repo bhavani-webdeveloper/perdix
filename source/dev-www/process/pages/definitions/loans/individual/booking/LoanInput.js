@@ -3291,7 +3291,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 return false;
                             }
                             if (model.loanAccount.interestRate > model.additional.product.maxInterestRate){
-                                PageHelper.showProgress("loan-create","Loan Amount requested should be in the range [" + model.additional.product.minInterestRate + "% - " + model.additional.product.maxInterestRate + "%]",5000);
+                                PageHelper.showProgress("loan-create","Interest Rate should be in the range [" + model.additional.product.minInterestRate + "% - " + model.additional.product.maxInterestRate + "%]",5000);
                                 return false;
                             }
                         }
