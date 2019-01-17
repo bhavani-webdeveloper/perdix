@@ -659,6 +659,9 @@ define([],function(){
                                     "orderNo": 7,
                                     "readonly": false
                                 },
+                                "PreliminaryInformation.expectedPortfolioInsurancePremium": {
+                                    "readonly": true
+                                },
                                 // "NomineeDetails": {
                                 //     "orderNo": 8,
                                 //     "readonly": false

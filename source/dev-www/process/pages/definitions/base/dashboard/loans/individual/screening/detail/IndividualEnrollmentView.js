@@ -970,7 +970,7 @@ define({
                 },
                 eventListeners: {
                     "financial-summary": function(bundleModel, model, params) {
-                        model.customer = model.enrolmentProcess.customer;
+                        //model.customer = model.enrolmentProcess.customer;
                         model.bankDetails = params[10].BankAccounts;
                         var liability = params[19].subgroups;
                         model._scores = params;

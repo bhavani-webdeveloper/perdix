@@ -1529,7 +1529,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                         "Sanction":
                         {
                             "excludes": [
-                                "ProxyIndicators"
+                                //"ProxyIndicators"
                                 // "EnterpriseFinancials.otherBusinessIncomes",
                                 // "EnterpriseReferences",
                                 // "EnterpriseFinancials.expenditures",
@@ -1541,6 +1541,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                              ],
                             "overrides": {
                                 "Machinery":{
+                                    "readonly":true
+                                },
+                                "ProxyIndicators":{
                                     "readonly":true
                                 },
                                 "SuppliersDeatils":{
