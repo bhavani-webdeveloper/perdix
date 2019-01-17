@@ -51,7 +51,6 @@ define([],function(){
             };
  
  
- 
             var configFile = function() {
                 return {
                     "loanAccount.currentStage": {
@@ -1337,7 +1336,8 @@ define([],function(){
                     "PostReview.hold",
                     "PostReview.hold.remarks",
                     "PostReview.hold.holdButton",
- 
+                    "CBCheck",
+                    "CBCheck.CBCheckIgnore"
                     // "ProposedUtilizationPlan",
                     // "ProposedUtilizationPlan.loanUtilisationDetail",
                     // "ProposedUtilizationPlan.loanUtilisationDetail.utilisationType",
@@ -1346,7 +1346,7 @@ define([],function(){
                 ];
  
             }
- 
+            
             return {
                 "type": "schema-form",
                 "title": "LOAN_REQUEST",
@@ -1496,6 +1496,23 @@ define([],function(){
                                                     "html": "<div ng-bind-html='model.loanMitigantsByParameter[arrayIndex].Mitigants'></div>    "
                                                 }]
                                             }
+                                        }
+                                    },
+                                    "CBCheck": {
+                                        "type": "box",
+                                        "title": "CB Check",
+                                        "condition": "model.currentStage =='Screening'",
+                                        "orderNo": 550,
+                                        "items": {
+                                           'CBCheckIgnore' : {
+                                            "key": "loanAccount.cbCheckIgnore",
+                                            "type": "radios",
+                                            "titleMap": {
+                                                "YES": "YES",
+                                                "NO": "NO"
+                                            },
+                                            "title": "CB Check Ignore",
+                                           }
                                         }
                                     },
                                     "PostReview": {
@@ -1792,13 +1809,21 @@ define([],function(){
                             .subscribe(function (value) {
                                 Utils.removeNulls(value, true);
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
-                                irfNavigator.goBack();
+                                if(model.loanAccount.cbCheckIgnore == "YES") {
+                                    irfNavigator.goBack();
+                                } else {
+                                    if(model.currentStage != 'Screening') {
+                                        irfNavigator.goBack(); 
+                                    }
+                                }
+                                //irfNavigator.goBack();
                             }, function (err) {
                                 PageHelper.showErrors(err);
                                 PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                
                                 PageHelper.hideLoader();
                             });
+                        
                     },
                     reject: function(model, formCtrl, form, $event){
                         // if(PageHelper.isFormInvalid(formCtrl)) {
