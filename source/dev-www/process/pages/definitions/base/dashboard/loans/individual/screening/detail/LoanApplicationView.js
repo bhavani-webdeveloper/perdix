@@ -26,7 +26,7 @@ define({
 
                     if (model.currentStage == 'Screening')
                         $state.go('Page.Engine', {
-                            pageName: 'loans.individual.screening.ScreeningQueue',
+                            pageName: 'base.dashboard.loans.individual.screening.ScreeningQueue',
                             pageId: null
                         });
                     if (model.currentStage == 'Dedupe')
@@ -36,32 +36,32 @@ define({
                         });
                     if (model.currentStage == 'ScreeningReview')
                         $state.go('Page.Engine', {
-                            pageName: 'loans.individual.screening.ScreeningReviewQueue',
+                            pageName: 'base.dashboard.loans.individual.screening.ScreeningReviewQueue',
                             pageId: null
                         });
                     if (model.currentStage == 'Application')
                         $state.go('Page.Engine', {
-                            pageName: 'loans.individual.screening.ApplicationQueue',
+                            pageName: 'base.dashboard.loans.individual.screening.ApplicationQueue',
                             pageId: null
                         });
                     if (model.currentStage == 'ApplicationReview')
                         $state.go('Page.Engine', {
-                            pageName: 'loans.individual.screening.ApplicationReviewQueue',
+                            pageName: 'base.dashboard.loans.individual.screening.ApplicationReviewQueue',
                             pageId: null
                         });
                     if (model.currentStage == 'FieldAppraisal')
                         $state.go('Page.Engine', {
-                            pageName: 'loans.individual.screening.FieldAppraisalQueue',
+                            pageName: 'base.dashboard.loans.individual.screening.FieldAppraisalQueue',
                             pageId: null
                         });
                     if (model.currentStage == 'FieldAppraisalReview')
                         $state.go('Page.Engine', {
-                            pageName: 'loans.individual.screening.FieldAppraisalReviewQueue',
+                            pageName: 'base.dashboard.loans.individual.screening.FieldAppraisalReviewQueue',
                             pageId: null
                         });
                     if (model.currentStage == 'CreditCommitteeReview')
                         $state.go('Page.Engine', {
-                            pageName: 'loans.individual.screening.CreditCommitteeReviewQueue',
+                            pageName: 'base.dashboard.loans.individual.screening.CreditCommitteeReviewQueue',
                             pageId: null
                         });
                     if (model.currentStage == 'CentralRiskReview')
@@ -76,7 +76,7 @@ define({
                         });
                     if (model.currentStage == 'Sanction')
                         $state.go('Page.Engine', {
-                            pageName: 'loans.individual.screening.LoanSanctionQueue',
+                            pageName: 'base.dashboard.loans.individual.screening.LoanSanctionQueue',
                             pageId: null
                         });
                     if (model.currentStage == 'Rejected')
@@ -232,7 +232,7 @@ define({
             initialize: function(model, form, formCtrl, bundlePageObj, bundleModel) {
                 model.currentStage = bundleModel.currentStage;
                 model.bundleModel = bundleModel;
-                model.loanAccount = bundleModel.loanAccount;
+                //model.loanAccount = bundleModel.loanAccount;
                 model.linkedAccount={};
                 model.siteCode = SessionStore.getGlobalSetting('siteCode');
                 model.review = model.review || {};
@@ -241,7 +241,7 @@ define({
                 model.mitigantsChanged=0;
                 model.loanMitigants= model.loanAccount.loanMitigants;
                 model.expectedTurnoverObj = {};
-                
+
 
             /*Asset details*/
                 if (model.loanAccount.collateral.length != 0) {

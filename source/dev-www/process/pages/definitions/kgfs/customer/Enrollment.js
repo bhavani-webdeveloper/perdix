@@ -819,6 +819,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                     "bankAccounts.customerBankAccounts.bankStatements.noOfChequeBounced",
                     "bankAccounts.customerBankAccounts.bankStatements.noOfEmiChequeBounced",
                     "bankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto",
+                    "bankAccounts.customerBankAccounts.isDisbursmentAccount",
                     "Liabilities1",
                     "Liabilities1.liabilities",
                     "Liabilities1.liabilities.loanType",
@@ -936,6 +937,19 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                             ],
                             "options": {
                                 "repositoryAdditions": {
+                                    "bankAccounts":{
+                                        "items":{
+                                            "customerBankAccounts":{
+                                                "items":{
+                                                    "isDisbursmentAccount":{
+                                                        key:"customer.customerBankAccounts[].isDisbersementAccount",
+                                                        type:"checkbox",
+                                                        title:"isDisbursmentAccount",
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
                                     "ContactInformation":{
                                         "items":{
                                             "CustomerResidentialAddress":{
