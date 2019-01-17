@@ -1133,6 +1133,7 @@ define({
                     });
                 },
                 submit: function(model, form, formName) {
+                    PageHelper.showLoader();
 
                     if(!model.group.grtEndDate) {
                         irfProgressMessage.pop('GRT-proceed', 'Please End GRT before proceeding with the action.', 3000);
@@ -1151,7 +1152,6 @@ define({
                         }
                     }
 
-                    PageHelper.showLoader();
                     irfProgressMessage.pop('GRT-proceed', 'Working...');
                     PageHelper.clearErrors();
                     model.groupAction = "PROCEED";

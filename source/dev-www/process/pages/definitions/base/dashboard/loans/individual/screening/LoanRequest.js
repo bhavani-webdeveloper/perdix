@@ -837,6 +837,13 @@ define([],function(){
                             "excludes":[
                                 "LoanRecommendation.securityEmiRequired",
                                 "LoanMitigants.deviationParameter",
+                                "LoanSanction",
+                                "LoanSanction.sanctionDate",
+                                "LoanSanction.numberOfDisbursements",
+                                "LoanSanction.disbursementSchedules",
+                                "LoanSanction.disbursementSchedules.disbursementAmount",
+                                "LoanSanction.disbursementSchedules.trancheNumber",
+                                "LoanSanction.disbursementSchedules.tranchCondition",
                             ],
                             "overrides": {
                                 "NomineeDetails.nominees.nomineeFirstName":{
@@ -870,6 +877,13 @@ define([],function(){
                         "FieldAppraisalReview":{
                             "excludes":[
                                 "LoanMitigants.loanMitigantsByParameter",
+                                "LoanSanction",
+                                "LoanSanction.sanctionDate",
+                                "LoanSanction.numberOfDisbursements",
+                                "LoanSanction.disbursementSchedules",
+                                "LoanSanction.disbursementSchedules.disbursementAmount",
+                                "LoanSanction.disbursementSchedules.trancheNumber",
+                                "LoanSanction.disbursementSchedules.tranchCondition",
                             ],
                             "overrides":{
                                 "AdditionalLoanInformation": {
@@ -1003,6 +1017,20 @@ define([],function(){
                 }
    
             };
+            var populateDisbursementSchedule=function (value,form,model){
+                PageHelper.showProgress("loan-create","Verify Disbursement Schedules",5000);
+                model.loanAccount.disbursementSchedules=[];
+                for(var i=0;i<value;i++){
+                    model.loanAccount.disbursementSchedules.push({
+                        trancheNumber:""+(i+1),
+                        disbursementAmount:0
+                    });
+                }
+                if (value ==1){
+                    model.loanAccount.disbursementSchedules[0].disbursementAmount = model.loanAccount.loanAmount;
+                }
+        
+            }
              var overridesFields = function (bundlePageObj) {
                 return {
                         "PreliminaryInformation.linkedAccountNumber": {
@@ -1049,13 +1077,20 @@ define([],function(){
                             "enumCode": "customerinfo_colctn_Pymt_type"
                         },
                         //over ride for ticket
+                        "LoanSanction.numberOfDisbursements": {
+                           // key:"loanAccount.numberOfDisbursements",
+                            title:"NUM_OF_DISBURSEMENTS",
+                            onChange:function(value,form,model){
+                                populateDisbursementSchedule(value,form,model);
+                            }
+                        },
                         "LoanSanction.disbursementSchedules.tranchCondition": {
                             type: "lov",
                             autolov: true,
                             title: "TRANCHE_CONDITION",
                             bindMap: {
                             },
-                            searchHelper: formHelper,
+                            searchHelper: formHelper,//Verify Disbursement Schedules
                             search: function (inputModel, form, model, context) {
 
                                 var trancheConditions = formHelper.enum('tranche_conditions').data;
